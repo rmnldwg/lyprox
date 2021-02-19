@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+{% block content %}
+    {% for patient in patient_list %}
+        <p>
+            ID: {{ patient.identifier }}, 
+            age: {{ patient.age }}, 
+            gender: {{ patient.gender }}
+            <a href="{% url 'patients:detail' patient.id %}">link</a>
+        </p>
+    {% endfor %}
+{% endblock content %}

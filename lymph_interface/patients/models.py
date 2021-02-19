@@ -25,7 +25,7 @@ TREATMENT_TYPE = [
     (2, "surgery"),
     (3, "immunotherapy")
 ]
-class Therapy(models.Model):
+class Treatment(models.Model):
     """Specifies the therapy a patient has received."""
     patient = models.ForeignKey(Patient, on_delete=models.CASCADE)
     

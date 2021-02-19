@@ -36,7 +36,7 @@ class Migration(migrations.Migration):
             ],
         ),
         migrations.CreateModel(
-            name='Therapy',
+            name='Treatment',
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('treatment_type', models.PositiveSmallIntegerField(choices=[(0, 'radiotherapy'), (1, 'chemotherapy'), (2, 'surgery'), (3, 'immunotherapy')])),
