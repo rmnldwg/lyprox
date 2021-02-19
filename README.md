@@ -1,2 +1,3 @@
-# lymph-interface
-Web app for uploading and viewing a database of detailed lymph node level involvements.
+# Lymph Interface
+
+This web app is for clinitians who are faced with the task of electively defining clinical target volumes (CTV-N). It allows the user to view a database of detailed patterns of lymphatic involvements and contribute to it. Also, the database can be used for building probabilistic models that can predict risks of involvements based on diagnoses and various patient characterisitcs. For example, the work based on Bayesian networks by [(Pouymayou et al., 2019)](), or the work by [(Roman Ludwig et al., 2021)]() using hidden Markov models.
