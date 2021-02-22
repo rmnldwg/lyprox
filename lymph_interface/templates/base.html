@@ -1,11 +1,37 @@
 <!DOCTYPE html>
-<html>
-    <head>
-        <title>USZ Lymph Interface</title>
-    </head>
+{% load static %}
+<html lang="en">
+<head>
+    <link rel="stylesheet" type="text/css" href="{% static 'style.css' %}">
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>USZ Lymph Interface</title>
+</head>
 
-    <body>
-        {% block content %}
-        {% endblock content %}
-    </body>
+<body>
+    <div id="container">
+        <header id="header">
+            <div class="logos">
+                <img src="{% static 'usz-uzh-logo.png' %}">
+            </div>
+            <hr>
+        </header>
+
+        <div id="body">
+            {% block content %}
+            {% endblock content %}
+        </div>
+
+        <footer id="footer">
+            <hr>
+            <div id="contact">
+                <span>University Hospital Zurich</span>
+                <span>Departement of Radiation Oncology</span>
+                <span>Rämistrasse 100, 8091 Zürich</span>
+                <span><a href="mailto:roman.ludwig@usz.ch">roman.ludwig@usz.ch</a></span>
+            </div>
+        </footer>
+    </div>
+</body>
 </html>
