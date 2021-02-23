@@ -1,5 +1,63 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <p>ID: {{ patient.identifier }}, age: {{ patient.age }}, gender: {{ patient.gender }}</p>
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'patients/detail_style.css' %}">
+
+    <div class="section">
+        <div id="patient" class="tile">
+            <h3 class="tiletitle">Patient (ID: {{ patient.identifier }})</h3>
+        </div>
+    </div>
+
+    <h3 class="sectitle">Tumors</h3>
+
+    <div class="section">
+        {% for tumor in patient.tumor_set.all %}
+            <div id="tumor" class="tile">
+                <h4 class="tiletitle">Tumor #{{ forloop.counter }}</h4>
+                <p>{{ tumor.get_t_stage_display }} stage tumor in the {{ tumor.get_location_display }}</p>
+                <p>Diagnosed on {{ tumor.diagnose_date }}</p>
+            </div>
+        {% endfor %}
+    </div>
+
+    <h3 class="sectitle">Treatments</h3>
+
+    <div class="section">
+        {% for treatment in patient.treatment_set.all %}
+            <div id="treatment" class="tile">
+                <h4 class="tiletitle">Treatment #{{ forloop.counter }}</h4>
+                <p>{{ treatment.get_kind_display }} started on {{ treatment.start_date }} until {{ treatment.end_date }} </p>
+            </div>
+        {% endfor %}
+    </div>
+
+    <h3 class="sectitle">Lymph node level involvement</h3>
+
+    <div class="section">
+        <div id="diagnose" class="tile">
+            <h4 class="tiletitle">Diagnose</h4>
+            <table class="table">
+                <tr>
+                    <th>Modality</th>
+                    <th>N-stage</th>
+                    <th>I</th>
+                    <th>II</th>
+                    <th>III</th>
+                    <th>IV</th>
+                </tr>
+                {% for diagnose in patient.diagnose_set.all %}
+                <tr>
+                    <td>{{ diagnose.get_modality_display }}</td>
+                    <td>{{ diagnose.get_n_stage_display }}</td>
+                    <td>{{ diagnose.lnl_I }}</td>
+                    <td>{{ diagnose.lnl_II }}</td>
+                    <td>{{ diagnose.lnl_III }}</td>
+                    <td>{{ diagnose.lnl_IV }}</td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+    </div>
 {% endblock content %}

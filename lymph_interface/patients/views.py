@@ -5,8 +5,8 @@ from django.views import generic
 from .models import Patient
 
 # Create your views here.
-class IndexView(generic.ListView):
-    template_name = "patients/index.html"
+class ListView(generic.ListView):
+    template_name = "patients/list.html"
     context_object_name = "patient_list"
     
     def get_queryset(self):

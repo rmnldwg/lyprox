@@ -19,7 +19,7 @@ class Patient(models.Model):
     
 
 
-TREATMENT_TYPE = [
+TREATMENT_KIND = [
     (0, "radiotherapy"),
     (1, "chemotherapy"),
     (2, "surgery"),
@@ -29,7 +29,7 @@ class Treatment(models.Model):
     """Specifies the therapy a patient has received."""
     patient = models.ForeignKey(Patient, on_delete=models.CASCADE)
     
-    treatment_type = models.PositiveSmallIntegerField(choices=TREATMENT_TYPE)
+    kind = models.PositiveSmallIntegerField(choices=TREATMENT_KIND)
     
     start_date = models.DateField()
     end_date = models.DateField()
@@ -71,12 +71,21 @@ M_STAGES = [
     (0, "M0"),
     (1, "M1")
 ]
+MODALITIES = [
+    (0, "CT"),
+    (1, "MRI"),
+    (2, "PET"),
+    (3, "FNA"),
+    (4, "neck dissection")
+]
 class Diagnose(models.Model):
     """Report of pattern of lymphatic metastases for a given diagnostic 
     modality."""
     patient = models.ForeignKey(Patient, on_delete=models.CASCADE)
     
     diagnose_date = models.DateField()
+    
+    modality = models.PositiveSmallIntegerField(choices=MODALITIES)
     
     n_stage = models.PositiveSmallIntegerField(choices=N_STAGES)
     m_stage = models.PositiveSmallIntegerField(choices=M_STAGES)
