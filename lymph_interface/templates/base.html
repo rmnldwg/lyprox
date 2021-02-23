@@ -10,28 +10,26 @@
 </head>
 
 <body>
-    <div id="container">
-        <header id="header">
-            <div class="logos">
-                <img src="{% static 'usz-uzh-logo.png' %}">
-            </div>
-            <hr>
-        </header>
-
-        <div id="body">
-            {% block content %}
-            {% endblock content %}
+    <header>
+        <div class="logos">
+            <img src="{% static 'usz-uzh-logo.png' %}">
         </div>
+        <hr>
+    </header>
 
-        <footer id="footer">
-            <hr>
-            <div id="contact">
-                <span>University Hospital Zurich</span>
-                <span>Departement of Radiation Oncology</span>
-                <span>Rämistrasse 100, 8091 Zürich</span>
-                <span><a href="mailto:roman.ludwig@usz.ch">roman.ludwig@usz.ch</a></span>
-            </div>
-        </footer>
-    </div>
+    <section>
+        {% block content %}
+        {% endblock content %}
+    </section>
+
+    <footer>
+        <hr>
+        <div id="contact">
+            <span>University Hospital Zurich</span>
+            <span>Departement of Radiation Oncology</span>
+            <span>Rämistrasse 100, 8091 Zürich</span>
+            <span><a href="mailto:roman.ludwig@usz.ch">roman.ludwig@usz.ch</a></span>
+        </div>
+    </footer>
 </body>
 </html>

@@ -19,20 +19,20 @@ class Patient(models.Model):
     
 
 
-TREATMENT_KIND = [
-    (0, "radiotherapy"),
-    (1, "chemotherapy"),
-    (2, "surgery"),
-    (3, "immunotherapy")
-]
-class Treatment(models.Model):
-    """Specifies the therapy a patient has received."""
-    patient = models.ForeignKey(Patient, on_delete=models.CASCADE)
+# TREATMENT_KIND = [
+#     (0, "radiotherapy"),
+#     (1, "chemotherapy"),
+#     (2, "surgery"),
+#     (3, "immunotherapy")
+# ]
+# class Treatment(models.Model):
+#     """Specifies the therapy a patient has received."""
+#     patient = models.ForeignKey(Patient, on_delete=models.CASCADE)
     
-    kind = models.PositiveSmallIntegerField(choices=TREATMENT_KIND)
+#     kind = models.PositiveSmallIntegerField(choices=TREATMENT_KIND)
     
-    start_date = models.DateField()
-    end_date = models.DateField()
+#     start_date = models.DateField()
+#     end_date = models.DateField()
     
     
     
