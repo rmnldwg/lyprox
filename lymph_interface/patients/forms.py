@@ -22,6 +22,11 @@ class PatientForm(forms.ModelForm):
         patient = super(PatientForm, self).save(commit=False)
         patient.identifier = self.cleaned_data["first_name"]
         patient.age = self._compute_age()
+        
+        if commit:
+            patient.save()
+            
+        return patient
     
     
     def _compute_age(self):

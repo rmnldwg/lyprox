@@ -17,5 +17,16 @@ class ListView(generic.ListView):
     
 class DetailView(generic.DetailView):
     model = Patient
-    template_name = "patients/detail.html"  
+    template_name = "patients/detail.html"
+    
+    
+def create_patient(request):
+    form = PatientForm(request.POST or None)
+    
+    if form.is_valid():
+        form.save()
+        form = PatientForm()
+        
+    context = {"form": form}
+    return render(request, "patients/create.html", context)
     
