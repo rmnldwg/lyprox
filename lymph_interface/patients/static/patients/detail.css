@@ -1,0 +1,78 @@
+/* HEADER of PATIENT */
+.patient-header ul {
+    display: flex;
+    justify-content: space-between;
+    list-style: none;
+    padding: 0;
+}
+
+.patient-header ul li {
+    margin: 10px;
+    font-size: xx-large;
+    font-weight: bold;
+}
+
+
+/* PATIENT INFO */
+.patient-info ul {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    list-style: none;
+    padding: 0;
+}
+
+.patient-info ul li {
+    border-left: 1px solid gray;
+    border-right: 1px solid gray;
+    flex-grow: 1;
+    font-size: large;
+    margin: 10px 0;
+    text-align: center;
+    padding: 0 20px;
+}
+
+
+/* LIST of TUMORS */
+.tumors {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.tumors div {
+    background-color: gray;
+    margin: 10px 0 10px 10px;
+    min-width: 300px;
+    padding: 10px;
+}
+
+.tumors div p {
+    margin: 0;
+}
+
+.tumors div p:first-child {
+    font-size: large;
+    font-weight: bold;
+    padding-bottom: 5px;
+}
+
+.diagnoses {
+    padding: 10px;
+}
+
+.diagnoses table {
+    border: 1px solid gray;
+    border-collapse: collapse;
+    width: 100%;
+}
+
+.diagnoses table tr th {
+    background-color: gray;
+    color: white;
+    font-size: large;
+    padding: 5px 0;
+}
+
+.diagnoses table tr td {
+    text-align: center;
+}

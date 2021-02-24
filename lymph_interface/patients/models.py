@@ -7,6 +7,7 @@ class Patient(models.Model):
     gender = models.CharField(max_length=10, choices=[("female", "female"), 
                                                       ("male"  , "male"  )])
     age = models.IntegerField()
+    diagnose_date = models.DateField()
     
     alcohol_abuse = models.BooleanField()
     nicotine_abuse = models.BooleanField()
@@ -53,9 +54,12 @@ class Tumor(models.Model):
     """Report of primary tumor(s)."""
     patient = models.ForeignKey(Patient, on_delete=models.CASCADE)
     
-    diagnose_date = models.DateField()
-    
     location = models.PositiveSmallIntegerField(choices=LOCATIONS)
+    position = models.CharField(max_length=10, choices=[("left", "left"),
+                                                        ("right", "right")])
+    extension = models.BooleanField()
+    size = models.FloatField()
+    
     t_stage = models.PositiveSmallIntegerField(choices=T_STAGES)
     stage_prefix = models.CharField(max_length=1, choices=[("c", "c"), 
                                                            ("p", "p")])
