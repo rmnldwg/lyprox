@@ -3,15 +3,15 @@ from django.db import models
 # Create your models here.
 class Patient(models.Model):
     """Base model class of a patient. Contains patient specific information."""
-    identifier = models.CharField(max_length=200) # ideally, this is a hashed id
+    identifier = models.CharField(max_length=200, unique=True) # ideally, this is a hashed id
     gender = models.CharField(max_length=10, choices=[("female", "female"), 
                                                       ("male"  , "male"  )])
     age = models.IntegerField()
     diagnose_date = models.DateField()
     
-    alcohol_abuse = models.BooleanField()
-    nicotine_abuse = models.BooleanField()
-    hpv_status = models.BooleanField() 
+    alcohol_abuse = models.BooleanField(blank=True, null=True)
+    nicotine_abuse = models.BooleanField(blank=True, null=True)
+    hpv_status = models.BooleanField(blank=True, null=True) 
     
     
     def __str__(self):
@@ -58,7 +58,7 @@ class Tumor(models.Model):
     position = models.CharField(max_length=10, choices=[("left", "left"),
                                                         ("right", "right")])
     extension = models.BooleanField()
-    size = models.FloatField()
+    size = models.FloatField(blank=True, null=True)
     
     t_stage = models.PositiveSmallIntegerField(choices=T_STAGES)
     stage_prefix = models.CharField(max_length=1, choices=[("c", "c"), 
@@ -94,7 +94,7 @@ class Diagnose(models.Model):
     n_stage = models.PositiveSmallIntegerField(choices=N_STAGES)
     m_stage = models.PositiveSmallIntegerField(choices=M_STAGES)
     
-    lnl_I   = models.BooleanField(blank=True, null=True, default=None)
-    lnl_II  = models.BooleanField(blank=True, null=True, default=None)
-    lnl_III = models.BooleanField(blank=True, null=True, default=None)
-    lnl_IV  = models.BooleanField(blank=True, null=True, default=None)
+    lnl_I   = models.BooleanField(blank=True, null=True)
+    lnl_II  = models.BooleanField(blank=True, null=True)
+    lnl_III = models.BooleanField(blank=True, null=True)
+    lnl_IV  = models.BooleanField(blank=True, null=True)

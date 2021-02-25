@@ -3,7 +3,7 @@ from django.http import HttpResponse, Http404
 from django.views import generic
 
 from .models import Patient
-from .forms import PatientForm
+from .forms import PatientForm, TumorForm, DiagnoseForm
 
 # Create your views here.
 class ListView(generic.ListView):
@@ -15,18 +15,50 @@ class ListView(generic.ListView):
         return Patient.objects.all()
     
     
+    
 class DetailView(generic.DetailView):
     model = Patient
     template_name = "patients/detail.html"
     
     
+    
 def create_patient(request):
+    """View to add new patients to the database."""
     form = PatientForm(request.POST or None)
     
     if form.is_valid():
-        form.save()
-        form = PatientForm()
+        new_patient = form.save()
+        return edit_patient(request)
         
     context = {"form": form}
     return render(request, "patients/create.html", context)
     
+    
+def add_tumor_to_patient(request, *args, **kwargs):
+    """View to add new tumors and diagnoses to existing patients."""
+    tumor_form = TumorForm(request.POST or None)
+    diagnose_form = DiagnoseForm()
+    
+    if tumor_form.is_valid():
+        new_tumor = tumor_form.save(kwargs["pk"])
+        tumor_form = TumorForm()
+        
+    context = {"tumor_form": tumor_form, 
+               "diagnose_form": diagnose_form,
+               "patient": Patient.objects.get(pk=kwargs["pk"])}
+    return render(request, "patients/edit.html", context)
+
+
+def add_diagnose_to_patient(request, *args, **kwargs):
+    """View to add new tumors and diagnoses to existing patients."""
+    tumor_form = TumorForm()
+    diagnose_form = DiagnoseForm(request.POST or None)
+    
+    if diagnose_form.is_valid():
+        new_diagnose = diagnose_form.save(kwargs["pk"])
+        diagnose_form = DiagnoseForm()
+        
+    context = {"tumor_form": tumor_form, 
+               "diagnose_form": diagnose_form,
+               "patient": Patient.objects.get(pk=kwargs["pk"])}
+    return render(request, "patients/edit.html", context)
