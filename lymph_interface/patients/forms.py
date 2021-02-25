@@ -16,6 +16,8 @@ class PatientForm(forms.ModelForm):
                   "alcohol_abuse", 
                   "nicotine_abuse", 
                   "hpv_status"]
+        widgets = {"diagnose_date": forms.SelectDateWidget()}
+        
         
     def save(self, commit=True):
         """Compute hashed ID and age from name, birthday and diagnose date."""

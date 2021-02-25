@@ -1,5 +1,5 @@
-from django.shortcuts import render, get_object_or_404
-from django.http import HttpResponse, Http404
+from django.shortcuts import render, get_object_or_404, reverse
+from django.http import HttpResponse, Http404, HttpResponseRedirect
 from django.views import generic
 
 from .models import Patient
@@ -28,7 +28,7 @@ def create_patient(request):
     
     if form.is_valid():
         new_patient = form.save()
-        return edit_patient(request)
+        return HttpResponseRedirect(reverse("patients:add_tumor", kwargs={"pk": new_patient.pk}))
         
     context = {"form": form}
     return render(request, "patients/create.html", context)

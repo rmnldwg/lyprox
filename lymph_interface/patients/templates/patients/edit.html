@@ -1,17 +1,22 @@
 {% extends "patients/detail.html" %}
 
 {% block add_tumor %}
-<form method="POST" action="{% url 'patients:add_tumor' patient.pk %}">
-    {% csrf_token %}
-    {{ tumor_form.as_p }}
-    <input type="submit" value="Add">
-</form>
+<div>
+    <p>Add tumor</p>
+    <form method="POST" action="{% url 'patients:add_tumor' patient.pk %}">
+        {% csrf_token %}
+        {{ tumor_form.as_p }}
+        <input type="submit" value="Add">
+    </form>
+</div>
 {% endblock add_tumor %}
 
 {% block add_diagnose %}
-<form method="POST" action="{% url 'patients:add_diagnose' patient.pk %}">
-    {% csrf_token %}
-    {{ diagnose_form.as_table }}
-    <input type="submit" value="Add">
-</form>
+<div>
+    <form method="POST" action="{% url 'patients:add_diagnose' patient.pk %}">
+        {% csrf_token %}
+        {{ diagnose_form.as_table }}
+        <input type="submit" value="Add">
+    </form>
+</div>
 {% endblock add_diagnose %}

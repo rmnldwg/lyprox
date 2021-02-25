@@ -34,11 +34,8 @@
     </div>
     {% endfor %}
 
-    <div>
-        <p>Add tumor</p>
-        {% block add_tumor %}
-        {% endblock add_tumor %}
-    </div>
+    {% block add_tumor %}
+    {% endblock add_tumor %}
 </div>
 
 <div class="diagnoses">
@@ -64,10 +61,8 @@
         {% endfor %}
     </table>
 
-    <div>
-        {% block add_diagnose %}
-        {% endblock add_diagnose %}
-    </div>
+    {% block add_diagnose %}
+    {% endblock add_diagnose %}
 </div>
     
 {% endblock content %}
