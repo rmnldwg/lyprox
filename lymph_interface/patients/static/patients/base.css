@@ -34,45 +34,64 @@
 
 
 /* LIST of TUMORS */
-.tumors {
+.tumor-list {
     display: flex;
     flex-wrap: wrap;
 }
 
-.tumors div {
-    background-color: gray;
+.tumor-list div {
     margin: 10px 0 10px 10px;
     min-width: 300px;
     padding: 10px;
 }
 
-.tumors div p {
+.tumor-list div.tumor {
+    background-color: gray;
+    position: relative;
+    height: 180px;
+}
+
+.tumor-list div.tumor p {
     margin: 0;
 }
 
-.tumors div p:first-child {
+.tumor-list div.tumor p:first-child {
     font-size: large;
     font-weight: bold;
     padding-bottom: 5px;
 }
 
-.diagnoses {
+.tumor-list div.tumor div.buttons {
+    display: block;
+    text-align: right;
+    position: absolute;
+    bottom: 0;
+}
+
+.tumor-list div.tumor div.buttons a i {
+    font-size: 30px;
+    color: black;
+}
+
+
+/* TABLE of DIAGNOSES */
+.diagnose-list {
     padding: 10px;
 }
 
-.diagnoses table {
+.diagnose-list table {
     border: 1px solid gray;
     border-collapse: collapse;
     width: 100%;
 }
 
-.diagnoses table tr th {
+.diagnose-list table tr th {
     background-color: gray;
     color: white;
     font-size: large;
     padding: 5px 0;
 }
 
-.diagnoses table tr td {
+.diagnose-list table tr td {
     text-align: center;
 }

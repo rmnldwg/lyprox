@@ -1,68 +1,23 @@
-{% extends "base.html" %}
+{% extends "patients/base.html" %}
 
-{% block content %}
+{% block add_tumor %}
 
 {% load static %}
-<link rel="stylesheet" type="text/css" href="{% static 'patients/detail.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'patients/add.css' %}">
 
-<div class="patient-header">
-    <ul>
-        <li>Patient {{ patient.pk }}</li>
-        <li>Hash-ID: {{ patient.identifier }} </li>
-    </ul>
+<div class="add-tumor">
+    <a href="{% url 'patients:add_tumor' patient.pk %}">
+        <img src="{% static 'patients/add_circle.svg' %}" alt="add tumor">
+    </a>
 </div>
+{% endblock add_tumor %}
 
-<div class="patient-info">
-    <ul>
-        <li>date of diagnosis: {{ patient.diagnose_date }} </li>
-        <li>age: {{ patient.age }} </li>
-        <li>gender: {{ patient.gender }} </li>
-        <li>alcohol abuse: {{ patient.alcohol_abuse }} </li>
-        <li>nicotine abuse: {{ patient.nicotine_abuse }} </li>
-        <li>HPV status: {{ patient.hpv_status }} </li>
-    </ul>
-</div>
-
-<div class="tumors">
-    {% for tumor in patient.tumor_set.all %}
-    <div>
-        <p>Tumor {{ forloop.counter }} ({{ tumor.get_stage_prefix_display }}{{ tumor.get_t_stage_display }}) </p>
-        <p>location: {{ tumor.get_location_display }} </p>
-        <p>position: {{ tumor.get_position_display }} </p>
-        <p>extension: {{ tumor.extension }} </p>
-        <p>size: {{ tumor.size}} </p>
-    </div>
-    {% endfor %}
-
-    {% block add_tumor %}
-    {% endblock add_tumor %}
-</div>
-
-<div class="diagnoses">
-    <h3>lymph node level involvement</h3>
-    <table>
-        <tr>
-            <th>modality</th>
-            <th>I</th>
-            <th>II</th>
-            <th>III</th>
-            <th>IV</th>
-        </tr>
-        {% for diagnose in patient.diagnose_set.all %}
-
-        <tr>
-            <td>{{ diagnose.get_modality_display }} </td>
-            <td>{{ diagnose.lnl_I }} </td>
-            <td>{{ diagnose.lnl_II }}</td>
-            <td>{{ diagnose.lnl_III }}</td>
-            <td>{{ diagnose.lnl_IV }}</td>
-        </tr>
-
-        {% endfor %}
-    </table>
-
-    {% block add_diagnose %}
-    {% endblock add_diagnose %}
-</div>
-    
-{% endblock content %}
+{% block add_diagnose %}
+<tr class="add-diagnose">
+    <td colspan="9">
+        <a href="{% url 'patients:add_diagnose' patient.pk %}">
+            <img src="{% static 'patients/add_circle.svg' %}" alt="add disgnose">
+        </a>
+    </td>
+</tr>
+{% endblock add_diagnose %}

@@ -1,0 +1,52 @@
+{% extends "patients/base.html" %}
+
+{% block add_tumor %}
+
+{% load static %}
+<link rel="stylesheet" type="text/css" href="{% static 'patients/add.css' %}">
+
+<div class="tumor">
+    <p>Add tumor</p>
+    <form method="POST" action="{% url 'patients:add_tumor' patient.pk %}">
+        {% csrf_token %}
+        <table>
+            <tr>
+                <td>T-stage</td>
+                <td>{{ tumor_form.stage_prefix }}{{ tumor_form.t_stage }} </td>
+            </tr>
+            <tr>
+                <td>location</td>
+                <td>{{ tumor_form.location }} </td>
+            </tr>
+            <tr>
+                <td>position</td>
+                <td>{{ tumor_form.position }} </td>
+            </tr>
+            <tr>
+                <td>extension</td>
+                <td>{{ tumor_form.extension }} </td>
+            </tr>
+            <tr>
+                <td>size</td>
+                <td>{{ tumor_form.size }} </td>
+            </tr>
+        </table>
+        <div class="buttons">
+            <input type="submit" value="Add" id="add_tumor_button">
+            <label for="add_tumor_button">
+                <i class="material-icons" title="add tumor to patient">check_circle_outline</i>
+            </label>
+        </div>
+    </form>
+</div>
+{% endblock add_tumor %}
+
+{% block add_diagnose %}
+<tr class="add-diagnose">
+    <td colspan="9">
+        <a href="{% url 'patients:add_diagnose' patient.pk %}">
+            <img src="{% static 'patients/add_circle.svg' %}" alt="add disgnose">
+        </a>
+    </td>
+</tr>
+{% endblock add_diagnose %}

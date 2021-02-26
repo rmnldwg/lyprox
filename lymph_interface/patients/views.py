@@ -37,28 +37,24 @@ def create_patient(request):
 def add_tumor_to_patient(request, *args, **kwargs):
     """View to add new tumors and diagnoses to existing patients."""
     tumor_form = TumorForm(request.POST or None)
-    diagnose_form = DiagnoseForm()
     
     if tumor_form.is_valid():
         new_tumor = tumor_form.save(kwargs["pk"])
         tumor_form = TumorForm()
         
     context = {"tumor_form": tumor_form, 
-               "diagnose_form": diagnose_form,
                "patient": Patient.objects.get(pk=kwargs["pk"])}
-    return render(request, "patients/edit.html", context)
+    return render(request, "patients/add_tumor.html", context)
 
 
 def add_diagnose_to_patient(request, *args, **kwargs):
     """View to add new tumors and diagnoses to existing patients."""
-    tumor_form = TumorForm()
     diagnose_form = DiagnoseForm(request.POST or None)
     
     if diagnose_form.is_valid():
         new_diagnose = diagnose_form.save(kwargs["pk"])
         diagnose_form = DiagnoseForm()
         
-    context = {"tumor_form": tumor_form, 
-               "diagnose_form": diagnose_form,
+    context = {"diagnose_form": diagnose_form,
                "patient": Patient.objects.get(pk=kwargs["pk"])}
-    return render(request, "patients/edit.html", context)
+    return render(request, "patients/add_diagnose.html", context)

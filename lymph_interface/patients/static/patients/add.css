@@ -1,0 +1,45 @@
+.add-tumor {
+    background-color: lightgray;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.add-tumor a img {
+    width: 60px;
+}
+
+.tumor div.buttons {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0;
+    margin: 0;
+    margin-top: 5px;
+}
+
+.tumor .buttons input {
+    display: none;
+}
+
+.tumor .buttons label:hover {
+    color: red;
+    cursor: pointer;
+}
+
+.tumor .buttons label i {
+    font-size: 30px;
+}
+
+tr.add-diagnose td a img {
+    width: 30px;
+}
+
+tr.add-diagnose td input[type="submit"] {
+    display: none;
+}
+
+tr.add-diagnose td label:hover {
+    color: red;
+    cursor: pointer;
+}

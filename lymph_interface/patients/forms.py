@@ -1,4 +1,5 @@
 from django import forms
+from django.forms.widgets import NumberInput
 from django.db import IntegrityError
 from django.utils.translation import gettext as _
 from .models import Patient, Tumor, Diagnose
@@ -7,7 +8,7 @@ class PatientForm(forms.ModelForm):
     
     first_name = forms.CharField()
     last_name = forms.CharField()
-    birthday = forms.DateField()
+    birthday = forms.DateField(widget=NumberInput(attrs={"type": "date"}))
     
     class Meta:
         model = Patient
@@ -16,7 +17,7 @@ class PatientForm(forms.ModelForm):
                   "alcohol_abuse", 
                   "nicotine_abuse", 
                   "hpv_status"]
-        widgets = {"diagnose_date": forms.SelectDateWidget()}
+        widgets = {"diagnose_date": NumberInput(attrs={"type": "date"})}
         
         
     def save(self, commit=True):
@@ -76,8 +77,7 @@ class TumorForm(forms.ModelForm):
                   "location", 
                   "position",
                   "extension",
-                  "size"
-                  ]
+                  "size"]
         
         
     def save(self, pk, commit=True):
@@ -103,6 +103,7 @@ class DiagnoseForm(forms.ModelForm):
                   "lnl_II",
                   "lnl_III",
                   "lnl_IV"]
+        widgets = {"diagnose_date": NumberInput(attrs={"type": "date"})}
         
         
     def save(self, pk, commit=True):
