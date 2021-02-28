@@ -50,9 +50,14 @@
             </tr>
         </table>
         <div class="buttons">
-            <a href="https://google.com">
-                <i class="material-icons" title="delete tumor">delete_outline</i>
-            </a>
+            <form action="{% url 'patients:delete_tumor' patient.pk %}" method="POST">
+                {% csrf_token %}
+                <input name="tumor_pk" value="{{ tumor.pk }}">
+                <input type="submit" value="Delete" id="delete_tumor_button">
+                <label for="delete_tumor_button">
+                    <i class="material-icons" title="delete tumor">delete_outline</i>
+                </label>
+            </form>
         </div>
     </div>
     {% endfor %}
@@ -95,7 +100,16 @@
             <td>{{ diagnose.lnl_II }}</td>
             <td>{{ diagnose.lnl_III }}</td>
             <td>{{ diagnose.lnl_IV }}</td>
-            <td></td>
+            <td>
+                <form action="{% url 'patients:delete_diagnose' patient.pk %}" method="POST">
+                    {% csrf_token %}
+                    <input name="diagnose_pk" value="{{ diagnose.pk }}">
+                    <input type="submit" value="Delete" id="delete_diagnose_button">
+                    <label for="delete_diagnose_button">
+                        <i class="material-icons" title="delete diagnose">delete_outline</i>
+                    </label>
+                </form>
+            </td>
         </tr>
         {% endfor %}
 

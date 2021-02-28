@@ -2,7 +2,7 @@ from django.shortcuts import render, get_object_or_404, reverse
 from django.http import HttpResponse, Http404, HttpResponseRedirect
 from django.views import generic
 
-from .models import Patient
+from .models import Patient, Tumor, Diagnose
 from .forms import PatientForm, TumorForm, DiagnoseForm
 
 # Create your views here.
@@ -47,6 +47,22 @@ def add_tumor_to_patient(request, *args, **kwargs):
     return render(request, "patients/add_tumor.html", context)
 
 
+def delete_tumor_from_patient(request, *args, **kwargs):
+    """Delete one specific tumor from the list of tumors of a particular 
+    patient."""
+    patient = Patient.objects.get(pk=kwargs["pk"])
+    
+    if request.method == "POST":
+        tumor = Tumor.objects.get(pk=request.POST["tumor_pk"])
+    
+        if tumor.patient != patient:
+            raise Exception("Find out which error to raise here!")
+    
+        tumor.delete()
+    
+    return HttpResponseRedirect(reverse("patients:detail", kwargs={"pk": patient.pk}))
+
+
 def add_diagnose_to_patient(request, *args, **kwargs):
     """View to add new tumors and diagnoses to existing patients."""
     diagnose_form = DiagnoseForm(request.POST or None)
@@ -58,3 +74,19 @@ def add_diagnose_to_patient(request, *args, **kwargs):
     context = {"diagnose_form": diagnose_form,
                "patient": Patient.objects.get(pk=kwargs["pk"])}
     return render(request, "patients/add_diagnose.html", context)
+
+
+def delete_diagnose_from_patient(request, *args, **kwargs):
+    """Delete one specific diagnose from the list of diagnoses of a particular 
+    patient."""
+    patient = Patient.objects.get(pk=kwargs["pk"])
+    
+    if request.method == "POST":
+        diagnose = Diagnose.objects.get(pk=request.POST["diagnose_pk"])
+    
+        if diagnose.patient != patient:
+            raise Exception("Find out which error to raise here!")
+    
+        diagnose.delete()
+    
+    return HttpResponseRedirect(reverse("patients:detail", kwargs={"pk": patient.pk}))

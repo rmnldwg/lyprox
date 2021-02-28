@@ -68,9 +68,17 @@
     bottom: 0;
 }
 
-.tumor-list div.tumor div.buttons a i {
+.tumor-list div.tumor div.buttons form input {
+    display: none;
+}
+
+.tumor-list div.tumor div.buttons form label {
     font-size: 30px;
-    color: black;
+}
+
+.tumor-list div.tumor div.buttons form label:hover {
+    cursor: pointer;
+    color: red;
 }
 
 
@@ -94,4 +102,17 @@
 
 .diagnose-list table tr td {
     text-align: center;
+}
+
+.diagnose-list table tr td form input {
+    display: none;
+}
+
+.diagnose-list table tr td form label {
+    font-size: 25px;
+}
+
+.diagnose-list table tr td form label:hover {
+    color: red;
+    cursor: pointer;
 }

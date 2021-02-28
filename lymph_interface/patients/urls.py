@@ -7,6 +7,8 @@ urlpatterns = [
     path("", views.ListView.as_view(), name="list"),
     path("<int:pk>/", views.DetailView.as_view(), name="detail"),
     path("create/", views.create_patient, name="create"),
-    path("<int:pk>/add/tumor/", views.add_tumor_to_patient, name="add_tumor"),
-    path("<int:pk>/add/diagnose/", views.add_diagnose_to_patient, name="add_diagnose"),
+    path("<int:pk>/tumor/add", views.add_tumor_to_patient, name="add_tumor"),
+    path("<int:pk>/diagnose/add", views.add_diagnose_to_patient, name="add_diagnose"),
+    path("<int:pk>/tumor/delete", views.delete_tumor_from_patient, name="delete_tumor"),
+    path("<int:pk>/diagnose/delete", views.delete_diagnose_from_patient, name="delete_diagnose"),
 ]
