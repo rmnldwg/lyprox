@@ -1,8 +1,18 @@
 from django import forms
+from django.conf import settings
 from django.forms.widgets import NumberInput
 from django.db import IntegrityError
 from django.utils.translation import gettext as _
+
 from .models import Patient, Tumor, Diagnose
+from .utils import compute_hash
+
+import numpy as np
+from pathlib import Path
+import pandas
+import os
+
+
 
 class PatientForm(forms.ModelForm):
     
@@ -16,7 +26,9 @@ class PatientForm(forms.ModelForm):
                   "diagnose_date", 
                   "alcohol_abuse", 
                   "nicotine_abuse", 
-                  "hpv_status"]
+                  "hpv_status", 
+                  "n_stage",
+                  "m_stage"]
         widgets = {"diagnose_date": NumberInput(attrs={"type": "date"})}
         
         
@@ -63,8 +75,11 @@ class PatientForm(forms.ModelForm):
     def _get_identifier(self, cleaned_data):
         """Compute the (potentially hashed) identifier from fields that are of 
         provacy concern."""
-        identifier = cleaned_data["first_name"]
+        identifier = compute_hash(cleaned_data["first_name"], 
+                                  cleaned_data["last_name"], 
+                                  cleaned_data["birthday"])
         cleaned_data.pop("first_name")
+        cleaned_data.pop("last_name")
         return identifier
         
         
@@ -97,8 +112,6 @@ class DiagnoseForm(forms.ModelForm):
         model = Diagnose
         fields = ["diagnose_date",
                   "modality",
-                  "n_stage",
-                  "m_stage",
                   "lnl_I",
                   "lnl_II",
                   "lnl_III",
@@ -115,3 +128,35 @@ class DiagnoseForm(forms.ModelForm):
             diagnose.save()
             
         return diagnose
+    
+    
+    
+class DataFileForm(forms.Form):
+    data_file = forms.FileField()
+    
+    def clean(self):
+        cleaned_data = super(DataFileForm, self).clean()
+        
+        suffix = cleaned_data["data_file"].name.split(".")[-1]
+        if suffix != "csv":
+            raise ValidationError(_("File must be of type CSV."))
+        
+        file_path = Path(getattr(settings, "FILE_UPLOAD_TEMP_DIR")).resolve() / "tmp.csv"
+        
+        dest = open(file_path, "wb")
+        for chunk in cleaned_data["data_file"].chunks():
+            dest.write(chunk)
+        dest.close()
+        
+        try:
+            data_frame = pandas.read_csv(file_path, header=[0,1,2], 
+                                         skip_blank_lines=True)
+        except:
+            raise forms.ValidationError(_("pandas was unable to parse the " 
+                                          "uploaded file. Make sure it is a "
+                                          "valid CSV file with 3 header rows."))
+            
+        os.remove(file_path)
+            
+        cleaned_data["data_frame"] = data_frame
+        return cleaned_data

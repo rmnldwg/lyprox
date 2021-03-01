@@ -1,11 +1,11 @@
-from django.shortcuts import render, get_object_or_404, reverse
-from django.http import HttpResponse, Http404, HttpResponseRedirect
+from django.shortcuts import render, get_object_or_404, reverse, redirect
+from django.http import HttpResponse, Http404
 from django.views import generic
 
-from .models import Patient, Tumor, Diagnose
-from .forms import PatientForm, TumorForm, DiagnoseForm
+from .models import Patient, Tumor, Diagnose, create_from_pandas
+from .forms import PatientForm, TumorForm, DiagnoseForm, DataFileForm
 
-# Create your views here.
+
 class ListView(generic.ListView):
     template_name = "patients/list.html"
     context_object_name = "patient_list"
@@ -28,10 +28,38 @@ def create_patient(request):
     
     if form.is_valid():
         new_patient = form.save()
-        return HttpResponseRedirect(reverse("patients:add_tumor", kwargs={"pk": new_patient.pk}))
+        return redirect("patients:add_tumor", pk=new_patient.pk)
         
     context = {"form": form}
     return render(request, "patients/create.html", context)
+
+
+def upload_patients(request):
+    """View to load many patients at once from a CSV file using pandas. This 
+    requires the CSV file to be formatted in a certain way."""
+    if request.method == "POST":
+        form = DataFileForm(request.POST, request.FILES)
+        
+        # custom validator creates pandas DataFrame from uploaded CSV
+        if form.is_valid():
+            data_frame = form.cleaned_data["data_frame"]
+            # creating patients from the resulting pandas DataFrame
+            num_new = create_from_pandas(data_frame)
+            context = {"num_new": num_new}
+            return render(request, "patients/upload.html", context)
+        
+    else:
+        form = DataFileForm()
+        
+    context = {"upload_succes": False, "form": form}
+    return render(request, "patients/upload.html", context)
+
+
+def upload_success(request, *args, **kwargs):
+    """Display that the patients have been uploaded successfully and how many."""
+    context = {"num_new": kwargs["num_new"]}
+    return render(request, "patients/upload.html", context)
+    
     
     
 def add_tumor_to_patient(request, *args, **kwargs):
@@ -60,7 +88,7 @@ def delete_tumor_from_patient(request, *args, **kwargs):
     
         tumor.delete()
     
-    return HttpResponseRedirect(reverse("patients:detail", kwargs={"pk": patient.pk}))
+    return redirect("patients:detail", pk=patient.pk)
 
 
 def add_diagnose_to_patient(request, *args, **kwargs):
@@ -89,4 +117,4 @@ def delete_diagnose_from_patient(request, *args, **kwargs):
     
         diagnose.delete()
     
-    return HttpResponseRedirect(reverse("patients:detail", kwargs={"pk": patient.pk}))
+    return redirect("patients:detail", pk=patient.pk)
