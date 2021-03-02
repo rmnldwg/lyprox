@@ -1,12 +1,45 @@
 {% extends "base.html" %}
 
 {% block content %}
+
+{% load static %}
+<link rel="stylesheet" href="{% static 'patients/list.css' %}">
+
+<div class="patient-list">
+    <table>
+        <tr>
+            <th>Patient</th>
+            <th>Hash</th>
+            <th>date of diagnosis</th>
+            <th>gender</th>
+            <th>age</th>
+            <th>stage</th>
+            <th>link</th>
+        </tr>
+
     {% for patient in patient_list %}
-        <p>
-            ID: {{ patient.identifier }}, 
-            age: {{ patient.age }}, 
-            gender: {{ patient.gender }}
-            <a href="{% url 'patients:detail' patient.id %}">link</a>
-        </p>
+        <tr>
+            <td>{{ patient.pk }} </td>
+            <td>{{ patient.identifier }} </td>
+            <td>{{ patient.diagnose_date }} </td>
+            <td>{{ patient.gender }} </td>
+            <td>{{ patient.age }} </td>
+            <td>{{ patient.get_t_stage_display }} {{ patient.get_n_stage_display }} {{ patient.get_m_stage_display }} </td>
+            <td>
+                <a href="{% url 'patients:detail' patient.pk %}">
+                    <i class="material-icons">link</i>
+                </a>
+            </td>
+        </tr>
     {% endfor %}
+
+        <tr>
+            <td colspan="7">
+                <a href="{% url 'patients:create' %}">
+                    <i class="material-icons">add_circle_outline</i>
+                </a>
+            </td>
+        </tr>
+    </table>
+</div>
 {% endblock content %}

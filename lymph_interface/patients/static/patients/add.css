@@ -5,8 +5,14 @@
     align-items: center;
 }
 
-.add-tumor a img {
-    width: 60px;
+.add-tumor a i {
+    color: black;
+    font-size: 60px;
+}
+
+.add-tumor a i:hover {
+    color: red;
+    cursor: pointer;
 }
 
 .tumor div.buttons {
@@ -31,15 +37,26 @@
     font-size: 30px;
 }
 
-tr.add-diagnose td a img {
-    width: 30px;
+tr.add-diagnose td a i {
+    font-size: 30px;
+    color: black;
+}
+
+tr.add-diagnose td a i:hover {
+    color: red;
+    cursor: pointer;
 }
 
 tr.add-diagnose td input[type="submit"] {
     display: none;
 }
 
-tr.add-diagnose td label:hover {
+tr.add-diagnose td label i {
+    font-size: 25px;
+    color: black;
+}
+
+tr.add-diagnose td label i:hover {
     color: red;
     cursor: pointer;
 }

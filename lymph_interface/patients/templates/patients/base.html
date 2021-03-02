@@ -20,6 +20,7 @@
         <li>alcohol abuse: {{ patient.alcohol_abuse }} </li>
         <li>nicotine abuse: {{ patient.nicotine_abuse }} </li>
         <li>HPV status: {{ patient.hpv_status }} </li>
+        <li>stage: {{ patient.get_t_stage_display }} {{ patient.get_n_stage_display }} {{ patient.get_m_stage_display }} </li>
     </ul>
 </div>
 
@@ -69,20 +70,18 @@
 <div class="diagnose-list">
     <h3>lymph node level involvement</h3>
     <table>
-        <col style="width: 17.5%;">
-        <col style="width: 17.5%;">
+        <col style="width: 20%;">
+        <col style="width: 20%;">
         <col style="width: 10%;">
         <col style="width: 10%;">
         <col style="width: 10%;">
         <col style="width: 10%;">
         <col style="width: 10%;">
         <col style="width: 10%;">
-        <col style="width: 5%;">
         <tr>
-            <th>modality</th>
             <th>diagnose date</th>
-            <th>N-stage</th>
-            <th>M-stage</th>
+            <th>moadlity</th>
+            <th>side</th>
             <th>I</th>
             <th>II</th>
             <th>III</th>
@@ -92,10 +91,9 @@
 
         {% for diagnose in patient.diagnose_set.all %}
         <tr>
-            <td>{{ diagnose.get_modality_display }}</td>
             <td>{{ diagnose.diagnose_date }}</td>
-            <td>{{ diagnose.get_n_stage_display }}</td>
-            <td>{{ diagnose.get_m_stage_display }}</td>
+            <td>{{ diagnose.get_modality_display }}</td>
+            <td>{{ diagnose.get_side_display }}</td>
             <td>{{ diagnose.lnl_I }}</td>
             <td>{{ diagnose.lnl_II }}</td>
             <td>{{ diagnose.lnl_III }}</td>

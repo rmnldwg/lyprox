@@ -45,19 +45,13 @@ def upload_patients(request):
             data_frame = form.cleaned_data["data_frame"]
             # creating patients from the resulting pandas DataFrame
             num_new = create_from_pandas(data_frame)
-            context = {"num_new": num_new}
+            context = {"upload_success": True, "num_new": num_new}
             return render(request, "patients/upload.html", context)
         
     else:
         form = DataFileForm()
         
     context = {"upload_succes": False, "form": form}
-    return render(request, "patients/upload.html", context)
-
-
-def upload_success(request, *args, **kwargs):
-    """Display that the patients have been uploaded successfully and how many."""
-    context = {"num_new": kwargs["num_new"]}
     return render(request, "patients/upload.html", context)
     
     

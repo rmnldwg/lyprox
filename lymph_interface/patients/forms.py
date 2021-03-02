@@ -100,6 +100,11 @@ class TumorForm(forms.ModelForm):
         tumor = super(TumorForm, self).save(commit=False)
         tumor.patient = Patient.objects.get(pk=pk)
         
+        # update patient's T-stage to be the worst of all its tumors'
+        if tumor.t_stage > tumor.patient.t_stage:
+            tumor.patient.t_stage = tumor.t_stage 
+            tumor.patient.save()
+        
         if commit:
             tumor.save()
             
@@ -112,6 +117,7 @@ class DiagnoseForm(forms.ModelForm):
         model = Diagnose
         fields = ["diagnose_date",
                   "modality",
+                  "side",
                   "lnl_I",
                   "lnl_II",
                   "lnl_III",
@@ -150,7 +156,7 @@ class DataFileForm(forms.Form):
         
         try:
             data_frame = pandas.read_csv(file_path, header=[0,1,2], 
-                                         skip_blank_lines=True)
+                                         skip_blank_lines=True, infer_datetime_format=True)
         except:
             raise forms.ValidationError(_("pandas was unable to parse the " 
                                           "uploaded file. Make sure it is a "

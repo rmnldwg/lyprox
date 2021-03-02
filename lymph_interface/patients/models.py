@@ -5,8 +5,16 @@ from .utils import nan_to_None as _
 
 import pandas
 import numpy as np
+import dateutil.parser
 
 
+T_STAGES = [
+    (0, "T0"),
+    (1, "T1"),
+    (2, "T2"),
+    (3, "T3"),
+    (4, "T4")
+]
 N_STAGES = [
     (0, "N0"),
     (1, "N1"),
@@ -30,6 +38,7 @@ class Patient(models.Model):
     nicotine_abuse = models.BooleanField(blank=True, null=True)
     hpv_status = models.BooleanField(blank=True, null=True) 
     
+    t_stage = models.PositiveSmallIntegerField(choices=T_STAGES, default=0)
     n_stage = models.PositiveSmallIntegerField(choices=N_STAGES)
     m_stage = models.PositiveSmallIntegerField(choices=M_STAGES)
     
@@ -58,12 +67,13 @@ def create_from_pandas(data_frame, anonymize=True):
             
         gender = _(row[("patient", "general", "gender")])
         age = _(row[("patient", "general", "age")])
-        diagnose_date = _(row[("patient", "general", "date")])
+        diagnose_date = dateutil.parser.parse(_(row[("patient", "general", "date")]))
         
         alcohol_abuse = _(row[("patient", "abuse", "alcohol")])
         nicotine_abuse = _(row[("patient", "abuse", "nicotine")])
         hpv_status = _(row[("patient", "condition", "HPV")])
         
+        t_stage = 0
         n_stage = _(row[("patient", "stage", "N")])
         m_stage = _(row[("patient", "stage", "M")])
         
@@ -74,6 +84,7 @@ def create_from_pandas(data_frame, anonymize=True):
                               alcohol_abuse=alcohol_abuse, 
                               nicotine_abuse=nicotine_abuse, 
                               hpv_status=hpv_status,
+                              t_stage=t_stage,
                               n_stage=n_stage,
                               m_stage=m_stage)
         new_patient.save()
@@ -100,6 +111,11 @@ def create_from_pandas(data_frame, anonymize=True):
             new_tumor.patient = new_patient
             
             new_tumor.save()
+            
+            if new_tumor.t_stage > new_patient.t_stage:
+                new_patient.t_stage = new_tumor.t_stage
+                new_patient.save()
+                
             count += 1
             
         # DIAGNOSES
@@ -114,7 +130,11 @@ def create_from_pandas(data_frame, anonymize=True):
             modality_list = [item[1] for item in MODALITIES]
             modality_idx = modality_list.index(modality)
             
-            diagnose_date = _(row[(f"{modality}", "info", "date")])
+            # can be empty...
+            try:
+                diagnose_date = dateutil.parser.parse(_(row[(f"{modality}", "info", "date")]))
+            except:
+                diagnose_date = None
             
             if diagnose_date is not None:      
                 for side in ["right", "left"]:
@@ -143,13 +163,6 @@ LOCATIONS = [
     (1, "oropharynx"),
     (2, "hypopharynx"),
     (3, "larynx")
-]
-T_STAGES = [
-    (0, "T0"),
-    (1, "T1"),
-    (2, "T2"),
-    (3, "T3"),
-    (4, "T4")
 ]
 class Tumor(models.Model):
     """Report of primary tumor(s)."""

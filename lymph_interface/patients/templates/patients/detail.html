@@ -7,16 +7,16 @@
 
 <div class="add-tumor">
     <a href="{% url 'patients:add_tumor' patient.pk %}">
-        <img src="{% static 'patients/add_circle.svg' %}" alt="add tumor">
+        <i class="material-icons">add_circle_outline</i>
     </a>
 </div>
 {% endblock add_tumor %}
 
 {% block add_diagnose %}
 <tr class="add-diagnose">
-    <td colspan="9">
+    <td colspan="8">
         <a href="{% url 'patients:add_diagnose' patient.pk %}">
-            <img src="{% static 'patients/add_circle.svg' %}" alt="add disgnose">
+            <i class="material-icons">add_circle_outline</i>
         </a>
     </td>
 </tr>

@@ -2,9 +2,25 @@
 
 
 {% block content %}
-<form action="{% url 'patients:upload' %}" method="post" enctype="multipart/form-data">
-    {% csrf_token %}
-    {{ form }}
-    <button type="submit">Upload</button>
-</form>
+
+{% load static %}
+<link rel="stylesheet" href="{% static 'patients/upload.css' %}">
+
+<div class="spacer"></div>
+
+<div class="upload">
+    {% if not upload_success %}
+        <p>Upload CSV table of patients</p>
+        <form action="{% url 'patients:upload' %}" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{ form.data_file }}
+            <button type="submit" id="upload_button">Upload</button>
+            <label for="upload_button">
+                <i class="material-icons" title="upload csv file">backup</i>
+            </label>
+        </form>
+    {% else %}
+        <p>{{ num_new }} patients have been added</p>
+    {% endif %}
+</div>
 {% endblock content %}
