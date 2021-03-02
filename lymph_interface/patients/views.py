@@ -2,8 +2,9 @@ from django.shortcuts import render, get_object_or_404, reverse, redirect
 from django.http import HttpResponse, Http404
 from django.views import generic
 
-from .models import Patient, Tumor, Diagnose, create_from_pandas
+from .models import Patient, Tumor, Diagnose
 from .forms import PatientForm, TumorForm, DiagnoseForm, DataFileForm
+from .utils import create_from_pandas
 
 
 class ListView(generic.ListView):
@@ -55,7 +56,6 @@ def upload_patients(request):
     return render(request, "patients/upload.html", context)
     
     
-    
 def add_tumor_to_patient(request, *args, **kwargs):
     """View to add new tumors and diagnoses to existing patients."""
     tumor_form = TumorForm(request.POST or None)
@@ -64,9 +64,10 @@ def add_tumor_to_patient(request, *args, **kwargs):
         new_tumor = tumor_form.save(kwargs["pk"])
         tumor_form = TumorForm()
         
-    context = {"tumor_form": tumor_form, 
+    context = {"action": "add_tumor", 
+               "tumor_form": tumor_form, 
                "patient": Patient.objects.get(pk=kwargs["pk"])}
-    return render(request, "patients/add_tumor.html", context)
+    return render(request, "patients/detail.html", context)
 
 
 def delete_tumor_from_patient(request, *args, **kwargs):
@@ -93,9 +94,10 @@ def add_diagnose_to_patient(request, *args, **kwargs):
         new_diagnose = diagnose_form.save(kwargs["pk"])
         diagnose_form = DiagnoseForm()
         
-    context = {"diagnose_form": diagnose_form,
+    context = {"action": "add_diagnose", 
+               "diagnose_form": diagnose_form,
                "patient": Patient.objects.get(pk=kwargs["pk"])}
-    return render(request, "patients/add_diagnose.html", context)
+    return render(request, "patients/detail.html", context)
 
 
 def delete_diagnose_from_patient(request, *args, **kwargs):

@@ -1,22 +1,11 @@
-{% extends "patients/base.html" %}
-
-{% block add_tumor %}
-
 {% load static %}
-<link rel="stylesheet" type="text/css" href="{% static 'patients/add.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'patients/add_diagnose.css' %}">
 
-<div class="add-tumor">
-    <a href="{% url 'patients:add_tumor' patient.pk %}">
-        <i class="material-icons">add_circle_outline</i>
-    </a>
-</div>
-{% endblock add_tumor %}
 
-{% block add_diagnose %}
-
-<form method="POST" action="{% url 'patients:add_diagnose' patient.pk %}">
+{% if action == "add_diagnose" %}
+<tr class="add-diagnose">
     {% csrf_token %}
-    <tr class="add-diagnose">
+    <form method="POST" action="{% url 'patients:add_diagnose' patient.pk %}">
         <td>{{ diagnose_form.diagnose_date }}</td>
         <td>{{ diagnose_form.modality }}</td>
         <td>{{ diagnose_form.side }}</td>
@@ -27,9 +16,22 @@
         <td>
             <input type="submit" value="Add" id="add_diagnose_button">
             <label for="add_diagnose_button">
-                <i class="material-icons">add_circle_outline</i>
+                <i class="material-icons">check_circle_outline</i>
             </label>
+            <a href="{% url 'patients:detail' patient.pk %}">
+                <i class="material-icons">cancel</i>
+            </a>
         </td>
-    </tr>
-</form>
-{% endblock add_diagnose %}
+    </form>
+</tr>
+
+{% else %}
+<tr class="add-diagnose">
+    <td colspan="8">
+        <a href="{% url 'patients:add_diagnose' patient.pk %}">
+            <i class="material-icons">add_circle_outline</i>
+        </a>
+    </td>
+</tr>
+
+{% endif %}
