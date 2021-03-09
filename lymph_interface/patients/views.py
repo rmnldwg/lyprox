@@ -3,7 +3,7 @@ from django.http import HttpResponse, Http404
 from django.views import generic
 
 from .models import Patient, Tumor, Diagnose
-from .forms import PatientForm, TumorForm, DiagnoseForm, DataFileForm
+from .forms import PatientForm, TumorForm, DiagnoseForm, DataFileForm, DashboardForm
 from .utils import create_from_pandas
 
 
@@ -114,3 +114,14 @@ def delete_diagnose_from_patient(request, *args, **kwargs):
         diagnose.delete()
     
     return redirect("patients:detail", pk=patient.pk)
+
+
+def dashboard(request):
+    """Display the dashboard showing patterns of involvement."""
+    if request.method == "POST":
+        form = DashboardForm(request)
+    else:
+        form = DashboardForm()
+
+    context = {"form": form}
+    return render(request, "patients/dashboard.html", context)

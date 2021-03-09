@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+{% load static %}
+<link rel="stylesheet" href="{% static 'patients/dashboard.css' %}">
+
+<form action="POST">
+{% csrf_token %}
+
+    <div class="modalities">
+        <ul>
+            <li class="title">Diagnoses</li>
+
+            {% for checkbox in form.modality_checkboxes %}
+            <li>
+                {{ checkbox.tag }}
+                <label for="{{ checkbox.id_for_label }}">{{ checkbox.choice_label }}</label>
+            </li>
+            {% endfor %}
+
+            <li>
+                <p>{{ form.modality_combine.label }}</p>
+                {{ form.modality_combine }}
+            </li>
+        </ul>
+    </div>
+
+    <hr>
+
+    <div class="tumor">
+        <p class="title">Primary Tumor</p>
+        
+        <ul>
+            {% for radiobutton in form.location_radiobuttons %}
+            <li>
+                {{ radiobutton.tag }}
+                <label for="{{ radiobutton.id_for_label }}">{{ radiobutton.choice_label }}</label>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+
+</form>
+
+
+{% endblock content %}

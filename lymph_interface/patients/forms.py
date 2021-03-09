@@ -4,7 +4,7 @@ from django.forms.widgets import NumberInput
 from django.db import IntegrityError
 from django.utils.translation import gettext as _
 
-from .models import Patient, Tumor, Diagnose
+from .models import Patient, Tumor, Diagnose, MODALITIES, LOCATIONS
 from .utils import compute_hash
 
 import numpy as np
@@ -166,3 +166,23 @@ class DataFileForm(forms.Form):
             
         cleaned_data["data_frame"] = data_frame
         return cleaned_data
+
+
+
+class DashboardForm(forms.Form):
+    modality_checkboxes = forms.MultipleChoiceField(
+        required=False, 
+        widget=forms.CheckboxSelectMultiple, 
+        choices=MODALITIES,
+    )
+    modality_combine = forms.ChoiceField(
+        choices=[("AND", "AND"), 
+                 ("OR", "OR"), 
+                 ("XOR", "XOR")],
+        label="Combine")
+    
+    
+    location_radiobuttons = forms.ChoiceField(
+        choices=LOCATIONS,
+        widget=forms.RadioSelect
+    )

@@ -1,0 +1,97 @@
+.title {
+    font-weight: bold;
+    font-size: large;
+    margin: 0;
+}
+
+div.modalities ul {
+    list-style: none;
+    display: flex;
+    justify-content: flex-start;
+    margin: 0;
+    padding: 0;
+}
+
+div.modalities ul li:first-child {
+    justify-self: flex-start;
+    justify-content: flex-start;
+    max-width: 150px;
+}
+
+div.modalities ul li {
+    min-width: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-grow: 1;
+}
+
+div.modalities ul li:last-child {
+    display: flex;
+    flex-direction: column;
+    max-width: 100px;
+    justify-content: center;
+}
+
+div.modalities ul li:last-child p {
+    margin: 0;
+}
+
+div.modalities ul li label {
+    flex-grow: 1;
+    margin: 0 5px;
+    padding: 10px 0;
+    cursor: pointer;
+    text-align: center;
+    background-color: lightgray;
+}
+
+div.modalities ul li input[type="checkbox"] {
+    display: none;
+}
+
+div.modalities ul li input[type="checkbox"]:checked + label {
+    background-color: gray;
+}
+
+
+
+div.tumor {
+    max-width: 500px;
+    margin-left: auto;
+    margin-right: auto;
+    background-color: red;
+    border: solid 1px gray;
+    margin-top: 10px;
+    padding: 10px;
+}
+
+div.tumor ul {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin: 0;
+    padding: 0;
+}
+
+div.tumor ul li {
+    min-width: 50px;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    flex-grow: 1;
+}
+
+div.tumor ul li input[type="radio"] {
+    display: none;
+}
+
+div.tumor ul li label {
+    min-width: 150px;
+    margin: 5px 0px;
+    padding: 10px 5px;
+    cursor: pointer;
+    text-align: center;
+    background-color: lightgray;
+}
