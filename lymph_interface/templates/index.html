@@ -1,5 +1,28 @@
 {% extends 'base.html' %}
 
 {% block content %}
+
+{% load static %}
+<link rel="stylesheet" href="{% static 'index.css' %}">
+
 <h1>Home</h1>
+<div class="links">
+    <ul>
+        <li>
+            <a href="{% url 'patients:list' %}">
+                <i class="material-icons">list_alt</i>
+            </a>
+        </li>
+        <li>
+            <a href="{% url 'patients:create' %}">
+                <i class="material-icons">person_add</i>
+            </a>
+        </li>
+        <li>
+            <a href="https://google.com?q=placeholder">
+                <i class="material-icons">stacked_bar_chart</i>
+            </a>
+        </li>
+    </ul>
+</div>
 {% endblock content %}

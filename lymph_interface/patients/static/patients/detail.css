@@ -7,7 +7,7 @@
 }
 
 .patient-header ul li {
-    margin: 10px;
+    margin: 0;
     font-size: xx-large;
     font-weight: bold;
 }
@@ -40,7 +40,7 @@
 }
 
 .tumor-list div {
-    margin: 10px 0 10px 10px;
+    margin: 10px 10px 10px 0;
     min-width: 300px;
     padding: 10px;
 }
@@ -84,7 +84,7 @@
 
 /* TABLE of DIAGNOSES */
 .diagnose-list {
-    padding: 10px;
+    padding: 0;
 }
 
 .diagnose-list table {
