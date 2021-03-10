@@ -9,7 +9,6 @@ import dateutil.parser
 
 
 T_STAGES = [
-    (0, "T0"),
     (1, "T1"),
     (2, "T2"),
     (3, "T3"),

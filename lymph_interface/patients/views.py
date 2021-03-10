@@ -119,6 +119,7 @@ def delete_diagnose_from_patient(request, *args, **kwargs):
 def dashboard(request):
     """Display the dashboard showing patterns of involvement."""
     if request.method == "POST":
+        print(request.POST)
         form = DashboardForm(request)
     else:
         form = DashboardForm()

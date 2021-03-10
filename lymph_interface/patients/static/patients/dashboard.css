@@ -1,6 +1,7 @@
 .title {
+    text-align: center;
     font-weight: bold;
-    font-size: large;
+    font-size: x-large;
     margin: 0;
 }
 
@@ -57,16 +58,28 @@ div.modalities ul li input[type="checkbox"]:checked + label {
 
 
 div.tumor {
-    max-width: 500px;
+    max-width: 400px;
     margin-left: auto;
     margin-right: auto;
-    background-color: red;
-    border: solid 1px gray;
+    background-color: lightgray;
     margin-top: 10px;
     padding: 10px;
 }
 
-div.tumor ul {
+div.tumor div.content {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: space-evenly;
+}
+
+div.tumor div.content hr {
+    background-color: white;
+    width: 1px;
+    border: none;
+}
+
+div.tumor div.content div ul {
     list-style: none;
     display: flex;
     flex-direction: column;
@@ -75,7 +88,7 @@ div.tumor ul {
     padding: 0;
 }
 
-div.tumor ul li {
+div.tumor div.content div ul li {
     min-width: 50px;
     display: flex;
     justify-content: flex-start;
@@ -83,15 +96,50 @@ div.tumor ul li {
     flex-grow: 1;
 }
 
-div.tumor ul li input[type="radio"] {
+div.tumor div.content div ul li input {
     display: none;
 }
 
-div.tumor ul li label {
+div.tumor div.content div ul li input:checked + label {
+    color: white;
+    background-color: rgb(56, 56, 56);
+}
+
+div.tumor div.content div ul li label {
     min-width: 150px;
-    margin: 5px 0px;
+    margin-top: 10px;
     padding: 10px 5px;
     cursor: pointer;
     text-align: center;
-    background-color: lightgray;
+    background-color: gray;
+}
+
+
+div.involvement {
+    margin-top: 10px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+}
+
+div.involvement div {
+    width: 400px;
+    background-color: red;
+    display: flex;
+    padding: 10px;
+}
+
+div.involvement div ul {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+div.involvement div.contra {
+    justify-content: flex-start;
+}
+
+div.involvement div.ipsi {
+    justify-content: flex-end;
 }

@@ -5,12 +5,12 @@
 {% load static %}
 <link rel="stylesheet" href="{% static 'patients/dashboard.css' %}">
 
-<form action="POST">
+<form method="POST">
 {% csrf_token %}
 
     <div class="modalities">
         <ul>
-            <li class="title">Diagnoses</li>
+            <li><p class="title">Diagnoses</p> </li>
 
             {% for checkbox in form.modality_checkboxes %}
             <li>
@@ -31,16 +31,50 @@
     <div class="tumor">
         <p class="title">Primary Tumor</p>
         
-        <ul>
-            {% for radiobutton in form.location_radiobuttons %}
-            <li>
-                {{ radiobutton.tag }}
-                <label for="{{ radiobutton.id_for_label }}">{{ radiobutton.choice_label }}</label>
-            </li>
-            {% endfor %}
-        </ul>
+        <div class="content">
+            <div class="location">
+                <ul>
+                    <li>Location</li>
+
+                    {% for radiobutton in form.location_radiobuttons %}
+                    <li>
+                        {{ radiobutton.tag }}
+                        <label for="{{ radiobutton.id_for_label }}">{{ radiobutton.choice_label }}</label>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+
+            <hr>
+
+            <div class="stage">
+                <ul>
+                    <li>T-stage</li>
+
+                    {% for checkbox in form.tstage_checkboxes %}
+                    <li>
+                        {{ checkbox.tag }}
+                        <label for="{{ checkbox.id_for_label }}">{{ checkbox.choice_label }}</label>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
     </div>
 
+    <div class="involvement">
+        <div class="contra">
+            <ul>
+                <li>contra</li>
+            </ul>
+        </div>
+
+        <div class="ipsi">
+            <ul>
+                <li>ipsi</li>
+            </ul>
+        </div>
+    </div>
 </form>
 
 

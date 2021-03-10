@@ -4,7 +4,7 @@ from django.forms.widgets import NumberInput
 from django.db import IntegrityError
 from django.utils.translation import gettext as _
 
-from .models import Patient, Tumor, Diagnose, MODALITIES, LOCATIONS
+from .models import Patient, Tumor, Diagnose, MODALITIES, LOCATIONS, T_STAGES
 from .utils import compute_hash
 
 import numpy as np
@@ -185,4 +185,8 @@ class DashboardForm(forms.Form):
     location_radiobuttons = forms.ChoiceField(
         choices=LOCATIONS,
         widget=forms.RadioSelect
+    )
+    tstage_checkboxes = forms.MultipleChoiceField(
+        widget=forms.CheckboxSelectMultiple,
+        choices=T_STAGES,
     )
