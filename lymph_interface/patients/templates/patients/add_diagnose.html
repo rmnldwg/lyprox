@@ -4,8 +4,8 @@
 
 {% if action == "add_diagnose" %}
 <tr class="add-diagnose">
-    {% csrf_token %}
     <form method="POST" action="{% url 'patients:add_diagnose' patient.pk %}">
+        {% csrf_token %}
         <td>{{ diagnose_form.diagnose_date }}</td>
         <td>{{ diagnose_form.modality }}</td>
         <td>{{ diagnose_form.side }}</td>
