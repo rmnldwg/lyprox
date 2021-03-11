@@ -26,9 +26,9 @@ def create_from_pandas(data_frame, anonymize=True):
             # last_name = row[("patient", "general", "last_name")]
             # birthday = row[("patient", "general", "birthday")]
             kisim_id = row[("patient", "general", "ID")]
-            identifier = compute_hash(kisim_id)
+            hash_value = compute_hash(kisim_id)
         else:
-            identifier = row[("patient", "general", "ID")]
+            hash_value = row[("patient", "general", "ID")]
 
         gender = _(row[("patient", "general", "gender")])
         age = _(row[("patient", "general", "age")])
@@ -43,7 +43,7 @@ def create_from_pandas(data_frame, anonymize=True):
         n_stage = _(row[("patient", "stage", "N")])
         m_stage = _(row[("patient", "stage", "M")])
 
-        new_patient = Patient(identifier=identifier,
+        new_patient = Patient(hash_value=hash_value,
                               gender=gender,
                               age=age,
                               diagnose_date=diagnose_date,
@@ -56,20 +56,18 @@ def create_from_pandas(data_frame, anonymize=True):
         new_patient.save()
 
         # TUMORS
-        location_list = [tuple[1] for tuple in LOCATIONS]
         stages_list = [tuple[1] for tuple in T_STAGES]
 
         count = 1
         while ("tumor", f"{count}", "location") in data_frame.columns:
-            location = _(location_list.index(
-                row[("tumor", f"{count}", "location")]))
+            subsite = _(row[("tumor", f"{count}", "subsite")])
             position = _(row[("tumor", f"{count}", "side")])
             extension = _(row[("tumor", f"{count}", "extension")])
             size = _(row[("tumor", f"{count}", "size")])
             stage_prefix = _(row[("tumor", f"{count}", "prefix")])
             t_stage = _(row[("tumor", f"{count}", "stage")])
 
-            new_tumor = Tumor(location=location,
+            new_tumor = Tumor(subsite=subsite,
                               position=position,
                               extension=extension,
                               size=size,
@@ -106,18 +104,30 @@ def create_from_pandas(data_frame, anonymize=True):
 
             if diagnose_date is not None:
                 for side in ["right", "left"]:
-                    lnl_I = _(row[(f"{modality}", f"{side}", "I")])
-                    lnl_II = _(row[(f"{modality}", f"{side}", "II")])
-                    lnl_III = _(row[(f"{modality}", f"{side}", "III")])
-                    lnl_IV = _(row[(f"{modality}", f"{side}", "IV")])
+                    I   = _(row[(f"{modality}", f"{side}", "I")])
+                    Ia  = _(row[(f"{modality}", f"{side}", "Ia")])
+                    Ib  = _(row[(f"{modality}", f"{side}", "Ib")])
+                    II  = _(row[(f"{modality}", f"{side}", "II")])
+                    IIa = _(row[(f"{modality}", f"{side}", "IIa")])
+                    IIb = _(row[(f"{modality}", f"{side}", "IIb")])
+                    III = _(row[(f"{modality}", f"{side}", "III")])
+                    IV  = _(row[(f"{modality}", f"{side}", "IV")])
+                    V   = _(row[(f"{modality}", f"{side}", "V")])
+                    VII = _(row[(f"{modality}", f"{side}", "VII")])
 
                     new_diagnose = Diagnose(modality=modality_idx,
                                             diagnose_date=diagnose_date,
                                             side=side,
-                                            lnl_I=lnl_I,
-                                            lnl_II=lnl_II,
-                                            lnl_III=lnl_III,
-                                            lnl_IV=lnl_IV)
+                                            I=I,
+                                            Ia=Ia,
+                                            Ib=Ib,
+                                            II=II,
+                                            IIa=IIa,
+                                            IIb=IIb,
+                                            III=III,
+                                            IV=IV,
+                                            V=V,
+                                            VII=VII)
 
                     new_diagnose.patient = new_patient
                     new_diagnose.save()

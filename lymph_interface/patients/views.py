@@ -70,6 +70,29 @@ def add_tumor_to_patient(request, *args, **kwargs):
     return render(request, "patients/detail.html", context)
 
 
+def edit_tumor_of_patient(request, *args, **kwargs):
+    """Edit an existing tumor."""
+    patient = Patient.objects.get(pk=kwargs["pk"])
+    
+    if request.method == "POST":
+        tumor = Tumor.objects.get(pk=request.POST["tumor_pk"])
+        tumor_form = TumorForm(instance=tumor)
+        
+        if tumor.patient != patient:
+            raise Exception("Find out which error to raise here!")
+        
+        tumor.delete()
+        
+        context = {"action": "add_tumor", 
+                   "tumor_form": tumor_form,
+                   "patient": patient}
+        
+        return render(request, "patients/detail.html", context)
+    
+    else:
+        return redirect("patients:detail", pk=patient.pk)
+
+
 def delete_tumor_from_patient(request, *args, **kwargs):
     """Delete one specific tumor from the list of tumors of a particular 
     patient."""
@@ -98,6 +121,29 @@ def add_diagnose_to_patient(request, *args, **kwargs):
                "diagnose_form": diagnose_form,
                "patient": Patient.objects.get(pk=kwargs["pk"])}
     return render(request, "patients/detail.html", context)
+
+
+def edit_diagnose_of_patient(request, *args, **kwargs):
+    """Edit an existing diagnose."""
+    patient = Patient.objects.get(pk=kwargs["pk"])
+
+    if request.method == "POST":
+        diagnose = Diagnose.objects.get(pk=request.POST["diagnose_pk"])
+        diagnose_form = DiagnoseForm(instance=diagnose)
+
+        if diagnose.patient != patient:
+            raise Exception("Find out which error to raise here!")
+
+        diagnose.delete()
+
+        context = {"action": "add_diagnose",
+                   "diagnose_form": diagnose_form,
+                   "patient": patient}
+
+        return render(request, "patients/detail.html", context)
+
+    else:
+        return redirect("patients:detail", pk=patient.pk)
 
 
 def delete_diagnose_from_patient(request, *args, **kwargs):

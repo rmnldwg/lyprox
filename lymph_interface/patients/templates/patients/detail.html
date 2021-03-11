@@ -8,7 +8,7 @@
 <div class="patient-header">
     <ul>
         <li>Patient {{ patient.pk }}</li>
-        <li>Hash-ID: {{ patient.identifier }} </li>
+        <li>Hash-ID: {{ patient.hash_value }} </li>
     </ul>
 </div>
 
@@ -51,6 +51,14 @@
             </tr>
         </table>
         <div class="buttons">
+            <form action="{% url 'patients:edit_tumor' patient.pk %}" method="POST">
+                {% csrf_token %}
+                <input name="tumor_pk" value="{{ tumor.pk }}">
+                <input type="submit" value="Edit" id="edit_tumor_button">
+                <label for="edit_tumor_button">
+                    <i class="material-icons" title="edit tumor">create</i>
+                </label>
+            </form>
             <form action="{% url 'patients:delete_tumor' patient.pk %}" method="POST">
                 {% csrf_token %}
                 <input name="tumor_pk" value="{{ tumor.pk }}">
@@ -94,19 +102,29 @@
             <td>{{ diagnose.diagnose_date }}</td>
             <td>{{ diagnose.get_modality_display }}</td>
             <td>{{ diagnose.get_side_display }}</td>
-            <td>{{ diagnose.lnl_I }}</td>
-            <td>{{ diagnose.lnl_II }}</td>
-            <td>{{ diagnose.lnl_III }}</td>
-            <td>{{ diagnose.lnl_IV }}</td>
+            <td>{{ diagnose.I }}</td>
+            <td>{{ diagnose.II }}</td>
+            <td>{{ diagnose.III }}</td>
+            <td>{{ diagnose.IV }}</td>
             <td>
-                <form action="{% url 'patients:delete_diagnose' patient.pk %}" method="POST">
-                    {% csrf_token %}
-                    <input name="diagnose_pk" value="{{ diagnose.pk }}">
-                    <input type="submit" value="Delete" id="delete_diagnose_button">
-                    <label for="delete_diagnose_button">
-                        <i class="material-icons" title="delete diagnose">delete_outline</i>
-                    </label>
-                </form>
+                <div class="buttons">
+                    <form action="{% url 'patients:edit_diagnose' patient.pk %}" method="POST">
+                        {% csrf_token %}
+                        <input name="diagnose_pk" value="{{ diagnose.pk }}">
+                        <input type="submit" value="Edit" id="edit_diagnose_button">
+                        <label for="edit_diagnose_button">
+                            <i class="material-icons" title="edit diagnose">create</i>
+                        </label>
+                    </form>
+                    <form action="{% url 'patients:delete_diagnose' patient.pk %}" method="POST">
+                        {% csrf_token %}
+                        <input name="diagnose_pk" value="{{ diagnose.pk }}">
+                        <input type="submit" value="Delete" id="delete_diagnose_button">
+                        <label for="delete_diagnose_button">
+                            <i class="material-icons" title="delete diagnose">delete_outline</i>
+                        </label>
+                    </form>
+                </div>
             </td>
         </tr>
         {% endfor %}

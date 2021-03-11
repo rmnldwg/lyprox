@@ -4,7 +4,7 @@ from django.forms.widgets import NumberInput
 from django.db import IntegrityError
 from django.utils.translation import gettext as _
 
-from .models import Patient, Tumor, Diagnose, MODALITIES, LOCATIONS, T_STAGES
+from .models import Patient, Tumor, Diagnose, MODALITIES, LOCATIONS, SUBSITES, T_STAGES, LNLs
 from .utils import compute_hash
 
 import numpy as np
@@ -36,7 +36,7 @@ class PatientForm(forms.ModelForm):
         """Compute hashed ID and age from name, birthday and diagnose date."""
         patient = super(PatientForm, self).save(commit=False)
 
-        patient.identifier = self.cleaned_data["identifier"]
+        patient.hash_value = self.cleaned_data["hash_value"]
         patient.age = self._compute_age()
         
         if commit:
@@ -49,14 +49,14 @@ class PatientForm(forms.ModelForm):
         """Override superclass clean method to raise a ValidationError when a 
         duplicate identifier is found."""
         cleaned_data = super(PatientForm, self).clean()
-        unique_identifier = self._get_identifier(cleaned_data)
+        unique_hash = self._get_identifier(cleaned_data)
         
         try:
-            previous_patient = Patient.objects.get(identifier=unique_identifier)
+            previous_patient = Patient.objects.get(hash_value=unique_hash)
             raise forms.ValidationError(_("Identifier already exists in "
                                           "database. Possible duplicate?"))
         except Patient.DoesNotExist: 
-            cleaned_data["identifier"] = unique_identifier
+            cleaned_data["hash_value"] = unique_hash
             return cleaned_data
         
     
@@ -73,14 +73,14 @@ class PatientForm(forms.ModelForm):
     
     
     def _get_identifier(self, cleaned_data):
-        """Compute the (potentially hashed) identifier from fields that are of 
+        """Compute the hashed undique identifier from fields that are of 
         provacy concern."""
-        identifier = compute_hash(cleaned_data["first_name"], 
+        hash_value = compute_hash(cleaned_data["first_name"], 
                                   cleaned_data["last_name"], 
                                   cleaned_data["birthday"])
         cleaned_data.pop("first_name")
         cleaned_data.pop("last_name")
-        return identifier
+        return hash_value
         
         
         
@@ -89,7 +89,7 @@ class TumorForm(forms.ModelForm):
         model = Tumor
         fields = ["t_stage",
                   "stage_prefix",
-                  "location", 
+                  "subsite", 
                   "position",
                   "extension",
                   "size"]
@@ -99,6 +99,15 @@ class TumorForm(forms.ModelForm):
         """Save tumor to existing patient."""
         tumor = super(TumorForm, self).save(commit=False)
         tumor.patient = Patient.objects.get(pk=pk)
+        
+        # automatically extract location from subsite
+        subsite_dict = dict(SUBSITES)
+        location_list = [tpl[1] for tpl in LOCATIONS]
+        
+        for i, loc in enumerate(location_list):
+            loc_subsites = [tpl[1] for tpl in subsite_dict[loc]]
+            if tumor.get_subsite_display() in loc_subsites:
+                tumor.location = i
         
         # update patient's T-stage to be the worst of all its tumors'
         if tumor.t_stage > tumor.patient.t_stage:
@@ -118,10 +127,10 @@ class DiagnoseForm(forms.ModelForm):
         fields = ["diagnose_date",
                   "modality",
                   "side",
-                  "lnl_I",
-                  "lnl_II",
-                  "lnl_III",
-                  "lnl_IV"]
+                  ]
+        for lnl in LNLs:
+            fields.append(lnl)
+            
         widgets = {"diagnose_date": NumberInput(attrs={"type": "date"})}
         
         
@@ -129,6 +138,12 @@ class DiagnoseForm(forms.ModelForm):
         """Save diagnose to existing patient."""
         diagnose = super(DiagnoseForm, self).save(commit=False)
         diagnose.patient = Patient.objects.get(pk=pk)
+        
+        if diagnose.Ia or diagnose.Ib:
+            diagnose.I = True
+            
+        if diagnose.IIa or diagnose.IIb:
+            diagnose.II = True
         
         if commit:
             diagnose.save()

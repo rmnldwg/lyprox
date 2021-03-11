@@ -62,7 +62,9 @@
 }
 
 .tumor-list div.tumor div.buttons {
-    display: block;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
     text-align: right;
     position: absolute;
     bottom: 0;
@@ -104,15 +106,21 @@
     text-align: center;
 }
 
-.diagnose-list table tr td form input {
+.diagnose-list table tr td div.buttons {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+.diagnose-list table tr td div.buttons form input {
     display: none;
 }
 
-.diagnose-list table tr td form label {
+.diagnose-list table tr td div.buttons form label {
     font-size: 25px;
 }
 
-.diagnose-list table tr td form label:hover {
+.diagnose-list table tr td div.buttons form label:hover {
     color: red;
     cursor: pointer;
 }

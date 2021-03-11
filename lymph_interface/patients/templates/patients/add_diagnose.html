@@ -9,17 +9,17 @@
         <td>{{ diagnose_form.diagnose_date }}</td>
         <td>{{ diagnose_form.modality }}</td>
         <td>{{ diagnose_form.side }}</td>
-        <td>{{ diagnose_form.lnl_I }}</td>
-        <td>{{ diagnose_form.lnl_II }}</td>
-        <td>{{ diagnose_form.lnl_III }}</td>
-        <td>{{ diagnose_form.lnl_IV }}</td>
+        <td>{{ diagnose_form.I }}</td>
+        <td>{{ diagnose_form.II }}</td>
+        <td>{{ diagnose_form.III }}</td>
+        <td>{{ diagnose_form.IV }}</td>
         <td>
             <input type="submit" value="Add" id="add_diagnose_button">
             <label for="add_diagnose_button">
-                <i class="material-icons">check_circle_outline</i>
+                <i class="material-icons" title="accept and add">check_circle_outline</i>
             </label>
             <a href="{% url 'patients:detail' patient.pk %}">
-                <i class="material-icons">cancel</i>
+                <i class="material-icons" title="cancel and discard">cancel</i>
             </a>
         </td>
     </form>
@@ -29,7 +29,7 @@
 <tr class="add-diagnose">
     <td colspan="8">
         <a href="{% url 'patients:add_diagnose' patient.pk %}">
-            <i class="material-icons">add_circle_outline</i>
+            <i class="material-icons" title="add new diagnose">add_circle_outline</i>
         </a>
     </td>
 </tr>

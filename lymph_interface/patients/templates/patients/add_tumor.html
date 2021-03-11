@@ -14,7 +14,7 @@
             </tr>
             <tr>
                 <td>location</td>
-                <td>{{ tumor_form.location }} </td>
+                <td>{{ tumor_form.subsite }} </td>
             </tr>
             <tr>
                 <td>position</td>
@@ -32,10 +32,10 @@
         <div class="buttons">
             <input type="submit" value="Add" id="add_tumor_button">
             <label for="add_tumor_button">
-                <i class="material-icons" title="add tumor to patient">check_circle_outline</i>
+                <i class="material-icons" title="accept and add">check_circle_outline</i>
             </label>
             <a href="{% url 'patients:detail' patient.pk %}">
-                <i class="material-icons">cancel</i>
+                <i class="material-icons" title="cancel and discard">cancel</i>
             </a>
         </div>
     </form>
@@ -44,7 +44,7 @@
 {% else %}
 <div class="add-tumor">
     <a href="{% url 'patients:add_tumor' patient.pk %}">
-        <i class="material-icons">add_circle_outline</i>
+        <i class="material-icons" title="add new tumor">add_circle_outline</i>
     </a>
 </div>
 
