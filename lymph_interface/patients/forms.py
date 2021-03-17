@@ -197,11 +197,45 @@ class DashboardForm(forms.Form):
         label="Combine")
     
     
-    location_radiobuttons = forms.ChoiceField(
-        choices=LOCATIONS,
+    nicotine_abuse = forms.ChoiceField(
+        widget=forms.RadioSelect,
+        choices=[(True, "add"),
+                 (None, "not_interested"),
+                 (False, "remove")]
+    )
+    hpv_status = forms.ChoiceField(
+        widget=forms.RadioSelect,
+        choices=[(True, "add"),
+                 (None, "not_interested"),
+                 (False, "remove")]
+    )
+    neck_dissection = forms.ChoiceField(
+        widget=forms.RadioSelect,
+        choices=[(True, "add"),
+                 (None, "not_interested"),
+                 (False, "remove")]
+    )
+    
+    
+    subsite_radiobuttons = forms.ChoiceField(
+        choices=[("C01.9", "base of tongue, nos"),
+                 ("C09.9", "tonsil, nos"), 
+                 ("rest" , "other and/or multiple")],
         widget=forms.RadioSelect
     )
     tstage_checkboxes = forms.MultipleChoiceField(
         widget=forms.CheckboxSelectMultiple,
         choices=T_STAGES,
+    )
+    central = forms.ChoiceField(
+        widget=forms.RadioSelect,
+        choices=[(True, "add"),
+                 (None, "not_interested"),
+                 (False, "remove")]
+    )
+    midline_extension = forms.ChoiceField(
+        widget=forms.RadioSelect,
+        choices=[(True, "add"),
+                 (None, "not_interested"),
+                 (False, "remove")]
     )

@@ -28,15 +28,66 @@
 
     <hr>
 
-    <div class="tumor">
-        <p class="title">Primary Tumor</p>
-        
-        <div class="content">
-            <div class="location">
-                <ul>
-                    <li>Location</li>
+    <div class="patient">
+        <table class="fields">
+            <caption class="title">Patient details</caption>
+            <tr>
+                <th>smoking status</th>
+                <th>p16</th>
+                <th>neck dissection</th>
+            </tr>
 
-                    {% for radiobutton in form.location_radiobuttons %}
+            <tr>
+                <td>
+                    <div class="buttons">
+                        {% for radiobutton in form.nicotine_abuse %}
+                        
+                        {{ radiobutton.tag }}
+                        <label for="{{ radiobutton.id_for_label }}">
+                            <i class="material-icons">{{ radiobutton.choice_label }}</i>
+                        </label>
+                        {% endfor %}
+                    </div>
+                </td>
+
+                <td>
+                    <div class="buttons">
+                        {% for radiobutton in form.hpv_status %}
+                
+                        {{ radiobutton.tag }}
+                        <label for="{{ radiobutton.id_for_label }}">
+                            <i class="material-icons">{{ radiobutton.choice_label }}</i>
+                        </label>
+                        {% endfor %}
+                    </div>
+                </td>
+
+                <td>
+                    <div class="buttons">
+                        {% for radiobutton in form.neck_dissection %}
+                
+                        {{ radiobutton.tag }}
+                        <label for="{{ radiobutton.id_for_label }}">
+                            <i class="material-icons">{{ radiobutton.choice_label }}</i>
+                        </label>
+                        {% endfor %}
+                    </div>
+                </td>
+            </tr>
+        </table>
+    </div>
+
+    <hr>
+
+    <div class="tumor">
+        <p class="title">Primary Tumor (oropharynx)</p>
+        
+        <div class="subsite-stage">
+            <div class="subsite">
+                <ul>
+                    <li>Subsite</li>
+
+                    {% for radiobutton in form.subsite_radiobuttons %}
                     <li>
                         {{ radiobutton.tag }}
                         <label for="{{ radiobutton.id_for_label }}">{{ radiobutton.choice_label }}</label>
@@ -45,7 +96,7 @@
                 </ul>
             </div>
 
-            <hr>
+            <hr class="vertical">
 
             <div class="stage">
                 <ul>
@@ -60,6 +111,41 @@
                 </ul>
             </div>
         </div>
+
+        <hr class="horizontal">
+
+        <table class="lateral">
+            <caption>Lateralization</caption>
+            <tr>
+                <th>central</th>
+                <th>midline extension</th>
+            </tr>
+            <tr>
+                <td>
+                    <div class="central buttons">
+                        {% for radiobutton in form.central %}
+                    
+                        {{ radiobutton.tag }}
+                        <label for="{{ radiobutton.id_for_label }}">
+                            <i class="material-icons">{{ radiobutton.choice_label }}</i>
+                        </label>
+                        {% endfor %}
+                    </div>
+                </td>
+
+                <td>
+                    <div class="extension buttons">
+                        {% for radiobutton in form.midline_extension %}
+                    
+                        {{ radiobutton.tag }}
+                        <label for="{{ radiobutton.id_for_label }}">
+                            <i class="material-icons">{{ radiobutton.choice_label }}</i>
+                        </label>
+                        {% endfor %}
+                    </div>
+                </td>
+            </tr>
+        </table>
     </div>
 
     <div class="involvement">

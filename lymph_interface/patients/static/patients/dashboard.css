@@ -57,6 +57,45 @@ div.modalities ul li input[type="checkbox"]:checked + label {
 
 
 
+div.buttons label {
+    display: flex;
+    flex-grow: 1;
+    justify-content: center;
+    width: 40px;
+    cursor: pointer;
+    background-color: lightgray;
+    padding: 5px 0;
+}
+div.buttons input[type="radio"] {
+    display: none;
+}
+div.buttons input[type="radio"]:checked + label {
+    background-color: gray;
+}
+
+
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+table tr th, table tr td {
+    background-color: lightgray;
+    text-align: center;
+    height: 30px;
+    border-left: 5px solid white;
+    border-right: 5px solid white;
+}
+
+table tr td div.buttons {
+    display: flex;
+    flex-direction: row;
+}
+
+
+
+
 div.tumor {
     max-width: 400px;
     margin-left: auto;
@@ -66,20 +105,20 @@ div.tumor {
     padding: 10px;
 }
 
-div.tumor div.content {
+div.tumor div.subsite-stage {
     display: flex;
     flex-direction: row;
     flex-wrap: nowrap;
     justify-content: space-evenly;
 }
 
-div.tumor div.content hr {
+div.tumor div.subsite-stage hr.vertical {
     background-color: white;
     width: 1px;
     border: none;
 }
 
-div.tumor div.content div ul {
+div.tumor div.subsite-stage div ul {
     list-style: none;
     display: flex;
     flex-direction: column;
@@ -88,7 +127,7 @@ div.tumor div.content div ul {
     padding: 0;
 }
 
-div.tumor div.content div ul li {
+div.tumor div.subsite-stage div ul li {
     min-width: 50px;
     display: flex;
     justify-content: flex-start;
@@ -96,16 +135,16 @@ div.tumor div.content div ul li {
     flex-grow: 1;
 }
 
-div.tumor div.content div ul li input {
+div.tumor div.subsite-stage div ul li input {
     display: none;
 }
 
-div.tumor div.content div ul li input:checked + label {
+div.tumor div.subsite-stage div ul li input:checked + label {
     color: white;
     background-color: rgb(56, 56, 56);
 }
 
-div.tumor div.content div ul li label {
+div.tumor div.subsite-stage div ul li label {
     min-width: 150px;
     margin-top: 10px;
     padding: 10px 5px;
@@ -113,6 +152,31 @@ div.tumor div.content div ul li label {
     text-align: center;
     background-color: gray;
 }
+
+div.tumor hr.horizontal {
+    background-color: white;
+    height: 1px;
+    border: none;
+}
+
+table.lateral tr th, table.lateral tr td {
+    background-color: gray;
+    border-left: 5px solid lightgray;
+    border-right: 5px solid lightgray;
+}
+
+table.lateral div.buttons input[type="radio"]:checked + label {
+    color: white;
+    background-color: rgb(56, 56, 56);
+}
+
+table.lateral div.buttons label {
+    background-color: gray;
+}
+
+
+
+
 
 
 div.involvement {
