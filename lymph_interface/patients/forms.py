@@ -185,6 +185,22 @@ class DataFileForm(forms.Form):
 
 
 class DashboardForm(forms.Form):
+    """Form for querying the database."""
+    
+    def __init__(self, *args, **kwargs):
+        """Extend default initialization to create lots of fields for the 
+        LNLs from a list."""
+        super(DashboardForm, self).__init__(*args, **kwargs)
+        for side in ["ipsi", "contra"]:
+            for lnl in ["Ia", "Ib", "IIa", "IIb", "III", "IV", "V", "VII"]:
+                self.fields[f"{side}_{lnl}"] = forms.ChoiceField(
+                    widget=forms.RadioSelect,
+                    choices=[(True, "add"),
+                            (None, "not_interested"),
+                            (False, "remove")]
+                    )
+        
+        
     modality_checkboxes = forms.MultipleChoiceField(
         required=False, 
         widget=forms.CheckboxSelectMultiple, 
@@ -239,3 +255,16 @@ class DashboardForm(forms.Form):
                  (None, "not_interested"),
                  (False, "remove")]
     )
+    
+    ipsi_lnl = {}
+
+        
+    contra_lnl = {}
+    for lnl in ["Ia", "Ib", "IIa", "IIb", "III", "IV", "V", "VII"]:
+        tmp_radiobuttons = forms.ChoiceField(
+            widget=forms.RadioSelect,
+            choices=[(True, "add"),
+                     (None, "not_interested"),
+                     (False, "remove")],
+        )
+        contra_lnl[lnl] = tmp_radiobuttons

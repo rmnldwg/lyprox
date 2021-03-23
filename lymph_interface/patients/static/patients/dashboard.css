@@ -72,7 +72,12 @@ div.buttons input[type="radio"] {
 div.buttons input[type="radio"]:checked + label {
     background-color: gray;
 }
-
+div.lnl.buttons {
+    padding: 0;
+    width: 100%;
+    display: flex;
+    text-align: center;
+}
 
 
 table {
@@ -188,9 +193,9 @@ div.involvement {
 
 div.involvement div {
     width: 400px;
-    background-color: red;
+    background-color: lightgray;
     display: flex;
-    padding: 10px;
+    padding: 0;
 }
 
 div.involvement div ul {
@@ -206,4 +211,15 @@ div.involvement div.contra {
 
 div.involvement div.ipsi {
     justify-content: flex-end;
+}
+
+div.involvement div table tr th {
+    border: 1px solid white;
+}
+
+div.involvement div table tr td {
+    border: 1px solid white;
+    min-width: 30px;
+    background-color: lightgray;
+    padding: 0;
 }
