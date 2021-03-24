@@ -5,7 +5,7 @@
 {% load static %}
 <link rel="stylesheet" href="{% static 'patients/dashboard.css' %}">
 
-<form method="POST">
+<form method="POST" action="{% url 'patients:dashboard' %}">
 {% csrf_token %}
 
     <div class="modalities">
@@ -87,7 +87,7 @@
                 <ul>
                     <li>Subsite</li>
 
-                    {% for radiobutton in form.subsite_radiobuttons %}
+                    {% for radiobutton in form.subsites %}
                     <li>
                         {{ radiobutton.tag }}
                         <label for="{{ radiobutton.id_for_label }}">{{ radiobutton.choice_label }}</label>
@@ -102,7 +102,7 @@
                 <ul>
                     <li>T-stage</li>
 
-                    {% for checkbox in form.tstage_checkboxes %}
+                    {% for checkbox in form.tstages %}
                     <li>
                         {{ checkbox.tag }}
                         <label for="{{ checkbox.id_for_label }}">{{ checkbox.choice_label }}</label>
@@ -385,6 +385,9 @@
             </table>
         </div>
     </div>
+
+    <input type="submit" value="test">
+    <p>{{ n }}</p>
 </form>
 
 

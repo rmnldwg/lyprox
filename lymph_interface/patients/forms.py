@@ -2,6 +2,7 @@ from django import forms
 from django.conf import settings
 from django.forms.widgets import NumberInput
 from django.db import IntegrityError
+from django.core.exceptions import ValidationError
 from django.utils.translation import gettext as _
 
 from .models import Patient, Tumor, Diagnose, MODALITIES, LOCATIONS, SUBSITES, T_STAGES, LNLs
@@ -184,6 +185,33 @@ class DataFileForm(forms.Form):
 
 
 
+class ThreeWayToggle(forms.ChoiceField):
+    """A toggle switch than can be in three different states: Positive/True, 
+    unkown/None and negative/False."""
+    
+    def __init__(self, 
+                 widget=forms.RadioSelect, 
+                 choices=[( 1, "add"),
+                          ( 0, "not_interested"), 
+                          (-1, "remove")],
+                 initial=0,
+                 required=False,
+                 **kwargs):
+        """Overwrite the defaults of the ChoiceField."""
+        super(ThreeWayToggle, self).__init__(widget=widget,
+                                             choices=choices,
+                                             initial=initial,
+                                             required=required,
+                                             **kwargs)
+    
+    def to_python(self, value):
+        """Cast the string to an integer."""
+        if value not in ["", None]:
+            return int(value)
+        return 0
+
+
+
 class DashboardForm(forms.Form):
     """Form for querying the database."""
     
@@ -192,79 +220,62 @@ class DashboardForm(forms.Form):
         LNLs from a list."""
         super(DashboardForm, self).__init__(*args, **kwargs)
         for side in ["ipsi", "contra"]:
-            for lnl in ["Ia", "Ib", "IIa", "IIb", "III", "IV", "V", "VII"]:
-                self.fields[f"{side}_{lnl}"] = forms.ChoiceField(
-                    widget=forms.RadioSelect,
-                    choices=[(True, "add"),
-                            (None, "not_interested"),
-                            (False, "remove")]
-                    )
+            for lnl in LNLs:
+                self.fields[f"{side}_{lnl}"] = ThreeWayToggle()
+           
+                
+    def clean(self):
+        """Make sure LNLs I & II have correct values corresponding to their 
+        sublevels a & b. Also convert tstages from list of str to list of int."""
+        cleaned_data = super(DashboardForm, self).clean()
+        
+        for side in ["ipsi", "contra"]:
+            for lnl in ["I", "II"]:
+                a = cleaned_data[f"{side}_{lnl}a"]
+                b = cleaned_data[f"{side}_{lnl}b"]
+                cleaned_data[f"{side}_{lnl}"] = np.maximum(a,b)
+                
+        str_list = cleaned_data["tstages"]
+        cleaned_data["tstages"] = [int(s) for s in str_list]
+        
+        return cleaned_data
         
         
+        
+    # select modalities to show
     modality_checkboxes = forms.MultipleChoiceField(
         required=False, 
         widget=forms.CheckboxSelectMultiple, 
         choices=MODALITIES,
+        initial=[5]
     )
     modality_combine = forms.ChoiceField(
         choices=[("AND", "AND"), 
                  ("OR", "OR"), 
                  ("XOR", "XOR")],
-        label="Combine")
-    
-    
-    nicotine_abuse = forms.ChoiceField(
-        widget=forms.RadioSelect,
-        choices=[(True, "add"),
-                 (None, "not_interested"),
-                 (False, "remove")]
-    )
-    hpv_status = forms.ChoiceField(
-        widget=forms.RadioSelect,
-        choices=[(True, "add"),
-                 (None, "not_interested"),
-                 (False, "remove")]
-    )
-    neck_dissection = forms.ChoiceField(
-        widget=forms.RadioSelect,
-        choices=[(True, "add"),
-                 (None, "not_interested"),
-                 (False, "remove")]
+        label="Combine",
+        initial="OR"
     )
     
     
-    subsite_radiobuttons = forms.ChoiceField(
-        choices=[("C01.9", "base of tongue, nos"),
-                 ("C09.9", "tonsil, nos"), 
+    # patient specific fields
+    nicotine_abuse = ThreeWayToggle()
+    hpv_status = ThreeWayToggle()
+    neck_dissection = ThreeWayToggle()
+    
+    
+    # tumor specific info
+    subsites = forms.ChoiceField(
+        widget=forms.RadioSelect,
+        choices=[("base", "base of tongue"),
+                 ("tonsil", "tonsil"), 
                  ("rest" , "other and/or multiple")],
-        widget=forms.RadioSelect
+        initial="base"
     )
-    tstage_checkboxes = forms.MultipleChoiceField(
+    tstages = forms.MultipleChoiceField(
         widget=forms.CheckboxSelectMultiple,
         choices=T_STAGES,
+        initial=[1,2,3,4]
     )
-    central = forms.ChoiceField(
-        widget=forms.RadioSelect,
-        choices=[(True, "add"),
-                 (None, "not_interested"),
-                 (False, "remove")]
-    )
-    midline_extension = forms.ChoiceField(
-        widget=forms.RadioSelect,
-        choices=[(True, "add"),
-                 (None, "not_interested"),
-                 (False, "remove")]
-    )
-    
-    ipsi_lnl = {}
-
-        
-    contra_lnl = {}
-    for lnl in ["Ia", "Ib", "IIa", "IIb", "III", "IV", "V", "VII"]:
-        tmp_radiobuttons = forms.ChoiceField(
-            widget=forms.RadioSelect,
-            choices=[(True, "add"),
-                     (None, "not_interested"),
-                     (False, "remove")],
-        )
-        contra_lnl[lnl] = tmp_radiobuttons
+    central = ThreeWayToggle()
+    midline_extension = ThreeWayToggle()

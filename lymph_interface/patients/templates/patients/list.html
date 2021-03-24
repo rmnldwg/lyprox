@@ -20,8 +20,8 @@
     {% for patient in patient_list %}
         <tr>
             <td>{{ patient.pk }} </td>
-            <td>{{ patient.identifier }} </td>
-            <td>{{ patient.diagnose_date }} </td>
+            <td>{{ patient.hash_value }} </td>
+            <td>{{ patient.diagnose_date | date:"Y-m-d" }} </td>
             <td>{{ patient.gender }} </td>
             <td>{{ patient.age }} </td>
             <td>{{ patient.get_t_stage_display }} {{ patient.get_n_stage_display }} {{ patient.get_m_stage_display }} </td>

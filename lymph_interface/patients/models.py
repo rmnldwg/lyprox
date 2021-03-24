@@ -1,8 +1,5 @@
 from django.db import models
 
-from .utils import compute_hash, create_from_pandas
-from .utils import nan_to_None as _
-
 import pandas
 import numpy as np
 import dateutil.parser
@@ -39,6 +36,7 @@ class Patient(models.Model):
     alcohol_abuse = models.BooleanField(blank=True, null=True)
     nicotine_abuse = models.BooleanField(blank=True, null=True)
     hpv_status = models.BooleanField(blank=True, null=True) 
+    neck_dissection = models.BooleanField(blank=True, null=True)
     
     t_stage = models.PositiveSmallIntegerField(choices=T_STAGES, default=0)
     n_stage = models.PositiveSmallIntegerField(choices=N_STAGES)
@@ -47,7 +45,7 @@ class Patient(models.Model):
     
     def __str__(self):
         """Report some patient specifics."""
-        return f"ID: {self.identifier}, age: {self.age}, gender: {self.gender}"
+        return f"ID: {self.hash_value}, age: {self.age}, gender: {self.gender}"
 
 
 

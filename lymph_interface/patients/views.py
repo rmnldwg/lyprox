@@ -4,7 +4,7 @@ from django.views import generic
 
 from .models import Patient, Tumor, Diagnose
 from .forms import PatientForm, TumorForm, DiagnoseForm, DataFileForm, DashboardForm
-from .utils import create_from_pandas
+from .utils import create_from_pandas, query_patients
 
 
 class ListView(generic.ListView):
@@ -45,8 +45,10 @@ def upload_patients(request):
         if form.is_valid():
             data_frame = form.cleaned_data["data_frame"]
             # creating patients from the resulting pandas DataFrame
-            num_new = create_from_pandas(data_frame)
-            context = {"upload_success": True, "num_new": num_new}
+            num_new, num_skipped = create_from_pandas(data_frame)
+            context = {"upload_success": True, 
+                       "num_new": num_new, 
+                       "num_skipped": num_skipped}
             return render(request, "patients/upload.html", context)
         
     else:
@@ -164,11 +166,13 @@ def delete_diagnose_from_patient(request, *args, **kwargs):
 
 def dashboard(request):
     """Display the dashboard showing patterns of involvement."""
-    if request.method == "POST":
-        print(request.POST)
-        form = DashboardForm(request)
+    form = DashboardForm(request.POST or None)
+    
+    if request.method == "POST" and form.is_valid():
+        q = query_patients(form.cleaned_data)
+        print(q)
+        context = {"form": form, "n": len(q)}
     else:
-        form = DashboardForm()
-
-    context = {"form": form}
+        context = {"form": form}
+        
     return render(request, "patients/dashboard.html", context)
