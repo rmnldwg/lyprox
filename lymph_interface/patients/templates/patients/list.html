@@ -3,43 +3,60 @@
 {% block content %}
 
 {% load static %}
-<link rel="stylesheet" href="{% static 'patients/list.css' %}">
 
-<div class="patient-list">
-    <table>
-        <tr>
-            <th>Patient</th>
-            <th>Hash</th>
-            <th>date of diagnosis</th>
-            <th>gender</th>
-            <th>age</th>
-            <th>stage</th>
-            <th>link</th>
-        </tr>
+<section class="section">
+    <table class="table is-fullwidth is-hoverable">
+        <thead>
+            <tr>
+                <th>Patient</th>
+                <th>Hash</th>
+                <th>date of diagnosis</th>
+                <th>gender</th>
+                <th>age</th>
+                <th>stage</th>
+                <th>link</th>
+            </tr>
+        </thead>
 
-    {% for patient in patient_list %}
-        <tr>
-            <td>{{ patient.pk }} </td>
-            <td>{{ patient.hash_value }} </td>
-            <td>{{ patient.diagnose_date | date:"Y-m-d" }} </td>
-            <td>{{ patient.gender }} </td>
-            <td>{{ patient.age }} </td>
-            <td>{{ patient.get_t_stage_display }} {{ patient.get_n_stage_display }} {{ patient.get_m_stage_display }} </td>
-            <td>
-                <a href="{% url 'patients:detail' patient.pk %}">
-                    <i class="material-icons">person_search</i>
-                </a>
-            </td>
-        </tr>
-    {% endfor %}
+        <tbody>
+            {% for patient in patient_list %}
+            <tr>
+                <td>{{ patient.pk }} </td>
+                <td>{{ patient.hash_value }} </td>
+                <td>{{ patient.diagnose_date | date:"Y-m-d" }} </td>
+                <td>{{ patient.gender }} </td>
+                <td>{{ patient.age }} </td>
+                <td>{{ patient.get_t_stage_display }} {{ patient.get_n_stage_display }} {{ patient.get_m_stage_display }} </td>
+                <td>
+                    <div class="field">
+                        <div class="control">
+                            <a class="button is-white is-small" href="{% url 'patients:detail' patient.pk %}">
+                                <span class="icon">
+                                    <i class="material-icons">person_search</i>
+                                </span>
+                                <span>Details</span>
+                            </a>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            {% endfor %}
 
-        <tr>
-            <td colspan="7">
-                <a href="{% url 'patients:create' %}">
-                    <i class="material-icons">add_circle_outline</i>
-                </a>
-            </td>
-        </tr>
+            <tr>
+                <td colspan="7">
+                    <div class="field is-grouped is-grouped-centered">
+                        <div class="control">
+                            <a class="button is-white" href="{% url 'patients:create' %}">
+                                <span class="icon">
+                                    <i class="material-icons">add_circle_outline</i>
+                                </span>
+                                <span>Add patient</span>
+                            </a>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+        </tbody>
     </table>
-</div>
+</section>
 {% endblock content %}

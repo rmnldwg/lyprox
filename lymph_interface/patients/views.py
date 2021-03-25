@@ -70,45 +70,43 @@ def add_tumor_to_patient(request, *args, **kwargs):
                "tumor_form": tumor_form, 
                "patient": Patient.objects.get(pk=kwargs["pk"])}
     return render(request, "patients/detail.html", context)
-
-
-def edit_tumor_of_patient(request, *args, **kwargs):
-    """Edit an existing tumor."""
-    patient = Patient.objects.get(pk=kwargs["pk"])
     
+    
+def change_tumor_of_patient(request, *args, **kwargs):
+    """Edit or delete a patient's tumor."""
+
     if request.method == "POST":
-        tumor = Tumor.objects.get(pk=request.POST["tumor_pk"])
-        tumor_form = TumorForm(instance=tumor)
+        data = request.POST
+        print(data)
+
+        if "edit_pk" in data:
+            print("editing...")
+            patient = Patient.objects.get(pk=kwargs["pk"])
+            
+            tumor_pk = data["edit_pk"]
+            tumor = Tumor.objects.get(pk=tumor_pk)
+            tumor_form = TumorForm(instance=tumor)
+            
+            tumor.delete()
+            
+            context = {"action": "add_tumor",
+                       "tumor_form": tumor_form,
+                       "patient": patient}
+            
+            return render(request, "patients/detail.html", context)
+            
+        elif "delete_pk" in data:
+            print("deleting...")
+            tumor_pk = data["delete_pk"]
+            tumor = Tumor.objects.get(pk=tumor_pk)
+            tumor.delete()
+            
+            return redirect("patients:detail", pk=kwargs["pk"])
+        else:
+            raise ValidationError("Form was submitted without instructions.")
         
-        if tumor.patient != patient:
-            raise Exception("Find out which error to raise here!")
-        
-        tumor.delete()
-        
-        context = {"action": "add_tumor", 
-                   "tumor_form": tumor_form,
-                   "patient": patient}
-        
-        return render(request, "patients/detail.html", context)
-    
     else:
-        return redirect("patients:detail", pk=patient.pk)
-
-
-def delete_tumor_from_patient(request, *args, **kwargs):
-    """Delete one specific tumor from the list of tumors of a particular 
-    patient."""
-    patient = Patient.objects.get(pk=kwargs["pk"])
-    
-    if request.method == "POST":
-        tumor = Tumor.objects.get(pk=request.POST["tumor_pk"])
-    
-        if tumor.patient != patient:
-            raise Exception("Find out which error to raise here!")
-    
-        tumor.delete()
-    
-    return redirect("patients:detail", pk=patient.pk)
+        return redirect("patients:detail", pk=kwargs["pk"])
 
 
 def add_diagnose_to_patient(request, *args, **kwargs):
@@ -146,6 +144,43 @@ def edit_diagnose_of_patient(request, *args, **kwargs):
 
     else:
         return redirect("patients:detail", pk=patient.pk)
+    
+    
+def change_diagnose_of_patient(request, *args, **kwargs):
+    """Edit or delete a patient's diagnose."""
+
+    if request.method == "POST":
+        data = request.POST
+        print(data)
+
+        if "edit_pk" in data:
+            print("editing...")
+            patient = Patient.objects.get(pk=kwargs["pk"])
+
+            diagnose_pk = data["edit_pk"]
+            diagnose = Diagnose.objects.get(pk=diagnose_pk)
+            diagnose_form = DiagnoseForm(instance=diagnose)
+
+            diagnose.delete()
+
+            context = {"action": "add_diagnose",
+                       "diagnose_form": diagnose_form,
+                       "patient": patient}
+
+            return render(request, "patients/detail.html", context)
+
+        elif "delete_pk" in data:
+            print("deleting...")
+            diagnose_pk = data["delete_pk"]
+            diagnose = Diagnose.objects.get(pk=diagnose_pk)
+            diagnose.delete()
+
+            return redirect("patients:detail", pk=kwargs["pk"])
+        else:
+            raise ValidationError("Form was submitted without instructions.")
+
+    else:
+        return redirect("patients:detail", pk=kwargs["pk"])
 
 
 def delete_diagnose_from_patient(request, *args, **kwargs):

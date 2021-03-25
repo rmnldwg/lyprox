@@ -5,133 +5,145 @@
 {% load static %}
 <link rel="stylesheet" type="text/css" href="{% static 'patients/detail.css' %}">
 
-<div class="patient-header">
-    <ul>
-        <li>Patient {{ patient.pk }}</li>
-        <li>Hash-ID: {{ patient.hash_value }} </li>
-    </ul>
+<div class="level">
+    <button class="button level-left">
+        <span class="icon">
+            <i class="material-icons">navigate_before</i>
+        </span>
+        <span>Previous</span>
+    </button>
+    <button class="button level-right">
+        <span>Next</span>
+        <span class="icon">
+            <i class="material-icons">navigate_next</i>
+        </span>
+    </button>
 </div>
 
-<div class="patient-info">
-    <ul>
-        <li>date of diagnosis: {{ patient.diagnose_date }} </li>
-        <li>age: {{ patient.age }} </li>
-        <li>gender: {{ patient.gender }} </li>
-        <li>alcohol abuse: {{ patient.alcohol_abuse }} </li>
-        <li>nicotine abuse: {{ patient.nicotine_abuse }} </li>
-        <li>HPV status: {{ patient.hpv_status }} </li>
-        <li>stage: {{ patient.get_t_stage_display }} {{ patient.get_n_stage_display }} {{ patient.get_m_stage_display }} </li>
-    </ul>
-</div>
+<section class="hero">
+    <div class="hero-body">
+        <p class="title">Patient {{ patient.pk }}</p>
+        <p class="subtitle">Hash-ID: {{ patient.hash_value }} </p>
+    </div>
+</section>
 
-<div class="tumor-list">
+<section class="level">
+    <div class="level-item"><p><strong>date of diagnosis:</strong> {{ patient.diagnose_date }}</p></div>
+    <div class="level-item"><p><strong>age:</strong> {{ patient.age }}</p></div>
+    <div class="level-item"><p><strong>gender:</strong> {{ patient.gender }}</p></div>
+    <div class="level-item"><p><strong>alcohol abuse:</strong> {{ patient.alcohol_abuse }}</p></div>
+    <div class="level-item"><p><strong>nicotine abuse:</strong> {{ patient.nicotine_abuse }}</p></div>
+    <div class="level-item"><p><strong>HPV status:</strong> {{ patient.hpv_status }}</p></div>
+    <div class="level-item"><p><strong>stage:</strong> {{ patient.get_t_stage_display }} {{ patient.get_n_stage_display }} {{ patient.get_m_stage_display }}</p></div>
+</section>
+
+<section class="columns is-multiline">
     {% for tumor in patient.tumor_set.all %}
-    <div class="tumor">
-        <p>Tumor {{ forloop.counter }}</p>
-        <table>
-            <tr>
-                <td>T-stage</td>
-                <td>{{ tumor.stage_prefix }}{{ tumor.get_t_stage_display }} </td>
-            </tr>
-            <tr>
-                <td>location</td>
-                <td>{{ tumor.get_location_display }} </td>
-            </tr>
-            <tr>
-                <td>position</td>
-                <td>{{ tumor.get_position_display }} </td>
-            </tr>
-            <tr>
-                <td>extension</td>
-                <td>{{ tumor.extension }} </td>
-            </tr>
-            <tr>
-                <td>size</td>
-                <td>{{ tumor.size }} cm³</td>
-            </tr>
-        </table>
-        <div class="buttons">
-            <form action="{% url 'patients:edit_tumor' patient.pk %}" method="POST">
+    <div class="column is-4">
+        <div class="box">
+            <table class="table is-fullwidth">
+                <caption class="title is-4">Tumor {{ forloop.counter }}</caption>
+                <tbody>
+                    <tr>
+                        <td>T-stage</td>
+                        <td>{{ tumor.stage_prefix }}{{ tumor.get_t_stage_display }} </td>
+                    </tr>
+                    <tr>
+                        <td>location</td>
+                        <td>{{ tumor.get_location_display }} </td>
+                    </tr>
+                    <tr>
+                        <td>position</td>
+                        <td>{{ tumor.get_position_display }} </td>
+                    </tr>
+                    <tr>
+                        <td>extension</td>
+                        <td>{{ tumor.extension }} </td>
+                    </tr>
+                    <tr>
+                        <td>size</td>
+                        <td>{{ tumor.size }} cm³</td>
+                    </tr>
+                </tbody>
+            </table>
+            
+            <form action="{% url 'patients:change_tumor' patient.pk %}" method="POST">
                 {% csrf_token %}
-                <input name="tumor_pk" value="{{ tumor.pk }}">
-                <input type="submit" value="Edit" id="edit_tumor_button">
-                <label for="edit_tumor_button">
-                    <i class="material-icons" title="edit tumor">create</i>
-                </label>
-            </form>
-            <form action="{% url 'patients:delete_tumor' patient.pk %}" method="POST">
-                {% csrf_token %}
-                <input name="tumor_pk" value="{{ tumor.pk }}">
-                <input type="submit" value="Delete" id="delete_tumor_button">
-                <label for="delete_tumor_button">
-                    <i class="material-icons" title="delete tumor">delete_outline</i>
-                </label>
+                <div class="field is-grouped is-grouped-right">
+                    <p class="control">
+                        <button class="button is-small" type="submit" name="edit_pk" value="{{ tumor.pk }}">Edit</button>
+                    </p>
+                    <p class="control">
+                        <button class="button is-small" type="submit" name="delete_pk" value="{{ tumor.pk }}">Delete</button>
+                    </p>
+                </div>
             </form>
         </div>
     </div>
     {% endfor %}
-
-    {% include 'patients/add_tumor.html' %}
-
-</div>
-
-<div class="diagnose-list">
-    <h3>lymph node level involvement</h3>
-    <table>
-        <col style="width: 20%;">
-        <col style="width: 20%;">
-        <col style="width: 10%;">
-        <col style="width: 10%;">
-        <col style="width: 10%;">
-        <col style="width: 10%;">
-        <col style="width: 10%;">
-        <col style="width: 10%;">
-        <tr class="header">
-            <th>diagnose date</th>
-            <th>moadlity</th>
-            <th>side</th>
-            <th>I</th>
-            <th>II</th>
-            <th>III</th>
-            <th>IV</th>
-            <th></th>
-        </tr>
-
-        {% for diagnose in patient.diagnose_set.all %}
-        <tr>
-            <td>{{ diagnose.diagnose_date }}</td>
-            <td>{{ diagnose.get_modality_display }}</td>
-            <td>{{ diagnose.get_side_display }}</td>
-            <td>{{ diagnose.I }}</td>
-            <td>{{ diagnose.II }}</td>
-            <td>{{ diagnose.III }}</td>
-            <td>{{ diagnose.IV }}</td>
-            <td>
-                <div class="buttons">
-                    <form action="{% url 'patients:edit_diagnose' patient.pk %}" method="POST">
-                        {% csrf_token %}
-                        <input name="diagnose_pk" value="{{ diagnose.pk }}">
-                        <input type="submit" value="Edit" id="edit_diagnose_button">
-                        <label for="edit_diagnose_button">
-                            <i class="material-icons" title="edit diagnose">create</i>
-                        </label>
-                    </form>
-                    <form action="{% url 'patients:delete_diagnose' patient.pk %}" method="POST">
-                        {% csrf_token %}
-                        <input name="diagnose_pk" value="{{ diagnose.pk }}">
-                        <input type="submit" value="Delete" id="delete_diagnose_button">
-                        <label for="delete_diagnose_button">
-                            <i class="material-icons" title="delete diagnose">delete_outline</i>
-                        </label>
-                    </form>
-                </div>
-            </td>
-        </tr>
-        {% endfor %}
-
-        {% include 'patients/add_diagnose.html' %}
-
-    </table>
-</div>
     
+    <div class="column is-4">
+        <div class="box is-flex is-flex-direction-row is-justify-content-center is-align-content-center">
+            {% include 'patients/add_tumor.html' %}
+        </div>
+    </div>
+
+</section>
+
+<section class="section">
+    <table class="table is-fullwidth is-hoverable">
+        <caption class="title is-4">lymph node level involvement</caption>
+
+        <col style="width: 20%;">
+        <col style="width: 15%;">
+        <col style="width: 10%;">
+        <col style="width: 10%;">
+        <col style="width: 10%;">
+        <col style="width: 10%;">
+        <col style="width: 10%;">
+        <col style="width: 15%;">
+
+        <thead>
+            <tr class="header">
+                <th>diagnose date</th>
+                <th>moadlity</th>
+                <th>side</th>
+                <th>I</th>
+                <th>II</th>
+                <th>III</th>
+                <th>IV</th>
+                <th></th>
+            </tr>
+        </thead>
+
+        <tbody>
+            {% for diagnose in patient.diagnose_set.all %}
+            <tr>
+                <td>{{ diagnose.diagnose_date }}</td>
+                <td>{{ diagnose.get_modality_display }}</td>
+                <td>{{ diagnose.get_side_display }}</td>
+                <td>{{ diagnose.I }}</td>
+                <td>{{ diagnose.II }}</td>
+                <td>{{ diagnose.III }}</td>
+                <td>{{ diagnose.IV }}</td>
+                <td>
+                    <form action="{% url 'patients:change_diagnose' patient.pk %}" method="POST">
+                        {% csrf_token %}
+                        <div class="field is-grouped is-grouped-right">
+                            <p class="control">
+                                <button class="button is-small" type="submit" name="edit_pk" value="{{ diagnose.pk }}">Edit</button>
+                            </p>
+                            <p class="control">
+                                <button class="button is-small" type="submit" name="delete_pk" value="{{ diagnose.pk }}">Delete</button>
+                            </p>
+                        </div>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+            
+            {% include 'patients/add_diagnose.html' %}
+        </tbody>
+    </table>
+</section>
 {% endblock content %}

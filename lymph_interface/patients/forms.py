@@ -94,6 +94,14 @@ class TumorForm(forms.ModelForm):
                   "position",
                   "extension",
                   "size"]
+        widgets = {
+            "t_stage": forms.Select(attrs={"class": "select"}),
+            "stage_prefix": forms.Select(attrs={"class": "select"}),
+            "subsite": forms.Select(attrs={"class": "select shorten"}),
+            "position": forms.Select(attrs={"class": "select"}),
+            "extension": forms.CheckboxInput(attrs={"class": "checkbox"}),
+            "size": forms.TextInput(attrs={"class": "input"}),
+        }
         
         
     def save(self, pk, commit=True):
@@ -127,12 +135,21 @@ class DiagnoseForm(forms.ModelForm):
         model = Diagnose
         fields = ["diagnose_date",
                   "modality",
-                  "side",
-                  ]
+                  "side",]
+        
+        widgets = {"diagnose_date": forms.NumberInput(attrs={"class": "input",
+                                                             "type": "date"}),
+                   "modality": forms.Select(attrs={"class": "select"}),
+                   "side": forms.Select(attrs={"class": "select"})}
+        
         for lnl in LNLs:
             fields.append(lnl)
+            widgets[lnl] = forms.Select(choices=[(True, "positiv"),
+                                                 (False, "negativ"),
+                                                 (None, "unknown")],
+                                        attrs={"class": "select"})
             
-        widgets = {"diagnose_date": NumberInput(attrs={"type": "date"})}
+
         
         
     def save(self, pk, commit=True):
@@ -154,7 +171,9 @@ class DiagnoseForm(forms.ModelForm):
     
     
 class DataFileForm(forms.Form):
-    data_file = forms.FileField()
+    data_file = forms.FileField(
+        widget=forms.widgets.FileInput(attrs={"class": "file-input"})
+    )
     
     def clean(self):
         cleaned_data = super(DataFileForm, self).clean()

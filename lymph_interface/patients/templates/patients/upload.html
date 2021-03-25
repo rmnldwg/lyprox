@@ -1,26 +1,50 @@
 {% extends "base.html" %}
 
-
 {% block content %}
 
 {% load static %}
-<link rel="stylesheet" href="{% static 'patients/upload.css' %}">
 
-<div class="spacer"></div>
+<section class="hero">
+    <div class="hero-body">
+        <p class="title">Upload</p>
+        <p class="subtitle">Import patients from CSV table</p>
+    </div>
+</section>
 
-<div class="upload">
-    {% if not upload_success %}
-        <p>Upload CSV table of patients</p>
-        <form action="{% url 'patients:upload' %}" method="post" enctype="multipart/form-data">
+<section class="columns is-centered">
+    <div class="column is-half">
+        {% if not upload_success %}
+        <form action="{% url 'patients:upload' %}" method="POST" enctype="multipart/form-data">
             {% csrf_token %}
-            {{ form.data_file }}
-            <button type="submit" id="upload_button">Upload</button>
-            <label for="upload_button">
-                <i class="material-icons" title="upload csv file">backup</i>
-            </label>
+            <div class="field is-grouped is-grouped-centered">
+                <div class="control">
+                    <div class="file">
+                        <label class="file-label">
+                            {{ form.data_file }}
+                            <span class="file-cta">
+                                <span class="file-icon">
+                                    <i class="material-icons">find_in_page</i>
+                                </span>
+                                <span class="file-label">
+                                    Choose a file...
+                                </span>
+                            </span>
+                        </label>
+                    </div>
+                </div>
+                <div class="control">
+                    <button class="button is-primary" type="submit">
+                        <span class="icon">
+                            <i class="material-icons">backup</i>
+                        </span>
+                        <span>Upload</span>
+                    </button>
+                </div>
+            </div>
         </form>
-    {% else %}
+        {% else %}
         <p>{{ num_new }} patients have been added and {{ num_skipped }} were skipped.</p>
-    {% endif %}
-</div>
+        {% endif %}
+    </div>
+</section>
 {% endblock content %}

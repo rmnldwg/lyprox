@@ -1,9 +1,7 @@
 {% load static %}
-<link rel="stylesheet" type="text/css" href="{% static 'patients/add_diagnose.css' %}">
-
 
 {% if action == "add_diagnose" %}
-<tr class="add-diagnose">
+<tr>
     <form method="POST" action="{% url 'patients:add_diagnose' patient.pk %}">
         {% csrf_token %}
         <td>{{ diagnose_form.diagnose_date }}</td>
@@ -14,23 +12,31 @@
         <td>{{ diagnose_form.III }}</td>
         <td>{{ diagnose_form.IV }}</td>
         <td>
-            <input type="submit" value="Add" id="add_diagnose_button">
-            <label for="add_diagnose_button">
-                <i class="material-icons" title="accept and add">check_circle_outline</i>
-            </label>
-            <a href="{% url 'patients:detail' patient.pk %}">
-                <i class="material-icons" title="cancel and discard">cancel</i>
-            </a>
+            <div class="field is-grouped is-grouped-right">
+                <div class="control">
+                    <button class="button is-small" type="submit" value="add">Add</button>
+                </div>
+                <div class="control">
+                    <a class="button is-small" href="{% url 'patients:detail' patient.pk %}">Delete/Cancel</a>
+                </div>
+            </div>
         </td>
     </form>
 </tr>
 
 {% else %}
-<tr class="add-diagnose">
+<tr>
     <td colspan="8">
-        <a href="{% url 'patients:add_diagnose' patient.pk %}">
-            <i class="material-icons" title="add new diagnose">add_circle_outline</i>
-        </a>
+        <div class="field is-grouped is-grouped-centered">
+            <div class="control">
+                <a class="button is-white" href="{% url 'patients:add_diagnose' patient.pk %}">
+                    <span class="icon">
+                        <i class="material-icons">add_circle_outline</i>
+                    </span>
+                    <span>Add diagnose</span>
+                </a>
+            </div>
+        </div>
     </td>
 </tr>
 

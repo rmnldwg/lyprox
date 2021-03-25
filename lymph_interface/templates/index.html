@@ -3,26 +3,35 @@
 {% block content %}
 
 {% load static %}
-<link rel="stylesheet" href="{% static 'index.css' %}">
 
-<h1>Home</h1>
-<div class="links">
-    <ul>
-        <li>
+<section class="hero">
+    <div class="hero-body">
+        <p class="title">Index</p>
+        <p class="subtitle">Choose wisely</p>
+    </div>
+</section>
+
+<section class="tile is-ancestor">
+    <div class="tile is-parent">
+        <div class="tile is-child box has-text-centered">
             <a href="{% url 'patients:list' %}">
-                <i class="material-icons">list_alt</i>
+                <i class="material-icons is-size-2">list_alt</i>
             </a>
-        </li>
-        <li>
+        </div>
+    </div>
+    <div class="tile is-parent">
+        <div class="tile is-child box has-text-centered">
             <a href="{% url 'patients:create' %}">
-                <i class="material-icons">person_add</i>
+                <i class="material-icons is-size-2">person_add</i>
             </a>
-        </li>
-        <li>
+        </div>
+    </div>
+    <div class="tile is-parent">
+        <div class="tile is-child box has-text-centered">
             <a href="{% url 'patients:dashboard' %}">
-                <i class="material-icons">stacked_bar_chart</i>
+                <i class="material-icons is-size-2">stacked_bar_chart</i>
             </a>
-        </li>
-    </ul>
-</div>
+        </div>
+    </div>
+</section>
 {% endblock content %}

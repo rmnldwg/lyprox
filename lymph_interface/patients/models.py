@@ -76,7 +76,7 @@ SUBSITES = [
                      ("C06.0", "cheeck mucosa"),
                      ("C06.1", "vestibule of mouth"),
                      ("C06.2", "retromolar area"),
-                     ("C06.8", "overlapping lesion of other and unspecified parts of mouth"),
+                     ("C06.8", "overlapping lesion(s) of NOS parts of mouth"),
                      ("C06.9", "mouth, nos"),)
      ),
     ("oropharynx",  (("C01.9", "base of tongue, nos"),
