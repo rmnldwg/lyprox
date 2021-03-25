@@ -5,20 +5,6 @@
 {% load static %}
 <link rel="stylesheet" type="text/css" href="{% static 'patients/detail.css' %}">
 
-<div class="level">
-    <button class="button level-left">
-        <span class="icon">
-            <i class="material-icons">navigate_before</i>
-        </span>
-        <span>Previous</span>
-    </button>
-    <button class="button level-right">
-        <span>Next</span>
-        <span class="icon">
-            <i class="material-icons">navigate_next</i>
-        </span>
-    </button>
-</div>
 
 <section class="hero">
     <div class="hero-body">
@@ -106,7 +92,7 @@
         <thead>
             <tr class="header">
                 <th>diagnose date</th>
-                <th>moadlity</th>
+                <th>modality</th>
                 <th>side</th>
                 <th>I</th>
                 <th>II</th>
@@ -119,7 +105,7 @@
         <tbody>
             {% for diagnose in patient.diagnose_set.all %}
             <tr>
-                <td>{{ diagnose.diagnose_date }}</td>
+                <td>{{ diagnose.diagnose_date|date:"d. M Y" }}</td>
                 <td>{{ diagnose.get_modality_display }}</td>
                 <td>{{ diagnose.get_side_display }}</td>
                 <td>{{ diagnose.I }}</td>
@@ -146,4 +132,19 @@
         </tbody>
     </table>
 </section>
+
+<div class="level">
+    <button class="button level-left">
+        <span class="icon">
+            <i class="material-icons">navigate_before</i>
+        </span>
+        <span>Previous</span>
+    </button>
+    <button class="button level-right">
+        <span>Next</span>
+        <span class="icon">
+            <i class="material-icons">navigate_next</i>
+        </span>
+    </button>
+</div>
 {% endblock content %}
