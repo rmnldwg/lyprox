@@ -1,12 +1,9 @@
-.title {
-    text-align: center;
-    font-weight: bold;
-    font-size: x-large;
-    margin: 0;
+input[type="checkbox"].checkbox:checked + label {
+    background-color: lightgray;
 }
 
-input[type="checkbox"].checkbox:checked + label {
-    background-color: red;
+input[type="radio"].radio:checked + label {
+    background-color: lightgray;
 }
 
 
@@ -31,25 +28,6 @@ div.lnl.buttons {
     width: 100%;
     display: flex;
     text-align: center;
-}
-
-
-table {
-    width: 100%;
-    border-collapse: collapse;
-}
-
-table tr th, table tr td {
-    background-color: lightgray;
-    text-align: center;
-    height: 30px;
-    border-left: 5px solid white;
-    border-right: 5px solid white;
-}
-
-table tr td div.buttons {
-    display: flex;
-    flex-direction: row;
 }
 
 

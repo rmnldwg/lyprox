@@ -10,17 +10,23 @@
 
     <div class="level">
         <div class="level-left">
-            <p class="is-size-3">Diagnoses:</p>
+            <p class="title is-3">Diagnoses</p>
         </div>
         
-        {% for checkbox in form.modalities %}
+        
         <div class="level-item">
-            {{ checkbox.tag }}
-            <label for="{{ checkbox.id_for_label }}" class="checkbox button">
-                <span>{{ checkbox.choice_label }}</span>
-            </label>
+            <div class="field is-grouped">
+                {% for checkbox in form.modalities %}
+                <div class="control">
+                    {{ checkbox.tag }}
+                    <label for="{{ checkbox.id_for_label }}" class="checkbox button is-medium">
+                        <span>{{ checkbox.choice_label }}</span>
+                    </label>
+                </div>
+                {% endfor %}
+            </div>
         </div>
-        {% endfor %}
+        
 
         <div class="level-right">
             <div class="field">
@@ -34,56 +40,114 @@
 
     <hr>
 
-    <div class="patient">
-        <table class="fields">
-            <caption class="title">Patient details</caption>
-            <tr>
-                <th>smoking status</th>
-                <th>p16</th>
-                <th>neck dissection</th>
-            </tr>
+    <section>
+        <p class="title is-3">Patient details</p>
 
-            <tr>
-                <td>
-                    <div class="buttons">
-                        {% for radiobutton in form.nicotine_abuse %}
-                        
-                        {{ radiobutton.tag }}
-                        <label for="{{ radiobutton.id_for_label }}">
-                            <i class="material-icons">{{ radiobutton.choice_label }}</i>
-                        </label>
-                        {% endfor %}
+        <div class="columns">
+            <div class="column">
+                <div class="box has-text-centered">
+                    <p class="heading is-size-6">smoking status</p>
+                    <div class="block is-flex is-flex-direction-row is-justify-content-center">
+                        <div class="field has-addons">
+                            {% for radio in form.nicotine_abuse %}
+                            <p class="control">
+                                {{ radio.tag }}
+                                <label for="{{ radio.id_for_label }}" class="checkbox button is-medium">
+                                    {{ radio.choice_label }}
+                                </label>
+                            </p>
+                            {% endfor %}
+                        </div>
                     </div>
-                </td>
-
-                <td>
-                    <div class="buttons">
-                        {% for radiobutton in form.hpv_status %}
-                
-                        {{ radiobutton.tag }}
-                        <label for="{{ radiobutton.id_for_label }}">
-                            <i class="material-icons">{{ radiobutton.choice_label }}</i>
-                        </label>
-                        {% endfor %}
+                </div>
+            </div>
+            <div class="column">
+                <div class="box has-text-centered">
+                    <p class="heading is-size-6">p16</p>
+                    <div class="block is-flex is-flex-direction-row is-justify-content-center">
+                        <div class="field has-addons">
+                            {% for radio in form.hpv_status %}
+                            <div class="control">
+                                {{ radio.tag }}
+                                <label for="{{ radio.id_for_label }}" class="checkbox button is-medium">
+                                    {{ radio.choice_label }}
+                                </label>
+                            </div>
+                            {% endfor %}
+                        </div>
                     </div>
-                </td>
-
-                <td>
-                    <div class="buttons">
-                        {% for radiobutton in form.neck_dissection %}
-                
-                        {{ radiobutton.tag }}
-                        <label for="{{ radiobutton.id_for_label }}">
-                            <i class="material-icons">{{ radiobutton.choice_label }}</i>
-                        </label>
-                        {% endfor %}
+                </div>
+            </div>
+            <div class="column">
+                <div class="box has-text-centered">
+                    <p class="heading is-size-6">neck dissection</p>
+                    <div class="block is-flex is-flex-direction-row is-justify-content-center">
+                        <div class="field has-addons">
+                            {% for radio in form.neck_dissection %}
+                            <div class="control">
+                                {{ radio.tag }}
+                                <label for="{{ radio.id_for_label }}" class="checkbox button is-medium">
+                                    {{ radio.choice_label }}
+                                </label>
+                            </div>
+                            {% endfor %}
+                        </div>
                     </div>
-                </td>
-            </tr>
-        </table>
-    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 
     <hr>
+
+    <div class="columns is-centered">
+        <div class="column is-half">
+            <div class="box">
+                <p class="title is-3">Primary tumor</p>
+                <p class="subtitle">Oropharynx</p>
+
+                <div class="columns">
+                    <div class="column">
+                        <p class="title is-5">Subsite</p>
+                        {% for radio in form.subsites %}
+                        <div class="field">
+                            <div class="control">
+                                {{ radio.tag }}
+                                <label for="{{ radio.id_for_label }}" class="radio button is-fullwidth is-medium">
+                                    <span>{{ radio.choice_label }}</span>
+                                </label>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    <div class="column">
+                        <p class="title is-5">T-stage</p>
+                        {% for checkbox in form.tstages %}
+                        <div class="field">
+                            <div class="control">
+                                {{ checkbox.tag }}
+                                <label for="{{ checkbox.id_for_label }}" class="checkbox button is-fullwidth is-medium">
+                                    {{ checkbox.choice_label }}
+                                </label>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <hr>
+
+                <div class="columns">                    
+                    <div class="column">
+
+                    </div>
+                    <div class="column">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <div class="tumor">
         <p class="title">Primary Tumor (oropharynx)</p>

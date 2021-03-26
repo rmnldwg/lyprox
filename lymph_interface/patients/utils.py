@@ -212,7 +212,8 @@ def query_patients(data):
         
     # DIAGNOSES filtering... more complicated, probably
     # first ipsilateral
-    filter_kwargs = {"side": F("patient__tumor__position")}
+    filter_kwargs = {"modality": data["modalities"][0], 
+                     "side": F("patient__tumor__position")}
     for lnl in LNLs:
         if (inv := int(data[f"ipsi_{lnl}"])) != 0:
             filter_kwargs[f"{lnl}"] = _(inv)

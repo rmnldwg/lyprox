@@ -228,7 +228,7 @@ class ThreeWayToggle(forms.ChoiceField):
     unkown/None and negative/False."""
     
     def __init__(self, 
-                 widget=forms.RadioSelect, 
+                 widget=forms.RadioSelect(attrs={"class": "radio is-hidden"}), 
                  choices=[( 1, "add"),
                           ( 0, "not_interested"), 
                           (-1, "remove")],
@@ -276,6 +276,9 @@ class DashboardForm(forms.Form):
         str_list = cleaned_data["tstages"]
         cleaned_data["tstages"] = [int(s) for s in str_list]
         
+        str_list = cleaned_data["modalities"]
+        cleaned_data["modalities"] = [int(s) for s in str_list]
+        
         return cleaned_data
         
         
@@ -297,21 +300,27 @@ class DashboardForm(forms.Form):
     
     
     # patient specific fields
-    nicotine_abuse = ThreeWayToggle()
-    hpv_status = ThreeWayToggle()
-    neck_dissection = ThreeWayToggle()
+    nicotine_abuse = ThreeWayToggle(choices=[( 1, "positive"),
+                                             ( 0, "unknown"),
+                                             (-1, "negative")])
+    hpv_status = ThreeWayToggle(choices=[(1, "positive"),
+                                         (0, "unknown"),
+                                         (-1, "negative")])
+    neck_dissection = ThreeWayToggle(choices=[(1, "positive"),
+                                              (0, "unknown"),
+                                              (-1, "negative")])
     
     
     # tumor specific info
     subsites = forms.ChoiceField(
-        widget=forms.RadioSelect,
+        widget=forms.RadioSelect(attrs={"class": "radio is-hidden"}),
         choices=[("base", "base of tongue"),
                  ("tonsil", "tonsil"), 
                  ("rest" , "other and/or multiple")],
         initial="base"
     )
     tstages = forms.MultipleChoiceField(
-        widget=forms.CheckboxSelectMultiple,
+        widget=forms.CheckboxSelectMultiple(attrs={"class": "checkbox is-hidden"}),
         choices=T_STAGES,
         initial=[1,2,3,4]
     )
