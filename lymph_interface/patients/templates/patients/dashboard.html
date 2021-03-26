@@ -8,22 +8,28 @@
 <form method="POST" action="{% url 'patients:dashboard' %}">
 {% csrf_token %}
 
-    <div class="modalities">
-        <ul>
-            <li><p class="title">Diagnoses</p> </li>
+    <div class="level">
+        <div class="level-left">
+            <p class="is-size-3">Diagnoses:</p>
+        </div>
+        
+        {% for checkbox in form.modalities %}
+        <div class="level-item">
+            {{ checkbox.tag }}
+            <label for="{{ checkbox.id_for_label }}" class="checkbox button">
+                <span>{{ checkbox.choice_label }}</span>
+            </label>
+        </div>
+        {% endfor %}
 
-            {% for checkbox in form.modality_checkboxes %}
-            <li>
-                {{ checkbox.tag }}
-                <label for="{{ checkbox.id_for_label }}">{{ checkbox.choice_label }}</label>
-            </li>
-            {% endfor %}
-
-            <li>
-                <p>{{ form.modality_combine.label }}</p>
-                {{ form.modality_combine }}
-            </li>
-        </ul>
+        <div class="level-right">
+            <div class="field">
+                <label for="{{ form.modality_combine.id_for_label }}" class="label">{{ form.modality_combine.label }}</label>
+                <div class="control">
+                    {{ form.modality_combine }}
+                </div>
+            </div>
+        </div>
     </div>
 
     <hr>

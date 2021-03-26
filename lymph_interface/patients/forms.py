@@ -17,9 +17,12 @@ import os
 
 class PatientForm(forms.ModelForm):
     
-    first_name = forms.CharField()
-    last_name = forms.CharField()
-    birthday = forms.DateField(widget=NumberInput(attrs={"type": "date"}))
+    first_name = forms.CharField(
+        widget=forms.widgets.TextInput(attrs={"class": "input"}))
+    last_name = forms.CharField(
+        widget=forms.widgets.TextInput(attrs={"class": "input"}))
+    birthday = forms.DateField(widget=NumberInput(attrs={"class": "input", 
+                                                         "type": "date"}))
     
     class Meta:
         model = Patient
@@ -30,7 +33,23 @@ class PatientForm(forms.ModelForm):
                   "hpv_status", 
                   "n_stage",
                   "m_stage"]
-        widgets = {"diagnose_date": NumberInput(attrs={"type": "date"})}
+        widgets = {"gender": forms.Select(attrs={"class": "select"}),
+                   "diagnose_date": NumberInput(attrs={"class": "input", 
+                                                       "type": "date"}),
+                   "alcohol_abuse": forms.Select(choices=[(True, "positive"),
+                                                          (False, "negative"),
+                                                          (None, "unknown")],
+                                                 attrs={"class": "select"}),
+                   "nicotine_abuse": forms.Select(choices=[(True, "positive"),
+                                                           (False, "negative"),
+                                                           (None, "unknown")],
+                                                  attrs={"class": "select"}), 
+                   "hpv_status": forms.Select(choices=[(True, "positive"),
+                                                       (False, "negative"),
+                                                       (None, "unknown")],
+                                              attrs={"class": "select"}),
+                   "n_stage": forms.Select(attrs={"class": "select"}),
+                   "m_stage": forms.Select(attrs={"class": "select"})}
         
         
     def save(self, commit=True):
@@ -262,9 +281,9 @@ class DashboardForm(forms.Form):
         
         
     # select modalities to show
-    modality_checkboxes = forms.MultipleChoiceField(
+    modalities = forms.MultipleChoiceField(
         required=False, 
-        widget=forms.CheckboxSelectMultiple, 
+        widget=forms.CheckboxSelectMultiple(attrs={"class": "checkbox is-hidden"}), 
         choices=MODALITIES,
         initial=[5]
     )

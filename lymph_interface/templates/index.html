@@ -11,23 +11,30 @@
     </div>
 </section>
 
-<section class="tile is-ancestor">
-    <div class="tile is-parent">
-        <div class="tile is-child box has-text-centered">
+<section class="columns">
+    <div class="column">
+        <div class="box has-text-centered">
             <a href="{% url 'patients:list' %}">
                 <i class="material-icons is-size-2">list_alt</i>
             </a>
         </div>
     </div>
-    <div class="tile is-parent">
-        <div class="tile is-child box has-text-centered">
+    <div class="column">
+        <div class="box has-text-centered">
             <a href="{% url 'patients:create' %}">
                 <i class="material-icons is-size-2">person_add</i>
             </a>
         </div>
     </div>
-    <div class="tile is-parent">
-        <div class="tile is-child box has-text-centered">
+    <div class="column">
+        <div class="box has-text-centered">
+            <a href="{% url 'patients:upload' %}">
+                <i class="material-icons is-size-2">backup</i>
+            </a>
+        </div>
+    </div>
+    <div class="column">
+        <div class="box has-text-centered">
             <a href="{% url 'patients:dashboard' %}">
                 <i class="material-icons is-size-2">stacked_bar_chart</i>
             </a>

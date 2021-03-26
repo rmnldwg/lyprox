@@ -5,54 +5,8 @@
     margin: 0;
 }
 
-div.modalities ul {
-    list-style: none;
-    display: flex;
-    justify-content: flex-start;
-    margin: 0;
-    padding: 0;
-}
-
-div.modalities ul li:first-child {
-    justify-self: flex-start;
-    justify-content: flex-start;
-    max-width: 150px;
-}
-
-div.modalities ul li {
-    min-width: 50px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-grow: 1;
-}
-
-div.modalities ul li:last-child {
-    display: flex;
-    flex-direction: column;
-    max-width: 100px;
-    justify-content: center;
-}
-
-div.modalities ul li:last-child p {
-    margin: 0;
-}
-
-div.modalities ul li label {
-    flex-grow: 1;
-    margin: 0 5px;
-    padding: 10px 0;
-    cursor: pointer;
-    text-align: center;
-    background-color: lightgray;
-}
-
-div.modalities ul li input[type="checkbox"] {
-    display: none;
-}
-
-div.modalities ul li input[type="checkbox"]:checked + label {
-    background-color: gray;
+input[type="checkbox"].checkbox:checked + label {
+    background-color: red;
 }
 
 
