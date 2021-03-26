@@ -259,7 +259,10 @@ class DashboardForm(forms.Form):
         super(DashboardForm, self).__init__(*args, **kwargs)
         for side in ["ipsi", "contra"]:
             for lnl in LNLs:
-                self.fields[f"{side}_{lnl}"] = ThreeWayToggle()
+                self.fields[f"{side}_{lnl}"] = ThreeWayToggle(
+                    choices=[( 1, "positive"),
+                             ( 0, "unknown"),
+                             (-1, "negative")])
            
                 
     def clean(self):
@@ -286,7 +289,7 @@ class DashboardForm(forms.Form):
     # select modalities to show
     modalities = forms.MultipleChoiceField(
         required=False, 
-        widget=forms.CheckboxSelectMultiple(attrs={"class": "checkbox is-hidden"}), 
+        widget=forms.CheckboxSelectMultiple(attrs={"class": "is-hidden"}), 
         choices=MODALITIES,
         initial=[5]
     )
@@ -324,5 +327,9 @@ class DashboardForm(forms.Form):
         choices=T_STAGES,
         initial=[1,2,3,4]
     )
-    central = ThreeWayToggle()
-    midline_extension = ThreeWayToggle()
+    central = ThreeWayToggle(choices=[(1, "positive"),
+                                      (0, "unknown"),
+                                      (-1, "negative")])
+    midline_extension = ThreeWayToggle(choices=[(1, "positive"),
+                                                (0, "unknown"),
+                                                (-1, "negative")])
