@@ -289,7 +289,7 @@ class DashboardForm(forms.Form):
     # select modalities to show
     modalities = forms.MultipleChoiceField(
         required=False, 
-        widget=forms.CheckboxSelectMultiple(attrs={"class": "is-hidden"}), 
+        widget=forms.CheckboxSelectMultiple(attrs={"class": "checkbox is-hidden"}), 
         choices=MODALITIES,
         initial=[5]
     )

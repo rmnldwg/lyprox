@@ -199,7 +199,7 @@ def delete_diagnose_from_patient(request, *args, **kwargs):
     return redirect("patients:detail", pk=patient.pk)
 
 
-def dashboard(request):
+def dashboard(request, old_context={}):
     """Display the dashboard showing patterns of involvement."""
     form = DashboardForm(request.POST or None)
     
@@ -207,6 +207,8 @@ def dashboard(request):
         q = query_patients(form.cleaned_data)
         print(q)
         context = {"form": form, "n": len(q)}
+        
+        return render(request, "patients/dashboard.html", context)
     else:
         context = {"form": form}
         

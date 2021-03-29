@@ -19,7 +19,7 @@
                 {% for checkbox in form.modalities %}
                 <div class="control">
                     {{ checkbox.tag }}
-                    <label for="{{ checkbox.id_for_label }}" class="checkbox button is-medium">
+                    <label for="{{ checkbox.id_for_label }}" class="button is-medium">
                         <span>{{ checkbox.choice_label }}</span>
                     </label>
                 </div>
@@ -473,6 +473,7 @@
     </div>
 
     <input type="submit" value="test">
+    <a name="anchor"></a>
     <p>{{ n }}</p>
 </form>
 
