@@ -1,7 +1,21 @@
 input[type="checkbox"].checkbox:checked + label {
-    background-color: lightgray;
+    background-color: #C5D5DB;
 }
 
 input[type="radio"].radio:checked + label {
-    background-color: lightgray;
+    background-color: #C5D5DB;
+}
+
+input[type="radio"].radio:checked + label.add {
+    background-color: #00AFA5;
+    color: white;
+}
+
+input[type="radio"].radio:checked + label.not_interested {
+    background-color: #C5D5DB;
+}
+
+input[type="radio"].radio:checked + label.remove {
+    background-color: #AE0060;
+    color: white;
 }

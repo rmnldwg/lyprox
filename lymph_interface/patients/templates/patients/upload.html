@@ -4,14 +4,12 @@
 
 {% load static %}
 
-<section class="hero">
-    <div class="hero-body">
-        <p class="title">Upload</p>
-        <p class="subtitle">Import patients from CSV table</p>
-    </div>
-</section>
+<div class="block">
+    <p class="title">Upload</p>
+    <p class="subtitle">Import patients from CSV table</p>
+</div>
 
-<section class="columns is-centered">
+<section class="block columns is-centered">
     <div class="column is-half">
         {% if not upload_success %}
         <form action="{% url 'patients:upload' %}" method="POST" enctype="multipart/form-data">

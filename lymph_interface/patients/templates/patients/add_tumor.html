@@ -37,10 +37,10 @@
     </table>
     <div class="field is-grouped is-grouped-right">
         <div class="control">
-            <button class="button is-small" type="submit" value="add">Add</button>
+            <button class="button is-small is-success" type="submit" value="add">Add</button>
         </div>
         <div class="control">
-            <a class="button is-small" href="{% url 'patients:detail' patient.pk %}">Delete/Cancel</a>
+            <a class="button is-small is-danger" href="{% url 'patients:detail' patient.pk %}">Delete/Cancel</a>
         </div>
     </div>
 </form>
@@ -48,7 +48,7 @@
 {% else %}
 <div class="field is-grouped is-grouped-centered is-align-self-center">
     <div class="control">
-        <a class="button" href="{% url 'patients:add_tumor' patient.pk %}">
+        <a class="button is-info" href="{% url 'patients:add_tumor' patient.pk %}">
             <span class="icon">
                 <i class="material-icons">add_circle_outline</i>
             </span>

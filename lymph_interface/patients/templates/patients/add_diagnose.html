@@ -14,10 +14,10 @@
         <td>
             <div class="field is-grouped is-grouped-right">
                 <div class="control">
-                    <button class="button is-small" type="submit" value="add">Add</button>
+                    <button class="button is-small is-success" type="submit" value="add">Add</button>
                 </div>
                 <div class="control">
-                    <a class="button is-small" href="{% url 'patients:detail' patient.pk %}">Delete/Cancel</a>
+                    <a class="button is-small is-danger" href="{% url 'patients:detail' patient.pk %}">Delete/Cancel</a>
                 </div>
             </div>
         </td>
@@ -29,7 +29,7 @@
     <td colspan="8">
         <div class="field is-grouped is-grouped-centered">
             <div class="control">
-                <a class="button is-white" href="{% url 'patients:add_diagnose' patient.pk %}">
+                <a class="button is-info" href="{% url 'patients:add_diagnose' patient.pk %}">
                     <span class="icon">
                         <i class="material-icons">add_circle_outline</i>
                     </span>

@@ -5,13 +5,10 @@
 {% load static %}
 <link rel="stylesheet" type="text/css" href="{% static 'patients/detail.css' %}">
 
-
-<section class="hero">
-    <div class="hero-body">
-        <p class="title">Patient {{ patient.pk }}</p>
-        <p class="subtitle">Hash-ID: {{ patient.hash_value }} </p>
-    </div>
-</section>
+<div class="block">
+    <p class="title">Patient {{ patient.pk }}</p>
+    <p class="subtitle">Hash-ID: {{ patient.hash_value }} </p>
+</div>
 
 <section class="level">
     <div class="level-item"><p><strong>date of diagnosis:</strong> {{ patient.diagnose_date }}</p></div>
@@ -57,10 +54,10 @@
                 {% csrf_token %}
                 <div class="field is-grouped is-grouped-right">
                     <p class="control">
-                        <button class="button is-small" type="submit" name="edit_pk" value="{{ tumor.pk }}">Edit</button>
+                        <button class="button is-small is-info" type="submit" name="edit_pk" value="{{ tumor.pk }}">Edit</button>
                     </p>
                     <p class="control">
-                        <button class="button is-small" type="submit" name="delete_pk" value="{{ tumor.pk }}">Delete</button>
+                        <button class="button is-small is-danger" type="submit" name="delete_pk" value="{{ tumor.pk }}">Delete</button>
                     </p>
                 </div>
             </form>
@@ -117,10 +114,10 @@
                         {% csrf_token %}
                         <div class="field is-grouped is-grouped-right">
                             <p class="control">
-                                <button class="button is-small" type="submit" name="edit_pk" value="{{ diagnose.pk }}">Edit</button>
+                                <button class="button is-small is-info" type="submit" name="edit_pk" value="{{ diagnose.pk }}">Edit</button>
                             </p>
                             <p class="control">
-                                <button class="button is-small" type="submit" name="delete_pk" value="{{ diagnose.pk }}">Delete</button>
+                                <button class="button is-small is-danger" type="submit" name="delete_pk" value="{{ diagnose.pk }}">Delete</button>
                             </p>
                         </div>
                     </form>

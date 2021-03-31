@@ -1,10 +1,10 @@
 {% load static %}
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="has-navbar-fixed-top">
 <head>
     <link rel="stylesheet" type="text/css" href="{% static 'base.css' %}">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.2/css/bulma.min.css">
+    <link rel="stylesheet" href="{% static 'usz.css' %}">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -13,11 +13,34 @@
 </head>
 
 <body>
-    <header class="is-flex is-justify-content-center">
-        <figure class="image m-3">
-            <img src="{% static 'usz-uzh-logo.png' %}">
-        </figure>
-    </header>
+    <nav class="navbar is-fixed-top is-primary" role="navigation">
+        <div class="container">
+            <div class="navbar-brand">
+                <a class="navbar-item" href="{% url 'index' %}">
+                    <img src="{% static 'usz-logo-white.png' %}" alt="USZ Logo">
+                </a>
+            </div>
+            <div class="navbar-menu">
+                <div class="navbar-start">
+                    <a href="{% url 'patients:list' %}" class="navbar-item">
+                        List
+                    </a>
+
+                    <a href="{% url 'patients:upload' %}" class="navbar-item">
+                        Upload
+                    </a>
+
+                    <a href="{% url 'patients:create' %}" class="navbar-item">
+                        Create
+                    </a>
+
+                    <a href="{% url 'patients:dashboard' %}" class="navbar-item">
+                        Dashboard
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
 
     <section class="section">
         <div class="container">
@@ -26,7 +49,7 @@
         </div>
     </section>
 
-    <footer class="footer">
+    <footer class="footer is-fullheight">
         <div class="container">
             <div class="columns">
                 <div class="column has-text-centered">University Hospital Zurich</div>

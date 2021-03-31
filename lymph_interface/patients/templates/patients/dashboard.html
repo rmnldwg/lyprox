@@ -8,18 +8,18 @@
 <form method="POST" action="{% url 'patients:dashboard' %}">
 {% csrf_token %}
 
-    <div class="level">
-        <div class="level-left">
-            <p class="title is-3">Diagnoses</p>
+    <div class="columns is-multiline">
+        <div class="column is-2">
+            <p class="title is-4">Diagnoses</p>
         </div>
         
         
-        <div class="level-item">
-            <div class="field is-grouped">
+        <div class="column">
+            <div class="columns">
                 {% for checkbox in form.modalities %}
-                <div class="control">
+                <div class="column">
                     {{ checkbox.tag }}
-                    <label for="{{ checkbox.id_for_label }}" class="button is-medium">
+                    <label for="{{ checkbox.id_for_label }}" class="button is-fullwidth">
                         <span>{{ checkbox.choice_label }}</span>
                     </label>
                 </div>
@@ -28,9 +28,8 @@
         </div>
         
 
-        <div class="level-right">
+        <div class="column is-1">
             <div class="field">
-                <label for="{{ form.modality_combine.id_for_label }}" class="label">{{ form.modality_combine.label }}</label>
                 <div class="control">
                     {{ form.modality_combine }}
                 </div>
@@ -40,80 +39,79 @@
 
     <hr>
 
-    <section>
-        <p class="title is-3">Patient details</p>
-
-        <div class="columns">
-            <div class="column">
-                <div class="box has-text-centered">
-                    <p class="heading is-size-6">smoking status</p>
-                    <div class="block is-flex is-flex-direction-row is-justify-content-center">
-                        <div class="field has-addons">
-                            {% for radio in form.nicotine_abuse %}
-                            <p class="control">
-                                {{ radio.tag }}
-                                <label for="{{ radio.id_for_label }}" class="button is-medium">
-                                    {{ radio.choice_label }}
-                                </label>
-                            </p>
-                            {% endfor %}
-                        </div>
+    <div class="columns is-multiline">
+        <div class="column is-2">
+            <p class="title is-4">Patient details</p>
+        </div>
+        <div class="column">
+            <div class="has-text-centered">
+                <div class="is-flex is-flex-direction-row is-justify-content-center">
+                    <div class="field has-addons">
+                        {% for radio in form.nicotine_abuse %}
+                        <p class="control">
+                            {{ radio.tag }}
+                            <label for="{{ radio.id_for_label }}" class="button {{ radio.choice_label }}">
+                                <i class="material-icons">{{ radio.choice_label }}</i>
+                            </label>
+                        </p>
+                        {% endfor %}
                     </div>
                 </div>
-            </div>
-            <div class="column">
-                <div class="box has-text-centered">
-                    <p class="heading is-size-6">p16</p>
-                    <div class="block is-flex is-flex-direction-row is-justify-content-center">
-                        <div class="field has-addons">
-                            {% for radio in form.hpv_status %}
-                            <div class="control">
-                                {{ radio.tag }}
-                                <label for="{{ radio.id_for_label }}" class="button is-medium">
-                                    {{ radio.choice_label }}
-                                </label>
-                            </div>
-                            {% endfor %}
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="column">
-                <div class="box has-text-centered">
-                    <p class="heading is-size-6">neck dissection</p>
-                    <div class="block is-flex is-flex-direction-row is-justify-content-center">
-                        <div class="field has-addons">
-                            {% for radio in form.neck_dissection %}
-                            <div class="control">
-                                {{ radio.tag }}
-                                <label for="{{ radio.id_for_label }}" class="button is-medium">
-                                    {{ radio.choice_label }}
-                                </label>
-                            </div>
-                            {% endfor %}
-                        </div>
-                    </div>
-                </div>
+                <p class="heading">smoking status</p>
             </div>
         </div>
-    </section>
+        <div class="column">
+            <div class="has-text-centered">
+                <div class="is-flex is-flex-direction-row is-justify-content-center">
+                    <div class="field has-addons">
+                        {% for radio in form.hpv_status %}
+                        <div class="control">
+                            {{ radio.tag }}
+                            <label for="{{ radio.id_for_label }}" class="button {{ radio.choice_label }}">
+                                <i class="material-icons">{{ radio.choice_label }}</i>
+                            </label>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                <p class="heading">p16</p>
+            </div>
+        </div>
+        <div class="column">
+            <div class="has-text-centered">
+                <div class="is-flex is-flex-direction-row is-justify-content-center">
+                    <div class="field has-addons">
+                        {% for radio in form.neck_dissection %}
+                        <div class="control">
+                            {{ radio.tag }}
+                            <label for="{{ radio.id_for_label }}" class="button {{ radio.choice_label }}">
+                                <i class="material-icons">{{ radio.choice_label }}</i>
+                            </label>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                <p class="heading">neck dissection</p>
+            </div>
+        </div>
+    </div>
 
     <hr>
 
     <div class="columns is-centered">
-        <div class="column is-half">
+        <div class="column is-5">
             <div class="box">
-                <p class="title is-3">Primary tumor</p>
+                <p class="title is-4">Primary tumor</p>
                 <p class="subtitle">Oropharynx</p>
 
                 <div class="columns">
                     <div class="column">
-                        <p class="title is-5">Subsite</p>
+                        <p class="title is-6">Subsite</p>
                         {% for radio in form.subsites %}
                         <div class="field">
                             <div class="control">
                                 {{ radio.tag }}
-                                <label for="{{ radio.id_for_label }}" class="button is-fullwidth is-medium">
+                                <label for="{{ radio.id_for_label }}" class="button is-fullwidth ">
                                     <span>{{ radio.choice_label }}</span>
                                 </label>
                             </div>
@@ -121,12 +119,12 @@
                         {% endfor %}
                     </div>
                     <div class="column">
-                        <p class="title is-5">T-stage</p>
+                        <p class="title is-6">T-stage</p>
                         {% for checkbox in form.tstages %}
                         <div class="field">
                             <div class="control">
                                 {{ checkbox.tag }}
-                                <label for="{{ checkbox.id_for_label }}" class="button is-fullwidth is-medium">
+                                <label for="{{ checkbox.id_for_label }}" class="button is-fullwidth ">
                                     {{ checkbox.choice_label }}
                                 </label>
                             </div>
@@ -137,37 +135,37 @@
 
                 <hr>
 
-                <p class="title is-5">Lateralization</p>
+                <p class="title is-6">Lateralization</p>
                 <div class="columns">                    
                     <div class="column has-text-centered">
-                        <p class="heading is-size-7">central</p>
-                        <div class="block is-flex is-flex-direction-row is-justify-content-center">
+                        <div class="is-flex is-flex-direction-row is-justify-content-center">
                             <div class="field has-addons">
                                 {% for radio in form.central %}
                                 <p class="control">
                                     {{ radio.tag }}
-                                    <label for="{{ radio.id_for_label }}" class="button">
-                                        {{ radio.choice_label }}
+                                    <label for="{{ radio.id_for_label }}" class="button {{ radio.choice_label }}">
+                                        <i class="material-icons">{{ radio.choice_label }}</i>
                                     </label>
                                 </p>
                                 {% endfor %}
                             </div>
                         </div>
+                        <p class="heading is-size-7">central</p>
                     </div>
                     <div class="column has-text-centered">
-                        <p class="heading is-size-7">midline extension</p>
-                        <div class="block is-flex is-flex-direction-row is-justify-content-center">
+                        <div class="is-flex is-flex-direction-row is-justify-content-center">
                             <div class="field has-addons">
                                 {% for radio in form.midline_extension %}
                                 <p class="control">
                                     {{ radio.tag }}
-                                    <label for="{{ radio.id_for_label }}" class="button">
-                                        {{ radio.choice_label }}
+                                    <label for="{{ radio.id_for_label }}" class="button {{ radio.choice_label }}">
+                                        <i class="material-icons">{{ radio.choice_label }}</i>
                                     </label>
                                 </p>
                                 {% endfor %}
                             </div>
                         </div>
+                        <p class="heading is-size-7">midline extension</p>
                     </div>
                 </div>
             </div>
@@ -175,7 +173,7 @@
     </div>
 
     <div class="columns is-centered">
-        <div class="column is-4">
+        <div class="column is-3">
             <div class="box">
                 <p class="title is-4">contra</p>
                 <table class="table is-fullwidth">
@@ -189,8 +187,8 @@
                                         {% for radio in form.contra_Ia %}
                                         <p class="control">
                                             {{ radio.tag }}
-                                            <label for="{{ radio.id_for_label }}" class="button is-small">
-                                                {{ radio.choice_label }}
+                                            <label for="{{ radio.id_for_label }}" class="button is-small {{ radio.choice_label }}">
+                                                <i class="material-icons">{{ radio.choice_label }}</i>
                                             </label>
                                         </p>
                                         {% endfor %}
@@ -206,8 +204,8 @@
                                         {% for radio in form.contra_Ib %}
                                         <p class="control">
                                             {{ radio.tag }}
-                                            <label for="{{ radio.id_for_label }}" class="button is-small">
-                                                {{ radio.choice_label }}
+                                            <label for="{{ radio.id_for_label }}" class="button is-small {{ radio.choice_label }}">
+                                                <i class="material-icons">{{ radio.choice_label }}</i>
                                             </label>
                                         </p>
                                         {% endfor %}
@@ -224,8 +222,8 @@
                                         {% for radio in form.contra_IIa %}
                                         <p class="control">
                                             {{ radio.tag }}
-                                            <label for="{{ radio.id_for_label }}" class="button is-small">
-                                                {{ radio.choice_label }}
+                                            <label for="{{ radio.id_for_label }}" class="button is-small {{ radio.choice_label }}">
+                                                <i class="material-icons">{{ radio.choice_label }}</i>
                                             </label>
                                         </p>
                                         {% endfor %}
@@ -241,8 +239,8 @@
                                         {% for radio in form.contra_IIb %}
                                         <p class="control">
                                             {{ radio.tag }}
-                                            <label for="{{ radio.id_for_label }}" class="button is-small">
-                                                {{ radio.choice_label }}
+                                            <label for="{{ radio.id_for_label }}" class="button is-small {{ radio.choice_label }}">
+                                                <i class="material-icons">{{ radio.choice_label }}</i>
                                             </label>
                                         </p>
                                         {% endfor %}
@@ -258,8 +256,8 @@
                                         {% for radio in form.contra_III %}
                                         <p class="control">
                                             {{ radio.tag }}
-                                            <label for="{{ radio.id_for_label }}" class="button is-small">
-                                                {{ radio.choice_label }}
+                                            <label for="{{ radio.id_for_label }}" class="button is-small {{ radio.choice_label }}">
+                                                <i class="material-icons">{{ radio.choice_label }}</i>
                                             </label>
                                         </p>
                                         {% endfor %}
@@ -275,8 +273,8 @@
                                         {% for radio in form.contra_IV %}
                                         <p class="control">
                                             {{ radio.tag }}
-                                            <label for="{{ radio.id_for_label }}" class="button is-small">
-                                                {{ radio.choice_label }}
+                                            <label for="{{ radio.id_for_label }}" class="button is-small {{ radio.choice_label }}">
+                                                <i class="material-icons">{{ radio.choice_label }}</i>
                                             </label>
                                         </p>
                                         {% endfor %}
@@ -292,8 +290,8 @@
                                         {% for radio in form.contra_V %}
                                         <p class="control">
                                             {{ radio.tag }}
-                                            <label for="{{ radio.id_for_label }}" class="button is-small">
-                                                {{ radio.choice_label }}
+                                            <label for="{{ radio.id_for_label }}" class="button is-small {{ radio.choice_label }}">
+                                                <i class="material-icons">{{ radio.choice_label }}</i>
                                             </label>
                                         </p>
                                         {% endfor %}
@@ -309,8 +307,8 @@
                                         {% for radio in form.contra_VII %}
                                         <p class="control">
                                             {{ radio.tag }}
-                                            <label for="{{ radio.id_for_label }}" class="button is-small">
-                                                {{ radio.choice_label }}
+                                            <label for="{{ radio.id_for_label }}" class="button is-small {{ radio.choice_label }}">
+                                                <i class="material-icons">{{ radio.choice_label }}</i>
                                             </label>
                                         </p>
                                         {% endfor %}
@@ -322,8 +320,8 @@
                 </table>
             </div>
         </div>
-        <div class="column is-2"></div>
-        <div class="column is-4">
+        <div class="column is-1"></div>
+        <div class="column is-3">
             <div class="box">
                 <p class="title is-4">ipsi</p>
                 <table class="table is-fullwidth">
@@ -337,8 +335,8 @@
                                         {% for radio in form.ipsi_Ia %}
                                         <p class="control">
                                             {{ radio.tag }}
-                                            <label for="{{ radio.id_for_label }}" class="button is-small">
-                                                {{ radio.choice_label }}
+                                            <label for="{{ radio.id_for_label }}" class="button is-small {{ radio.choice_label }}">
+                                                <i class="material-icons">{{ radio.choice_label }}</i>
                                             </label>
                                         </p>
                                         {% endfor %}
@@ -354,8 +352,8 @@
                                         {% for radio in form.ipsi_Ib %}
                                         <p class="control">
                                             {{ radio.tag }}
-                                            <label for="{{ radio.id_for_label }}" class="button is-small">
-                                                {{ radio.choice_label }}
+                                            <label for="{{ radio.id_for_label }}" class="button is-small {{ radio.choice_label }}">
+                                                <i class="material-icons">{{ radio.choice_label }}</i>
                                             </label>
                                         </p>
                                         {% endfor %}
@@ -372,8 +370,8 @@
                                         {% for radio in form.ipsi_IIa %}
                                         <p class="control">
                                             {{ radio.tag }}
-                                            <label for="{{ radio.id_for_label }}" class="button is-small">
-                                                {{ radio.choice_label }}
+                                            <label for="{{ radio.id_for_label }}" class="button is-small {{ radio.choice_label }}">
+                                                <i class="material-icons">{{ radio.choice_label }}</i>
                                             </label>
                                         </p>
                                         {% endfor %}
@@ -389,8 +387,8 @@
                                         {% for radio in form.ipsi_IIb %}
                                         <p class="control">
                                             {{ radio.tag }}
-                                            <label for="{{ radio.id_for_label }}" class="button is-small">
-                                                {{ radio.choice_label }}
+                                            <label for="{{ radio.id_for_label }}" class="button is-small {{ radio.choice_label }}">
+                                                <i class="material-icons">{{ radio.choice_label }}</i>
                                             </label>
                                         </p>
                                         {% endfor %}
@@ -406,8 +404,8 @@
                                         {% for radio in form.ipsi_III %}
                                         <p class="control">
                                             {{ radio.tag }}
-                                            <label for="{{ radio.id_for_label }}" class="button is-small">
-                                                {{ radio.choice_label }}
+                                            <label for="{{ radio.id_for_label }}" class="button is-small {{ radio.choice_label }}">
+                                                <i class="material-icons">{{ radio.choice_label }}</i>
                                             </label>
                                         </p>
                                         {% endfor %}
@@ -423,8 +421,8 @@
                                         {% for radio in form.ipsi_IV %}
                                         <p class="control">
                                             {{ radio.tag }}
-                                            <label for="{{ radio.id_for_label }}" class="button is-small">
-                                                {{ radio.choice_label }}
+                                            <label for="{{ radio.id_for_label }}" class="button is-small {{ radio.choice_label }}">
+                                                <i class="material-icons">{{ radio.choice_label }}</i>
                                             </label>
                                         </p>
                                         {% endfor %}
@@ -440,8 +438,8 @@
                                         {% for radio in form.ipsi_V %}
                                         <p class="control">
                                             {{ radio.tag }}
-                                            <label for="{{ radio.id_for_label }}" class="button is-small">
-                                                {{ radio.choice_label }}
+                                            <label for="{{ radio.id_for_label }}" class="button is-small {{ radio.choice_label }}">
+                                                <i class="material-icons">{{ radio.choice_label }}</i>
                                             </label>
                                         </p>
                                         {% endfor %}
@@ -457,8 +455,8 @@
                                         {% for radio in form.ipsi_VII %}
                                         <p class="control">
                                             {{ radio.tag }}
-                                            <label for="{{ radio.id_for_label }}" class="button is-small">
-                                                {{ radio.choice_label }}
+                                            <label for="{{ radio.id_for_label }}" class="button is-small {{ radio.choice_label }}">
+                                                <i class="material-icons">{{ radio.choice_label }}</i>
                                             </label>
                                         </p>
                                         {% endfor %}

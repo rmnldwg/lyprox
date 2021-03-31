@@ -259,10 +259,7 @@ class DashboardForm(forms.Form):
         super(DashboardForm, self).__init__(*args, **kwargs)
         for side in ["ipsi", "contra"]:
             for lnl in LNLs:
-                self.fields[f"{side}_{lnl}"] = ThreeWayToggle(
-                    choices=[( 1, "positive"),
-                             ( 0, "unknown"),
-                             (-1, "negative")])
+                self.fields[f"{side}_{lnl}"] = ThreeWayToggle()
            
                 
     def clean(self):
@@ -303,15 +300,9 @@ class DashboardForm(forms.Form):
     
     
     # patient specific fields
-    nicotine_abuse = ThreeWayToggle(choices=[( 1, "positive"),
-                                             ( 0, "unknown"),
-                                             (-1, "negative")])
-    hpv_status = ThreeWayToggle(choices=[(1, "positive"),
-                                         (0, "unknown"),
-                                         (-1, "negative")])
-    neck_dissection = ThreeWayToggle(choices=[(1, "positive"),
-                                              (0, "unknown"),
-                                              (-1, "negative")])
+    nicotine_abuse = ThreeWayToggle()
+    hpv_status = ThreeWayToggle()
+    neck_dissection = ThreeWayToggle()
     
     
     # tumor specific info
@@ -327,9 +318,5 @@ class DashboardForm(forms.Form):
         choices=T_STAGES,
         initial=[1,2,3,4]
     )
-    central = ThreeWayToggle(choices=[(1, "positive"),
-                                      (0, "unknown"),
-                                      (-1, "negative")])
-    midline_extension = ThreeWayToggle(choices=[(1, "positive"),
-                                                (0, "unknown"),
-                                                (-1, "negative")])
+    central = ThreeWayToggle()
+    midline_extension = ThreeWayToggle()

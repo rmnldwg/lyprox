@@ -45,7 +45,7 @@ class Patient(models.Model):
     
     def __str__(self):
         """Report some patient specifics."""
-        return f"ID: {self.hash_value}, age: {self.age}, gender: {self.gender}"
+        return f"ID: {self.hash_value} | age: {self.age} | gender: {self.gender}"
 
 
 
@@ -127,6 +127,11 @@ class Tumor(models.Model):
                                                            ("p", "p")])
     
     
+    def __str__(self):
+        """Report some main characteristics."""
+        return f"Patient: {self.patient.pk} | subsite: {self.subsite} | stage: T{self.t_stage}"
+    
+    
 
 # diagnostic modalities that are used to detect metastases in LNLs
 MODALITIES = [
@@ -156,6 +161,12 @@ class Diagnose(models.Model):
     
     side = models.CharField(max_length=10, choices=[("left", "left"),
                                                     ("right", "right")])
+    
+    
+    def __str__(self):
+        """Report some info for admin view."""
+        return f"Patient: {self.patient.pk} | modality: {self.get_modality_display()} | side: {self.side}"
+    
     
 # add lymph node level fields to model 'Diagnose'
 lnl_fields = []

@@ -1,18 +1,22 @@
 @charset "utf-8";
 
 // Setting USZ colors
-$usz-blue: #055EA8;
+$usz-blue: #005EA8;
 $usz-green: #00AFA5;
 $usz-orange: #F17900;
 $usz-red: #AE0060;
 $usz-gray: #C5D5DB;
+$white: #FFFFFF;
 
 // Change Bulma's global variables
 $primary: $usz-blue;
-$link: $usz-gray;
+$info: $usz-gray;
+$link: $usz-blue;
 $success: $usz-green;
 $warning: $usz-orange;
 $danger: $usz-red;
+
+
 
 // importing everything necessary from Bulma
 @import "../node_modules/bulma/bulma.sass";
