@@ -210,26 +210,38 @@ def query_patients(data):
     if (me := data["midline_extension"]) != 0:
         q = q.filter(tumor__extension=_(me))
         
-    # DIAGNOSES filtering... more complicated, probably
-    # first ipsilateral
-    filter_kwargs = {"modality": data["modalities"][0], 
-                     "side": F("patient__tumor__position")}
-    for lnl in LNLs:
-        if (inv := int(data[f"ipsi_{lnl}"])) != 0:
-            filter_kwargs[f"{lnl}"] = _(inv)
-    
-    d = Diagnose.objects.filter(**filter_kwargs)
-    print(len(d))
-    
-    q = q.filter(diagnose__in=d)
+    # DIAGNOSES filtering
+    q_list = []  # I think that's bad python...
+    for mod in data["modalities"]:
+        # kreate kwrags dictionary for the filtering, so that I can loop 
+        # through the LNLs and simply append what I am looking for to that dict.
+        ipsi_kwargs = {"modality": mod,
+                       "side": F("patient__tumor__position")}
+        contra_kwargs = {"modality": mod}
+        # loop through the LNLs
+        for lnl in LNLs:
+            if (inv := data[f"ipsi_{lnl}"]) != 0:
+                ipsi_kwargs[f"{lnl}"] = _(inv)
+            if (inv := data[f"contra_{lnl}"]) != 0:
+                contra_kwargs[f"{lnl}"] = _(inv)
             
-        # other_side = {"right": "left",
-        #               "left": "right"}
-            
-        # if (inv := int(data[f"contra_{lnl}"])) != 0:
-        #     filter_kwargs = {"diagnose__side": other_side[F("tumor__position")],
-        #                      f"diagnose__{lnl}": _(inv)}
-        #     q = q.filter(**filter_kwargs)
-    
+        d_ipsi = Diagnose.objects.filter(
+            **ipsi_kwargs
+        )
+        q_ipsi = q.filter(diagnose__in=d_ipsi)
+        
+        d_contra = Diagnose.objects.filter(
+            **contra_kwargs
+        ).exclude(
+            side=F("patient__tumor__position")
+        )
+        q_contra = q.filter(diagnose__in=d_contra)
+        
+        q_list.append(q_ipsi.intersection(q_contra))
+        
+    if data["modality_combine"] == "OR":
+        q = Patient.objects.none().union(*q_list)
+    elif data["modality_combine"] == "AND":
+        q = Patient.objects.all().intersection(*q_list)
     
     return q

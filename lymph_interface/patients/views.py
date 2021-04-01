@@ -2,7 +2,7 @@ from django.shortcuts import render, get_object_or_404, reverse, redirect
 from django.http import HttpResponse, Http404
 from django.views import generic
 
-from .models import Patient, Tumor, Diagnose
+from .models import Patient, Tumor, Diagnose, MODALITIES
 from .forms import PatientForm, TumorForm, DiagnoseForm, DataFileForm, DashboardForm
 from .utils import create_from_pandas, query_patients
 
@@ -206,6 +206,7 @@ def dashboard(request, old_context={}):
     if request.method == "POST" and form.is_valid():
         q = query_patients(form.cleaned_data)
         print(q)
+            
         context = {"form": form, "n": len(q)}
         
         return render(request, "patients/dashboard.html", context)

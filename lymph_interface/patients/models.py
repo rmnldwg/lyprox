@@ -45,7 +45,7 @@ class Patient(models.Model):
     
     def __str__(self):
         """Report some patient specifics."""
-        return f"ID: {self.hash_value} | age: {self.age} | gender: {self.gender}"
+        return f"pk {self.pk} | {self.age} yo | {self.gender}"
 
 
 
@@ -129,7 +129,7 @@ class Tumor(models.Model):
     
     def __str__(self):
         """Report some main characteristics."""
-        return f"Patient: {self.patient.pk} | subsite: {self.subsite} | stage: T{self.t_stage}"
+        return f"pk {self.pk} | belongs to {self.patient.pk} | subsite {self.subsite} | T{self.t_stage}"
     
     
 
@@ -165,7 +165,7 @@ class Diagnose(models.Model):
     
     def __str__(self):
         """Report some info for admin view."""
-        return f"Patient: {self.patient.pk} | modality: {self.get_modality_display()} | side: {self.side}"
+        return f"pk {self.pk} | belongs to {self.patient.pk} | {self.get_modality_display()} | {self.side} side"
     
     
 # add lymph node level fields to model 'Diagnose'
