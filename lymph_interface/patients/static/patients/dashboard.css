@@ -1,5 +1,10 @@
 input[type="checkbox"].checkbox:checked + label {
-    background-color: #C5D5DB;
+    background-color: #005EA8;
+    color: white;
+}
+input[type="checkbox"].checkbox:checked:hover + label {
+    background-color: #005EA8;
+    color: white;
 }
 
 input[type="radio"].radio:checked + label {
@@ -17,5 +22,17 @@ input[type="radio"].radio:checked + label.not_interested {
 
 input[type="radio"].radio:checked + label.remove {
     background-color: #AE0060;
+    color: white;
+}
+
+.tumor.button {
+    min-width: 200px;
+}
+input[type="radio"].radio:checked + label.tumor {
+    background-color: #005EA8;
+    color: white;
+}
+input[type="radio"].radio:checked:hover + label.tumor {
+    background-color: #005EA8;
     color: white;
 }

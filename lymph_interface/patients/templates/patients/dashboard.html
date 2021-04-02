@@ -5,6 +5,8 @@
 {% load static %}
 <link rel="stylesheet" href="{% static 'patients/dashboard.css' %}">
 
+{% load mytags %}
+
 <form method="POST" action="{% url 'patients:dashboard' %}">
 {% csrf_token %}
 
@@ -19,7 +21,7 @@
                 {% for checkbox in form.modalities %}
                 <div class="column">
                     {{ checkbox.tag }}
-                    <label for="{{ checkbox.id_for_label }}" class="button is-fullwidth">
+                    <label for="{{ checkbox.id_for_label }}" class="button is-primary is-light is-fullwidth">
                         <span>{{ checkbox.choice_label }}</span>
                     </label>
                 </div>
@@ -57,7 +59,7 @@
                         {% endfor %}
                     </div>
                 </div>
-                <p class="heading">smoking status</p>
+                <p class="heading">smoking status {{ stats.nicotine_abuse }}</p>
             </div>
         </div>
         <div class="column">
@@ -99,7 +101,7 @@
     <hr>
 
     <div class="columns is-centered">
-        <div class="column is-5">
+        <div class="column is-6">
             <div class="box">
                 <p class="title is-4">Primary tumor</p>
                 <p class="subtitle">Oropharynx</p>
@@ -108,12 +110,15 @@
                     <div class="column">
                         <p class="title is-6">Subsite</p>
                         {% for radio in form.subsites %}
-                        <div class="field">
+                        <div class="field is-grouped">
                             <div class="control">
                                 {{ radio.tag }}
-                                <label for="{{ radio.id_for_label }}" class="button is-fullwidth ">
-                                    <span>{{ radio.choice_label }}</span>
+                                <label for="{{ radio.id_for_label }}" class="tumor button is-primary is-light">
+                                    {{ radio.choice_label }}
                                 </label>
+                            </div>
+                            <div class="control">
+                                <span class="button is-light">{{ stats.subsites|index:forloop.counter0 }}</span>
                             </div>
                         </div>
                         {% endfor %}
@@ -121,12 +126,17 @@
                     <div class="column">
                         <p class="title is-6">T-stage</p>
                         {% for checkbox in form.tstages %}
-                        <div class="field">
+                        <div class="field is-grouped">
                             <div class="control">
                                 {{ checkbox.tag }}
-                                <label for="{{ checkbox.id_for_label }}" class="button is-fullwidth ">
+                                <label for="{{ checkbox.id_for_label }}" class="tumor button is-primary is-light">
                                     {{ checkbox.choice_label }}
                                 </label>
+                            </div>
+                            <div class="control">
+                                <span class="button is-light">
+                                    {{ stats.t_stages|index:forloop.counter0 }}
+                                </span>
                             </div>
                         </div>
                         {% endfor %}
