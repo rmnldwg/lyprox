@@ -4,7 +4,7 @@ from django.views import generic
 
 from .models import Patient, Tumor, Diagnose, MODALITIES
 from .forms import PatientForm, TumorForm, DiagnoseForm, DataFileForm, DashboardForm
-from .utils import create_from_pandas, query_patients
+from .utils import create_from_pandas, query_patients, querybased_statistics
 
 
 class ListView(generic.ListView):
@@ -205,12 +205,13 @@ def dashboard(request, old_context={}):
     
     if request.method == "POST" and form.is_valid():
         q = query_patients(form.cleaned_data)
-        print(q)
-            
-        context = {"form": form, "n": len(q)}
-        
-        return render(request, "patients/dashboard.html", context)
+        stat_dict = querybased_statistics(q, **form.cleaned_data)
     else:
-        context = {"form": form}
+        q = Patient.objects.all()
+        stat_dict = querybased_statistics(q)
+
+    print(stat_dict)
+    context = {"form": form, 
+               "stats": stat_dict}
         
     return render(request, "patients/dashboard.html", context)

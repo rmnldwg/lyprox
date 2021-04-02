@@ -169,7 +169,21 @@ def oneminusone_to_bool(num: int) -> bool:
 
 
 def query_patients(data):
-    """Query the patient database for the requested fields."""
+    """Query the patient database for the requested fields. The basic idea is 
+    to first use the specified patient characteristics to narrow down the set 
+    of patients. Then, all diagnoses (ipsi & contra as well as for all selected 
+    modalities) are found that match the form. Finally, for each modality a 
+    QuerySet is created which is a subset of the inital QuerySet of patients 
+    that contain the respective diagnoses. Depending on the choice of modality 
+    combination (AND, OR, XOR) it then returns the intersection, union or ??? 
+    of these modality-respective QuerySets.
+    
+    Args:
+        data: Dictionary containing the cleaned data from the DashboardForm.
+        
+    Returns:
+        QuerySet of patients.
+    """
     q = Patient.objects.all()  # first, collect all patients, then restrict
     _ = oneminusone_to_bool  # neccessary because radio buttons return 1, 0 or -1
     
@@ -211,10 +225,11 @@ def query_patients(data):
         q = q.filter(tumor__extension=_(me))
         
     # DIAGNOSES filtering
-    q_list = []  # I think that's bad python...
+    q_list = []
     for mod in data["modalities"]:
         # kreate kwrags dictionary for the filtering, so that I can loop 
         # through the LNLs and simply append what I am looking for to that dict.
+        # This also alllows me to use f-strings.
         ipsi_kwargs = {"modality": mod,
                        "side": F("patient__tumor__position")}
         contra_kwargs = {"modality": mod}
@@ -225,6 +240,8 @@ def query_patients(data):
             if (inv := data[f"contra_{lnl}"]) != 0:
                 contra_kwargs[f"{lnl}"] = _(inv)
             
+        # create QuerySets of diagnoses for each modality ipsilaterally and 
+        # contralaterally.
         d_ipsi = Diagnose.objects.filter(
             **ipsi_kwargs
         )
@@ -237,11 +254,84 @@ def query_patients(data):
         )
         q_contra = q.filter(diagnose__in=d_contra)
         
+        # collect intersection (logical AND) of patients that have requested 
+        # ipsi- & contralateral involvement in a list
         q_list.append(q_ipsi.intersection(q_contra))
         
+    # Depending on the chosen way of combining the different modalities, 
+    # return the union or the intersection of the collected QuerySets.
     if data["modality_combine"] == "OR":
         q = Patient.objects.none().union(*q_list)
     elif data["modality_combine"] == "AND":
         q = Patient.objects.all().intersection(*q_list)
     
     return q
+
+
+def tf2arr(value):
+    """Map `True`, `False` & `None` to one-hot-arrays of length 3. This 
+    particular mapping comes from the fact that in the form `True`, `None`, 
+    `False` are represented by integers 1, 0, -1. So, the one-hot encoding 
+    uses an array of length 3 that is one only at these respective indices, 
+    where -1 is the last item."""
+    if value is None:
+        return np.array([1, 0, 0], dtype=int)
+    else:
+        if value:
+            return np.array([0, 1, 0], dtype=int)
+        else:
+            return np.array([0, 0, 1], dtype=int)
+        
+        
+def subsite2arr(subsite):
+    """Map different subsites to an one-hot-array of length three. A one in the 
+    first place means "base of tongue", at the second place is "tonsil" and at 
+    the tird place it's "rest"."""
+    if subsite in ["C01.9"]:
+        return np.array([1, 0, 0], dtype=int)
+    elif subsite in ["C09.0", "C09.1", "C09.8", "C09.9"]:
+        return np.array([0, 1, 0], dtype=int)
+    else:
+        return np.array([0, 0, 1], dtype=int)
+    
+    
+def pos2arr(pos):
+    """Map position to bool."""
+    if pos == "central":
+        return np.array([0, 1, 0], dtype=int)
+    elif (pos == "left") or (pos == "right"):
+        return np.array([0, 0, 1], dtype=int)
+    else:
+        return np.array([1, 0, 0], dtype=int)
+
+
+def querybased_statistics(q, modalities=[5], modality_combine="OR", **kwargs):
+    """Create statistics based on a QuerySet of patients."""
+    
+    # create dictionary of counts
+    stat_dict = {"nicotine_abuse": np.zeros(shape=(3,), dtype=int),
+                 "hpv_status": np.zeros(shape=(3,), dtype=int),
+                 "neck_dissection": np.zeros(shape=(3,), dtype=int),
+                 
+                 "subsites": np.zeros(shape=(3,), dtype=int),
+                 "t_stages": np.zeros(shape=(len(T_STAGES),), dtype=int),
+                 "central": np.zeros(shape=(3,), dtype=int),
+                 "midline_extension": np.zeros(shape=(3,), dtype=int),}
+    
+    for side in ["ipsi", "contra"]:
+        for lnl in LNLs:
+            stat_dict[f"{side}_{lnl}"] = np.zeros(shape=(3,), dtype=int)
+    
+    for patient in q.iterator():
+        stat_dict["nicotine_abuse"] += tf2arr(patient.nicotine_abuse)
+        stat_dict["hpv_status"] += tf2arr(patient.hpv_status)
+        stat_dict["neck_dissection"] += tf2arr(patient.neck_dissection)
+        
+        tumor = Tumor.objects.filter(patient=patient).first()
+        
+        stat_dict["subsites"] += subsite2arr(tumor.subsite)
+        stat_dict["t_stages"][tumor.t_stage-1] += 1
+        stat_dict["central"] += pos2arr(tumor.position)
+        stat_dict["midline_extension"] += tf2arr(tumor.extension)
+        
+    return stat_dict
