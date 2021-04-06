@@ -101,7 +101,7 @@
     <hr>
 
     <div class="columns is-centered">
-        <div class="column is-6">
+        <div class="column is-7">
             <div class="box">
                 <p class="title is-4">Primary tumor</p>
                 <p class="subtitle">Oropharynx</p>
@@ -109,16 +109,16 @@
                 <div class="columns">
                     <div class="column">
                         <p class="title is-6">Subsite</p>
-                        {% for radio in form.subsites %}
+                        {% for checkbox in form.subsites %}
                         <div class="field is-grouped">
                             <div class="control">
-                                {{ radio.tag }}
-                                <label for="{{ radio.id_for_label }}" class="tumor button is-primary is-light">
-                                    {{ radio.choice_label }}
+                                {{ checkbox.tag }}
+                                <label for="{{ checkbox.id_for_label }}" class="tumor button is-primary is-light">
+                                    {{ checkbox.choice_label }}
                                 </label>
                             </div>
                             <div class="control">
-                                <span class="button is-light">{{ stats.subsites|index:forloop.counter0 }}</span>
+                                <span class="stats button is-info">{{ stats.subsites|index:forloop.counter0 }}</span>
                             </div>
                         </div>
                         {% endfor %}
@@ -134,7 +134,7 @@
                                 </label>
                             </div>
                             <div class="control">
-                                <span class="button is-light">
+                                <span class="stats button is-info">
                                     {{ stats.t_stages|index:forloop.counter0 }}
                                 </span>
                             </div>

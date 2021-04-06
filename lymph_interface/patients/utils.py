@@ -202,14 +202,8 @@ def query_patients(data):
         
     # TUMOR specific queries
     # (oropharynx) subsite
-    tumor_filter_kwargs = {}
-    subsite_dict = {"base":   ["C01.9"], 
-                    "tonsil": ["C09.0", "C09.1", "C09.8", "C09.9"]}
-    if (sub := data["subsites"]) == "rest":
-        q = q.exclude(tumor__subsite__in=subsite_dict["base"])
-        q = q.exclude(tumor__subsite__in=subsite_dict["tonsil"])
-    else:
-        q = q.filter(tumor__subsite__in=subsite_dict[sub])
+    print(data["subsite_icds"])
+    q = q.filter(tumor__subsite__in=data["subsite_icds"])
         
     # T-stages
     q = q.filter(tumor__t_stage__in=data["tstages"])
@@ -233,6 +227,8 @@ def query_patients(data):
         ipsi_kwargs = {"modality": mod,
                        "side": F("patient__tumor__position")}
         contra_kwargs = {"modality": mod}
+        central_kwargs = {"modality": mod,
+                          "patient__tumor__position": "central"}
         # loop through the LNLs
         for lnl in LNLs:
             if (inv := data[f"ipsi_{lnl}"]) != 0:
@@ -254,9 +250,16 @@ def query_patients(data):
         )
         q_contra = q.filter(diagnose__in=d_contra)
         
+        # patients with central involvement are added seperately to the 
+        # selected subset. But how to count their involvement patterns is not 
+        # yet decided.
+        # TODO: ask Bertrand how he did this.
+        d_central = Diagnose.objects.filter(**central_kwargs)
+        q_central = q.filter(diagnose__in=d_central)
+        
         # collect intersection (logical AND) of patients that have requested 
         # ipsi- & contralateral involvement in a list
-        q_list.append(q_ipsi.intersection(q_contra))
+        q_list.append(q_central.union(q_ipsi.intersection(q_contra)))
         
     # Depending on the chosen way of combining the different modalities, 
     # return the union or the intersection of the collected QuerySets.

@@ -273,6 +273,18 @@ class DashboardForm(forms.Form):
                 b = cleaned_data[f"{side}_{lnl}b"]
                 cleaned_data[f"{side}_{lnl}"] = np.maximum(a,b)
                 
+        subsites = cleaned_data["subsites"]
+        subsite_dict = {"base":   ["C01.9"], 
+                        "tonsil": ["C09.0", "C09.1", "C09.8", "C09.9"],
+                        "rest":   ["C10.0", "C10.1", "C10.2", "C10.3", "C10.4", 
+                                   "C10.8", "C10.9", "C12.9", "C13.0", "C13.1", 
+                                   "C13.2", "C13.8", "C13.9", "C32.0", "C32.1", 
+                                   "C32.2", "C32.3", "C32.8", "C32.9"]}
+        icd_codes = []
+        for sub in subsites:
+            icd_codes += subsite_dict[sub]
+        cleaned_data["subsite_icds"] = icd_codes
+                
         str_list = cleaned_data["tstages"]
         cleaned_data["tstages"] = [int(s) for s in str_list]
         
@@ -292,8 +304,7 @@ class DashboardForm(forms.Form):
     )
     modality_combine = forms.ChoiceField(
         choices=[("AND", "AND"), 
-                 ("OR", "OR"), 
-                 ("XOR", "XOR")],
+                 ("OR", "OR")],
         label="Combine",
         initial="OR"
     )
@@ -306,12 +317,12 @@ class DashboardForm(forms.Form):
     
     
     # tumor specific info
-    subsites = forms.ChoiceField(
-        widget=forms.RadioSelect(attrs={"class": "radio is-hidden"}),
+    subsites = forms.MultipleChoiceField(
+        widget=forms.CheckboxSelectMultiple(attrs={"class": "checkbox is-hidden"}),
         choices=[("base", "base of tongue"),
                  ("tonsil", "tonsil"), 
-                 ("rest" , "other and/or multiple")],
-        initial="base"
+                 ("rest" , "other/multiple")],
+        initial=["base", "tonsil", "rest"]
     )
     tstages = forms.MultipleChoiceField(
         widget=forms.CheckboxSelectMultiple(attrs={"class": "checkbox is-hidden"}),

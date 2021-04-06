@@ -28,6 +28,10 @@ input[type="radio"].radio:checked + label.remove {
 .tumor.button {
     min-width: 200px;
 }
+.stats.button {
+    min-width: 60px;
+}
+
 input[type="radio"].radio:checked + label.tumor {
     background-color: #005EA8;
     color: white;

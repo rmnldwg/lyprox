@@ -210,7 +210,6 @@ def dashboard(request, old_context={}):
         q = Patient.objects.all()
         stat_dict = querybased_statistics(q)
 
-    print(stat_dict)
     context = {"form": form, 
                "stats": stat_dict}
         

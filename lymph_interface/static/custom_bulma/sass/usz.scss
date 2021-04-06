@@ -10,13 +10,12 @@ $white: #FFFFFF;
 
 // Change Bulma's global variables
 $primary: $usz-blue;
+$primary-dark: $usz-blue;
 $info: $usz-gray;
 $link: $usz-blue;
 $success: $usz-green;
 $warning: $usz-orange;
 $danger: $usz-red;
-
-
 
 // importing everything necessary from Bulma
 @import "../node_modules/bulma/bulma.sass";
