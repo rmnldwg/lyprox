@@ -182,7 +182,7 @@ def query_patients(data):
         data: Dictionary containing the cleaned data from the DashboardForm.
         
     Returns:
-        QuerySet of patients.
+        QuerySet of patients, ipsi- & contralateral diagnoses.
     """
     q = Patient.objects.all()  # first, collect all patients, then restrict
     _ = oneminusone_to_bool  # neccessary because radio buttons return 1, 0 or -1
@@ -220,6 +220,8 @@ def query_patients(data):
         
     # DIAGNOSES filtering
     q_list = []
+    d_ipsi_list = []
+    d_contra_list = []
     for mod in data["modalities"]:
         # kreate kwrags dictionary for the filtering, so that I can loop 
         # through the LNLs and simply append what I am looking for to that dict.
@@ -250,6 +252,13 @@ def query_patients(data):
         )
         q_contra = q.filter(diagnose__in=d_contra)
         
+        # for easier counting of LNL involvements, I also create two QuerySets 
+        # for the diagnoses (one ipsi- & one contralateral). I can basically 
+        # reuse the created diagnose-QuerySets for that but need to restrict 
+        # them to the already queried patients
+        d_ipsi_list.append(d_ipsi.filter(patient__in=q_ipsi))
+        d_contra_list.append(d_contra.filter(patient__in=q_contra))
+        
         # patients with central involvement are added seperately to the 
         # selected subset. But how to count their involvement patterns is not 
         # yet decided.
@@ -265,10 +274,14 @@ def query_patients(data):
     # return the union or the intersection of the collected QuerySets.
     if data["modality_combine"] == "OR":
         q = Patient.objects.none().union(*q_list)
+        d_i = Diagnose.objects.none().union(*d_ipsi_list)
+        d_c = Diagnose.objects.none().union(*d_contra_list)
     elif data["modality_combine"] == "AND":
         q = Patient.objects.all().intersection(*q_list)
+        d_i = Diagnose.objects.all().intersection(*d_ipsi_list)
+        d_c = Diagnose.objects.all().intersection(*d_contra_list)
     
-    return q
+    return q, {'ipsi': d_i, 'contra': d_c}
 
 
 def tf2arr(value):
@@ -299,7 +312,10 @@ def subsite2arr(subsite):
     
     
 def pos2arr(pos):
-    """Map position to bool."""
+    """Map position to one-hot-array of length three. A one in the first place 
+    means unknown lateralization, in the second place it means the tumor is 
+    central and in the last place corresponds to a laterlalized tumor (right or 
+    left)."""
     if pos == "central":
         return np.array([0, 1, 0], dtype=int)
     elif (pos == "left") or (pos == "right"):
@@ -308,8 +324,15 @@ def pos2arr(pos):
         return np.array([1, 0, 0], dtype=int)
 
 
-def querybased_statistics(q, modalities=[5], modality_combine="OR", **kwargs):
-    """Create statistics based on a QuerySet of patients."""
+def querybased_statistics(q, d_dict, modalities=[], modality_combine="OR", **kwargs):
+    """Create statistics based on a QuerySet of patients & diagnoses.
+    
+    Args:
+        q: QuerySet of patients.
+        
+        d_dict: Dictionary with keys 'ipsi' & 'contra' and respective values 
+            of QuerySets that contain the Diagnoses from the Patients in q.
+    """
     
     # create dictionary of counts
     stat_dict = {"nicotine_abuse": np.zeros(shape=(3,), dtype=int),
@@ -320,10 +343,6 @@ def querybased_statistics(q, modalities=[5], modality_combine="OR", **kwargs):
                  "t_stages": np.zeros(shape=(len(T_STAGES),), dtype=int),
                  "central": np.zeros(shape=(3,), dtype=int),
                  "midline_extension": np.zeros(shape=(3,), dtype=int),}
-    
-    for side in ["ipsi", "contra"]:
-        for lnl in LNLs:
-            stat_dict[f"{side}_{lnl}"] = np.zeros(shape=(3,), dtype=int)
     
     for patient in q.iterator():
         stat_dict["nicotine_abuse"] += tf2arr(patient.nicotine_abuse)
@@ -336,5 +355,12 @@ def querybased_statistics(q, modalities=[5], modality_combine="OR", **kwargs):
         stat_dict["t_stages"][tumor.t_stage-1] += 1
         stat_dict["central"] += pos2arr(tumor.position)
         stat_dict["midline_extension"] += tf2arr(tumor.extension)
+        
+    # DIAGNOSES
+    for side in ["ipsi", "contra"]:
+        for lnl in LNLs:
+            stat_dict[f"{side}_{lnl}"] = np.zeros(shape=(3,), dtype=int)
+            tf_arr = [getattr(diag, f"{lnl}") for diag in d_dict[side]]
+            # TODO: Do sth with that array of True/False & None (is it None?)
         
     return stat_dict

@@ -169,6 +169,5 @@ class Diagnose(models.Model):
     
     
 # add lymph node level fields to model 'Diagnose'
-lnl_fields = []
 for lnl in LNLs:
     Diagnose.add_to_class(lnl, models.BooleanField(blank=True, null=True))

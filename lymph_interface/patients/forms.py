@@ -300,7 +300,7 @@ class DashboardForm(forms.Form):
         required=False, 
         widget=forms.CheckboxSelectMultiple(attrs={"class": "checkbox is-hidden"}), 
         choices=MODALITIES,
-        initial=[5]
+        initial=[]
     )
     modality_combine = forms.ChoiceField(
         choices=[("AND", "AND"), 

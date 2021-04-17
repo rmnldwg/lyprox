@@ -1,0 +1,17 @@
+<tr>
+    <td colspan="2">{{ name }}</td>
+    <td>
+        <div class="block is-flex is-justify-content-flex-end">
+            <div class="field has-addons">
+                {% for radio in radiobuttons %}
+                <p class="control">
+                    {{ radio.tag }}
+                    <label for="{{ radio.id_for_label }}" class="button is-small {{ radio.choice_label }}">
+                        <i class="material-icons">{{ radio.choice_label }}</i>
+                    </label>
+                </p>
+                {% endfor %}
+            </div>
+        </div>
+    </td>
+</tr>
