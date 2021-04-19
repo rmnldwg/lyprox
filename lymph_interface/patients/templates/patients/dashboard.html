@@ -117,8 +117,8 @@
                                     {{ checkbox.choice_label }}
                                 </label>
                             </div>
-                            <div class="control">
-                                <span class="stats button is-info">{{ stats.subsites|index:forloop.counter0 }}</span>
+                            <div class="control no-pointer">
+                                <span class="stats button is-info no-pointer">{{ stats.subsites|index:forloop.counter0 }}</span>
                             </div>
                         </div>
                         {% endfor %}
@@ -133,8 +133,8 @@
                                     {{ checkbox.choice_label }}
                                 </label>
                             </div>
-                            <div class="control">
-                                <span class="stats button is-info">
+                            <div class="control no-pointer">
+                                <span class="stats button is-info no-pointer">
                                     {{ stats.t_stages|index:forloop.counter0 }}
                                 </span>
                             </div>
@@ -205,6 +205,9 @@
                                     </div>
                                 </div>
                             </td>
+                            <td>
+                                {{ stats.contra_Ia }}
+                            </td>
                         </tr>
                         <tr>
                             <td>b</td>
@@ -221,6 +224,9 @@
                                         {% endfor %}
                                     </div>
                                 </div>
+                            </td>
+                            <td>
+                                {{ stats.contra_Ib }}
                             </td>
                         </tr>
                         <tr>
@@ -240,6 +246,9 @@
                                     </div>
                                 </div>
                             </td>
+                            <td>
+                                {{ stats.contra_IIa }}
+                            </td>
                         </tr>
                         <tr>
                             <td>b</td>
@@ -257,15 +266,18 @@
                                     </div>
                                 </div>
                             </td>
+                            <td>
+                                {{ stats.contra_IIb }}
+                            </td>
                         </tr>
 
-                        {% include 'patients/dashboard_lnlrow.html' with name='III' radiobuttons=form.contra_III %}
+                        {% include 'patients/dashboard_lnlrow.html' with name='III' radiobuttons=form.contra_III stat=stats.contra_III %}
 
-                        {% include 'patients/dashboard_lnlrow.html' with name='IV' radiobuttons=form.contra_IV %}
+                        {% include 'patients/dashboard_lnlrow.html' with name='IV' radiobuttons=form.contra_IV stat=stats.contra_IV %}
 
-                        {% include 'patients/dashboard_lnlrow.html' with name='V' radiobuttons=form.contra_V %}
+                        {% include 'patients/dashboard_lnlrow.html' with name='V' radiobuttons=form.contra_V stat=stats.contra_V %}
 
-                        {% include 'patients/dashboard_lnlrow.html' with name='VII' radiobuttons=form.contra_VII %}
+                        {% include 'patients/dashboard_lnlrow.html' with name='VII' radiobuttons=form.contra_VII stat=stats.contra_VII %}
                     
                     </tbody>
                 </table>
@@ -294,6 +306,9 @@
                                     </div>
                                 </div>
                             </td>
+                            <td>
+                                {{ stats.ipsi_Ia }}
+                            </td>
                         </tr>
                         <tr>
                             <td>b</td>
@@ -310,6 +325,9 @@
                                         {% endfor %}
                                     </div>
                                 </div>
+                            </td>
+                            <td>
+                                {{ stats.ipsi_Ib }}
                             </td>
                         </tr>
                         <tr>
@@ -329,6 +347,9 @@
                                     </div>
                                 </div>
                             </td>
+                            <td>
+                                {{ stats.ipsi_IIa }}
+                            </td>
                         </tr>
                         <tr>
                             <td>b</td>
@@ -346,15 +367,18 @@
                                     </div>
                                 </div>
                             </td>
+                            <td>
+                                {{ stats.ipsi_IIb }}
+                            </td>
                         </tr>
 
-                        {% include 'patients/dashboard_lnlrow.html' with name='III' radiobuttons=form.ipsi_III %}
+                        {% include 'patients/dashboard_lnlrow.html' with name='III' radiobuttons=form.ipsi_III stat=stats.ipsi_III %}
 
-                        {% include 'patients/dashboard_lnlrow.html' with name='IV' radiobuttons=form.ipsi_IV %}
+                        {% include 'patients/dashboard_lnlrow.html' with name='IV' radiobuttons=form.ipsi_IV stat=stats.ipsi_IV %}
 
-                        {% include 'patients/dashboard_lnlrow.html' with name='V' radiobuttons=form.ipsi_V %}
+                        {% include 'patients/dashboard_lnlrow.html' with name='V' radiobuttons=form.ipsi_V stat=stats.ipsi_V %}
 
-                        {% include 'patients/dashboard_lnlrow.html' with name='VII' radiobuttons=form.ipsi_VII %}
+                        {% include 'patients/dashboard_lnlrow.html' with name='VII' radiobuttons=form.ipsi_VII stat=stats.ipsi_VII %}
                     
                     </tbody>
                 </table>

@@ -204,13 +204,11 @@ def dashboard(request, old_context={}):
     form = DashboardForm(request.POST or None)
     
     if request.method == "POST" and form.is_valid():
-        q, d_dict = query_patients(form.cleaned_data)
+        q, d_i, d_c = query_patients(form.cleaned_data)
         stat_dict = querybased_statistics(q, d_i, d_c, **form.cleaned_data)
     else:
         q = Patient.objects.none()
-        d_dict = {'ipsi': Diagnose.objects.none(),
-                  'contra': Diagnose.objects.none()}
-        stat_dict = querybased_statistics(q, d_dict)
+        stat_dict = querybased_statistics(q)
 
     context = {"form": form, 
                "stats": stat_dict}

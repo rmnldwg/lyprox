@@ -202,7 +202,6 @@ def query_patients(data):
         
     # TUMOR specific queries
     # (oropharynx) subsite
-    print(data["subsite_icds"])
     q = q.filter(tumor__subsite__in=data["subsite_icds"])
         
     # T-stages
@@ -245,43 +244,41 @@ def query_patients(data):
         )
         q_ipsi = q.filter(diagnose__in=d_ipsi)
         
-        d_contra = Diagnose.objects.filter(
-            **contra_kwargs
-        ).exclude(
+        d_contra = Diagnose.objects.exclude(
             side=F("patient__tumor__position")
+        ).filter(
+            **contra_kwargs
         )
         q_contra = q.filter(diagnose__in=d_contra)
         
-        # for easier counting of LNL involvements, I also create two QuerySets 
-        # for the diagnoses (one ipsi- & one contralateral). I can basically 
-        # reuse the created diagnose-QuerySets for that but need to restrict 
-        # them to the already queried patients
-        d_ipsi_list.append(d_ipsi.filter(patient__in=q_ipsi))
-        d_contra_list.append(d_contra.filter(patient__in=q_contra))
+        # collect diagnoses in list as well
+        d_ipsi_list.append(d_ipsi)
+        d_contra_list.append(d_contra)
         
         # patients with central involvement are added seperately to the 
         # selected subset. But how to count their involvement patterns is not 
-        # yet decided.
+        # yet decided. Now I just ignore them.
         # TODO: ask Bertrand how he did this.
         d_central = Diagnose.objects.filter(**central_kwargs)
         q_central = q.filter(diagnose__in=d_central)
         
         # collect intersection (logical AND) of patients that have requested 
-        # ipsi- & contralateral involvement in a list
-        q_list.append(q_central.union(q_ipsi.intersection(q_contra)))
+        # ipsi- & contralateral involvement in specified modalities
+        q_list.append(q_ipsi.intersection(q_contra))
         
     # Depending on the chosen way of combining the different modalities, 
     # return the union or the intersection of the collected QuerySets.
     if data["modality_combine"] == "OR":
         q = Patient.objects.none().union(*q_list)
-        d_i = Diagnose.objects.none().union(*d_ipsi_list)
-        d_c = Diagnose.objects.none().union(*d_contra_list)
     elif data["modality_combine"] == "AND":
         q = Patient.objects.all().intersection(*q_list)
-        d_i = Diagnose.objects.all().intersection(*d_ipsi_list)
-        d_c = Diagnose.objects.all().intersection(*d_contra_list)
+        
+    # regardless of how the modalities are combined, I need to pass all 
+    # diagnoses that match the selection to the stats function
+    d_i = Diagnose.objects.none().union(*d_ipsi_list)
+    d_c = Diagnose.objects.none().union(*d_contra_list)
     
-    return q, {'ipsi': d_i, 'contra': d_c}
+    return q, d_i, d_c
 
 
 def tf2arr(value):
@@ -324,14 +321,12 @@ def pos2arr(pos):
         return np.array([1, 0, 0], dtype=int)
 
 
-def querybased_statistics(q, d_dict, modalities=[], modality_combine="OR", **kwargs):
+def querybased_statistics(q, d_i=None, d_c=None, 
+                          modalities=[], modality_combine="OR", **kwargs):
     """Create statistics based on a QuerySet of patients & diagnoses.
     
     Args:
         q: QuerySet of patients.
-        
-        d_dict: Dictionary with keys 'ipsi' & 'contra' and respective values 
-            of QuerySets that contain the Diagnoses from the Patients in q.
     """
     
     # create dictionary of counts
@@ -344,11 +339,19 @@ def querybased_statistics(q, d_dict, modalities=[], modality_combine="OR", **kwa
                  "central": np.zeros(shape=(3,), dtype=int),
                  "midline_extension": np.zeros(shape=(3,), dtype=int),}
     
+    # initialize diagnoses
+    d = Diagnose.objects.all()    
+    # initialize LNL counts with zeros
+    for side in ["ipsi", "contra"]:
+        for lnl in LNLs:
+            stat_dict[f"{side}_{lnl}"] = np.zeros(shape=(3,), dtype=int)
+    
     for patient in q.iterator():
         stat_dict["nicotine_abuse"] += tf2arr(patient.nicotine_abuse)
         stat_dict["hpv_status"] += tf2arr(patient.hpv_status)
         stat_dict["neck_dissection"] += tf2arr(patient.neck_dissection)
         
+        # TUMOR
         tumor = Tumor.objects.filter(patient=patient).first()
         
         stat_dict["subsites"] += subsite2arr(tumor.subsite)
@@ -356,11 +359,58 @@ def querybased_statistics(q, d_dict, modalities=[], modality_combine="OR", **kwa
         stat_dict["central"] += pos2arr(tumor.position)
         stat_dict["midline_extension"] += tf2arr(tumor.extension)
         
-    # DIAGNOSES
-    for side in ["ipsi", "contra"]:
-        for lnl in LNLs:
-            stat_dict[f"{side}_{lnl}"] = np.zeros(shape=(3,), dtype=int)
-            tf_arr = [getattr(diag, f"{lnl}") for diag in d_dict[side]]
-            # TODO: Do sth with that array of True/False & None (is it None?)
+        # DIAGNOSES
+        d_p = d.filter(patient=patient)  # all diagnoses of that patient
+        
+        d_pm = d_p.filter(modality__in=modalities)  # restrict to modalities
+        
+        for side in ['ipsi', 'contra']:
+            if side == 'ipsi':
+                d_pms = d_pm.intersection(d_i)
+            else:
+                d_pms = d_pm.intersection(d_c)
+            
+            if d_pms.exists():  # if the QuerySet is not empty
+                # get a list of tuples with LNL involvement
+                lnl_tuples = d_pms.values_list(*LNLs)
+                lnl_array = np.array(lnl_tuples)
+                
+                # the idea in the checks below is to use numpy's min & max 
+                # functions to quickly reduce the 2D array to the array of 
+                # entries containing `True`, `False` or `None` for every LNL 
+                # in the system.
+                # By setting the inital value to something below (above) the 
+                # smallest (largest) value, we make sure that this initial 
+                # value is only returned by the max (min) function the whole 
+                # array is `None`.
+                if modality_combine == 'OR':
+                    try:
+                        tmp = lnl_array.max(axis=0)
+                    except TypeError:
+                        # if I do this directly on an array without `None`, it 
+                        # gives back only `True`... bug in numpy?
+                        tmp = lnl_array.max(axis=0, 
+                                            where=(lnl_array!=None), 
+                                            initial=-1)
+                    val = np.where(tmp==-1, None, tmp)
+                
+                # I am not sure what to do here: If one modality is `True` and 
+                # the other says `False`, what should be the result in the "AND" 
+                # case? `False` or `None`? TODO: find out!
+                elif modality_combine == 'AND':
+                    tmp = lnl_array.min(axis=0,
+                                        where=(lnl_array!=None), 
+                                        initial=2)
+                    val = np.where(tmp==2, None, tmp)
+                # val should now be an array containing `True`, `False` & `None`
+            
+            else:  # if it is empty, add `None` to all LNLs for that patient
+                val = np.array([None] * len(LNLs))
+            
+            for i,lnl in enumerate(LNLs):
+                if (lnl == 'IIa') and (side == 'contra') and val[i]:
+                    print(patient)
+                    
+                stat_dict[f'{side}_{lnl}'] += tf2arr(val[i])
         
     return stat_dict
