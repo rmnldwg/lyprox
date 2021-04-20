@@ -11,16 +11,16 @@ input[type="radio"].radio:checked + label {
     background-color: #C5D5DB;
 }
 
-input[type="radio"].radio:checked + label.add {
+input[type="radio"].radio:checked + label.plus {
     background-color: #00AFA5;
     color: white;
 }
 
-input[type="radio"].radio:checked + label.not_interested {
+input[type="radio"].radio:checked + label.ban {
     background-color: #C5D5DB;
 }
 
-input[type="radio"].radio:checked + label.remove {
+input[type="radio"].radio:checked + label.minus {
     background-color: #AE0060;
     color: white;
 }

@@ -7,7 +7,7 @@
                 <p class="control">
                     {{ radio.tag }}
                     <label for="{{ radio.id_for_label }}" class="button is-small {{ radio.choice_label }}">
-                        <i class="material-icons">{{ radio.choice_label }}</i>
+                        <i class="fas fa-lg fa-{{ radio.choice_label }}"></i>
                     </label>
                 </p>
                 {% endfor %}

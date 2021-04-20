@@ -10,15 +10,52 @@
     <p class="subtitle">Hash-ID: {{ patient.hash_value }} </p>
 </div>
 
-<section class="level">
-    <div class="level-item"><p><strong>date of diagnosis:</strong> {{ patient.diagnose_date }}</p></div>
-    <div class="level-item"><p><strong>age:</strong> {{ patient.age }}</p></div>
-    <div class="level-item"><p><strong>gender:</strong> {{ patient.gender }}</p></div>
-    <div class="level-item"><p><strong>alcohol abuse:</strong> {{ patient.alcohol_abuse }}</p></div>
-    <div class="level-item"><p><strong>nicotine abuse:</strong> {{ patient.nicotine_abuse }}</p></div>
-    <div class="level-item"><p><strong>HPV status:</strong> {{ patient.hpv_status }}</p></div>
-    <div class="level-item"><p><strong>stage:</strong> {{ patient.get_t_stage_display }} {{ patient.get_n_stage_display }} {{ patient.get_m_stage_display }}</p></div>
-</section>
+<div class="block">
+    <div class="field is-grouped is-grouped-multiline">
+        <div class="control">
+            <div class="tags has-addons are-medium">
+                <span class="tag is-info">date of diagnosis</span>
+                <span class="tag is-primary">{{ patient.diagnose_date }}</span>
+            </div>
+        </div>
+        <div class="control">
+            <div class="tags has-addons are-medium">
+                <span class="tag is-info">age</span>
+                <span class="tag is-primary">{{ patient.age }}</span>
+            </div>            
+        </div>
+        <div class="control">
+            <div class="tags has-addons are-medium">
+                <span class="tag is-info">gender</span>
+                <span class="tag is-primary">{{ patient.gender }}</span>
+            </div>            
+        </div>
+        <div class="control">
+            <div class="tags has-addons are-medium">
+                <span class="tag is-info">alcohol abuse</span>
+                <span class="tag is-primary">{{ patient.alcohol_abuse }}</span>
+            </div>            
+        </div>
+        <div class="control">
+            <div class="tags has-addons are-medium">
+                <span class="tag is-info">nicotine abuse</span>
+                <span class="tag is-primary">{{ patient.nicotine_abuse }}</span>
+            </div>            
+        </div>
+        <div class="control">
+            <div class="tags has-addons are-medium">
+                <span class="tag is-info">HPV status</span>
+                <span class="tag is-primary">{{ patient.hpv_status }}</span>
+            </div>            
+        </div>
+        <div class="control">
+            <div class="tags has-addons are-medium">
+                <span class="tag is-info">stage</span>
+                <span class="tag is-primary">{{ patient.get_t_stage_display }} {{ patient.get_n_stage_display }} {{ patient.get_m_stage_display }}</span>
+            </div>            
+        </div>
+    </div>
+</div>
 
 <section class="columns is-multiline">
     {% for tumor in patient.tumor_set.all %}
@@ -52,13 +89,20 @@
             
             <form action="{% url 'patients:change_tumor' patient.pk %}" method="POST">
                 {% csrf_token %}
-                <div class="field is-grouped is-grouped-right">
-                    <p class="control">
-                        <button class="button is-small is-info" type="submit" name="edit_pk" value="{{ tumor.pk }}">Edit</button>
-                    </p>
-                    <p class="control">
-                        <button class="button is-small is-danger" type="submit" name="delete_pk" value="{{ tumor.pk }}">Delete</button>
-                    </p>
+                <div class="buttons has-addons is-right">
+                    <button class="button is-small is-info" type="submit" name="edit_pk" value="{{ tumor.pk }}">
+                        <span class="icon is-small">
+                            <i class="fa fa-pen"></i>
+                        </span>
+                        <span>edit</span>
+                    </button>
+                    <button class="button is-small is-danger" type="submit" name="delete_pk" value="{{ tumor.pk }}">
+                        <span>delete</span>
+                        <span class="icon is-small">
+                            <i class="fas fa-trash"></i>
+                        </span>
+                        
+                    </button>
                 </div>
             </form>
         </div>
@@ -77,13 +121,17 @@
     <table class="table is-fullwidth is-hoverable">
         <caption class="title is-4">lymph node level involvement</caption>
 
-        <col style="width: 20%;">
-        <col style="width: 15%;">
         <col style="width: 10%;">
         <col style="width: 10%;">
         <col style="width: 10%;">
-        <col style="width: 10%;">
-        <col style="width: 10%;">
+        <col style="width: 5%;">
+        <col style="width: 5%;">
+        <col style="width: 5%;">
+        <col style="width: 5%;">
+        <col style="width: 5%;">
+        <col style="width: 5%;">
+        <col style="width: 5%;">
+        <col style="width: 5%;">
         <col style="width: 15%;">
 
         <thead>
@@ -91,10 +139,14 @@
                 <th>diagnose date</th>
                 <th>modality</th>
                 <th>side</th>
-                <th>I</th>
-                <th>II</th>
+                <th>Ia</th>
+                <th>Ib</th>
+                <th>IIa</th>
+                <th>IIb</th>
                 <th>III</th>
                 <th>IV</th>
+                <th>V</th>
+                <th>VII</th>
                 <th></th>
             </tr>
         </thead>
@@ -105,20 +157,30 @@
                 <td>{{ diagnose.diagnose_date|date:"d. M Y" }}</td>
                 <td>{{ diagnose.get_modality_display }}</td>
                 <td>{{ diagnose.get_side_display }}</td>
-                <td>{{ diagnose.I }}</td>
-                <td>{{ diagnose.II }}</td>
-                <td>{{ diagnose.III }}</td>
-                <td>{{ diagnose.IV }}</td>
+                <td><span class="tag {{ diagnose.Ia }}">{{ diagnose.Ia }}</span></td>
+                <td><span class="tag {{ diagnose.Ib }}">{{ diagnose.Ib }}</span></td>
+                <td><span class="tag {{ diagnose.IIa }}">{{ diagnose.IIa }}</span></td>
+                <td><span class="tag {{ diagnose.IIb }}">{{ diagnose.IIb }}</span></td>
+                <td><span class="tag {{ diagnose.III }}">{{ diagnose.III }}</span></td>
+                <td><span class="tag {{ diagnose.IV }}">{{ diagnose.IV }}</span></td>
+                <td><span class="tag {{ diagnose.V }}">{{ diagnose.V }}</span></td>
+                <td><span class="tag {{ diagnose.VII }}">{{ diagnose.VII }}</span></td>
                 <td>
                     <form action="{% url 'patients:change_diagnose' patient.pk %}" method="POST">
                         {% csrf_token %}
-                        <div class="field is-grouped is-grouped-right">
-                            <p class="control">
-                                <button class="button is-small is-info" type="submit" name="edit_pk" value="{{ diagnose.pk }}">Edit</button>
-                            </p>
-                            <p class="control">
-                                <button class="button is-small is-danger" type="submit" name="delete_pk" value="{{ diagnose.pk }}">Delete</button>
-                            </p>
+                        <div class="buttons has-addons is-right">
+                            <button class="button is-small is-info" type="submit" name="edit_pk" value="{{ diagnose.pk }}">
+                                <span class="icon is-small">
+                                    <i class="fas fa-pen"></i>
+                                </span>
+                                <span>edit</span>
+                            </button>
+                            <button class="button is-small is-danger" type="submit" name="delete_pk" value="{{ diagnose.pk }}">
+                                <span>delete</span>
+                                <span class="icon is-small">
+                                    <i class="fas fa-trash"></i>
+                                </span>
+                            </button>
                         </div>
                     </form>
                 </td>
@@ -133,14 +195,14 @@
 <div class="level">
     <button class="button level-left">
         <span class="icon">
-            <i class="material-icons">navigate_before</i>
+            <i class="fas fa-angle-left"></i>
         </span>
         <span>Previous</span>
     </button>
     <button class="button level-right">
         <span>Next</span>
         <span class="icon">
-            <i class="material-icons">navigate_next</i>
+            <i class="fas fa-angle-right"></i>
         </span>
     </button>
 </div>

@@ -229,9 +229,9 @@ class ThreeWayToggle(forms.ChoiceField):
     
     def __init__(self, 
                  widget=forms.RadioSelect(attrs={"class": "radio is-hidden"}), 
-                 choices=[( 1, "add"),
-                          ( 0, "not_interested"), 
-                          (-1, "remove")],
+                 choices=[( 1, "plus"),
+                          ( 0, "ban"), 
+                          (-1, "minus")],
                  initial=0,
                  required=False,
                  **kwargs):
