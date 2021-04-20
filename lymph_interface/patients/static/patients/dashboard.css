@@ -12,7 +12,7 @@ input[type="radio"].radio:checked + label {
 }
 
 input[type="radio"].radio:checked + label.plus {
-    background-color: #00AFA5;
+    background-color: #AE0060;
     color: white;
 }
 
@@ -21,7 +21,7 @@ input[type="radio"].radio:checked + label.ban {
 }
 
 input[type="radio"].radio:checked + label.minus {
-    background-color: #AE0060;
+    background-color: #00AFA5;
     color: white;
 }
 
@@ -42,4 +42,20 @@ input[type="radio"].radio:checked + label.tumor {
 input[type="radio"].radio:checked:hover + label.tumor {
     background-color: #005EA8;
     color: white;
+}
+
+div.tag.pos {
+    min-width: none;
+    padding: 0;
+    background-color: #AE0060;
+}
+div.tag.neg {
+    min-width: none;
+    padding: 0;
+    background-color: #00AFA5;
+}
+div.tag.unk {
+    min-width: none;
+    padding: 0;
+    background-color: #C5D5DB;
 }

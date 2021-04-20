@@ -191,94 +191,37 @@
                         <tr>
                             <td rowspan="2">I</td>
                             <td>a</td>
-                            <td>
-                                <div class="block is-flex is-justify-content-flex-end">
-                                    <div class="field has-addons">
-                                        {% for radio in form.contra_Ia %}
-                                        <p class="control">
-                                            {{ radio.tag }}
-                                            <label for="{{ radio.id_for_label }}" class="button is-small {{ radio.choice_label }}">
-                                                <i class="fas fa-lg fa-{{ radio.choice_label }}"></i>
-                                            </label>
-                                        </p>
-                                        {% endfor %}
-                                    </div>
-                                </div>
-                            </td>
-                            <td>
-                                {{ stats.contra_Ia }}
-                            </td>
+                            {% include 'patients/dashboard_lnlrow.html' with radiobuttons=form.contra_Ia stat=stats.contra_Ia %}
                         </tr>
                         <tr>
                             <td>b</td>
-                            <td>
-                                <div class="block is-flex is-justify-content-flex-end">
-                                    <div class="field has-addons">
-                                        {% for radio in form.contra_Ib %}
-                                        <p class="control">
-                                            {{ radio.tag }}
-                                            <label for="{{ radio.id_for_label }}" class="button is-small {{ radio.choice_label }}">
-                                                <i class="fas fa-lg fa-{{ radio.choice_label }}"></i>
-                                            </label>
-                                        </p>
-                                        {% endfor %}
-                                    </div>
-                                </div>
-                            </td>
-                            <td>
-                                {{ stats.contra_Ib }}
-                            </td>
+                            {% include 'patients/dashboard_lnlrow.html' with radiobuttons=form.contra_Ib stat=stats.contra_Ib %}
                         </tr>
                         <tr>
                             <td rowspan="2">II</td>
                             <td>a</td>
-                            <td>
-                                <div class="block is-flex is-justify-content-flex-end">
-                                    <div class="field has-addons">
-                                        {% for radio in form.contra_IIa %}
-                                        <p class="control">
-                                            {{ radio.tag }}
-                                            <label for="{{ radio.id_for_label }}" class="button is-small {{ radio.choice_label }}">
-                                                <i class="fas fa-lg fa-{{ radio.choice_label }}"></i>
-                                            </label>
-                                        </p>
-                                        {% endfor %}
-                                    </div>
-                                </div>
-                            </td>
-                            <td>
-                                {{ stats.contra_IIa }}
-                            </td>
+                            {% include 'patients/dashboard_lnlrow.html' with radiobuttons=form.contra_IIa stat=stats.contra_IIa %}
                         </tr>
                         <tr>
                             <td>b</td>
-                            <td>
-                                <div class="block is-flex is-justify-content-flex-end">
-                                    <div class="field has-addons">
-                                        {% for radio in form.contra_IIb %}
-                                        <p class="control">
-                                            {{ radio.tag }}
-                                            <label for="{{ radio.id_for_label }}" class="button is-small {{ radio.choice_label }}">
-                                                <i class="fas fa-lg fa-{{ radio.choice_label }}"></i>
-                                            </label>
-                                        </p>
-                                        {% endfor %}
-                                    </div>
-                                </div>
-                            </td>
-                            <td>
-                                {{ stats.contra_IIb }}
-                            </td>
+                            {% include 'patients/dashboard_lnlrow.html' with radiobuttons=form.contra_IIb stat=stats.contra_IIb %}
                         </tr>
-
-                        {% include 'patients/dashboard_lnlrow.html' with name='III' radiobuttons=form.contra_III stat=stats.contra_III %}
-
-                        {% include 'patients/dashboard_lnlrow.html' with name='IV' radiobuttons=form.contra_IV stat=stats.contra_IV %}
-
-                        {% include 'patients/dashboard_lnlrow.html' with name='V' radiobuttons=form.contra_V stat=stats.contra_V %}
-
-                        {% include 'patients/dashboard_lnlrow.html' with name='VII' radiobuttons=form.contra_VII stat=stats.contra_VII %}
-                    
+                        <tr>
+                            <td colspan="2">III</td>
+                            {% include 'patients/dashboard_lnlrow.html' with radiobuttons=form.contra_III stat=stats.contra_III %}
+                        </tr>
+                        <tr>
+                            <td colspan="2">IV</td>
+                            {% include 'patients/dashboard_lnlrow.html' with radiobuttons=form.contra_IV stat=stats.contra_IV %}
+                        </tr>
+                        <tr>
+                            <td colspan="2">V</td>
+                            {% include 'patients/dashboard_lnlrow.html' with radiobuttons=form.contra_V stat=stats.contra_V %}
+                        </tr>
+                        <tr>
+                            <td colspan="2">VII</td>
+                            {% include 'patients/dashboard_lnlrow.html' with radiobuttons=form.contra_VII stat=stats.contra_VII %}
+                        </tr>
                     </tbody>
                 </table>
             </div>
@@ -292,94 +235,37 @@
                         <tr>
                             <td rowspan="2">I</td>
                             <td>a</td>
-                            <td>
-                                <div class="block is-flex is-justify-content-flex-end">
-                                    <div class="field has-addons">
-                                        {% for radio in form.ipsi_Ia %}
-                                        <p class="control">
-                                            {{ radio.tag }}
-                                            <label for="{{ radio.id_for_label }}" class="button is-small {{ radio.choice_label }}">
-                                                <i class="fas fa-lg fa-{{ radio.choice_label }}"></i>
-                                            </label>
-                                        </p>
-                                        {% endfor %}
-                                    </div>
-                                </div>
-                            </td>
-                            <td>
-                                {{ stats.ipsi_Ia }}
-                            </td>
+                            {% include 'patients/dashboard_lnlrow.html' with radiobuttons=form.ipsi_Ia stat=stats.ipsi_Ia %}
                         </tr>
                         <tr>
                             <td>b</td>
-                            <td>
-                                <div class="block is-flex is-justify-content-flex-end">
-                                    <div class="field has-addons">
-                                        {% for radio in form.ipsi_Ib %}
-                                        <p class="control">
-                                            {{ radio.tag }}
-                                            <label for="{{ radio.id_for_label }}" class="button is-small {{ radio.choice_label }}">
-                                                <i class="fas fa-lg fa-{{ radio.choice_label }}"></i>
-                                            </label>
-                                        </p>
-                                        {% endfor %}
-                                    </div>
-                                </div>
-                            </td>
-                            <td>
-                                {{ stats.ipsi_Ib }}
-                            </td>
+                            {% include 'patients/dashboard_lnlrow.html' with radiobuttons=form.ipsi_Ib stat=stats.ipsi_Ib %}
                         </tr>
                         <tr>
                             <td rowspan="2">II</td>
                             <td>a</td>
-                            <td>
-                                <div class="block is-flex is-justify-content-flex-end">
-                                    <div class="field has-addons">
-                                        {% for radio in form.ipsi_IIa %}
-                                        <p class="control">
-                                            {{ radio.tag }}
-                                            <label for="{{ radio.id_for_label }}" class="button is-small {{ radio.choice_label }}">
-                                                <i class="fas fa-lg fa-{{ radio.choice_label }}"></i>
-                                            </label>
-                                        </p>
-                                        {% endfor %}
-                                    </div>
-                                </div>
-                            </td>
-                            <td>
-                                {{ stats.ipsi_IIa }}
-                            </td>
+                            {% include 'patients/dashboard_lnlrow.html' with radiobuttons=form.ipsi_IIa stat=stats.ipsi_IIa %}
                         </tr>
                         <tr>
                             <td>b</td>
-                            <td>
-                                <div class="block is-flex is-justify-content-flex-end">
-                                    <div class="field has-addons">
-                                        {% for radio in form.ipsi_IIb %}
-                                        <p class="control">
-                                            {{ radio.tag }}
-                                            <label for="{{ radio.id_for_label }}" class="button is-small {{ radio.choice_label }}">
-                                                <i class="fas fa-lg fa-{{ radio.choice_label }}"></i>
-                                            </label>
-                                        </p>
-                                        {% endfor %}
-                                    </div>
-                                </div>
-                            </td>
-                            <td>
-                                {{ stats.ipsi_IIb }}
-                            </td>
+                            {% include 'patients/dashboard_lnlrow.html' with radiobuttons=form.ipsi_IIb stat=stats.ipsi_IIb %}
                         </tr>
-
-                        {% include 'patients/dashboard_lnlrow.html' with name='III' radiobuttons=form.ipsi_III stat=stats.ipsi_III %}
-
-                        {% include 'patients/dashboard_lnlrow.html' with name='IV' radiobuttons=form.ipsi_IV stat=stats.ipsi_IV %}
-
-                        {% include 'patients/dashboard_lnlrow.html' with name='V' radiobuttons=form.ipsi_V stat=stats.ipsi_V %}
-
-                        {% include 'patients/dashboard_lnlrow.html' with name='VII' radiobuttons=form.ipsi_VII stat=stats.ipsi_VII %}
-                    
+                        <tr>
+                            <td colspan="2">III</td>
+                            {% include 'patients/dashboard_lnlrow.html' with radiobuttons=form.ipsi_III stat=stats.ipsi_III %}
+                        </tr>
+                        <tr>
+                            <td colspan="2">IV</td>
+                            {% include 'patients/dashboard_lnlrow.html' with radiobuttons=form.ipsi_IV stat=stats.ipsi_IV %}
+                        </tr>
+                        <tr>
+                            <td colspan="2">V</td>
+                            {% include 'patients/dashboard_lnlrow.html' with radiobuttons=form.ipsi_V stat=stats.ipsi_V %}
+                        </tr>
+                        <tr>
+                            <td colspan="2">VII</td>
+                            {% include 'patients/dashboard_lnlrow.html' with radiobuttons=form.ipsi_VII stat=stats.ipsi_VII %}
+                        </tr>
                     </tbody>
                 </table>
             </div>
