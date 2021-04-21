@@ -2,6 +2,8 @@ from django.shortcuts import render, get_object_or_404, reverse, redirect
 from django.http import HttpResponse, Http404
 from django.views import generic
 
+import time
+
 from .models import Patient, Tumor, Diagnose, MODALITIES
 from .forms import PatientForm, TumorForm, DiagnoseForm, DataFileForm, DashboardForm
 from .utils import create_from_pandas, query_patients, querybased_statistics
@@ -204,8 +206,11 @@ def dashboard(request, old_context={}):
     form = DashboardForm(request.POST or None)
     
     if request.method == "POST" and form.is_valid():
+        start = time.time()
         q, d_i, d_c = query_patients(form.cleaned_data)
         stat_dict = querybased_statistics(q, d_i, d_c, **form.cleaned_data)
+        end = time.time()
+        print(end - start)
     else:
         q = Patient.objects.none()
         stat_dict = querybased_statistics(q)

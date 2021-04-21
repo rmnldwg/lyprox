@@ -6,7 +6,7 @@
             {% for radio in radiobuttons %}
             <p class="control">
                 {{ radio.tag }}
-                <label for="{{ radio.id_for_label }}" class="tag button is-small {{ radio.choice_label }}">
+                <label for="{{ radio.id_for_label }}" class="tag button is-small">
                     <i class="fas fa-lg fa-{{ radio.choice_label }}"></i>
                 </label>
             </p>

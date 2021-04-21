@@ -5,6 +5,7 @@ import numpy as np
 import dateutil
 from .models import Patient, Diagnose, Tumor, T_STAGES, N_STAGES, M_STAGES, MODALITIES, LNLs
 
+import time
 
 def compute_hash(*args):
     """Compute a hash vlaue from three patient-specific fields that must be 
@@ -328,6 +329,7 @@ def querybased_statistics(q, d_i=None, d_c=None,
     Args:
         q: QuerySet of patients.
     """
+    time_list = []
     
     # create dictionary of counts
     stat_dict = {"nicotine_abuse": np.zeros(shape=(3,), dtype=int),
@@ -346,7 +348,7 @@ def querybased_statistics(q, d_i=None, d_c=None,
         for lnl in LNLs:
             stat_dict[f"{side}_{lnl}"] = np.zeros(shape=(3,), dtype=int)
     
-    for patient in q.iterator():
+    for patient in q:
         stat_dict["nicotine_abuse"] += tf2arr(patient.nicotine_abuse)
         stat_dict["hpv_status"] += tf2arr(patient.hpv_status)
         stat_dict["neck_dissection"] += tf2arr(patient.neck_dissection)
@@ -372,6 +374,8 @@ def querybased_statistics(q, d_i=None, d_c=None,
             
             if d_pms.exists():  # if the QuerySet is not empty
                 # get a list of tuples with LNL involvement
+                # TODO: This is stupid! Use `select_related()` outside of the
+                # loop!
                 lnl_tuples = d_pms.values_list(*LNLs)
                 lnl_array = np.array(lnl_tuples)
                 
@@ -403,14 +407,14 @@ def querybased_statistics(q, d_i=None, d_c=None,
                                         initial=2)
                     val = np.where(tmp==2, None, tmp)
                 # val should now be an array containing `True`, `False` & `None`
-            
+                
             else:  # if it is empty, add `None` to all LNLs for that patient
                 val = np.array([None] * len(LNLs))
             
-            for i,lnl in enumerate(LNLs):
-                if (lnl == 'IIa') and (side == 'contra') and val[i]:
-                    print(patient)
-                    
+            for i,lnl in enumerate(LNLs):                    
                 stat_dict[f'{side}_{lnl}'] += tf2arr(val[i])
+            
+            # time_list.append(end - start)
         
+    # print(np.mean(time_list))
     return stat_dict
