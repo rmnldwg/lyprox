@@ -6,7 +6,7 @@ import time
 
 from .models import Patient, Tumor, Diagnose, MODALITIES
 from .forms import PatientForm, TumorForm, DiagnoseForm, DataFileForm, DashboardForm
-from .utils import create_from_pandas, query_patients, querybased_statistics
+from .utils import create_from_pandas, query, query2statistics
 
 
 class ListView(generic.ListView):
@@ -207,15 +207,22 @@ def dashboard(request, old_context={}):
     
     if request.method == "POST" and form.is_valid():
         start = time.time()
-        q, d_i, d_c = query_patients(form.cleaned_data)
-        stat_dict = querybased_statistics(q, d_i, d_c, **form.cleaned_data)
+        match_patients, match_diagnoses_dict = query(form.cleaned_data)
+        statistics = query2statistics(match_patients,
+                                      match_diagnoses_dict,
+                                      **form.cleaned_data)
         end = time.time()
         print(end - start)
+        print(f"Query contains {len(match_patients)} patients, "
+              f"{len(match_diagnoses_dict['ipsi'])} ipsilateral & "
+              f"{len(match_diagnoses_dict['contra'])} contralateral diagnoses.")
     else:
-        q = Patient.objects.none()
-        stat_dict = querybased_statistics(q)
+        no_patients = Patient.objects.none()
+        no_diagnose_dict = {'ipsi': Diagnose.objects.none(), 
+                            'contra': Diagnose.objects.none()}
+        statistics = query2statistics(no_patients, no_diagnose_dict)
 
     context = {"form": form, 
-               "stats": stat_dict}
+               "stats": statistics}
         
     return render(request, "patients/dashboard.html", context)

@@ -169,13 +169,13 @@
                     <form action="{% url 'patients:change_diagnose' patient.pk %}" method="POST">
                         {% csrf_token %}
                         <div class="buttons has-addons is-right">
-                            <button class="button is-small is-info" type="submit" name="edit_pk" value="{{ diagnose.pk }}">
+                            <button class="tag button is-small is-info" type="submit" name="edit_pk" value="{{ diagnose.pk }}">
                                 <span class="icon is-small">
                                     <i class="fas fa-pen"></i>
                                 </span>
                                 <span>edit</span>
                             </button>
-                            <button class="button is-small is-danger" type="submit" name="delete_pk" value="{{ diagnose.pk }}">
+                            <button class="tag button is-small is-danger" type="submit" name="delete_pk" value="{{ diagnose.pk }}">
                                 <span>delete</span>
                                 <span class="icon is-small">
                                     <i class="fas fa-trash"></i>

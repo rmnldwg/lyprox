@@ -1,8 +1,10 @@
 from django.db import IntegrityError
-from django.db.models import F
+from django.db.models import Q, F, QuerySet
 
 import numpy as np
 import dateutil
+from collections import defaultdict
+from typing import List, Union, Optional, Dict, Any
 from .models import Patient, Diagnose, Tumor, T_STAGES, N_STAGES, M_STAGES, MODALITIES, LNLs
 
 import time
@@ -168,8 +170,52 @@ def oneminusone_to_bool(num: int) -> bool:
     else:
         raise ValueError("Only 1 and -1 are allowed.")
 
+# TODO: How to do type hinting for multiple return values
+def query(data: Dict[str, Any]):
+    """"""
+    patients = Patient.objects.all()
+    _ = oneminusone_to_bool  # neccessary cause radio buttons return 1, 0 or -1
+    
+    # PATIENT specific fields
+    if (na := data["nicotine_abuse"]) != 0:
+        patients = patients.filter(nicotine_abuse=_(na))
+    if (hpv := data["hpv_status"]) != 0:
+        patients = patients.filter(hpv_status=_(hpv))
+    if (nd := data["neck_dissection"]) != 0:
+        patients = patients.filter(neck_dissection=_(nd))
+        
+    # TUMOR specific queries
+    patients = patients.filter(tumor__subsite__in=data["subsite_icds"])
+    patients = patients.filter(tumor__t_stage__in=data["tstages"])
 
-def query_patients(data):
+    if (ce := data["central"]) == 1:
+        patients = patients.filter(tumor__position="central")
+    elif ce == -1:
+        patients = patients.exclude(tumor__position="central")
+
+    if (me := data["midline_extension"]) != 0:
+        patients = patients.filter(tumor__extension=_(me))
+        
+    # DIAGNOSES
+    d = Diagnose.objects.all().filter(patient__in=patients,
+                                      modality__in=data['modalities'])
+    diagnoses = {'ipsi':   d.filter(side=F('patient__tumor__position')),
+                 'contra': d.exclude(side=F('patient__tumor__position'))}
+        
+    for side in ['ipsi', 'contra']:
+        for lnl in LNLs:
+            if (inv := data[f'{side}_{lnl}']) != 0:
+                diagnoses[side] = diagnoses[side].filter(**{lnl: _(inv)})
+                
+    patients = patients.filter(diagnose__in=diagnoses['ipsi'])
+    patients = patients.filter(diagnose__in=diagnoses['contra'])
+    
+    # distinct is necessary, bacause the two lines don't seem to successively 
+    # reduce the dataset
+    return patients.distinct(), diagnoses
+
+
+def _old_query(data):
     """Query the patient database for the requested fields. The basic idea is 
     to first use the specified patient characteristics to narrow down the set 
     of patients. Then, all diagnoses (ipsi & contra as well as for all selected 
@@ -322,6 +368,90 @@ def pos2arr(pos):
         return np.array([1, 0, 0], dtype=int)
 
 
+def query2statistics(match_pats: QuerySet,
+                     match_diags: Dict[str, QuerySet],
+                     modality_combine: str = 'OR',
+                     **kwargs):
+    """Create statistics/counts based on Patient & Diagnose QuerySets.
+    
+    Args:
+        match_pats: Patients that match a previously submitted pattern.
+        
+        match_diags: Contains the keys 'ipsi', for ipsilateral diagnoses that 
+            match the previously submitted pattern, and 'contra' for the 
+            respective set of contralateral diagnoses.
+    """
+    
+    # initialize dictionary of statistics/counts for patient & tumor
+    statistics = {"nicotine_abuse": np.zeros(shape=(3,), dtype=int),
+                  "hpv_status": np.zeros(shape=(3,), dtype=int),
+                  "neck_dissection": np.zeros(shape=(3,), dtype=int),
+                  
+                  "subsites": np.zeros(shape=(3,), dtype=int),
+                  "t_stages": np.zeros(shape=(len(T_STAGES),), dtype=int),
+                  "central": np.zeros(shape=(3,), dtype=int),
+                  "midline_extension": np.zeros(shape=(3,), dtype=int),}
+    
+    # initialize LNL statistics/counts with zeros
+    for side in ["ipsi", "contra"]:
+        for lnl in LNLs:
+            statistics[f"{side}_{lnl}"] = np.zeros(shape=(3,), dtype=int)
+            
+    # DIAGNOSES
+    # aggregated diagnoses, sorted by side
+    agg_diags =   {'ipsi':   defaultdict(np.ndarray),
+                   'contra': defaultdict(np.ndarray)}
+    for side in ['ipsi', 'contra']:
+        match_diags[side] = (match_diags[side]
+                             .select_related('patient')
+                             .values())
+        for diag in match_diags[side]:
+            lnl_array = np.array([diag[f'{lnl}'] for lnl in LNLs])
+            try:  # stack involvement data of each patient into a 2D array
+                agg_diags[side][diag['patient_id']] = np.vstack(
+                    [agg_diags[side][diag['patient_id']], lnl_array]
+                )
+            except TypeError:  # gets raised when there's nothing yet
+                agg_diags[side][diag['patient_id']] = np.array([lnl_array])  
+            
+    # PATIENT & TUMOR         
+    # get basic fields and prefetch the tumor. Also, combine the modalities.
+    patients = (match_pats
+                .prefetch_related('tumor')
+                .values(
+                    'id',
+                    'nicotine_abuse',
+                    'hpv_status',
+                    'neck_dissection',
+                    'tumor__subsite',
+                    'tumor__t_stage',
+                    'tumor__position',
+                    'tumor__extension',
+                ))
+    for pat in patients:
+        statistics["nicotine_abuse"] += tf2arr(pat["nicotine_abuse"])
+        statistics["hpv_status"] += tf2arr(pat["hpv_status"])
+        statistics["neck_dissection"] += tf2arr(pat["neck_dissection"])
+        
+        statistics["subsites"] += subsite2arr(pat["tumor__subsite"])
+        statistics["t_stages"][pat["tumor__t_stage"]-1] += 1
+        statistics["central"] += pos2arr(pat["tumor__position"])
+        statistics["midline_extension"] += tf2arr(pat["tumor__extension"])
+        
+        for side in ['ipsi', 'contra']:
+            if modality_combine == 'OR':
+                lnl_states = agg_diags[side][pat['id']].any(axis=0)
+            elif modality_combine == 'AND':
+                lnl_states = agg_diags[side][pat['id']].all(axis=0)
+            else:
+                lnl_states = np.array([None] * len(LNLs))
+                
+            for i,lnl in enumerate(LNLs):
+                statistics[f'{side}_{lnl}'] += tf2arr(lnl_states[i])
+              
+    return statistics
+            
+            
 def querybased_statistics(q, d_i=None, d_c=None, 
                           modalities=[], modality_combine="OR", **kwargs):
     """Create statistics based on a QuerySet of patients & diagnoses.
@@ -342,7 +472,7 @@ def querybased_statistics(q, d_i=None, d_c=None,
                  "midline_extension": np.zeros(shape=(3,), dtype=int),}
     
     # initialize diagnoses
-    d = Diagnose.objects.all()    
+    d = Diagnose.objects.all()
     # initialize LNL counts with zeros
     for side in ["ipsi", "contra"]:
         for lnl in LNLs:
