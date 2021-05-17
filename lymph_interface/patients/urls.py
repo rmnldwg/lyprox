@@ -13,5 +13,4 @@ urlpatterns = [
     path("<int:pk>/diagnose/add", views.add_diagnose_to_patient, name="add_diagnose"),
     path("<int:pk>/diagnose/change", views.change_diagnose_of_patient, name="change_diagnose"),
     path("dashboard/", views.dashboard, name="dashboard"),
-    path("new-dashboard/", views.new_dashboard, name="new_dashboard"),
 ]
