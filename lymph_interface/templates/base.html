@@ -1,47 +1,9 @@
-{% load static %}
-
 <!DOCTYPE html>
 <html lang="en" class="has-navbar-fixed-top">
-<head>
-    <link rel="stylesheet" type="text/css" href="{% static 'base.css' %}">
-    <link rel="stylesheet" type="text/css" href="{% static 'usz.css' %}">
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <script src="https://kit.fontawesome.com/c702fb8f68.js" crossorigin="anonymous"></script>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>USZ Lymph Interface</title>
-</head>
+{% include 'patients/head.html' %}
 
 <body>
-    <nav class="navbar is-fixed-top is-primary" role="navigation">
-        <div class="container">
-            <div class="navbar-brand">
-                <a class="navbar-item" href="{% url 'index' %}">
-                    <img src="{% static 'usz-logo-white.png' %}" alt="USZ Logo">
-                </a>
-            </div>
-            <div class="navbar-menu">
-                <div class="navbar-start">
-                    <a href="{% url 'patients:list' %}" class="navbar-item">
-                        List
-                    </a>
-
-                    <a href="{% url 'patients:upload' %}" class="navbar-item">
-                        Upload
-                    </a>
-
-                    <a href="{% url 'patients:create' %}" class="navbar-item">
-                        Create
-                    </a>
-
-                    <a href="{% url 'patients:dashboard' %}" class="navbar-item">
-                        Dashboard
-                    </a>
-                </div>
-            </div>
-        </div>
-    </nav>
+    {% include 'patients/navbar.html' %}
 
     <section class="section">
         <div class="container">
@@ -50,43 +12,6 @@
         </div>
     </section>
 
-    <footer class="footer is-fullheight">
-        <div class="container">
-            <div class="columns">
-                <div class="column has-text-centered">
-                    <span class="icon-text">
-                        <span class="icon">
-                            <i class="far fa-hospital"></i>
-                        </span>
-                        <span>University Hospital Zurich</span>
-                    </span>
-                </div>
-                <div class="column has-text-centered">
-                    <span class="icon-text">
-                        <span class="icon">
-                            <i class="fas fa-stethoscope"></i>
-                        </span>
-                        <span>Departement of Radiation Oncology</span>
-                    </span>
-                </div>
-                <div class="column has-text-centered">
-                    <span class="icon-text">
-                        <span class="icon">
-                            <i class="fas fa-map-marker-alt"></i>
-                        </span>
-                        <span>Rämistrasse 100, 8091 Zürich</span>
-                    </span>
-                </div>
-                <div class="column has-text-centered">
-                    <span class="icon-text">
-                        <span class="icon">
-                            <i class="fas fa-envelope"></i>
-                        </span>
-                        <a href="mailto:roman.ludwig@usz.ch">roman.ludwig@usz.ch</a>
-                    </span>
-                </div>
-            </div>
-        </div>
-    </footer>
+    {% include 'patients/footer.html' %}
 </body>
 </html>
