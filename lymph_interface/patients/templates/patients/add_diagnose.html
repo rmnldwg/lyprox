@@ -16,14 +16,14 @@
         <td>{{ diagnose_form.V }}</td>
         <td>{{ diagnose_form.VII }}</td>
         <td>
-            <div class="buttons has-addons">
-                <button class="button is-small is-success" type="submit" value="add">
+            <div class="buttons has-addons is-right">
+                <button class="tag button is-small is-success" type="submit" value="add">
                     <span class="icon">
                         <i class="fas fa-plus"></i>
                     </span>
                     <span>add</span>
                 </button>
-                <a class="button is-small is-danger" href="{% url 'patients:detail' patient.pk %}">
+                <a class="tag button is-small is-danger" href="{% url 'patients:detail' patient.pk %}">
                     <span>delete</span>
                     <span class="icon">
                         <i class="fas fa-trash"></i>

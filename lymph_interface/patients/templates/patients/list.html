@@ -18,7 +18,7 @@
             <th>gender</th>
             <th>age</th>
             <th>stage</th>
-            <th>link</th>
+            <th></th>
         </tr>
     </thead>
 
@@ -32,15 +32,19 @@
             <td>{{ patient.age }} </td>
             <td>{{ patient.get_t_stage_display }} {{ patient.get_n_stage_display }} {{ patient.get_m_stage_display }} </td>
             <td>
-                <div class="field">
-                    <div class="control">
-                        <a class="button is-info is-small" href="{% url 'patients:detail' patient.pk %}">
-                            <span class="icon">
-                                <i class="fas fa-address-card"></i>
-                            </span>
-                            <span>details</span>
-                        </a>
-                    </div>
+                <div class="buttons has-addons is-right">
+                    <a class="tag button is-info is-small" href="{% url 'patients:detail' patient.pk %}">
+                        <span class="icon">
+                            <i class="fas fa-address-card"></i>
+                        </span>
+                        <span>details</span>
+                    </a>
+                    <button class="tag button is-danger is-small">
+                        <span>delete</span>
+                        <span class="icon">
+                            <i class="fas fa-trash"></i>
+                        </span>
+                    </button>
                 </div>
             </td>
         </tr>

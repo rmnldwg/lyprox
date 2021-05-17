@@ -163,9 +163,9 @@ class DiagnoseForm(forms.ModelForm):
         
         for lnl in LNLs:
             fields.append(lnl)
-            widgets[lnl] = forms.Select(choices=[(True, "positiv"),
-                                                 (False, "negativ"),
-                                                 (None, "unknown")],
+            widgets[lnl] = forms.Select(choices=[(True, "pos"),
+                                                 (False, "neg"),
+                                                 (None, "???")],
                                         attrs={"class": "select"})
             
 
