@@ -226,3 +226,30 @@ def dashboard(request, old_context={}):
                "stats": statistics}
         
     return render(request, "patients/dashboard.html", context)
+
+
+def new_dashboard(request, old_context={}):
+    """Display the dashboard showing patterns of involvement."""
+    form = DashboardForm(request.POST or None)
+    
+    if request.method == "POST" and form.is_valid():
+        start = time.time()
+        match_patients, match_diagnoses_dict = query(form.cleaned_data)
+        statistics = query2statistics(match_patients,
+                                      match_diagnoses_dict,
+                                      **form.cleaned_data)
+        end = time.time()
+        print(end - start)
+        print(f"Query contains {len(match_patients)} patients, "
+              f"{len(match_diagnoses_dict['ipsi'])} ipsilateral & "
+              f"{len(match_diagnoses_dict['contra'])} contralateral diagnoses.")
+    else:
+        no_patients = Patient.objects.none()
+        no_diagnose_dict = {'ipsi': Diagnose.objects.none(), 
+                            'contra': Diagnose.objects.none()}
+        statistics = query2statistics(no_patients, no_diagnose_dict)
+
+    context = {"form": form, 
+               "stats": statistics}
+        
+    return render(request, "patients/new_dashboard.html", context)

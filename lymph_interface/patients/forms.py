@@ -271,7 +271,7 @@ class DashboardForm(forms.Form):
             for lnl in ["I", "II"]:
                 a = cleaned_data[f"{side}_{lnl}a"]
                 b = cleaned_data[f"{side}_{lnl}b"]
-                cleaned_data[f"{side}_{lnl}"] = np.maximum(a,b)
+                # cleaned_data[f"{side}_{lnl}"] = np.maximum(a,b)
                 
         subsites = cleaned_data["subsites"]
         subsite_dict = {"base":   ["C01.9"], 

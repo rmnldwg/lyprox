@@ -50,12 +50,12 @@
                 <div class="is-flex is-flex-direction-row is-justify-content-center">
                     <div class="field has-addons">
                         {% for radio in form.nicotine_abuse %}
-                        <p class="control">
+                        <div class="control">
                             {{ radio.tag }}
                             <label for="{{ radio.id_for_label }}" class="button {{ radio.choice_label }}">
                                 <i class="fas fa-lg fa-{{ radio.choice_label }}"></i>
                             </label>
-                        </p>
+                        </div>
                         {% endfor %}
                     </div>
                 </div>
