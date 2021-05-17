@@ -201,18 +201,15 @@ def delete_diagnose_from_patient(request, *args, **kwargs):
     return redirect("patients:detail", pk=patient.pk)
 
 
-def dashboard(request, old_context={}):
+def dashboard(request):
     """Display the dashboard showing patterns of involvement."""
     form = DashboardForm(request.POST or None)
     
     if request.method == "POST" and form.is_valid():
-        start = time.time()
         match_patients, match_diagnoses_dict = query(form.cleaned_data)
         statistics = query2statistics(match_patients,
                                       match_diagnoses_dict,
                                       **form.cleaned_data)
-        end = time.time()
-        print(end - start)
         print(f"Query contains {len(match_patients)} patients, "
               f"{len(match_diagnoses_dict['ipsi'])} ipsilateral & "
               f"{len(match_diagnoses_dict['contra'])} contralateral diagnoses.")

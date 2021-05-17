@@ -14,5 +14,8 @@
   "devDependencies": {
     "bulma": "^0.9.2",
     "node-sass": "^5.0.0"
+  },
+  "dependencies": {
+    "bulma-calendar": "^6.1.0"
   }
 }
