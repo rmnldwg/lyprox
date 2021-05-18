@@ -1,29 +1,37 @@
 {% load mytags %}
 
 <td>
-    <div class="block is-flex is-justify-content-flex-end">
-        <div class="field has-addons">
-            {% for radio in radiobuttons %}
-            <p class="control">
-                {{ radio.tag }}
-                <label for="{{ radio.id_for_label }}" class="tag button is-info">
-                    <i class="fas fa-lg fa-{{ radio.choice_label }}"></i>
-                </label>
-            </p>
-            {% endfor %}
-        </div>
+    <div class="field has-addons">
+        {% for radio in radiobuttons %}
+        <p class="control">
+            {{ radio.tag }}
+            <label for="{{ radio.id_for_label }}" class="tag button is-info">
+                <i class="fas fa-lg fa-{{ radio.choice_label }}"></i>
+            </label>
+        </p>
+        {% endfor %}
     </div>
 </td>
+
 <td>
-    <div class="tags has-addons is-fullwidth">
-        {% if stat|index:1 != 0 %}
-            <div class="tag pos" style="width: {{ stat|bar:'1,100' }}px;"></div>
-        {% endif %}
-        {% if stat|index:0 != 0 %}
-            <div class="tag unk" style="width: {{ stat|bar:'0,100' }}px;"></div>
-        {% endif %}
-        {% if stat|index:-1 != 0 %}
-            <div class="tag neg" style="width: {{ stat|bar:'-1,100' }}px;"></div>
-        {% endif %}
+    <div class="field is-grouped is-justify-content-center">
+        <div class="control">
+            <span class="tag barplot-legend is-danger is-light" 
+                  data-tooltip="{{ stat|index:1 }} of {{ stat|sum }} ({{ stat|percent:1 }}%) patients have metastases in LNL {{ lnl }}">
+                {{ stat|index:1 }}
+            </span>
+        </div>
+        <div class="control">
+            <span class="tag barplot has-text-white" 
+                  style="background-size: {{ stat|bar:'1,100' }}% 100%, calc({{ stat|bar:'1,100' }}% + {{ stat|bar:'0,100' }}%) 100%, 100% 100%;">
+                {{ stat|index:0 }}
+            </span>
+        </div>
+        <div class="control">
+            <span class="tag barplot-legend is-success is-light" 
+                  data-tooltip="{{ stat|index:-1 }} of {{ stat|sum }} ({{ stat|percent:-1 }}%) patients do not have metastases in LNL {{ lnl }}">
+                {{ stat|index:-1 }}
+            </span>
+        </div>
     </div>
 </td>

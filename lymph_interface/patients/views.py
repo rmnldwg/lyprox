@@ -213,11 +213,18 @@ def dashboard(request):
         print(f"Query contains {len(match_patients)} patients, "
               f"{len(match_diagnoses_dict['ipsi'])} ipsilateral & "
               f"{len(match_diagnoses_dict['contra'])} contralateral diagnoses.")
-    else:
-        no_patients = Patient.objects.none()
-        no_diagnose_dict = {'ipsi': Diagnose.objects.none(), 
-                            'contra': Diagnose.objects.none()}
-        statistics = query2statistics(no_patients, no_diagnose_dict)
+    else:    
+        initial_data = {}
+        for field_name, field in form.fields.items():
+            initial_data[field_name] = form.get_initial_for_field(field, field_name)
+            
+        initial_form = DashboardForm(initial_data)
+        
+        if initial_form.is_valid():
+            init_patients, init_diagnoses_dict = query(initial_form.cleaned_data)
+            statistics = query2statistics(init_patients, init_diagnoses_dict)
+        else:
+            raise ValidationError("Validation of default values of form failed.")
 
     context = {"form": form, 
                "stats": statistics}

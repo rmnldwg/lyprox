@@ -304,9 +304,12 @@ class DashboardForm(forms.Form):
                     elif a + b == 0:
                         pass
                     else:
-                        raise ValidationError(f"Invalid values in LNL {lnl} {side}laterally.")
+                        raise ValidationError(f"Invalid values in LNL {lnl} "
+                                              "{side}laterally.")
                 else:
-                    raise ValidationError(f"Invalid values in LNL {lnl} {side}laterally.")
+                    raise ValidationError(f"Invalid values in LNL {lnl} "
+                                          "{side}laterally.")
+                
                                     
         subsites = cleaned_data["subsites"]
         subsite_dict = {"base":   ["C01.9"], 
@@ -335,7 +338,7 @@ class DashboardForm(forms.Form):
         required=False, 
         widget=forms.CheckboxSelectMultiple(attrs={"class": "checkbox is-hidden"}), 
         choices=MODALITIES,
-        initial=[]
+        initial=[1,2]
     )
     modality_combine = forms.ChoiceField(
         choices=[("AND", "AND"), 

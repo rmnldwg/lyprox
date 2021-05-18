@@ -11,7 +11,7 @@
 <body>
     {% include 'patients/navbar.html' %}
 
-    <form method="POST" action="{% url 'patients:dashboard' %}">
+    <form method="POST" action="{% url 'patients:dashboard' %}" name="dashboardform">
     {% csrf_token %}
         <section class="section columns">
             <div class="column">
@@ -39,50 +39,50 @@
                 <div class="columns">
                     <div class="column">
                         <div class="box">
-                            <p class="title is-4">contralateral</p>
+                            <p class="title is-4 has-text-centered">contralateral</p>
                             <table class="table is-fullwidth">
                                 <tbody>
                                     <tr>
                                         <td rowspan="3">I</td>
                                         <td>both</td>
-                                        {% include 'patients/lnlrow.html' with radiobuttons=form.contra_I stat=stats.contra_I %}
+                                        {% include 'patients/lnlrow.html' with lnl="I contralateral" radiobuttons=form.contra_I stat=stats.contra_I %}
                                     </tr>
                                     <tr>
                                         <td>a</td>
-                                        {% include 'patients/lnlrow.html' with radiobuttons=form.contra_Ia stat=stats.contra_Ia %}
+                                        {% include 'patients/lnlrow.html' with lnl="Ia contralateral" radiobuttons=form.contra_Ia stat=stats.contra_Ia %}
                                     </tr>
                                     <tr>
                                         <td>b</td>
-                                        {% include 'patients/lnlrow.html' with radiobuttons=form.contra_Ib stat=stats.contra_Ib %}
+                                        {% include 'patients/lnlrow.html' with lnl="Ib contralateral" radiobuttons=form.contra_Ib stat=stats.contra_Ib %}
                                     </tr>
                                     <tr>
                                         <td rowspan="3">I</td>
                                         <td>both</td>
-                                        {% include 'patients/lnlrow.html' with radiobuttons=form.contra_II stat=stats.contra_II %}
+                                        {% include 'patients/lnlrow.html' with lnl="II contralateral" radiobuttons=form.contra_II stat=stats.contra_II %}
                                     </tr>
                                     <tr>
                                         <td>a</td>
-                                        {% include 'patients/lnlrow.html' with radiobuttons=form.contra_IIa stat=stats.contra_IIa %}
+                                        {% include 'patients/lnlrow.html' with lnl="IIa contralateral" radiobuttons=form.contra_IIa stat=stats.contra_IIa %}
                                     </tr>
                                     <tr>
                                         <td>b</td>
-                                        {% include 'patients/lnlrow.html' with radiobuttons=form.contra_IIb stat=stats.contra_IIb %}
+                                        {% include 'patients/lnlrow.html' with lnl="IIb contralateral" radiobuttons=form.contra_IIb stat=stats.contra_IIb %}
                                     </tr>
                                     <tr>
                                         <td colspan="2">III</td>
-                                        {% include 'patients/lnlrow.html' with radiobuttons=form.contra_III stat=stats.contra_III %}
+                                        {% include 'patients/lnlrow.html' with lnl="III contralateral" radiobuttons=form.contra_III stat=stats.contra_III %}
                                     </tr>
                                     <tr>
                                         <td colspan="2">IV</td>
-                                        {% include 'patients/lnlrow.html' with radiobuttons=form.contra_IV stat=stats.contra_IV %}
+                                        {% include 'patients/lnlrow.html' with lnl="IV contralateral" radiobuttons=form.contra_IV stat=stats.contra_IV %}
                                     </tr>
                                     <tr>
                                         <td colspan="2">V</td>
-                                        {% include 'patients/lnlrow.html' with radiobuttons=form.contra_V stat=stats.contra_V %}
+                                        {% include 'patients/lnlrow.html' with lnl="V contralateral" radiobuttons=form.contra_V stat=stats.contra_V %}
                                     </tr>
                                     <tr>
                                         <td colspan="2">VII</td>
-                                        {% include 'patients/lnlrow.html' with radiobuttons=form.contra_VII stat=stats.contra_VII %}
+                                        {% include 'patients/lnlrow.html' with lnl="VII contralateral" radiobuttons=form.contra_VII stat=stats.contra_VII %}
                                     </tr>
                                 </tbody>
                             </table>
@@ -91,50 +91,50 @@
 
                     <div class="column">
                         <div class="box">
-                            <p class="title is-4">ipsilateral</p>
+                            <p class="title is-4 has-text-centered">ipsilateral</p>
                             <table class="table is-fullwidth">
                                 <tbody>
                                     <tr>
                                         <td rowspan="3">I</td>
                                         <td>both</td>
-                                        {% include 'patients/lnlrow.html' with radiobuttons=form.ipsi_I stat=stats.ipsi_I %}
+                                        {% include 'patients/lnlrow.html' with lnl="I ipsilateral" radiobuttons=form.ipsi_I stat=stats.ipsi_I %}
                                     </tr>
                                     <tr>
                                         <td>a</td>
-                                        {% include 'patients/lnlrow.html' with radiobuttons=form.ipsi_Ia stat=stats.ipsi_Ia %}
+                                        {% include 'patients/lnlrow.html' with lnl="Ia ipsilateral" radiobuttons=form.ipsi_Ia stat=stats.ipsi_Ia %}
                                     </tr>
                                     <tr>
                                         <td>b</td>
-                                        {% include 'patients/lnlrow.html' with radiobuttons=form.ipsi_Ib stat=stats.ipsi_Ib %}
+                                        {% include 'patients/lnlrow.html' with lnl="Ib ipsilateral" radiobuttons=form.ipsi_Ib stat=stats.ipsi_Ib %}
                                     </tr>
                                     <tr>
-                                        <td rowspan="3">II</td>
+                                        <td rowspan="3">I</td>
                                         <td>both</td>
-                                        {% include 'patients/lnlrow.html' with radiobuttons=form.ipsi_II stat=stats.ipsi_II %}
+                                        {% include 'patients/lnlrow.html' with lnl="II ipsilateral" radiobuttons=form.ipsi_II stat=stats.ipsi_II %}
                                     </tr>
                                     <tr>
                                         <td>a</td>
-                                        {% include 'patients/lnlrow.html' with radiobuttons=form.ipsi_IIa stat=stats.ipsi_IIa %}
+                                        {% include 'patients/lnlrow.html' with lnl="IIa ipsilateral" radiobuttons=form.ipsi_IIa stat=stats.ipsi_IIa %}
                                     </tr>
                                     <tr>
                                         <td>b</td>
-                                        {% include 'patients/lnlrow.html' with radiobuttons=form.ipsi_IIb stat=stats.ipsi_IIb %}
+                                        {% include 'patients/lnlrow.html' with lnl="IIb ipsilateral" radiobuttons=form.ipsi_IIb stat=stats.ipsi_IIb %}
                                     </tr>
                                     <tr>
                                         <td colspan="2">III</td>
-                                        {% include 'patients/lnlrow.html' with radiobuttons=form.ipsi_III stat=stats.ipsi_III %}
+                                        {% include 'patients/lnlrow.html' with lnl="III ipsilateral" radiobuttons=form.ipsi_III stat=stats.ipsi_III %}
                                     </tr>
                                     <tr>
                                         <td colspan="2">IV</td>
-                                        {% include 'patients/lnlrow.html' with radiobuttons=form.ipsi_IV stat=stats.ipsi_IV %}
+                                        {% include 'patients/lnlrow.html' with lnl="IV ipsilateral" radiobuttons=form.ipsi_IV stat=stats.ipsi_IV %}
                                     </tr>
                                     <tr>
                                         <td colspan="2">V</td>
-                                        {% include 'patients/lnlrow.html' with radiobuttons=form.ipsi_V stat=stats.ipsi_V %}
+                                        {% include 'patients/lnlrow.html' with lnl="V ipsilateral" radiobuttons=form.ipsi_V stat=stats.ipsi_V %}
                                     </tr>
                                     <tr>
                                         <td colspan="2">VII</td>
-                                        {% include 'patients/lnlrow.html' with radiobuttons=form.ipsi_VII stat=stats.ipsi_VII %}
+                                        {% include 'patients/lnlrow.html' with lnl="VII ipsilateral" radiobuttons=form.ipsi_VII stat=stats.ipsi_VII %}
                                     </tr>
                                 </tbody>
                             </table>
@@ -143,12 +143,13 @@
                 </div>
 
                 <div class="box is-flex is-justify-content-center">
-                    <button type="submit" class="button is-medium is-warning">
+                    <button type="submit" class="button is-medium is-warning" data-tooltip="Test">
                         <span class="icon">
                             <i class="fas fa-chart-bar"></i>
                         </span>
                         <span><strong>Compute</strong></span>
                     </button>
+                    <div class="tag line"></div>
                 </div>
             </div>
 

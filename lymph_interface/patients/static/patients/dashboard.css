@@ -46,3 +46,16 @@ div.tag.unk {
     padding: 0;
     background-color: #C5D5DB;
 }
+
+.barplot {
+    width: 100px;
+    background-image:
+        linear-gradient(#AE0060,#AE0060),
+        linear-gradient(#BDCFD6,#BDCFD6),
+        linear-gradient(#00AFA5,#00AFA5);
+    background-repeat:no-repeat;
+}
+
+.barplot-legend {
+    width: 40px;
+}
