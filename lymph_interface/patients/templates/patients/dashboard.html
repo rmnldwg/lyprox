@@ -16,7 +16,20 @@
         <section class="section columns">
             <div class="column">
                 <div class="box">
-                    <p class="title is-4">Modalities</p>
+                    <div class="level">
+                        <div class="level-left">
+                            <div class="level-item">
+                                <p class="title is-4">Modalities</p>
+                            </div>
+                        </div>
+                        <div class="level-right">
+                            <div class="level-item has-tooltip-left has-tooltip-multiline" data-tooltip="Select the diagnostic modalities to consider in this dashboard and how to combine them">
+                                <span class="icon">
+                                    <i class="fas fa-question"></i>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
 
                     <div class="columns is-multiline">
                         {% for checkbox in form.modalities %}
@@ -145,17 +158,29 @@
                 <div class="box is-flex is-justify-content-center">
                     <button type="submit" class="button is-medium is-warning" data-tooltip="Test">
                         <span class="icon">
-                            <i class="fas fa-chart-bar"></i>
+                            <i class="fas fa-cogs"></i>
                         </span>
                         <span><strong>Compute</strong></span>
                     </button>
-                    <div class="tag line"></div>
                 </div>
             </div>
 
             <div class="column is-one-quarter">
                 <div class="box">
-                    <p class="title is-4">Patient details</p>
+                    <div class="level">
+                        <div class="level-left">
+                            <div class="level-item">
+                                <p class="title is-4">Patient details</p>
+                            </div>
+                        </div>
+                        <div class="level-right">
+                            <div class="level-item has-tooltip-left" data-tooltip="Specify which patients to consider">
+                                <span class="icon">
+                                    <i class="fas fa-question"></i>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
 
                     <div class="columns is-multiline">
                         <div class="column">
@@ -203,7 +228,20 @@
                 </div>
 
                 <div class="box">
-                    <p class="title is-4">Primary tumor</p>
+                    <div class="level">
+                        <div class="level-left">
+                            <div class="level-item">
+                                <p class="title is-4">Primary tumor</p>
+                            </div>
+                        </div>
+                        <div class="level-right">
+                            <div class="level-item has-tooltip-left has-tooltip-multiline" data-tooltip="Of the selected patients, consider only those that have primary tumors matching the selection in this box">
+                                <span class="icon">
+                                    <i class="fas fa-question"></i>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
 
                     <p class="title is-5">Lateralization</p>
 
