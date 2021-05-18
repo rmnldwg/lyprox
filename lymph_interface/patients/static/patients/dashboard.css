@@ -52,7 +52,7 @@ div.tag.unk {
 }
 
 .barplot {
-    width: 100px;
+    width: 100%;
     background-image:
         linear-gradient(#AE0060,#AE0060),
         linear-gradient(#BDCFD6,#BDCFD6),
@@ -62,4 +62,8 @@ div.tag.unk {
 
 .barplot-legend {
     width: 40px;
+}
+
+.barplot-tablecell {
+    width: 100%;
 }

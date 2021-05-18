@@ -13,7 +13,7 @@
     </div>
 </td>
 
-<td>
+<td class="barplot-tablecell">
     <div class="field is-grouped is-justify-content-center">
         <div class="control">
             <span class="tag barplot-legend is-danger is-light" 
@@ -21,7 +21,7 @@
                 {{ stat|index:1 }}
             </span>
         </div>
-        <div class="control">
+        <div class="control is-expanded">
             <span class="tag barplot has-text-white" 
                   style="background-size: {{ stat|bar:'1,100' }}% 100%, calc({{ stat|bar:'1,100' }}% + {{ stat|bar:'0,100' }}%) 100%, 100% 100%;">
                 {{ stat|index:0 }}
