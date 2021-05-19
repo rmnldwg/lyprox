@@ -134,3 +134,6 @@ dmypy.json
 
 # Bulma
 **/custom_bulma/node_modules
+
+# screenshots from Bertrand's interface
+bertrands_interface/
