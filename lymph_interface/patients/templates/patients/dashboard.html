@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en" class="has-navbar-fixed-top">
-{% include 'patients/head.html' %}
+{% include 'head.html' %}
 
 {% load static %}
 <link rel="stylesheet" href="{% static 'patients/dashboard.css' %}">
@@ -9,7 +9,7 @@
 {% load mytags %}
 
 <body>
-    {% include 'patients/navbar.html' %}
+    {% include 'navbar.html' %}
 
     <form method="POST" action="{% url 'patients:dashboard' %}" name="dashboardform">
     {% csrf_token %}
@@ -338,6 +338,6 @@
         </section>
     </form>
 
-    {% include 'patients/footer.html' %}
+    {% include 'footer.html' %}
 </body>
 </html>
