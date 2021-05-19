@@ -171,7 +171,8 @@ def oneminusone_to_bool(num: int) -> bool:
         raise ValueError("Only 1 and -1 are allowed.")
 
 # TODO: How to do type hinting for multiple return values
-def query(data: Dict[str, Any]):
+def query(data: Dict[str, Any], 
+          assign_central: Dict[str, str] = {"ipsi": "left"}):
     """"""
     patients = Patient.objects.all()
     _ = oneminusone_to_bool  # neccessary cause radio buttons return 1, 0 or -1
@@ -199,8 +200,12 @@ def query(data: Dict[str, Any]):
     # DIAGNOSES
     d = Diagnose.objects.all().filter(patient__in=patients,
                                       modality__in=data['modalities'])
-    diagnoses = {'ipsi':   d.filter(side=F('patient__tumor__position')),
-                 'contra': d.exclude(side=F('patient__tumor__position'))}
+    q_ipsi = (Q(side=F("patient__tumor__position"))
+              | (Q(patient__tumor__position="central")
+                 & Q(side=assign_central["ipsi"])))
+    
+    diagnoses = {'ipsi':   d.filter(q_ipsi),
+                 'contra': d.exclude(q_ipsi)}
         
     for side in ['ipsi', 'contra']:
         for lnl in LNLs:
@@ -213,119 +218,6 @@ def query(data: Dict[str, Any]):
     # distinct is necessary, bacause the two lines don't seem to successively 
     # reduce the dataset
     return patients.distinct(), diagnoses
-
-
-def _old_query(data):
-    """Query the patient database for the requested fields. The basic idea is 
-    to first use the specified patient characteristics to narrow down the set 
-    of patients. Then, all diagnoses (ipsi & contra as well as for all selected 
-    modalities) are found that match the form. Finally, for each modality a 
-    QuerySet is created which is a subset of the inital QuerySet of patients 
-    that contain the respective diagnoses. Depending on the choice of modality 
-    combination (AND, OR, XOR) it then returns the intersection, union or ??? 
-    of these modality-respective QuerySets.
-    
-    Args:
-        data: Dictionary containing the cleaned data from the DashboardForm.
-        
-    Returns:
-        QuerySet of patients, ipsi- & contralateral diagnoses.
-    """
-    q = Patient.objects.all()  # first, collect all patients, then restrict
-    _ = oneminusone_to_bool  # neccessary because radio buttons return 1, 0 or -1
-    
-    # PATIENT specific fields
-    # nictoine abuse
-    if (na := data["nicotine_abuse"]) != 0:
-        q = q.filter(nicotine_abuse=_(na))
-        
-    # hpv status
-    if (hpv := data["hpv_status"]) != 0:
-        q = q.filter(hpv_status=_(hpv))
-        
-    # neck dissection
-    if (nd := data["neck_dissection"]) != 0:
-        q = q.filter(neck_dissection=_(nd))
-        
-    # TUMOR specific queries
-    # (oropharynx) subsite
-    q = q.filter(tumor__subsite__in=data["subsite_icds"])
-        
-    # T-stages
-    q = q.filter(tumor__t_stage__in=data["tstages"])
-        
-    # central location
-    if (ce := data["central"]) == 1:
-        q = q.filter(tumor__position="central")
-    elif ce == -1:
-        q = q.exclude(tumor__position="central")
-        
-    # check midline extension
-    if (me := data["midline_extension"]) != 0:
-        q = q.filter(tumor__extension=_(me))
-        
-    # DIAGNOSES filtering
-    q_list = []
-    d_ipsi_list = []
-    d_contra_list = []
-    for mod in data["modalities"]:
-        # kreate kwrags dictionary for the filtering, so that I can loop 
-        # through the LNLs and simply append what I am looking for to that dict.
-        # This also alllows me to use f-strings.
-        ipsi_kwargs = {"modality": mod,
-                       "side": F("patient__tumor__position")}
-        contra_kwargs = {"modality": mod}
-        central_kwargs = {"modality": mod,
-                          "patient__tumor__position": "central"}
-        # loop through the LNLs
-        for lnl in LNLs:
-            if (inv := data[f"ipsi_{lnl}"]) != 0:
-                ipsi_kwargs[f"{lnl}"] = _(inv)
-            if (inv := data[f"contra_{lnl}"]) != 0:
-                contra_kwargs[f"{lnl}"] = _(inv)
-            
-        # create QuerySets of diagnoses for each modality ipsilaterally and 
-        # contralaterally.
-        d_ipsi = Diagnose.objects.filter(
-            **ipsi_kwargs
-        )
-        q_ipsi = q.filter(diagnose__in=d_ipsi)
-        
-        d_contra = Diagnose.objects.exclude(
-            side=F("patient__tumor__position")
-        ).filter(
-            **contra_kwargs
-        )
-        q_contra = q.filter(diagnose__in=d_contra)
-        
-        # collect diagnoses in list as well
-        d_ipsi_list.append(d_ipsi)
-        d_contra_list.append(d_contra)
-        
-        # patients with central involvement are added seperately to the 
-        # selected subset. But how to count their involvement patterns is not 
-        # yet decided. Now I just ignore them.
-        # TODO: ask Bertrand how he did this.
-        d_central = Diagnose.objects.filter(**central_kwargs)
-        q_central = q.filter(diagnose__in=d_central)
-        
-        # collect intersection (logical AND) of patients that have requested 
-        # ipsi- & contralateral involvement in specified modalities
-        q_list.append(q_ipsi.intersection(q_contra))
-        
-    # Depending on the chosen way of combining the different modalities, 
-    # return the union or the intersection of the collected QuerySets.
-    if data["modality_combine"] == "OR":
-        q = Patient.objects.none().union(*q_list)
-    elif data["modality_combine"] == "AND":
-        q = Patient.objects.all().intersection(*q_list)
-        
-    # regardless of how the modalities are combined, I need to pass all 
-    # diagnoses that match the selection to the stats function
-    d_i = Diagnose.objects.none().union(*d_ipsi_list)
-    d_c = Diagnose.objects.none().union(*d_contra_list)
-    
-    return q, d_i, d_c
 
 
 def tf2arr(value):
@@ -383,7 +275,9 @@ def query2statistics(match_pats: QuerySet,
     """
     
     # initialize dictionary of statistics/counts for patient & tumor
-    statistics = {"nicotine_abuse": np.zeros(shape=(3,), dtype=int),
+    statistics = {"total": len(match_pats),
+                  
+                  "nicotine_abuse": np.zeros(shape=(3,), dtype=int),
                   "hpv_status": np.zeros(shape=(3,), dtype=int),
                   "neck_dissection": np.zeros(shape=(3,), dtype=int),
                   

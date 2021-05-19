@@ -230,7 +230,7 @@
                                         {% include 'patients/lnlrow.html' with lnl="Ib contralateral" radiobuttons=form.contra_Ib stat=stats.contra_Ib %}
                                     </tr>
                                     <tr>
-                                        <td rowspan="3">I</td>
+                                        <td rowspan="3">II</td>
                                         <td>both</td>
                                         {% include 'patients/lnlrow.html' with lnl="II contralateral" radiobuttons=form.contra_II stat=stats.contra_II %}
                                     </tr>
@@ -282,7 +282,7 @@
                                         {% include 'patients/lnlrow.html' with lnl="Ib ipsilateral" radiobuttons=form.ipsi_Ib stat=stats.ipsi_Ib %}
                                     </tr>
                                     <tr>
-                                        <td rowspan="3">I</td>
+                                        <td rowspan="3">II</td>
                                         <td>both</td>
                                         {% include 'patients/lnlrow.html' with lnl="II ipsilateral" radiobuttons=form.ipsi_II stat=stats.ipsi_II %}
                                     </tr>
@@ -322,6 +322,12 @@
                             
                         </div>
                         <div class="level-right">
+                            <div class="level-item">
+                                <div class="button is-medium no-pointer">
+                                    <span>Patients in selection: {{ stats.total }}</span>
+                                </div>
+                            </div>
+
                             <div class="level-item">
                                 <button type="submit" class="button is-medium is-warning" data-tooltip="Test">
                                     <span class="icon">
