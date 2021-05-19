@@ -228,7 +228,8 @@ class ThreeWayToggle(forms.ChoiceField):
     unkown/None and negative/False."""
     
     def __init__(self, 
-                 widget=forms.RadioSelect(attrs={"class": "radio is-hidden"}), 
+                 widget=None, 
+                 attrs={"class": "radio is-hidden"},
                  choices=[( 1, "plus"),
                           ( 0, "ban"), 
                           (-1, "minus")],
@@ -236,11 +237,20 @@ class ThreeWayToggle(forms.ChoiceField):
                  required=False,
                  **kwargs):
         """Overwrite the defaults of the ChoiceField."""
-        super(ThreeWayToggle, self).__init__(widget=widget,
-                                             choices=choices,
-                                             initial=initial,
-                                             required=required,
-                                             **kwargs)
+        if widget is not None:
+            super(ThreeWayToggle, self).__init__(
+                widget=widget,
+                choices=choices,
+                initial=initial,
+                required=required,
+                **kwargs)
+        else:
+            super(ThreeWayToggle, self).__init__(
+                widget=forms.RadioSelect(attrs=attrs),
+                choices=choices,
+                initial=initial,
+                required=required,
+                **kwargs)
     
     def to_python(self, value):
         """Cast the string to an integer."""
@@ -259,7 +269,16 @@ class DashboardForm(forms.Form):
         super(DashboardForm, self).__init__(*args, **kwargs)
         for side in ["ipsi", "contra"]:
             for lnl in LNLs:
-                self.fields[f"{side}_{lnl}"] = ThreeWayToggle()
+                if lnl in ['I', 'II']:
+                    self.fields[f"{side}_{lnl}"] = ThreeWayToggle(
+                        attrs={"class": "radio is-hidden",
+                               "onclick": "bothClickHandler(this);"})
+                elif lnl in ['Ia', 'Ib', 'IIa', 'IIb']:
+                    self.fields[f"{side}_{lnl}"] = ThreeWayToggle(
+                        attrs={"class": "radio is-hidden",
+                               "onclick": "subClickHandler(this);"})
+                else:
+                    self.fields[f"{side}_{lnl}"] = ThreeWayToggle()
            
                 
     def clean(self):
@@ -271,8 +290,27 @@ class DashboardForm(forms.Form):
             for lnl in ["I", "II"]:
                 a = cleaned_data[f"{side}_{lnl}a"]
                 b = cleaned_data[f"{side}_{lnl}b"]
-                cleaned_data[f"{side}_{lnl}"] = np.maximum(a,b)
                 
+                # make sure data regarding sublevels is not conflicting
+                if a * b == 1:
+                    cleaned_data[f"{side}_{lnl}"] = a
+                elif a * b == -1:
+                    cleaned_data[f"{side}_{lnl}"] = 1
+                elif a * b == 0:
+                    if a + b == 1:
+                        cleaned_data[f"{side}_{lnl}"] = 1
+                    elif a + b == -1:
+                        pass
+                    elif a + b == 0:
+                        pass
+                    else:
+                        raise ValidationError(f"Invalid values in LNL {lnl} "
+                                              "{side}laterally.")
+                else:
+                    raise ValidationError(f"Invalid values in LNL {lnl} "
+                                          "{side}laterally.")
+                
+                                    
         subsites = cleaned_data["subsites"]
         subsite_dict = {"base":   ["C01.9"], 
                         "tonsil": ["C09.0", "C09.1", "C09.8", "C09.9"],
@@ -300,7 +338,7 @@ class DashboardForm(forms.Form):
         required=False, 
         widget=forms.CheckboxSelectMultiple(attrs={"class": "checkbox is-hidden"}), 
         choices=MODALITIES,
-        initial=[]
+        initial=[1,2]
     )
     modality_combine = forms.ChoiceField(
         choices=[("AND", "AND"), 

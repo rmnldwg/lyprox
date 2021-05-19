@@ -1,0 +1,30 @@
+{% load static %}
+
+<nav class="navbar is-fixed-top is-primary" role="navigation">
+    <div class="container">
+        <div class="navbar-brand">
+            <a class="navbar-item" href="{% url 'index' %}">
+                <img src="{% static 'usz-logo-white.png' %}" alt="USZ Logo">
+            </a>
+        </div>
+        <div class="navbar-menu">
+            <div class="navbar-start">
+                <a href="{% url 'patients:list' %}" class="navbar-item">
+                    List
+                </a>
+
+                <a href="{% url 'patients:upload' %}" class="navbar-item">
+                    Upload
+                </a>
+
+                <a href="{% url 'patients:create' %}" class="navbar-item">
+                    Create
+                </a>
+
+                <a href="{% url 'patients:dashboard' %}" class="navbar-item">
+                    Dashboard
+                </a>
+            </div>
+        </div>
+    </div>
+</nav>

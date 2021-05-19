@@ -1,14 +1,19 @@
+body {
+    background-color: #dbe6eb;
+}
+
 input[type="checkbox"].checkbox:checked + label {
     background-color: #005EA8;
     color: white;
 }
 input[type="checkbox"].checkbox:checked:hover + label {
-    background-color: #005EA8;
+    background-color: #005392;
     color: white;
 }
 
 input[type="radio"].radio:checked + label {
-    background-color: #C5D5DB;
+    background-color: #005EA8;
+    color: white;
 }
 
 .tumor.button {
@@ -26,7 +31,7 @@ input[type="radio"].radio:checked + label.tumor {
     color: white;
 }
 input[type="radio"].radio:checked:hover + label.tumor {
-    background-color: #005EA8;
+    background-color: #005392;
     color: white;
 }
 
@@ -44,4 +49,21 @@ div.tag.unk {
     min-width: none;
     padding: 0;
     background-color: #C5D5DB;
+}
+
+.barplot {
+    width: 100%;
+    background-image:
+        linear-gradient(#AE0060,#AE0060),
+        linear-gradient(#BDCFD6,#BDCFD6),
+        linear-gradient(#00AFA5,#00AFA5);
+    background-repeat:no-repeat;
+}
+
+.barplot-legend {
+    width: 40px;
+}
+
+.barplot-tablecell {
+    width: 100%;
 }

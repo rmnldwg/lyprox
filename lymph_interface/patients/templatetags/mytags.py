@@ -12,3 +12,11 @@ def bar(indexable, argstr):
     width = float(widthstr)
     total = sum(indexable)
     return width * indexable[i] / total
+
+@register.filter(name="sum")
+def mysum(indexable):
+    return sum(indexable)
+
+@register.filter(name="percent")
+def percent(indexable, i):
+    return f"{100 * indexable[i] / sum(indexable):.1f}"
