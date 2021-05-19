@@ -1,0 +1,18 @@
+.box {
+    min-height: 25em;
+}
+
+span.tag.True {
+    background-color: #BCFFFB;
+    color: #00AFA5;
+    min-width: 50px;
+}
+span.tag.False {
+    background-color: #FFBCE1;
+    color: #AE0060;
+    min-width: 50px;
+}
+span.tag.None {
+    background-color: #C5D5DB;
+    min-width: 50px;
+}

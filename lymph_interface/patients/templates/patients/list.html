@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+{% load static %}
+
+<div class="block">
+    <p class="title">List</p>
+    <p class="subtitle">All patients currently in the database</p>
+</div>
+
+<table class="block table is-fullwidth is-hoverable">
+    <thead>
+        <tr>
+            <th>Patient</th>
+            <th>Hash</th>
+            <th>date of diagnosis</th>
+            <th>gender</th>
+            <th>age</th>
+            <th>stage</th>
+            <th></th>
+        </tr>
+    </thead>
+
+    <tbody>
+        {% for patient in patient_list %}
+        <tr>
+            <td>{{ patient.pk }} </td>
+            <td>{{ patient.hash_value }} </td>
+            <td>{{ patient.diagnose_date | date:"Y-m-d" }} </td>
+            <td>{{ patient.gender }} </td>
+            <td>{{ patient.age }} </td>
+            <td>{{ patient.get_t_stage_display }} {{ patient.get_n_stage_display }} {{ patient.get_m_stage_display }} </td>
+            <td>
+                <div class="buttons has-addons is-right">
+                    <a class="tag button is-info is-small" href="{% url 'patients:detail' patient.pk %}">
+                        <span class="icon">
+                            <i class="fas fa-address-card"></i>
+                        </span>
+                        <span>details</span>
+                    </a>
+                    <button class="tag button is-danger is-small">
+                        <span>delete</span>
+                        <span class="icon">
+                            <i class="fas fa-trash"></i>
+                        </span>
+                    </button>
+                </div>
+            </td>
+        </tr>
+        {% endfor %}
+
+        <tr>
+            <td colspan="7">
+                <div class="field is-grouped is-grouped-centered">
+                    <div class="control">
+                        <a class="button is-info" href="{% url 'patients:create' %}">
+                            <span class="icon">
+                                <i class="fas fa-plus"></i>
+                            </span>
+                            <span>Add patient</span>
+                        </a>
+                    </div>
+                </div>
+            </td>
+        </tr>
+    </tbody>
+</table>
+{% endblock content %}

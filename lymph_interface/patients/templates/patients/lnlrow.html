@@ -1,0 +1,37 @@
+{% load mytags %}
+
+<td>
+    <div class="field has-addons">
+        {% for radio in radiobuttons %}
+        <p class="control">
+            {{ radio.tag }}
+            <label for="{{ radio.id_for_label }}" class="tag button is-info">
+                <i class="fas fa-lg fa-{{ radio.choice_label }}"></i>
+            </label>
+        </p>
+        {% endfor %}
+    </div>
+</td>
+
+<td class="barplot-tablecell">
+    <div class="field is-grouped is-justify-content-center">
+        <div class="control">
+            <span class="tag barplot-legend is-danger is-light" 
+                  data-tooltip="{{ stat|index:1 }} of {{ stat|sum }} ({{ stat|percent:1 }}%) patients have metastases in LNL {{ lnl }}">
+                {{ stat|index:1 }}
+            </span>
+        </div>
+        <div class="control is-expanded">
+            <span class="tag barplot has-text-white" 
+                  style="background-size: {{ stat|bar:'1,100' }}% 100%, calc({{ stat|bar:'1,100' }}% + {{ stat|bar:'0,100' }}%) 100%, 100% 100%;">
+                {{ stat|index:0 }}
+            </span>
+        </div>
+        <div class="control">
+            <span class="tag barplot-legend is-success is-light" 
+                  data-tooltip="{{ stat|index:-1 }} of {{ stat|sum }} ({{ stat|percent:-1 }}%) patients do not have metastases in LNL {{ lnl }}">
+                {{ stat|index:-1 }}
+            </span>
+        </div>
+    </div>
+</td>

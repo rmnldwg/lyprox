@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+{% load static %}
+
+<div class="block">
+    <p class="title">Index</p>
+    <p class="subtitle">Choose wisely</p>
+</div>
+
+<section class="block columns">
+    <div class="column">
+        <div class="box has-text-centered">
+            <a href="{% url 'patients:list' %}">
+                <span class="icon is-large">
+                    <i class="fas fa-2x fa-th-list"></i>
+                </span>
+            </a>
+            <p class="heading is-size-6">list of patients</p>
+        </div>
+    </div>
+    <div class="column">
+        <div class="box has-text-centered">
+            <a href="{% url 'patients:create' %}">
+                <span class="icon is-large">
+                    <i class="fas fa-2x fa-user-plus"></i>
+                </span>
+            </a>
+            <p class="heading is-size-6">add new patient</p>
+        </div>
+    </div>
+    <div class="column">
+        <div class="box has-text-centered">
+            <a href="{% url 'patients:upload' %}">
+                <span class="icon is-large">
+                    <i class="fas fa-2x fa-cloud-upload-alt"></i>
+                </span>
+            </a>
+            <p class="heading is-size-6">upload table of patients</p>
+        </div>
+    </div>
+    <div class="column">
+        <div class="box has-text-centered">
+            <a href="{% url 'patients:dashboard' %}">
+                <span class="icon is-large">
+                    <i class="fas fa-2x fa-chart-pie"></i>
+                </span>
+            </a>
+            <p class="heading is-size-6">dashboard</p>
+        </div>
+    </div>
+</section>
+{% endblock content %}

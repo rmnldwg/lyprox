@@ -1,0 +1,213 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+{% load static %}
+<link rel="stylesheet" type="text/css" href="{% static 'patients/detail.css' %}">
+
+<div class="block">
+    <p class="title">Patient {{ patient.pk }}</p>
+    <p class="subtitle">Hash-ID: {{ patient.hash_value }} </p>
+</div>
+
+<div class="block">
+    <div class="field is-grouped is-grouped-multiline">
+        <div class="control">
+            <div class="tags has-addons are-medium">
+                <span class="tag is-info">date of diagnosis</span>
+                <span class="tag is-primary">{{ patient.diagnose_date }}</span>
+            </div>
+        </div>
+        <div class="control">
+            <div class="tags has-addons are-medium">
+                <span class="tag is-info">age</span>
+                <span class="tag is-primary">{{ patient.age }}</span>
+            </div>            
+        </div>
+        <div class="control">
+            <div class="tags has-addons are-medium">
+                <span class="tag is-info">gender</span>
+                <span class="tag is-primary">{{ patient.gender }}</span>
+            </div>            
+        </div>
+        <div class="control">
+            <div class="tags has-addons are-medium">
+                <span class="tag is-info">alcohol abuse</span>
+                <span class="tag is-primary">{{ patient.alcohol_abuse }}</span>
+            </div>            
+        </div>
+        <div class="control">
+            <div class="tags has-addons are-medium">
+                <span class="tag is-info">nicotine abuse</span>
+                <span class="tag is-primary">{{ patient.nicotine_abuse }}</span>
+            </div>            
+        </div>
+        <div class="control">
+            <div class="tags has-addons are-medium">
+                <span class="tag is-info">HPV status</span>
+                <span class="tag is-primary">{{ patient.hpv_status }}</span>
+            </div>            
+        </div>
+        <div class="control">
+            <div class="tags has-addons are-medium">
+                <span class="tag is-info">stage</span>
+                <span class="tag is-primary">{{ patient.get_t_stage_display }} {{ patient.get_n_stage_display }} {{ patient.get_m_stage_display }}</span>
+            </div>            
+        </div>
+    </div>
+</div>
+
+<section class="columns is-multiline">
+    {% for tumor in patient.tumor_set.all %}
+    <div class="column is-4">
+        <div class="box">
+            <table class="table is-fullwidth">
+                <caption class="title is-4">Tumor {{ forloop.counter }}</caption>
+                <tbody>
+                    <tr>
+                        <td>T-stage</td>
+                        <td>{{ tumor.stage_prefix }}{{ tumor.get_t_stage_display }} </td>
+                    </tr>
+                    <tr>
+                        <td>location</td>
+                        <td>{{ tumor.get_location_display }} </td>
+                    </tr>
+                    <tr>
+                        <td>Subsite</td>
+                        <td>{{ tumor.get_subsite_display }}</td>
+                    </tr>
+                    <tr>
+                        <td>position</td>
+                        <td>{{ tumor.get_position_display }} </td>
+                    </tr>
+                    <tr>
+                        <td>extension</td>
+                        <td>{{ tumor.extension }} </td>
+                    </tr>
+                    <tr>
+                        <td>size</td>
+                        <td>{{ tumor.size }} cm³</td>
+                    </tr>
+                </tbody>
+            </table>
+            
+            <form action="{% url 'patients:change_tumor' patient.pk %}" method="POST">
+                {% csrf_token %}
+                <div class="buttons has-addons is-right">
+                    <button class="button is-small is-info" type="submit" name="edit_pk" value="{{ tumor.pk }}">
+                        <span class="icon is-small">
+                            <i class="fa fa-pen"></i>
+                        </span>
+                        <span>edit</span>
+                    </button>
+                    <button class="button is-small is-danger" type="submit" name="delete_pk" value="{{ tumor.pk }}">
+                        <span>delete</span>
+                        <span class="icon is-small">
+                            <i class="fas fa-trash"></i>
+                        </span>
+                        
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+    {% endfor %}
+    
+    <div class="column is-4">
+        <div class="box is-flex is-flex-direction-row is-justify-content-center is-align-content-center">
+            {% include 'patients/add_tumor.html' %}
+        </div>
+    </div>
+
+</section>
+
+<section class="section">
+    <table class="table is-fullwidth is-hoverable">
+        <caption class="title is-4">lymph node level involvement</caption>
+
+        <col style="width: 10%;">
+        <col style="width: 10%;">
+        <col style="width: 10%;">
+        <col style="width: 5%;">
+        <col style="width: 5%;">
+        <col style="width: 5%;">
+        <col style="width: 5%;">
+        <col style="width: 5%;">
+        <col style="width: 5%;">
+        <col style="width: 5%;">
+        <col style="width: 5%;">
+        <col style="width: 15%;">
+
+        <thead>
+            <tr class="header">
+                <th>diagnose date</th>
+                <th>modality</th>
+                <th>side</th>
+                <th>Ia</th>
+                <th>Ib</th>
+                <th>IIa</th>
+                <th>IIb</th>
+                <th>III</th>
+                <th>IV</th>
+                <th>V</th>
+                <th>VII</th>
+                <th></th>
+            </tr>
+        </thead>
+
+        <tbody>
+            {% for diagnose in patient.diagnose_set.all %}
+            <tr>
+                <td>{{ diagnose.diagnose_date|date:"d. M Y" }}</td>
+                <td>{{ diagnose.get_modality_display }}</td>
+                <td>{{ diagnose.get_side_display }}</td>
+                <td><span class="tag {{ diagnose.Ia }}">{{ diagnose.Ia }}</span></td>
+                <td><span class="tag {{ diagnose.Ib }}">{{ diagnose.Ib }}</span></td>
+                <td><span class="tag {{ diagnose.IIa }}">{{ diagnose.IIa }}</span></td>
+                <td><span class="tag {{ diagnose.IIb }}">{{ diagnose.IIb }}</span></td>
+                <td><span class="tag {{ diagnose.III }}">{{ diagnose.III }}</span></td>
+                <td><span class="tag {{ diagnose.IV }}">{{ diagnose.IV }}</span></td>
+                <td><span class="tag {{ diagnose.V }}">{{ diagnose.V }}</span></td>
+                <td><span class="tag {{ diagnose.VII }}">{{ diagnose.VII }}</span></td>
+                <td>
+                    <form action="{% url 'patients:change_diagnose' patient.pk %}" method="POST">
+                        {% csrf_token %}
+                        <div class="buttons has-addons is-right">
+                            <button class="tag button is-small is-info" type="submit" name="edit_pk" value="{{ diagnose.pk }}">
+                                <span class="icon is-small">
+                                    <i class="fas fa-pen"></i>
+                                </span>
+                                <span>edit</span>
+                            </button>
+                            <button class="tag button is-small is-danger" type="submit" name="delete_pk" value="{{ diagnose.pk }}">
+                                <span>delete</span>
+                                <span class="icon is-small">
+                                    <i class="fas fa-trash"></i>
+                                </span>
+                            </button>
+                        </div>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+            
+            {% include 'patients/add_diagnose.html' %}
+        </tbody>
+    </table>
+</section>
+
+<div class="level">
+    <button class="button level-left">
+        <span class="icon">
+            <i class="fas fa-angle-left"></i>
+        </span>
+        <span>Previous</span>
+    </button>
+    <button class="button level-right">
+        <span>Next</span>
+        <span class="icon">
+            <i class="fas fa-angle-right"></i>
+        </span>
+    </button>
+</div>
+{% endblock content %}

@@ -1,0 +1,65 @@
+{% load static %}
+
+{% if action == "add_tumor" %}
+<form method="POST" action="{% url 'patients:add_tumor' patient.pk %}">
+    {% csrf_token %}
+    <table class="table">
+        <caption class="title is-4">Add tumor</caption>
+        <tbody>
+            <tr>
+                <td>T-stage</td>
+                <td class="field is-grouped is-grouped-left">
+                    <div class="control">
+                        {{ tumor_form.stage_prefix }}
+                    </div>
+                    <div class="control">
+                        {{ tumor_form.t_stage }}
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>location</td>
+                <td>{{ tumor_form.subsite }} </td>
+            </tr>
+            <tr>
+                <td>position</td>
+                <td>{{ tumor_form.position }} </td>
+            </tr>
+            <tr>
+                <td>extension</td>
+                <td>{{ tumor_form.extension }} </td>
+            </tr>
+            <tr>
+                <td>size</td>
+                <td>{{ tumor_form.size }} </td>
+            </tr>
+        </tbody>
+    </table>
+    <div class="buttons has-addons is-right">
+        <button class="button is-small is-success" type="submit" value="add">
+            <span class="icon">
+                <i class="fa fa-plus"></i>
+            </span>
+            <span>add</span>
+        </button>
+        <a class="button is-small is-danger" href="{% url 'patients:detail' patient.pk %}">
+            <span>delete</span>
+            <span class="icon">
+                <i class="fas fa-trash"></i>
+            </span>
+        </a>
+    </div>
+</form>
+
+{% else %}
+<div class="field is-grouped is-grouped-centered is-align-self-center">
+    <div class="control">
+        <a class="button is-info" href="{% url 'patients:add_tumor' patient.pk %}">
+            <span class="icon">
+                <i class="fa fa-plus"></i>
+            </span>
+            <span>Add tumor</span>
+        </a>
+    </div>
+</div>
+{% endif %}
