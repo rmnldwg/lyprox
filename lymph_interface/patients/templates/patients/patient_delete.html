@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="block">
+    <p class="title">Delete</p>
+    <p class="subtitle">Are you sure you want to delete?</p>
+</div>
+
+<section class="block columns is-centered">
+    <div class="column is-half">
+        <div class="box">
+            <form action="." method="post">
+                {% csrf_token %}
+
+                <div class="field is-grouped is-grouped-centered">
+                    <div class="control">
+                        <a href="{% url 'patients:detail' patient.pk %}" class="button is-info">
+                            <span class="icon">
+                                <i class="fas fa-arrow-left"></i>
+                            </span>
+                            <span>Cancel</span>
+                        </a>
+                    </div>
+
+                    <div class="control">
+                        <button class="button is-danger" type="submit">
+                            <span class="icon">
+                                <i class="fas fa-trash"></i>
+                            </span>
+                            <span>Delete</span>
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</section>
+{% endblock content %}

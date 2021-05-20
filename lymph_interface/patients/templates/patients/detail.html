@@ -6,7 +6,21 @@
 <link rel="stylesheet" type="text/css" href="{% static 'patients/detail.css' %}">
 
 <div class="block">
-    <p class="title">Patient {{ patient.pk }}</p>
+    <p class="title">
+        Patient {{ patient.pk }} 
+        <a href="{% url 'patients:update' patient.pk %}" class="button">
+            <span class="icon">
+                <i class="fas fa-pen"></i>
+            </span>
+            <span>Edit</span>
+        </a>
+        <a href="{% url 'patients:delete' patient.pk %}" class="button is-danger">
+            <span class="icon">
+                <i class="fas fa-trash"></i>
+            </span>
+            <span>Delete</span>
+        </a>
+    </p>
     <p class="subtitle">Hash-ID: {{ patient.hash_value }} </p>
 </div>
 

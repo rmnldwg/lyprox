@@ -14,16 +14,7 @@ import pandas
 import os
 
 
-
 class PatientForm(forms.ModelForm):
-    
-    first_name = forms.CharField(
-        widget=forms.widgets.TextInput(attrs={"class": "input"}))
-    last_name = forms.CharField(
-        widget=forms.widgets.TextInput(attrs={"class": "input"}))
-    birthday = forms.DateField(widget=NumberInput(attrs={"class": "input", 
-                                                         "type": "date"}))
-    
     class Meta:
         model = Patient
         fields = ["gender", 
@@ -50,8 +41,19 @@ class PatientForm(forms.ModelForm):
                                               attrs={"class": "select"}),
                    "n_stage": forms.Select(attrs={"class": "select"}),
                    "m_stage": forms.Select(attrs={"class": "select"})}
-        
-        
+
+
+
+class PatientCreateForm(PatientForm): 
+    first_name = forms.CharField(
+        widget=forms.widgets.TextInput(attrs={"class": "input",
+                                              "placeholder": "First name"}))
+    last_name = forms.CharField(
+        widget=forms.widgets.TextInput(attrs={"class": "input",
+                                              "placeholder": "Last name"}))
+    birthday = forms.DateField(widget=NumberInput(attrs={"class": "input", 
+                                                         "type": "date"}))
+    
     def save(self, commit=True):
         """Compute hashed ID and age from name, birthday and diagnose date."""
         patient = super(PatientForm, self).save(commit=False)
@@ -72,9 +74,11 @@ class PatientForm(forms.ModelForm):
         unique_hash = self._get_identifier(cleaned_data)
         
         try:
-            previous_patient = Patient.objects.get(hash_value=unique_hash)
+            prev_patient_hash = Patient.objects.get(hash_value=unique_hash)
             raise forms.ValidationError(_("Identifier already exists in "
                                           "database. Possible duplicate?"))
+            
+        # if the above does not throw an exception, one can proceed
         except Patient.DoesNotExist: 
             cleaned_data["hash_value"] = unique_hash
             return cleaned_data

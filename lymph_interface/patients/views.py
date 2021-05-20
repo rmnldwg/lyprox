@@ -5,7 +5,7 @@ from django.views import generic
 import time
 
 from .models import Patient, Tumor, Diagnose, MODALITIES
-from .forms import PatientForm, TumorForm, DiagnoseForm, DataFileForm, DashboardForm, ValidationError
+from .forms import PatientCreateForm, PatientForm, TumorForm, DiagnoseForm, DataFileForm, DashboardForm, ValidationError
 from .utils import create_from_pandas, query, query2statistics
 
 
@@ -13,28 +13,40 @@ class ListView(generic.ListView):
     template_name = "patients/list.html"
     context_object_name = "patient_list"
     
-    def get_queryset(self):
+    def get_queryset(self, patients=Patient.objects.all()):
         """List all patients in the database."""
-        return Patient.objects.all()
-    
+        return patients
     
     
 class DetailView(generic.DetailView):
     model = Patient
     template_name = "patients/detail.html"
+
+
+class CreatePatientView(generic.FormView):
+    model = Patient
+    form_class = PatientCreateForm
+    template_name = "patients/patient_create.html"
+    
+    def form_valid(self, form) -> HttpResponse:
+        patient = form.save()
+        pk = patient.pk
+        return redirect("patients:detail", pk=pk)
     
     
+class UpdatePatientView(generic.UpdateView):
+    model = Patient
+    form_class = PatientForm
+    template_name = "patients/patient_create.html"
     
-def create_patient(request):
-    """View to add new patients to the database."""
-    form = PatientForm(request.POST or None)
+    def get_success_url(self) -> str:
+        return redirect("patients:detail", pk=self.kwargs["pk"])
     
-    if form.is_valid():
-        new_patient = form.save()
-        return redirect("patients:add_tumor", pk=new_patient.pk)
-        
-    context = {"form": form}
-    return render(request, "patients/create.html", context)
+    
+class DeletePatientView(generic.DeleteView):
+    model = Patient
+    template_name = "patients/patient_delete.html"
+    success_url = "patients/"
 
 
 def upload_patients(request):

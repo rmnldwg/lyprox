@@ -1,0 +1,122 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="block">
+    <p class="title">Create</p>
+    <p class="subtitle">Define a new patient</p>
+</div>
+
+<section class="block columns is-centered">
+    <div class="column is-5">
+        <div class="box">
+            <form action="." method="post">
+                {% csrf_token %}
+
+                <div class="is-flex is-justify-content-flex-row">
+                    <div class="field">
+                        <label for="{{ form.first_name.id_for_label }}" class="label">
+                            {{ form.first_name.label }}
+                        </label>
+                        <div class="control is-expanded">
+                            {{ form.first_name }}
+                        </div>
+                    </div>
+                    
+                    <div class="field">
+                        <label for="{{ form.last_name.id_for_label }}" class="label">
+                            {{ form.last_name.label }}
+                        </label>
+                        <div class="control is-expanded">
+                            {{ form.last_name }}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="field">
+                    <label for="{{ form.birthday.id_for_label }}" class="label">
+                        {{ form.birthday.label }}
+                    </label>
+                    <div class="control is-expanded">
+                        {{ form.birthday }}
+                    </div>
+                </div>
+
+                <div class="field">
+                    <label for="{{ form.gender.id_for_label }}" class="label">
+                        {{ form.gender.label }}
+                    </label>
+                    <div class="select is-expanded">
+                        {{ form.gender }}
+                    </div>
+                </div>
+
+                <div class="field">
+                    <label for="{{ form.n_stage.id_for_label }}" class="label">
+                        {{ form.n_stage.label }}
+                    </label>
+                    <div class="select is-expanded">
+                        {{ form.n_stage }}
+                    </div>
+                </div>
+
+                <div class="field">
+                    <label for="{{ form.m_stage.id_for_label }}" class="label">
+                        {{ form.m_stage.label }}
+                    </label>
+                    <div class="select is-expanded">
+                        {{ form.m_stage }}
+                    </div>
+                </div>
+
+                <div class="field">
+                    <label for="{{ form.alcohol_abuse.id_for_label }}" class="label">
+                        {{ form.alcohol_abuse.label }}
+                    </label>
+                    <div class="select is-expanded">
+                        {{ form.alcohol_abuse }}
+                    </div>
+                </div>
+
+                <div class="field">
+                    <label for="{{ form.nicotine_abuse.id_for_label }}" class="label">
+                        {{ form.nicotine_abuse.label }}
+                    </label>
+                    <div class="select is-expanded">
+                        {{ form.nicotine_abuse }}
+                    </div>
+                </div>
+
+                <div class="field">
+                    <label for="{{ form.hpv_status.id_for_label }}" class="label">
+                        {{ form.hpv_status.label }}
+                    </label>
+                    <div class="select is-expanded">
+                        {{ form.hpv_status }}
+                    </div>
+                </div>
+
+
+                <div class="field is-grouped is-grouped-right">
+                    <div class="control">
+                        <a href="{% url 'patients:list' %}" class="button is-info">
+                            <span class="icon">
+                                <i class="fas fa-arrow-left"></i>
+                            </span>
+                            <span>Cancel</span>
+                        </a>
+                    </div>
+                    <div class="control">
+                        <button class="button is-primary" type="submit">
+                            <span class="icon">
+                                <i class="fas fa-save"></i>
+                            </span>
+                            <span>Save</span>
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</section>
+{% endblock content %}
