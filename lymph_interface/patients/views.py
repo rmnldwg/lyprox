@@ -2,6 +2,8 @@ from django.shortcuts import render, get_object_or_404, reverse, redirect
 from django.http import HttpResponse, Http404
 from django.views import generic
 
+from typing import Any, Dict, List
+
 import time
 
 from .models import Patient, Tumor, Diagnose, MODALITIES
@@ -20,7 +22,7 @@ class ListView(generic.ListView):
     
 class DetailView(generic.DetailView):
     model = Patient
-    template_name = "patients/detail.html"
+    template_name = "patients/patient_detail.html"
 
 
 class CreatePatientView(generic.FormView):
@@ -28,10 +30,13 @@ class CreatePatientView(generic.FormView):
     form_class = PatientCreateForm
     template_name = "patients/patient_create.html"
     
-    def form_valid(self, form) -> HttpResponse:
-        patient = form.save()
-        pk = patient.pk
-        return redirect("patients:detail", pk=pk)
+    def get_success_url(self) -> str:
+        return redirect("patients:detail", pk=self.kwargs["pk"])
+    
+    def get_context_data(self, **kwargs: Any) -> Dict[str, Any]:
+        context = super().get_context_data(**kwargs)
+        context["create"] = True
+        return context
     
     
 class UpdatePatientView(generic.UpdateView):
@@ -41,6 +46,11 @@ class UpdatePatientView(generic.UpdateView):
     
     def get_success_url(self) -> str:
         return redirect("patients:detail", pk=self.kwargs["pk"])
+    
+    def get_context_data(self, **kwargs: Any) -> Dict[str, Any]:
+        context = super().get_context_data(**kwargs)
+        context["create"] = False
+        return context
     
     
 class DeletePatientView(generic.DeleteView):

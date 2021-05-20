@@ -2,16 +2,12 @@
 
 {% block content %}
 
-<div class="block">
-    <p class="title">Delete</p>
-    <p class="subtitle">Are you sure you want to delete?</p>
-</div>
-
 <section class="block columns is-centered">
     <div class="column is-half">
         <div class="box">
             <form action="." method="post">
                 {% csrf_token %}
+                <p class="title is-3">Delete patient {{ patient.pk }}?</p>
 
                 <div class="field is-grouped is-grouped-centered">
                     <div class="control">

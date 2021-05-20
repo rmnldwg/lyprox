@@ -5,24 +5,32 @@
 {% load static %}
 <link rel="stylesheet" type="text/css" href="{% static 'patients/detail.css' %}">
 
-<div class="block">
-    <p class="title">
-        Patient {{ patient.pk }} 
-        <a href="{% url 'patients:update' patient.pk %}" class="button">
-            <span class="icon">
-                <i class="fas fa-pen"></i>
-            </span>
-            <span>Edit</span>
-        </a>
-        <a href="{% url 'patients:delete' patient.pk %}" class="button is-danger">
-            <span class="icon">
-                <i class="fas fa-trash"></i>
-            </span>
-            <span>Delete</span>
-        </a>
-    </p>
-    <p class="subtitle">Hash-ID: {{ patient.hash_value }} </p>
+<div class="level">
+    <div class="level-left">
+        <div class="level-item">
+            <p class="title">Patient {{ patient.pk }}</p>
+        </div>
+    </div>
+    <div class="level-right">
+        <div class="level-item">
+            <div class="buttons">
+                <a href="{% url 'patients:update' patient.pk %}" class="button is-info">
+                    <span class="icon">
+                        <i class="fas fa-pen"></i>
+                    </span>
+                    <span>Edit</span>
+                </a>
+                <a href="{% url 'patients:delete' patient.pk %}" class="button is-danger">
+                    <span>Delete</span>
+                    <span class="icon">
+                        <i class="fas fa-trash"></i>
+                    </span>
+                </a>
+            </div>
+        </div>
+    </div>
 </div>
+<p class="subtitle">Hash-ID: {{ patient.hash_value }}</p>
 
 <div class="block">
     <div class="field is-grouped is-grouped-multiline">
@@ -46,6 +54,14 @@
         </div>
         <div class="control">
             <div class="tags has-addons are-medium">
+                <span class="tag is-info">stage</span>
+                <span class="tag is-primary">{{ patient.get_t_stage_display }} {{ patient.get_n_stage_display }} {{ patient.get_m_stage_display }}</span>
+            </div>            
+        </div>
+    </div>
+    <div class="field is-grouped is-grouped-multiline">
+        <div class="control">
+            <div class="tags has-addons are-medium">
                 <span class="tag is-info">alcohol abuse</span>
                 <span class="tag is-primary">{{ patient.alcohol_abuse }}</span>
             </div>            
@@ -60,12 +76,6 @@
             <div class="tags has-addons are-medium">
                 <span class="tag is-info">HPV status</span>
                 <span class="tag is-primary">{{ patient.hpv_status }}</span>
-            </div>            
-        </div>
-        <div class="control">
-            <div class="tags has-addons are-medium">
-                <span class="tag is-info">stage</span>
-                <span class="tag is-primary">{{ patient.get_t_stage_display }} {{ patient.get_n_stage_display }} {{ patient.get_m_stage_display }}</span>
             </div>            
         </div>
     </div>

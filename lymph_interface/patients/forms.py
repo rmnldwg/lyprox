@@ -53,6 +53,8 @@ class PatientCreateForm(PatientForm):
                                               "placeholder": "Last name"}))
     birthday = forms.DateField(widget=NumberInput(attrs={"class": "input", 
                                                          "type": "date"}))
+    diagnose_date = forms.DateField(widget=NumberInput(attrs={"class": "input",
+                                                              "type": "date"}))
     
     def save(self, commit=True):
         """Compute hashed ID and age from name, birthday and diagnose date."""
