@@ -1,3 +1,4 @@
+# from lymph_interface import patients
 from django.shortcuts import render, get_object_or_404, reverse, redirect
 from django.http import HttpResponse, Http404
 from django.views import generic
@@ -11,13 +12,18 @@ from .forms import PatientCreateForm, PatientForm, TumorForm, DiagnoseForm, Data
 from .utils import create_from_pandas, query, query2statistics
 
 
+# PATIENT related views
 class ListView(generic.ListView):
     template_name = "patients/list.html"
     context_object_name = "patient_list"
     
-    def get_queryset(self, patients=Patient.objects.all()):
+    def get_queryset(self, *args, **kwargs):
         """List all patients in the database."""
-        return patients
+        try:
+            queryset = kwargs["queryset"]
+        except KeyError:
+            queryset = Patient.objects.all()
+        return queryset
     
     
 class DetailView(generic.DetailView):
@@ -28,28 +34,28 @@ class DetailView(generic.DetailView):
 class CreatePatientView(generic.FormView):
     model = Patient
     form_class = PatientCreateForm
-    template_name = "patients/patient_create.html"
+    template_name = "patients/patient_form.html"
     
     def get_success_url(self) -> str:
         return redirect("patients:detail", pk=self.kwargs["pk"])
     
     def get_context_data(self, **kwargs: Any) -> Dict[str, Any]:
         context = super().get_context_data(**kwargs)
-        context["create"] = True
+        context["action"] = "create_patient"
         return context
     
-    
+      
 class UpdatePatientView(generic.UpdateView):
     model = Patient
     form_class = PatientForm
-    template_name = "patients/patient_create.html"
+    template_name = "patients/patient_form.html"
     
     def get_success_url(self) -> str:
         return redirect("patients:detail", pk=self.kwargs["pk"])
     
     def get_context_data(self, **kwargs: Any) -> Dict[str, Any]:
         context = super().get_context_data(**kwargs)
-        context["create"] = False
+        context["action"] = "edit_patient"
         return context
     
     
@@ -81,7 +87,22 @@ def upload_patients(request):
     context = {"upload_succes": False, "form": form}
     return render(request, "patients/upload.html", context)
     
+# TUMOR related views
+class CreateTumorView(generic.FormView):
+    model = Tumor
+    form_class = TumorForm
+    template_name = "patients/patient_detail.html"
+
+    def get_success_url(self) -> str:
+        return redirect("patients:detail", pk=self.kwargs["pk"])
     
+    def get_context_data(self, **kwargs: Any) -> Dict[str, Any]:
+        context = super().get_context_data(**kwargs)
+        context["action"] = "create_tumor"
+        context["patient"] = Patient.objects.get(pk=self.kwargs["pk"])
+        return context
+
+
 def add_tumor_to_patient(request, *args, **kwargs):
     """View to add new tumors and diagnoses to existing patients."""
     tumor_form = TumorForm(request.POST or None)
@@ -229,6 +250,7 @@ def dashboard(request):
     
     if request.method == "POST" and form.is_valid():
         match_patients, match_diagnoses_dict = query(form.cleaned_data)
+        
         statistics = query2statistics(match_patients,
                                       match_diagnoses_dict,
                                       **form.cleaned_data)

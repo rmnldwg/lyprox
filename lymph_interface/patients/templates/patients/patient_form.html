@@ -5,16 +5,16 @@
 <section class="block columns is-centered">
     <div class="column is-5">
         <div class="box">
-            {% if create %}
+            {% if action == "create_patient" %}
             <p class="title is-3">New patient</p>
-            {% else %}
+            {% elif action == "edit_patient" %}
             <p class="title is-3">Edit patient {{ patient.pk }}</p>
             {% endif %}
 
             <form action="." method="post">
                 {% csrf_token %}
 
-                {% if create %}
+                {% if action == "create_patient" %}
                 <div class="field is-grouped">
                     <div class="control is-expanded">
                         <label for="{{ form.first_name.id_for_label }}" class="label is-hidden">
@@ -103,14 +103,14 @@
 
                 <div class="field is-grouped is-grouped-right">
                     <div class="control">
-                        {% if create %}
+                        {% if action == "create_patient" %}
                         <a href="{% url 'patients:list' %}" class="button is-info">
                             <span class="icon">
                                 <i class="fas fa-arrow-left"></i>
                             </span>
                             <span>Cancel</span>
                         </a>
-                        {% else %}
+                        {% elif action == "edit_patient" %}
                         <a href="{% url 'patients:detail' patient.pk %}" class="button is-info">
                             <span class="icon">
                                 <i class="fas fa-arrow-left"></i>

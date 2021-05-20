@@ -1,6 +1,6 @@
 {% load static %}
 
-{% if action == "add_tumor" %}
+{% if action == "create_tumor" %}
 <form method="POST" action="{% url 'patients:add_tumor' patient.pk %}">
     {% csrf_token %}
     <table class="table">
@@ -10,44 +10,44 @@
                 <td>T-stage</td>
                 <td class="field is-grouped is-grouped-left">
                     <div class="control">
-                        {{ tumor_form.stage_prefix }}
+                        {{ form.stage_prefix }}
                     </div>
                     <div class="control">
-                        {{ tumor_form.t_stage }}
+                        {{ form.t_stage }}
                     </div>
                 </td>
             </tr>
             <tr>
                 <td>location</td>
-                <td>{{ tumor_form.subsite }} </td>
+                <td>{{ form.subsite }} </td>
             </tr>
             <tr>
                 <td>position</td>
-                <td>{{ tumor_form.position }} </td>
+                <td>{{ form.position }} </td>
             </tr>
             <tr>
                 <td>extension</td>
-                <td>{{ tumor_form.extension }} </td>
+                <td>{{ form.extension }} </td>
             </tr>
             <tr>
                 <td>size</td>
-                <td>{{ tumor_form.size }} </td>
+                <td>{{ form.size }} </td>
             </tr>
         </tbody>
     </table>
-    <div class="buttons has-addons is-right">
-        <button class="button is-small is-success" type="submit" value="add">
+    <div class="buttons is-right">
+        <a class="button is-small is-info" href="{% url 'patients:detail' patient.pk %}">
             <span class="icon">
-                <i class="fa fa-plus"></i>
+                <i class="fas fa-arrow-left"></i>
             </span>
-            <span>add</span>
-        </button>
-        <a class="button is-small is-danger" href="{% url 'patients:detail' patient.pk %}">
-            <span>delete</span>
-            <span class="icon">
-                <i class="fas fa-trash"></i>
-            </span>
+            <span>Cancel</span>
         </a>
+        <button class="button is-small is-primary" type="submit">
+            <span class="icon">
+                <i class="fa fa-save"></i>
+            </span>
+            <span>Save</span>
+        </button>
     </div>
 </form>
 
