@@ -82,66 +82,31 @@
 </div>
 
 <section class="columns is-multiline">
-    {% for tumor in patient.tumor_set.all %}
-    <div class="column is-4">
-        <div class="box">
-            <table class="table is-fullwidth">
-                <caption class="title is-4">Tumor {{ forloop.counter }}</caption>
-                <tbody>
-                    <tr>
-                        <td>T-stage</td>
-                        <td>{{ tumor.stage_prefix }}{{ tumor.get_t_stage_display }} </td>
-                    </tr>
-                    <tr>
-                        <td>location</td>
-                        <td>{{ tumor.get_location_display }} </td>
-                    </tr>
-                    <tr>
-                        <td>Subsite</td>
-                        <td>{{ tumor.get_subsite_display }}</td>
-                    </tr>
-                    <tr>
-                        <td>position</td>
-                        <td>{{ tumor.get_position_display }} </td>
-                    </tr>
-                    <tr>
-                        <td>extension</td>
-                        <td>{{ tumor.extension }} </td>
-                    </tr>
-                    <tr>
-                        <td>size</td>
-                        <td>{{ tumor.size }} cm³</td>
-                    </tr>
-                </tbody>
-            </table>
-            
-            <form action="{% url 'patients:change_tumor' patient.pk %}" method="POST">
-                {% csrf_token %}
-                <div class="buttons has-addons is-right">
-                    <button class="button is-small is-info" type="submit" name="edit_pk" value="{{ tumor.pk }}">
-                        <span class="icon is-small">
-                            <i class="fa fa-pen"></i>
-                        </span>
-                        <span>edit</span>
-                    </button>
-                    <button class="button is-small is-danger" type="submit" name="delete_pk" value="{{ tumor.pk }}">
-                        <span>delete</span>
-                        <span class="icon is-small">
-                            <i class="fas fa-trash"></i>
-                        </span>
-                        
-                    </button>
-                </div>
-            </form>
-        </div>
-    </div>
+    {% for tumor in tumors %}
+    {% include 'patients/tumor_detail.html' %}
     {% endfor %}
     
+    {% if action == "create_tumor" or action == "update_tumor" %}
+    {% include 'patients/tumor_form.html' %}
+    {% elif action == "delete_tumor" %}
+    {% include 'patients/tumor_delete.html' %}
+    {% else %}
+
     <div class="column is-4">
         <div class="box is-flex is-flex-direction-row is-justify-content-center is-align-content-center">
-            {% include 'patients/tumor_form.html' %}
+            <div class="field is-grouped is-grouped-centered is-align-self-center">
+                <div class="control">
+                    <a class="button is-info" href="{% url 'patients:tumor_create' pk=patient.pk %}">
+                        <span class="icon">
+                            <i class="fa fa-plus"></i>
+                        </span>
+                        <span>Add tumor</span>
+                    </a>
+                </div>
+            </div>
         </div>
     </div>
+    {% endif %}
 
 </section>
 

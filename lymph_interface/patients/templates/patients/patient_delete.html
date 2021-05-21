@@ -5,7 +5,7 @@
 <section class="block columns is-centered">
     <div class="column is-half">
         <div class="box">
-            <form action="." method="post">
+            <form action="{% url 'patients:delete' patient.pk %}" method="post">
                 {% csrf_token %}
                 <p class="title is-3">Delete patient {{ patient.pk }}?</p>
 
@@ -20,11 +20,11 @@
                     </div>
 
                     <div class="control">
-                        <button class="button is-danger" type="submit">
+                        <button class="button is-danger" type="submit" value="confirm">
+                            <span>Delete</span>
                             <span class="icon">
                                 <i class="fas fa-trash"></i>
                             </span>
-                            <span>Delete</span>
                         </button>
                     </div>
                 </div>

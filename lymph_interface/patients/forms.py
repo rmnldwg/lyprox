@@ -42,20 +42,15 @@ class PatientForm(forms.ModelForm):
                    "n_stage": forms.Select(attrs={"class": "select"}),
                    "m_stage": forms.Select(attrs={"class": "select"})}
 
-
-
-class PatientCreateForm(PatientForm): 
     first_name = forms.CharField(
         widget=forms.widgets.TextInput(attrs={"class": "input",
                                               "placeholder": "First name"}))
     last_name = forms.CharField(
         widget=forms.widgets.TextInput(attrs={"class": "input",
-                                              "placeholder": "Last name"}))
+                                              "placeholder": "Last name"}))   
     birthday = forms.DateField(widget=NumberInput(attrs={"class": "input", 
                                                          "type": "date"}))
-    diagnose_date = forms.DateField(widget=NumberInput(attrs={"class": "input",
-                                                              "type": "date"}))
-    
+
     def save(self, commit=True):
         """Compute hashed ID and age from name, birthday and diagnose date."""
         patient = super(PatientForm, self).save(commit=False)
@@ -85,7 +80,7 @@ class PatientCreateForm(PatientForm):
             cleaned_data["hash_value"] = unique_hash
             return cleaned_data
         
-    
+        
     def _compute_age(self):
         """Compute age of patient at diagnose/admission."""
         bd = self.cleaned_data["birthday"]
@@ -95,21 +90,22 @@ class PatientCreateForm(PatientForm):
         if (dd.month < bd.month) or (dd.month == bd.month and dd.day < bd.day):
             age -= 1
             
+        self.cleaned_data.pop("birthday")
         return age
     
     
-    def _get_identifier(self, cleaned_data):
+    def _get_identifier(self):
         """Compute the hashed undique identifier from fields that are of 
         provacy concern."""
-        hash_value = compute_hash(cleaned_data["first_name"], 
-                                  cleaned_data["last_name"], 
-                                  cleaned_data["birthday"])
-        cleaned_data.pop("first_name")
-        cleaned_data.pop("last_name")
+        hash_value = compute_hash(self.cleaned_data["first_name"], 
+                                  self.cleaned_data["last_name"],
+                                  self.cleaned_data["birthday"])
+        self.cleaned_data.pop("first_name")
+        self.cleaned_data.pop("last_name")
         return hash_value
-        
-        
-        
+
+
+
 class TumorForm(forms.ModelForm):
     class Meta:
         model = Tumor
@@ -129,10 +125,9 @@ class TumorForm(forms.ModelForm):
         }
         
         
-    def save(self, pk, commit=True):
+    def save(self, commit=True):
         """Save tumor to existing patient."""
         tumor = super(TumorForm, self).save(commit=False)
-        tumor.patient = Patient.objects.get(pk=pk)
         
         # automatically extract location from subsite
         subsite_dict = dict(SUBSITES)
@@ -143,12 +138,12 @@ class TumorForm(forms.ModelForm):
             if tumor.get_subsite_display() in loc_subsites:
                 tumor.location = i
         
-        # update patient's T-stage to be the worst of all its tumors'
-        if tumor.t_stage > tumor.patient.t_stage:
-            tumor.patient.t_stage = tumor.t_stage 
-            tumor.patient.save()
-        
         if commit:
+            # update patient's T-stage to be the worst of all its tumors'
+            if tumor.t_stage > tumor.patient.t_stage:
+                tumor.patient.t_stage = tumor.t_stage 
+                tumor.patient.save()
+                
             tumor.save()
             
         return tumor

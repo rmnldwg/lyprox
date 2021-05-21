@@ -1,65 +1,68 @@
 {% load static %}
 
-{% if action == "create_tumor" %}
-<form method="POST" action="{% url 'patients:add_tumor' patient.pk %}">
-    {% csrf_token %}
-    <table class="table">
-        <caption class="title is-4">Add tumor</caption>
-        <tbody>
-            <tr>
-                <td>T-stage</td>
-                <td class="field is-grouped is-grouped-left">
-                    <div class="control">
-                        {{ form.stage_prefix }}
-                    </div>
-                    <div class="control">
-                        {{ form.t_stage }}
-                    </div>
-                </td>
-            </tr>
-            <tr>
-                <td>location</td>
-                <td>{{ form.subsite }} </td>
-            </tr>
-            <tr>
-                <td>position</td>
-                <td>{{ form.position }} </td>
-            </tr>
-            <tr>
-                <td>extension</td>
-                <td>{{ form.extension }} </td>
-            </tr>
-            <tr>
-                <td>size</td>
-                <td>{{ form.size }} </td>
-            </tr>
-        </tbody>
-    </table>
-    <div class="buttons is-right">
-        <a class="button is-small is-info" href="{% url 'patients:detail' patient.pk %}">
-            <span class="icon">
-                <i class="fas fa-arrow-left"></i>
-            </span>
-            <span>Cancel</span>
-        </a>
-        <button class="button is-small is-primary" type="submit">
-            <span class="icon">
-                <i class="fa fa-save"></i>
-            </span>
-            <span>Save</span>
-        </button>
-    </div>
-</form>
+<div class="column is-4">
+    <div class="box is-flex is-flex-direction-row is-justify-content-center is-align-content-center">
+        {% if action == "create_tumor" %}
+        <form method="POST" action="{% url 'patients:tumor_create' pk=patient.pk %}">
 
-{% else %}
-<div class="field is-grouped is-grouped-centered is-align-self-center">
-    <div class="control">
-        <a class="button is-info" href="{% url 'patients:add_tumor' patient.pk %}">
-            <span class="icon">
-                <i class="fa fa-plus"></i>
-            </span>
-            <span>Add tumor</span>
-        </a>
+        {% elif action == "update_tumor" %}
+        <form method="POST" action="{% url 'patients:tumor_update' pk=patient.pk tumor_pk=tumor.pk %}">
+            
+        {% endif %}
+            {% csrf_token %}
+            <table class="table">
+
+                {% if action == "create_tumor" %}
+                <caption class="title is-4">Add tumor</caption>
+
+                {% elif action == "update_tumor" %}
+                <caption class="title is-4">Edit tumor {{ tumor.pk }}</caption>
+
+                {% endif %}
+                <tbody>
+                    <tr>
+                        <td>T-stage</td>
+                        <td class="field is-grouped is-grouped-left">
+                            <div class="control">
+                                {{ form.stage_prefix }}
+                            </div>
+                            <div class="control">
+                                {{ form.t_stage }}
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>location</td>
+                        <td>{{ form.subsite }} </td>
+                    </tr>
+                    <tr>
+                        <td>position</td>
+                        <td>{{ form.position }} </td>
+                    </tr>
+                    <tr>
+                        <td>extension</td>
+                        <td>{{ form.extension }} </td>
+                    </tr>
+                    <tr>
+                        <td>size</td>
+                        <td>{{ form.size }} </td>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="buttons is-right">
+                <a class="button is-small is-info" href="{% url 'patients:detail' pk=patient.pk %}">
+                    <span class="icon">
+                        <i class="fas fa-arrow-left"></i>
+                    </span>
+                    <span>Cancel</span>
+                </a>
+                <button class="button is-small is-primary" type="submit">
+                    <span class="icon">
+                        <i class="fa fa-save"></i>
+                    </span>
+                    <span>Save</span>
+                </button>
+            </div>
+        </form>
     </div>
 </div>
-{% endif %}

@@ -7,14 +7,16 @@
         <div class="box">
             {% if action == "create_patient" %}
             <p class="title is-3">New patient</p>
+            <form action="{% url 'patients:create' %}" method="post">
+
             {% elif action == "edit_patient" %}
             <p class="title is-3">Edit patient {{ patient.pk }}</p>
+            <form action="{% url 'patients:update' pk=patient.pk %}" method="post">
+            
             {% endif %}
 
-            <form action="." method="post">
                 {% csrf_token %}
 
-                {% if action == "create_patient" %}
                 <div class="field is-grouped">
                     <div class="control is-expanded">
                         <label for="{{ form.first_name.id_for_label }}" class="label is-hidden">
@@ -44,7 +46,6 @@
                         {{ form.diagnose_date }}
                     </div>
                 </div>
-                {% endif %}
 
                 <div class="field is-grouped">
                     <div class="control">
@@ -111,7 +112,7 @@
                             <span>Cancel</span>
                         </a>
                         {% elif action == "edit_patient" %}
-                        <a href="{% url 'patients:detail' patient.pk %}" class="button is-info">
+                        <a href="{% url 'patients:detail' pk=patient.pk %}" class="button is-info">
                             <span class="icon">
                                 <i class="fas fa-arrow-left"></i>
                             </span>
@@ -120,7 +121,7 @@
                         {% endif %}
                     </div>
                     <div class="control">
-                        <button class="button is-primary" type="submit">
+                        <button class="button is-primary" type="submit" value="confirm">
                             <span class="icon">
                                 <i class="fas fa-save"></i>
                             </span>

@@ -1,14 +1,17 @@
 # from lymph_interface import patients
-from django.shortcuts import render, get_object_or_404, reverse, redirect
+from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponse, Http404
+from django.urls.base import reverse, reverse_lazy
 from django.views import generic
 
-from typing import Any, Dict, List
+from typing import Any, Dict, List, Optional
 
 import time
 
+from numpy import e, errstate
+
 from .models import Patient, Tumor, Diagnose, MODALITIES
-from .forms import PatientCreateForm, PatientForm, TumorForm, DiagnoseForm, DataFileForm, DashboardForm, ValidationError
+from .forms import PatientForm, TumorForm, DiagnoseForm, DataFileForm, DashboardForm, ValidationError
 from .utils import create_from_pandas, query, query2statistics
 
 
@@ -29,15 +32,26 @@ class ListView(generic.ListView):
 class DetailView(generic.DetailView):
     model = Patient
     template_name = "patients/patient_detail.html"
+    
+    def get_context_data(self, **kwargs: Any) -> Dict[str, Any]:
+        context = super().get_context_data(**kwargs)
+        
+        tumors = Tumor.objects.all().filter(patient=context["patient"])
+        context["tumors"] = tumors
+        
+        diagnoses = Diagnose.objects.all().filter(patient=context["patient"])
+        context["diagnoses"] = diagnoses
+        
+        return context
 
 
-class CreatePatientView(generic.FormView):
+class CreatePatientView(generic.CreateView):
     model = Patient
-    form_class = PatientCreateForm
+    form_class = PatientForm
     template_name = "patients/patient_form.html"
     
-    def get_success_url(self) -> str:
-        return redirect("patients:detail", pk=self.kwargs["pk"])
+    # def get_success_url(self) -> str:
+    #     return redirect("patients:detail", pk=self.kwargs["pk"])
     
     def get_context_data(self, **kwargs: Any) -> Dict[str, Any]:
         context = super().get_context_data(**kwargs)
@@ -51,7 +65,7 @@ class UpdatePatientView(generic.UpdateView):
     template_name = "patients/patient_form.html"
     
     def get_success_url(self) -> str:
-        return redirect("patients:detail", pk=self.kwargs["pk"])
+        return reverse("patients:detail", kwargs=self.kwargs)
     
     def get_context_data(self, **kwargs: Any) -> Dict[str, Any]:
         context = super().get_context_data(**kwargs)
@@ -62,7 +76,7 @@ class UpdatePatientView(generic.UpdateView):
 class DeletePatientView(generic.DeleteView):
     model = Patient
     template_name = "patients/patient_delete.html"
-    success_url = "patients/"
+    success_url = "/patients"
 
 
 def upload_patients(request):
@@ -87,34 +101,101 @@ def upload_patients(request):
     context = {"upload_succes": False, "form": form}
     return render(request, "patients/upload.html", context)
     
+    
 # TUMOR related views
-class CreateTumorView(generic.FormView):
+class CreateTumorView(generic.CreateView):
     model = Tumor
     form_class = TumorForm
     template_name = "patients/patient_detail.html"
 
+    def form_valid(self, form: TumorForm) -> HttpResponse:
+        tumor = form.save(commit=False)
+        tumor.patient = Patient.objects.get(**self.kwargs)
+        return super(CreateTumorView, self).form_valid(form)
+
     def get_success_url(self) -> str:
-        return redirect("patients:detail", pk=self.kwargs["pk"])
+        return reverse("patients:detail", kwargs=self.kwargs)
     
     def get_context_data(self, **kwargs: Any) -> Dict[str, Any]:
         context = super().get_context_data(**kwargs)
         context["action"] = "create_tumor"
-        context["patient"] = Patient.objects.get(pk=self.kwargs["pk"])
-        return context
-
-
-def add_tumor_to_patient(request, *args, **kwargs):
-    """View to add new tumors and diagnoses to existing patients."""
-    tumor_form = TumorForm(request.POST or None)
-    
-    if tumor_form.is_valid():
-        new_tumor = tumor_form.save(kwargs["pk"])
-        tumor_form = TumorForm()
         
-    context = {"action": "add_tumor", 
-               "tumor_form": tumor_form, 
-               "patient": Patient.objects.get(pk=kwargs["pk"])}
-    return render(request, "patients/detail.html", context)
+        patient = Patient.objects.get(**self.kwargs)
+        context["patient"] = patient
+        
+        tumors = Tumor.objects.all().filter(patient=patient)
+        context["tumors"] = tumors
+        
+        diagnoses = Diagnose.objects.all().filter(patient=patient)
+        context["diagnoses"] = diagnoses
+        
+        return context
+    
+    
+class UpdateTumorView(generic.UpdateView):
+    model = Tumor
+    form_class = TumorForm
+    template_name = "patients/patient_detail.html"
+    
+    def get_object(self):
+        print(self.kwargs)
+        return Tumor.objects.get(pk=self.kwargs["tumor_pk"])
+    
+    def get_success_url(self) -> str:
+        return reverse("patients:detail", 
+                       kwargs={"pk": self.kwargs["pk"]})
+    
+    def get_context_data(self, **kwargs: Any) -> Dict[str, Any]:
+        context = super().get_context_data(**kwargs)
+        context["action"] = "update_tumor"
+        
+        patient = Patient.objects.get(pk=self.kwargs["pk"])
+        context["patient"] = patient
+        
+        tumors = Tumor.objects.all().filter(
+            patient=patient
+        ).exclude(
+            pk=self.kwargs["tumor_pk"]
+        )
+        context["tumors"] = tumors
+        
+        diagnoses = Diagnose.objects.all().filter(patient=patient)
+        context["diagnoses"] = diagnoses
+
+        return context
+    
+    
+class DeleteTumorView(generic.DeleteView):
+    model = Tumor
+    template_name = "patients/patient_detail.html"
+    
+    def get_object(self):
+        print(self.kwargs)
+        return Tumor.objects.get(pk=self.kwargs["tumor_pk"])
+    
+    def get_success_url(self) -> str:
+        return reverse("patients:detail", kwargs={"pk": self.kwargs["pk"]})
+    
+    def get_context_data(self, **kwargs: Any) -> Dict[str, Any]:
+        context = super().get_context_data(**kwargs)
+        context["action"] = "delete_tumor"
+        
+        patient = Patient.objects.get(pk=self.kwargs["pk"])
+        context["patient"] = patient
+        
+        tumors = Tumor.objects.all().filter(
+            patient=patient
+        ).exclude(
+            pk=self.kwargs["tumor_pk"]
+        )
+        context["tumors"] = tumors
+        
+        diagnoses = Diagnose.objects.all().filter(patient=patient)
+        context["diagnoses"] = diagnoses
+
+        return context
+        
+
     
     
 def change_tumor_of_patient(request, *args, **kwargs):
@@ -126,7 +207,7 @@ def change_tumor_of_patient(request, *args, **kwargs):
 
         if "edit_pk" in data:
             print("editing...")
-            patient = Patient.objects.get(pk=kwargs["pk"])
+            patient = Patient.objects.get(**kwargs)
             
             tumor_pk = data["edit_pk"]
             tumor = Tumor.objects.get(pk=tumor_pk)
