@@ -1,4 +1,5 @@
 from django.db import models
+from django.urls import reverse
 
 import pandas
 import numpy as np
@@ -46,6 +47,9 @@ class Patient(models.Model):
     def __str__(self):
         """Report some patient specifics."""
         return f"pk {self.pk} | {self.age} yo | {self.gender}"
+    
+    def get_absolute_url(self):
+        return reverse("patients:detail", args=[self.pk])
 
 
 

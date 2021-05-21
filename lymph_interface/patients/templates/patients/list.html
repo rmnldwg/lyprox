@@ -33,18 +33,18 @@
             <td>{{ patient.get_t_stage_display }} {{ patient.get_n_stage_display }} {{ patient.get_m_stage_display }} </td>
             <td>
                 <div class="buttons has-addons is-right">
-                    <a class="tag button is-info is-small" href="{% url 'patients:detail' patient.pk %}">
+                    <a href="{% url 'patients:detail' patient.pk %}" class="tag button is-info is-small">
                         <span class="icon">
                             <i class="fas fa-address-card"></i>
                         </span>
                         <span>details</span>
                     </a>
-                    <button class="tag button is-danger is-small">
+                    <a href="{% url 'patients:delete' patient.pk %}" class="tag button is-danger is-small">
                         <span>delete</span>
                         <span class="icon">
                             <i class="fas fa-trash"></i>
                         </span>
-                    </button>
+                    </a>
                 </div>
             </td>
         </tr>

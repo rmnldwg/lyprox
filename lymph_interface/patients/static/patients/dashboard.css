@@ -22,9 +22,6 @@ input[type="radio"].radio:checked + label {
 .stats.button {
     min-width: 60px;
 }
-.no-pointer:hover {
-    cursor: default;
-}
 
 input[type="radio"].radio:checked + label.tumor {
     background-color: #005EA8;

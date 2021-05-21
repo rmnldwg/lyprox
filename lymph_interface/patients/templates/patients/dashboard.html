@@ -143,7 +143,7 @@
                                             </label>
                                         </div>
                                         <div class="control">
-                                            <p class="button is-info no-pointer">
+                                            <p class="button is-info is-static">
                                                 <span>{{ stats.subsites|index:forloop.counter0 }}</span>
                                             </p>
                                         </div>
@@ -162,7 +162,7 @@
                                             </label>
                                         </div>
                                         <div class="control">
-                                            <p class="button is-info no-pointer">
+                                            <p class="button is-info is-static">
                                                 <span>{{ stats.t_stages|index:forloop.counter0 }}</span>
                                             </p>
                                         </div>
@@ -323,13 +323,13 @@
                         </div>
                         <div class="level-right">
                             <div class="level-item">
-                                <div class="button is-medium no-pointer">
+                                <button class="button is-medium is-static" type="submit">
                                     <span>Patients in selection: {{ stats.total }}</span>
-                                </div>
+                                </button>
                             </div>
 
                             <div class="level-item">
-                                <button type="submit" class="button is-medium is-warning" data-tooltip="Test">
+                                <button class="button is-medium is-warning" type="submit"data-tooltip="Test">
                                     <span class="icon">
                                         <i class="fas fa-cogs"></i>
                                     </span>

@@ -1,0 +1,54 @@
+<div class="column is-4">
+    <div class="box">
+        <table class="table is-fullwidth">
+            <caption class="title is-4">
+                Tumor {{ forloop.counter }}
+                <span class="has-text-info">
+                    ({{ tumor.pk }})
+                </span>
+            </caption>
+            <tbody>
+                <tr>
+                    <td>T-stage</td>
+                    <td>{{ tumor.stage_prefix }}{{ tumor.get_t_stage_display }} </td>
+                </tr>
+                <tr>
+                    <td>location</td>
+                    <td>{{ tumor.get_location_display }} </td>
+                </tr>
+                <tr>
+                    <td>Subsite</td>
+                    <td>{{ tumor.get_subsite_display }}</td>
+                </tr>
+                <tr>
+                    <td>position</td>
+                    <td>{{ tumor.get_position_display }} </td>
+                </tr>
+                <tr>
+                    <td>extension</td>
+                    <td>{{ tumor.extension }} </td>
+                </tr>
+                <tr>
+                    <td>size</td>
+                    <td>{{ tumor.size }} cm³</td>
+                </tr>
+            </tbody>
+        </table>
+        
+        <div class="buttons is-right">
+            <a href="{% url 'patients:tumor_update' pk=patient.pk tumor_pk=tumor.pk %}" class="button is-small is-info">
+                <span class="icon is-small">
+                    <i class="fa fa-pen"></i>
+                </span>
+                <span>edit</span>
+            </a>
+            <a href="{% url 'patients:tumor_delete' pk=patient.pk tumor_pk=tumor.pk %}" class="button is-small is-danger">
+                <span>delete</span>
+                <span class="icon is-small">
+                    <i class="fas fa-trash"></i>
+                </span>
+                
+            </a>
+        </div>
+    </div>
+</div>

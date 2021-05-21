@@ -14,16 +14,7 @@ import pandas
 import os
 
 
-
 class PatientForm(forms.ModelForm):
-    
-    first_name = forms.CharField(
-        widget=forms.widgets.TextInput(attrs={"class": "input"}))
-    last_name = forms.CharField(
-        widget=forms.widgets.TextInput(attrs={"class": "input"}))
-    birthday = forms.DateField(widget=NumberInput(attrs={"class": "input", 
-                                                         "type": "date"}))
-    
     class Meta:
         model = Patient
         fields = ["gender", 
@@ -50,8 +41,16 @@ class PatientForm(forms.ModelForm):
                                               attrs={"class": "select"}),
                    "n_stage": forms.Select(attrs={"class": "select"}),
                    "m_stage": forms.Select(attrs={"class": "select"})}
-        
-        
+
+    first_name = forms.CharField(
+        widget=forms.widgets.TextInput(attrs={"class": "input",
+                                              "placeholder": "First name"}))
+    last_name = forms.CharField(
+        widget=forms.widgets.TextInput(attrs={"class": "input",
+                                              "placeholder": "Last name"}))   
+    birthday = forms.DateField(widget=NumberInput(attrs={"class": "input", 
+                                                         "type": "date"}))
+
     def save(self, commit=True):
         """Compute hashed ID and age from name, birthday and diagnose date."""
         patient = super(PatientForm, self).save(commit=False)
@@ -72,14 +71,16 @@ class PatientForm(forms.ModelForm):
         unique_hash = self._get_identifier(cleaned_data)
         
         try:
-            previous_patient = Patient.objects.get(hash_value=unique_hash)
+            prev_patient_hash = Patient.objects.get(hash_value=unique_hash)
             raise forms.ValidationError(_("Identifier already exists in "
                                           "database. Possible duplicate?"))
+            
+        # if the above does not throw an exception, one can proceed
         except Patient.DoesNotExist: 
             cleaned_data["hash_value"] = unique_hash
             return cleaned_data
         
-    
+        
     def _compute_age(self):
         """Compute age of patient at diagnose/admission."""
         bd = self.cleaned_data["birthday"]
@@ -89,21 +90,22 @@ class PatientForm(forms.ModelForm):
         if (dd.month < bd.month) or (dd.month == bd.month and dd.day < bd.day):
             age -= 1
             
+        self.cleaned_data.pop("birthday")
         return age
     
     
-    def _get_identifier(self, cleaned_data):
+    def _get_identifier(self):
         """Compute the hashed undique identifier from fields that are of 
         provacy concern."""
-        hash_value = compute_hash(cleaned_data["first_name"], 
-                                  cleaned_data["last_name"], 
-                                  cleaned_data["birthday"])
-        cleaned_data.pop("first_name")
-        cleaned_data.pop("last_name")
+        hash_value = compute_hash(self.cleaned_data["first_name"], 
+                                  self.cleaned_data["last_name"],
+                                  self.cleaned_data["birthday"])
+        self.cleaned_data.pop("first_name")
+        self.cleaned_data.pop("last_name")
         return hash_value
-        
-        
-        
+
+
+
 class TumorForm(forms.ModelForm):
     class Meta:
         model = Tumor
@@ -123,10 +125,9 @@ class TumorForm(forms.ModelForm):
         }
         
         
-    def save(self, pk, commit=True):
+    def save(self, commit=True):
         """Save tumor to existing patient."""
         tumor = super(TumorForm, self).save(commit=False)
-        tumor.patient = Patient.objects.get(pk=pk)
         
         # automatically extract location from subsite
         subsite_dict = dict(SUBSITES)
@@ -137,12 +138,12 @@ class TumorForm(forms.ModelForm):
             if tumor.get_subsite_display() in loc_subsites:
                 tumor.location = i
         
-        # update patient's T-stage to be the worst of all its tumors'
-        if tumor.t_stage > tumor.patient.t_stage:
-            tumor.patient.t_stage = tumor.t_stage 
-            tumor.patient.save()
-        
         if commit:
+            # update patient's T-stage to be the worst of all its tumors'
+            if tumor.t_stage > tumor.patient.t_stage:
+                tumor.patient.t_stage = tumor.t_stage 
+                tumor.patient.save()
+                
             tumor.save()
             
         return tumor
@@ -156,10 +157,10 @@ class DiagnoseForm(forms.ModelForm):
                   "modality",
                   "side",]
         
-        widgets = {"diagnose_date": forms.NumberInput(attrs={"class": "input",
+        widgets = {"diagnose_date": forms.NumberInput(attrs={"class": "input is-small",
                                                              "type": "date"}),
-                   "modality": forms.Select(attrs={"class": "select"}),
-                   "side": forms.Select(attrs={"class": "select"})}
+                   "modality": forms.Select(attrs={"class": "select is-small"}),
+                   "side": forms.Select(attrs={"class": "select is-small"})}
         
         for lnl in LNLs:
             fields.append(lnl)
@@ -169,12 +170,9 @@ class DiagnoseForm(forms.ModelForm):
                                         attrs={"class": "select"})
             
 
-        
-        
-    def save(self, pk, commit=True):
+    def save(self, commit=True):
         """Save diagnose to existing patient."""
         diagnose = super(DiagnoseForm, self).save(commit=False)
-        diagnose.patient = Patient.objects.get(pk=pk)
         
         if diagnose.Ia or diagnose.Ib:
             diagnose.I = True

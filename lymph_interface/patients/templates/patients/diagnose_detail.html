@@ -1,0 +1,29 @@
+<tr>
+    <td>{{ diagnose.diagnose_date|date:"d. M Y" }}</td>
+    <td>{{ diagnose.get_modality_display }}</td>
+    <td>{{ diagnose.get_side_display }}</td>
+    <td><span class="tag {{ diagnose.Ia }}">{{ diagnose.Ia }}</span></td>
+    <td><span class="tag {{ diagnose.Ib }}">{{ diagnose.Ib }}</span></td>
+    <td><span class="tag {{ diagnose.IIa }}">{{ diagnose.IIa }}</span></td>
+    <td><span class="tag {{ diagnose.IIb }}">{{ diagnose.IIb }}</span></td>
+    <td><span class="tag {{ diagnose.III }}">{{ diagnose.III }}</span></td>
+    <td><span class="tag {{ diagnose.IV }}">{{ diagnose.IV }}</span></td>
+    <td><span class="tag {{ diagnose.V }}">{{ diagnose.V }}</span></td>
+    <td><span class="tag {{ diagnose.VII }}">{{ diagnose.VII }}</span></td>
+    <td>
+        <div class="buttons is-right">
+            <a href="{% url 'patients:diagnose_update' pk=patient.pk diagnose_pk=diagnose.pk %}" class="tag button is-small is-info" type="submit" name="edit_pk" value="{{ diagnose.pk }}">
+                <span class="icon is-small">
+                    <i class="fas fa-pen"></i>
+                </span>
+                <span>Edit</span>
+            </a>
+            <a href="{% url 'patients:diagnose_delete' pk=patient.pk diagnose_pk=diagnose.pk %}" class="tag button is-small is-danger" type="submit" name="delete_pk" value="{{ diagnose.pk }}">
+                <span>Delete</span>
+                <span class="icon is-small">
+                    <i class="fas fa-trash"></i>
+                </span>
+            </a>
+        </div>
+    </td>
+</tr>
