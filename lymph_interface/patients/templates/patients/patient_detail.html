@@ -145,42 +145,30 @@
         </thead>
 
         <tbody>
-            {% for diagnose in patient.diagnose_set.all %}
+            {% for diagnose in diagnoses %}
+            {% include 'patients/diagnose_detail.html' %}
+            {% endfor %}
+
+            {% if action == "create_diagnose" or action == "update_diagnose" %}
+            {% include 'patients/diagnose_form.html' %}
+            {% elif action == "delete_diagnose" %}
+            {% include 'patients/diagnose_delete.html' %}
+            {% endif %}
+
             <tr>
-                <td>{{ diagnose.diagnose_date|date:"d. M Y" }}</td>
-                <td>{{ diagnose.get_modality_display }}</td>
-                <td>{{ diagnose.get_side_display }}</td>
-                <td><span class="tag {{ diagnose.Ia }}">{{ diagnose.Ia }}</span></td>
-                <td><span class="tag {{ diagnose.Ib }}">{{ diagnose.Ib }}</span></td>
-                <td><span class="tag {{ diagnose.IIa }}">{{ diagnose.IIa }}</span></td>
-                <td><span class="tag {{ diagnose.IIb }}">{{ diagnose.IIb }}</span></td>
-                <td><span class="tag {{ diagnose.III }}">{{ diagnose.III }}</span></td>
-                <td><span class="tag {{ diagnose.IV }}">{{ diagnose.IV }}</span></td>
-                <td><span class="tag {{ diagnose.V }}">{{ diagnose.V }}</span></td>
-                <td><span class="tag {{ diagnose.VII }}">{{ diagnose.VII }}</span></td>
-                <td>
-                    <form action="{% url 'patients:change_diagnose' patient.pk %}" method="POST">
-                        {% csrf_token %}
-                        <div class="buttons has-addons is-right">
-                            <button class="tag button is-small is-info" type="submit" name="edit_pk" value="{{ diagnose.pk }}">
-                                <span class="icon is-small">
-                                    <i class="fas fa-pen"></i>
+                <td colspan="12">
+                    <div class="field is-grouped is-grouped-centered">
+                        <div class="control">
+                            <a class="button is-info" href="{% url 'patients:diagnose_create' patient.pk %}">
+                                <span class="icon">
+                                    <i class="fa fa-plus"></i>
                                 </span>
-                                <span>edit</span>
-                            </button>
-                            <button class="tag button is-small is-danger" type="submit" name="delete_pk" value="{{ diagnose.pk }}">
-                                <span>delete</span>
-                                <span class="icon is-small">
-                                    <i class="fas fa-trash"></i>
-                                </span>
-                            </button>
+                                <span>Add diagnose</span>
+                            </a>
                         </div>
-                    </form>
+                    </div>
                 </td>
             </tr>
-            {% endfor %}
-            
-            {% include 'patients/add_diagnose.html' %}
         </tbody>
     </table>
 </section>

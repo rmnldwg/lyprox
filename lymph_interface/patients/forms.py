@@ -157,10 +157,10 @@ class DiagnoseForm(forms.ModelForm):
                   "modality",
                   "side",]
         
-        widgets = {"diagnose_date": forms.NumberInput(attrs={"class": "input",
+        widgets = {"diagnose_date": forms.NumberInput(attrs={"class": "input is-small",
                                                              "type": "date"}),
-                   "modality": forms.Select(attrs={"class": "select"}),
-                   "side": forms.Select(attrs={"class": "select"})}
+                   "modality": forms.Select(attrs={"class": "select is-small"}),
+                   "side": forms.Select(attrs={"class": "select is-small"})}
         
         for lnl in LNLs:
             fields.append(lnl)
@@ -170,12 +170,9 @@ class DiagnoseForm(forms.ModelForm):
                                         attrs={"class": "select"})
             
 
-        
-        
-    def save(self, pk, commit=True):
+    def save(self, commit=True):
         """Save diagnose to existing patient."""
         diagnose = super(DiagnoseForm, self).save(commit=False)
-        diagnose.patient = Patient.objects.get(pk=pk)
         
         if diagnose.Ia or diagnose.Ib:
             diagnose.I = True

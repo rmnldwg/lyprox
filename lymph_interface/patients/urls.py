@@ -12,7 +12,8 @@ urlpatterns = [
     path("<int:pk>/tumor/create", views.CreateTumorView.as_view(), name="tumor_create"),
     path("<int:pk>/tumor/<int:tumor_pk>/update", views.UpdateTumorView.as_view(), name="tumor_update"),
     path("<int:pk>/tumor/<int:tumor_pk>/delete", views.DeleteTumorView.as_view(), name="tumor_delete"),
-    path("<int:pk>/diagnose/add", views.add_diagnose_to_patient, name="add_diagnose"),
-    path("<int:pk>/diagnose/change", views.change_diagnose_of_patient, name="change_diagnose"),
+    path("<int:pk>/diagnose/create", views.CreateDiagnoseView.as_view(), name="diagnose_create"),
+    path("<int:pk>/diagnose/<int:diagnose_pk>/update", views.UpdateDiagnoseView.as_view(), name="diagnose_update"),
+    path("<int:pk>/diagnose/<int:diagnose_pk>/delete", views.DeleteDiagnoseView.as_view(), name="diagnose_delete"),
     path("dashboard/", views.dashboard, name="dashboard"),
 ]
