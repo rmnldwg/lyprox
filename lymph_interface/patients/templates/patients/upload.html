@@ -16,15 +16,15 @@
             {% csrf_token %}
             <div class="field is-grouped is-grouped-centered">
                 <div class="control">
-                    <div class="file">
+                    <div class="file" id="file-upload">
                         <label class="file-label">
                             {{ form.data_file }}
                             <span class="file-cta">
                                 <span class="file-icon">
                                     <i class="fas fa-folder-open"></i>
                                 </span>
-                                <span class="file-label">
-                                    Choose a file...
+                                <span class="file-label" id="file-label-text">
+                                    Choose CSV table...
                                 </span>
                             </span>
                         </label>
@@ -45,4 +45,14 @@
         {% endif %}
     </div>
 </section>
+
+<script>
+    const fileInput = document.querySelector('#file-upload input[type=file]');
+    fileInput.onchange = () => {
+        if (fileInput.files.length > 0) {
+            const fileName = document.querySelector('#file-upload #file-label-text');
+            fileName.textContent = fileInput.files[0].name;
+        }
+    }
+</script>
 {% endblock content %}
