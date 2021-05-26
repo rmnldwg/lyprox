@@ -195,26 +195,20 @@ class DataFileForm(forms.Form):
     def clean(self):
         cleaned_data = super(DataFileForm, self).clean()
         
+        print(cleaned_data)
+        
         suffix = cleaned_data["data_file"].name.split(".")[-1]
         if suffix != "csv":
             raise ValidationError(_("File must be of type CSV."))
         
-        file_path = Path(getattr(settings, "FILE_UPLOAD_TEMP_DIR")).resolve() / "tmp.csv"
-        
-        dest = open(file_path, "wb")
-        for chunk in cleaned_data["data_file"].chunks():
-            dest.write(chunk)
-        dest.close()
-        
         try:
-            data_frame = pandas.read_csv(file_path, header=[0,1,2], 
-                                         skip_blank_lines=True, infer_datetime_format=True)
+            data_frame = pandas.read_csv(cleaned_data["data_file"], header=[0,1,2], 
+                                         skip_blank_lines=True, 
+                                         infer_datetime_format=True)
         except:
             raise forms.ValidationError(_("pandas was unable to parse the " 
                                           "uploaded file. Make sure it is a "
                                           "valid CSV file with 3 header rows."))
-            
-        os.remove(file_path)
             
         cleaned_data["data_frame"] = data_frame
         return cleaned_data
