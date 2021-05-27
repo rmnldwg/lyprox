@@ -4,7 +4,9 @@ from django.http import HttpResponse, Http404
 from django.urls.base import reverse, reverse_lazy
 from django.views import generic
 
-from typing import Any, Dict, List, Optional
+import django_filters
+
+from typing import Any, Dict, List, Optional, Sequence
 
 import time
 
@@ -13,23 +15,47 @@ from numpy import e, errstate
 from .models import Patient, Tumor, Diagnose, MODALITIES
 from .forms import PatientForm, TumorForm, DiagnoseForm, DataFileForm, DashboardForm, ValidationError
 from .utils import create_from_pandas, query, query2statistics
+from .filters import PatientFilter
 
 
 # PATIENT related views
-class ListView(generic.ListView):
+class PatientListView(generic.ListView):
+    model = Patient
     template_name = "patients/list.html"
     context_object_name = "patient_list"
+    filterset_class = PatientFilter
     
-    def get_queryset(self, *args, **kwargs):
-        """List all patients in the database."""
+    def get_queryset(self):
+        """Add ability to filter queryset via FilterSets to generic ListView."""
+        queryset = super().get_queryset()
+        self.filterset = self.filterset_class(self.request.GET, 
+                                              queryset=queryset)
+        return self.filterset.qs.distinct()
+    
+    def get_context_data(self, **kwargs: Any) -> Dict[str, Any]:
+        """Add FilterSet to context for displaying filter form."""
+        context = super().get_context_data(**kwargs)
+        context["filterset"] = self.filterset
+        return context
+    
+    def get_ordering(self) -> Sequence[str]:
+        """Order list of patients."""
         try:
-            queryset = kwargs["queryset"]
-        except KeyError:
-            queryset = Patient.objects.all()
-        return queryset
+            ordering_str = self.request.GET.get("order_by")
+            ordering = ordering_str.split(",")
+            print(ordering)
+            return ordering
+        except:
+            return super().get_ordering()
+        
+        
+def filter_patients(request):
+    """Filter patients according to form."""
+    filter = PatientFilter(request.POST, queryset=Patient.objects.all())
+    return render(request, "patients/filter.html", {"f": filter})
     
     
-class DetailView(generic.DetailView):
+class PatientDetailView(generic.DetailView):
     model = Patient
     template_name = "patients/patient_detail.html"
     

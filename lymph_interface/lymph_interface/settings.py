@@ -40,6 +40,9 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     
+    # third party apps
+    "django_filters",
+    
     # my apps
     "patients.apps.PatientsConfig",
 ]
