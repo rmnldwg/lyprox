@@ -68,7 +68,7 @@ class PatientForm(forms.ModelForm):
         """Override superclass clean method to raise a ValidationError when a 
         duplicate identifier is found."""
         cleaned_data = super(PatientForm, self).clean()
-        unique_hash = self._get_identifier(cleaned_data)
+        unique_hash, cleaned_data = self._get_identifier(cleaned_data)
         
         try:
             prev_patient_hash = Patient.objects.get(hash_value=unique_hash)
@@ -94,15 +94,15 @@ class PatientForm(forms.ModelForm):
         return age
     
     
-    def _get_identifier(self):
+    def _get_identifier(self, cleaned_data):
         """Compute the hashed undique identifier from fields that are of 
         provacy concern."""
-        hash_value = compute_hash(self.cleaned_data["first_name"], 
-                                  self.cleaned_data["last_name"],
-                                  self.cleaned_data["birthday"])
-        self.cleaned_data.pop("first_name")
-        self.cleaned_data.pop("last_name")
-        return hash_value
+        hash_value = compute_hash(cleaned_data["first_name"], 
+                                  cleaned_data["last_name"],
+                                  cleaned_data["birthday"])
+        cleaned_data.pop("first_name")
+        cleaned_data.pop("last_name")
+        return hash_value, cleaned_data
 
 
 

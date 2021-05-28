@@ -3,20 +3,95 @@
 {% block content %}
 
 {% load static %}
+<link rel="stylesheet" href="{% static 'patients/list.css' %}">
 
 <div class="block">
     <p class="title">List</p>
     <p class="subtitle">All patients currently in the database</p>
 </div>
 
-<section class="section">
-    <form method="GET">
-        <table class="table">
-            {{ filterset.form.as_table }}
-        </table>
-        <input class="button" type="submit">
-    </form>
-</section>
+<input type="checkbox" name="expand-select" id="filter-container">
+<div class="filter-container notification is-primary is-light">
+    <label class="filter-label icon-text" for="filter-container">
+        <span class="icon">
+            <i class="fas fa-chevron-down"></i>
+        </span>
+        <span class="title is-4">Filter patients</span>
+    </label>
+
+    <div class="filter-body block">
+        <form method="get">
+            <div class="columns">
+                <div class="column">
+                    <div class="field">
+                        <div class="control">
+                            <label for="{{ filterset.form.diagnose_date.id_for_label }}" class="label has-text-primary">
+                                {{ filterset.form.diagnose_date.label }}, From - To
+                            </label>
+                            <div class="is-flex is-justify-content-flex-row">
+                                {{ filterset.form.diagnose_date }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="field is-grouped">
+                        <div class="control is-expanded">
+                            <label for="{{ filterset.form.age.id_for_label }}" class="label has-text-primary">
+                                {{ filterset.form.age.label }}, From - To
+                            </label>
+                            <div class="is-flex is-justify-content-flex-row">
+                                {{ filterset.form.age }}
+                            </div>
+                        </div>
+                        <div class="control">
+                            <label for="{{ filterset.form.gender.id_for_label }}" class="label has-text-primary">
+                                {{ filterset.form.gender.label }}
+                            </label>
+                            <div class="select">
+                                {{ filterset.form.gender }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="column">
+                    <div class="field is-grouped">
+                        <div class="control">
+                            <label for="{{ filterset.form.tumor__t_stage.id_for_label }}" class="label has-text-primary">
+                                T-stage
+                            </label>
+                            <div class="select is-multiple">
+                                {{ filterset.form.tumor__t_stage }}
+                            </div>
+                        </div>
+                        <div class="control">
+                            <label for="{{ filterset.form.n_stage.id_for_label }}" class="label has-text-primary">
+                                N-stage
+                            </label>
+                            <div class="select is-multiple">
+                                {{ filterset.form.n_stage }}
+                            </div>
+                        </div>
+                        <div class="control">
+                            <label for="{{ filterset.form.m_stage.id_for_label }}" class="label has-text-primary">
+                                M-stage
+                            </label>
+                            <div class="select is-multiple">
+                                {{ filterset.form.m_stage }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="buttons is-grouped is-right">
+                <button class="button is-warning" type="submit">
+                    <span class="icon">
+                        <i class="fas fa-filter"></i>
+                    </span>
+                    <span>Filter</span>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
 
 <table class="block table is-fullwidth is-hoverable">
     <thead>

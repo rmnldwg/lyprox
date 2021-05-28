@@ -11,8 +11,8 @@
 <body>
     {% include 'navbar.html' %}
 
-    <form method="POST" action="{% url 'patients:dashboard' %}" name="dashboardform">
-    {% csrf_token %}
+    <form method="GET" action="{% url 'patients:dashboard' %}" name="dashboardform">
+    <!-- {% csrf_token %} -->
         <section class="section columns is-multiline">
             
             <div class="column is-3-widescreen">

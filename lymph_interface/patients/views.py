@@ -135,6 +135,7 @@ class CreateTumorView(generic.CreateView):
     template_name = "patients/patient_detail.html"
 
     def form_valid(self, form: TumorForm) -> HttpResponse:
+        # assign tumor to current patient
         tumor = form.save(commit=False)
         tumor.patient = Patient.objects.get(**self.kwargs)
         
@@ -335,9 +336,9 @@ class DeleteDiagnoseView(generic.DeleteView):
 
 def dashboard(request):
     """Display the dashboard showing patterns of involvement."""
-    form = DashboardForm(request.POST or None)
+    form = DashboardForm(request.GET or None)
     
-    if request.method == "POST" and form.is_valid():
+    if request.method == "GET" and form.is_valid():
         match_patients, match_diagnoses_dict = query(form.cleaned_data)
         
         statistics = query2statistics(match_patients,
