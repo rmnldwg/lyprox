@@ -137,6 +137,12 @@ class CreateTumorView(generic.CreateView):
     def form_valid(self, form: TumorForm) -> HttpResponse:
         tumor = form.save(commit=False)
         tumor.patient = Patient.objects.get(**self.kwargs)
+        
+        # udate T-stage to always be the worst of a patient's tumors
+        if tumor.patient.t_stage < tumor.t_stage:
+            tumor.patient.t_stage = tumor.t_stage
+            tumor.patient.save()
+            
         return super(CreateTumorView, self).form_valid(form)
 
     def get_success_url(self) -> str:
@@ -198,6 +204,21 @@ class DeleteTumorView(generic.DeleteView):
         return Tumor.objects.get(pk=self.kwargs["tumor_pk"])
     
     def get_success_url(self) -> str:
+        # get patient and...
+        patient = Patient.objects.get(pk=self.kwargs["pk"])
+        tumors = Tumor.objects.all().filter(
+            patient=patient
+        ).exclude(
+            pk=self.kwargs["tumor_pk"]
+        )
+        # ...the new maximum T-stage to...
+        max_t_stage = 0
+        for tumor in tumors:
+            if tumor.t_stage > max_t_stage:
+                max_t_stage = tumor.t_stage
+        # ...update the patient's T-stage after deletion. 
+        patient.t_stage = max_t_stage
+        patient.save()
         return reverse("patients:detail", kwargs={"pk": self.kwargs["pk"]})
     
     def get_context_data(self, **kwargs: Any) -> Dict[str, Any]:
