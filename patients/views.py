@@ -43,7 +43,6 @@ class PatientListView(generic.ListView):
         try:
             ordering_str = self.request.GET.get("order_by")
             ordering = ordering_str.split(",")
-            print(ordering)
             return ordering
         except:
             return super().get_ordering()

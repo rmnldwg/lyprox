@@ -195,8 +195,6 @@ class DataFileForm(forms.Form):
     def clean(self):
         cleaned_data = super(DataFileForm, self).clean()
         
-        print(cleaned_data)
-        
         suffix = cleaned_data["data_file"].name.split(".")[-1]
         if suffix != "csv":
             raise ValidationError(_("File must be of type CSV."))
