@@ -46,12 +46,6 @@ class PatientListView(generic.ListView):
             return ordering
         except:
             return super().get_ordering()
-        
-        
-def filter_patients(request):
-    """Filter patients according to form."""
-    filter = PatientFilter(request.POST, queryset=Patient.objects.all())
-    return render(request, "patients/filter.html", {"f": filter})
     
     
 class PatientDetailView(generic.DetailView):
