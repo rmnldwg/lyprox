@@ -51,6 +51,16 @@
                             </div>
                         </div>
                     </div>
+                    <div class="field">
+                        <div class="control">
+                            <label for="{{ filterset.form.ordering.id_for_label }}" class="label has-text-primary">
+                                {{ filterset.form.ordering.label }}
+                            </label>
+                            <div class="select">
+                                {{ filterset.form.ordering }}
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <div class="column">
                     <div class="field is-grouped">
@@ -96,52 +106,12 @@
 <table class="block table is-fullwidth is-hoverable">
     <thead>
         <tr>
-            <th>
-                <span class="icon-text">
-                    <a href="?order_by=pk" class="icon">
-                        <i class="fas fa-chevron-down"></i>
-                    </a>
-                    <span>Patient</span>
-                    <a href="?order_by=-pk" class="icon">
-                        <i class="fas fa-chevron-up"></i>
-                    </a>
-                </span>
-            </th>
+            <th>Patient</th>
             <th>Hash</th>
-            <th>
-                <span class="icon-text">
-                    <a href="?order_by=diagnose_date" class="icon">
-                        <i class="fas fa-chevron-down"></i>
-                    </a>
-                    <span>Date of diagnose</span>
-                    <a href="?order_by=-diagnose_date" class="icon">
-                        <i class="fas fa-chevron-up"></i>
-                    </a>
-                </span>
-            </th>
+            <th>Date of diagnosis</th>
             <th>gender</th>
-            <th>
-                <span class="icon-text">
-                    <a href="?order_by=age" class="icon">
-                        <i class="fas fa-chevron-down"></i>
-                    </a>
-                    <span>Age</span>
-                    <a href="?order_by=-age" class="icon">
-                        <i class="fas fa-chevron-up"></i>
-                    </a>
-                </span>
-            </th>
-            <th>
-                <span class="icon-text">
-                    <a href="?order_by=t_stage,n_stage,m_stage" class="icon">
-                        <i class="fas fa-chevron-down"></i>
-                    </a>
-                    <span>Stage</span>
-                    <a href="?order_by=-t_stage,-n_stage,-m_stage" class="icon">
-                        <i class="fas fa-chevron-up"></i>
-                    </a>
-                </span>
-            </th>
+            <th>Age</th>
+            <th>TNM stage</th>
             <th></th>
         </tr>
     </thead>

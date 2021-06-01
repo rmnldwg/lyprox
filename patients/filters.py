@@ -31,7 +31,21 @@ class PatientFilter(django_filters.FilterSet):
         widget=widgets.SelectMultiple()
     )
     
+    # additional form field for sorting
+    ordering = django_filters.OrderingFilter(
+        fields=[
+            ("diagnose_date", "diagnose_date"),
+            ("age", "age"),
+            ("t_stage", "t_stage")
+        ],
+        field_labels={
+            "diagnose_date": "Diagnose date",
+            "age": "Age",
+            "t_stage": "T-stage"
+        }
+    )
+    
     class Meta:
         model = Patient
         fields = ["diagnose_date", "gender", "age", 
-                  "tumor__t_stage", "n_stage", "m_stage"]
+                  "t_stage", "n_stage", "m_stage"]

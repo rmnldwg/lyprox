@@ -15,3 +15,7 @@ label.filter-label {
 #filter-container:checked ~ .filter-container > .filter-label {
     padding-bottom: 1.5em;
 }
+
+form {
+    width: 100%;
+}
