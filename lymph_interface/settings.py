@@ -42,7 +42,7 @@ INSTALLED_APPS = [
     
     # third party apps
     "django_filters",
-    
+  
     # my apps
     "patients.apps.PatientsConfig",
 ]
