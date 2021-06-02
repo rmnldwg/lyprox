@@ -135,11 +135,8 @@ class DashboardView(generic.ListView):
     def get_context_data(self, **kwargs: Any) -> Dict[str, Any]:
         context = super(DashboardView, self).get_context_data(**kwargs)
         context["show_filter"] = False
-
-        if self.request.GET.get("render") != "subset_list":
-            context["form"] = self.form
-            context["stats"] = self.stats
-
+        context["form"] = self.form
+        context["stats"] = self.stats
         return context
 
     def get_template_names(self) -> str:

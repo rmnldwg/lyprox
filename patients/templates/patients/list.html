@@ -7,7 +7,12 @@
 
 <div class="block">
     <p class="title">List</p>
+
+    {% if not show_filter %}
+    <p class="subtitle">Selected subset of {{ stats.total }} patients</p>
+    {% else %}
     <p class="subtitle">All patients currently in the database</p>
+    {% endif %}
 </div>
 
 {% if show_filter %}
