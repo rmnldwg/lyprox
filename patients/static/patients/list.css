@@ -1,0 +1,21 @@
+input[name="expand-select"], .filter-body {
+    display: none;
+}
+
+label.filter-label {
+    cursor: pointer;
+    display: block;
+    padding-bottom: 0;
+}
+
+#filter-container:checked ~ .filter-container > .filter-body {
+    display: flex;
+}
+
+#filter-container:checked ~ .filter-container > .filter-label {
+    padding-bottom: 1.5em;
+}
+
+form {
+    width: 100%;
+}

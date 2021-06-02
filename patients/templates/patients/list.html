@@ -4,20 +4,122 @@
 
 {% load static %}
 
+<link rel="stylesheet" href="{% static 'patients/list.css' %}">
+
 <div class="block">
     <p class="title">List</p>
+
+    {% if not show_filter %}
+    <p class="subtitle">Selected subset of {{ stats.total }} patients</p>
+    {% else %}
     <p class="subtitle">All patients currently in the database</p>
+    {% endif %}
 </div>
+
+{% if show_filter %}
+<input type="checkbox" name="expand-select" id="filter-container">
+<div class="filter-container notification is-primary is-light">
+    <label class="filter-label icon-text" for="filter-container">
+        <span class="icon">
+            <i class="fas fa-chevron-down"></i>
+        </span>
+        <span class="title is-4">Filter patients</span>
+    </label>
+
+    <div class="filter-body block">
+        <form method="get">
+            <div class="columns">
+                <div class="column">
+                    <div class="field">
+                        <div class="control">
+                            <label for="{{ filterset.form.diagnose_date.id_for_label }}" class="label has-text-primary">
+                                {{ filterset.form.diagnose_date.label }}, From - To
+                            </label>
+                            <div class="is-flex is-justify-content-flex-row">
+                                {{ filterset.form.diagnose_date }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="field is-grouped">
+                        <div class="control is-expanded">
+                            <label for="{{ filterset.form.age.id_for_label }}" class="label has-text-primary">
+                                {{ filterset.form.age.label }}, From - To
+                            </label>
+                            <div class="is-flex is-justify-content-flex-row">
+                                {{ filterset.form.age }}
+                            </div>
+                        </div>
+                        <div class="control">
+                            <label for="{{ filterset.form.gender.id_for_label }}" class="label has-text-primary">
+                                {{ filterset.form.gender.label }}
+                            </label>
+                            <div class="select">
+                                {{ filterset.form.gender }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="field">
+                        <div class="control">
+                            <label for="{{ filterset.form.ordering.id_for_label }}" class="label has-text-primary">
+                                {{ filterset.form.ordering.label }}
+                            </label>
+                            <div class="select">
+                                {{ filterset.form.ordering }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="column">
+                    <div class="field is-grouped">
+                        <div class="control">
+                            <label for="{{ filterset.form.tumor__t_stage.id_for_label }}" class="label has-text-primary">
+                                T-stage
+                            </label>
+                            <div class="select is-multiple">
+                                {{ filterset.form.tumor__t_stage }}
+                            </div>
+                        </div>
+                        <div class="control">
+                            <label for="{{ filterset.form.n_stage.id_for_label }}" class="label has-text-primary">
+                                N-stage
+                            </label>
+                            <div class="select is-multiple">
+                                {{ filterset.form.n_stage }}
+                            </div>
+                        </div>
+                        <div class="control">
+                            <label for="{{ filterset.form.m_stage.id_for_label }}" class="label has-text-primary">
+                                M-stage
+                            </label>
+                            <div class="select is-multiple">
+                                {{ filterset.form.m_stage }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="buttons is-grouped is-right">
+                <button class="button is-warning" type="submit">
+                    <span class="icon">
+                        <i class="fas fa-filter"></i>
+                    </span>
+                    <span>Filter</span>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endif %}
 
 <table class="block table is-fullwidth is-hoverable">
     <thead>
         <tr>
             <th>Patient</th>
             <th>Hash</th>
-            <th>date of diagnosis</th>
+            <th>Date of diagnosis</th>
             <th>gender</th>
-            <th>age</th>
-            <th>stage</th>
+            <th>Age</th>
+            <th>TNM stage</th>
             <th></th>
         </tr>
     </thead>
