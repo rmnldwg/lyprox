@@ -10,6 +10,7 @@
     <p class="subtitle">All patients currently in the database</p>
 </div>
 
+{% if show_filter %}
 <input type="checkbox" name="expand-select" id="filter-container">
 <div class="filter-container notification is-primary is-light">
     <label class="filter-label icon-text" for="filter-container">
@@ -102,6 +103,7 @@
         </form>
     </div>
 </div>
+{% endif %}
 
 <table class="block table is-fullwidth is-hoverable">
     <thead>

@@ -12,9 +12,7 @@
     {% include 'navbar.html' %}
 
     <form method="GET" action="{% url 'patients:dashboard' %}" name="dashboardform">
-    <!-- {% csrf_token %} -->
         <section class="section columns is-multiline">
-            
             <div class="column is-3-widescreen">
                 <div class="columns is-multiline" id="control-column">
                     <div class="column is-full-widescreen is-one-quarter">
@@ -323,13 +321,13 @@
                         </div>
                         <div class="level-right">
                             <div class="level-item">
-                                <button class="button is-medium is-static" type="submit">
+                                <button class="button is-medium" type="submit" name="render" value="subset_list" data-tooltip="Display selected subset in list">
                                     <span>Patients in selection: {{ stats.total }}</span>
                                 </button>
                             </div>
 
                             <div class="level-item">
-                                <button class="button is-medium is-warning" type="submit"data-tooltip="Test">
+                                <button class="button is-medium is-warning" type="submit" name="render" value="dashboard" data-tooltip="Display statistic of selected subset">
                                     <span class="icon">
                                         <i class="fas fa-cogs"></i>
                                     </span>

@@ -18,6 +18,66 @@ from .utils import create_from_pandas, query, query2statistics
 from .filters import PatientFilter
 
 
+class DashboardView(generic.ListView):
+    model = Patient
+    form_class = DashboardForm
+    context_object_name = "patient_list"
+    template_name = "patients/dashboard.html"
+    
+    def get_queryset(self):
+        self.form = self.form_class(self.request.GET or None)
+        
+        if self.request.method == "GET" and self.form.is_valid():
+            match_pats, match_diag_dict = query(
+                self.form.cleaned_data
+            )
+            self.stats = query2statistics(match_pats, 
+                                          match_diag_dict,
+                                          **self.form.cleaned_data)
+            queryset = match_pats
+        
+        else:
+            # fill form with initial values from respective form fields
+            initial_data = {}
+            for field_name, field in self.form.fields.items():
+                initial_data[field_name] = self.form.get_initial_for_field(
+                    field, field_name
+                )
+            initial_form = self.form_class(initial_data)
+
+            if initial_form.is_valid():
+                init_pats, init_diag_dict = query(
+                    initial_form.cleaned_data
+                )
+                self.stats = query2statistics(init_pats, 
+                                              init_diag_dict, 
+                                              **initial_form.cleaned_data)
+                queryset = init_pats
+            
+            else:
+                raise ValidationError(
+                    "Validation of default values of form failed.")
+                
+        return queryset
+                
+                
+    def get_context_data(self, **kwargs: Any) -> Dict[str, Any]:
+        context = super(DashboardView, self).get_context_data(**kwargs)
+        context["show_filter"] = False
+        
+        if self.request.GET.get("render") != "subset_list":
+            context["form"] = self.form
+            context["stats"] = self.stats
+            
+        return context
+    
+    def get_template_names(self) -> str:
+        if self.request.GET.get("render") == "subset_list":
+                return "patients/list.html"
+        else:
+            return super(DashboardView, self).get_template_names()
+
+
 # PATIENT related views
 class PatientListView(generic.ListView):
     model = Patient
@@ -36,16 +96,8 @@ class PatientListView(generic.ListView):
         """Add FilterSet to context for displaying filter form."""
         context = super().get_context_data(**kwargs)
         context["filterset"] = self.filterset
+        context["show_filter"] = True
         return context
-    
-    def get_ordering(self) -> Sequence[str]:
-        """Order list of patients."""
-        try:
-            ordering_str = self.request.GET.get("order_by")
-            ordering = ordering_str.split(",")
-            return ordering
-        except:
-            return super().get_ordering()
     
     
 class PatientDetailView(generic.DetailView):
@@ -325,35 +377,3 @@ class DeleteDiagnoseView(generic.DeleteView):
         context["diagnoses"] = diagnoses
 
         return context
-
-
-def dashboard(request):
-    """Display the dashboard showing patterns of involvement."""
-    form = DashboardForm(request.GET or None)
-    
-    if request.method == "GET" and form.is_valid():
-        match_patients, match_diagnoses_dict = query(form.cleaned_data)
-        
-        statistics = query2statistics(match_patients,
-                                      match_diagnoses_dict,
-                                      **form.cleaned_data)
-        print(f"Query contains {len(match_patients)} patients, "
-              f"{len(match_diagnoses_dict['ipsi'])} ipsilateral & "
-              f"{len(match_diagnoses_dict['contra'])} contralateral diagnoses.")
-    else:    
-        initial_data = {}
-        for field_name, field in form.fields.items():
-            initial_data[field_name] = form.get_initial_for_field(field, field_name)
-            
-        initial_form = DashboardForm(initial_data)
-        
-        if initial_form.is_valid():
-            init_patients, init_diagnoses_dict = query(initial_form.cleaned_data)
-            statistics = query2statistics(init_patients, init_diagnoses_dict)
-        else:
-            raise ValidationError("Validation of default values of form failed.")
-
-    context = {"form": form, 
-               "stats": statistics}
-        
-    return render(request, "patients/dashboard.html", context)
