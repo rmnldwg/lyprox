@@ -11,6 +11,14 @@
 <body>
     {% include 'navbar.html' %}
 
+    <div class="modal">
+        <div class="modal-background"></div>
+        <div class="modal-content">
+            {% include 'patients/dashboard_help.html' %}
+        </div>
+        <button class="modal-close is-large" aria-label="close"></button>
+    </div>
+
     <form method="GET" action="{% url 'patients:dashboard' %}" name="dashboardform">
         <section class="section columns is-multiline">
             <div class="column is-3-widescreen">
@@ -321,7 +329,15 @@
                         </div>
                         <div class="level-right">
                             <div class="level-item">
-                                <button class="button is-medium" type="submit" name="render" value="subset_list" data-tooltip="Display selected subset in list">
+                                <p class="button is-medium is-primary is-light is-rounded is-outlined" style="width: 0;" id="show-help" data-tooltip="Display documentation on how to use this dashboard">
+                                    <span class="icon">
+                                        <i class="fas fa-question"></i>
+                                    </span>
+                                </p>
+                            </div>
+
+                            <div class="level-item">
+                                <button class="button is-medium is-warning is-light is-outlined" type="submit" name="render" value="subset_list" data-tooltip="Display selected subset in list">
                                     <span>Patients in selection: {{ stats.total }}</span>
                                 </button>
                             </div>
@@ -338,9 +354,18 @@
                     </div>
                 </div>
             </div>
-
         </section>
     </form>
+
+    <script>
+        $("#show-help").click(function() {
+            $(".modal").addClass("is-active");
+        });
+
+        $(".modal-close").click(function() {
+            $(".modal").removeClass("is-active");
+        });
+    </script>
 
     {% include 'footer.html' %}
 </body>
