@@ -25,6 +25,21 @@
                     Dashboard
                 </a>
             </div>
+            <div class="navbar-end">
+                {% if user.is_authenticated %}
+                <div class="navbar-item">
+                    <a href="{% url 'logout' %}" class="button">
+                        Log out
+                    </a>
+                </div>
+                {% else %}
+                <div class="navbar-item">
+                    <a href="{% url 'login' %}" class="button">
+                        Log in
+                    </a>
+                </div>
+                {% endif %}
+            </div>
         </div>
     </div>
 </nav>
