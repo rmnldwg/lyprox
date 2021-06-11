@@ -12,18 +12,38 @@
                 <a href="{% url 'patients:list' %}" class="navbar-item">
                     List
                 </a>
+                <a href="{% url 'patients:create' %}" class="navbar-item">
+                    Create
+                </a>
 
                 <a href="{% url 'patients:upload' %}" class="navbar-item">
                     Upload
                 </a>
 
-                <a href="{% url 'patients:create' %}" class="navbar-item">
-                    Create
-                </a>
-
                 <a href="{% url 'patients:dashboard' %}" class="navbar-item">
                     Dashboard
                 </a>
+            </div>
+            <div class="navbar-end">
+                {% if user.is_authenticated %}
+                <div class="navbar-item">
+                    <a href="{% url 'accounts:logout' %}" class="button is-primary is-inverted is-outlined">
+                        <span class="icon">
+                            <i class="fas fa-sign-out-alt"></i>
+                        </span>
+                        <span>Log out</span>
+                    </a>
+                </div>
+                {% else %}
+                <div class="navbar-item">
+                    <a href="{% url 'accounts:login' %}" class="button is-primary is-inverted is-outlined">
+                        <span class="icon">
+                            <i class="fas fa-sign-in-alt"></i>
+                        </span>
+                        <span>Log in</span>
+                    </a>
+                </div>
+                {% endif %}
             </div>
         </div>
     </div>

@@ -3,6 +3,8 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponse, Http404
 from django.urls.base import reverse, reverse_lazy
 from django.views import generic
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.decorators import login_required
 
 import django_filters
 
@@ -56,7 +58,7 @@ class PatientDetailView(generic.DetailView):
         return context
 
 
-class CreatePatientView(generic.CreateView):
+class CreatePatientView(LoginRequiredMixin, generic.CreateView):
     model = Patient
     form_class = PatientForm
     template_name = "patients/patient_form.html"
@@ -70,7 +72,7 @@ class CreatePatientView(generic.CreateView):
         return context
     
       
-class UpdatePatientView(generic.UpdateView):
+class UpdatePatientView(LoginRequiredMixin, generic.UpdateView):
     model = Patient
     form_class = PatientForm
     template_name = "patients/patient_form.html"
@@ -84,7 +86,7 @@ class UpdatePatientView(generic.UpdateView):
         return context
     
     
-class DeletePatientView(generic.DeleteView):
+class DeletePatientView(LoginRequiredMixin, generic.DeleteView):
     model = Patient
     template_name = "patients/patient_delete.html"
     success_url = "/patients"
@@ -146,6 +148,7 @@ class DashboardView(generic.ListView):
             return super(DashboardView, self).get_template_names()
 
 
+@login_required
 def upload_patients(request):
     """View to load many patients at once from a CSV file using pandas. This 
     requires the CSV file to be formatted in a certain way."""
@@ -170,7 +173,7 @@ def upload_patients(request):
     
     
 # TUMOR related views
-class CreateTumorView(generic.CreateView):
+class CreateTumorView(LoginRequiredMixin, generic.CreateView):
     model = Tumor
     form_class = TumorForm
     template_name = "patients/patient_detail.html"
@@ -206,7 +209,7 @@ class CreateTumorView(generic.CreateView):
         return context
     
     
-class UpdateTumorView(generic.UpdateView):
+class UpdateTumorView(LoginRequiredMixin, generic.UpdateView):
     model = Tumor
     form_class = TumorForm
     template_name = "patients/patient_detail.html"
@@ -238,7 +241,7 @@ class UpdateTumorView(generic.UpdateView):
         return context
     
     
-class DeleteTumorView(generic.DeleteView):
+class DeleteTumorView(LoginRequiredMixin, generic.DeleteView):
     model = Tumor
     template_name = "patients/patient_detail.html"
     
@@ -284,7 +287,7 @@ class DeleteTumorView(generic.DeleteView):
 
 
 # DIAGNOSE related views
-class CreateDiagnoseView(generic.CreateView):
+class CreateDiagnoseView(LoginRequiredMixin, generic.CreateView):
     model = Diagnose
     form_class = DiagnoseForm
     template_name = "patients/patient_detail.html"
@@ -313,7 +316,7 @@ class CreateDiagnoseView(generic.CreateView):
         return context
     
     
-class UpdateDiagnoseView(generic.UpdateView):
+class UpdateDiagnoseView(LoginRequiredMixin, generic.UpdateView):
     model = Diagnose
     form_class = DiagnoseForm
     template_name = "patients/patient_detail.html"
@@ -345,7 +348,7 @@ class UpdateDiagnoseView(generic.UpdateView):
         return context
     
     
-class DeleteDiagnoseView(generic.DeleteView):
+class DeleteDiagnoseView(LoginRequiredMixin, generic.DeleteView):
     model = Diagnose
     template_name = "patients/patient_detail.html"
     
