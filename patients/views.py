@@ -9,10 +9,10 @@ from django.contrib.auth.decorators import login_required
 import django_filters
 
 from typing import Any, Dict, List, Optional, Sequence
-
 import time
-
 from numpy import e, errstate
+import logging
+logger = logging.getLogger(__name__)
 
 from .models import Patient, Tumor, Diagnose, MODALITIES
 from .forms import PatientForm, TumorForm, DiagnoseForm, DataFileForm, DashboardForm, ValidationError
@@ -62,9 +62,6 @@ class CreatePatientView(LoginRequiredMixin, generic.CreateView):
     model = Patient
     form_class = PatientForm
     template_name = "patients/patient_form.html"
-    
-    # def get_success_url(self) -> str:
-    #     return redirect("patients:detail", pk=self.kwargs["pk"])
     
     def get_context_data(self, **kwargs: Any) -> Dict[str, Any]:
         context = super().get_context_data(**kwargs)
@@ -129,8 +126,9 @@ class DashboardView(generic.ListView):
                 queryset = init_pats
 
             else:
-                raise ValidationError(
-                    "Validation of default values of form failed.")
+                msg = "Validation of default values of form failed."
+                logger.error(msg)
+                raise ValidationError(msg)
 
         return queryset
 

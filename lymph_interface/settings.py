@@ -28,6 +28,7 @@ SECRET_KEY = 'a9b4rrnpl-7)g_a%xkr&%$n62!0c9om24ym-lo$h4#ahjufnz_'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
+LOG_LEVEL = 'DEBUG'
 
 ALLOWED_HOSTS = []
 
@@ -38,25 +39,34 @@ LOGGING = {
     'disanle_existing_loggers': False,
     
     'formatters': {
-        'console': {
-            'format': "[%(asctime)s] %(name)-25s %(message)s"
+        'default': {
+            'format': "[%(asctime)s] %(levelname)-10s %(name)-25s %(message)s"
         }  
     },
     
     'handlers': {
         'console': {
             'class': 'logging.StreamHandler',
-            'formatter': 'console',
+            'formatter': 'default',
         },
         'file': {
             'class': 'logging.FileHandler',
-            'filename': BASE_DIR / 'tmp/debug.log'
+            'filename': BASE_DIR / 'tmp/debug.log',
+            'formatter': 'default'
         }
     },
     
     'loggers': {
         'django': {
-            'level': 'INFO',
+            'level': LOG_LEVEL,
+            'handlers': ['console']
+        },
+        'patients': {
+            'level': LOG_LEVEL,
+            'handlers': ['console']
+        },
+        'accounts': {
+            'level': LOG_LEVEL,
             'handlers': ['console']
         }
     }

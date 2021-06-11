@@ -3,11 +3,15 @@ from django.db.models import Q, F, QuerySet
 
 import numpy as np
 import dateutil
+import time
 from collections import defaultdict
 from typing import List, Union, Optional, Dict, Any
+import logging
+logger = logging.getLogger(__name__)
+
 from .models import Patient, Diagnose, Tumor, T_STAGES, N_STAGES, M_STAGES, MODALITIES, LNLs
 
-import time
+
 
 def compute_hash(*args):
     """Compute a hash vlaue from three patient-specific fields that must be 
@@ -67,6 +71,8 @@ def create_from_pandas(data_frame, anonymize=True):
         try:
             new_patient.save()
         except IntegrityError:
+            msg = f"Patient already in database. Skipping row {i+1}."
+            logger.debug(msg)
             num_skipped += 1
             continue
             
@@ -152,11 +158,17 @@ def create_from_pandas(data_frame, anonymize=True):
                         new_diagnose.patient = new_patient
                         new_diagnose.save()
             
+            msg = f"parsed row {i+1} and created patient {new_patient}"
+            logger.debug(msg)
+            
             num_new += 1
             
         except:
+            msg = f"Unable to add Tumor/Diagnose. Skipping row {i+1}."
+            logger.warning(msg)
             new_patient.delete()
-            raise
+            num_skipped += 1
+            continue
 
     return num_new, num_skipped
 

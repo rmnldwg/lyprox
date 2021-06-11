@@ -5,13 +5,15 @@ from django.db import IntegrityError
 from django.core.exceptions import ValidationError
 from django.utils.translation import gettext as _
 
-from .models import Patient, Tumor, Diagnose, MODALITIES, LOCATIONS, SUBSITES, T_STAGES, LNLs
-from .utils import compute_hash
-
 import numpy as np
 from pathlib import Path
 import pandas
 import os
+import logging
+logger = logging.getLogger(__name__)
+
+from .models import Patient, Tumor, Diagnose, MODALITIES, LOCATIONS, SUBSITES, T_STAGES, LNLs
+from .utils import compute_hash
 
 
 class PatientForm(forms.ModelForm):
@@ -72,8 +74,9 @@ class PatientForm(forms.ModelForm):
         
         try:
             prev_patient_hash = Patient.objects.get(hash_value=unique_hash)
-            raise forms.ValidationError(_("Identifier already exists in "
-                                          "database. Possible duplicate?"))
+            msg = "hash already in database. Possible duplicate, form inalid."
+            logger.warning(msg)
+            raise forms.ValidationError(_(msg))
             
         # if the above does not throw an exception, one can proceed
         except Patient.DoesNotExist: 
