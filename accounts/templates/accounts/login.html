@@ -13,7 +13,7 @@
             </div>
             {% endif %}
 
-            <form action="{% url 'login' %}" method="post">
+            <form action="{% url 'accounts:login' %}" method="post">
                 {% csrf_token %}
 
                 <div class="field">
@@ -37,7 +37,10 @@
                 <div class="field is-grouped is-grouped-right">
                     <p class="control">
                         <button class="button is-primary">
-                            Login
+                            <span class="icon">
+                                <i class="fas fa-sign-in-alt"></i>
+                            </span>
+                            <span>Log in</span>
                         </button>
                     </p>
                 </div>

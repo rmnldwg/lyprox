@@ -7,7 +7,7 @@ from django.utils.translation import gettext, gettext_lazy as _
 class CustomAuthenticationForm(AuthenticationForm):
     username = UsernameField(
         widget=forms.TextInput(attrs={'autofocus': True, 
-                                                           "class": "input"})
+                                      "class": "input"})
     )
     password = forms.CharField(
         label=_("Password"),
