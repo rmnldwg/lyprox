@@ -17,6 +17,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 FILE_UPLOAD_TEMP_DIR = BASE_DIR / "tmp"
 
+LOGIN_REDIRECT_URL = "/"
+
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
@@ -28,6 +30,37 @@ SECRET_KEY = 'a9b4rrnpl-7)g_a%xkr&%$n62!0c9om24ym-lo$h4#ahjufnz_'
 DEBUG = True
 
 ALLOWED_HOSTS = []
+
+
+# Logging
+LOGGING = {
+    'version': 1,
+    'disanle_existing_loggers': False,
+    
+    'formatters': {
+        'console': {
+            'format': "[%(asctime)s] %(name)-25s %(message)s"
+        }  
+    },
+    
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+            'formatter': 'console',
+        },
+        'file': {
+            'class': 'logging.FileHandler',
+            'filename': BASE_DIR / 'tmp/debug.log'
+        }
+    },
+    
+    'loggers': {
+        'django': {
+            'level': 'INFO',
+            'handlers': ['console']
+        }
+    }
+}
 
 
 # Application definition
