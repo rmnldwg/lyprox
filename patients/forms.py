@@ -14,9 +14,10 @@ logger = logging.getLogger(__name__)
 
 from .models import Patient, Tumor, Diagnose, MODALITIES, LOCATIONS, SUBSITES, T_STAGES, LNLs
 from .utils import compute_hash
+from .loggers import FormLoggerMixin
 
 
-class PatientForm(forms.ModelForm):
+class PatientForm(FormLoggerMixin, forms.ModelForm):
     class Meta:
         model = Patient
         fields = ["gender", 
@@ -62,6 +63,8 @@ class PatientForm(forms.ModelForm):
         
         if commit:
             patient.save()
+            msg = f"new patient ({patient}) saved to database"
+            self.logger.info(msg)
             
         return patient
     
@@ -74,8 +77,9 @@ class PatientForm(forms.ModelForm):
         
         try:
             prev_patient_hash = Patient.objects.get(hash_value=unique_hash)
-            msg = "hash already in database. Possible duplicate, form inalid."
-            logger.warning(msg)
+            msg = ("Hash value already in database. Entered patient might be "
+                   "duplicate.")
+            self.logger.warning(msg)
             raise forms.ValidationError(_(msg))
             
         # if the above does not throw an exception, one can proceed
@@ -109,7 +113,7 @@ class PatientForm(forms.ModelForm):
 
 
 
-class TumorForm(forms.ModelForm):
+class TumorForm(FormLoggerMixin, forms.ModelForm):
     class Meta:
         model = Tumor
         fields = ["t_stage",
@@ -124,8 +128,15 @@ class TumorForm(forms.ModelForm):
             "subsite": forms.Select(attrs={"class": "select shorten"}),
             "position": forms.Select(attrs={"class": "select"}),
             "extension": forms.CheckboxInput(attrs={"class": "checkbox"}),
-            "size": forms.TextInput(attrs={"class": "input"}),
+            "size": forms.NumberInput(attrs={"class": "input", 
+                                             "min": 0.0}),
         }
+        
+    def clean_size(self):
+        size = self.cleaned_data["size"]
+        if size < 0.:
+            raise ValidationError("Size must be a positive number.")
+        return size
         
         
     def save(self, commit=True):
@@ -148,12 +159,15 @@ class TumorForm(forms.ModelForm):
                 tumor.patient.save()
                 
             tumor.save()
+            msg = (f"New tumor ({tumor}) has been added to patient "
+                   f"({tumor.patient})")
+            self.logger.info(msg)
             
         return tumor
         
         
         
-class DiagnoseForm(forms.ModelForm):
+class DiagnoseForm(FormLoggerMixin, forms.ModelForm):
     class Meta:
         model = Diagnose
         fields = ["diagnose_date",
@@ -185,12 +199,15 @@ class DiagnoseForm(forms.ModelForm):
         
         if commit:
             diagnose.save()
+            msg = (f"New diagnose ({diagnose}) has been added to patient "
+                   f"({diagnose.patient})")
+            self.logger.info(msg)
             
         return diagnose
     
     
     
-class DataFileForm(forms.Form):
+class DataFileForm(FormLoggerMixin, forms.Form):
     data_file = forms.FileField(
         widget=forms.widgets.FileInput(attrs={"class": "file-input"})
     )
@@ -199,16 +216,21 @@ class DataFileForm(forms.Form):
         cleaned_data = super(DataFileForm, self).clean()
         suffix = cleaned_data["data_file"].name.split(".")[-1]
         if suffix != "csv":
+            msg = "Uploaded file is not CSV table."
+            self.logger.warning(msg)
             raise ValidationError(_("File must be of type CSV."))
         
         try:
-            data_frame = pandas.read_csv(cleaned_data["data_file"], header=[0,1,2], 
+            data_frame = pandas.read_csv(cleaned_data["data_file"], 
+                                         header=[0,1,2], 
                                          skip_blank_lines=True, 
                                          infer_datetime_format=True)
         except:
-            raise forms.ValidationError(_("pandas was unable to parse the " 
-                                          "uploaded file. Make sure it is a "
-                                          "valid CSV file with 3 header rows."))
+            msg = ("Error while parsing CSV table.")
+            self.logger.error(msg)
+            raise forms.ValidationError(
+                _(msg + " Make sure format is as specified")
+            )
             
         cleaned_data["data_frame"] = data_frame
         return cleaned_data
@@ -252,7 +274,7 @@ class ThreeWayToggle(forms.ChoiceField):
 
 
 
-class DashboardForm(forms.Form):
+class DashboardForm(FormLoggerMixin, forms.Form):
     """Form for querying the database."""
     
     def __init__(self, *args, **kwargs):
@@ -296,11 +318,13 @@ class DashboardForm(forms.Form):
                     elif a + b == 0:
                         pass
                     else:
-                        raise ValidationError(f"Invalid values in LNL {lnl} "
-                                              "{side}laterally.")
+                        msg = f"Invalid values in LNL {lnl} {side}laterally."
+                        self.logger.warning(msg)
+                        raise ValidationError(msg)
                 else:
-                    raise ValidationError(f"Invalid values in LNL {lnl} "
-                                          "{side}laterally.")
+                    msg = f"Invalid values in LNL {lnl} {side}laterally."
+                    self.logger.warning(msg)
+                    raise ValidationError(msg)
                 
                                     
         subsites = cleaned_data["subsites"]

@@ -18,6 +18,7 @@ from .models import Patient, Tumor, Diagnose, MODALITIES
 from .forms import PatientForm, TumorForm, DiagnoseForm, DataFileForm, DashboardForm, ValidationError
 from .utils import create_from_pandas, query, query2statistics
 from .filters import PatientFilter
+from .loggers import ViewLoggerMixin
 
 
 # PATIENT related views
@@ -26,6 +27,7 @@ class PatientListView(generic.ListView):
     template_name = "patients/list.html"
     context_object_name = "patient_list"
     filterset_class = PatientFilter
+    action = "show_patient_list"
     
     def get_queryset(self):
         """Add ability to filter queryset via FilterSets to generic ListView."""
@@ -45,6 +47,7 @@ class PatientListView(generic.ListView):
 class PatientDetailView(generic.DetailView):
     model = Patient
     template_name = "patients/patient_detail.html"
+    action = "show_patient_detail"
     
     def get_context_data(self, **kwargs: Any) -> Dict[str, Any]:
         context = super().get_context_data(**kwargs)
@@ -58,35 +61,38 @@ class PatientDetailView(generic.DetailView):
         return context
 
 
-class CreatePatientView(LoginRequiredMixin, generic.CreateView):
+class CreatePatientView(ViewLoggerMixin, LoginRequiredMixin, generic.CreateView):
     model = Patient
     form_class = PatientForm
     template_name = "patients/patient_form.html"
+    action = "create_patient"
     
     def get_context_data(self, **kwargs: Any) -> Dict[str, Any]:
         context = super().get_context_data(**kwargs)
-        context["action"] = "create_patient"
+        context["action"] = self.action
         return context
     
       
-class UpdatePatientView(LoginRequiredMixin, generic.UpdateView):
+class UpdatePatientView(ViewLoggerMixin, LoginRequiredMixin, generic.UpdateView):
     model = Patient
     form_class = PatientForm
     template_name = "patients/patient_form.html"
+    action = "edit_patient"
     
     def get_success_url(self) -> str:
         return reverse("patients:detail", kwargs=self.kwargs)
     
     def get_context_data(self, **kwargs: Any) -> Dict[str, Any]:
         context = super().get_context_data(**kwargs)
-        context["action"] = "edit_patient"
+        context["action"] = self.action
         return context
     
     
-class DeletePatientView(LoginRequiredMixin, generic.DeleteView):
+class DeletePatientView(ViewLoggerMixin, LoginRequiredMixin, generic.DeleteView):
     model = Patient
     template_name = "patients/patient_delete.html"
     success_url = "/patients"
+    action = "delete_patient"
     
     
 class DashboardView(generic.ListView):
@@ -94,6 +100,7 @@ class DashboardView(generic.ListView):
     form_class = DashboardForm
     context_object_name = "patient_list"
     template_name = "patients/dashboard.html"
+    action = "display_dashboard"
 
     def get_queryset(self):
         self.form = self.form_class(self.request.GET or None)
@@ -157,7 +164,18 @@ def upload_patients(request):
         if form.is_valid():
             data_frame = form.cleaned_data["data_frame"]
             # creating patients from the resulting pandas DataFrame
-            num_new, num_skipped = create_from_pandas(data_frame)
+            try:
+                num_new, num_skipped = create_from_pandas(data_frame)
+            except KeyError:
+                # down below I handle the case that the provided file is in 
+                # in fact a readable CSV file, but with the wrong fields. I 
+                # think it could be done more elegantly, but hey... it works
+                msg = "Provided CSV table is missing required columns."
+                logger.error(msg)
+                form = DataFileForm()
+                context = {"upload_success": False, "form": form, "error": msg}
+                return render(request, "patients/upload.html", context)
+                
             context = {"upload_success": True, 
                        "num_new": num_new, 
                        "num_skipped": num_skipped}
@@ -171,10 +189,11 @@ def upload_patients(request):
     
     
 # TUMOR related views
-class CreateTumorView(LoginRequiredMixin, generic.CreateView):
+class CreateTumorView(ViewLoggerMixin, LoginRequiredMixin, generic.CreateView):
     model = Tumor
     form_class = TumorForm
     template_name = "patients/patient_detail.html"
+    action = "create_tumor"
 
     def form_valid(self, form: TumorForm) -> HttpResponse:
         # assign tumor to current patient
@@ -193,7 +212,7 @@ class CreateTumorView(LoginRequiredMixin, generic.CreateView):
     
     def get_context_data(self, **kwargs: Any) -> Dict[str, Any]:
         context = super().get_context_data(**kwargs)
-        context["action"] = "create_tumor"
+        context["action"] = self.action
         
         patient = Patient.objects.get(**self.kwargs)
         context["patient"] = patient
@@ -207,10 +226,11 @@ class CreateTumorView(LoginRequiredMixin, generic.CreateView):
         return context
     
     
-class UpdateTumorView(LoginRequiredMixin, generic.UpdateView):
+class UpdateTumorView(ViewLoggerMixin, LoginRequiredMixin, generic.UpdateView):
     model = Tumor
     form_class = TumorForm
     template_name = "patients/patient_detail.html"
+    action = "update_tumor"
     
     def get_object(self):
         return Tumor.objects.get(pk=self.kwargs["tumor_pk"])
@@ -221,7 +241,7 @@ class UpdateTumorView(LoginRequiredMixin, generic.UpdateView):
     
     def get_context_data(self, **kwargs: Any) -> Dict[str, Any]:
         context = super().get_context_data(**kwargs)
-        context["action"] = "update_tumor"
+        context["action"] = self.action
         
         patient = Patient.objects.get(pk=self.kwargs["pk"])
         context["patient"] = patient
@@ -239,9 +259,10 @@ class UpdateTumorView(LoginRequiredMixin, generic.UpdateView):
         return context
     
     
-class DeleteTumorView(LoginRequiredMixin, generic.DeleteView):
+class DeleteTumorView(ViewLoggerMixin, LoginRequiredMixin, generic.DeleteView):
     model = Tumor
     template_name = "patients/patient_detail.html"
+    action = "delete_tumor"
     
     def get_object(self):
         return Tumor.objects.get(pk=self.kwargs["tumor_pk"])
@@ -266,7 +287,7 @@ class DeleteTumorView(LoginRequiredMixin, generic.DeleteView):
     
     def get_context_data(self, **kwargs: Any) -> Dict[str, Any]:
         context = super().get_context_data(**kwargs)
-        context["action"] = "delete_tumor"
+        context["action"] = self.action
         
         patient = Patient.objects.get(pk=self.kwargs["pk"])
         context["patient"] = patient
@@ -285,10 +306,11 @@ class DeleteTumorView(LoginRequiredMixin, generic.DeleteView):
 
 
 # DIAGNOSE related views
-class CreateDiagnoseView(LoginRequiredMixin, generic.CreateView):
+class CreateDiagnoseView(ViewLoggerMixin, LoginRequiredMixin, generic.CreateView):
     model = Diagnose
     form_class = DiagnoseForm
     template_name = "patients/patient_detail.html"
+    action = "create_diagnose"
 
     def form_valid(self, form: DiagnoseForm) -> HttpResponse:
         diagnose = form.save(commit=False)
@@ -300,7 +322,7 @@ class CreateDiagnoseView(LoginRequiredMixin, generic.CreateView):
     
     def get_context_data(self, **kwargs: Any) -> Dict[str, Any]:
         context = super().get_context_data(**kwargs)
-        context["action"] = "create_diagnose"
+        context["action"] = self.action
         
         patient = Patient.objects.get(**self.kwargs)
         context["patient"] = patient
@@ -314,10 +336,11 @@ class CreateDiagnoseView(LoginRequiredMixin, generic.CreateView):
         return context
     
     
-class UpdateDiagnoseView(LoginRequiredMixin, generic.UpdateView):
+class UpdateDiagnoseView(ViewLoggerMixin, LoginRequiredMixin, generic.UpdateView):
     model = Diagnose
     form_class = DiagnoseForm
     template_name = "patients/patient_detail.html"
+    action = "update_diagnose"
     
     def get_object(self):
         return Diagnose.objects.get(pk=self.kwargs["diagnose_pk"])
@@ -328,7 +351,7 @@ class UpdateDiagnoseView(LoginRequiredMixin, generic.UpdateView):
     
     def get_context_data(self, **kwargs: Any) -> Dict[str, Any]:
         context = super().get_context_data(**kwargs)
-        context["action"] = "update_diagnose"
+        context["action"] = self.action
         
         patient = Patient.objects.get(pk=self.kwargs["pk"])
         context["patient"] = patient
@@ -346,9 +369,10 @@ class UpdateDiagnoseView(LoginRequiredMixin, generic.UpdateView):
         return context
     
     
-class DeleteDiagnoseView(LoginRequiredMixin, generic.DeleteView):
+class DeleteDiagnoseView(ViewLoggerMixin, LoginRequiredMixin, generic.DeleteView):
     model = Diagnose
     template_name = "patients/patient_detail.html"
+    action = "delete_diagnose"
     
     def get_object(self):
         return Diagnose.objects.get(pk=self.kwargs["diagnose_pk"])
@@ -358,7 +382,7 @@ class DeleteDiagnoseView(LoginRequiredMixin, generic.DeleteView):
     
     def get_context_data(self, **kwargs: Any) -> Dict[str, Any]:
         context = super().get_context_data(**kwargs)
-        context["action"] = "delete_diagnose"
+        context["action"] = self.action
         
         patient = Patient.objects.get(pk=self.kwargs["pk"])
         context["patient"] = patient

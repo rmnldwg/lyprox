@@ -28,7 +28,7 @@ SECRET_KEY = 'a9b4rrnpl-7)g_a%xkr&%$n62!0c9om24ym-lo$h4#ahjufnz_'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
-LOG_LEVEL = 'DEBUG'
+LOG_LEVEL = 'INFO'
 
 ALLOWED_HOSTS = []
 
@@ -40,7 +40,7 @@ LOGGING = {
     
     'formatters': {
         'default': {
-            'format': "[%(asctime)s] %(levelname)-10s %(name)-25s %(message)s"
+            'format': "[%(asctime)s] %(levelname)-10s %(name)-40s %(message)s"
         }  
     },
     
