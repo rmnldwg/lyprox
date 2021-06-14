@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+{% include 'head.html' %}
+
+<body>
+    <section class="section">
+        <div class="container">
+            <div class="columns is-centered">
+                <div class="column is-5">
+                    <div class="notification is-warning">
+                        <p class="title is-1">
+                            <i class="fas fa-map-signs"></i>
+                            404
+                        </p>
+                        <p class="subtitle is-3">Page not found</p>
+                        <p>
+                            Maybe you mistyped the URL you were looking for. Try again or start over from the
+                            <span class="icon-text">
+                                <span class="icon">
+                                    <i class="fas fa-home"></i>
+                                </span>
+                                <span>
+                                    <a href="{% url 'index' %}">
+                                        home page
+                                    </a>
+                                </span>
+                            </span>
+                            .
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</body>
+</html>
