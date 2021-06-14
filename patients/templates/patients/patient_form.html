@@ -15,6 +15,12 @@
             
             {% endif %}
 
+                {% if form.errors %}
+                <div class="notification is-danger is-light">
+                    {{ form.non_field_errors }}
+                </div>
+                {% endif %}
+
                 {% csrf_token %}
 
                 <div class="field is-grouped">

@@ -17,6 +17,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 FILE_UPLOAD_TEMP_DIR = BASE_DIR / "tmp"
 
+LOGIN_REDIRECT_URL = "/"
+
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
@@ -26,8 +28,53 @@ SECRET_KEY = 'a9b4rrnpl-7)g_a%xkr&%$n62!0c9om24ym-lo$h4#ahjufnz_'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
+LOG_LEVEL = 'INFO'
 
 ALLOWED_HOSTS = []
+
+
+# Logging
+LOGGING = {
+    'version': 1,
+    'disanle_existing_loggers': False,
+    
+    'formatters': {
+        'default': {
+            'format': "[%(asctime)s] %(levelname)-10s %(name)-40s %(message)s"
+        }  
+    },
+    
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+            'formatter': 'default',
+        },
+        'file': {
+            'class': 'logging.FileHandler',
+            'filename': BASE_DIR / 'tmp/debug.log',
+            'formatter': 'default'
+        }
+    },
+    
+    'loggers': {
+        'django': {
+            'level': LOG_LEVEL,
+            'handlers': ['console']
+        },
+        'patients': {
+            'level': LOG_LEVEL,
+            'handlers': ['console']
+        },
+        'accounts': {
+            'level': LOG_LEVEL,
+            'handlers': ['console']
+        },
+        'auth_logger': {
+            'level': LOG_LEVEL,
+            'handlers': ['console']
+        }
+    }
+}
 
 
 # Application definition
@@ -39,6 +86,7 @@ INSTALLED_APPS = [
 
     # third party apps
     "django_filters",
+    "auth_logger",
     
     'django.contrib.admin',
     'django.contrib.auth',
