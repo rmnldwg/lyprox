@@ -68,6 +68,10 @@ LOGGING = {
         'accounts': {
             'level': LOG_LEVEL,
             'handlers': ['console']
+        },
+        'auth_logger': {
+            'level': LOG_LEVEL,
+            'handlers': ['console']
         }
     }
 }
@@ -82,6 +86,7 @@ INSTALLED_APPS = [
 
     # third party apps
     "django_filters",
+    "auth_logger",
     
     'django.contrib.admin',
     'django.contrib.auth',

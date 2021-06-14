@@ -10,7 +10,6 @@ from pathlib import Path
 import pandas
 import os
 import logging
-logger = logging.getLogger(__name__)
 
 from .models import Patient, Tumor, Diagnose, MODALITIES, LOCATIONS, SUBSITES, T_STAGES, LNLs
 from .utils import compute_hash
@@ -63,8 +62,6 @@ class PatientForm(FormLoggerMixin, forms.ModelForm):
         
         if commit:
             patient.save()
-            msg = f"new patient ({patient}) saved to database"
-            self.logger.info(msg)
             
         return patient
     
@@ -134,7 +131,7 @@ class TumorForm(FormLoggerMixin, forms.ModelForm):
         
     def clean_size(self):
         size = self.cleaned_data["size"]
-        if size < 0.:
+        if size is not None and size < 0.:
             raise ValidationError("Size must be a positive number.")
         return size
         
@@ -159,9 +156,6 @@ class TumorForm(FormLoggerMixin, forms.ModelForm):
                 tumor.patient.save()
                 
             tumor.save()
-            msg = (f"New tumor ({tumor}) has been added to patient "
-                   f"({tumor.patient})")
-            self.logger.info(msg)
             
         return tumor
         
@@ -199,9 +193,6 @@ class DiagnoseForm(FormLoggerMixin, forms.ModelForm):
         
         if commit:
             diagnose.save()
-            msg = (f"New diagnose ({diagnose}) has been added to patient "
-                   f"({diagnose.patient})")
-            self.logger.info(msg)
             
         return diagnose
     
@@ -216,9 +207,9 @@ class DataFileForm(FormLoggerMixin, forms.Form):
         cleaned_data = super(DataFileForm, self).clean()
         suffix = cleaned_data["data_file"].name.split(".")[-1]
         if suffix != "csv":
-            msg = "Uploaded file is not CSV table."
+            msg = "Uploaded file is not a CSV table."
             self.logger.warning(msg)
-            raise ValidationError(_("File must be of type CSV."))
+            raise ValidationError(_(msg))
         
         try:
             data_frame = pandas.read_csv(cleaned_data["data_file"], 

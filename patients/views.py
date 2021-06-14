@@ -132,11 +132,6 @@ class DashboardView(generic.ListView):
                                               **initial_form.cleaned_data)
                 queryset = init_pats
 
-            else:
-                msg = "Validation of default values of form failed."
-                logger.error(msg)
-                raise ValidationError(msg)
-
         return queryset
 
     def get_context_data(self, **kwargs: Any) -> Dict[str, Any]:

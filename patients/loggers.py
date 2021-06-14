@@ -1,4 +1,5 @@
 import logging
+from typing import Dict, Any
 
 
 class FormLoggerMixin(object):
@@ -12,6 +13,18 @@ class FormLoggerMixin(object):
             self.__class__.__name__
         ])
         return logging.getLogger(name)
+    
+    
+    def is_valid(self) -> bool:
+        if super().is_valid():
+            msg = f"Form successfully cleaned."
+            self.logger.info(msg)
+            return True
+        
+        else:
+            msg = f"Form has errors (or is unbound)."
+            self.logger.info(msg)
+            return False
 
 
 class ViewLoggerMixin(object):
@@ -26,8 +39,20 @@ class ViewLoggerMixin(object):
         ])
         return logging.getLogger(name)
 
-
-    def get_success_url(self) -> str:
-        msg = f"Successfully performed action {self.action}"
+    def form_valid(self, form):
+        ret = super().form_valid(form)
+        msg = f"{self.object.__class__.__name__} ({self.object}) has been saved."
         self.logger.info(msg)
-        return super(ViewLoggerMixin, self).get_success_url()
+        return ret
+    
+    def form_invalid(self, form):
+        msg = f"Form {form} invalid."
+        self.logger.info(msg)
+        return super().form_invalid(form)
+
+    def delete(self, request, *args, **kwargs):
+        instance = self.get_object()
+        msg = f"{instance.__class__.__name__} ({instance}) has been deleted."
+        res = super().delete(request, *args, **kwargs)
+        self.logger.info(msg)
+        return res
