@@ -24,10 +24,14 @@ LOGIN_REDIRECT_URL = "/"
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'a9b4rrnpl-7)g_a%xkr&%$n62!0c9om24ym-lo$h4#ahjufnz_'
+with open(BASE_DIR / "KEY") as f:
+    SECRET_KEY = f.read().strip()
+    
+CSRF_COOKIE_SECURE = True
+SESSION_COOKIE_SECURE = True
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 LOG_LEVEL = 'INFO'
 
 ALLOWED_HOSTS = []
@@ -59,19 +63,19 @@ LOGGING = {
     'loggers': {
         'django': {
             'level': LOG_LEVEL,
-            'handlers': ['console']
+            'handlers': ['console', 'file']
         },
         'patients': {
             'level': LOG_LEVEL,
-            'handlers': ['console']
+            'handlers': ['console', 'file']
         },
         'accounts': {
             'level': LOG_LEVEL,
-            'handlers': ['console']
+            'handlers': ['console', 'file']
         },
         'auth_logger': {
             'level': LOG_LEVEL,
-            'handlers': ['console']
+            'handlers': ['console', 'file']
         }
     }
 }

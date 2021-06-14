@@ -135,5 +135,8 @@ dmypy.json
 # Bulma
 **/custom_bulma/node_modules
 
+# secret key
+KEY
+
 # screenshots from Bertrand's interface
 bertrands_interface/
