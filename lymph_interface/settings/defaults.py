@@ -13,72 +13,57 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
-BASE_DIR = Path(__file__).resolve().parent.parent
+BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
 FILE_UPLOAD_TEMP_DIR = BASE_DIR / "tmp"
 
 LOGIN_REDIRECT_URL = "/"
 
 
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
-
-# SECURITY WARNING: keep the secret key used in production secret!
-with open(BASE_DIR / "KEY") as f:
-    SECRET_KEY = f.read().strip()
-    
-CSRF_COOKIE_SECURE = True
-SESSION_COOKIE_SECURE = True
-
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
-LOG_LEVEL = 'INFO'
-
-ALLOWED_HOSTS = []
-
-
 # Logging
-LOGGING = {
-    'version': 1,
-    'disanle_existing_loggers': False,
-    
-    'formatters': {
-        'default': {
-            'format': "[%(asctime)s] %(levelname)-10s %(name)-40s %(message)s"
-        }  
-    },
-    
-    'handlers': {
-        'console': {
-            'class': 'logging.StreamHandler',
-            'formatter': 'default',
+def set_LOGGING(LOG_LEVEL):
+    LOGGING = {
+        'version': 1,
+        'disanle_existing_loggers': False,
+        
+        'formatters': {
+            'default': {
+                'format': "[%(asctime)s] %(levelname)-10s %(name)-40s %(message)s"
+            }  
         },
-        'file': {
-            'class': 'logging.FileHandler',
-            'filename': BASE_DIR / 'tmp/debug.log',
-            'formatter': 'default'
-        }
-    },
-    
-    'loggers': {
-        'django': {
-            'level': LOG_LEVEL,
-            'handlers': ['console', 'file']
+        
+        'handlers': {
+            'console': {
+                'class': 'logging.StreamHandler',
+                'formatter': 'default',
+            },
+            'file': {
+                'class': 'logging.FileHandler',
+                'filename': BASE_DIR / 'tmp/debug.log',
+                'formatter': 'default'
+            }
         },
-        'patients': {
-            'level': LOG_LEVEL,
-            'handlers': ['console', 'file']
-        },
-        'accounts': {
-            'level': LOG_LEVEL,
-            'handlers': ['console', 'file']
-        },
-        'auth_logger': {
-            'level': LOG_LEVEL,
-            'handlers': ['console', 'file']
+        
+        'loggers': {
+            'django': {
+                'level': LOG_LEVEL,
+                'handlers': ['console', 'file']
+            },
+            'patients': {
+                'level': LOG_LEVEL,
+                'handlers': ['console', 'file']
+            },
+            'accounts': {
+                'level': LOG_LEVEL,
+                'handlers': ['console', 'file']
+            },
+            'auth_logger': {
+                'level': LOG_LEVEL,
+                'handlers': ['console', 'file']
+            }
         }
     }
-}
+    return LOGGING
 
 
 # Application definition
