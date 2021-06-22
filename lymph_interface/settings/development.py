@@ -1,11 +1,17 @@
 from .defaults import *
-
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
+import os
+import warnings
 
 # SECURITY WARNING: keep the secret key used in production secret!
-with open(BASE_DIR / "KEY") as f:
-    SECRET_KEY = f.read().strip()
+try:
+    SECRET_KEY = os.environ["DJANGO_SECRET_KEY"]
+except KeyError:
+    warnings.warn(
+        "Secret key not in environment variables. This is fine for "
+        "development, but make sure to set it for production!",
+        RuntimeWarning
+    )
+    SECRET_KEY = "k_&(m5ymps%p=4&qjnwkv-avxb@@ez1tewc8g_eg4k#jx59ukx"
     
 CSRF_COOKIE_SECURE = True
 SESSION_COOKIE_SECURE = True
