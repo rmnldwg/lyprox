@@ -39,7 +39,7 @@ def set_LOGGING(LOG_LEVEL):
             },
             'file': {
                 'class': 'logging.FileHandler',
-                'filename': BASE_DIR / 'tmp/debug.log',
+                'filename': BASE_DIR / 'debug.log',
                 'formatter': 'default'
             }
         },
