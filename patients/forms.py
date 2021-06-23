@@ -268,6 +268,44 @@ class ThreeWayToggle(forms.ChoiceField):
 class DashboardForm(FormLoggerMixin, forms.Form):
     """Form for querying the database."""
     
+    # select modalities to show
+    modalities = forms.MultipleChoiceField(
+        required=False, 
+        widget=forms.CheckboxSelectMultiple(attrs={"class": "checkbox is-hidden"}), 
+        choices=MODALITIES,
+        initial=[1,2]
+    )
+    modality_combine = forms.ChoiceField(
+        choices=[("AND", "AND"), 
+                 ("OR", "OR")],
+        label="Combine",
+        initial="OR"
+    )
+    
+    # patient specific fields
+    nicotine_abuse = ThreeWayToggle()
+    hpv_status = ThreeWayToggle()
+    neck_dissection = ThreeWayToggle()
+    
+    # tumor specific info
+    subsites = forms.MultipleChoiceField(
+        required=False,
+        widget=forms.CheckboxSelectMultiple(attrs={"class": "checkbox is-hidden"}),
+        choices=[("base", "base of tongue"),
+                 ("tonsil", "tonsil"), 
+                 ("rest" , "other/multiple")],
+        initial=["base", "tonsil", "rest"]
+    )
+    tstages = forms.MultipleChoiceField(
+        required=False,
+        widget=forms.CheckboxSelectMultiple(attrs={"class": "checkbox is-hidden"}),
+        choices=T_STAGES,
+        initial=[1,2,3,4]
+    )
+    central = ThreeWayToggle()
+    midline_extension = ThreeWayToggle()
+    
+    
     def __init__(self, *args, **kwargs):
         """Extend default initialization to create lots of fields for the 
         LNLs from a list."""
@@ -337,42 +375,3 @@ class DashboardForm(FormLoggerMixin, forms.Form):
         cleaned_data["modalities"] = [int(s) for s in str_list]
         
         return cleaned_data
-        
-        
-        
-    # select modalities to show
-    modalities = forms.MultipleChoiceField(
-        required=False, 
-        widget=forms.CheckboxSelectMultiple(attrs={"class": "checkbox is-hidden"}), 
-        choices=MODALITIES,
-        initial=[1,2]
-    )
-    modality_combine = forms.ChoiceField(
-        choices=[("AND", "AND"), 
-                 ("OR", "OR")],
-        label="Combine",
-        initial="OR"
-    )
-    
-    
-    # patient specific fields
-    nicotine_abuse = ThreeWayToggle()
-    hpv_status = ThreeWayToggle()
-    neck_dissection = ThreeWayToggle()
-    
-    
-    # tumor specific info
-    subsites = forms.MultipleChoiceField(
-        widget=forms.CheckboxSelectMultiple(attrs={"class": "checkbox is-hidden"}),
-        choices=[("base", "base of tongue"),
-                 ("tonsil", "tonsil"), 
-                 ("rest" , "other/multiple")],
-        initial=["base", "tonsil", "rest"]
-    )
-    tstages = forms.MultipleChoiceField(
-        widget=forms.CheckboxSelectMultiple(attrs={"class": "checkbox is-hidden"}),
-        choices=T_STAGES,
-        initial=[1,2,3,4]
-    )
-    central = ThreeWayToggle()
-    midline_extension = ThreeWayToggle()
