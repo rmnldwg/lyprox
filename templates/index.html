@@ -3,13 +3,13 @@
 {% block content %}
 
 {% load static %}
+{% load mytags %}
 
 
 <div class="block">
-    <p class="title">Interface</p>
-    <p class="subtitle">
-        Visualizing a HNSCC database
-    </p>
+    <div class="content">
+        {% include_md 'index.md' %}
+    </div>
 </div>
 
 <section class="block columns">
