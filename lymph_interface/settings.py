@@ -10,10 +10,38 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.1/ref/settings/
 """
 
-from pathlib import Path  
+from pathlib import Path
+import json
+import warnings
+
+
+try:
+    with open("/etc/lymph-interface_config.json") as config_file:
+        config = json.load(config_file)
+except FileNotFoundError:
+    warnings.warn(
+        "No config file found under '/etc/lymph-iterface_config.json'. This is "
+        "fine for development, as default values will be loaded, but make sure "
+        "to provide this config file for production.",
+        RuntimeWarning
+    )
+    config = {
+        "DEBUG": True,
+        "LOG_LEVEL": "INFO",
+        "ALLOWED_HOSTS": [],
+        "SECRET_KEY": 'k_&(m5ymps%p=4&qjnwkv-avxb@@ez1tewc8g_eg4k#jx59ukx'
+    }
+
+# security
+DEBUG = config["DEBUG"]
+SECRET_KEY = config["SECRET_KEY"]
+ALLOWED_HOSTS = config["ALLOWED_HOSTS"]
+CSRF_COOKIE_SECURE = True
+SESSION_COOKIE_SECURE = True
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
-BASE_DIR = Path(__file__).resolve().parent.parent.parent
+BASE_DIR = Path(__file__).resolve().parent.parent
 
 FILE_UPLOAD_TEMP_DIR = BASE_DIR / "tmp"
 
@@ -25,13 +53,13 @@ def set_LOGGING(LOG_LEVEL):
     LOGGING = {
         'version': 1,
         'disanle_existing_loggers': False,
-        
+
         'formatters': {
             'default': {
                 'format': "[%(asctime)s] %(levelname)-10s %(name)-40s %(message)s"
-            }  
+            }
         },
-        
+
         'handlers': {
             'console': {
                 'class': 'logging.StreamHandler',
@@ -43,7 +71,7 @@ def set_LOGGING(LOG_LEVEL):
                 'formatter': 'default'
             }
         },
-        
+
         'loggers': {
             'django': {
                 'level': LOG_LEVEL,
@@ -65,6 +93,9 @@ def set_LOGGING(LOG_LEVEL):
     }
     return LOGGING
 
+LOG_LEVEL = config["LOG_LEVEL"]
+LOGGING = set_LOGGING(LOG_LEVEL)
+
 
 # Application definition
 
@@ -76,7 +107,7 @@ INSTALLED_APPS = [
     # third party apps
     "django_filters",
     "auth_logger",
-    
+
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -169,5 +200,9 @@ STATICFILES_DIRS = [
     BASE_DIR / "lymph_interface" / "static"
 ]
 
-STATIC_ROOT = BASE_DIR / "static"
+try:
+    STATIC_ROOT = config["STATIC_ROOT"]
+except KeyError:
+    pass
+
 STATIC_URL = '/static/'
