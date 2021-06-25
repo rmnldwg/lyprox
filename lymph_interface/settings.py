@@ -31,6 +31,7 @@ except FileNotFoundError:
         "ALLOWED_HOSTS": [],
         "SECRET_KEY": 'k_&(m5ymps%p=4&qjnwkv-avxb@@ez1tewc8g_eg4k#jx59ukx'
     }
+    
 
 # security
 DEBUG = config["DEBUG"]
@@ -201,7 +202,7 @@ STATICFILES_DIRS = [
 ]
 
 try:
-    STATIC_ROOT = config["STATIC_ROOT"]
+    STATIC_ROOT = BASE_DIR / config["STATIC_ROOT_SUFFIX"]
 except KeyError:
     pass
 
