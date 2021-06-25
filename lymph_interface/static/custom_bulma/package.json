@@ -1,0 +1,22 @@
+{
+  "name": "custom_bulma",
+  "version": "1.0.0",
+  "description": "customizing bulma to fit the USZ corporate design",
+  "main": "sass/usz.scss",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "css-build": "node-sass --omit-source-map-url sass/usz.scss ../usz.css",
+    "css-watch": "npm run css-build -- --watch",
+    "start": "npm run css-watch"
+  },
+  "author": "Roman Ludwig",
+  "license": "MIT",
+  "devDependencies": {
+    "bulma": "^0.9.2",
+    "node-sass": "^5.0.0"
+  },
+  "dependencies": {
+    "@creativebulma/bulma-tooltip": "^1.2.0",
+    "bulma-calendar": "^6.1.0"
+  }
+}
