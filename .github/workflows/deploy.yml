@@ -1,0 +1,39 @@
+# This is a basic workflow to push changes to a remote virtual machine
+name: Push to Azure VM
+
+# Controls when the workflow will run
+on:
+  # Triggers the workflow on push or pull request events but only for the main branch
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "build"
+  build:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+    - name: Prepare SSH keys
+      uses: shimataro/ssh-key-action@v2
+      with:
+        key: ${{ secrets.REMOTE_KEY }}
+        known_hosts: ${{ secrets.REMOTE_KNOWN_HOSTS }}
+    
+    - name: Checkout repository
+      uses: actions/checkout@v2
+      with:
+        ssh-key: ${{ secrets.REMOTE_KEY }}
+        fetch-depth: 0
+        ref: main
+      
+    - name: Add/push to remote VM
+      run: |
+        git config user.name "rmnldwg"
+        git config user.email "roman.ludwig@usz.ch"
+        git remote add production ssh://rmnldwg@${{ secrets.REMOTE_KNOWN_HOSTS }}:/var/repos/lymph-interface.git
+        git push production
