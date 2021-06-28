@@ -53,6 +53,7 @@ def create_from_pandas(data_frame, anonymize=True):
         alcohol_abuse = _(row[("patient", "abuse", "alcohol")])
         nicotine_abuse = _(row[("patient", "abuse", "nicotine")])
         hpv_status = _(row[("patient", "condition", "HPV")])
+        neck_dissection = _(row[("patient", "condition", "neck-dissection")])
 
         t_stage = 0
         n_stage = _(row[("patient", "stage", "N")])
@@ -65,6 +66,7 @@ def create_from_pandas(data_frame, anonymize=True):
                               alcohol_abuse=alcohol_abuse,
                               nicotine_abuse=nicotine_abuse,
                               hpv_status=hpv_status,
+                              neck_dissection=neck_dissection,
                               t_stage=t_stage,
                               n_stage=n_stage,
                               m_stage=m_stage)
