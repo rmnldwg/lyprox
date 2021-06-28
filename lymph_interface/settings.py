@@ -29,7 +29,9 @@ except FileNotFoundError:
         "DEBUG": True,
         "LOG_LEVEL": "INFO",
         "ALLOWED_HOSTS": [],
-        "SECRET_KEY": 'k_&(m5ymps%p=4&qjnwkv-avxb@@ez1tewc8g_eg4k#jx59ukx'
+        "SECRET_KEY": 'k_&(m5ymps%p=4&qjnwkv-avxb@@ez1tewc8g_eg4k#jx59ukx',
+        "CSRF_COOKIE_SECURE": False,
+        "SESSION_COOKIE_SECURE": False,
     }
     
 
@@ -37,8 +39,8 @@ except FileNotFoundError:
 DEBUG = config["DEBUG"]
 SECRET_KEY = config["SECRET_KEY"]
 ALLOWED_HOSTS = config["ALLOWED_HOSTS"]
-CSRF_COOKIE_SECURE = True
-SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = config["CSRF_COOKIE_SECURE"]
+SESSION_COOKIE_SECURE = config["SESSION_COOKIE_SECURE"]
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
