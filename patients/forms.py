@@ -1,6 +1,6 @@
 from django import forms
 from django.conf import settings
-from django.forms.widgets import NumberInput
+from django.forms import widgets
 from django.db import IntegrityError
 from django.core.exceptions import ValidationError
 from django.utils.translation import gettext as _
@@ -23,35 +23,45 @@ class PatientForm(FormLoggerMixin, forms.ModelForm):
                   "diagnose_date", 
                   "alcohol_abuse", 
                   "nicotine_abuse", 
-                  "hpv_status", 
+                  "hpv_status",
+                  "neck_dissection", 
                   "n_stage",
                   "m_stage"]
-        widgets = {"gender": forms.Select(attrs={"class": "select"}),
-                   "diagnose_date": NumberInput(attrs={"class": "input", 
-                                                       "type": "date"}),
-                   "alcohol_abuse": forms.Select(choices=[(True, "positive"),
-                                                          (False, "negative"),
-                                                          (None, "unknown")],
-                                                 attrs={"class": "select"}),
-                   "nicotine_abuse": forms.Select(choices=[(True, "positive"),
-                                                           (False, "negative"),
-                                                           (None, "unknown")],
+        widgets = {"gender": widgets.Select(attrs={"class": "select"}),
+                   "diagnose_date": widgets.NumberInput(attrs={"class": "input",
+                                                               "type": "date"}),
+                   "alcohol_abuse": widgets.Select(choices=[(True, "yes"),
+                                                            (False, "no"),
+                                                            (None, "unknown")],
+                                                   attrs={"class": "select"}),
+                   "nicotine_abuse": widgets.Select(choices=[(True, "yes"),
+                                                             (False, "no"),
+                                                             (None, "unknown")],
                                                   attrs={"class": "select"}), 
-                   "hpv_status": forms.Select(choices=[(True, "positive"),
-                                                       (False, "negative"),
-                                                       (None, "unknown")],
-                                              attrs={"class": "select"}),
-                   "n_stage": forms.Select(attrs={"class": "select"}),
-                   "m_stage": forms.Select(attrs={"class": "select"})}
+                   "hpv_status": widgets.Select(choices=[(True, "positive"),
+                                                         (False, "negative"),
+                                                         (None, "unknown")],
+                                                attrs={"class": "select"}),
+                   "neck_dissection": widgets.Select(choices=[(True, "yes"),
+                                                              (False, "no"),
+                                                              (None, "unknown")],
+                                                     attrs={"class": "select"}),
+                   "n_stage": widgets.Select(attrs={"class": "select"}),
+                   "m_stage": widgets.Select(attrs={"class": "select"})}
 
     first_name = forms.CharField(
-        widget=forms.widgets.TextInput(attrs={"class": "input",
-                                              "placeholder": "First name"}))
+        widget=widgets.TextInput(attrs={"class": "input",
+                                        "placeholder": "First name"}))
     last_name = forms.CharField(
-        widget=forms.widgets.TextInput(attrs={"class": "input",
-                                              "placeholder": "Last name"}))   
-    birthday = forms.DateField(widget=NumberInput(attrs={"class": "input", 
-                                                         "type": "date"}))
+        widget=widgets.TextInput(attrs={"class": "input",
+                                        "placeholder": "Last name"}))   
+    birthday = forms.DateField(
+        widget=widgets.NumberInput(attrs={"class": "input",
+                                          "type": "date"}))
+    check_for_duplicate = forms.BooleanField(
+        widget=widgets.HiddenInput(),
+        required=False)
+
 
     def save(self, commit=True):
         """Compute hashed ID and age from name, birthday and diagnose date."""
@@ -72,17 +82,21 @@ class PatientForm(FormLoggerMixin, forms.ModelForm):
         cleaned_data = super(PatientForm, self).clean()
         unique_hash, cleaned_data = self._get_identifier(cleaned_data)
         
-        try:
-            prev_patient_hash = Patient.objects.get(hash_value=unique_hash)
-            msg = ("Hash value already in database. Entered patient might be "
-                   "duplicate.")
-            self.logger.warning(msg)
-            raise forms.ValidationError(_(msg))
-            
-        # if the above does not throw an exception, one can proceed
-        except Patient.DoesNotExist: 
-            cleaned_data["hash_value"] = unique_hash
-            return cleaned_data
+        if cleaned_data["check_for_duplicate"]:
+            try:
+                prev_patient_hash = Patient.objects.get(hash_value=unique_hash)
+                
+                msg = ("Hash value already in database. Entered patient might be "
+                    "duplicate.")
+                self.logger.warning(msg)
+                raise forms.ValidationError(_(msg))
+                
+            # if the above does not throw an exception, one can proceed
+            except Patient.DoesNotExist: 
+                pass
+
+        cleaned_data["hash_value"] = unique_hash
+        return cleaned_data
         
         
     def _compute_age(self):
@@ -268,6 +282,44 @@ class ThreeWayToggle(forms.ChoiceField):
 class DashboardForm(FormLoggerMixin, forms.Form):
     """Form for querying the database."""
     
+    # select modalities to show
+    modalities = forms.MultipleChoiceField(
+        required=False, 
+        widget=forms.CheckboxSelectMultiple(attrs={"class": "checkbox is-hidden"}), 
+        choices=MODALITIES,
+        initial=[1,2]
+    )
+    modality_combine = forms.ChoiceField(
+        choices=[("AND", "AND"), 
+                 ("OR", "OR")],
+        label="Combine",
+        initial="OR"
+    )
+    
+    # patient specific fields
+    nicotine_abuse = ThreeWayToggle()
+    hpv_status = ThreeWayToggle()
+    neck_dissection = ThreeWayToggle()
+    
+    # tumor specific info
+    subsites = forms.MultipleChoiceField(
+        required=False,
+        widget=forms.CheckboxSelectMultiple(attrs={"class": "checkbox is-hidden"}),
+        choices=[("base", "base of tongue"),
+                 ("tonsil", "tonsil"), 
+                 ("rest" , "other/multiple")],
+        initial=["base", "tonsil", "rest"]
+    )
+    tstages = forms.MultipleChoiceField(
+        required=False,
+        widget=forms.CheckboxSelectMultiple(attrs={"class": "checkbox is-hidden"}),
+        choices=T_STAGES,
+        initial=[1,2,3,4]
+    )
+    central = ThreeWayToggle()
+    midline_extension = ThreeWayToggle()
+    
+    
     def __init__(self, *args, **kwargs):
         """Extend default initialization to create lots of fields for the 
         LNLs from a list."""
@@ -337,42 +389,3 @@ class DashboardForm(FormLoggerMixin, forms.Form):
         cleaned_data["modalities"] = [int(s) for s in str_list]
         
         return cleaned_data
-        
-        
-        
-    # select modalities to show
-    modalities = forms.MultipleChoiceField(
-        required=False, 
-        widget=forms.CheckboxSelectMultiple(attrs={"class": "checkbox is-hidden"}), 
-        choices=MODALITIES,
-        initial=[1,2]
-    )
-    modality_combine = forms.ChoiceField(
-        choices=[("AND", "AND"), 
-                 ("OR", "OR")],
-        label="Combine",
-        initial="OR"
-    )
-    
-    
-    # patient specific fields
-    nicotine_abuse = ThreeWayToggle()
-    hpv_status = ThreeWayToggle()
-    neck_dissection = ThreeWayToggle()
-    
-    
-    # tumor specific info
-    subsites = forms.MultipleChoiceField(
-        widget=forms.CheckboxSelectMultiple(attrs={"class": "checkbox is-hidden"}),
-        choices=[("base", "base of tongue"),
-                 ("tonsil", "tonsil"), 
-                 ("rest" , "other/multiple")],
-        initial=["base", "tonsil", "rest"]
-    )
-    tstages = forms.MultipleChoiceField(
-        widget=forms.CheckboxSelectMultiple(attrs={"class": "checkbox is-hidden"}),
-        choices=T_STAGES,
-        initial=[1,2,3,4]
-    )
-    central = ThreeWayToggle()
-    midline_extension = ThreeWayToggle()

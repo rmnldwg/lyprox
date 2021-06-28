@@ -8,10 +8,12 @@
             {% if action == "create_patient" %}
             <p class="title is-3">New patient</p>
             <form action="{% url 'patients:create' %}" method="post">
+                <input type="hidden" id="{{ form.check_for_duplicate.auto_id }}" name="{{ form.check_for_duplicate.name }}" value="True">
 
             {% elif action == "edit_patient" %}
             <p class="title is-3">Edit patient {{ patient.pk }}</p>
             <form action="{% url 'patients:update' pk=patient.pk %}" method="post">
+                <input type="hidden" id="{{ form.check_for_duplicate.auto_id }}" name="{{ form.check_for_duplicate.name }}" value="False">
             
             {% endif %}
 
@@ -25,16 +27,24 @@
 
                 <div class="field is-grouped">
                     <div class="control is-expanded">
-                        <label for="{{ form.first_name.id_for_label }}" class="label is-hidden">
+                        <label for="{{ form.first_name.id_for_label }}" class="label">
                             {{ form.first_name.label }}
                         </label>
                         {{ form.first_name }}
                     </div>
                     <div class="control is-expanded">
-                        <label for="{{ form.last_name.id_for_label }}" class="label is-hidden">
+                        <label for="{{ form.last_name.id_for_label }}" class="label">
                             {{ form.last_name.label }}
                         </label>
                         {{ form.last_name }}
+                    </div>
+                    <div class="control">
+                        <label for="{{ form.gender.id_for_label }}" class="label">
+                            {{ form.gender.label }}
+                        </label>
+                        <div class="select">
+                            {{ form.gender }}
+                        </div>
                     </div>
                 </div>
 
@@ -78,17 +88,17 @@
                             {{ form.hpv_status }}
                         </div>
                     </div>
+                    <div class="control">
+                        <label for="{{ form.neck_dissection.id_for_label }}" class="label">
+                            {{ form.neck_dissection.label }}
+                        </label>
+                        <div class="select">
+                            {{ form.neck_dissection }}
+                        </div>
+                    </div>
                 </div>
 
                 <div class="field is-grouped">
-                    <div class="control">
-                        <label for="{{ form.gender.id_for_label }}" class="label">
-                            {{ form.gender.label }}
-                        </label>
-                        <div class="select">
-                            {{ form.gender }}
-                        </div>
-                    </div>
                     <div class="control">
                         <label for="{{ form.n_stage.id_for_label }}" class="label">
                             {{ form.n_stage.label }}

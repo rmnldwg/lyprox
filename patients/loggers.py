@@ -46,7 +46,7 @@ class ViewLoggerMixin(object):
         return ret
     
     def form_invalid(self, form):
-        msg = f"Form {form} invalid."
+        msg = f"Form {form.__class__.__name__} invalid."
         self.logger.info(msg)
         return super().form_invalid(form)
 

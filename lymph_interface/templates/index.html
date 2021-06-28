@@ -3,10 +3,13 @@
 {% block content %}
 
 {% load static %}
+{% load mytags %}
+
 
 <div class="block">
-    <p class="title">Index</p>
-    <p class="subtitle">Choose wisely</p>
+    <div class="content">
+        {% include_md 'index.md' %}
+    </div>
 </div>
 
 <section class="block columns">

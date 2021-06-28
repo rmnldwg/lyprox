@@ -53,6 +53,7 @@ def create_from_pandas(data_frame, anonymize=True):
         alcohol_abuse = _(row[("patient", "abuse", "alcohol")])
         nicotine_abuse = _(row[("patient", "abuse", "nicotine")])
         hpv_status = _(row[("patient", "condition", "HPV")])
+        neck_dissection = _(row[("patient", "condition", "neck-dissection")])
 
         t_stage = 0
         n_stage = _(row[("patient", "stage", "N")])
@@ -65,6 +66,7 @@ def create_from_pandas(data_frame, anonymize=True):
                               alcohol_abuse=alcohol_abuse,
                               nicotine_abuse=nicotine_abuse,
                               hpv_status=hpv_status,
+                              neck_dissection=neck_dissection,
                               t_stage=t_stage,
                               n_stage=n_stage,
                               m_stage=m_stage)
@@ -346,10 +348,16 @@ def query2statistics(match_pats: QuerySet,
         statistics["midline_extension"] += tf2arr(pat["tumor__extension"])
         
         for side in ['ipsi', 'contra']:
+            # I didn't use np.any() and np.all(), because they are not 
+            # consistent w.r.t. the ordering of arrays
             if modality_combine == 'OR':
-                lnl_states = agg_diags[side][pat['id']].any(axis=0)
+                lnl_states = np.array(
+                    [any(col) for col in agg_diags[side][pat['id']].T]
+                )
             elif modality_combine == 'AND':
-                lnl_states = agg_diags[side][pat['id']].all(axis=0)
+                lnl_states = np.array(
+                    [all(col) for col in agg_diags[side][pat['id']].T]
+                )
             else:
                 lnl_states = np.array([None] * len(LNLs))
                 

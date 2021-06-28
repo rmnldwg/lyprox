@@ -7,11 +7,11 @@
 <link rel="stylesheet" href="{% static 'patients/list.css' %}">
 
 <div class="block">
-    <p class="title">List</p>
-
     {% if not show_filter %}
-    <p class="subtitle">Selected subset of {{ stats.total }} patients</p>
+    <p class="title">Subset <span class="has-text-info">(not filterable)</span></p>
+    <p class="subtitle">{{ stats.total }} patients selected via the dashboard</p>
     {% else %}
+    <p class="title">List <span class="has-text-info">(filterable)</span></p>
     <p class="subtitle">All patients currently in the database</p>
     {% endif %}
 </div>
@@ -134,7 +134,7 @@
             <td>{{ patient.age }} </td>
             <td>{{ patient.get_t_stage_display }} {{ patient.get_n_stage_display }} {{ patient.get_m_stage_display }} </td>
             <td>
-                <div class="buttons has-addons is-right">
+                <div class="buttons is-grouped is-right">
                     <a href="{% url 'patients:detail' patient.pk %}" class="tag button is-info is-small">
                         <span class="icon">
                             <i class="fas fa-address-card"></i>
