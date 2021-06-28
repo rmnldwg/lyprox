@@ -35,5 +35,5 @@ jobs:
       run: |
         git config user.name "rmnldwg"
         git config user.email "roman.ludwig@usz.ch"
-        git remote add production ssh://rmnldwg@${{ secrets.REMOTE_IP }}:/home/rmnldwg/repos/lymph-interface.git
-        git push production
+        git remote add production ssh://rmnldwg@${{ secrets.REMOTE_IP }}:/home/rmnldwg/repos/lymph-interface
+        git push production main
