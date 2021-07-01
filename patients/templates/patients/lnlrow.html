@@ -23,7 +23,9 @@
         </div>
         <div class="control is-expanded">
             <span class="tag barplot has-text-white" 
+                  data-tooltip="{{ stat|index:0 }} of {{ stat|sum }} ({{ stat|percent:0 }}%) patients have unknown involvement in LNL {{ lnl }}"
                   style="background-size: {{ stat|bar:'1,100' }}% 100%, calc({{ stat|bar:'1,100' }}% + {{ stat|bar:'0,100' }}%) 100%, 100% 100%;">
+                  {{ stat|index:0 }}
             </span>
         </div>
         <div class="control">
