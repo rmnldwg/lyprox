@@ -48,6 +48,10 @@ div.tag.unk {
     background-color: #C5D5DB;
 }
 
+div.tag.stat-tag {
+    width: 34px;
+}
+
 .barplot {
     width: 100%;
     background-image:

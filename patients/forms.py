@@ -319,6 +319,15 @@ class DashboardForm(FormLoggerMixin, forms.Form):
     central = ThreeWayToggle()
     midline_extension = ThreeWayToggle()
     
+    # checkbutton for switching to percent
+    show_percent = forms.BooleanField(
+        required=False, initial=False, 
+        widget=forms.widgets.RadioSelect(
+            attrs={"class": "radio is-hidden"},
+            choices=[(True, "percent"), (False, "absolute")]
+        )
+    )
+    
     
     def __init__(self, *args, **kwargs):
         """Extend default initialization to create lots of fields for the 

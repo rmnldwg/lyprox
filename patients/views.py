@@ -95,7 +95,7 @@ class DeletePatientView(ViewLoggerMixin, LoginRequiredMixin, generic.DeleteView)
     action = "delete_patient"
     
     
-class DashboardView(generic.ListView):
+class DashboardView(ViewLoggerMixin, generic.ListView):
     model = Patient
     form_class = DashboardForm
     context_object_name = "patient_list"
@@ -122,6 +122,7 @@ class DashboardView(generic.ListView):
                     field, field_name
                 )
             initial_form = self.form_class(initial_data)
+            self.logger.debug(f"Initial data: {initial_data}")
 
             if initial_form.is_valid():
                 init_pats, init_diag_dict = query(
@@ -131,6 +132,11 @@ class DashboardView(generic.ListView):
                                               init_diag_dict,
                                               **initial_form.cleaned_data)
                 queryset = init_pats
+            
+            else:
+                self.logger.warn("Initial form is invalid, errors are: "
+                                 f"{initial_form.errors.as_data()}")
+                queryset = Patient.objects.none()
 
         return queryset
 
@@ -138,6 +144,10 @@ class DashboardView(generic.ListView):
         context = super(DashboardView, self).get_context_data(**kwargs)
         context["show_filter"] = False
         context["form"] = self.form
+        
+        if self.form.is_valid():
+            context["show_percent"] = self.form.cleaned_data["show_percent"]
+            
         context["stats"] = self.stats
         return context
 

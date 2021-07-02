@@ -11,7 +11,7 @@ register = template.Library()
 
 @register.filter(name="index")
 def index(indexable, i):
-    return indexable[i]
+    return indexable[int(f"{i}".lower())]
 
 @register.filter(name="bar")
 def bar(indexable, argstr):
@@ -27,7 +27,8 @@ def mysum(indexable):
 
 @register.filter(name="percent")
 def percent(indexable, i):
-    return f"{100 * indexable[i] / sum(indexable):.1f}"
+    i = int(f"{i}".lower())
+    return f"{100 * indexable[i] / sum(indexable):.0f}"
 
 
 

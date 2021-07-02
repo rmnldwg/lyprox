@@ -1,0 +1,26 @@
+{% load mytags %}
+
+<p class="heading has-text-centered">{{ name }}</p>
+<div class="field has-addons is-justify-content-center" 
+     style="margin-bottom: 6px;">
+    {% for radio in radio_buttons %}
+    <div class="control">
+        {{ radio.tag }}
+        <label for="{{ radio.id_for_label }}" class="tag button is-info {{ radio.choice_label }}">
+            <i class="fas fa-lg fa-{{ radio.choice_label }}"></i>
+        </label>
+    </div>
+    {% endfor %}
+</div>
+
+<div class="tags has-addons is-justify-content-center">
+    {% for i in '102' %}
+    <div class="tag stat-tag button is-static">
+        {% if show_percent %}
+        {{ stat|percent:i }}%
+        {% else %}
+        {{ stat|index:i }}
+        {% endif %}
+    </div>
+    {% endfor %}
+</div>
