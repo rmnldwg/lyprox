@@ -11,7 +11,7 @@ register = template.Library()
 
 @register.filter(name="index")
 def index(indexable, i):
-    return indexable[i]
+    return indexable[int(f"{i}".lower())]
 
 @register.filter(name="bar")
 def bar(indexable, argstr):
