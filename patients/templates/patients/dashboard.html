@@ -11,7 +11,7 @@
 <body>
     {% include 'navbar.html' %}
 
-    <div class="modal">
+    <div class="modal" id="help-modal">
         <div class="modal-background"></div>
         <div class="modal-content">
             <div class="box">
@@ -20,7 +20,29 @@
                 </div>
             </div>
         </div>
-        <button class="modal-close is-large" aria-label="close"></button>
+        <button class="modal-close is-large" id="close-help-modal" aria-label="close"></button>
+    </div>
+
+    <div class="modal" id="pCT-modal">
+        <div class="modal-background"></div>
+        <div class="modal-content">
+            <div class="notification is-danger is-light">
+                <div class="content">
+                    <p>
+                        A planning CT (pCT) might even be done after the patient has
+                        undergone neck dissection. Hence, pCT is not strictly a diagnostic
+                        modality that shows a patient's state of disease before treatment.
+                    </p>
+                    <p>
+                        One can, however, use pCT in combination with a filter for all
+                        patients that did not receive neck dissection (put the
+                        three-way-toggle button "neck dissection" in the box "Patient
+                        details" to minus).
+                    </p>
+                </div>
+            </div>
+        </div>
+        <button class="modal-close is-large" id="close-pCT-modal"></button>
     </div>
 
     <form method="GET" action="{% url 'patients:dashboard' %}" name="dashboardform">
@@ -194,6 +216,14 @@
                             </div>
                         </div>
                         <div class="level-right">
+                            <div class="level-item">
+                                <p class="button tag is-danger is-light is-hidden" id="pCT-note">
+                                    <strong>Note:&nbsp;</strong>
+                                    Modality "planning CT" is not strictly a diagnostic modality.
+                                    Click here for more info
+                                </p>
+                            </div>
+
                             <div class="level-item has-tooltip-left has-tooltip-multiline" data-tooltip="Select the diagnostic modalities to consider in this dashboard and how to combine them">
                                 <span class="icon">
                                     <i class="fas fa-question"></i>
@@ -362,12 +392,28 @@
     </form>
 
     <script>
-        $("#show-help").click(function() {
-            $(".modal").addClass("is-active");
+        $("#show-help-modal").click(function() {
+            $("#help-modal").addClass("is-active");
         });
 
-        $(".modal-close").click(function() {
-            $(".modal").removeClass("is-active");
+        $("#close-help-modal").click(function() {
+            $("#help-modal").removeClass("is-active");
+        });
+
+        $("#pCT-note").click(function() {
+            $("#pCT-modal").addClass("is-active");
+        });
+
+        $("#close-pCT-modal").click(function () {
+            $("#pCT-modal").removeClass("is-active");
+        });
+
+        $("#id_modalities_5").change(function () {
+            if ($("#id_modalities_5").is(':checked')) {
+                $("#pCT-note").removeClass("is-hidden");
+            } else if (!$("#id_modalities_5").is(':checked')) {
+                $("#pCT-note").addClass("is-hidden");
+            };
         });
     </script>
 
