@@ -6,8 +6,6 @@ on:
   # Triggers the workflow on push or pull request events but only for the main branch
   push:
     branches: [ main ]
-  pull_request:
-    branches: [ main ]
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
@@ -37,3 +35,6 @@ jobs:
         git config user.email "roman.ludwig@usz.ch"
         git remote add production ssh://rmnldwg@${{ secrets.REMOTE_IP }}:/home/rmnldwg/lymph-interface
         git push production main
+        
+    - name: Restart apache2
+      run: sudo service apache2 restart
