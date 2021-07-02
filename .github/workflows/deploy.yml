@@ -36,5 +36,9 @@ jobs:
         git remote add production ssh://rmnldwg@${{ secrets.REMOTE_IP }}:/home/rmnldwg/lymph-interface
         git push production main
         
-    - name: Restart apache2
-      run: sudo service apache2 restart
+    - name: Checkout main & estart apache2
+      run: |
+        ssh rmnldwg@${{ secrets.REMOTE_IP }}
+        cd lymph_interface
+        git checkout main
+        sudo service apache2 restart
