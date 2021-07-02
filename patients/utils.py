@@ -349,17 +349,30 @@ def query2statistics(match_pats: QuerySet,
         
         for side in ['ipsi', 'contra']:
             # I didn't use np.any() and np.all(), because they are not 
-            # consistent w.r.t. the ordering of arrays
+            # consistent w.r.t. the ordering of arrays.
+            # Also, it's important to initialize `lnl_states` with 
+            # `dtype=object`, so that it is capable of storing `None`
             if modality_combine == 'OR':
                 lnl_states = np.array(
-                    [any(col) for col in agg_diags[side][pat['id']].T]
+                    [any(col) for col in agg_diags[side][pat['id']].T],
+                    dtype=object
                 )
             elif modality_combine == 'AND':
                 lnl_states = np.array(
-                    [all(col) for col in agg_diags[side][pat['id']].T]
+                    [all(col) for col in agg_diags[side][pat['id']].T],
+                    dtype=object
                 )
+                lnl_states[np.all(np.array(agg_diags[side][pat['id']]) == None, axis=0)] = None
             else:
                 lnl_states = np.array([None] * len(LNLs))
+            
+            # any() and all() don't return None, even if the array is full of 
+            # them, which is why I need to add it again here
+            all_none_idx = np.all(
+                np.array(agg_diags[side][pat['id']]) == None, 
+                axis=0
+            )
+            lnl_states[all_none_idx] = None
                 
             for i,lnl in enumerate(LNLs):
                 statistics[f'{side}_{lnl}'] += tf2arr(lnl_states[i])
