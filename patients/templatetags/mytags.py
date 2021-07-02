@@ -27,7 +27,8 @@ def mysum(indexable):
 
 @register.filter(name="percent")
 def percent(indexable, i):
-    return f"{100 * indexable[i] / sum(indexable):.1f}"
+    i = int(f"{i}".lower())
+    return f"{100 * indexable[i] / sum(indexable):.0f}"
 
 
 

@@ -18,20 +18,32 @@
         <div class="control">
             <span class="tag barplot-legend is-danger is-light" 
                   data-tooltip="{{ stat|index:1 }} of {{ stat|sum }} ({{ stat|percent:1 }}%) patients have metastases in LNL {{ lnl }}">
+                {% if show_percent %}
+                {{ stat|percent:1 }}%
+                {% else %}
                 {{ stat|index:1 }}
+                {% endif %}
             </span>
         </div>
         <div class="control is-expanded">
             <span class="tag barplot has-text-white" 
                   data-tooltip="{{ stat|index:0 }} of {{ stat|sum }} ({{ stat|percent:0 }}%) patients have unknown involvement in LNL {{ lnl }}"
                   style="background-size: {{ stat|bar:'1,100' }}% 100%, calc({{ stat|bar:'1,100' }}% + {{ stat|bar:'0,100' }}%) 100%, 100% 100%;">
-                  {{ stat|index:0 }}
+                {% if show_percent %}
+                {{ stat|percent:0 }}%
+                {% else %}
+                {{ stat|index:0 }}
+                {% endif %}
             </span>
         </div>
         <div class="control">
             <span class="tag barplot-legend is-success is-light" 
                   data-tooltip="{{ stat|index:-1 }} of {{ stat|sum }} ({{ stat|percent:-1 }}%) patients do not have metastases in LNL {{ lnl }}">
+                {% if show_percent %}
+                {{ stat|percent:-1 }}%
+                {% else %}
                 {{ stat|index:-1 }}
+                {% endif %}
             </span>
         </div>
     </div>

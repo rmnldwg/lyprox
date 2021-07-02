@@ -16,7 +16,11 @@
 <div class="tags has-addons is-justify-content-center">
     {% for i in '102' %}
     <div class="tag stat-tag button is-static">
+        {% if show_percent %}
+        {{ stat|percent:i }}%
+        {% else %}
         {{ stat|index:i }}
+        {% endif %}
     </div>
     {% endfor %}
 </div>
