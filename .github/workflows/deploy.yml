@@ -41,5 +41,6 @@ jobs:
         ssh rmnldwg@${{ secrets.REMOTE_IP }}
         cd lymph_interface
         git checkout main
-        python manage.py collectstatic
+        source .venv/bin/activate
+        python manage.py collectstatic --noinput
         sudo service apache2 restart
