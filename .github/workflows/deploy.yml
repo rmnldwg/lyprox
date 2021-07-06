@@ -37,10 +37,13 @@ jobs:
         git push production main
         
     - name: Checkout main, rebuild static & restart apache2
-      run: |
-        ssh rmnldwg@${{ secrets.REMOTE_IP }}
-        cd lymph_interface
-        git checkout main
-        source .venv/bin/activate
-        python manage.py collectstatic --noinput
-        sudo service apache2 restart
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.REMOTE_IP }}
+        username: $(( secrets.REMOTE_USERNAME ))
+        key: ${{ secrets.REMOTE_KEY }}
+        script: |
+          cd lymph_interface
+          source .venv/bin/activate
+          python manage.py collectstatic --noinput
+          sudo service apache2 restart
