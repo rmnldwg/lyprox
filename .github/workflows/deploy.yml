@@ -42,6 +42,7 @@ jobs:
         host: ${{ secrets.REMOTE_IP }}
         username: $(( secrets.REMOTE_USERNAME ))
         key: ${{ secrets.REMOTE_KEY }}
+        debug: true
         script: |
           cd lymph_interface
           source .venv/bin/activate
