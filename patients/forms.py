@@ -154,21 +154,7 @@ class TumorForm(FormLoggerMixin, forms.ModelForm):
         """Save tumor to existing patient."""
         tumor = super(TumorForm, self).save(commit=False)
         
-        # automatically extract location from subsite
-        subsite_dict = dict(SUBSITES)
-        location_list = [tpl[1] for tpl in LOCATIONS]
-        
-        for i, loc in enumerate(location_list):
-            loc_subsites = [tpl[1] for tpl in subsite_dict[loc]]
-            if tumor.get_subsite_display() in loc_subsites:
-                tumor.location = i
-        
         if commit:
-            # update patient's T-stage to be the worst of all its tumors'
-            if tumor.t_stage > tumor.patient.t_stage:
-                tumor.patient.t_stage = tumor.t_stage 
-                tumor.patient.save()
-                
             tumor.save()
             
         return tumor

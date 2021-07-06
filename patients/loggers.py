@@ -2,6 +2,26 @@ import logging
 from typing import Dict, Any
 
 
+class ModeLoggerMixin(object):
+    """Mixin for django models that provide logging capabilities."""
+    
+    @property
+    def logger(self):
+        name = '.'.join([
+            self.__module__,
+            self.__class__.__name__
+        ])
+        return logging.getLogger(name)
+    
+    def save(self, *args, **kwargs):
+        self.logger.info(f"Saving {self.__class__.__name__} <{self}>")
+        return super().save(*args, **kwargs)
+    
+    def delete(self, *args, **kwargs):
+        self.logger.info(f"Deleting {self.__class__.__name__} <{self}>")
+        return super().delete(*args, **kwargs)
+
+
 class FormLoggerMixin(object):
     """Mixin for django forms that provide logging information for events like 
     successfull/failed validation."""
@@ -41,7 +61,7 @@ class ViewLoggerMixin(object):
 
     def form_valid(self, form):
         ret = super().form_valid(form)
-        msg = f"{self.object.__class__.__name__} ({self.object}) has been saved."
+        msg = f"{self.object.__class__.__name__} <{self.object}> successfully saved."
         self.logger.info(msg)
         return ret
     
@@ -49,10 +69,3 @@ class ViewLoggerMixin(object):
         msg = f"Form {form.__class__.__name__} invalid."
         self.logger.info(msg)
         return super().form_invalid(form)
-
-    def delete(self, request, *args, **kwargs):
-        instance = self.get_object()
-        msg = f"{instance.__class__.__name__} ({instance}) has been deleted."
-        res = super().delete(request, *args, **kwargs)
-        self.logger.info(msg)
-        return res

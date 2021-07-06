@@ -5,6 +5,8 @@ import pandas
 import numpy as np
 import dateutil.parser
 
+from .loggers import ModeLoggerMixin
+
 
 # TNM staging system
 T_STAGES = [
@@ -24,7 +26,7 @@ M_STAGES = [
     (1, "M1"),
     (2, "MX")
 ]
-class Patient(models.Model):
+class Patient(ModeLoggerMixin, models.Model):
     """Base model class of a patient. Contains patient specific information."""
     # this first field should be computed from the fields that must be deleted 
     # for anomymization.
@@ -50,6 +52,19 @@ class Patient(models.Model):
     
     def get_absolute_url(self):
         return reverse("patients:detail", args=[self.pk])
+    
+    def update_t_stage(self):
+        tumors = Tumor.objects.all().filter(patient=self)
+        
+        max_t_stage = 0
+        for tumor in tumors:
+            if max_t_stage < tumor.t_stage:
+                max_t_stage = tumor.t_stage
+                
+        self.t_stage = max_t_stage
+        self.save()
+        self.logger.debug(f"T-stage of patient {self} updated to "
+                          f"{self.get_t_stage_display()}.")
 
 
 
@@ -114,7 +129,7 @@ SUBSITES = [
                      ("C32.9", "larynx, nos"),)
      )
 ]
-class Tumor(models.Model):
+class Tumor(ModeLoggerMixin, models.Model):
     """Report of primary tumor(s)."""
     patient = models.ForeignKey(Patient, on_delete=models.CASCADE)
     
@@ -135,6 +150,36 @@ class Tumor(models.Model):
         """Report some main characteristics."""
         return f"pk {self.pk} | belongs to {self.patient.pk} | subsite {self.subsite} | T{self.t_stage}"
     
+    def save(self, *args, **kwargs):
+        """Extract location and update patient's T-stage upon saving tumor."""
+        # automatically extract location from subsite
+        subsite_dict = dict(SUBSITES)
+        location_list = [tpl[1] for tpl in LOCATIONS]
+        
+        found_location = False
+        for i, loc in enumerate(location_list):
+            loc_subsites = [tpl[1] for tpl in subsite_dict[loc]]
+            if self.get_subsite_display() in loc_subsites:
+                self.location = i
+                found_location = True
+                
+        if not found_location:
+            self.logger.warn("Could not extract location for this tumor's "
+                             f"({self}) subsite ({self.get_subsite_display()})")
+                    
+        tmp_return = super(Tumor, self).save(*args, **kwargs)
+    
+        # call patient's `update_t_stage` method
+        self.patient.update_t_stage()
+        
+        return tmp_return
+        
+        
+    def delete(self, *args, **kwargs):
+        patient = self.patient
+        tmp = super(Tumor, self).delete(*args, **kwargs)
+        patient.update_t_stage()
+        return tmp
     
 
 # diagnostic modalities that are used to detect metastases in LNLs
