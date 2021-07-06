@@ -24,5 +24,8 @@ jobs:
         key: ${{ secrets.REMOTE_KEY }}
         port: 22
         script: |
-          whoami
-          ls -l
+          cd ${{ secrets.REPO }}
+          git pull origin main
+          source .venv/bin/activate
+          python manage.py collectstatic --noinput
+          sudo service apache2 restart
