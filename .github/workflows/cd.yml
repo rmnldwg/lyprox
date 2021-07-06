@@ -24,7 +24,7 @@ jobs:
         key: ${{ secrets.REMOTE_KEY }}
         port: 22
         script: |
-          cd ${{ secrets.REPO }}
+          cd ${{ secrets.REPO_NAME }}
           git pull origin main
           source .venv/bin/activate
           python manage.py collectstatic --noinput
