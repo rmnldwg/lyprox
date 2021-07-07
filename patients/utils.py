@@ -187,7 +187,7 @@ def oneminusone_to_bool(num: int) -> bool:
 
 # TODO: How to do type hinting for multiple return values
 def query(data: Dict[str, Any], 
-          assign_central: Dict[str, str] = {"ipsi": "left"}):
+          assign_central: str = "left"):
     """"""
     patients = Patient.objects.all()
     _ = oneminusone_to_bool  # neccessary cause radio buttons return 1, 0 or -1
@@ -217,15 +217,23 @@ def query(data: Dict[str, Any],
                                       modality__in=data['modalities'])
     q_ipsi = (Q(side=F("patient__tumor__position"))
               | (Q(patient__tumor__position="central")
-                 & Q(side=assign_central["ipsi"])))
+                 & Q(side=assign_central)))
     
     diagnoses = {'ipsi':   d.filter(q_ipsi),
                  'contra': d.exclude(q_ipsi)}
-        
+    
     for side in ['ipsi', 'contra']:
         for lnl in LNLs:
             if (inv := data[f'{side}_{lnl}']) != 0:
-                diagnoses[side] = diagnoses[side].filter(**{lnl: _(inv)})
+                # TODO: In here, find diagnoses that do NOT agree with the 
+                # involvement and remove the corresponding patients from the 
+                # queryset.
+                q_mismatch = ~Q(**{lnl: _(inv)})
+                mismatch_diags = diagnoses[side].filter(q_mismatch)
+                # logger.info(mismatch_diags)
+                patients = patients.exclude(diagnose__in=mismatch_diags)
+                
+                # diagnoses[side] = diagnoses[side].filter(**{lnl: _(inv)})
                 
     patients = patients.filter(diagnose__in=diagnoses['ipsi'])
     patients = patients.filter(diagnose__in=diagnoses['contra'])
