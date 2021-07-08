@@ -10,8 +10,8 @@ from typing import List, Union, Optional, Dict, Any
 import logging
 logger = logging.getLogger(__name__)
 
-from .models import Patient, Diagnose, Tumor, T_STAGES, N_STAGES, M_STAGES, MODALITIES, LNLs
-
+from .models import (Patient, Diagnose, Tumor, 
+                     T_STAGES, N_STAGES, M_STAGES, MODALITIES, LNLs)
 
 
 def compute_hash(*args):
@@ -176,65 +176,6 @@ def create_from_pandas(data_frame, anonymize=True):
     return num_new, num_skipped
 
 
-def oneminusone_to_bool(num: int) -> bool:
-    """Transform 1 to `True` and -1 to `False`."""
-    if num == 1:
-        return True
-    elif num == -1:
-        return False
-    else:
-        raise ValueError("Only 1 and -1 are allowed.")
-
-# TODO: How to do type hinting for multiple return values
-def query(data: Dict[str, Any], 
-          assign_central: Dict[str, str] = {"ipsi": "left"}):
-    """"""
-    patients = Patient.objects.all()
-    _ = oneminusone_to_bool  # neccessary cause radio buttons return 1, 0 or -1
-    
-    # PATIENT specific fields
-    if (na := data["nicotine_abuse"]) != 0:
-        patients = patients.filter(nicotine_abuse=_(na))
-    if (hpv := data["hpv_status"]) != 0:
-        patients = patients.filter(hpv_status=_(hpv))
-    if (nd := data["neck_dissection"]) != 0:
-        patients = patients.filter(neck_dissection=_(nd))
-        
-    # TUMOR specific queries
-    patients = patients.filter(tumor__subsite__in=data["subsite_icds"])
-    patients = patients.filter(tumor__t_stage__in=data["tstages"])
-
-    if (ce := data["central"]) == 1:
-        patients = patients.filter(tumor__position="central")
-    elif ce == -1:
-        patients = patients.exclude(tumor__position="central")
-
-    if (me := data["midline_extension"]) != 0:
-        patients = patients.filter(tumor__extension=_(me))
-        
-    # DIAGNOSES
-    d = Diagnose.objects.all().filter(patient__in=patients,
-                                      modality__in=data['modalities'])
-    q_ipsi = (Q(side=F("patient__tumor__position"))
-              | (Q(patient__tumor__position="central")
-                 & Q(side=assign_central["ipsi"])))
-    
-    diagnoses = {'ipsi':   d.filter(q_ipsi),
-                 'contra': d.exclude(q_ipsi)}
-        
-    for side in ['ipsi', 'contra']:
-        for lnl in LNLs:
-            if (inv := data[f'{side}_{lnl}']) != 0:
-                diagnoses[side] = diagnoses[side].filter(**{lnl: _(inv)})
-                
-    patients = patients.filter(diagnose__in=diagnoses['ipsi'])
-    patients = patients.filter(diagnose__in=diagnoses['contra'])
-    
-    # distinct is necessary, bacause the two lines don't seem to successively 
-    # reduce the dataset
-    return patients.distinct(), diagnoses
-
-
 def tf2arr(value):
     """Map `True`, `False` & `None` to one-hot-arrays of length 3. This 
     particular mapping comes from the fact that in the form `True`, `None`, 
@@ -275,106 +216,191 @@ def pos2arr(pos):
         return np.array([1, 0, 0], dtype=int)
 
 
-def query2statistics(match_pats: QuerySet,
-                     match_diags: Dict[str, QuerySet],
-                     modality_combine: str = 'OR',
-                     **kwargs):
-    """Create statistics/counts based on Patient & Diagnose QuerySets.
-    
-    Args:
-        match_pats: Patients that match a previously submitted pattern.
-        
-        match_diags: Contains the keys 'ipsi', for ipsilateral diagnoses that 
-            match the previously submitted pattern, and 'contra' for the 
-            respective set of contralateral diagnoses.
+
+def patientspecific_query(
+    patient_queryset: QuerySet = Patient.objects.all(),
+    nicotine_abuse: Optional[bool] = None,
+    hpv_status: Optional[bool] = None,
+    neck_dissection: Optional[bool] = None,
+    **rest
+) -> QuerySet:
+    """Filter `QuerySet` of `Patient`s based on patient-specific properties.
     """
+    kwargs = locals()              # extract keyword arguments and...
+    kwargs.pop('patient_queryset') # ...remove the patient queryset and...
+    kwargs.pop('rest')             # ...any other kwargs from this dictionary.
+    for key, value in kwargs.items():   # iterate over provided kwargs and ...
+        if value is not None:             # ...if it's of interest, then filter
+            patient_queryset = patient_queryset.filter(**{key: value})
     
-    # initialize dictionary of statistics/counts for patient & tumor
-    statistics = {"total": len(match_pats),
-                  
-                  "nicotine_abuse": np.zeros(shape=(3,), dtype=int),
-                  "hpv_status": np.zeros(shape=(3,), dtype=int),
-                  "neck_dissection": np.zeros(shape=(3,), dtype=int),
-                  
-                  "subsites": np.zeros(shape=(3,), dtype=int),
-                  "t_stages": np.zeros(shape=(len(T_STAGES),), dtype=int),
-                  "central": np.zeros(shape=(3,), dtype=int),
-                  "midline_extension": np.zeros(shape=(3,), dtype=int),}
+    return patient_queryset
+
+
+def tumorspecific_query(
+    patient_queryset: QuerySet = Patient.objects.all(),
+    subsite__in: List[str] = ["C01.9",
+                              "C09.0", "C09.1", "C09.8", "C09.9",
+                              "C10.0", "C10.1", "C10.2", "C10.3", "C10.4", 
+                              "C10.8", "C10.9", "C12.9", "C13.0", "C13.1", 
+                              "C13.2", "C13.8", "C13.9", "C32.0", "C32.1", 
+                              "C32.2", "C32.3", "C32.8", "C32.9"],
+    t_stage__in: List[int] = [1,2,3,4],
+    position__in: List[str] = ['left', 'right', 'central'],
+    extension: Optional[bool] = None,
+    **rest
+) -> QuerySet:
+    """Filter `QuerySet` of `Patient`s based on tumor-specific properties.
+    """
+    kwargs = locals()              # extract keyword arguments and...
+    kwargs.pop('patient_queryset') # ...remove the patient queryset and...
+    kwargs.pop('rest')             # ...any other kwargs from this dictionary.
+    for key, value in kwargs.items():   # iterate over provided kwargs and ...
+        if value is not None:             # ...if it's of interest, then filter
+            patient_queryset = patient_queryset.filter(**{f'tumor__{key}': value})
     
-    # initialize LNL statistics/counts with zeros
-    for side in ["ipsi", "contra"]:
-        for lnl in LNLs:
-            statistics[f"{side}_{lnl}"] = np.zeros(shape=(3,), dtype=int)
-            
+    return patient_queryset
+
+
+def diagnosespecific_query(
+    patient_queryset: QuerySet = Patient.objects.all(),
+    assign_central: str = "left",
+    **kwargs
+):
+    """"""
     # DIAGNOSES
-    # aggregated diagnoses, sorted by side
-    agg_diags =   {'ipsi':   defaultdict(np.ndarray),
-                   'contra': defaultdict(np.ndarray)}
+    d = Diagnose.objects.all().filter(patient__in=patient_queryset,
+                                      modality__in=kwargs['modalities'])
+    q_ipsi = (Q(side=F("patient__tumor__position"))
+              | (Q(patient__tumor__position="central")
+                 & Q(side=assign_central)))
+    
+    diagnose_querysets = {
+        'ipsi'  : d.filter(q_ipsi).select_related('patient').values(),
+        'contra': d.exclude(q_ipsi).select_related('patient').values()
+    }
+    
+    diagnose_tables = {
+        'ipsi'  : {},
+        'contra': {}
+    }
+    
+    patient_queryset = patient_queryset.filter(
+        Q(diagnose__in=d.filter(q_ipsi)) | Q(diagnose__in=d.exclude(q_ipsi))
+    ).distinct()
+    
+    selected_diagnose = {    # via form selected diagnoses will be stored here
+        'ipsi'  : np.array([None] * len(LNLs)),
+        'contra': np.array([None] * len(LNLs))
+    }
+    
+    # sort diags into patient bins...
+    combined_involvement = {'ipsi'  : {},
+                            'contra': {}}
     for side in ['ipsi', 'contra']:
-        match_diags[side] = (match_diags[side]
-                             .select_related('patient')
-                             .values())
-        for diag in match_diags[side]:
-            lnl_array = np.array([diag[f'{lnl}'] for lnl in LNLs])
-            try:  # stack involvement data of each patient into a 2D array
-                agg_diags[side][diag['patient_id']] = np.vstack(
-                    [agg_diags[side][diag['patient_id']], lnl_array]
-                )
-            except TypeError:  # gets raised when there's nothing yet
-                agg_diags[side][diag['patient_id']] = np.array([lnl_array])  
-            
-    # PATIENT & TUMOR         
-    # get basic fields and prefetch the tumor. Also, combine the modalities.
-    patients = (match_pats
-                .prefetch_related('tumor')
-                .values(
-                    'id',
-                    'nicotine_abuse',
-                    'hpv_status',
-                    'neck_dissection',
-                    'tumor__subsite',
-                    'tumor__t_stage',
-                    'tumor__position',
-                    'tumor__extension',
-                ))
-    for pat in patients:
-        statistics["nicotine_abuse"] += tf2arr(pat["nicotine_abuse"])
-        statistics["hpv_status"] += tf2arr(pat["hpv_status"])
-        statistics["neck_dissection"] += tf2arr(pat["neck_dissection"])
-        
-        statistics["subsites"] += subsite2arr(pat["tumor__subsite"])
-        statistics["t_stages"][pat["tumor__t_stage"]-1] += 1
-        statistics["central"] += pos2arr(pat["tumor__position"])
-        statistics["midline_extension"] += tf2arr(pat["tumor__extension"])
-        
-        for side in ['ipsi', 'contra']:
-            # I didn't use np.any() and np.all(), because they are not 
-            # consistent w.r.t. the ordering of arrays.
-            # Also, it's important to initialize `lnl_states` with 
-            # `dtype=object`, so that it is capable of storing `None`
-            if modality_combine == 'OR':
-                lnl_states = np.array(
-                    [any(col) for col in agg_diags[side][pat['id']].T],
-                    dtype=object
-                )
-            elif modality_combine == 'AND':
-                lnl_states = np.array(
-                    [all(col) for col in agg_diags[side][pat['id']].T],
-                    dtype=object
-                )
-                lnl_states[np.all(np.array(agg_diags[side][pat['id']]) == None, axis=0)] = None
-            else:
-                lnl_states = np.array([None] * len(LNLs))
-            
-            # any() and all() don't return None, even if the array is full of 
-            # them, which is why I need to add it again here
-            all_none_idx = np.all(
-                np.array(agg_diags[side][pat['id']]) == None, 
-                axis=0
-            )
-            lnl_states[all_none_idx] = None
+        for i,lnl in enumerate(LNLs):
+            if (selected_inv := kwargs[f'{side}_{lnl}']) is not None:
+                selected_diagnose[side][i] = selected_inv
                 
+        for diagnose in diagnose_querysets[side]:
+            patient_id = diagnose['patient_id']
+            diag_array = np.array([diagnose[f'{lnl}'] for lnl in LNLs])
+            
+            try:
+                diagnose_tables[side][patient_id] = np.vstack([
+                    diagnose_tables[side][patient_id],
+                    diag_array
+                ])
+            except KeyError:
+                diagnose_tables[side][patient_id] = diag_array
+        
+        # ...and aggregate/combine each patient's diag    
+        for pat_id, diag_table in diagnose_tables[side].items():
+            if kwargs['modality_combine'] == 'OR':
+                combine = any
+            elif kwargs['modality_combine'] == 'AND':
+                combine = all
+            else:
+                msg = ("Modalities can only be combined using logical OR or "
+                       "logical AND")
+                logger.error(msg)
+                raise ValueError(msg)
+            
+            try:
+                combined_involvement[side][pat_id] = np.array(
+                    [combine(col) for col in diag_table.T],
+                    dtype=object
+                )
+            except TypeError:  # difference: square bracket around `col`
+                combined_involvement[side][pat_id] = np.array(
+                    [combine([col]) for col in diag_table.T],
+                    dtype=object
+                )
+            # when all observations yield 'unknown' for a LNL, report 'unknown'
+            all_none_idx = np.all(diag_table == None, axis=0)
+            combined_involvement[side][pat_id][all_none_idx] = None
+            
+            mask = selected_diagnose[side] != None
+            match = np.all(np.equal(combined_involvement[side][pat_id], 
+                                    selected_diagnose[side],
+                                    where=mask,
+                                    out=np.ones_like(mask, dtype=bool)))
+            if not match:   # if it does not match, remove patient from queryset
+                patient_queryset = patient_queryset.exclude(id=pat_id)
+    
+    return patient_queryset, combined_involvement
+
+
+def count_patients(
+    patient_queryset: QuerySet,
+    combined_involvement: Dict[str, Dict[str, np.ndarray]]
+):
+    """Count how often patients have various characteristics like HPV status, 
+    certain lymph node level involvement, and so on.
+    """
+    # prefetch patients and important fields for performance
+    patients = patient_queryset.prefetch_related('tumor').values(
+        'id',
+        'nicotine_abuse',
+        'hpv_status',
+        'neck_dissection',
+        'tumor__subsite',
+        'tumor__t_stage',
+        'tumor__position',
+        'tumor__extension',
+    )
+    counts = {   # initialize counts of patient- & tumor-related fields
+        'total': len(patients),
+         
+        'nicotine_abuse': np.zeros(shape=(3,), dtype=int),
+        'hpv_status': np.zeros(shape=(3,), dtype=int),
+        'neck_dissection': np.zeros(shape=(3,), dtype=int),
+        
+        'subsites': np.zeros(shape=(3,), dtype=int),
+        't_stages': np.zeros(shape=(len(T_STAGES),), dtype=int),
+        'central': np.zeros(shape=(3,), dtype=int),
+        'extension': np.zeros(shape=(3,), dtype=int), 
+    }
+    for side in ['ipsi', 'contra']:
+        for lnl in LNLs:
+            counts[f'{side}_{lnl}'] = np.zeros(shape=(3,), dtype=int)
+            
+    # loop through patients to populate the counts dictionary
+    for patient in patients:
+        # PATIENT specific counts
+        counts['nicotine_abuse'] += tf2arr(patient['nicotine_abuse'])
+        counts['hpv_status'] += tf2arr(patient['hpv_status'])
+        counts['neck_dissection'] += tf2arr(patient['neck_dissection'])
+        
+        # TUMOR specific counts
+        counts['subsites'] += subsite2arr(patient['tumor__subsite'])
+        counts['t_stages'][patient['tumor__t_stage']-1] += 1
+        counts['central'] += pos2arr(patient['tumor__position'])
+        counts['extension'] += tf2arr(patient['tumor__extension'])
+        
+        # DIAGNOSE specific (involvement) counts
+        for side in ['ipsi', 'contra']:
             for i,lnl in enumerate(LNLs):
-                statistics[f'{side}_{lnl}'] += tf2arr(lnl_states[i])
-              
-    return statistics
+                tmp = combined_involvement[side][patient['id']][i]
+                counts[f'{side}_{lnl}'] += tf2arr(tmp)
+                
+    return patient_queryset, counts

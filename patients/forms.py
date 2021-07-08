@@ -154,21 +154,7 @@ class TumorForm(FormLoggerMixin, forms.ModelForm):
         """Save tumor to existing patient."""
         tumor = super(TumorForm, self).save(commit=False)
         
-        # automatically extract location from subsite
-        subsite_dict = dict(SUBSITES)
-        location_list = [tpl[1] for tpl in LOCATIONS]
-        
-        for i, loc in enumerate(location_list):
-            loc_subsites = [tpl[1] for tpl in subsite_dict[loc]]
-            if tumor.get_subsite_display() in loc_subsites:
-                tumor.location = i
-        
         if commit:
-            # update patient's T-stage to be the worst of all its tumors'
-            if tumor.t_stage > tumor.patient.t_stage:
-                tumor.patient.t_stage = tumor.t_stage 
-                tumor.patient.save()
-                
             tumor.save()
             
         return tumor
@@ -249,8 +235,8 @@ class ThreeWayToggle(forms.ChoiceField):
     def __init__(self, 
                  widget=None, 
                  attrs={"class": "radio is-hidden"},
-                 choices=[( 1, "plus"),
-                          ( 0, "ban"), 
+                 choices=[( 1 , "plus"),
+                          ( 0 , "ban"), 
                           (-1, "minus")],
                  initial=0,
                  required=False,
@@ -302,7 +288,7 @@ class DashboardForm(FormLoggerMixin, forms.Form):
     neck_dissection = ThreeWayToggle()
     
     # tumor specific info
-    subsites = forms.MultipleChoiceField(
+    subsite__in = forms.MultipleChoiceField(
         required=False,
         widget=forms.CheckboxSelectMultiple(attrs={"class": "checkbox is-hidden"}),
         choices=[("base", "base of tongue"),
@@ -310,14 +296,14 @@ class DashboardForm(FormLoggerMixin, forms.Form):
                  ("rest" , "other/multiple")],
         initial=["base", "tonsil", "rest"]
     )
-    tstages = forms.MultipleChoiceField(
+    t_stage__in = forms.MultipleChoiceField(
         required=False,
         widget=forms.CheckboxSelectMultiple(attrs={"class": "checkbox is-hidden"}),
         choices=T_STAGES,
         initial=[1,2,3,4]
     )
     central = ThreeWayToggle()
-    midline_extension = ThreeWayToggle()
+    extension = ThreeWayToggle()
     
     # checkbutton for switching to percent
     show_percent = forms.BooleanField(
@@ -345,6 +331,19 @@ class DashboardForm(FormLoggerMixin, forms.Form):
                                "onclick": "subClickHandler(this);"})
                 else:
                     self.fields[f"{side}_{lnl}"] = ThreeWayToggle()
+                    
+                    
+    def _to_bool(self, value: int):
+        """Transform values of -1, 0 and 1 to False, None and True respectively. 
+        Anything else is just passed through."""
+        if value == 1:
+            return True
+        elif value == -1:
+            return False
+        elif value == 0:
+            return None
+        else:
+            return value
            
                 
     def clean(self):
@@ -352,34 +351,33 @@ class DashboardForm(FormLoggerMixin, forms.Form):
         sublevels a & b. Also convert tstages from list of str to list of int."""
         cleaned_data = super(DashboardForm, self).clean()
         
+        # map all -1,0,1 fields to False,None,True
+        cleaned_data = {
+            key: self._to_bool(value) for key,value in cleaned_data.items()
+        }
+        
+        # make sure LNLs I & II arent in conflict with their sublevels
         for side in ["ipsi", "contra"]:
             for lnl in ["I", "II"]:
                 a = cleaned_data[f"{side}_{lnl}a"]
                 b = cleaned_data[f"{side}_{lnl}b"]
                 
                 # make sure data regarding sublevels is not conflicting
-                if a * b == 1:
-                    cleaned_data[f"{side}_{lnl}"] = a
-                elif a * b == -1:
-                    cleaned_data[f"{side}_{lnl}"] = 1
-                elif a * b == 0:
-                    if a + b == 1:
-                        cleaned_data[f"{side}_{lnl}"] = 1
-                    elif a + b == -1:
-                        pass
-                    elif a + b == 0:
-                        pass
-                    else:
-                        msg = f"Invalid values in LNL {lnl} {side}laterally."
-                        self.logger.warning(msg)
-                        raise ValidationError(msg)
-                else:
-                    msg = f"Invalid values in LNL {lnl} {side}laterally."
-                    self.logger.warning(msg)
-                    raise ValidationError(msg)
-                
-                                    
-        subsites = cleaned_data["subsites"]
+                if a is True or b is True:
+                    cleaned_data[f"{side}_{lnl}"] = True
+                if a is False and b is False:
+                    cleaned_data[f'{side}_{lnl}'] = False
+
+        # map `central` from False,None,True to the respective list of positions
+        if cleaned_data['central'] is True:
+            cleaned_data['position__in'] = ['central']
+        elif cleaned_data['central'] is False:
+            cleaned_data["position__in"] = ['left', 'right']
+        else:
+            cleaned_data["position__in"] = ['left', 'right', 'central']
+        
+        # map subsites 'base','tonsil','rest' to list of ICD codes.
+        subsites = cleaned_data["subsite__in"]
         subsite_dict = {"base":   ["C01.9"], 
                         "tonsil": ["C09.0", "C09.1", "C09.8", "C09.9"],
                         "rest":   ["C10.0", "C10.1", "C10.2", "C10.3", "C10.4", 
@@ -389,12 +387,15 @@ class DashboardForm(FormLoggerMixin, forms.Form):
         icd_codes = []
         for sub in subsites:
             icd_codes += subsite_dict[sub]
-        cleaned_data["subsite_icds"] = icd_codes
-                
-        str_list = cleaned_data["tstages"]
-        cleaned_data["tstages"] = [int(s) for s in str_list]
+        cleaned_data["subsite__in"] = icd_codes
         
+        # make sure T-stages are list of ints
+        str_list = cleaned_data["t_stage__in"]
+        cleaned_data["t_stage__in"] = [int(s) for s in str_list]
+        
+        # make sure list of modalities is list of ints
         str_list = cleaned_data["modalities"]
         cleaned_data["modalities"] = [int(s) for s in str_list]
         
+        self.logger.debug(f'cleaned data: {cleaned_data}')
         return cleaned_data

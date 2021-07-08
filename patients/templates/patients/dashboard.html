@@ -109,14 +109,14 @@
                                         </div>
                 
                                         <div class="column">
-                                            {% include 'patients/three-way-toggle.html' with name='midline extension' radio_buttons=form.midline_extension stat=stats.midline_extension show_percent=show_percent %}
+                                            {% include 'patients/three-way-toggle.html' with name='midline extension' radio_buttons=form.extension stat=stats.extension show_percent=show_percent %}
                                         </div>
                                     </div>
                                 </div>
 
                                 <div class="column is-full-widescreen">
                                     <p class="title is-5">Subsite</p>
-                                    {% for checkbox in form.subsites %}
+                                    {% for checkbox in form.subsite__in %}
                                     <div class="field is-grouped">
                                         <div class="control is-expanded">
                                             {{ checkbox.tag }}
@@ -139,7 +139,7 @@
 
                                 <div class="column is-full-widescreen">
                                     <p class="title is-5">T-stage</p>
-                                    {% for checkbox in form.tstages %}
+                                    {% for checkbox in form.t_stage__in %}
                                     <div class="field is-grouped">
                                         <div class="control is-expanded">
                                             {{ checkbox.tag }}
