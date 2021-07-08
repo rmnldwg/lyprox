@@ -226,41 +226,61 @@ def oneminusone_to_bool(num: int) -> bool:
         raise ValueError("Only use this function inside an if-clause that "
                          "catches the case == 0.")
 
+
+def patientspecific_query(
+    patient_queryset: QuerySet = Patient.objects.all(),
+    nicotine_abuse: Optional[bool] = None,
+    hpv_status: Optional[bool] = None,
+    neck_dissection: Optional[bool] = None,
+    **rest: Dict[Any]
+) -> QuerySet:
+    """Filter `QuerySet` of `Patient`s based on patient-specific properties.
+    """
+    kwargs = locals()              # extract keyword arguments and...
+    kwargs.pop('patient_queryset') # ...remove the patient queryset and...
+    kwargs.pop('rest')             # ...any other kwargs from this dictionary.
+    for kwarg, value in kwargs.items():   # iterate over provided kwargs and ...
+        if value is not None:             # ...if it's of interest (not None)...
+            patient_queryset.filter(**{kwarg, value})   # ...filter queryset.
+            
+    return patient_queryset
+
+
+def tumorspecific_query(
+    patient_queryset: QuerySet = Patient.objects.all(),
+    subsite__in: List[str] = ["C01.9",
+                              "C09.0", "C09.1", "C09.8", "C09.9",
+                              "C10.0", "C10.1", "C10.2", "C10.3", "C10.4", 
+                              "C10.8", "C10.9", "C12.9", "C13.0", "C13.1", 
+                              "C13.2", "C13.8", "C13.9", "C32.0", "C32.1", 
+                              "C32.2", "C32.3", "C32.8", "C32.9"],
+    t_stage__in: List[int] = [1,2,3,4],
+    position: Optional[bool] = None,
+    extension: Optional[bool] = None,
+    **rest: Dict[Any]
+) -> QuerySet:
+    """Filter `QuerySet` of `Patient`s based on tumor-specific properties.
+    """
+    kwargs = locals()              # extract keyword arguments and...
+    kwargs.pop('patient_queryset') # ...remove the patient queryset and...
+    kwargs.pop('rest')             # ...any other kwargs from this dictionary.
+    for kwarg, value in kwargs.items():   # iterate over provided kwargs and ...
+        if value is not None:             # ...if it's of interest (not None)...
+            patient_queryset.filter(**{f'tumor__{kwarg}', value})   # ...filter.
+            
+    return patient_queryset
+
+
 # TODO: How to do type hinting for multiple return values
-def query(data: Dict[str, Any], 
-          assign_central: str = "left",
-          modality_combine: str = "OR"):
-    """"""
-    patient_queryset = Patient.objects.all()
-    _ = oneminusone_to_bool  # neccessary cause radio buttons return 1, 0 or -1
-    
-    # PATIENT specific fields
-    if (na := data["nicotine_abuse"]) != 0:
-        patient_queryset = patient_queryset.filter(nicotine_abuse=_(na))
-    if (hpv := data["hpv_status"]) != 0:
-        patient_queryset = patient_queryset.filter(hpv_status=_(hpv))
-    if (nd := data["neck_dissection"]) != 0:
-        patient_queryset = patient_queryset.filter(neck_dissection=_(nd))
-        
-    # TUMOR specific queries
-    patient_queryset = patient_queryset.filter(
-        tumor__subsite__in=data["subsite_icds"]
-    )
-    patient_queryset = patient_queryset.filter(
-        tumor__t_stage__in=data["tstages"]
-    )
-
-    if (ce := data["central"]) == 1:
-        patient_queryset = patient_queryset.filter(tumor__position="central")
-    elif ce == -1:
-        patient_queryset = patient_queryset.exclude(tumor__position="central")
-
-    if (me := data["midline_extension"]) != 0:
-        patient_queryset = patient_queryset.filter(tumor__extension=_(me))
-        
+def diagnosespecific_query(
+    patient_queryset: QuerySet = Patient.objects.all(),
+    assign_central: str = "left",
+    **kwargs: Dict[Any]
+):
+    """"""        
     # DIAGNOSES
     d = Diagnose.objects.all().filter(patient__in=patient_queryset,
-                                      modality__in=data['modalities'])
+                                      modality__in=kwargs['modalities'])
     q_ipsi = (Q(side=F("patient__tumor__position"))
               | (Q(patient__tumor__position="central")
                  & Q(side=assign_central)))
@@ -281,11 +301,11 @@ def query(data: Dict[str, Any],
     }
     
     # sort diags into patient bins...
-    combination = {'ipsi'  : defaultdict(),
-                   'contra': defaultdict()}
+    combined_involvement = {'ipsi'  : defaultdict(),
+                            'contra': defaultdict()}
     for side in ['ipsi', 'contra']:
         for i,lnl in enumerate(LNLs):
-            if (selected_inv := data[f'{side}_{lnl}']) != 0:
+            if (selected_inv := kwargs[f'{side}_{lnl}']) != 0:
                 selected_diagnose[side][i] = _(selected_inv)
         
         for diagnose in diagnose_querysets[side]:
@@ -302,9 +322,9 @@ def query(data: Dict[str, Any],
         
         # ...and aggregate/combine each patient's diag    
         for pat_pk, diag_table in diagnose_tables[side].items():
-            if modality_combine == 'OR':
+            if kwargs['modality_combine'] == 'OR':
                 combine = any
-            elif modality_combine == 'AND':
+            elif kwargs['modality_combine'] == 'AND':
                 combine = all
             else:
                 msg = ("Modalities can only be combined using logical OR or "
@@ -312,28 +332,36 @@ def query(data: Dict[str, Any],
                 logger.error(msg)
                 raise ValueError(msg)
             
-            combination[side][pat_pk] = np.array(
+            combined_involvement[side][pat_pk] = np.array(
                 [combine(col) for col in diag_table],
                 dtype=object
             )
             # when all observations yield 'unknown' for a LNL, report 'unknown'
             all_none_idx = np.all(diag_table == None, axis=0)
-            combination[side][pat_pk][all_none_idx] = None
+            combined_involvement[side][pat_pk][all_none_idx] = None
             
-            # match the combination against what is selected in the data
+            # match the combined involvement against what is selected in the data
             mask = np.all(
-                np.stack([combination[side][pat_pk] != None, 
+                np.stack([combined_involvement[side][pat_pk] != None, 
                           selected_diagnose[side] != None]),
                 axis=0
             )
-            match = np.all(np.equal(combination[side][pat_pk], 
+            match = np.all(np.equal(combined_involvement[side][pat_pk], 
                                     selected_diagnose[side],
                                     where=mask))
             if not match:   # if it does not match, remove patient from queryset
-                patient_queryset.exclude(pk=pat_pk)
-                diagnose_tables['ipsi'].pop(pat_pk, None)
-                diagnose_tables['contra'].pop(pat_pk, None)
+                patient_queryset = patient_queryset.exclude(pk=pat_pk)
 
+    return patient_queryset, combined_involvement
+
+
+def count_patients(
+    patient_queryset: QuerySet,
+    combined_involvement: Dict[str, Dict[str, np.ndarray]]
+):
+    """Count how often patients have various characteristics like HPV status, 
+    certain lymph node level involvement, and so on.
+    """
     # prefetch patients and important fields for performance
     patients = patient_queryset.prefetch_related('tumor').values(
         'pk',
@@ -377,7 +405,7 @@ def query(data: Dict[str, Any],
         # DIAGNOSE specific (involvement) counts
         for side in ['ipsi', 'contra']:
             for i,lnl in enumerate(LNLs):
-                combined_involvement = diagnose_tables[side][patient['pk']][i]
-                counts[f'{side}_{lnl}'] += tf2arr(combined_involvement)
+                tmp = combined_involvement[side][patient['pk']][i]
+                counts[f'{side}_{lnl}'] += tf2arr(tmp)
                 
     return patient_queryset, counts

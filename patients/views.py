@@ -16,7 +16,11 @@ logger = logging.getLogger(__name__)
 
 from .models import Patient, Tumor, Diagnose, MODALITIES
 from .forms import PatientForm, TumorForm, DiagnoseForm, DataFileForm, DashboardForm, ValidationError
-from .utils import create_from_pandas, query, query2statistics
+from .utils import (create_from_pandas, 
+                    patientspecific_query, 
+                    tumorspecific_query, 
+                    diagnosespecific_query,
+                    count_patients)
 from .filters import PatientFilter
 from .loggers import ViewLoggerMixin
 
@@ -104,15 +108,21 @@ class DashboardView(ViewLoggerMixin, generic.ListView):
 
     def get_queryset(self):
         self.form = self.form_class(self.request.GET or None)
+        queryset = Patient.objects.all()
 
         if self.request.method == "GET" and self.form.is_valid():
-            match_pats, match_diag_dict = query(
-                self.form.cleaned_data
+            queryset = patientspecific_query(patient_queryset=queryset, 
+                                             **self.form.cleaned_data)
+            queryset = tumorspecific_query(patient_queryset=queryset,
+                                           **self.form.cleaned_data)
+            queryset, combined_involvement = diagnosespecific_query(
+                patient_queryset=queryset, **self.form.cleaned_data
             )
-            self.stats = query2statistics(match_pats,
-                                          match_diag_dict,
-                                          **self.form.cleaned_data)
-            queryset = match_pats
+            queryset, counts = count_patients(
+                patient_queryset=queryset,
+                combined_involvement=combined_involvement
+            )
+            self.stats = counts
 
         else:
             # fill form with initial values from respective form fields
@@ -125,13 +135,18 @@ class DashboardView(ViewLoggerMixin, generic.ListView):
             self.logger.debug(f"Initial data: {initial_data}")
 
             if initial_form.is_valid():
-                init_pats, init_diag_dict = query(
-                    initial_form.cleaned_data
+                queryset = patientspecific_query(patient_queryset=queryset, 
+                                                **initial_form.cleaned_data)
+                queryset = tumorspecific_query(patient_queryset=queryset,
+                                               **initial_form.cleaned_data)
+                queryset, combined_involvement = diagnosespecific_query(
+                    patient_queryset=queryset, **initial_form.cleaned_data
                 )
-                self.stats = query2statistics(init_pats,
-                                              init_diag_dict,
-                                              **initial_form.cleaned_data)
-                queryset = init_pats
+                queryset, counts = count_patients(
+                    patient_queryset=queryset,
+                    combined_involvement=combined_involvement
+                )
+                self.stats = counts
             
             else:
                 self.logger.warn("Initial form is invalid, errors are: "

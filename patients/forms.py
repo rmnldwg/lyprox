@@ -235,10 +235,10 @@ class ThreeWayToggle(forms.ChoiceField):
     def __init__(self, 
                  widget=None, 
                  attrs={"class": "radio is-hidden"},
-                 choices=[( 1, "plus"),
-                          ( 0, "ban"), 
-                          (-1, "minus")],
-                 initial=0,
+                 choices=[(True , "plus"),
+                          (None , "ban"), 
+                          (False, "minus")],
+                 initial=None,
                  required=False,
                  **kwargs):
         """Overwrite the defaults of the ChoiceField."""
@@ -288,7 +288,7 @@ class DashboardForm(FormLoggerMixin, forms.Form):
     neck_dissection = ThreeWayToggle()
     
     # tumor specific info
-    subsites = forms.MultipleChoiceField(
+    subsite__in = forms.MultipleChoiceField(
         required=False,
         widget=forms.CheckboxSelectMultiple(attrs={"class": "checkbox is-hidden"}),
         choices=[("base", "base of tongue"),
@@ -296,14 +296,14 @@ class DashboardForm(FormLoggerMixin, forms.Form):
                  ("rest" , "other/multiple")],
         initial=["base", "tonsil", "rest"]
     )
-    tstages = forms.MultipleChoiceField(
+    t_stage__in = forms.MultipleChoiceField(
         required=False,
         widget=forms.CheckboxSelectMultiple(attrs={"class": "checkbox is-hidden"}),
         choices=T_STAGES,
         initial=[1,2,3,4]
     )
-    central = ThreeWayToggle()
-    midline_extension = ThreeWayToggle()
+    position = ThreeWayToggle()
+    extension = ThreeWayToggle()
     
     # checkbutton for switching to percent
     show_percent = forms.BooleanField(
@@ -365,7 +365,7 @@ class DashboardForm(FormLoggerMixin, forms.Form):
                     raise ValidationError(msg)
                 
                                     
-        subsites = cleaned_data["subsites"]
+        subsites = cleaned_data["subsite__in"]
         subsite_dict = {"base":   ["C01.9"], 
                         "tonsil": ["C09.0", "C09.1", "C09.8", "C09.9"],
                         "rest":   ["C10.0", "C10.1", "C10.2", "C10.3", "C10.4", 
@@ -375,10 +375,10 @@ class DashboardForm(FormLoggerMixin, forms.Form):
         icd_codes = []
         for sub in subsites:
             icd_codes += subsite_dict[sub]
-        cleaned_data["subsite_icds"] = icd_codes
+        cleaned_data["subsite__in"] = icd_codes
                 
-        str_list = cleaned_data["tstages"]
-        cleaned_data["tstages"] = [int(s) for s in str_list]
+        str_list = cleaned_data["t_stage__in"]
+        cleaned_data["t_stage__in"] = [int(s) for s in str_list]
         
         str_list = cleaned_data["modalities"]
         cleaned_data["modalities"] = [int(s) for s in str_list]
