@@ -109,6 +109,7 @@ class DashboardView(ViewLoggerMixin, generic.ListView):
     def get_queryset(self):
         self.form = self.form_class(self.request.GET or None)
         queryset = Patient.objects.all()
+        start_querying = time.time()
 
         if self.request.method == "GET" and self.form.is_valid():
             queryset = patientspecific_query(patient_queryset=queryset, 
@@ -132,7 +133,6 @@ class DashboardView(ViewLoggerMixin, generic.ListView):
                     field, field_name
                 )
             initial_form = self.form_class(initial_data)
-            self.logger.debug(f"Initial data: {initial_data}")
 
             if initial_form.is_valid():
                 queryset = patientspecific_query(patient_queryset=queryset, 
@@ -152,7 +152,11 @@ class DashboardView(ViewLoggerMixin, generic.ListView):
                 self.logger.warn("Initial form is invalid, errors are: "
                                  f"{initial_form.errors.as_data()}")
                 queryset = Patient.objects.none()
-
+        
+        end_querying = time.time()
+        self.logger.info(
+            f'Querying finished in {end_querying - start_querying} seconds'
+        ) 
         return queryset
 
     def get_context_data(self, **kwargs: Any) -> Dict[str, Any]:

@@ -235,10 +235,10 @@ class ThreeWayToggle(forms.ChoiceField):
     def __init__(self, 
                  widget=None, 
                  attrs={"class": "radio is-hidden"},
-                 choices=[(True , "plus"),
-                          (None , "ban"), 
-                          (False, "minus")],
-                 initial=None,
+                 choices=[( 1 , "plus"),
+                          ( 0 , "ban"), 
+                          (-1, "minus")],
+                 initial=0,
                  required=False,
                  **kwargs):
         """Overwrite the defaults of the ChoiceField."""
@@ -331,6 +331,17 @@ class DashboardForm(FormLoggerMixin, forms.Form):
                                "onclick": "subClickHandler(this);"})
                 else:
                     self.fields[f"{side}_{lnl}"] = ThreeWayToggle()
+                    
+                    
+    def _to_bool(self, value: int):
+        if value == 1:
+            return True
+        elif value == -1:
+            return False
+        elif value == 0:
+            return None
+        else:
+            return value
            
                 
     def clean(self):
@@ -338,31 +349,21 @@ class DashboardForm(FormLoggerMixin, forms.Form):
         sublevels a & b. Also convert tstages from list of str to list of int."""
         cleaned_data = super(DashboardForm, self).clean()
         
+        cleaned_data = {key: self._to_bool(value) for key,value in cleaned_data.items()}
+        
         for side in ["ipsi", "contra"]:
             for lnl in ["I", "II"]:
                 a = cleaned_data[f"{side}_{lnl}a"]
                 b = cleaned_data[f"{side}_{lnl}b"]
                 
                 # make sure data regarding sublevels is not conflicting
-                if a * b == 1:
-                    cleaned_data[f"{side}_{lnl}"] = a
-                elif a * b == -1:
-                    cleaned_data[f"{side}_{lnl}"] = 1
-                elif a * b == 0:
-                    if a + b == 1:
-                        cleaned_data[f"{side}_{lnl}"] = 1
-                    elif a + b == -1:
-                        pass
-                    elif a + b == 0:
-                        pass
-                    else:
-                        msg = f"Invalid values in LNL {lnl} {side}laterally."
-                        self.logger.warning(msg)
-                        raise ValidationError(msg)
-                else:
-                    msg = f"Invalid values in LNL {lnl} {side}laterally."
-                    self.logger.warning(msg)
-                    raise ValidationError(msg)
+                if a or b:
+                    cleaned_data[f"{side}_{lnl}"] = True
+                try:  # negation ~ only works with bool, not with None
+                    if ~a and ~b:
+                        cleaned_data[f'{side}_{lnl}'] = False
+                except TypeError:
+                    pass
                 
                                     
         subsites = cleaned_data["subsite__in"]
@@ -383,4 +384,5 @@ class DashboardForm(FormLoggerMixin, forms.Form):
         str_list = cleaned_data["modalities"]
         cleaned_data["modalities"] = [int(s) for s in str_list]
         
+        self.logger.info(cleaned_data)
         return cleaned_data
