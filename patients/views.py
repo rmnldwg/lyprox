@@ -155,7 +155,7 @@ class DashboardView(ViewLoggerMixin, generic.ListView):
         
         end_querying = time.time()
         self.logger.info(
-            f'Querying finished in {end_querying - start_querying} seconds'
+            f'Querying finished in {end_querying - start_querying:.3f} seconds'
         ) 
         return queryset
 

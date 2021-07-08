@@ -302,7 +302,7 @@ class DashboardForm(FormLoggerMixin, forms.Form):
         choices=T_STAGES,
         initial=[1,2,3,4]
     )
-    position = ThreeWayToggle()
+    central = ThreeWayToggle()
     extension = ThreeWayToggle()
     
     # checkbutton for switching to percent
@@ -334,6 +334,8 @@ class DashboardForm(FormLoggerMixin, forms.Form):
                     
                     
     def _to_bool(self, value: int):
+        """Transform values of -1, 0 and 1 to False, None and True respectively. 
+        Anything else is just passed through."""
         if value == 1:
             return True
         elif value == -1:
@@ -349,23 +351,32 @@ class DashboardForm(FormLoggerMixin, forms.Form):
         sublevels a & b. Also convert tstages from list of str to list of int."""
         cleaned_data = super(DashboardForm, self).clean()
         
-        cleaned_data = {key: self._to_bool(value) for key,value in cleaned_data.items()}
+        # map all -1,0,1 fields to False,None,True
+        cleaned_data = {
+            key: self._to_bool(value) for key,value in cleaned_data.items()
+        }
         
+        # make sure LNLs I & II arent in conflict with their sublevels
         for side in ["ipsi", "contra"]:
             for lnl in ["I", "II"]:
                 a = cleaned_data[f"{side}_{lnl}a"]
                 b = cleaned_data[f"{side}_{lnl}b"]
                 
                 # make sure data regarding sublevels is not conflicting
-                if a or b:
+                if a is True or b is True:
                     cleaned_data[f"{side}_{lnl}"] = True
-                try:  # negation ~ only works with bool, not with None
-                    if ~a and ~b:
-                        cleaned_data[f'{side}_{lnl}'] = False
-                except TypeError:
-                    pass
-                
-                                    
+                if a is False and b is False:
+                    cleaned_data[f'{side}_{lnl}'] = False
+
+        # map `central` from False,None,True to the respective list of positions
+        if cleaned_data['central'] is True:
+            cleaned_data['position__in'] = ['central']
+        elif cleaned_data['central'] is False:
+            cleaned_data["position__in"] = ['left', 'right']
+        else:
+            cleaned_data["position__in"] = ['left', 'right', 'central']
+        
+        # map subsites 'base','tonsil','rest' to list of ICD codes.
         subsites = cleaned_data["subsite__in"]
         subsite_dict = {"base":   ["C01.9"], 
                         "tonsil": ["C09.0", "C09.1", "C09.8", "C09.9"],
@@ -377,12 +388,14 @@ class DashboardForm(FormLoggerMixin, forms.Form):
         for sub in subsites:
             icd_codes += subsite_dict[sub]
         cleaned_data["subsite__in"] = icd_codes
-                
+        
+        # make sure T-stages are list of ints
         str_list = cleaned_data["t_stage__in"]
         cleaned_data["t_stage__in"] = [int(s) for s in str_list]
         
+        # make sure list of modalities is list of ints
         str_list = cleaned_data["modalities"]
         cleaned_data["modalities"] = [int(s) for s in str_list]
         
-        self.logger.info(cleaned_data)
+        self.logger.debug(f'cleaned data: {cleaned_data}')
         return cleaned_data

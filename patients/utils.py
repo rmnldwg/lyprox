@@ -10,8 +10,8 @@ from typing import List, Union, Optional, Dict, Any
 import logging
 logger = logging.getLogger(__name__)
 
-from .models import Patient, Diagnose, Tumor, T_STAGES, N_STAGES, M_STAGES, MODALITIES, LNLs
-
+from .models import (Patient, Diagnose, Tumor, 
+                     T_STAGES, N_STAGES, M_STAGES, MODALITIES, LNLs)
 
 
 def compute_hash(*args):
@@ -216,16 +216,6 @@ def pos2arr(pos):
         return np.array([1, 0, 0], dtype=int)
 
 
-def oneminusone_to_bool(num: int) -> bool:
-    """Transform 1 to `True` and -1 to `False`."""
-    if num == 1:
-        return True
-    elif num == -1:
-        return False
-    else:
-        raise ValueError("Only use this function inside an if-clause that "
-                         "catches the case == 0.")
-
 
 def patientspecific_query(
     patient_queryset: QuerySet = Patient.objects.all(),
@@ -243,7 +233,6 @@ def patientspecific_query(
         if value is not None:             # ...if it's of interest, then filter
             patient_queryset = patient_queryset.filter(**{key: value})
     
-    logger.info(f'{patient_queryset.count()} patients still in QuerySet')
     return patient_queryset
 
 
@@ -256,7 +245,7 @@ def tumorspecific_query(
                               "C13.2", "C13.8", "C13.9", "C32.0", "C32.1", 
                               "C32.2", "C32.3", "C32.8", "C32.9"],
     t_stage__in: List[int] = [1,2,3,4],
-    position: Optional[bool] = None,
+    position__in: List[str] = ['left', 'right', 'central'],
     extension: Optional[bool] = None,
     **rest
 ) -> QuerySet:
@@ -269,18 +258,15 @@ def tumorspecific_query(
         if value is not None:             # ...if it's of interest, then filter
             patient_queryset = patient_queryset.filter(**{f'tumor__{key}': value})
     
-    logger.info(f'{patient_queryset.count()} patients still in QuerySet')
     return patient_queryset
 
 
-# TODO: How to do type hinting for multiple return values
 def diagnosespecific_query(
     patient_queryset: QuerySet = Patient.objects.all(),
     assign_central: str = "left",
     **kwargs
 ):
     """"""
-    _ = oneminusone_to_bool
     # DIAGNOSES
     d = Diagnose.objects.all().filter(patient__in=patient_queryset,
                                       modality__in=kwargs['modalities'])
@@ -353,12 +339,7 @@ def diagnosespecific_query(
             all_none_idx = np.all(diag_table == None, axis=0)
             combined_involvement[side][pat_id][all_none_idx] = None
             
-            # match the combined involvement against what is selected in the data
-            mask = np.all(
-                np.stack([combined_involvement[side][pat_id] != None, 
-                          selected_diagnose[side] != None]),
-                axis=0
-            )
+            mask = selected_diagnose[side] != None
             match = np.all(np.equal(combined_involvement[side][pat_id], 
                                     selected_diagnose[side],
                                     where=mask,
@@ -388,7 +369,7 @@ def count_patients(
         'tumor__extension',
     )
     counts = {   # initialize counts of patient- & tumor-related fields
-        'total': patients.count(),
+        'total': len(patients),
          
         'nicotine_abuse': np.zeros(shape=(3,), dtype=int),
         'hpv_status': np.zeros(shape=(3,), dtype=int),
@@ -396,7 +377,7 @@ def count_patients(
         
         'subsites': np.zeros(shape=(3,), dtype=int),
         't_stages': np.zeros(shape=(len(T_STAGES),), dtype=int),
-        'position': np.zeros(shape=(3,), dtype=int),
+        'central': np.zeros(shape=(3,), dtype=int),
         'extension': np.zeros(shape=(3,), dtype=int), 
     }
     for side in ['ipsi', 'contra']:
@@ -413,7 +394,7 @@ def count_patients(
         # TUMOR specific counts
         counts['subsites'] += subsite2arr(patient['tumor__subsite'])
         counts['t_stages'][patient['tumor__t_stage']-1] += 1
-        counts['position'] += pos2arr(patient['tumor__position'])
+        counts['central'] += pos2arr(patient['tumor__position'])
         counts['extension'] += tf2arr(patient['tumor__extension'])
         
         # DIAGNOSE specific (involvement) counts
