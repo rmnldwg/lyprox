@@ -14,13 +14,15 @@ from numpy import e, errstate
 import logging
 logger = logging.getLogger(__name__)
 
-from .models import Patient, Tumor, Diagnose, MODALITIES
-from .forms import PatientForm, TumorForm, DiagnoseForm, DataFileForm, DashboardForm, ValidationError
-from .utils import (create_from_pandas, 
-                    patientspecific_query, 
-                    tumorspecific_query, 
-                    diagnosespecific_query,
-                    count_patients)
+from .models import Patient, Tumor, Diagnose
+from .forms import (PatientForm, 
+                    TumorForm, 
+                    DiagnoseForm, 
+                    DataFileForm, 
+                    DashboardForm, 
+                    ValidationError)
+from .utils import import_from_pandas, ParsingError
+from . import query
 from .filters import PatientFilter
 from .loggers import ViewLoggerMixin
 
@@ -112,14 +114,14 @@ class DashboardView(ViewLoggerMixin, generic.ListView):
         start_querying = time.time()
 
         if self.request.method == "GET" and self.form.is_valid():
-            queryset = patientspecific_query(patient_queryset=queryset, 
+            queryset = query.patient_specific(patient_queryset=queryset, 
                                              **self.form.cleaned_data)
-            queryset = tumorspecific_query(patient_queryset=queryset,
+            queryset = query.tumor_specific(patient_queryset=queryset,
                                            **self.form.cleaned_data)
-            queryset, combined_involvement = diagnosespecific_query(
+            queryset, combined_involvement = query.diagnose_specific(
                 patient_queryset=queryset, **self.form.cleaned_data
             )
-            queryset, counts = count_patients(
+            queryset, counts = query.count_patients(
                 patient_queryset=queryset,
                 combined_involvement=combined_involvement
             )
@@ -135,14 +137,14 @@ class DashboardView(ViewLoggerMixin, generic.ListView):
             initial_form = self.form_class(initial_data)
 
             if initial_form.is_valid():
-                queryset = patientspecific_query(patient_queryset=queryset, 
+                queryset = query.patient_specific(patient_queryset=queryset, 
                                                 **initial_form.cleaned_data)
-                queryset = tumorspecific_query(patient_queryset=queryset,
+                queryset = query.tumor_specific(patient_queryset=queryset,
                                                **initial_form.cleaned_data)
-                queryset, combined_involvement = diagnosespecific_query(
+                queryset, combined_involvement = query.diagnose_specific(
                     patient_queryset=queryset, **initial_form.cleaned_data
                 )
-                queryset, counts = count_patients(
+                queryset, counts = query.count_patients(
                     patient_queryset=queryset,
                     combined_involvement=combined_involvement
                 )
@@ -189,15 +191,13 @@ def upload_patients(request):
             data_frame = form.cleaned_data["data_frame"]
             # creating patients from the resulting pandas DataFrame
             try:
-                num_new, num_skipped = create_from_pandas(data_frame)
-            except KeyError:
-                # down below I handle the case that the provided file is in 
-                # in fact a readable CSV file, but with the wrong fields. I 
-                # think it could be done more elegantly, but hey... it works
-                msg = "Provided CSV table is missing required columns."
-                logger.error(msg)
+                num_new, num_skipped = import_from_pandas(data_frame)
+            except ParsingError as pe:
+                logger.error(pe.message)
                 form = DataFileForm()
-                context = {"upload_success": False, "form": form, "error": msg}
+                context = {"upload_success": False, 
+                           "form": form, 
+                           "error": pe.message}
                 return render(request, "patients/upload.html", context)
                 
             context = {"upload_success": True, 

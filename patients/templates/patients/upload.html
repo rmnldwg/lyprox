@@ -57,7 +57,9 @@
                 </div>
             </form>
             {% else %}
-            <p>{{ num_new }} patients have been added and {{ num_skipped }} were skipped.</p>
+            <div class="notification is-success is-light">
+                {{ num_new }} patients have been added and {{ num_skipped }} were skipped.
+            </div>
             {% endif %}
         </div>
     </div>

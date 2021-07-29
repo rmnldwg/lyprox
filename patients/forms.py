@@ -11,7 +11,7 @@ import pandas
 import os
 import logging
 
-from .models import Patient, Tumor, Diagnose, MODALITIES, LOCATIONS, SUBSITES, T_STAGES, LNLs
+from .models import Patient, Tumor, Diagnose
 from .utils import compute_hash
 from .loggers import FormLoggerMixin
 
@@ -173,7 +173,7 @@ class DiagnoseForm(FormLoggerMixin, forms.ModelForm):
                    "modality": forms.Select(attrs={"class": "select is-small"}),
                    "side": forms.Select(attrs={"class": "select is-small"})}
         
-        for lnl in LNLs:
+        for lnl in Diagnose.LNLs:
             fields.append(lnl)
             widgets[lnl] = forms.Select(choices=[(True, "pos"),
                                                  (False, "neg"),
@@ -272,7 +272,7 @@ class DashboardForm(FormLoggerMixin, forms.Form):
     modalities = forms.MultipleChoiceField(
         required=False, 
         widget=forms.CheckboxSelectMultiple(attrs={"class": "checkbox is-hidden"}), 
-        choices=MODALITIES,
+        choices=Diagnose.Modalities.choices,
         initial=[1,2]
     )
     modality_combine = forms.ChoiceField(
@@ -299,7 +299,7 @@ class DashboardForm(FormLoggerMixin, forms.Form):
     t_stage__in = forms.MultipleChoiceField(
         required=False,
         widget=forms.CheckboxSelectMultiple(attrs={"class": "checkbox is-hidden"}),
-        choices=T_STAGES,
+        choices=Patient.T_stages.choices,
         initial=[1,2,3,4]
     )
     central = ThreeWayToggle()
@@ -320,7 +320,7 @@ class DashboardForm(FormLoggerMixin, forms.Form):
         LNLs from a list."""
         super(DashboardForm, self).__init__(*args, **kwargs)
         for side in ["ipsi", "contra"]:
-            for lnl in LNLs:
+            for lnl in Diagnose.LNLs:
                 if lnl in ['I', 'II']:
                     self.fields[f"{side}_{lnl}"] = ThreeWayToggle(
                         attrs={"class": "radio is-hidden",

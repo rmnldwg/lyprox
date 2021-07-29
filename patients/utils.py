@@ -1,17 +1,27 @@
 from django.db import IntegrityError
 from django.forms import ValidationError
-from django.db.models import Q, F, QuerySet
 
 import numpy as np
-import dateutil
-import time
-from collections import defaultdict
+import pandas as pd
+import dateutil.parser as dp
 from typing import List, Union, Optional, Dict, Any
 import logging
 logger = logging.getLogger(__name__)
 
-from .models import (Patient, Diagnose, Tumor, 
-                     T_STAGES, N_STAGES, M_STAGES, MODALITIES, LNLs)
+from .models import (Patient, Diagnose, Tumor)
+
+
+class ParsingError(Exception):
+    """Exception raised when the parsing of an uploaded CSV fails due to 
+    missing data columns."""
+    
+    def __init__(self, column, message="Missing column in uploaded table"):
+        self.column = column
+        self.message = message
+        super().__init__(self.message)
+    
+    def __str__(self):
+        return f"{self.column}: {self.message}"
 
 
 def compute_hash(*args):
@@ -27,380 +37,165 @@ def nan_to_None(sth):
         return sth
 
 
-def create_from_pandas(data_frame, anonymize=True):
-    """Create a batch of new patients from a pandas `DataFrame`."""
+def patient_from_row(row, anonymize: List[str]):
+    """Create a `Patient` instance from a row of a `DataFrame` containing the 
+    appropriate information."""
+    patient_dict = row.to_dict()
+    _ = nan_to_None
+    
+    if len(anonymize) != 0:
+        to_hash = [patient_dict.pop(a) for a in anonymize]
+        hash_value = compute_hash(*to_hash)
+    else:
+        hash_value = compute_hash(*patient_dict)
+    
+    patient_fields = [field.name for field in Patient._meta.get_fields()]
+    fields_to_remove = ["id", "hash_value", "tumor", "diagnose", "t_stage"]
+    [patient_fields.remove(field) for field in fields_to_remove]
+    
+    valid_patient_dict = {}
+    for field in patient_fields:
+        try:
+            valid_patient_dict[field] = _(patient_dict[field])
+        except KeyError:
+            column = field
+            raise ParsingError(column)
+    
+    try:
+        new_patient = Patient(
+            hash_value=hash_value,
+            **valid_patient_dict
+        )
+        new_patient.save()
+    except IntegrityError as ie:
+        msg = ("Hash value already in database. Patient might have been added "
+               "before")
+        logger.warn(msg)
+        raise ie
+    
+    return new_patient
+
+
+def add_tumors_from_row(row, patient):
+    """Create `Tumor` instances from row of a `DataFrame` and add them to an 
+    existing `Patient` instance."""
+    # extract number of tumors in row
+    level_zero = row.index.get_level_values(0)
+    num_tumors = np.max([int(num) for num in level_zero])
+    _ = nan_to_None
+    
+    tumor_fields = [field.name for field in Tumor._meta.get_fields()]
+    fields_to_remove = ["id", "patient"]
+    [tumor_fields.remove(field) for field in fields_to_remove]
+    
+    for i in range(num_tumors):
+        tumor_dict = row[(f"{i+1}")].to_dict()
+        
+        valid_tumor_dict = {}
+        for field in tumor_fields:
+            try:
+                valid_tumor_dict[field] = _(tumor_dict[field])
+            except KeyError:
+                column = field
+                raise ParsingError(column)
+        
+        new_tumor = Tumor(
+            patient=patient,
+            **valid_tumor_dict
+        )
+        new_tumor.save()
+
+
+def add_diagnoses_from_row(row, patient):
+    """Create `Diagnose` instances from row of `DataFrame` and add them to an 
+    existing `Patient` instance."""
+    modalities_list = list(set(row.index.get_level_values(0)))
+    if not set(modalities_list).issubset(Diagnose.Modalities.labels):
+        message = ("Unknown diagnostic modalities were provided. Known are "
+                   f"only {Diagnose.Modalities.labels}.")
+        raise ParsingError(column="Modalities", message=message)
+    
+    if len(modalities_list) == 0:
+        message = "No diagnostic modalities were found in the provided table."
+        raise ParsingError(column="Modalities", message=message)
+    
+    _ = nan_to_None
+    
+    diagnose_fields = [field.name for field in Diagnose._meta.get_fields()]
+    fields_to_remove = ["id", "patient", "modality", "side", "diagnose_date"]
+    [diagnose_fields.remove(field) for field in fields_to_remove]
+    
+    for mod in modalities_list:
+        diagnose_date = _(row[(mod, "info", "date")])
+        if diagnose_date is not None:
+            for side in ["left", "right"]:
+                diagnose_dict = row[(mod, side)].to_dict()
+                
+                valid_diagnose_dict = {}
+                for field in diagnose_fields:
+                    try:
+                        valid_diagnose_dict[field] = _(diagnose_dict[field])
+                    except KeyError:
+                        column = field
+                        raise ParsingError(column)
+                
+                mod_num = Diagnose.Modalities.labels.index(mod)
+                new_diagnosis = Diagnose(
+                    patient=patient, modality=mod_num, side=side,
+                    diagnose_date=diagnose_date,
+                    **valid_diagnose_dict
+                )
+                new_diagnosis.save()
+    
+
+def import_from_pandas(
+    data_frame: pd.DataFrame, 
+    anonymize: List[str] = ["ID"]
+):
+    """Import patients from pandas `DataFrame`."""
     num_new = 0
     num_skipped = 0
-    _ = nan_to_None
-
+    
     for i, row in data_frame.iterrows():
-        # PATIENT
-        # privacy-related fields that also serve identification purposes
-        if anonymize:
-            # first_name = row[("patient", "general", "first_name")]
-            # last_name = row[("patient", "general", "last_name")]
-            # birthday = row[("patient", "general", "birthday")]
-            kisim_id = row[("patient", "general", "ID")]
-            hash_value = compute_hash(kisim_id)
-        else:
-            hash_value = row[("patient", "general", "ID")]
-
-        gender = _(row[("patient", "general", "gender")])
-        age = _(row[("patient", "general", "age")])
-        diagnose_date = dateutil.parser.parse(
-            _(row[("patient", "general", "diagnosedate")]))
-
-        alcohol_abuse = _(row[("patient", "abuse", "alcohol")])
-        nicotine_abuse = _(row[("patient", "abuse", "nicotine")])
-        hpv_status = _(row[("patient", "condition", "HPV")])
-        neck_dissection = _(row[("patient", "condition", "neck-dissection")])
-
-        t_stage = 0
-        n_stage = _(row[("patient", "stage", "N")])
-        m_stage = _(row[("patient", "stage", "M")])
-
-        new_patient = Patient(hash_value=hash_value,
-                              gender=gender,
-                              age=age,
-                              diagnose_date=diagnose_date,
-                              alcohol_abuse=alcohol_abuse,
-                              nicotine_abuse=nicotine_abuse,
-                              hpv_status=hpv_status,
-                              neck_dissection=neck_dissection,
-                              t_stage=t_stage,
-                              n_stage=n_stage,
-                              m_stage=m_stage)
-        
+        # Make sure first two levels are correct for patient data
         try:
-            new_patient.save()
+            patient_row = row[("patient", "#")]
+        except KeyError:
+            missing = "('patient', '#', '...')"
+            message = ("For patient info, first level must be 'patient', "
+                       "second level must be '#'.")
+            raise ParsingError(column=missing, message=message)
+        
+        # skip row if patient is already in database
+        try:
+            new_patient = patient_from_row(
+                patient_row, anonymize=anonymize
+            )
         except IntegrityError:
-            msg = f"Patient already in database. Skipping row {i+1}."
-            logger.debug(msg)
+            msg = ("Skipping row")
+            logger.warn(msg)
             num_skipped += 1
             continue
-            
-
+        
+        # make sure first level is correct for tumor
         try:
-            # TUMORS
-            stages_list = [tuple[1] for tuple in T_STAGES]
-
-            count = 1
-            while ("tumor", f"{count}", "location") in data_frame.columns:
-                location = _(row["tumor", f"{count}", "location"])
-                subsite = _(row[("tumor", f"{count}", "ICD-O-3")])
-                position = _(row[("tumor", f"{count}", "side")])
-                extension = _(row[("tumor", f"{count}", "extension")])
-                size = _(row[("tumor", f"{count}", "size")])
-                stage_prefix = _(row[("tumor", f"{count}", "prefix")])
-                t_stage = _(row[("tumor", f"{count}", "stage")])
-
-                # TODO: deal with location (must be validated so that it 
-                #   matches the subsite and vice versa)
-                new_tumor = Tumor(subsite=subsite,
-                                  position=position,
-                                  extension=extension,
-                                  size=size,
-                                  t_stage=t_stage,
-                                  stage_prefix=stage_prefix)
-                new_tumor.patient = new_patient
-
-                new_tumor.save()
-
-                if new_tumor.t_stage > new_patient.t_stage:
-                    new_patient.t_stage = new_tumor.t_stage
-                    new_patient.save()
-
-                count += 1
-
-            # DIAGNOSES
-            # first, find out which diagnoses are present in this DataFrame
-            header_first_row = list(set([item[0] for item in data_frame.columns]))
-            pat_index = header_first_row.index("patient")
-            header_first_row.pop(pat_index)
-            tum_index = header_first_row.index("tumor")
-            header_first_row.pop(tum_index)
-
-            for modality in header_first_row:
-                modality_list = [item[1] for item in MODALITIES]
-                modality_idx = modality_list.index(modality)
-
-                # can be empty...
-                try:
-                    diagnose_date = dateutil.parser.parse(
-                        _(row[(f"{modality}", "info", "date")]))
-                except:
-                    diagnose_date = None
-
-                if diagnose_date is not None:
-                    for side in ["right", "left"]:
-                        I   = _(row[(f"{modality}", f"{side}", "I")])
-                        Ia  = _(row[(f"{modality}", f"{side}", "Ia")])
-                        Ib  = _(row[(f"{modality}", f"{side}", "Ib")])
-                        II  = _(row[(f"{modality}", f"{side}", "II")])
-                        IIa = _(row[(f"{modality}", f"{side}", "IIa")])
-                        IIb = _(row[(f"{modality}", f"{side}", "IIb")])
-                        III = _(row[(f"{modality}", f"{side}", "III")])
-                        IV  = _(row[(f"{modality}", f"{side}", "IV")])
-                        V   = _(row[(f"{modality}", f"{side}", "V")])
-                        VII = _(row[(f"{modality}", f"{side}", "VII")])
-
-                        new_diagnose = Diagnose(modality=modality_idx,
-                                                diagnose_date=diagnose_date,
-                                                side=side,
-                                                I=I,
-                                                Ia=Ia,
-                                                Ib=Ib,
-                                                II=II,
-                                                IIa=IIa,
-                                                IIb=IIb,
-                                                III=III,
-                                                IV=IV,
-                                                V=V,
-                                                VII=VII)
-
-                        new_diagnose.patient = new_patient
-                        new_diagnose.save()
-            
-            msg = f"parsed row {i+1} and created patient {new_patient}"
-            logger.debug(msg)
-            
-            num_new += 1
-            
-        except:
-            msg = f"Unable to add Tumor/Diagnose. Skipping row {i+1}."
-            logger.warning(msg)
-            new_patient.delete()
-            num_skipped += 1
-            continue
-
+            tumor_row = row[("tumor")]
+        except KeyError:
+            missing = "('tumor', '1/2/3/...', '...')"
+            message = ("For tumor info, first level must be 'tumor' and "
+                       "second level must be number of tumor.")
+            raise ParsingError(column=missing, message=message)
+                
+        add_tumors_from_row(
+            tumor_row, new_patient
+        )
+        
+        not_patient = row.index.get_level_values(0) != "patient"
+        not_tumor = row.index.get_level_values(0) != "tumor"
+        add_diagnoses_from_row(
+            row.loc[not_patient & not_tumor], new_patient
+        )
+        
+        num_new += 1
+        
     return num_new, num_skipped
-
-
-def tf2arr(value):
-    """Map `True`, `False` & `None` to one-hot-arrays of length 3. This 
-    particular mapping comes from the fact that in the form `True`, `None`, 
-    `False` are represented by integers 1, 0, -1. So, the one-hot encoding 
-    uses an array of length 3 that is one only at these respective indices, 
-    where -1 is the last item."""
-    if value is None:
-        return np.array([1, 0, 0], dtype=int)
-    else:
-        if value:
-            return np.array([0, 1, 0], dtype=int)
-        else:
-            return np.array([0, 0, 1], dtype=int)
-        
-        
-def subsite2arr(subsite):
-    """Map different subsites to an one-hot-array of length three. A one in the 
-    first place means "base of tongue", at the second place is "tonsil" and at 
-    the tird place it's "rest"."""
-    if subsite in ["C01.9"]:
-        return np.array([1, 0, 0], dtype=int)
-    elif subsite in ["C09.0", "C09.1", "C09.8", "C09.9"]:
-        return np.array([0, 1, 0], dtype=int)
-    else:
-        return np.array([0, 0, 1], dtype=int)
-    
-    
-def pos2arr(pos):
-    """Map position to one-hot-array of length three. A one in the first place 
-    means unknown lateralization, in the second place it means the tumor is 
-    central and in the last place corresponds to a laterlalized tumor (right or 
-    left)."""
-    if pos == "central":
-        return np.array([0, 1, 0], dtype=int)
-    elif (pos == "left") or (pos == "right"):
-        return np.array([0, 0, 1], dtype=int)
-    else:
-        return np.array([1, 0, 0], dtype=int)
-
-
-
-def patientspecific_query(
-    patient_queryset: QuerySet = Patient.objects.all(),
-    nicotine_abuse: Optional[bool] = None,
-    hpv_status: Optional[bool] = None,
-    neck_dissection: Optional[bool] = None,
-    **rest
-) -> QuerySet:
-    """Filter `QuerySet` of `Patient`s based on patient-specific properties.
-    """
-    kwargs = locals()              # extract keyword arguments and...
-    kwargs.pop('patient_queryset') # ...remove the patient queryset and...
-    kwargs.pop('rest')             # ...any other kwargs from this dictionary.
-    for key, value in kwargs.items():   # iterate over provided kwargs and ...
-        if value is not None:             # ...if it's of interest, then filter
-            patient_queryset = patient_queryset.filter(**{key: value})
-    
-    return patient_queryset
-
-
-def tumorspecific_query(
-    patient_queryset: QuerySet = Patient.objects.all(),
-    subsite__in: List[str] = ["C01.9",
-                              "C09.0", "C09.1", "C09.8", "C09.9",
-                              "C10.0", "C10.1", "C10.2", "C10.3", "C10.4", 
-                              "C10.8", "C10.9", "C12.9", "C13.0", "C13.1", 
-                              "C13.2", "C13.8", "C13.9", "C32.0", "C32.1", 
-                              "C32.2", "C32.3", "C32.8", "C32.9"],
-    t_stage__in: List[int] = [1,2,3,4],
-    position__in: List[str] = ['left', 'right', 'central'],
-    extension: Optional[bool] = None,
-    **rest
-) -> QuerySet:
-    """Filter `QuerySet` of `Patient`s based on tumor-specific properties.
-    """
-    kwargs = locals()              # extract keyword arguments and...
-    kwargs.pop('patient_queryset') # ...remove the patient queryset and...
-    kwargs.pop('rest')             # ...any other kwargs from this dictionary.
-    for key, value in kwargs.items():   # iterate over provided kwargs and ...
-        if value is not None:             # ...if it's of interest, then filter
-            patient_queryset = patient_queryset.filter(**{f'tumor__{key}': value})
-    
-    return patient_queryset
-
-
-def diagnosespecific_query(
-    patient_queryset: QuerySet = Patient.objects.all(),
-    assign_central: str = "left",
-    **kwargs
-):
-    """"""
-    # DIAGNOSES
-    d = Diagnose.objects.all().filter(patient__in=patient_queryset,
-                                      modality__in=kwargs['modalities'])
-    q_ipsi = (Q(side=F("patient__tumor__position"))
-              | (Q(patient__tumor__position="central")
-                 & Q(side=assign_central)))
-    
-    diagnose_querysets = {
-        'ipsi'  : d.filter(q_ipsi).select_related('patient').values(),
-        'contra': d.exclude(q_ipsi).select_related('patient').values()
-    }
-    
-    diagnose_tables = {
-        'ipsi'  : {},
-        'contra': {}
-    }
-    
-    patient_queryset = patient_queryset.filter(
-        Q(diagnose__in=d.filter(q_ipsi)) | Q(diagnose__in=d.exclude(q_ipsi))
-    ).distinct()
-    
-    selected_diagnose = {    # via form selected diagnoses will be stored here
-        'ipsi'  : np.array([None] * len(LNLs)),
-        'contra': np.array([None] * len(LNLs))
-    }
-    
-    # sort diags into patient bins...
-    combined_involvement = {'ipsi'  : {},
-                            'contra': {}}
-    for side in ['ipsi', 'contra']:
-        for i,lnl in enumerate(LNLs):
-            if (selected_inv := kwargs[f'{side}_{lnl}']) is not None:
-                selected_diagnose[side][i] = selected_inv
-                
-        for diagnose in diagnose_querysets[side]:
-            patient_id = diagnose['patient_id']
-            diag_array = np.array([diagnose[f'{lnl}'] for lnl in LNLs])
-            
-            try:
-                diagnose_tables[side][patient_id] = np.vstack([
-                    diagnose_tables[side][patient_id],
-                    diag_array
-                ])
-            except KeyError:
-                diagnose_tables[side][patient_id] = diag_array
-        
-        # ...and aggregate/combine each patient's diag    
-        for pat_id, diag_table in diagnose_tables[side].items():
-            if kwargs['modality_combine'] == 'OR':
-                combine = any
-            elif kwargs['modality_combine'] == 'AND':
-                combine = all
-            else:
-                msg = ("Modalities can only be combined using logical OR or "
-                       "logical AND")
-                logger.error(msg)
-                raise ValueError(msg)
-            
-            try:
-                combined_involvement[side][pat_id] = np.array(
-                    [combine(col) for col in diag_table.T],
-                    dtype=object
-                )
-            except TypeError:  # difference: square bracket around `col`
-                combined_involvement[side][pat_id] = np.array(
-                    [combine([col]) for col in diag_table.T],
-                    dtype=object
-                )
-            # when all observations yield 'unknown' for a LNL, report 'unknown'
-            all_none_idx = np.all(diag_table == None, axis=0)
-            combined_involvement[side][pat_id][all_none_idx] = None
-            
-            mask = selected_diagnose[side] != None
-            match = np.all(np.equal(combined_involvement[side][pat_id], 
-                                    selected_diagnose[side],
-                                    where=mask,
-                                    out=np.ones_like(mask, dtype=bool)))
-            if not match:   # if it does not match, remove patient from queryset
-                patient_queryset = patient_queryset.exclude(id=pat_id)
-    
-    return patient_queryset, combined_involvement
-
-
-def count_patients(
-    patient_queryset: QuerySet,
-    combined_involvement: Dict[str, Dict[str, np.ndarray]]
-):
-    """Count how often patients have various characteristics like HPV status, 
-    certain lymph node level involvement, and so on.
-    """
-    # prefetch patients and important fields for performance
-    patients = patient_queryset.prefetch_related('tumor').values(
-        'id',
-        'nicotine_abuse',
-        'hpv_status',
-        'neck_dissection',
-        'tumor__subsite',
-        'tumor__t_stage',
-        'tumor__position',
-        'tumor__extension',
-    )
-    counts = {   # initialize counts of patient- & tumor-related fields
-        'total': len(patients),
-         
-        'nicotine_abuse': np.zeros(shape=(3,), dtype=int),
-        'hpv_status': np.zeros(shape=(3,), dtype=int),
-        'neck_dissection': np.zeros(shape=(3,), dtype=int),
-        
-        'subsites': np.zeros(shape=(3,), dtype=int),
-        't_stages': np.zeros(shape=(len(T_STAGES),), dtype=int),
-        'central': np.zeros(shape=(3,), dtype=int),
-        'extension': np.zeros(shape=(3,), dtype=int), 
-    }
-    for side in ['ipsi', 'contra']:
-        for lnl in LNLs:
-            counts[f'{side}_{lnl}'] = np.zeros(shape=(3,), dtype=int)
-            
-    # loop through patients to populate the counts dictionary
-    for patient in patients:
-        # PATIENT specific counts
-        counts['nicotine_abuse'] += tf2arr(patient['nicotine_abuse'])
-        counts['hpv_status'] += tf2arr(patient['hpv_status'])
-        counts['neck_dissection'] += tf2arr(patient['neck_dissection'])
-        
-        # TUMOR specific counts
-        counts['subsites'] += subsite2arr(patient['tumor__subsite'])
-        counts['t_stages'][patient['tumor__t_stage']-1] += 1
-        counts['central'] += pos2arr(patient['tumor__position'])
-        counts['extension'] += tf2arr(patient['tumor__extension'])
-        
-        # DIAGNOSE specific (involvement) counts
-        for side in ['ipsi', 'contra']:
-            for i,lnl in enumerate(LNLs):
-                tmp = combined_involvement[side][patient['id']][i]
-                counts[f'{side}_{lnl}'] += tf2arr(tmp)
-                
-    return patient_queryset, counts
