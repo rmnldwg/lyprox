@@ -135,11 +135,11 @@ class Tumor(ModeLoggerMixin, models.Model):
     
     location = models.PositiveSmallIntegerField(choices=Locations.choices, null=True)
     subsite = models.CharField(max_length=10, choices=SUBSITES)
-    position = models.CharField(max_length=10, choices=[("left", "left"),
-                                                        ("right", "right"), 
-                                                        ("central", "central")])
+    side = models.CharField(max_length=10, choices=[("left", "left"),
+                                                    ("right", "right"),
+                                                    ("central", "central")])
     extension = models.BooleanField(blank=True, null=True)
-    size = models.FloatField(blank=True, null=True)
+    volume = models.FloatField(blank=True, null=True)
     
     t_stage = models.PositiveSmallIntegerField(choices=Patient.T_stages.choices)
     stage_prefix = models.CharField(max_length=1, choices=[("c", "c"), 

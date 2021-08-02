@@ -1,5 +1,6 @@
 from django.db import IntegrityError
 from django.forms import ValidationError
+from django.db.models import QuerySet
 
 import numpy as np
 import pandas as pd
@@ -26,7 +27,7 @@ class ParsingError(Exception):
 
 def compute_hash(*args):
     """Compute a hash vlaue from three patient-specific fields that must be 
-    removed due for repecting the patient's privacy."""
+    removed due for respecting the patient's privacy."""
     return hash(args)
 
 
@@ -35,6 +36,17 @@ def nan_to_None(sth):
         return None
     else:
         return sth
+
+
+def get_model_fields(model, remove: List[str]):
+    """Get list of names of model fields and remove the ones provided via the
+    `remove` argument."""
+    fields = model._meta.get_fields()
+    field_names = [f.name for f in fields]
+    for entry in remove:
+        field_names.remove(entry)
+    
+    return field_names
 
 
 def patient_from_row(row, anonymize: List[str]):
@@ -49,9 +61,9 @@ def patient_from_row(row, anonymize: List[str]):
     else:
         hash_value = compute_hash(*patient_dict)
     
-    patient_fields = [field.name for field in Patient._meta.get_fields()]
-    fields_to_remove = ["id", "hash_value", "tumor", "diagnose", "t_stage"]
-    [patient_fields.remove(field) for field in fields_to_remove]
+    patient_fields = get_model_fields(
+        Patient, remove=["id", "hash_value", "tumor", "diagnose", "t_stage"]
+    )
     
     valid_patient_dict = {}
     for field in patient_fields:
@@ -84,9 +96,9 @@ def add_tumors_from_row(row, patient):
     num_tumors = np.max([int(num) for num in level_zero])
     _ = nan_to_None
     
-    tumor_fields = [field.name for field in Tumor._meta.get_fields()]
-    fields_to_remove = ["id", "patient"]
-    [tumor_fields.remove(field) for field in fields_to_remove]
+    tumor_fields = get_model_fields(
+        Tumor, remove=["id", "patient"]
+    )
     
     for i in range(num_tumors):
         tumor_dict = row[(f"{i+1}")].to_dict()
@@ -121,9 +133,9 @@ def add_diagnoses_from_row(row, patient):
     
     _ = nan_to_None
     
-    diagnose_fields = [field.name for field in Diagnose._meta.get_fields()]
-    fields_to_remove = ["id", "patient", "modality", "side", "diagnose_date"]
-    [diagnose_fields.remove(field) for field in fields_to_remove]
+    diagnose_fields = get_model_fields(
+        Diagnose, remove=["id", "patient", "modality", "side", "diagnose_date"]
+    )
     
     for mod in modalities_list:
         diagnose_date = _(row[(mod, "info", "date")])
@@ -199,3 +211,26 @@ def import_from_pandas(
         num_new += 1
         
     return num_new, num_skipped
+
+
+def create_patient_columns():
+    """Create pandas `MultiIndex` for the patient-specific columns."""
+    
+    patient_fields = get_model_fields(
+        Patient, remove=["hash_value", "tumor", "diagnose", "t_stage"]
+    )
+    
+    tuples = []
+    for field in patient_fields:
+        tuples.append(("patient", "#", field))
+    
+    patient_columns = pd.MultiIndex.from_tuples(tuples)
+    return patient_columns
+    
+
+
+def export_to_pandas(patients: QuerySet):
+    """Export `QuerySet` of patients into a pandas `DataFrame` of the same 
+    format as it is needed for importing."""
+    
+    patient_columns = create_patient_columns()

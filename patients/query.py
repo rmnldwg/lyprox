@@ -4,7 +4,7 @@ import numpy as np
 import logging
 from typing import Optional, List, Dict
 
-from .models import (Patient, Diagnose, Tumor)
+from .models import Patient, Diagnose, Tumor
 
 logger = logging.getLogger(__name__)
 
@@ -36,14 +36,14 @@ def subsite2arr(subsite):
         return np.array([0, 0, 1], dtype=int)
     
     
-def pos2arr(pos):
-    """Map position to one-hot-array of length three. A one in the first place 
+def side2arr(side):
+    """Map side to one-hot-array of length three. A one in the first place 
     means unknown lateralization, in the second place it means the tumor is 
     central and in the last place corresponds to a laterlalized tumor (right or 
     left)."""
-    if pos == "central":
+    if side == "central":
         return np.array([0, 1, 0], dtype=int)
-    elif (pos == "left") or (pos == "right"):
+    elif (side == "left") or (side == "right"):
         return np.array([0, 0, 1], dtype=int)
     else:
         return np.array([1, 0, 0], dtype=int)
@@ -78,7 +78,7 @@ def tumor_specific(
                               "C13.2", "C13.8", "C13.9", "C32.0", "C32.1", 
                               "C32.2", "C32.3", "C32.8", "C32.9"],
     t_stage__in: List[int] = [1,2,3,4],
-    position__in: List[str] = ['left', 'right', 'central'],
+    side__in: List[str] = ['left', 'right', 'central'],
     extension: Optional[bool] = None,
     **rest
 ) -> QuerySet:
@@ -103,8 +103,8 @@ def diagnose_specific(
     # DIAGNOSES
     d = Diagnose.objects.all().filter(patient__in=patient_queryset,
                                       modality__in=kwargs['modalities'])
-    q_ipsi = (Q(side=F("patient__tumor__position"))
-              | (Q(patient__tumor__position="central")
+    q_ipsi = (Q(side=F("patient__tumor__side"))
+              | (Q(patient__tumor__side="central")
                  & Q(side=assign_central)))
     
     diagnose_querysets = {
@@ -198,7 +198,7 @@ def count_patients(
         'neck_dissection',
         'tumor__subsite',
         'tumor__t_stage',
-        'tumor__position',
+        'tumor__side',
         'tumor__extension',
     )
     counts = {   # initialize counts of patient- & tumor-related fields
@@ -227,7 +227,7 @@ def count_patients(
         # TUMOR specific counts
         counts['subsites'] += subsite2arr(patient['tumor__subsite'])
         counts['t_stages'][patient['tumor__t_stage']-1] += 1
-        counts['central'] += pos2arr(patient['tumor__position'])
+        counts['central'] += side2arr(patient['tumor__side'])
         counts['extension'] += tf2arr(patient['tumor__extension'])
         
         # DIAGNOSE specific (involvement) counts

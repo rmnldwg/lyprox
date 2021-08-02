@@ -21,7 +21,7 @@ from .forms import (PatientForm,
                     DataFileForm, 
                     DashboardForm, 
                     ValidationError)
-from .utils import import_from_pandas, ParsingError
+from .ioports import import_from_pandas, ParsingError
 from . import query
 from .filters import PatientFilter
 from .loggers import ViewLoggerMixin
