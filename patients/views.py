@@ -114,10 +114,12 @@ class DashboardView(ViewLoggerMixin, generic.ListView):
         start_querying = time.time()
 
         if self.request.method == "GET" and self.form.is_valid():
-            queryset = query.patient_specific(patient_queryset=queryset, 
-                                             **self.form.cleaned_data)
-            queryset = query.tumor_specific(patient_queryset=queryset,
-                                           **self.form.cleaned_data)
+            queryset = query.patient_specific(
+                patient_queryset=queryset, **self.form.cleaned_data
+            )
+            queryset = query.tumor_specific(
+                patient_queryset=queryset, **self.form.cleaned_data
+            )
             queryset, combined_involvement = query.diagnose_specific(
                 patient_queryset=queryset, **self.form.cleaned_data
             )

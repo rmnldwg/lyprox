@@ -191,16 +191,7 @@ def count_patients(
     certain lymph node level involvement, and so on.
     """
     # prefetch patients and important fields for performance
-    patients = patient_queryset.prefetch_related('tumor').values(
-        'id',
-        'nicotine_abuse',
-        'hpv_status',
-        'neck_dissection',
-        'tumor__subsite',
-        'tumor__t_stage',
-        'tumor__side',
-        'tumor__extension',
-    )
+    patients = patient_queryset.prefetch_related('tumor_set')
     counts = {   # initialize counts of patient- & tumor-related fields
         'total': len(patients),
          
@@ -220,20 +211,21 @@ def count_patients(
     # loop through patients to populate the counts dictionary
     for patient in patients:
         # PATIENT specific counts
-        counts['nicotine_abuse'] += tf2arr(patient['nicotine_abuse'])
-        counts['hpv_status'] += tf2arr(patient['hpv_status'])
-        counts['neck_dissection'] += tf2arr(patient['neck_dissection'])
+        counts['nicotine_abuse'] += tf2arr(patient.nicotine_abuse)
+        counts['hpv_status'] += tf2arr(patient.hpv_status)
+        counts['neck_dissection'] += tf2arr(patient.neck_dissection)
         
         # TUMOR specific counts
-        counts['subsites'] += subsite2arr(patient['tumor__subsite'])
-        counts['t_stages'][patient['tumor__t_stage']-1] += 1
-        counts['central'] += side2arr(patient['tumor__side'])
-        counts['extension'] += tf2arr(patient['tumor__extension'])
+        tumor = patient.tumor_set.first()
+        counts['subsites'] += subsite2arr(tumor.subsite)
+        counts['t_stages'][tumor.t_stage-1] += 1
+        counts['central'] += side2arr(tumor.side)
+        counts['extension'] += tf2arr(tumor.extension)
         
         # DIAGNOSE specific (involvement) counts
         for side in ['ipsi', 'contra']:
             for i,lnl in enumerate(Diagnose.LNLs):
-                tmp = combined_involvement[side][patient['id']][i]
+                tmp = combined_involvement[side][patient.id][i]
                 counts[f'{side}_{lnl}'] += tf2arr(tmp)
                 
     return patient_queryset, counts

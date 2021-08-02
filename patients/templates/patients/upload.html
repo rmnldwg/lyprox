@@ -47,7 +47,7 @@
                         </div>
                     </div>
                     <div class="control">
-                        <button class="button is-primary" type="submit">
+                        <button class="button is-primary" type="submit" id="upload">
                             <span class="icon">
                                 <i class="fas fa-cloud-upload-alt"></i>
                             </span>
@@ -72,6 +72,12 @@
             const fileName = document.querySelector('#file-upload #file-label-text');
             fileName.textContent = fileInput.files[0].name;
         }
-    }
+    };
+
+    $("#upload").click(function() {
+        if (fileInput.files.length > 0) {
+            $("#upload").addClass("is-loading");
+        }
+    });
 </script>
 {% endblock content %}

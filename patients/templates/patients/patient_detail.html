@@ -8,7 +8,10 @@
 <div class="level">
     <div class="level-left">
         <div class="level-item">
-            <p class="title">Patient {{ patient.pk }}</p>
+            <div>
+                <p class="title">Patient {{ patient.pk }}</p>
+                <p class="is-size-5">Hash-ID: {{ patient.hash_value }}</p>
+            </div>
         </div>
     </div>
     <div class="level-right">
@@ -30,7 +33,6 @@
         </div>
     </div>
 </div>
-<p class="subtitle">Hash-ID: {{ patient.hash_value }}</p>
 
 <div class="block">
     <div class="field is-grouped is-grouped-multiline">

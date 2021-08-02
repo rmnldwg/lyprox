@@ -38,18 +38,21 @@ def nan_to_None(sth):
         return sth
 
 
-def get_model_fields(model, remove: List[str]):
+def get_model_fields(model, remove: List[str] = []):
     """Get list of names of model fields and remove the ones provided via the
     `remove` argument."""
     fields = model._meta.get_fields()
     field_names = [f.name for f in fields]
     for entry in remove:
-        field_names.remove(entry)
+        try:
+            field_names.remove(entry)
+        except ValueError:
+            pass
     
     return field_names
 
 
-def patient_from_row(row, anonymize: List[str]):
+def row2patient(row, anonymize: List[str]):
     """Create a `Patient` instance from a row of a `DataFrame` containing the 
     appropriate information."""
     patient_dict = row.to_dict()
@@ -88,7 +91,7 @@ def patient_from_row(row, anonymize: List[str]):
     return new_patient
 
 
-def add_tumors_from_row(row, patient):
+def row2tumors(row, patient):
     """Create `Tumor` instances from row of a `DataFrame` and add them to an 
     existing `Patient` instance."""
     # extract number of tumors in row
@@ -118,7 +121,7 @@ def add_tumors_from_row(row, patient):
         new_tumor.save()
 
 
-def add_diagnoses_from_row(row, patient):
+def row2diagnoses(row, patient):
     """Create `Diagnose` instances from row of `DataFrame` and add them to an 
     existing `Patient` instance."""
     modalities_list = list(set(row.index.get_level_values(0)))
@@ -162,7 +165,7 @@ def add_diagnoses_from_row(row, patient):
 
 def import_from_pandas(
     data_frame: pd.DataFrame, 
-    anonymize: List[str] = ["ID"]
+    anonymize: List[str] = ["id"]
 ):
     """Import patients from pandas `DataFrame`."""
     num_new = 0
@@ -180,7 +183,7 @@ def import_from_pandas(
         
         # skip row if patient is already in database
         try:
-            new_patient = patient_from_row(
+            new_patient = row2patient(
                 patient_row, anonymize=anonymize
             )
         except IntegrityError:
@@ -198,39 +201,77 @@ def import_from_pandas(
                        "second level must be number of tumor.")
             raise ParsingError(column=missing, message=message)
                 
-        add_tumors_from_row(
+        row2tumors(
             tumor_row, new_patient
         )
         
         not_patient = row.index.get_level_values(0) != "patient"
         not_tumor = row.index.get_level_values(0) != "tumor"
-        add_diagnoses_from_row(
+        row2diagnoses(
             row.loc[not_patient & not_tumor], new_patient
         )
         
         num_new += 1
         
     return num_new, num_skipped
-
-
-def create_patient_columns():
-    """Create pandas `MultiIndex` for the patient-specific columns."""
     
-    patient_fields = get_model_fields(
-        Patient, remove=["hash_value", "tumor", "diagnose", "t_stage"]
-    )
-    
-    tuples = []
-    for field in patient_fields:
-        tuples.append(("patient", "#", field))
-    
-    patient_columns = pd.MultiIndex.from_tuples(tuples)
-    return patient_columns
-    
-
 
 def export_to_pandas(patients: QuerySet):
     """Export `QuerySet` of patients into a pandas `DataFrame` of the same 
     format as it is needed for importing."""
     
-    patient_columns = create_patient_columns()
+    # create list of tuples for MultiIndex and use that to create DataFrame
+    patient_fields = get_model_fields(
+        Patient, remove=["hash_value", "tumor", "diagnose", "t_stage"]
+    )
+    patient_column_tuples = [("patient", "#", f) for f in patient_fields]
+    
+    num_tumors = np.max([pat.tumor_set.all().count() for pat in patients])
+    tumor_fields = get_model_fields(
+        Tumor, remove=["id", "patient"]
+    )
+    tumor_column_tuples = []
+    for field in tumor_fields:
+        for i in range(num_tumors):
+            tumor_column_tuples.append(("tumor", f"{i+1}", field))
+    
+    diagnose_fields = get_model_fields(
+        Diagnose, remove=["id", "patient", "modality", "side", "diagnose_date"]
+    )
+    diagnose_column_tuples = []
+    for mod in Diagnose.Modalities.labels:
+        diagnose_column_tuples.append((mod, "info", "date"))
+        for side in ["left", "right"]:
+            for field in diagnose_fields:
+                diagnose_column_tuples.append((mod, side, field))
+    
+    tuples = [*patient_column_tuples,
+              *tumor_column_tuples,
+              *diagnose_column_tuples]
+    columns = pd.MultiIndex.from_tuples(tuples)
+    df = pd.DataFrame(columns=columns)
+    
+    # prefetch fields for performance
+    patients = patients.prefetch_related("tumor_set", "diagnose_set")
+    
+    # loop through patients
+    for patient in patients:
+        new_row = {}
+
+        for field in patient_fields:
+            new_row[("patient", "#", field)] = getattr(patient, field)
+        
+        for t,tumor in enumerate(patient.tumor_set.all()):
+            for field in tumor_fields:
+                new_row[("tumor", f"{t+1}", field)] = getattr(tumor, field)
+        
+        for diagnose in patient.diagnose_set.all():
+            mod = Diagnose.Modalities(diagnose.modality).label
+            side = diagnose.side
+            new_row[(mod, "info", "date")] = diagnose.diagnose_date
+            for field in diagnose_fields:
+                new_row[(mod, side, field)] = getattr(diagnose, field)
+        
+        df = df.append(new_row, ignore_index=True)
+    
+    return df
