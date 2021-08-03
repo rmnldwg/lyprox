@@ -4,13 +4,13 @@
 
 {% load static %}
 
-<section class="block columns is-centered">
+<section class="columns is-centered">
     <div class="column is-5">
         <div class="box">
             <p class="title">Upload</p>
             <p class="block">
                 Import multiple patients at once from a 
-                <a href="" data-tooltip="click to download template">
+                <a href="{% url 'patients:download' %}" data-tooltip="click to download example CSV">
                     specifically formatted
                 </a> CSV table.
             </p>

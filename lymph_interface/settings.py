@@ -206,6 +206,6 @@ STATICFILES_DIRS = [
 try:
     STATIC_ROOT = BASE_DIR / config["STATIC_ROOT_SUFFIX"]
 except KeyError:
-    pass
+    STATIC_ROOT = BASE_DIR / "static"
 
-STATIC_URL = '/static/'
+STATIC_URL = "/static/"

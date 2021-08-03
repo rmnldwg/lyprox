@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+{% load static %}
+
+<section class="columns is-centered">
+    <div class="column is-5">
+        <div class="box">
+            <div class="block">
+                <p class="title">Generate & Download</p>
+                <p>
+                    Initiate export of patient database and download the resulting 
+                    CSV table. This table has the same structure as the one that is 
+                    necessary to upload a batch of patients, so it might also be 
+                    used as a template.
+                </p>
+            </div>
+
+            {% if generate_success %}
+            <div class="notification is-success is-light">
+                Successfully exported database of patients
+            </div>
+            {% elif error %}
+            <div class="notification is-danger is-light">
+                {{ error }}
+            </div>
+            {% endif %}
+
+            <div class="block">
+                <form action="{% url 'patients:download' %}" method="post">
+                    {% csrf_token %}
+                    <div class="field is-grouped is-grouped-centered">
+                        <div class="control">
+                            <button class="button is-primary" type="submit" id="generate">
+                                <span class="icon">
+                                    <i class="fas fa-cogs"></i>
+                                </span>
+                                <span>Generate</span>
+                            </button>
+                        </div>
+                        <div class="control">
+                            <a class="button is-success" {% if download_available %}href="{% static 'downloads/latest.csv' %}" download {% else %}disabled{% endif %}>
+                                <span class="icon">
+                                    <i class="fas fa-download"></i>
+                                </span>
+                                <span>Download</span>
+                            </a>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+    $("#generate").click(function() {
+        $("#generate").addClass("is-loading");
+    });
+</script>
+{% endblock content %}

@@ -5,12 +5,14 @@ from django.urls.base import reverse, reverse_lazy
 from django.views import generic
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
+from django.conf import settings
 
 import django_filters
 
 from typing import Any, Dict, List, Optional, Sequence
 import time
 from numpy import e, errstate
+from pathlib import Path
 import logging
 logger = logging.getLogger(__name__)
 
@@ -21,7 +23,7 @@ from .forms import (PatientForm,
                     DataFileForm, 
                     DashboardForm, 
                     ValidationError)
-from .ioports import import_from_pandas, ParsingError
+from .ioports import export_to_pandas, import_from_pandas, ParsingError
 from . import query
 from .filters import PatientFilter
 from .loggers import ViewLoggerMixin
@@ -212,6 +214,28 @@ def upload_patients(request):
         
     context = {"upload_succes": False, "form": form}
     return render(request, "patients/upload.html", context)
+
+
+@login_required
+def generate_and_download_csv(request):
+    """Allow user to generate a CSV table from the current database and 
+    download it."""
+    download_file_path = settings.STATIC_ROOT / "downloads" / "latest.csv"
+    context = {}
+    
+    if request.method == "POST":
+        try:
+            patient_df = export_to_pandas(Patient.objects.all())
+            patient_df.to_csv(download_file_path)
+            context["generate_success"] = True
+        except:
+            msg = ("Something went wrong.")
+            logger.error(msg)
+            context["generate_success"] = False
+            context["error"] = msg
+    
+    context["download_available"] = Path(download_file_path).is_file()
+    return render(request, "patients/download.html", context)
     
     
 # TUMOR related views
