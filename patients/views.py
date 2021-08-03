@@ -11,6 +11,7 @@ import django_filters
 
 from typing import Any, Dict, List, Optional, Sequence
 import time
+import os
 from numpy import e, errstate
 from pathlib import Path
 import logging
@@ -220,19 +221,30 @@ def upload_patients(request):
 def generate_and_download_csv(request):
     """Allow user to generate a CSV table from the current database and 
     download it."""
-    download_file_path = settings.STATIC_ROOT / "downloads" / "latest.csv"
+    
+    # NOTE: This is only possible as long as the static files are served from 
+    #   the same directory as the root directory of the django app.
+    # download_folder = settings.MEDIA_ROOT / "downloads"
+    download_file_path = settings.DOWNLOADS_ROOT / "latest.csv"
     context = {}
     
     if request.method == "POST":
         try:
             patient_df = export_to_pandas(Patient.objects.all())
             patient_df.to_csv(download_file_path)
+            logger.info("Successfully generated and saved database as CSV.")
             context["generate_success"] = True
-        except:
-            msg = ("Something went wrong.")
+            
+        except FileNotFoundError:
+            msg = ("Download folder is missing or can't be accessed.")
             logger.error(msg)
             context["generate_success"] = False
             context["error"] = msg
+                
+        except Exception as e:
+            logger.error(e)
+            context["generate_success"] = False
+            context["error"] = e
     
     context["download_available"] = Path(download_file_path).is_file()
     return render(request, "patients/download.html", context)

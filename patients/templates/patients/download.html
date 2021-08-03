@@ -10,10 +10,10 @@
             <div class="block">
                 <p class="title">Generate & Download</p>
                 <p>
-                    Initiate export of patient database and download the resulting 
-                    CSV table. This table has the same structure as the one that is 
-                    necessary to upload a batch of patients, so it might also be 
-                    used as a template.
+                    Initiate export of patient database and download the 
+                    resulting CSV table. This table has the same structure as 
+                    the one that is necessary to upload a batch of patients, so 
+                    it may also be used as a template.
                 </p>
             </div>
 
@@ -40,7 +40,7 @@
                             </button>
                         </div>
                         <div class="control">
-                            <a class="button is-success" {% if download_available %}href="{% static 'downloads/latest.csv' %}" download {% else %}disabled{% endif %}>
+                            <a class="button is-success" {% if download_available %}href="/downloads/latest.csv" download {% else %}disabled{% endif %}>
                                 <span class="icon">
                                     <i class="fas fa-download"></i>
                                 </span>
