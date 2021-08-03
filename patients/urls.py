@@ -6,6 +6,7 @@ urlpatterns = [
     path("", views.PatientListView.as_view(), name="list"),
     path("create/", views.CreatePatientView.as_view(), name="create"),
     path("upload/", views.upload_patients, name="upload"),
+    path("download/", views.generate_and_download_csv, name="download"),
     path("<int:pk>/", views.PatientDetailView.as_view(), name="detail"),
     path("<int:pk>/update", views.UpdatePatientView.as_view(), name="update"),
     path("<int:pk>/delete", views.DeletePatientView.as_view(), name="delete"),

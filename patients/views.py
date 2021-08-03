@@ -5,22 +5,27 @@ from django.urls.base import reverse, reverse_lazy
 from django.views import generic
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
+from django.conf import settings
 
 import django_filters
 
 from typing import Any, Dict, List, Optional, Sequence
 import time
+import os
 from numpy import e, errstate
+from pathlib import Path
 import logging
 logger = logging.getLogger(__name__)
 
-from .models import Patient, Tumor, Diagnose, MODALITIES
-from .forms import PatientForm, TumorForm, DiagnoseForm, DataFileForm, DashboardForm, ValidationError
-from .utils import (create_from_pandas, 
-                    patientspecific_query, 
-                    tumorspecific_query, 
-                    diagnosespecific_query,
-                    count_patients)
+from .models import Patient, Tumor, Diagnose
+from .forms import (PatientForm, 
+                    TumorForm, 
+                    DiagnoseForm, 
+                    DataFileForm, 
+                    DashboardForm, 
+                    ValidationError)
+from .ioports import export_to_pandas, import_from_pandas, ParsingError
+from . import query
 from .filters import PatientFilter
 from .loggers import ViewLoggerMixin
 
@@ -112,14 +117,16 @@ class DashboardView(ViewLoggerMixin, generic.ListView):
         start_querying = time.time()
 
         if self.request.method == "GET" and self.form.is_valid():
-            queryset = patientspecific_query(patient_queryset=queryset, 
-                                             **self.form.cleaned_data)
-            queryset = tumorspecific_query(patient_queryset=queryset,
-                                           **self.form.cleaned_data)
-            queryset, combined_involvement = diagnosespecific_query(
+            queryset = query.patient_specific(
                 patient_queryset=queryset, **self.form.cleaned_data
             )
-            queryset, counts = count_patients(
+            queryset = query.tumor_specific(
+                patient_queryset=queryset, **self.form.cleaned_data
+            )
+            queryset, combined_involvement = query.diagnose_specific(
+                patient_queryset=queryset, **self.form.cleaned_data
+            )
+            queryset, counts = query.count_patients(
                 patient_queryset=queryset,
                 combined_involvement=combined_involvement
             )
@@ -135,14 +142,14 @@ class DashboardView(ViewLoggerMixin, generic.ListView):
             initial_form = self.form_class(initial_data)
 
             if initial_form.is_valid():
-                queryset = patientspecific_query(patient_queryset=queryset, 
+                queryset = query.patient_specific(patient_queryset=queryset, 
                                                 **initial_form.cleaned_data)
-                queryset = tumorspecific_query(patient_queryset=queryset,
+                queryset = query.tumor_specific(patient_queryset=queryset,
                                                **initial_form.cleaned_data)
-                queryset, combined_involvement = diagnosespecific_query(
+                queryset, combined_involvement = query.diagnose_specific(
                     patient_queryset=queryset, **initial_form.cleaned_data
                 )
-                queryset, counts = count_patients(
+                queryset, counts = query.count_patients(
                     patient_queryset=queryset,
                     combined_involvement=combined_involvement
                 )
@@ -189,15 +196,13 @@ def upload_patients(request):
             data_frame = form.cleaned_data["data_frame"]
             # creating patients from the resulting pandas DataFrame
             try:
-                num_new, num_skipped = create_from_pandas(data_frame)
-            except KeyError:
-                # down below I handle the case that the provided file is in 
-                # in fact a readable CSV file, but with the wrong fields. I 
-                # think it could be done more elegantly, but hey... it works
-                msg = "Provided CSV table is missing required columns."
-                logger.error(msg)
+                num_new, num_skipped = import_from_pandas(data_frame)
+            except ParsingError as pe:
+                logger.error(pe.message)
                 form = DataFileForm()
-                context = {"upload_success": False, "form": form, "error": msg}
+                context = {"upload_success": False, 
+                           "form": form, 
+                           "error": pe.message}
                 return render(request, "patients/upload.html", context)
                 
             context = {"upload_success": True, 
@@ -210,6 +215,39 @@ def upload_patients(request):
         
     context = {"upload_succes": False, "form": form}
     return render(request, "patients/upload.html", context)
+
+
+@login_required
+def generate_and_download_csv(request):
+    """Allow user to generate a CSV table from the current database and 
+    download it."""
+    
+    # NOTE: This is only possible as long as the static files are served from 
+    #   the same directory as the root directory of the django app.
+    # download_folder = settings.MEDIA_ROOT / "downloads"
+    download_file_path = settings.DOWNLOADS_ROOT / "latest.csv"
+    context = {}
+    
+    if request.method == "POST":
+        try:
+            patient_df = export_to_pandas(Patient.objects.all())
+            patient_df.to_csv(download_file_path)
+            logger.info("Successfully generated and saved database as CSV.")
+            context["generate_success"] = True
+            
+        except FileNotFoundError:
+            msg = ("Download folder is missing or can't be accessed.")
+            logger.error(msg)
+            context["generate_success"] = False
+            context["error"] = msg
+                
+        except Exception as e:
+            logger.error(e)
+            context["generate_success"] = False
+            context["error"] = e
+    
+    context["download_available"] = Path(download_file_path).is_file()
+    return render(request, "patients/download.html", context)
     
     
 # TUMOR related views

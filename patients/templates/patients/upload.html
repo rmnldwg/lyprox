@@ -4,13 +4,13 @@
 
 {% load static %}
 
-<section class="block columns is-centered">
+<section class="columns is-centered">
     <div class="column is-5">
         <div class="box">
             <p class="title">Upload</p>
             <p class="block">
                 Import multiple patients at once from a 
-                <a href="" data-tooltip="click to download template">
+                <a href="{% url 'patients:download' %}" data-tooltip="click to download example CSV">
                     specifically formatted
                 </a> CSV table.
             </p>
@@ -47,7 +47,7 @@
                         </div>
                     </div>
                     <div class="control">
-                        <button class="button is-primary" type="submit">
+                        <button class="button is-primary" type="submit" id="upload">
                             <span class="icon">
                                 <i class="fas fa-cloud-upload-alt"></i>
                             </span>
@@ -57,7 +57,9 @@
                 </div>
             </form>
             {% else %}
-            <p>{{ num_new }} patients have been added and {{ num_skipped }} were skipped.</p>
+            <div class="notification is-success is-light">
+                {{ num_new }} patients have been added and {{ num_skipped }} were skipped.
+            </div>
             {% endif %}
         </div>
     </div>
@@ -70,6 +72,12 @@
             const fileName = document.querySelector('#file-upload #file-label-text');
             fileName.textContent = fileInput.files[0].name;
         }
-    }
+    };
+
+    $("#upload").click(function() {
+        if (fileInput.files.length > 0) {
+            $("#upload").addClass("is-loading");
+        }
+    });
 </script>
 {% endblock content %}

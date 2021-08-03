@@ -1,7 +1,7 @@
 from django.forms import widgets
 import django_filters
 
-from .models import Patient, Tumor, Diagnose, T_STAGES, N_STAGES, M_STAGES
+from .models import Patient
 
 
 class PatientFilter(django_filters.FilterSet):
@@ -19,15 +19,15 @@ class PatientFilter(django_filters.FilterSet):
                                                          "type": "text"})
     )
     tumor__t_stage = django_filters.MultipleChoiceFilter(
-        choices=T_STAGES,
+        choices=Patient.T_stages.choices,
         widget=widgets.SelectMultiple()
     )
     n_stage = django_filters.MultipleChoiceFilter(
-        choices=N_STAGES,
+        choices=Patient.N_stages.choices,
         widget=widgets.SelectMultiple()
     )
     m_stage = django_filters.MultipleChoiceFilter(
-        choices=M_STAGES,
+        choices=Patient.M_stages.choices,
         widget=widgets.SelectMultiple()
     )
     

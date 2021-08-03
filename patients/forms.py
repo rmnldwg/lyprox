@@ -11,8 +11,8 @@ import pandas
 import os
 import logging
 
-from .models import Patient, Tumor, Diagnose, MODALITIES, LOCATIONS, SUBSITES, T_STAGES, LNLs
-from .utils import compute_hash
+from .models import Patient, Tumor, Diagnose
+from .ioports import compute_hash
 from .loggers import FormLoggerMixin
 
 
@@ -130,24 +130,24 @@ class TumorForm(FormLoggerMixin, forms.ModelForm):
         fields = ["t_stage",
                   "stage_prefix",
                   "subsite", 
-                  "position",
+                  "side",
                   "extension",
-                  "size"]
+                  "volume"]
         widgets = {
             "t_stage": forms.Select(attrs={"class": "select"}),
             "stage_prefix": forms.Select(attrs={"class": "select"}),
             "subsite": forms.Select(attrs={"class": "select shorten"}),
-            "position": forms.Select(attrs={"class": "select"}),
+            "side": forms.Select(attrs={"class": "select"}),
             "extension": forms.CheckboxInput(attrs={"class": "checkbox"}),
-            "size": forms.NumberInput(attrs={"class": "input", 
+            "volume": forms.NumberInput(attrs={"class": "input", 
                                              "min": 0.0}),
         }
         
-    def clean_size(self):
-        size = self.cleaned_data["size"]
-        if size is not None and size < 0.:
-            raise ValidationError("Size must be a positive number.")
-        return size
+    def clean_volume(self):
+        volume = self.cleaned_data["volume"]
+        if volume is not None and volume < 0.:
+            raise ValidationError("volume must be a positive number.")
+        return volume
         
         
     def save(self, commit=True):
@@ -173,7 +173,7 @@ class DiagnoseForm(FormLoggerMixin, forms.ModelForm):
                    "modality": forms.Select(attrs={"class": "select is-small"}),
                    "side": forms.Select(attrs={"class": "select is-small"})}
         
-        for lnl in LNLs:
+        for lnl in Diagnose.LNLs:
             fields.append(lnl)
             widgets[lnl] = forms.Select(choices=[(True, "pos"),
                                                  (False, "neg"),
@@ -272,7 +272,7 @@ class DashboardForm(FormLoggerMixin, forms.Form):
     modalities = forms.MultipleChoiceField(
         required=False, 
         widget=forms.CheckboxSelectMultiple(attrs={"class": "checkbox is-hidden"}), 
-        choices=MODALITIES,
+        choices=Diagnose.Modalities.choices,
         initial=[1,2]
     )
     modality_combine = forms.ChoiceField(
@@ -299,7 +299,7 @@ class DashboardForm(FormLoggerMixin, forms.Form):
     t_stage__in = forms.MultipleChoiceField(
         required=False,
         widget=forms.CheckboxSelectMultiple(attrs={"class": "checkbox is-hidden"}),
-        choices=T_STAGES,
+        choices=Patient.T_stages.choices,
         initial=[1,2,3,4]
     )
     central = ThreeWayToggle()
@@ -320,7 +320,7 @@ class DashboardForm(FormLoggerMixin, forms.Form):
         LNLs from a list."""
         super(DashboardForm, self).__init__(*args, **kwargs)
         for side in ["ipsi", "contra"]:
-            for lnl in LNLs:
+            for lnl in Diagnose.LNLs:
                 if lnl in ['I', 'II']:
                     self.fields[f"{side}_{lnl}"] = ThreeWayToggle(
                         attrs={"class": "radio is-hidden",
@@ -368,13 +368,13 @@ class DashboardForm(FormLoggerMixin, forms.Form):
                 if a is False and b is False:
                     cleaned_data[f'{side}_{lnl}'] = False
 
-        # map `central` from False,None,True to the respective list of positions
+        # map `central` from False,None,True to the respective list of sides
         if cleaned_data['central'] is True:
-            cleaned_data['position__in'] = ['central']
+            cleaned_data['side__in'] = ['central']
         elif cleaned_data['central'] is False:
-            cleaned_data["position__in"] = ['left', 'right']
+            cleaned_data["side__in"] = ['left', 'right']
         else:
-            cleaned_data["position__in"] = ['left', 'right', 'central']
+            cleaned_data["side__in"] = ['left', 'right', 'central']
         
         # map subsites 'base','tonsil','rest' to list of ICD codes.
         subsites = cleaned_data["subsite__in"]

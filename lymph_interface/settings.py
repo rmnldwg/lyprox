@@ -31,7 +31,7 @@ except FileNotFoundError:
         "ALLOWED_HOSTS": [],
         "SECRET_KEY": 'k_&(m5ymps%p=4&qjnwkv-avxb@@ez1tewc8g_eg4k#jx59ukx',
         "CSRF_COOKIE_SECURE": False,
-        "SESSION_COOKIE_SECURE": False,
+        "SESSION_COOKIE_SECURE": False
     }
     
 
@@ -206,6 +206,16 @@ STATICFILES_DIRS = [
 try:
     STATIC_ROOT = BASE_DIR / config["STATIC_ROOT_SUFFIX"]
 except KeyError:
-    pass
+    STATIC_ROOT = BASE_DIR / "static"
 
-STATIC_URL = '/static/'
+STATIC_URL = "/static/"
+
+
+# Download files
+
+try:
+    DOWNLOADS_ROOT = BASE_DIR / config["DOWNLOADS_ROOT_SUFFIX"]
+except KeyError:
+    DOWNLOADS_ROOT = BASE_DIR / "downloads"
+
+DOWNLOADS_URL = "/downloads/"
