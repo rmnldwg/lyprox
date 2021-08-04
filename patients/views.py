@@ -231,7 +231,7 @@ def generate_and_download_csv(request):
     if request.method == "POST":
         try:
             patient_df = export_to_pandas(Patient.objects.all())
-            patient_df.to_csv(download_file_path)
+            patient_df.to_csv(download_file_path, index=False)
             logger.info("Successfully generated and saved database as CSV.")
             context["generate_success"] = True
             
