@@ -136,7 +136,10 @@ def diagnose_specific(
                 
         for diagnose in diagnose_querysets[side]:
             patient_id = diagnose['patient_id']
-            diag_array = np.array([diagnose[f'{lnl}'] for lnl in Diagnose.LNLs])
+            # note the double square brackets below to make sure the 
+            # `diag_array` is two-dimensional. Without it, the 
+            # `np.all(, axis=0)` below would not work properly.
+            diag_array = np.array([[diagnose[f'{lnl}'] for lnl in Diagnose.LNLs]])
             
             try:
                 diagnose_tables[side][patient_id] = np.vstack([
