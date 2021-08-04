@@ -2,12 +2,12 @@
     min-height: 25em;
 }
 
-span.tag.True {
+span.tag.False {
     background-color: #BCFFFB;
     color: #00AFA5;
     min-width: 50px;
 }
-span.tag.False {
+span.tag.True {
     background-color: #FFBCE1;
     color: #AE0060;
     min-width: 50px;
