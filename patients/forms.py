@@ -234,7 +234,8 @@ class ThreeWayToggle(forms.ChoiceField):
     
     def __init__(self, 
                  widget=None, 
-                 attrs={"class": "radio is-hidden"},
+                 attrs={"class": "radio is-hidden",
+                        "onchange": "changeHandler();"},
                  choices=[( 1 , "plus"),
                           ( 0 , "ban"), 
                           (-1, "minus")],
@@ -271,11 +272,15 @@ class DashboardForm(FormLoggerMixin, forms.Form):
     # select modalities to show
     modalities = forms.MultipleChoiceField(
         required=False, 
-        widget=forms.CheckboxSelectMultiple(attrs={"class": "checkbox is-hidden"}), 
+        widget=forms.CheckboxSelectMultiple(
+            attrs={"class": "checkbox is-hidden",
+                   "onchange": "changeHandler();"}
+        ), 
         choices=Diagnose.Modalities.choices,
         initial=[1,2]
     )
     modality_combine = forms.ChoiceField(
+        widget=forms.Select(attrs={"onchange": "changeHandler();"}),
         choices=[("AND", "AND"), 
                  ("OR", "OR")],
         label="Combine",
@@ -290,7 +295,10 @@ class DashboardForm(FormLoggerMixin, forms.Form):
     # tumor specific info
     subsite__in = forms.MultipleChoiceField(
         required=False,
-        widget=forms.CheckboxSelectMultiple(attrs={"class": "checkbox is-hidden"}),
+        widget=forms.CheckboxSelectMultiple(
+            attrs={"class": "checkbox is-hidden",
+                   "onchange": "changeHandler();"},
+        ),
         choices=[("base", "base of tongue"),
                  ("tonsil", "tonsil"), 
                  ("rest" , "other/multiple")],
@@ -298,7 +306,10 @@ class DashboardForm(FormLoggerMixin, forms.Form):
     )
     t_stage__in = forms.MultipleChoiceField(
         required=False,
-        widget=forms.CheckboxSelectMultiple(attrs={"class": "checkbox is-hidden"}),
+        widget=forms.CheckboxSelectMultiple(
+            attrs={"class": "checkbox is-hidden",
+                   "onchange": "changeHandler();"}
+        ),
         choices=Patient.T_stages.choices,
         initial=[1,2,3,4]
     )
@@ -309,7 +320,7 @@ class DashboardForm(FormLoggerMixin, forms.Form):
     show_percent = forms.BooleanField(
         required=False, initial=False, 
         widget=forms.widgets.RadioSelect(
-            attrs={"class": "radio is-hidden"},
+            attrs={"class": "radio is-hidden", "onchange": "changeHandler();"},
             choices=[(True, "percent"), (False, "absolute")]
         )
     )
@@ -324,11 +335,13 @@ class DashboardForm(FormLoggerMixin, forms.Form):
                 if lnl in ['I', 'II']:
                     self.fields[f"{side}_{lnl}"] = ThreeWayToggle(
                         attrs={"class": "radio is-hidden",
-                               "onclick": "bothClickHandler(this);"})
+                               "onclick": ("bothClickHandler(this);"
+                                           "changeHandler();")})
                 elif lnl in ['Ia', 'Ib', 'IIa', 'IIb']:
                     self.fields[f"{side}_{lnl}"] = ThreeWayToggle(
                         attrs={"class": "radio is-hidden",
-                               "onclick": "subClickHandler(this);"})
+                               "onclick": ("subClickHandler(this);"
+                                           "changeHandler();")})
                 else:
                     self.fields[f"{side}_{lnl}"] = ThreeWayToggle()
                     
