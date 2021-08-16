@@ -77,3 +77,9 @@ $("#id_modalities_5").change(function () {
         $("#pCT-note").addClass("is-hidden");
     };
 });
+
+document.onkeyup = function (e) {
+    if (e.altKey && e.key == 'c') {
+        $("[name=dashboardform]").submit();
+    };
+};
