@@ -4,7 +4,6 @@
 
 {% load static %}
 <link rel="stylesheet" href="{% static 'patients/dashboard.css' %}">
-<script src="{% static 'patients/dashboard.js' %}"></script>
 
 {% load mytags %}
 
@@ -190,7 +189,7 @@
                         </div>
                     </div>
 
-                    <div class="columns is-multiline">
+                    <div class="columns">
                         {% for checkbox in form.modalities %}
                         <div class="column">
                             {{ checkbox.tag }}
@@ -200,7 +199,7 @@
                         </div>
                         {% endfor %}
 
-                        <div class="column is-1">
+                        <div class="column is-narrow">
                             <div class="select">
                                 {{ form.modality_combine }}
                             </div>
@@ -356,7 +355,7 @@
                             </div>
 
                             <div class="level-item">
-                                <button class="button is-medium is-warning" type="submit" name="render" value="dashboard" data-tooltip="Display statistic of selected subset">
+                                <button class="button is-medium is-warning has-tooltip-multiline" type="submit" id="compute" disabled name="render" value="dashboard" data-tooltip="Display statistic of selected subset. Change selection to activate button">
                                     <span class="icon">
                                         <i class="fas fa-cogs"></i>
                                     </span>
@@ -370,32 +369,9 @@
         </section>
     </form>
 
-    <script>
-        $("#show-help-modal").click(function() {
-            $("#help-modal").addClass("is-active");
-        });
-
-        $("#close-help-modal").click(function() {
-            $("#help-modal").removeClass("is-active");
-        });
-
-        $("#pCT-note").click(function() {
-            $("#pCT-modal").addClass("is-active");
-        });
-
-        $("#close-pCT-modal").click(function () {
-            $("#pCT-modal").removeClass("is-active");
-        });
-
-        $("#id_modalities_5").change(function () {
-            if ($("#id_modalities_5").is(':checked')) {
-                $("#pCT-note").removeClass("is-hidden");
-            } else if (!$("#id_modalities_5").is(':checked')) {
-                $("#pCT-note").addClass("is-hidden");
-            };
-        });
-    </script>
-
     {% include 'footer.html' %}
 </body>
+
+<script src="{% static 'patients/dashboard.js' %}"></script>
+
 </html>
