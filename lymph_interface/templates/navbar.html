@@ -4,7 +4,7 @@
     <div class="container">
         <div class="navbar-brand">
             <a class="navbar-item" href="{% url 'index' %}">
-                <img src="{% static 'usz-logo-white.png' %}" alt="USZ Logo">
+                <img src="{% static 'logo-white.svg' %}" alt="LyProX Logo">
             </a>
         </div>
         <div class="navbar-menu">
@@ -40,13 +40,23 @@
                 </div>
                 {% else %}
                 <div class="navbar-item">
-                    <a href="{% url 'accounts:login' %}" class="button is-primary is-inverted is-outlined">
-                        <span class="icon">
-                            <i class="fas fa-sign-in-alt"></i>
-                        </span>
-                        <span>Log in</span>
-                    </a>
-                </div>
+                    <div class="field is-grouped">
+                        <div class="control">
+                            <a href="{% url 'accounts:login' %}" class="button is-primary is-inverted is-outlined">
+                                <span class="icon">
+                                    <i class="fas fa-sign-in-alt"></i>
+                                </span>
+                                <span>Log in</span>
+                            </a>
+                        </div>
+                        <div class="control">
+                            <a href="https://github.com/rmnldwg/lymph-interface" class="button is-primary is-inverted">
+                                <span class="icon">
+                                    <i class="fab fa-lg fa-github"></i>
+                                </span>
+                            </a>
+                        </div>
+                    </div>
                 {% endif %}
             </div>
         </div>

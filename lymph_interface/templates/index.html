@@ -6,52 +6,94 @@
 {% load mytags %}
 
 
-<div class="block">
-    <div class="content">
-        {% include_md 'index.md' %}
+<div class="hero is-primary has-background-primary-light">
+    <div class="hero-body">
+        <div class="container">
+            <div class="columns">
+                <div class="column is-3">
+                    <figure class="image is-fullwidth">
+                        <img src="{% static 'logo.svg' %}" alt="">
+                    </figure>
+                </div>
+
+                <div class="column is-1"></div>
+
+                <div class="column">
+                    <h1 class="title is-2 has-text-danger">
+                        <b>Ly</b>mphatic <b>Pro</b>gression e<b>X</b>plorer
+                    </h1>
+                    <p class="subtitle is-4 has-text-primary">
+                        Welcome to our online interface with which we aim to visualize the patterns of lymphatic progression in head and neck squamous cell carcinoma.
+                    </p>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 
-<section class="block columns">
-    <div class="column">
-        <div class="box has-text-centered">
-            <a href="{% url 'patients:list' %}">
-                <span class="icon is-large">
-                    <i class="fas fa-2x fa-th-list"></i>
-                </span>
-            </a>
-            <p class="heading is-size-6">list of patients</p>
-        </div>
-    </div>
-    <div class="column">
-        <div class="box has-text-centered">
-            <a href="{% url 'patients:create' %}">
-                <span class="icon is-large">
-                    <i class="fas fa-2x fa-user-plus"></i>
-                </span>
-            </a>
-            <p class="heading is-size-6">add new patient</p>
-        </div>
-    </div>
-    <div class="column">
-        <div class="box has-text-centered">
-            <a href="{% url 'patients:upload' %}">
-                <span class="icon is-large">
-                    <i class="fas fa-2x fa-cloud-upload-alt"></i>
-                </span>
-            </a>
-            <p class="heading is-size-6">upload table of patients</p>
-        </div>
-    </div>
-    <div class="column">
-        <div class="box has-text-centered">
-            <a href="{% url 'patients:dashboard' %}">
-                <span class="icon is-large">
-                    <i class="fas fa-2x fa-chart-pie"></i>
-                </span>
-            </a>
-            <p class="heading is-size-6">dashboard</p>
+<section class="section">
+    <div class="container">
+        <div class="content">
+            {% include_md 'index.md' %}
         </div>
     </div>
 </section>
+
+<section class="section">
+    <div class="container">
+        <div class="block columns">
+            <div class="column">
+                <div class="box has-text-centered">
+                    <a href="{% url 'patients:list' %}">
+                        <span class="icon is-large">
+                            <i class="fas fa-2x fa-th-list"></i>
+                        </span>
+                    </a>
+                    <p class="heading is-size-6">list of patients</p>
+                </div>
+            </div>
+            <div class="column">
+                <div class="box has-text-centered">
+                    <a href="{% url 'patients:create' %}">
+                        <span class="icon is-large">
+                            <i class="fas fa-2x fa-user-plus"></i>
+                        </span>
+                    </a>
+                    <p class="heading is-size-6">add new patient</p>
+                </div>
+            </div>
+            <div class="column">
+                <div class="box has-text-centered">
+                    <a href="{% url 'patients:upload' %}">
+                        <span class="icon is-large">
+                            <i class="fas fa-2x fa-cloud-upload-alt"></i>
+                        </span>
+                    </a>
+                    <p class="heading is-size-6">upload patients</p>
+                </div>
+            </div>
+            <div class="column">
+                <div class="box has-text-centered">
+                    <a href="{% url 'patients:download' %}">
+                        <span class="icon is-large">
+                            <i class="fas fa-2x fa-cloud-download-alt"></i>
+                        </span>
+                    </a>
+                    <p class="heading is-size-6">export patients to CSV</p>
+                </div>
+            </div>
+            <div class="column">
+                <div class="box has-text-centered">
+                    <a href="{% url 'patients:dashboard' %}">
+                        <span class="icon is-large">
+                            <i class="fas fa-2x fa-chart-pie"></i>
+                        </span>
+                    </a>
+                    <p class="heading is-size-6">dashboard</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
 {% endblock content %}

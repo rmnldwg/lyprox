@@ -2,26 +2,30 @@
 
 {% block content %}
 
-<section class="block columns is-centered">
-    <div class="column is-3">
-        <div class="box">
-            <p class="notification is-success is-light">
-                You have been successfully logged out.
-            </p>
+<section class="section">
+    <div class="container">
+        <div class="block columns is-centered">
+            <div class="column is-3">
+                <div class="box">
+                    <p class="notification is-success is-light">
+                        You have been successfully logged out.
+                    </p>
 
-            <div class="buttons is-right">
-                <a href="{% url 'index' %}" class="button">
-                    <span class="icon">
-                        <i class="fas fa-home"></i>
-                    </span>
-                    <span>Home</span>
-                </a>
-                <a href="{% url 'accounts:login' %}" class="button is-primary">
-                    <span class="icon">
-                        <i class="fas fa-sign-in-alt"></i>
-                    </span>
-                    <span>Log in again</span>
-                </a>
+                    <div class="buttons is-right">
+                        <a href="{% url 'index' %}" class="button">
+                            <span class="icon">
+                                <i class="fas fa-home"></i>
+                            </span>
+                            <span>Home</span>
+                        </a>
+                        <a href="{% url 'accounts:login' %}" class="button is-primary">
+                            <span class="icon">
+                                <i class="fas fa-sign-in-alt"></i>
+                            </span>
+                            <span>Log in again</span>
+                        </a>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
