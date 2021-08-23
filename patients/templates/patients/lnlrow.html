@@ -44,33 +44,3 @@
             </span>
     </div>
 </td>
-
-<!--
-<td class="barplot-tablecell">
-    <div class="field is-grouped">
-        <div class="control is-expanded">
-            <span class="tag barplot has-text-white"
-                style="justify-content:space-between; background-size: {{ stat|bar:'1,100' }}% 100%, calc({{ stat|bar:'1,100' }}% + {{ stat|bar:'0,100' }}%) 100%, 100% 100%;">
-                
-                {% if show_percent %}
-                <span class="barplot-legend-left" data-tooltip="{{ stat|index:1 }} of {{ stat|sum }} patients ({{ stat|percent:1 }}%) have metastases in {{ lnl }}">
-                    {{ stat|percent:1 }}%
-                </span>
-                <span class="barplot-legend-right" data-tooltip="{{ stat|index:-1 }} of {{ stat|sum }} patients ({{ stat|percent:-1 }}%) have no metastases in {{ lnl }}">
-                    {{ stat|percent:-1 }}%
-                </span>
-
-                {% else %}
-                <span class="barplot-legend-left" data-tooltip="{{ stat|index:1 }} of {{ stat|sum }} patients ({{ stat|percent:1 }}%) have metastases in {{ lnl }}">
-                    {{ stat|index:1 }}
-                </span>
-                <span class="barplot-legend-rights" data-tooltip="{{ stat|index:-1 }} of {{ stat|sum }} patients ({{ stat|percent:-1 }}%) have no metastases in {{ lnl }}">
-                    {{ stat|index:-1 }}
-                </span>
-
-                {% endif %}
-            </span>
-        </div>
-    </div>
-</td>
--->
