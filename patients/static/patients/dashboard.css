@@ -53,12 +53,21 @@ div.tag.stat-tag {
 }
 
 .barplot {
-    width: 100%;
     background-image:
         linear-gradient(#AE0060,#AE0060),
         linear-gradient(#BDCFD6,#BDCFD6),
         linear-gradient(#00AFA5,#00AFA5);
     background-repeat:no-repeat;
+}
+
+.barplot-legend-left {
+    text-align: left;
+}
+.barplot-legend-center {
+    text-align: center;
+}
+.barplot-legend-right {
+    text-align: right;
 }
 
 .barplot-legend {
@@ -67,4 +76,8 @@ div.tag.stat-tag {
 
 .barplot-tablecell {
     width: 100%;
+}
+
+span[data-tooltip] {
+    border-bottom: none;
 }
