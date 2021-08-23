@@ -189,7 +189,7 @@
                         </div>
                     </div>
 
-                    <div class="columns is-multiline">
+                    <div class="columns">
                         {% for checkbox in form.modalities %}
                         <div class="column">
                             {{ checkbox.tag }}
@@ -199,7 +199,7 @@
                         </div>
                         {% endfor %}
 
-                        <div class="column is-1">
+                        <div class="column is-narrow">
                             <div class="select">
                                 {{ form.modality_combine }}
                             </div>
