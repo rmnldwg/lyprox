@@ -45,322 +45,328 @@
     </div>
 
     <form method="GET" action="{% url 'patients:dashboard' %}" name="dashboardform">
-        <section class="section columns is-multiline">
-            <div class="column is-3-widescreen">
-                <div class="columns is-multiline" id="control-column">
-                    <div class="column is-full-widescreen is-one-quarter">
-                        <div class="box">
-                            <div class="level">
-                                <div class="level-left">
-                                    <div class="level-item">
-                                        <p class="title is-4">Patient details</p>
-                                    </div>
-                                </div>
-                                <div class="level-right">
-                                    <div class="level-item has-tooltip-left" data-tooltip="Specify which patients to consider">
-                                        <span class="icon">
-                                            <i class="fas fa-question"></i>
-                                        </span>
-                                    </div>
+        <section class="section">
+            <div class="tile is-ancestor">
+                <div class="tile is-3 is-vertical is-parent">
+                    <div class="tile is-child box">
+                        <div class="level">
+                            <div class="level-left">
+                                <div class="level-item">
+                                    <p class="title is-4">Patient details</p>
                                 </div>
                             </div>
-        
-                            <div class="columns is-multiline">
-                                <div class="column">
-                                    {% include 'patients/three-way-toggle.html' with name='smoking status' radio_buttons=form.nicotine_abuse stat=stats.nicotine_abuse show_percent=show_percent %}
-                                </div>
-        
-                                <div class="column">
-                                    {% include 'patients/three-way-toggle.html' with name='HPV status' radio_buttons=form.hpv_status stat=stats.hpv_status show_percent=show_percent %}
-                                </div>
-        
-                                <div class="column">
-                                    {% include 'patients/three-way-toggle.html' with name='neck dissection' radio_buttons=form.neck_dissection stat=stats.neck_dissection show_percent=show_percent %}
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="column is-full-widescreen">
-                        <div class="box">
-                            <div class="level">
-                                <div class="level-left">
-                                    <div class="level-item">
-                                        <p class="title is-4">Primary tumor</p>
-                                    </div>
-                                </div>
-                                <div class="level-right">
-                                    <div class="level-item has-tooltip-left has-tooltip-multiline" data-tooltip="Of the selected patients, consider only those that have primary tumors matching the selection in this box">
-                                        <span class="icon">
-                                            <i class="fas fa-question"></i>
-                                        </span>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <div class="columns is-multiline">
-                                <div class="column is-full-widescreen">
-                                    <p class="title is-5">Lateralization</p>
-        
-                                    <div class="columns is-multiline">
-                                        <div class="column">
-                                            {% include 'patients/three-way-toggle.html' with name='central' radio_buttons=form.central stat=stats.central show_percent=show_percent %}
-                                        </div>
-                
-                                        <div class="column">
-                                            {% include 'patients/three-way-toggle.html' with name='midline extension' radio_buttons=form.extension stat=stats.extension show_percent=show_percent %}
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="column is-full-widescreen">
-                                    <p class="title is-5">Subsite</p>
-                                    {% for checkbox in form.subsite__in %}
-                                    <div class="field is-grouped">
-                                        <div class="control is-expanded">
-                                            {{ checkbox.tag }}
-                                            <label for="{{ checkbox.id_for_label }}" class="button is-primary is-light is-fullwidth">
-                                                <span>{{ checkbox.choice_label }}</span>
-                                            </label>
-                                        </div>
-                                        <div class="control">
-                                            <p class="button is-info is-static">
-                                                {% if show_percent %}
-                                                <span>{{ stats.subsites|percent:forloop.counter0 }}%</span>
-                                                {% else %}
-                                                <span>{{ stats.subsites|index:forloop.counter0 }}</span>
-                                                {% endif %}
-                                            </p>
-                                        </div>
-                                    </div>
-                                    {% endfor %}
-                                </div>
-
-                                <div class="column is-full-widescreen">
-                                    <p class="title is-5">T-stage</p>
-                                    {% for checkbox in form.t_stage__in %}
-                                    <div class="field is-grouped">
-                                        <div class="control is-expanded">
-                                            {{ checkbox.tag }}
-                                            <label for="{{ checkbox.id_for_label }}" class="button is-primary is-light is-fullwidth">
-                                                <span>{{ checkbox.choice_label }}</span>
-                                            </label>
-                                        </div>
-                                        <div class="control">
-                                            <p class="button is-info is-static">
-                                                {% if show_percent %}
-                                                <span>{{ stats.t_stages|percent:forloop.counter0 }}%</span>
-                                                {% else %}
-                                                <span>{{ stats.t_stages|index:forloop.counter0 }}</span>
-                                                {% endif %}
-                                            </p>
-                                        </div>
-                                    </div>
-                                    {% endfor %}
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="column is-9-widescreen">
-                <div class="box">
-                    <div class="level">
-                        <div class="level-left">
-                            <div class="level-item">
-                                <p class="title is-4">Modalities</p>
-                            </div>
-                        </div>
-                        <div class="level-right">
-                            <div class="level-item">
-                                <p class="button tag is-danger is-light is-hidden" id="pCT-note">
-                                    <strong>Note:&nbsp;</strong>
-                                    Modality "planning CT" is not strictly a diagnostic modality.
-                                    Click here for more info
-                                </p>
-                            </div>
-
-                            <div class="level-item has-tooltip-left has-tooltip-multiline" data-tooltip="Select the diagnostic modalities to consider in this dashboard and how to combine them">
-                                <span class="icon">
-                                    <i class="fas fa-question"></i>
-                                </span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="columns">
-                        {% for checkbox in form.modalities %}
-                        <div class="column">
-                            {{ checkbox.tag }}
-                            <label for="{{ checkbox.id_for_label }}" class="button is-primary is-light is-fullwidth">
-                                <span>{{ checkbox.choice_label }}</span>
-                            </label>
-                        </div>
-                        {% endfor %}
-
-                        <div class="column is-narrow">
-                            <div class="select">
-                                {{ form.modality_combine }}
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="columns">
-                    <div class="column">
-                        <div class="box">
-                            <p class="title is-4 has-text-centered">contralateral</p>
-                            <table class="table is-fullwidth">
-                                <tbody>
-                                    <tr>
-                                        <td rowspan="3">I</td>
-                                        <td>both</td>
-                                        {% include 'patients/lnlrow.html' with lnl="I contralateral" radiobuttons=form.contra_I stat=stats.contra_I show_percent=show_percent %}
-                                    </tr>
-                                    <tr>
-                                        <td>a</td>
-                                        {% include 'patients/lnlrow.html' with lnl="Ia contralateral" radiobuttons=form.contra_Ia stat=stats.contra_Ia show_percent=show_percent %}
-                                    </tr>
-                                    <tr>
-                                        <td>b</td>
-                                        {% include 'patients/lnlrow.html' with lnl="Ib contralateral" radiobuttons=form.contra_Ib stat=stats.contra_Ib show_percent=show_percent %}
-                                    </tr>
-                                    <tr>
-                                        <td rowspan="3">II</td>
-                                        <td>both</td>
-                                        {% include 'patients/lnlrow.html' with lnl="II contralateral" radiobuttons=form.contra_II stat=stats.contra_II show_percent=show_percent %}
-                                    </tr>
-                                    <tr>
-                                        <td>a</td>
-                                        {% include 'patients/lnlrow.html' with lnl="IIa contralateral" radiobuttons=form.contra_IIa stat=stats.contra_IIa show_percent=show_percent %}
-                                    </tr>
-                                    <tr>
-                                        <td>b</td>
-                                        {% include 'patients/lnlrow.html' with lnl="IIb contralateral" radiobuttons=form.contra_IIb stat=stats.contra_IIb show_percent=show_percent %}
-                                    </tr>
-                                    <tr>
-                                        <td colspan="2">III</td>
-                                        {% include 'patients/lnlrow.html' with lnl="III contralateral" radiobuttons=form.contra_III stat=stats.contra_III show_percent=show_percent %}
-                                    </tr>
-                                    <tr>
-                                        <td colspan="2">IV</td>
-                                        {% include 'patients/lnlrow.html' with lnl="IV contralateral" radiobuttons=form.contra_IV stat=stats.contra_IV show_percent=show_percent %}
-                                    </tr>
-                                    <tr>
-                                        <td colspan="2">V</td>
-                                        {% include 'patients/lnlrow.html' with lnl="V contralateral" radiobuttons=form.contra_V stat=stats.contra_V show_percent=show_percent %}
-                                    </tr>
-                                    <tr>
-                                        <td colspan="2">VII</td>
-                                        {% include 'patients/lnlrow.html' with lnl="VII contralateral" radiobuttons=form.contra_VII stat=stats.contra_VII show_percent=show_percent %}
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-
-                    <div class="column">
-                        <div class="box">
-                            <p class="title is-4 has-text-centered">ipsilateral</p>
-                            <table class="table is-fullwidth">
-                                <tbody>
-                                    <tr>
-                                        <td rowspan="3">I</td>
-                                        <td>both</td>
-                                        {% include 'patients/lnlrow.html' with lnl="I ipsilateral" radiobuttons=form.ipsi_I stat=stats.ipsi_I show_percent=show_percent %}
-                                    </tr>
-                                    <tr>
-                                        <td>a</td>
-                                        {% include 'patients/lnlrow.html' with lnl="Ia ipsilateral" radiobuttons=form.ipsi_Ia stat=stats.ipsi_Ia show_percent=show_percent %}
-                                    </tr>
-                                    <tr>
-                                        <td>b</td>
-                                        {% include 'patients/lnlrow.html' with lnl="Ib ipsilateral" radiobuttons=form.ipsi_Ib stat=stats.ipsi_Ib show_percent=show_percent %}
-                                    </tr>
-                                    <tr>
-                                        <td rowspan="3">II</td>
-                                        <td>both</td>
-                                        {% include 'patients/lnlrow.html' with lnl="II ipsilateral" radiobuttons=form.ipsi_II stat=stats.ipsi_II show_percent=show_percent %}
-                                    </tr>
-                                    <tr>
-                                        <td>a</td>
-                                        {% include 'patients/lnlrow.html' with lnl="IIa ipsilateral" radiobuttons=form.ipsi_IIa stat=stats.ipsi_IIa show_percent=show_percent %}
-                                    </tr>
-                                    <tr>
-                                        <td>b</td>
-                                        {% include 'patients/lnlrow.html' with lnl="IIb ipsilateral" radiobuttons=form.ipsi_IIb stat=stats.ipsi_IIb show_percent=show_percent %}
-                                    </tr>
-                                    <tr>
-                                        <td colspan="2">III</td>
-                                        {% include 'patients/lnlrow.html' with lnl="III ipsilateral" radiobuttons=form.ipsi_III stat=stats.ipsi_III show_percent=show_percent %}
-                                    </tr>
-                                    <tr>
-                                        <td colspan="2">IV</td>
-                                        {% include 'patients/lnlrow.html' with lnl="IV ipsilateral" radiobuttons=form.ipsi_IV stat=stats.ipsi_IV show_percent=show_percent %}
-                                    </tr>
-                                    <tr>
-                                        <td colspan="2">V</td>
-                                        {% include 'patients/lnlrow.html' with lnl="V ipsilateral" radiobuttons=form.ipsi_V stat=stats.ipsi_V show_percent=show_percent %}
-                                    </tr>
-                                    <tr>
-                                        <td colspan="2">VII</td>
-                                        {% include 'patients/lnlrow.html' with lnl="VII ipsilateral" radiobuttons=form.ipsi_VII stat=stats.ipsi_VII show_percent=show_percent %}
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="box">
-                    <div class="level">
-                        <div class="level-left">
-                            <div class="level-item">
-                                <div class="field has-addons">
-                                    {% for radio in form.show_percent %}
-                                    <div class="control">
-                                        {{ radio.tag }}
-                                        <label for="{{ radio.id_for_label }}" class="tag button is-medium is-info">
-                                            {% if radio.choice_label == 'percent' %}
-                                            <span class="icon">
-                                                <i class="fas fa-percentage"></i>   
-                                            </span>
-                                            <span>percent</span>
-                                            {% elif radio.choice_label == 'absolute' %}
-                                            <span>absolute</span>
-                                            <span class="icon">
-                                                <i class="fab fa-slack-hash"></i>
-                                            </span>
-                                            {% endif %}
-                                        </label>
-                                    </div>
-                                    {% endfor %}
-                                </div>
-                            </div>
-                        </div>
-                        <div class="level-right">
-                            <div class="level-item">
-                                <p class="button is-medium is-primary is-light is-rounded is-outlined" style="width: 0;" id="show-help-modal" data-tooltip="Display documentation on how to use this dashboard">
+                            <div class="level-right">
+                                <div class="level-item has-tooltip-left" data-tooltip="Specify which patients to consider">
                                     <span class="icon">
                                         <i class="fas fa-question"></i>
                                     </span>
-                                </p>
+                                </div>
                             </div>
-
-                            <div class="level-item">
-                                <button class="button is-medium is-warning is-light is-outlined" type="submit" name="render" value="subset_list" data-tooltip="Display selected subset in list">
-                                    <span>Patients in selection: {{ stats.total }}</span>
-                                </button>
+                        </div>
+                        
+                        <div class="columns is-multiline">
+                            <div class="column">
+                                {% include 'patients/three-way-toggle.html' with name='smoking status' radio_buttons=form.nicotine_abuse stat=stats.nicotine_abuse show_percent=show_percent %}
                             </div>
+                        
+                            <div class="column">
+                                {% include 'patients/three-way-toggle.html' with name='HPV status' radio_buttons=form.hpv_status stat=stats.hpv_status show_percent=show_percent %}
+                            </div>
+                        
+                            <div class="column">
+                                {% include 'patients/three-way-toggle.html' with name='neck dissection' radio_buttons=form.neck_dissection stat=stats.neck_dissection show_percent=show_percent %}
+                            </div>
+                        </div>
+                    </div>
 
-                            <div class="level-item">
-                                <button class="button is-medium is-warning has-tooltip-multiline" type="submit" id="compute" disabled name="render" value="dashboard" data-tooltip="Display statistic of selected subset. Change selection to activate button">
+                    <div class="tile is-child box">
+                        <div class="level">
+                            <div class="level-left">
+                                <div class="level-item">
+                                    <p class="title is-4">Primary tumor</p>
+                                </div>
+                            </div>
+                            <div class="level-right">
+                                <div class="level-item has-tooltip-left has-tooltip-multiline"
+                                    data-tooltip="Of the selected patients, consider only those that have primary tumors matching the selection in this box">
                                     <span class="icon">
-                                        <i class="fas fa-cogs"></i>
+                                        <i class="fas fa-question"></i>
                                     </span>
-                                    <span><strong>Compute</strong></span>
-                                </button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="columns is-multiline">
+                            <div class="column is-full-widescreen">
+                                <p class="title is-5">Lateralization</p>
+                        
+                                <div class="columns is-multiline">
+                                    <div class="column">
+                                        {% include 'patients/three-way-toggle.html' with name='central' radio_buttons=form.central stat=stats.central show_percent=show_percent %}
+                                    </div>
+                        
+                                    <div class="column">
+                                        {% include 'patients/three-way-toggle.html' with name='midline extension' radio_buttons=form.extension stat=stats.extension show_percent=show_percent %}
+                                    </div>
+                                </div>
+                            </div>
+                        
+                            <div class="column is-full-widescreen">
+                                <p class="title is-5">Subsite</p>
+                                {% for checkbox in form.subsite__in %}
+                                <div class="field is-grouped">
+                                    <div class="control is-expanded">
+                                        {{ checkbox.tag }}
+                                        <label for="{{ checkbox.id_for_label }}" class="button is-primary is-light is-fullwidth">
+                                            <span>{{ checkbox.choice_label }}</span>
+                                        </label>
+                                    </div>
+                                    <div class="control">
+                                        <p class="button is-info is-static">
+                                            {% if show_percent %}
+                                            <span>{{ stats.subsites|percent:forloop.counter0 }}%</span>
+                                            {% else %}
+                                            <span>{{ stats.subsites|index:forloop.counter0 }}</span>
+                                            {% endif %}
+                                        </p>
+                                    </div>
+                                </div>
+                                {% endfor %}
+                            </div>
+                        
+                            <div class="column is-full-widescreen">
+                                <p class="title is-5">T-stage</p>
+                                {% for checkbox in form.t_stage__in %}
+                                <div class="field is-grouped">
+                                    <div class="control is-expanded">
+                                        {{ checkbox.tag }}
+                                        <label for="{{ checkbox.id_for_label }}" class="button is-primary is-light is-fullwidth">
+                                            <span>{{ checkbox.choice_label }}</span>
+                                        </label>
+                                    </div>
+                                    <div class="control">
+                                        <p class="button is-info is-static">
+                                            {% if show_percent %}
+                                            <span>{{ stats.t_stages|percent:forloop.counter0 }}%</span>
+                                            {% else %}
+                                            <span>{{ stats.t_stages|index:forloop.counter0 }}</span>
+                                            {% endif %}
+                                        </p>
+                                    </div>
+                                </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tile is-9 is-vertical">
+                    <div class="tile is-parent">
+                        <div class="tile is-child box">
+                            <div class="level">
+                                <div class="level-left">
+                                    <div class="level-item">
+                                        <p class="title is-4">Modalities</p>
+                                    </div>
+                                </div>
+                                <div class="level-right">
+                                    <div class="level-item">
+                                        <p class="button tag is-danger is-light is-hidden" id="pCT-note">
+                                            <strong>Note:&nbsp;</strong>
+                                            Modality "planning CT" is not strictly a diagnostic modality.
+                                            Click here for more info
+                                        </p>
+                                    </div>
+                        
+                                    <div class="level-item has-tooltip-left has-tooltip-multiline"
+                                        data-tooltip="Select the diagnostic modalities to consider in this dashboard and how to combine them">
+                                        <span class="icon">
+                                            <i class="fas fa-question"></i>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        
+                            <div class="columns">
+                                {% for checkbox in form.modalities %}
+                                <div class="column">
+                                    {{ checkbox.tag }}
+                                    <label for="{{ checkbox.id_for_label }}" class="button is-primary is-light is-fullwidth">
+                                        <span>{{ checkbox.choice_label }}</span>
+                                    </label>
+                                </div>
+                                {% endfor %}
+                        
+                                <div class="column is-narrow">
+                                    <div class="select">
+                                        {{ form.modality_combine }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="tile">
+                        <div class="tile is-parent">
+                            <div class="tile is-child box">
+                                <p class="title is-4 has-text-centered">contralateral</p>
+                                <table class="table is-fullwidth">
+                                    <tbody>
+                                        <tr>
+                                            <td rowspan="3">I</td>
+                                            <td>both</td>
+                                            {% include 'patients/lnlrow.html' with lnl="I contralateral" radiobuttons=form.contra_I stat=stats.contra_I show_percent=show_percent %}
+                                        </tr>
+                                        <tr>
+                                            <td>a</td>
+                                            {% include 'patients/lnlrow.html' with lnl="Ia contralateral" radiobuttons=form.contra_Ia stat=stats.contra_Ia show_percent=show_percent %}
+                                        </tr>
+                                        <tr>
+                                            <td>b</td>
+                                            {% include 'patients/lnlrow.html' with lnl="Ib contralateral" radiobuttons=form.contra_Ib stat=stats.contra_Ib show_percent=show_percent %}
+                                        </tr>
+                                        <tr>
+                                            <td rowspan="3">II</td>
+                                            <td>both</td>
+                                            {% include 'patients/lnlrow.html' with lnl="II contralateral" radiobuttons=form.contra_II stat=stats.contra_II show_percent=show_percent %}
+                                        </tr>
+                                        <tr>
+                                            <td>a</td>
+                                            {% include 'patients/lnlrow.html' with lnl="IIa contralateral" radiobuttons=form.contra_IIa stat=stats.contra_IIa show_percent=show_percent %}
+                                        </tr>
+                                        <tr>
+                                            <td>b</td>
+                                            {% include 'patients/lnlrow.html' with lnl="IIb contralateral" radiobuttons=form.contra_IIb stat=stats.contra_IIb show_percent=show_percent %}
+                                        </tr>
+                                        <tr>
+                                            <td colspan="2">III</td>
+                                            {% include 'patients/lnlrow.html' with lnl="III contralateral" radiobuttons=form.contra_III stat=stats.contra_III show_percent=show_percent %}
+                                        </tr>
+                                        <tr>
+                                            <td colspan="2">IV</td>
+                                            {% include 'patients/lnlrow.html' with lnl="IV contralateral" radiobuttons=form.contra_IV stat=stats.contra_IV show_percent=show_percent %}
+                                        </tr>
+                                        <tr>
+                                            <td colspan="2">V</td>
+                                            {% include 'patients/lnlrow.html' with lnl="V contralateral" radiobuttons=form.contra_V stat=stats.contra_V show_percent=show_percent %}
+                                        </tr>
+                                        <tr>
+                                            <td colspan="2">VII</td>
+                                            {% include 'patients/lnlrow.html' with lnl="VII contralateral" radiobuttons=form.contra_VII stat=stats.contra_VII show_percent=show_percent %}
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <div class="tile is-parent">
+                            <div class="tile is-child box">
+                                <p class="title is-4 has-text-centered">ipsilateral</p>
+                                <table class="table is-fullwidth">
+                                    <tbody>
+                                        <tr>
+                                            <td rowspan="3">I</td>
+                                            <td>both</td>
+                                            {% include 'patients/lnlrow.html' with lnl="I ipsilateral" radiobuttons=form.ipsi_I stat=stats.ipsi_I show_percent=show_percent %}
+                                        </tr>
+                                        <tr>
+                                            <td>a</td>
+                                            {% include 'patients/lnlrow.html' with lnl="Ia ipsilateral" radiobuttons=form.ipsi_Ia stat=stats.ipsi_Ia show_percent=show_percent %}
+                                        </tr>
+                                        <tr>
+                                            <td>b</td>
+                                            {% include 'patients/lnlrow.html' with lnl="Ib ipsilateral" radiobuttons=form.ipsi_Ib stat=stats.ipsi_Ib show_percent=show_percent %}
+                                        </tr>
+                                        <tr>
+                                            <td rowspan="3">II</td>
+                                            <td>both</td>
+                                            {% include 'patients/lnlrow.html' with lnl="II ipsilateral" radiobuttons=form.ipsi_II stat=stats.ipsi_II show_percent=show_percent %}
+                                        </tr>
+                                        <tr>
+                                            <td>a</td>
+                                            {% include 'patients/lnlrow.html' with lnl="IIa ipsilateral" radiobuttons=form.ipsi_IIa stat=stats.ipsi_IIa show_percent=show_percent %}
+                                        </tr>
+                                        <tr>
+                                            <td>b</td>
+                                            {% include 'patients/lnlrow.html' with lnl="IIb ipsilateral" radiobuttons=form.ipsi_IIb stat=stats.ipsi_IIb show_percent=show_percent %}
+                                        </tr>
+                                        <tr>
+                                            <td colspan="2">III</td>
+                                            {% include 'patients/lnlrow.html' with lnl="III ipsilateral" radiobuttons=form.ipsi_III stat=stats.ipsi_III show_percent=show_percent %}
+                                        </tr>
+                                        <tr>
+                                            <td colspan="2">IV</td>
+                                            {% include 'patients/lnlrow.html' with lnl="IV ipsilateral" radiobuttons=form.ipsi_IV stat=stats.ipsi_IV show_percent=show_percent %}
+                                        </tr>
+                                        <tr>
+                                            <td colspan="2">V</td>
+                                            {% include 'patients/lnlrow.html' with lnl="V ipsilateral" radiobuttons=form.ipsi_V stat=stats.ipsi_V show_percent=show_percent %}
+                                        </tr>
+                                        <tr>
+                                            <td colspan="2">VII</td>
+                                            {% include 'patients/lnlrow.html' with lnl="VII ipsilateral" radiobuttons=form.ipsi_VII stat=stats.ipsi_VII show_percent=show_percent %}
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="tile is-parent">
+                        <div class="tile is-child box">
+                            <div class="level">
+                                <div class="level-left">
+                                    <div class="level-item">
+                                        <div class="field has-addons">
+                                            {% for radio in form.show_percent %}
+                                            <div class="control">
+                                                {{ radio.tag }}
+                                                <label for="{{ radio.id_for_label }}" class="tag button is-medium is-info">
+                                                    {% if radio.choice_label == 'percent' %}
+                                                    <span class="icon">
+                                                        <i class="fas fa-percentage"></i>
+                                                    </span>
+                                                    <span>percent</span>
+                                                    {% elif radio.choice_label == 'absolute' %}
+                                                    <span>absolute</span>
+                                                    <span class="icon">
+                                                        <i class="fab fa-slack-hash"></i>
+                                                    </span>
+                                                    {% endif %}
+                                                </label>
+                                            </div>
+                                            {% endfor %}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="level-right">
+                                    <div class="level-item">
+                                        <p class="button is-medium is-primary is-light is-rounded is-outlined" style="width: 0;"
+                                            id="show-help-modal" data-tooltip="Display documentation on how to use this dashboard">
+                                            <span class="icon">
+                                                <i class="fas fa-question"></i>
+                                            </span>
+                                        </p>
+                                    </div>
+                            
+                                    <div class="level-item">
+                                        <button class="button is-medium is-warning is-light is-outlined" type="submit" name="render"
+                                            value="subset_list" data-tooltip="Display selected subset in list">
+                                            <span>Patients in selection: {{ stats.total }}</span>
+                                        </button>
+                                    </div>
+                            
+                                    <div class="level-item">
+                                        <button class="button is-medium is-warning has-tooltip-multiline" type="submit" id="compute" disabled
+                                            name="render" value="dashboard"
+                                            data-tooltip="Display statistic of selected subset. Change selection to activate button">
+                                            <span class="icon">
+                                                <i class="fas fa-cogs"></i>
+                                            </span>
+                                            <span><strong>Compute</strong></span>
+                                        </button>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
