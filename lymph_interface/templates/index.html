@@ -41,58 +41,114 @@
 
 <section class="section">
     <div class="container">
-        <div class="block columns">
-            <div class="column">
-                <div class="box has-text-centered">
-                    <a href="{% url 'patients:list' %}">
-                        <span class="icon is-large">
-                            <i class="fas fa-2x fa-th-list"></i>
-                        </span>
-                    </a>
-                    <p class="heading is-size-6">list of patients</p>
-                </div>
+        <h1 class="title">Features</h1>
+        <div class="tile is-ancestor">
+            <div class="tile is-parent is-vertical">
+                <a href="{% url 'patients:dashboard' %}" class="tile is-child notification is-primary is-light">
+                    <div class="media">
+                        <figure class="media-left">
+                            <span class="icon is-large">
+                                <i class="fas fa-2x fa-chart-pie"></i>
+                            </span>
+                        </figure>
+                        <div class="media-content">
+                            <h2 class="title is-4">Dashboard</h2>
+                            <p>
+                                Interactive page that aggregates information on all patient's lymphatic metastatic involvement in a visual and
+                                intuitive dashboard. Here, one can explore correlations between involvements of different lymph node levels as well
+                                as estimate the impact of various risk factors on nodal involvement.
+                            </p>
+                        </div>
+                    </div>
+                </a>
+
+                <a href="{% url 'patients:list' %}" class="tile is-child notification is-primary is-light">
+                    <div class="media">
+                        <figure class="media-left">
+                            <p class="icon is-large">
+                                <i class="fas fa-2x fa-th-list"></i>
+                            </p>
+                        </figure>
+                        <div class="media-content">
+                            <h2 class="title is-4">List of patients</h2>
+                            <p>
+                                Look at a table of all the patients in the database. This view can be filtered for different patient-specific
+                                properties like age, date of diagnosis, TNM stage and more.
+                            </p>
+                        </div>
+                    </div>
+                </a>
+
+                <a href="{% url 'patients:download' %}" class="tile is-child notification is-primary is-light">
+                    <div class="media">
+                        <figure class="media-left">
+                            <span class="icon is-large">
+                                <i class="fas fa-2x fa-cloud-download-alt"></i>
+                            </span>
+                        </figure>
+                        <div class="media-content">
+                            <h2 class="title is-4">Export database</h2>
+                            <p>
+                                Download a CSV table of all patients in the database. This table can also be used as a template for uploading a
+                                batch of patients, as it has the required format for uploading.
+                            </p>
+                        </div>
+                    </div>
+                </a>
             </div>
-            <div class="column">
-                <div class="box has-text-centered">
-                    <a href="{% url 'patients:create' %}">
-                        <span class="icon is-large">
-                            <i class="fas fa-2x fa-user-plus"></i>
-                        </span>
-                    </a>
-                    <p class="heading is-size-6">add new patient</p>
+
+            <div class="tile is-parent is-vertical">
+                <a href="{% url 'patients:create' %}" class="tile is-child notification is-primary is-light">
+                    <div class="media">
+                        <figure class="media-left">
+                            <span class="icon is-large">
+                                <i class="fas fa-2x fa-user-plus"></i>
+                            </span>
+                        </figure>
+                        <div class="media-content">
+                            <h2 class="title is-4">Create new patient *</h2>
+                            <p>
+                                Manually add a new patient to the database using a pre-defined form.
+                            </p>
+                        </div>
+                    </div>
+                </a>
+
+                <a href="{% url 'patients:upload' %}" class="tile is-child notification is-primary is-light">
+                    <div class="media">
+                        <figure class="media-left">
+                            <span class="icon is-large">
+                                <i class="fas fa-2x fa-cloud-upload-alt"></i>
+                            </span>
+                        </figure>
+                        <div class="media-content">
+                            <h2 class="title is-4">Upload patients *</h2>
+                            <p>
+                                Add a batch of patients to the database via a CSV table of a specific format.
+                            </p>
+                        </div>
+                    </div>
+                </a>
+
+                <div class="tile is-child notification is-white">
+                    <p class="has-text-right has-text-danger has-text-weight-bold is-italic">
+                        * login required
+                    </p>
                 </div>
-            </div>
-            <div class="column">
-                <div class="box has-text-centered">
-                    <a href="{% url 'patients:upload' %}">
-                        <span class="icon is-large">
-                            <i class="fas fa-2x fa-cloud-upload-alt"></i>
-                        </span>
-                    </a>
-                    <p class="heading is-size-6">upload patients</p>
-                </div>
-            </div>
-            <div class="column">
-                <div class="box has-text-centered">
-                    <a href="{% url 'patients:download' %}">
-                        <span class="icon is-large">
-                            <i class="fas fa-2x fa-cloud-download-alt"></i>
-                        </span>
-                    </a>
-                    <p class="heading is-size-6">export patients to CSV</p>
-                </div>
-            </div>
-            <div class="column">
-                <div class="box has-text-centered">
-                    <a href="{% url 'patients:dashboard' %}">
-                        <span class="icon is-large">
-                            <i class="fas fa-2x fa-chart-pie"></i>
-                        </span>
-                    </a>
-                    <p class="heading is-size-6">dashboard</p>
+
+                <div class="tile is-child">
                 </div>
             </div>
         </div>
+    </div>
+</section>
+
+<section class="section">
+    <div class="container">
+        <h1 class="title">Publications</h1>
+        <p>
+            Our publications on the topic
+        </p>
     </div>
 </section>
 
