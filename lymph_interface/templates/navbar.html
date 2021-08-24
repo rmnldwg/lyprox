@@ -29,35 +29,35 @@
                 </a>
             </div>
             <div class="navbar-end">
-                {% if user.is_authenticated %}
-                <div class="navbar-item">
-                    <a href="{% url 'accounts:logout' %}" class="button is-primary is-inverted is-outlined">
-                        <span class="icon">
-                            <i class="fas fa-sign-out-alt"></i>
-                        </span>
-                        <span>Log out</span>
-                    </a>
-                </div>
-                {% else %}
                 <div class="navbar-item">
                     <div class="field is-grouped">
                         <div class="control">
+                            {% if user.is_authenticated %}
+                            <a href="{% url 'accounts:logout' %}" class="button is-primary is-inverted is-outlined">
+                                <span class="icon">
+                                    <i class="fas fa-sign-out-alt"></i>
+                                </span>
+                                <span>Log out</span>
+                            </a>
+                            {% else %}
                             <a href="{% url 'accounts:login' %}" class="button is-primary is-inverted is-outlined">
                                 <span class="icon">
                                     <i class="fas fa-sign-in-alt"></i>
                                 </span>
                                 <span>Log in</span>
                             </a>
+                            {% endif %}
                         </div>
                         <div class="control">
-                            <a href="https://github.com/rmnldwg/lymph-interface" target="_blank" class="button is-primary is-inverted has-tooltip-bottom" data-tooltip="source code on GitHub">
+                            <a href="https://github.com/rmnldwg/lymph-interface" target="_blank"
+                                class="button is-primary is-inverted has-tooltip-bottom" data-tooltip="source code on GitHub">
                                 <span class="icon">
                                     <i class="fab fa-lg fa-github"></i>
                                 </span>
                             </a>
                         </div>
                     </div>
-                {% endif %}
+                </div>
             </div>
         </div>
     </div>
