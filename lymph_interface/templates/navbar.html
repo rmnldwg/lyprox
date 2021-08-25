@@ -3,28 +3,28 @@
 <nav class="navbar is-fixed-top is-primary" role="navigation">
     <div class="container">
         <div class="navbar-brand">
-            <a class="navbar-item" href="{% url 'index' %}">
+            <a class="navbar-item" href="{% url 'index' %}" title="home">
                 <img src="{% static 'logo-white.svg' %}" alt="LyProX Logo">
             </a>
         </div>
         <div class="navbar-menu">
             <div class="navbar-start">
-                <a href="{% url 'patients:list' %}" class="navbar-item">
+                <a href="{% url 'patients:list' %}" class="navbar-item" title="list of all patients in database">
                     List
                 </a>
-                <a href="{% url 'patients:create' %}" class="navbar-item">
+                <a href="{% url 'patients:create' %}" class="navbar-item" title="add new patients to database">
                     Create
                 </a>
 
-                <a href="{% url 'patients:upload' %}" class="navbar-item">
+                <a href="{% url 'patients:upload' %}" class="navbar-item" title="upload batch of patients">
                     Upload
                 </a>
 
-                <a href="{% url 'patients:download' %}" class="navbar-item">
+                <a href="{% url 'patients:download' %}" class="navbar-item" title="export CSV of all patients">
                     Download
                 </a>
 
-                <a href="{% url 'patients:dashboard' %}" class="navbar-item">
+                <a href="{% url 'patients:dashboard' %}" class="navbar-item" title="explore patterns of progression">
                     Dashboard
                 </a>
             </div>
@@ -33,14 +33,14 @@
                     <div class="field is-grouped">
                         <div class="control">
                             {% if user.is_authenticated %}
-                            <a href="{% url 'accounts:logout' %}" class="button is-primary is-inverted is-outlined">
+                            <a href="{% url 'accounts:logout' %}" class="button is-primary is-inverted is-outlined" title="logout">
                                 <span class="icon">
                                     <i class="fas fa-sign-out-alt"></i>
                                 </span>
                                 <span>Log out</span>
                             </a>
                             {% else %}
-                            <a href="{% url 'accounts:login' %}" class="button is-primary is-inverted is-outlined">
+                            <a href="{% url 'accounts:login' %}" class="button is-primary is-inverted is-outlined" title="login">
                                 <span class="icon">
                                     <i class="fas fa-sign-in-alt"></i>
                                 </span>
@@ -49,8 +49,8 @@
                             {% endif %}
                         </div>
                         <div class="control">
-                            <a href="https://github.com/rmnldwg/lymph-interface" target="_blank"
-                                class="button is-primary is-inverted has-tooltip-bottom" data-tooltip="source code on GitHub">
+                            <a href="https://github.com/rmnldwg/lymph-interface" target="_blank" title="Source code on GitHub"
+                                class="button is-primary is-inverted has-tooltip-bottom">
                                 <span class="icon">
                                     <i class="fab fa-lg fa-github"></i>
                                 </span>

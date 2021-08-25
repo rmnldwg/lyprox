@@ -34,7 +34,7 @@
                             {% csrf_token %}
                             <div class="field is-grouped is-grouped-centered">
                                 <div class="control">
-                                    <button class="button is-primary" type="submit" id="generate">
+                                    <button class="button is-primary" type="submit" id="generate" title="generate CSV from database">
                                         <span class="icon">
                                             <i class="fas fa-cogs"></i>
                                         </span>
@@ -42,7 +42,7 @@
                                     </button>
                                 </div>
                                 <div class="control">
-                                    <a class="button is-success" {% if download_available %}href="/downloads/latest.csv" download {% else %}disabled{% endif %}>
+                                    <a class="button is-success" {% if download_available %}href="/downloads/latest.csv" download {% else %}disabled{% endif %} title="download exported CSV">
                                         <span class="icon">
                                             <i class="fas fa-download"></i>
                                         </span>

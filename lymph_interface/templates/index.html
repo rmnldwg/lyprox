@@ -12,7 +12,7 @@
             <div class="columns">
                 <div class="column is-3">
                     <figure class="image is-fullwidth">
-                        <img src="{% static 'logo.svg' %}" alt="">
+                        <img src="{% static 'logo.svg' %}" alt="LyProX logo">
                     </figure>
                 </div>
 
@@ -88,7 +88,9 @@
                         </div>
                     </div>
                 </a>
+            </div>
 
+            <div class="tile is-parent is-vertical">
                 <a href="{% url 'patients:download' %}" class="tile is-child notification is-primary is-light">
                     <div class="media">
                         <figure class="media-left">
@@ -97,7 +99,7 @@
                             </span>
                         </figure>
                         <div class="media-content">
-                            <h2 class="title is-4">Export database</h2>
+                            <h2 class="title is-4">Export database *</h2>
                             <p>
                                 Download a CSV table of all patients in the database. This table can also be used as a template for uploading a
                                 batch of patients, as it has the required format for uploading.
@@ -110,9 +112,7 @@
                         </div>
                     </div>
                 </a>
-            </div>
 
-            <div class="tile is-parent is-vertical">
                 <a href="{% url 'patients:create' %}" class="tile is-child notification is-primary is-light">
                     <div class="media">
                         <figure class="media-left">
@@ -160,9 +160,6 @@
                         * login required
                     </p>
                 </div>
-
-                <div class="tile is-child">
-                </div>
             </div>
         </div>
     </div>
@@ -175,7 +172,7 @@
         <div class="media">
             <div class="media-left">
                 <figure class="image is-96x96">
-                    <img class="is-rounded" src="{% static 'data.svg' %}" alt="">
+                    <img class="is-rounded" src="{% static 'data.svg' %}" alt="paper icon">
                 </figure>
             </div>
             <div class="media-content">
@@ -184,6 +181,7 @@
                     <br>
                     Detailed analysis of lymphatic progression patterns in oropharyngeal squamous cell carcinoma.
                     <br>
+                    <span class="has-text-danger">Not yet published</span>
                 </p>
             </div>
         </div>
@@ -191,7 +189,7 @@
         <div class="media">
             <div class="media-left">
                 <figure class="image is-96x96">
-                    <img class="is-rounded" src="{% static 'hmm.svg' %}" alt="">
+                    <img class="is-rounded" src="{% static 'hmm.svg' %}" alt="paper icon">
                 </figure>
             </div>
             <div class="media-content">
@@ -209,7 +207,7 @@
         <div class="media">
             <div class="media-left">
                 <figure class="image is-96x96">
-                    <img class="is-rounded" src="{% static 'bn.svg' %}" alt="">
+                    <img class="is-rounded" src="{% static 'bn.svg' %}" alt="paper icon">
                 </figure>
             </div>
             <div class="media-content">

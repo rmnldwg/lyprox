@@ -5,7 +5,7 @@
 <section class="section">
     <div class="container">
         <div class="block columns is-centered">
-            <div class="column is-5">
+            <div class="column is-6">
                 <div class="box">
                     {% if action == "create_patient" %}
                     <p class="title is-3">New patient</p>
@@ -65,7 +65,7 @@
                             </div>
                         </div>
 
-                        <div class="field is-grouped">
+                        <div class="field is-grouped is-grouped-multiline">
                             <div class="control">
                                 <label for="{{ form.alcohol_abuse.id_for_label }}" class="label">
                                     {{ form.alcohol_abuse.label }}
