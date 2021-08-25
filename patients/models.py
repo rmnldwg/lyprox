@@ -71,11 +71,11 @@ class Patient(ModeLoggerMixin, models.Model):
 class Tumor(ModeLoggerMixin, models.Model):
     """Report of primary tumor(s)."""
     
-    class Locations(models.IntegerChoices):
-        ORAL_CAVITY = 0, "oral cavity"
-        OROPHARYNX  = 1, "oropharynx"
-        HYPOPHARYNX = 2, "hypopharynx"
-        LARYNX      = 3, "larynx"
+    class Locations(models.TextChoices):
+        ORAL_CAVITY = "oral cavity"
+        OROPHARYNX  = "oropharynx"
+        HYPOPHARYNX = "hypopharynx"
+        LARYNX      = "larynx"
         
     SUBSITES = [
         ("oral cavity", (("C03.0", "upper gum"),
@@ -133,7 +133,7 @@ class Tumor(ModeLoggerMixin, models.Model):
     
     patient = models.ForeignKey(Patient, on_delete=models.CASCADE)
     
-    location = models.PositiveSmallIntegerField(choices=Locations.choices, null=True)
+    location = models.CharField(max_length=20, choices=Locations.choices)
     subsite = models.CharField(max_length=10, choices=SUBSITES)
     side = models.CharField(max_length=10, choices=[("left", "left"),
                                                     ("right", "right"),
@@ -153,13 +153,13 @@ class Tumor(ModeLoggerMixin, models.Model):
         """Extract location and update patient's T-stage upon saving tumor."""
         # automatically extract location from subsite
         subsite_dict = dict(self.SUBSITES)
-        location_list = self.Locations.labels
+        location_list = self.Locations.values
         
         found_location = False
-        for i, loc in enumerate(location_list):
+        for loc in location_list:
             loc_subsites = [tpl[1] for tpl in subsite_dict[loc]]
             if self.get_subsite_display() in loc_subsites:
-                self.location = i
+                self.location = loc
                 found_location = True
                 
         if not found_location:

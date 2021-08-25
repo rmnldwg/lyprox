@@ -1,4 +1,4 @@
-# Interface to explore lymphatic progression patterns in HNSCC
+# Our goal
 
 Head & neck squamous cell carcinomas (HNSCCs) frequently metastasise through the lymphatic network. Hence, radio-oncologists often have to decide whether or not to include the different lymph node levels (LNLs) - anatomically defined regions in the head & neck that contain several lymph nodes - into the clinical target volume (CTV) or not.
 
