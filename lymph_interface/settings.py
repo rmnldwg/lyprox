@@ -33,6 +33,7 @@ except FileNotFoundError:
         "CSRF_COOKIE_SECURE": False,
         "SESSION_COOKIE_SECURE": False,
         "GOOGLE_API_KEY": "AIzaSyAZDXINmEGM6LFl2RVnVxfRsd6M9hDgSKw",
+        "AUTH_USER_MODEL": "accounts.User"
     }
     
 
@@ -111,8 +112,8 @@ INSTALLED_APPS = [
 
     # third party apps
     "django_filters",
-    "auth_logger",
-    "address",
+    "phonenumber_field",
+    # "address",
 
     'django.contrib.admin',
     'django.contrib.auth',
@@ -184,6 +185,8 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+AUTH_USER_MODEL = config["AUTH_USER_MODEL"]
+
 
 # Internationalization
 # https://docs.djangoproject.com/en/3.1/topics/i18n/
@@ -214,8 +217,16 @@ except KeyError:
 STATIC_URL = "/static/"
 
 
-# Download files
+# upload files
+try:
+    MEDIA_ROOT = BASE_DIR / config["MEDIA_ROOT"]
+except KeyError:
+    MEDIA_ROOT = BASE_DIR / "uploads"
 
+MEDIA_URL = "/media/"
+
+
+# Download files
 try:
     DOWNLOADS_ROOT = BASE_DIR / config["DOWNLOADS_ROOT_SUFFIX"]
 except KeyError:

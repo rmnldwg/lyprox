@@ -1,8 +1,9 @@
-from django.contrib.auth.forms import UsernameField, AuthenticationForm
-from django.core.exceptions import ValidationError
+from django.contrib.auth.forms import UsernameField, AuthenticationForm, UserCreationForm
+from django.conf import settings
 from django import forms
-from django.utils.translation import gettext, gettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 
+from .models import Institution, User
 
 class CustomAuthenticationForm(AuthenticationForm):
     username = UsernameField(

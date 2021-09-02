@@ -65,6 +65,9 @@ local_settings.py
 db.sqlite3
 db.sqlite3-journal
 static/
+media/
+uploads/
+downloads/
 
 # Flask stuff:
 instance/
@@ -138,6 +141,3 @@ dmypy.json
 
 # screenshots from Bertrand's interface
 bertrands_interface/
-
-# media dir
-media/

@@ -1,13 +1,12 @@
-# from lymph_interface import patients
 from django.shortcuts import render
 from django.http import HttpResponse
 from django.urls.base import reverse
 from django.views import generic
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib.auth.decorators import login_required
 from django.conf import settings
 
-from typing import Any, Dict
+from typing import Any, Dict, Optional
 from pathlib import Path
 import logging
 logger = logging.getLogger(__name__)
@@ -62,7 +61,9 @@ class PatientDetailView(generic.DetailView):
         return context
 
 
-class CreatePatientView(ViewLoggerMixin, LoginRequiredMixin, generic.CreateView):
+class CreatePatientView(ViewLoggerMixin, 
+                        LoginRequiredMixin, 
+                        generic.CreateView):
     model = Patient
     form_class = PatientForm
     template_name = "patients/patient_form.html"
@@ -74,7 +75,10 @@ class CreatePatientView(ViewLoggerMixin, LoginRequiredMixin, generic.CreateView)
         return context
     
       
-class UpdatePatientView(ViewLoggerMixin, LoginRequiredMixin, generic.UpdateView):
+class UpdatePatientView(ViewLoggerMixin, 
+                        LoginRequiredMixin, 
+                        UserPassesTestMixin,
+                        generic.UpdateView):
     model = Patient
     form_class = PatientForm
     template_name = "patients/patient_form.html"
@@ -88,12 +92,37 @@ class UpdatePatientView(ViewLoggerMixin, LoginRequiredMixin, generic.UpdateView)
         context["action"] = self.action
         return context
     
+    def test_func(self) -> Optional[bool]:
+        """Make sure editing user is either superuser or comes from the 
+        institution that added the user in the first place."""
+        user = self.request.user
+        if user.is_superuser:
+            return True
+        
+        user_institution = user.institution
+        patient_institution = self.object.institution
+        return user_institution == patient_institution
     
-class DeletePatientView(ViewLoggerMixin, LoginRequiredMixin, generic.DeleteView):
+    
+class DeletePatientView(ViewLoggerMixin, 
+                        LoginRequiredMixin, 
+                        UserPassesTestMixin,
+                        generic.DeleteView):
     model = Patient
     template_name = "patients/patient_delete.html"
     success_url = "/patients"
     action = "delete_patient"
+    
+    def test_func(self) -> Optional[bool]:
+        """Make sure editing user is either superuser or comes from the 
+        institution that added the user in the first place."""
+        user = self.request.user
+        if user.is_superuser:
+            return True
+        
+        user_institution = user.institution
+        patient_institution = self.object.institution
+        return user_institution == patient_institution
 
 
 @login_required
@@ -163,7 +192,9 @@ def generate_and_download_csv(request):
     
     
 # TUMOR related views
-class CreateTumorView(ViewLoggerMixin, LoginRequiredMixin, generic.CreateView):
+class CreateTumorView(ViewLoggerMixin, 
+                      LoginRequiredMixin,
+                      generic.CreateView):
     model = Tumor
     form_class = TumorForm
     template_name = "patients/patient_detail.html"

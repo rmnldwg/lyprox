@@ -1,7 +1,6 @@
+from accounts.models import Institution
 from django.db import models
 from django.urls import reverse
-
-from address.models import AddressField
 
 from lymph_interface.loggers import ModeLoggerMixin
 
@@ -42,6 +41,8 @@ class Patient(ModeLoggerMixin, models.Model):
     t_stage = models.PositiveSmallIntegerField(choices=T_stages.choices, default=0)
     n_stage = models.PositiveSmallIntegerField(choices=N_stages.choices)
     m_stage = models.PositiveSmallIntegerField(choices=M_stages.choices)
+    
+    institution = models.ForeignKey(Institution, blank=True, on_delete=models.PROTECT)
     
     
     def __str__(self):
@@ -211,9 +212,3 @@ class Diagnose(models.Model):
 # add lymph node level fields to model 'Diagnose'
 for lnl in Diagnose.LNLs:
     Diagnose.add_to_class(lnl, models.BooleanField(blank=True, null=True))
-
-
-class Institution(models.Model):
-    """Hospital, clinic or research facility that treats patients."""
-    
-    name = models.CharField(max_length=100)

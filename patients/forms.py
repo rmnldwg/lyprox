@@ -63,6 +63,7 @@ class PatientForm(FormLoggerMixin, forms.ModelForm):
 
         patient.hash_value = self.cleaned_data["hash_value"]
         patient.age = self._compute_age()
+        patient.institution = self.request.user.institution
         
         if commit:
             patient.save()
