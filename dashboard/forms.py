@@ -1,6 +1,6 @@
 from django import forms
 
-from lymph_interface.loggers import FormLoggerMixin
+from core.loggers import FormLoggerMixin
 from patients.models import Patient, Tumor, Diagnose
 
 

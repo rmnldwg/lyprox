@@ -7,7 +7,7 @@ import pandas
 
 from .models import Institution, Patient, Tumor, Diagnose
 from .ioports import compute_hash
-from lymph_interface.loggers import FormLoggerMixin
+from core.loggers import FormLoggerMixin
 
 
 class PatientForm(FormLoggerMixin, forms.ModelForm):

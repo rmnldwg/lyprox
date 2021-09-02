@@ -18,7 +18,7 @@ from .forms import (PatientForm,
                     DataFileForm)
 from .ioports import export_to_pandas, import_from_pandas, ParsingError
 from .filters import PatientFilter
-from lymph_interface.loggers import ViewLoggerMixin
+from core.loggers import ViewLoggerMixin
 
 
 # PATIENT related views

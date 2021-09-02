@@ -2,7 +2,7 @@ from accounts.models import Institution
 from django.db import models
 from django.urls import reverse
 
-from lymph_interface.loggers import ModeLoggerMixin
+from core.loggers import ModeLoggerMixin
 
 
 class Patient(ModeLoggerMixin, models.Model):

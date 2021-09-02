@@ -3,7 +3,7 @@ from django.views import generic
 import time
 from typing import Any, Dict
 
-from lymph_interface.loggers import ViewLoggerMixin
+from core.loggers import ViewLoggerMixin
 from patients.models import Patient, Tumor, Diagnose
 
 from . import query
