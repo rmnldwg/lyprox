@@ -1,6 +1,8 @@
 from django.db import models
 from django.urls import reverse
 
+from address.models import AddressField
+
 from lymph_interface.loggers import ModeLoggerMixin
 
 
@@ -209,3 +211,9 @@ class Diagnose(models.Model):
 # add lymph node level fields to model 'Diagnose'
 for lnl in Diagnose.LNLs:
     Diagnose.add_to_class(lnl, models.BooleanField(blank=True, null=True))
+
+
+class Institution(models.Model):
+    """Hospital, clinic or research facility that treats patients."""
+    
+    name = models.CharField(max_length=100)

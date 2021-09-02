@@ -31,7 +31,8 @@ except FileNotFoundError:
         "ALLOWED_HOSTS": [],
         "SECRET_KEY": 'k_&(m5ymps%p=4&qjnwkv-avxb@@ez1tewc8g_eg4k#jx59ukx',
         "CSRF_COOKIE_SECURE": False,
-        "SESSION_COOKIE_SECURE": False
+        "SESSION_COOKIE_SECURE": False,
+        "GOOGLE_API_KEY": "AIzaSyAZDXINmEGM6LFl2RVnVxfRsd6M9hDgSKw",
     }
     
 
@@ -111,6 +112,7 @@ INSTALLED_APPS = [
     # third party apps
     "django_filters",
     "auth_logger",
+    "address",
 
     'django.contrib.admin',
     'django.contrib.auth',

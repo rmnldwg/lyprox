@@ -5,7 +5,7 @@ from django.utils.translation import gettext as _
 
 import pandas
 
-from .models import Patient, Tumor, Diagnose
+from .models import Institution, Patient, Tumor, Diagnose
 from .ioports import compute_hash
 from lymph_interface.loggers import FormLoggerMixin
 
@@ -219,3 +219,8 @@ class DataFileForm(FormLoggerMixin, forms.Form):
             
         cleaned_data["data_frame"] = data_frame
         return cleaned_data
+
+
+class InsitutionForm(FormLoggerMixin, forms.Form):
+    class Meta:
+        model = Institution
