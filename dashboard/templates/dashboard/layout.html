@@ -3,7 +3,7 @@
 {% include 'head.html' %}
 
 {% load static %}
-<link rel="stylesheet" href="{% static 'patients/dashboard.css' %}">
+<link rel="stylesheet" href="{% static 'dashboard/dashboard.css' %}">
 
 {% load mytags %}
 
@@ -15,7 +15,7 @@
         <div class="modal-content">
             <div class="box">
                 <div class="content">
-                    {% include_md 'patients/dashboard_help.md' %}
+                    {% include_md 'dashboard/help.md' %}
                 </div>
             </div>
         </div>
@@ -44,7 +44,7 @@
         <button class="modal-close is-large" id="close-pCT-modal"></button>
     </div>
 
-    <form method="GET" action="{% url 'patients:dashboard' %}" name="dashboardform">
+    <form method="GET" action="{% url 'dashboard:dashboard' %}" name="dashboardform">
         <section class="section">
             <div class="tile is-ancestor">
                 <div class="tile is-3 is-vertical is-parent">
@@ -66,15 +66,15 @@
                         
                         <div class="columns is-multiline">
                             <div class="column">
-                                {% include 'patients/three-way-toggle.html' with name='smoking status' radio_buttons=form.nicotine_abuse stat=stats.nicotine_abuse show_percent=show_percent %}
+                                {% include 'dashboard/three-way-toggle.html' with name='smoking status' radio_buttons=form.nicotine_abuse stat=stats.nicotine_abuse show_percent=show_percent %}
                             </div>
                         
                             <div class="column">
-                                {% include 'patients/three-way-toggle.html' with name='HPV status' radio_buttons=form.hpv_status stat=stats.hpv_status show_percent=show_percent %}
+                                {% include 'dashboard/three-way-toggle.html' with name='HPV status' radio_buttons=form.hpv_status stat=stats.hpv_status show_percent=show_percent %}
                             </div>
                         
                             <div class="column">
-                                {% include 'patients/three-way-toggle.html' with name='neck dissection' radio_buttons=form.neck_dissection stat=stats.neck_dissection show_percent=show_percent %}
+                                {% include 'dashboard/three-way-toggle.html' with name='neck dissection' radio_buttons=form.neck_dissection stat=stats.neck_dissection show_percent=show_percent %}
                             </div>
                         </div>
                     </div>
@@ -102,11 +102,11 @@
                         
                                 <div class="columns is-multiline">
                                     <div class="column">
-                                        {% include 'patients/three-way-toggle.html' with name='central' radio_buttons=form.central stat=stats.central show_percent=show_percent %}
+                                        {% include 'dashboard/three-way-toggle.html' with name='central' radio_buttons=form.central stat=stats.central show_percent=show_percent %}
                                     </div>
                         
                                     <div class="column">
-                                        {% include 'patients/three-way-toggle.html' with name='midline extension' radio_buttons=form.extension stat=stats.extension show_percent=show_percent %}
+                                        {% include 'dashboard/three-way-toggle.html' with name='midline extension' radio_buttons=form.extension stat=stats.extension show_percent=show_percent %}
                                     </div>
                                 </div>
                             </div>
@@ -222,44 +222,44 @@
                                         <tr>
                                             <td rowspan="3">I</td>
                                             <td>both</td>
-                                            {% include 'patients/lnlrow.html' with lnl="I contralateral" radiobuttons=form.contra_I stat=stats.contra_I show_percent=show_percent %}
+                                            {% include 'dashboard/lnlrow.html' with lnl="I contralateral" radiobuttons=form.contra_I stat=stats.contra_I show_percent=show_percent %}
                                         </tr>
                                         <tr>
                                             <td>a</td>
-                                            {% include 'patients/lnlrow.html' with lnl="Ia contralateral" radiobuttons=form.contra_Ia stat=stats.contra_Ia show_percent=show_percent %}
+                                            {% include 'dashboard/lnlrow.html' with lnl="Ia contralateral" radiobuttons=form.contra_Ia stat=stats.contra_Ia show_percent=show_percent %}
                                         </tr>
                                         <tr>
                                             <td>b</td>
-                                            {% include 'patients/lnlrow.html' with lnl="Ib contralateral" radiobuttons=form.contra_Ib stat=stats.contra_Ib show_percent=show_percent %}
+                                            {% include 'dashboard/lnlrow.html' with lnl="Ib contralateral" radiobuttons=form.contra_Ib stat=stats.contra_Ib show_percent=show_percent %}
                                         </tr>
                                         <tr>
                                             <td rowspan="3">II</td>
                                             <td>both</td>
-                                            {% include 'patients/lnlrow.html' with lnl="II contralateral" radiobuttons=form.contra_II stat=stats.contra_II show_percent=show_percent %}
+                                            {% include 'dashboard/lnlrow.html' with lnl="II contralateral" radiobuttons=form.contra_II stat=stats.contra_II show_percent=show_percent %}
                                         </tr>
                                         <tr>
                                             <td>a</td>
-                                            {% include 'patients/lnlrow.html' with lnl="IIa contralateral" radiobuttons=form.contra_IIa stat=stats.contra_IIa show_percent=show_percent %}
+                                            {% include 'dashboard/lnlrow.html' with lnl="IIa contralateral" radiobuttons=form.contra_IIa stat=stats.contra_IIa show_percent=show_percent %}
                                         </tr>
                                         <tr>
                                             <td>b</td>
-                                            {% include 'patients/lnlrow.html' with lnl="IIb contralateral" radiobuttons=form.contra_IIb stat=stats.contra_IIb show_percent=show_percent %}
+                                            {% include 'dashboard/lnlrow.html' with lnl="IIb contralateral" radiobuttons=form.contra_IIb stat=stats.contra_IIb show_percent=show_percent %}
                                         </tr>
                                         <tr>
                                             <td colspan="2">III</td>
-                                            {% include 'patients/lnlrow.html' with lnl="III contralateral" radiobuttons=form.contra_III stat=stats.contra_III show_percent=show_percent %}
+                                            {% include 'dashboard/lnlrow.html' with lnl="III contralateral" radiobuttons=form.contra_III stat=stats.contra_III show_percent=show_percent %}
                                         </tr>
                                         <tr>
                                             <td colspan="2">IV</td>
-                                            {% include 'patients/lnlrow.html' with lnl="IV contralateral" radiobuttons=form.contra_IV stat=stats.contra_IV show_percent=show_percent %}
+                                            {% include 'dashboard/lnlrow.html' with lnl="IV contralateral" radiobuttons=form.contra_IV stat=stats.contra_IV show_percent=show_percent %}
                                         </tr>
                                         <tr>
                                             <td colspan="2">V</td>
-                                            {% include 'patients/lnlrow.html' with lnl="V contralateral" radiobuttons=form.contra_V stat=stats.contra_V show_percent=show_percent %}
+                                            {% include 'dashboard/lnlrow.html' with lnl="V contralateral" radiobuttons=form.contra_V stat=stats.contra_V show_percent=show_percent %}
                                         </tr>
                                         <tr>
                                             <td colspan="2">VII</td>
-                                            {% include 'patients/lnlrow.html' with lnl="VII contralateral" radiobuttons=form.contra_VII stat=stats.contra_VII show_percent=show_percent %}
+                                            {% include 'dashboard/lnlrow.html' with lnl="VII contralateral" radiobuttons=form.contra_VII stat=stats.contra_VII show_percent=show_percent %}
                                         </tr>
                                     </tbody>
                                 </table>
@@ -281,44 +281,44 @@
                                         <tr>
                                             <td rowspan="3">I</td>
                                             <td>both</td>
-                                            {% include 'patients/lnlrow.html' with lnl="I ipsilateral" radiobuttons=form.ipsi_I stat=stats.ipsi_I show_percent=show_percent %}
+                                            {% include 'dashboard/lnlrow.html' with lnl="I ipsilateral" radiobuttons=form.ipsi_I stat=stats.ipsi_I show_percent=show_percent %}
                                         </tr>
                                         <tr>
                                             <td>a</td>
-                                            {% include 'patients/lnlrow.html' with lnl="Ia ipsilateral" radiobuttons=form.ipsi_Ia stat=stats.ipsi_Ia show_percent=show_percent %}
+                                            {% include 'dashboard/lnlrow.html' with lnl="Ia ipsilateral" radiobuttons=form.ipsi_Ia stat=stats.ipsi_Ia show_percent=show_percent %}
                                         </tr>
                                         <tr>
                                             <td>b</td>
-                                            {% include 'patients/lnlrow.html' with lnl="Ib ipsilateral" radiobuttons=form.ipsi_Ib stat=stats.ipsi_Ib show_percent=show_percent %}
+                                            {% include 'dashboard/lnlrow.html' with lnl="Ib ipsilateral" radiobuttons=form.ipsi_Ib stat=stats.ipsi_Ib show_percent=show_percent %}
                                         </tr>
                                         <tr>
                                             <td rowspan="3">II</td>
                                             <td>both</td>
-                                            {% include 'patients/lnlrow.html' with lnl="II ipsilateral" radiobuttons=form.ipsi_II stat=stats.ipsi_II show_percent=show_percent %}
+                                            {% include 'dashboard/lnlrow.html' with lnl="II ipsilateral" radiobuttons=form.ipsi_II stat=stats.ipsi_II show_percent=show_percent %}
                                         </tr>
                                         <tr>
                                             <td>a</td>
-                                            {% include 'patients/lnlrow.html' with lnl="IIa ipsilateral" radiobuttons=form.ipsi_IIa stat=stats.ipsi_IIa show_percent=show_percent %}
+                                            {% include 'dashboard/lnlrow.html' with lnl="IIa ipsilateral" radiobuttons=form.ipsi_IIa stat=stats.ipsi_IIa show_percent=show_percent %}
                                         </tr>
                                         <tr>
                                             <td>b</td>
-                                            {% include 'patients/lnlrow.html' with lnl="IIb ipsilateral" radiobuttons=form.ipsi_IIb stat=stats.ipsi_IIb show_percent=show_percent %}
+                                            {% include 'dashboard/lnlrow.html' with lnl="IIb ipsilateral" radiobuttons=form.ipsi_IIb stat=stats.ipsi_IIb show_percent=show_percent %}
                                         </tr>
                                         <tr>
                                             <td colspan="2">III</td>
-                                            {% include 'patients/lnlrow.html' with lnl="III ipsilateral" radiobuttons=form.ipsi_III stat=stats.ipsi_III show_percent=show_percent %}
+                                            {% include 'dashboard/lnlrow.html' with lnl="III ipsilateral" radiobuttons=form.ipsi_III stat=stats.ipsi_III show_percent=show_percent %}
                                         </tr>
                                         <tr>
                                             <td colspan="2">IV</td>
-                                            {% include 'patients/lnlrow.html' with lnl="IV ipsilateral" radiobuttons=form.ipsi_IV stat=stats.ipsi_IV show_percent=show_percent %}
+                                            {% include 'dashboard/lnlrow.html' with lnl="IV ipsilateral" radiobuttons=form.ipsi_IV stat=stats.ipsi_IV show_percent=show_percent %}
                                         </tr>
                                         <tr>
                                             <td colspan="2">V</td>
-                                            {% include 'patients/lnlrow.html' with lnl="V ipsilateral" radiobuttons=form.ipsi_V stat=stats.ipsi_V show_percent=show_percent %}
+                                            {% include 'dashboard/lnlrow.html' with lnl="V ipsilateral" radiobuttons=form.ipsi_V stat=stats.ipsi_V show_percent=show_percent %}
                                         </tr>
                                         <tr>
                                             <td colspan="2">VII</td>
-                                            {% include 'patients/lnlrow.html' with lnl="VII ipsilateral" radiobuttons=form.ipsi_VII stat=stats.ipsi_VII show_percent=show_percent %}
+                                            {% include 'dashboard/lnlrow.html' with lnl="VII ipsilateral" radiobuttons=form.ipsi_VII stat=stats.ipsi_VII show_percent=show_percent %}
                                         </tr>
                                     </tbody>
                                 </table>
@@ -392,6 +392,6 @@
     {% include 'footer.html' %}
 </body>
 
-<script src="{% static 'patients/dashboard.js' %}"></script>
+<script src="{% static 'dashboard/dashboard.js' %}"></script>
 
 </html>

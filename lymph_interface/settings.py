@@ -106,6 +106,7 @@ INSTALLED_APPS = [
     # my apps
     "accounts.apps.AccountsConfig",
     "patients.apps.PatientsConfig",
+    "dashboard.apps.DashboardConfig",
 
     # third party apps
     "django_filters",

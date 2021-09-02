@@ -1,10 +1,7 @@
 from django.db import models
 from django.urls import reverse
 
-import pandas
-import numpy as np
-
-from .loggers import ModeLoggerMixin
+from lymph_interface.loggers import ModeLoggerMixin
 
 
 class Patient(ModeLoggerMixin, models.Model):

@@ -1,18 +1,13 @@
 # from lymph_interface import patients
-from django.shortcuts import render, get_object_or_404, redirect
-from django.http import HttpResponse, Http404
-from django.urls.base import reverse, reverse_lazy
+from django.shortcuts import render
+from django.http import HttpResponse
+from django.urls.base import reverse
 from django.views import generic
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
 from django.conf import settings
 
-import django_filters
-
-from typing import Any, Dict, List, Optional, Sequence
-import time
-import os
-from numpy import e, errstate
+from typing import Any, Dict
 from pathlib import Path
 import logging
 logger = logging.getLogger(__name__)
@@ -21,13 +16,10 @@ from .models import Patient, Tumor, Diagnose
 from .forms import (PatientForm, 
                     TumorForm, 
                     DiagnoseForm, 
-                    DataFileForm, 
-                    DashboardForm, 
-                    ValidationError)
+                    DataFileForm)
 from .ioports import export_to_pandas, import_from_pandas, ParsingError
-from . import query
 from .filters import PatientFilter
-from .loggers import ViewLoggerMixin
+from lymph_interface.loggers import ViewLoggerMixin
 
 
 # PATIENT related views
@@ -102,86 +94,6 @@ class DeletePatientView(ViewLoggerMixin, LoginRequiredMixin, generic.DeleteView)
     template_name = "patients/patient_delete.html"
     success_url = "/patients"
     action = "delete_patient"
-    
-    
-class DashboardView(ViewLoggerMixin, generic.ListView):
-    model = Patient
-    form_class = DashboardForm
-    context_object_name = "patient_list"
-    template_name = "patients/dashboard.html"
-    action = "display_dashboard"
-
-    def get_queryset(self):
-        self.form = self.form_class(self.request.GET or None)
-        queryset = Patient.objects.all()
-        start_querying = time.time()
-
-        if self.request.method == "GET" and self.form.is_valid():
-            queryset = query.patient_specific(
-                patient_queryset=queryset, **self.form.cleaned_data
-            )
-            queryset = query.tumor_specific(
-                patient_queryset=queryset, **self.form.cleaned_data
-            )
-            queryset, combined_involvement = query.diagnose_specific(
-                patient_queryset=queryset, **self.form.cleaned_data
-            )
-            queryset, counts = query.count_patients(
-                patient_queryset=queryset,
-                combined_involvement=combined_involvement
-            )
-            self.stats = counts
-
-        else:
-            # fill form with initial values from respective form fields
-            initial_data = {}
-            for field_name, field in self.form.fields.items():
-                initial_data[field_name] = self.form.get_initial_for_field(
-                    field, field_name
-                )
-            initial_form = self.form_class(initial_data)
-
-            if initial_form.is_valid():
-                queryset = query.patient_specific(patient_queryset=queryset, 
-                                                **initial_form.cleaned_data)
-                queryset = query.tumor_specific(patient_queryset=queryset,
-                                               **initial_form.cleaned_data)
-                queryset, combined_involvement = query.diagnose_specific(
-                    patient_queryset=queryset, **initial_form.cleaned_data
-                )
-                queryset, counts = query.count_patients(
-                    patient_queryset=queryset,
-                    combined_involvement=combined_involvement
-                )
-                self.stats = counts
-            
-            else:
-                self.logger.warn("Initial form is invalid, errors are: "
-                                 f"{initial_form.errors.as_data()}")
-                queryset = Patient.objects.none()
-        
-        end_querying = time.time()
-        self.logger.info(
-            f'Querying finished in {end_querying - start_querying:.3f} seconds'
-        ) 
-        return queryset
-
-    def get_context_data(self, **kwargs: Any) -> Dict[str, Any]:
-        context = super(DashboardView, self).get_context_data(**kwargs)
-        context["show_filter"] = False
-        context["form"] = self.form
-        
-        if self.form.is_valid():
-            context["show_percent"] = self.form.cleaned_data["show_percent"]
-            
-        context["stats"] = self.stats
-        return context
-
-    def get_template_names(self) -> str:
-        if self.request.GET.get("render") == "subset_list":
-            return "patients/list.html"
-        else:
-            return super(DashboardView, self).get_template_names()
 
 
 @login_required

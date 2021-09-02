@@ -4,7 +4,7 @@ import numpy as np
 import logging
 from typing import Optional, List, Dict
 
-from .models import Patient, Diagnose, Tumor
+from patients.models import Patient, Diagnose, Tumor
 
 logger = logging.getLogger(__name__)
 
