@@ -47,7 +47,8 @@ class Patient(ModeLoggerMixin, models.Model):
     
     def __str__(self):
         """Report some patient specifics."""
-        return f"pk {self.pk} | {self.age} yo | {self.gender}"
+        return (f"#{self.pk}: {self.gender} ({self.age}) at "
+                f"{self.institution.shortname}")
     
     def get_absolute_url(self):
         return reverse("patients:detail", args=[self.pk])
@@ -147,7 +148,7 @@ class Tumor(ModeLoggerMixin, models.Model):
     
     def __str__(self):
         """Report some main characteristics."""
-        return f"pk {self.pk} | belongs to {self.patient.pk} | subsite {self.subsite} | T{self.t_stage}"
+        return f"#{self.pk}: T{self.t_stage} tumor of patient #{self.patient.pk}"
     
     def save(self, *args, **kwargs):
         """Extract location and update patient's T-stage upon saving tumor."""
@@ -206,7 +207,8 @@ class Diagnose(models.Model):
     
     def __str__(self):
         """Report some info for admin view."""
-        return f"pk {self.pk} | belongs to {self.patient.pk} | {self.get_modality_display()} | {self.side} side"
+        return (f"#{self.pk}: {self.get_modality_display()} diagnose "
+                f"({self.side}) of patient #{self.patient.pk}")
     
     
 # add lymph node level fields to model 'Diagnose'

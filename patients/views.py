@@ -1,8 +1,9 @@
+from accounts.models import User
 from django.shortcuts import render
 from django.http import HttpResponse
 from django.urls.base import reverse
 from django.views import generic
-from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
 from django.conf import settings
 
@@ -18,6 +19,7 @@ from .forms import (PatientForm,
                     DataFileForm)
 from .ioports import export_to_pandas, import_from_pandas, ParsingError
 from .filters import PatientFilter
+from .mixins import InstitutionCheckPatientMixin, InstitutionCheckObjectMixin
 from core.loggers import ViewLoggerMixin
 
 
@@ -74,10 +76,15 @@ class CreatePatientView(ViewLoggerMixin,
         context["action"] = self.action
         return context
     
+    def get_form_kwargs(self) -> Dict[str, Any]:
+        kwargs = super().get_form_kwargs()
+        kwargs["user"] = self.request.user
+        return kwargs
+    
       
 class UpdatePatientView(ViewLoggerMixin, 
                         LoginRequiredMixin, 
-                        UserPassesTestMixin,
+                        InstitutionCheckPatientMixin,
                         generic.UpdateView):
     model = Patient
     form_class = PatientForm
@@ -92,37 +99,20 @@ class UpdatePatientView(ViewLoggerMixin,
         context["action"] = self.action
         return context
     
-    def test_func(self) -> Optional[bool]:
-        """Make sure editing user is either superuser or comes from the 
-        institution that added the user in the first place."""
-        user = self.request.user
-        if user.is_superuser:
-            return True
-        
-        user_institution = user.institution
-        patient_institution = self.object.institution
-        return user_institution == patient_institution
+    def get_form_kwargs(self) -> Dict[str, Any]:
+        kwargs = super().get_form_kwargs()
+        kwargs["user"] = self.request.user
+        return kwargs
     
     
 class DeletePatientView(ViewLoggerMixin, 
                         LoginRequiredMixin, 
-                        UserPassesTestMixin,
+                        InstitutionCheckPatientMixin,
                         generic.DeleteView):
     model = Patient
     template_name = "patients/patient_delete.html"
     success_url = "/patients"
     action = "delete_patient"
-    
-    def test_func(self) -> Optional[bool]:
-        """Make sure editing user is either superuser or comes from the 
-        institution that added the user in the first place."""
-        user = self.request.user
-        if user.is_superuser:
-            return True
-        
-        user_institution = user.institution
-        patient_institution = self.object.institution
-        return user_institution == patient_institution
 
 
 @login_required
@@ -130,7 +120,7 @@ def upload_patients(request):
     """View to load many patients at once from a CSV file using pandas. This 
     requires the CSV file to be formatted in a certain way."""
     if request.method == "POST":
-        form = DataFileForm(request.POST, request.FILES)
+        form = DataFileForm(request.POST, request.FILES, user=request.user)
         
         # custom validator creates pandas DataFrame from uploaded CSV
         if form.is_valid():
@@ -194,6 +184,7 @@ def generate_and_download_csv(request):
 # TUMOR related views
 class CreateTumorView(ViewLoggerMixin, 
                       LoginRequiredMixin,
+                      InstitutionCheckObjectMixin,
                       generic.CreateView):
     model = Tumor
     form_class = TumorForm
@@ -226,7 +217,10 @@ class CreateTumorView(ViewLoggerMixin,
         return context
     
     
-class UpdateTumorView(ViewLoggerMixin, LoginRequiredMixin, generic.UpdateView):
+class UpdateTumorView(ViewLoggerMixin, 
+                      LoginRequiredMixin, 
+                      InstitutionCheckObjectMixin,
+                      generic.UpdateView):
     model = Tumor
     form_class = TumorForm
     template_name = "patients/patient_detail.html"
@@ -259,7 +253,10 @@ class UpdateTumorView(ViewLoggerMixin, LoginRequiredMixin, generic.UpdateView):
         return context
     
     
-class DeleteTumorView(ViewLoggerMixin, LoginRequiredMixin, generic.DeleteView):
+class DeleteTumorView(ViewLoggerMixin, 
+                      LoginRequiredMixin, 
+                      InstitutionCheckObjectMixin,
+                      generic.DeleteView):
     model = Tumor
     template_name = "patients/patient_detail.html"
     action = "delete_tumor"
@@ -291,7 +288,10 @@ class DeleteTumorView(ViewLoggerMixin, LoginRequiredMixin, generic.DeleteView):
 
 
 # DIAGNOSE related views
-class CreateDiagnoseView(ViewLoggerMixin, LoginRequiredMixin, generic.CreateView):
+class CreateDiagnoseView(ViewLoggerMixin, 
+                         LoginRequiredMixin, 
+                         InstitutionCheckObjectMixin,
+                         generic.CreateView):
     model = Diagnose
     form_class = DiagnoseForm
     template_name = "patients/patient_detail.html"
@@ -321,7 +321,10 @@ class CreateDiagnoseView(ViewLoggerMixin, LoginRequiredMixin, generic.CreateView
         return context
     
     
-class UpdateDiagnoseView(ViewLoggerMixin, LoginRequiredMixin, generic.UpdateView):
+class UpdateDiagnoseView(ViewLoggerMixin, 
+                         LoginRequiredMixin, 
+                         InstitutionCheckObjectMixin,
+                         generic.UpdateView):
     model = Diagnose
     form_class = DiagnoseForm
     template_name = "patients/patient_detail.html"
@@ -354,7 +357,10 @@ class UpdateDiagnoseView(ViewLoggerMixin, LoginRequiredMixin, generic.UpdateView
         return context
     
     
-class DeleteDiagnoseView(ViewLoggerMixin, LoginRequiredMixin, generic.DeleteView):
+class DeleteDiagnoseView(ViewLoggerMixin, 
+                         LoginRequiredMixin, 
+                         InstitutionCheckObjectMixin,
+                         generic.DeleteView):
     model = Diagnose
     template_name = "patients/patient_detail.html"
     action = "delete_diagnose"

@@ -42,6 +42,11 @@ class PatientForm(FormLoggerMixin, forms.ModelForm):
                                                      attrs={"class": "select"}),
                    "n_stage": widgets.Select(attrs={"class": "select"}),
                    "m_stage": widgets.Select(attrs={"class": "select"})}
+    
+    def __init__(self, *args, **kwargs):
+        user = kwargs.pop("user")
+        super().__init__(*args, **kwargs)
+        self.user = user
 
     first_name = forms.CharField(
         widget=widgets.TextInput(attrs={"class": "input",
@@ -63,7 +68,7 @@ class PatientForm(FormLoggerMixin, forms.ModelForm):
 
         patient.hash_value = self.cleaned_data["hash_value"]
         patient.age = self._compute_age()
-        patient.institution = self.request.user.institution
+        patient.institution = self.user.institution
         
         if commit:
             patient.save()

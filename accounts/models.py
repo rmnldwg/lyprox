@@ -282,7 +282,7 @@ class Institution(models.Model):
     logo = models.ImageField(upload_to="institution_logos/", blank=True)
     
     def __str__(self):
-        return self.shortname
+        return f"{self.shortname}, {self.get_country_display()}"
 
 
 class UserManager(BaseUserManager):
@@ -356,4 +356,4 @@ class User(AbstractBaseUser, PermissionsMixin):
     EMAIL_FIELD = "email"
     
     def __str__(self):
-        return f"{self.email}, since {self.date_joined}"
+        return f"{self.first_name} {self.last_name}, {self.institution.shortname}"
