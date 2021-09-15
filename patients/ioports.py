@@ -50,9 +50,10 @@ def get_model_fields(model, remove: List[str] = []):
     return field_names
 
 
-def row2patient(row, anonymize: List[str]):
+def row2patient(row, user, anonymize: List[str]):
     """Create a `Patient` instance from a row of a `DataFrame` containing the 
-    appropriate information."""
+    appropriate information, as well as the user that uploaded the information.
+    """
     patient_dict = row.to_dict()
     _ = nan_to_None
     
@@ -63,7 +64,9 @@ def row2patient(row, anonymize: List[str]):
         hash_value = compute_hash(*patient_dict)
     
     patient_fields = get_model_fields(
-        Patient, remove=["id", "hash_value", "tumor", "diagnose", "t_stage"]
+        Patient, remove=[
+            "id", "hash_value", "tumor", "diagnose", "t_stage", "institution"
+        ]
     )
     
     valid_patient_dict = {}
@@ -77,6 +80,7 @@ def row2patient(row, anonymize: List[str]):
     try:
         new_patient = Patient(
             hash_value=hash_value,
+            institution=user.institution,
             **valid_patient_dict
         )
         new_patient.save()
@@ -163,6 +167,7 @@ def row2diagnoses(row, patient):
 
 def import_from_pandas(
     data_frame: pd.DataFrame, 
+    user,
     anonymize: List[str] = ["id"]
 ):
     """Import patients from pandas `DataFrame`."""
@@ -182,7 +187,7 @@ def import_from_pandas(
         # skip row if patient is already in database
         try:
             new_patient = row2patient(
-                patient_row, anonymize=anonymize
+                patient_row, user=user, anonymize=anonymize
             )
         except IntegrityError:
             msg = ("Skipping row")

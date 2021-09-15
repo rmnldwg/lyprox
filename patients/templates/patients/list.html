@@ -122,6 +122,7 @@
                     <th>gender</th>
                     <th>Age</th>
                     <th>TNM stage</th>
+                    <th>Institution</th>
                     <th></th>
                 </tr>
             </thead>
@@ -135,6 +136,11 @@
                     <td>{{ patient.gender }} </td>
                     <td>{{ patient.age }} </td>
                     <td>{{ patient.get_t_stage_display }} {{ patient.get_n_stage_display }} {{ patient.get_m_stage_display }} </td>
+                    <td class="py-1">
+                        <span class="icon is-medium">
+                            <img class="institution-logo" src="{{ patient.institution.logo.url }}" alt="{{ patient.institution.shortname }}" title="{{ patient.institution.shortname }}">
+                        </span>
+                    </td>
                     <td>
                         <div class="buttons is-grouped is-right">
                             <a href="{% url 'patients:detail' patient.pk %}" class="tag button is-info is-small">

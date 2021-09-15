@@ -120,14 +120,14 @@ def upload_patients(request):
     """View to load many patients at once from a CSV file using pandas. This 
     requires the CSV file to be formatted in a certain way."""
     if request.method == "POST":
-        form = DataFileForm(request.POST, request.FILES, user=request.user)
+        form = DataFileForm(request.POST, request.FILES)
         
         # custom validator creates pandas DataFrame from uploaded CSV
         if form.is_valid():
             data_frame = form.cleaned_data["data_frame"]
             # creating patients from the resulting pandas DataFrame
             try:
-                num_new, num_skipped = import_from_pandas(data_frame)
+                num_new, num_skipped = import_from_pandas(data_frame, request.user)
             except ParsingError as pe:
                 logger.error(pe.message)
                 form = DataFileForm()
