@@ -1,0 +1,6 @@
+-r requirements.txt
+pytest==6.2
+pytest-django==4.3
+factory_boy==3.2
+faker==8.13
+coverage==5.5
