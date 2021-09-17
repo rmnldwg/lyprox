@@ -279,7 +279,7 @@ class Institution(models.Model):
     city = models.CharField(max_length=100)
     country = CountryField(blank=False)
     phone = PhoneNumberField()
-    logo = models.FileField(upload_to="institution_logos/", blank=True)
+    logo = models.FileField(upload_to="institution_logos/", blank=True, null=True)
     
     def __str__(self):
         return f"{self.shortname}, {self.get_country_display()}"

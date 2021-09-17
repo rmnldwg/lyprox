@@ -138,7 +138,11 @@
                     <td>{{ patient.get_t_stage_display }} {{ patient.get_n_stage_display }} {{ patient.get_m_stage_display }} </td>
                     <td class="py-1">
                         <span class="icon is-medium">
+                            {% if patient.institution.logo %}
                             <img class="institution-logo" src="{{ patient.institution.logo.url }}" alt="{{ patient.institution.shortname }}" title="{{ patient.institution.shortname }}">
+                            {% else %}
+                            <i class="fas fa-university"></i>
+                            {% endif %}
                         </span>
                     </td>
                     <td>
