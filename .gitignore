@@ -64,10 +64,11 @@ coverage.xml
 local_settings.py
 db.sqlite3
 db.sqlite3-journal
-static/
+./static/
 media/
 uploads/
 downloads/
+*/migrations
 
 # Flask stuff:
 instance/
@@ -137,7 +138,7 @@ dmypy.json
 .pyre/
 
 # Bulma
-**/custom_bulma/node_modules
+**/custom_bulma
 
 # screenshots from Bertrand's interface
 bertrands_interface/

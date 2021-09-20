@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="128.0px"
+   height="128.0px"
+   viewBox="0 0 128.0 128.0"
+   version="1.1"
+   id="SVGRoot"
+   sodipodi:docname="data-paper.svg"
+   inkscape:version="1.1 (c68e22c387, 2021-05-23)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview829"
+     pagecolor="#ffffff"
+     bordercolor="#999999"
+     borderopacity="1"
+     inkscape:pageshadow="0"
+     inkscape:pageopacity="0"
+     inkscape:pagecheckerboard="0"
+     inkscape:document-units="px"
+     showgrid="false"
+     inkscape:zoom="3.1108586"
+     inkscape:cx="49.664745"
+     inkscape:cy="71.523662"
+     inkscape:window-width="1920"
+     inkscape:window-height="1017"
+     inkscape:window-x="1912"
+     inkscape:window-y="-8"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="layer1"
+     showguides="true"
+     inkscape:snap-bbox="true"
+     inkscape:bbox-paths="true"
+     inkscape:bbox-nodes="true"
+     inkscape:snap-page="true"
+     inkscape:snap-bbox-midpoints="true"
+     inkscape:snap-global="false">
+    <inkscape:grid
+       type="xygrid"
+       id="grid892" />
+  </sodipodi:namedview>
+  <defs
+     id="defs824" />
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <rect
+       style="fill:#ffeede;fill-opacity:1;stroke:none;stroke-width:3.77197;stroke-linecap:round"
+       id="rect8743"
+       width="128"
+       height="128"
+       x="0"
+       y="0" />
+    <g
+       id="g3035"
+       transform="matrix(0.79382236,0,0,0.79382236,13.195369,30.033189)"
+       style="fill:#e47300;fill-opacity:1">
+      <g
+         aria-label="COMING"
+         id="text1889"
+         style="font-weight:900;font-size:40px;line-height:1.25;font-family:Gilroy;-inkscape-font-specification:'Gilroy Heavy';fill:#e47300;fill-opacity:1">
+        <path
+           d="m -1.1999162,42.067651 q -6.32,0 -10.4799998,-4.16 -4.12,-4.2 -4.12,-10.44 0,-6.24 4.12,-10.4 4.1599998,-4.2 10.4799998,-4.2 3.8,0 7.04,1.8 3.24,1.8 5.0800002,4.84 l -6.2000002,3.56 q -0.8,-1.48 -2.4,-2.32 -1.55999995,-0.88 -3.52,-0.88 -3.36,0 -5.44,2.12 -2.04,2.08 -2.04,5.48 0,3.4 2.04,5.52 2.08,2.08 5.44,2.08 1.96000005,0 3.52,-0.84 1.6,-0.88 2.4,-2.4 l 6.2000002,3.6 q -1.8400002,3.08 -5.0800002,4.88 -3.2,1.76 -7.04,1.76 z"
+           id="path3852"
+           style="fill:#e47300;fill-opacity:1" />
+        <path
+           d="m 36.840051,37.867651 q -4.24,4.2 -10.4,4.2 -6.16,0 -10.44,-4.2 -4.24,-4.24 -4.24,-10.4 0,-6.16 4.24,-10.36 4.28,-4.24 10.44,-4.24 6.16,0 10.4,4.24 4.28,4.2 4.28,10.36 0,6.16 -4.28,10.4 z m -15.8,-4.92 q 2.16,2.12 5.4,2.12 3.24,0 5.4,-2.12 2.16,-2.16 2.16,-5.48 0,-3.32 -2.16,-5.44 -2.16,-2.16 -5.4,-2.16 -3.24,0 -5.4,2.16 -2.16,2.12 -2.16,5.44 0,3.32 2.16,5.48 z"
+           id="path3854"
+           style="fill:#e47300;fill-opacity:1" />
+        <path
+           d="m 73.000011,13.467651 v 28 h -7.12 v -15.08 l -6.8,11.24 h -0.72 l -6.76,-11.2 v 15.04 h -7.16 v -28 h 7.16 l 7.12,11.96 7.16,-11.96 z"
+           id="path3856"
+           style="fill:#e47300;fill-opacity:1" />
+        <path
+           d="m 77.439965,13.467651 h 7.16 v 28 h -7.16 z"
+           id="path3858"
+           style="fill:#e47300;fill-opacity:1" />
+        <path
+           d="m 104.43995,13.467651 h 7.12 v 28 h -5.52 l -9.880002,-14.08 v 14.08 h -7.16 v -28 h 5.56 l 9.880002,14.08 z"
+           id="path3860"
+           style="fill:#e47300;fill-opacity:1" />
+        <path
+           d="m 143.79992,25.427651 v 2.84 q 0,6.16 -3.88,10 -3.84,3.8 -10,3.8 -6.56,0 -10.8,-4.2 -4.2,-4.2 -4.2,-10.36 0,-6.16 4.2,-10.4 4.2,-4.24 10.4,-4.24 3.92,0 7.16,1.76 3.28,1.76 5.12,4.68 l -6.08,3.48 q -0.84,-1.32 -2.48,-2.12 -1.6,-0.8 -3.64,-0.8 -3.32,0 -5.44,2.16 -2.12,2.16 -2.12,5.52 0,3.24 2.08,5.48 2.12,2.24 5.92,2.24 4.88,0 6.44,-3.68 h -6.8 v -6.16 z"
+           id="path3862"
+           style="fill:#e47300;fill-opacity:1" />
+      </g>
+      <g
+         aria-label="SOON"
+         id="text2421"
+         style="font-weight:900;font-size:40px;line-height:1.25;font-family:Gilroy;-inkscape-font-specification:'Gilroy Heavy';fill:#e47300;fill-opacity:1">
+        <path
+           d="m 20.22008,77.749124 q -4.44,0 -7.36,-1.88 -2.9200004,-1.88 -4.0800004,-5.08 l 6.1200004,-3.56 q 1.56,3.72 5.52,3.72 3.28,0 3.28,-1.88 0,-1.24 -1.88,-2 -0.8,-0.32 -3.52,-1.08 -3.84,-1.12 -6.08,-3.12 -2.2400004,-2.04 -2.2400004,-5.64 0,-3.88 2.7600004,-6.28 2.8,-2.4 6.96,-2.4 3.52,0 6.24,1.64 2.72,1.64 4.16,4.76 l -6,3.52 q -1.32,-3.12 -4.36,-3.12 -1.28,0 -1.96,0.52 -0.64,0.52 -0.64,1.32 0,0.92 0.96,1.56 1,0.64 3.84,1.48 2.04,0.6 3.28,1.12 1.24,0.52 2.72,1.52 1.48,0.96 2.2,2.52 0.72,1.52 0.72,3.6 0,4.12 -2.92,6.44 -2.92,2.32 -7.72,2.32 z"
+           id="path3865"
+           style="fill:#e47300;fill-opacity:1" />
+        <path
+           d="m 57.46,73.549124 q -4.24,4.2 -10.4,4.2 -6.16,0 -10.44,-4.2 -4.24,-4.24 -4.24,-10.4 0,-6.16 4.24,-10.36 4.28,-4.24 10.44,-4.24 6.16,0 10.4,4.24 4.28,4.2 4.28,10.36 0,6.16 -4.28,10.4 z m -15.8,-4.92 q 2.16,2.12 5.4,2.12 3.24,0 5.4,-2.12 2.16,-2.16 2.16,-5.48 0,-3.32 -2.16,-5.44 -2.16,-2.16 -5.4,-2.16 -3.24,0 -5.4,2.16 -2.16,2.12 -2.16,5.44 0,3.32 2.16,5.48 z"
+           id="path3867"
+           style="fill:#e47300;fill-opacity:1" />
+        <path
+           d="m 89.059961,73.549124 q -4.24,4.2 -10.4,4.2 -6.16,0 -10.44,-4.2 -4.24,-4.24 -4.24,-10.4 0,-6.16 4.24,-10.36 4.28,-4.24 10.44,-4.24 6.16,0 10.4,4.24 4.28,4.2 4.28,10.36 0,6.16 -4.28,10.4 z m -15.8,-4.92 q 2.16,2.12 5.4,2.12 3.24,0 5.4,-2.12 2.16,-2.16 2.16,-5.48 0,-3.32 -2.16,-5.44 -2.16,-2.16 -5.4,-2.16 -3.24,0 -5.4,2.16 -2.16,2.12 -2.16,5.44 0,3.32 2.16,5.48 z"
+           id="path3869"
+           style="fill:#e47300;fill-opacity:1" />
+        <path
+           d="m 112.09992,49.149124 h 7.12 v 28 h -5.52 l -9.88,-14.08 v 14.08 h -7.159999 v -28 h 5.559999 l 9.88,14.08 z"
+           id="path3871"
+           style="fill:#e47300;fill-opacity:1" />
+      </g>
+    </g>
+  </g>
+</svg>

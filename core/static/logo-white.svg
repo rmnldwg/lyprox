@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="32.17778mm"
+   height="9.7888699mm"
+   viewBox="0 0 32.17778 9.7888694"
+   version="1.1"
+   id="svg17430"
+   inkscape:version="1.1 (c68e22c387, 2021-05-23)"
+   sodipodi:docname="logo-white.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview17432"
+     pagecolor="#ffffff"
+     bordercolor="#999999"
+     borderopacity="1"
+     inkscape:pageshadow="0"
+     inkscape:pageopacity="0"
+     inkscape:pagecheckerboard="0"
+     inkscape:document-units="mm"
+     showgrid="false"
+     fit-margin-top="0"
+     fit-margin-left="0"
+     fit-margin-right="0"
+     fit-margin-bottom="0"
+     inkscape:zoom="6.2217172"
+     inkscape:cx="18.403279"
+     inkscape:cy="8.1167302"
+     inkscape:window-width="1920"
+     inkscape:window-height="1017"
+     inkscape:window-x="1912"
+     inkscape:window-y="-8"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="g2708-0" />
+  <defs
+     id="defs17427" />
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(-73.625583,-134.94922)">
+    <g
+       id="g2708-0"
+       transform="translate(45.959115,57.833251)">
+      <g
+         id="g2656-9"
+         style="fill:#ffffff;fill-opacity:1">
+        <g
+           aria-label="LyPro"
+           id="text13140-1"
+           style="font-weight:800;font-size:10.5833px;line-height:1.25;font-family:Gilroy;-inkscape-font-specification:'Gilroy Ultra-Bold';stroke-width:0.264583">
+          <path
+             d="m 29.359796,82.894456 h 2.645825 v 1.629828 h -4.339153 v -7.408309 h 1.693328 z"
+             style="text-align:end;text-anchor:end"
+             id="path213" />
+          <path
+             d="m 35.603928,79.232635 h 1.693328 l -1.809744,5.1329 q -0.444499,1.248829 -1.174747,1.788578 -0.719664,0.539748 -1.841494,0.486831 v -1.481662 q 0.550332,0 0.846664,-0.201082 0.296333,-0.1905 0.476249,-0.677332 l -2.106077,-5.048233 h 1.746244 l 1.174747,3.238489 z"
+             style="text-align:end;text-anchor:end"
+             id="path215" />
+          <path
+             d="m 40.736816,77.115975 q 1.09008,0 1.841494,0.740831 0.751414,0.740831 0.751414,1.799161 0,1.058329 -0.751414,1.79916 -0.751414,0.740831 -1.841494,0.740831 H 39.62557 v 2.328326 h -1.693328 v -7.408309 z m 0,3.492488 q 0.391582,0 0.645581,-0.275165 0.253999,-0.275166 0.253999,-0.677331 0,-0.402166 -0.253999,-0.677332 Q 41.128398,78.70347 40.736816,78.70347 H 39.62557 v 1.904993 z"
+             style="text-align:end;text-anchor:end"
+             id="path217" />
+          <path
+             d="m 45.605112,80.174548 q 0.148167,-0.507998 0.592665,-0.772581 0.455082,-0.275165 0.99483,-0.275165 v 1.79916 q -0.582081,-0.09525 -1.09008,0.201083 -0.497415,0.285749 -0.497415,1.005414 v 2.391825 h -1.587495 v -5.291649 h 1.587495 z"
+             style="text-align:end;text-anchor:end"
+             id="path219" />
+          <path
+             d="m 52.304315,83.86812 q -0.814914,0.804331 -1.98966,0.804331 -1.174746,0 -1.98966,-0.804331 -0.814914,-0.814914 -0.814914,-1.989661 0,-1.174746 0.814914,-1.979077 0.814914,-0.814914 1.98966,-0.814914 1.174746,0 1.98966,0.814914 0.814914,0.804331 0.814914,1.979077 0,1.174747 -0.814914,1.989661 z m -2.857491,-1.09008 q 0.349249,0.349249 0.867831,0.349249 0.518582,0 0.867831,-0.349249 0.349248,-0.349249 0.349248,-0.899581 0,-0.550331 -0.349248,-0.89958 -0.349249,-0.349249 -0.867831,-0.349249 -0.518582,0 -0.867831,0.349249 -0.349248,0.349249 -0.349248,0.89958 0,0.550332 0.349248,0.899581 z"
+             style="text-align:end;text-anchor:end"
+             id="path221" />
+        </g>
+        <g
+           aria-label="X"
+           id="text14200-8"
+           style="font-weight:800;font-size:13.9841px;line-height:1.25;font-family:Gilroy;-inkscape-font-specification:'Gilroy Ultra-Bold';stroke-width:0.291336">
+          <path
+             d="m 59.844247,86.904839 h -0.85303 l -2.824788,-4.36304 -2.824788,4.36304 h -0.867014 l 3.258295,-5.034277 -3.076502,-4.754594 h 0.85303 l 2.656979,4.097342 2.642995,-4.097342 h 0.85303 l -3.076502,4.754594 z"
+             style="font-weight:300;-inkscape-font-specification:'Gilroy Light'"
+             id="path224" />
+        </g>
+      </g>
+    </g>
+  </g>
+</svg>
