@@ -35,10 +35,12 @@
                             {% if user.is_authenticated %}
                             <div class="buttons has-addons">
                                 <div class="button is-primary is-inverted">
-                                    <span class="icon mr-2">
-                                        <img src="{{ user.institution.logo.url }}" alt="{{ user.institution.shortname }} logo">
+                                    <span class="icon-text">
+                                        <span class="icon mr-2">
+                                            <img src="{{ user.institution.logo.url }}" alt="{{ user.institution.shortname }} logo">
+                                        </span>
+                                        <span>{{ user }}</span>
                                     </span>
-                                    <span>{{ user }}</span>
                                 </div>
                                 <a href="{% url 'accounts:logout' %}" class="button is-primary is-inverted is-outlined" title="logout">
                                     <span>Log out</span>
