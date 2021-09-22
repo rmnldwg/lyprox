@@ -22,6 +22,22 @@ def tf2arr(value):
             return np.array([0, 1, 0], dtype=int)
         else:
             return np.array([0, 0, 1], dtype=int)
+
+
+def gender2arr(value):
+    """Map 'male' and 'female' to the one-hot-array of length three. male is 
+    represented by [0,1,0], female by [0,0,1] and unknown with [1,0,0].
+    """
+    if value is None:
+        return np.array([1,0,0], dtype=int)
+    else:
+        if value == "male":
+            return np.array([0,1,0], dtype=int)
+        elif value == "female":
+            return np.array([0,0,1], dtype=int)
+        else:
+            return None
+    
         
         
 def subsite2arr(subsite):
@@ -52,6 +68,7 @@ def side2arr(side):
 
 def patient_specific(
     patient_queryset: QuerySet = Patient.objects.all(),
+    gender: Optional[str] = None,
     nicotine_abuse: Optional[bool] = None,
     hpv_status: Optional[bool] = None,
     neck_dissection: Optional[bool] = None,
@@ -198,7 +215,8 @@ def count_patients(
     patients = patient_queryset.prefetch_related('tumor_set')
     counts = {   # initialize counts of patient- & tumor-related fields
         'total': len(patients),
-         
+        
+        'gender': np.zeros(shape=(3,), dtype=int),
         'nicotine_abuse': np.zeros(shape=(3,), dtype=int),
         'hpv_status': np.zeros(shape=(3,), dtype=int),
         'neck_dissection': np.zeros(shape=(3,), dtype=int),
@@ -215,6 +233,7 @@ def count_patients(
     # loop through patients to populate the counts dictionary
     for patient in patients:
         # PATIENT specific counts
+        counts['gender'] += gender2arr(patient.gender)
         counts['nicotine_abuse'] += tf2arr(patient.nicotine_abuse)
         counts['hpv_status'] += tf2arr(patient.hpv_status)
         counts['neck_dissection'] += tf2arr(patient.neck_dissection)

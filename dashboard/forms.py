@@ -1,4 +1,5 @@
 from django import forms
+from django.db.models.expressions import Value
 
 from core.loggers import FormLoggerMixin
 from patients.models import Patient, Tumor, Diagnose
@@ -36,9 +37,10 @@ class ThreeWayToggle(forms.ChoiceField):
     
     def to_python(self, value):
         """Cast the string to an integer."""
-        if value not in ["", None]:
+        try:
             return int(value)
-        return 0
+        except ValueError:
+            return value
 
 
 
@@ -64,6 +66,9 @@ class DashboardForm(FormLoggerMixin, forms.Form):
     )
     
     # patient specific fields
+    gender = ThreeWayToggle(choices=[("male", "mars"), 
+                                     (0, "ban"), 
+                                     ("female", "venus")])
     nicotine_abuse = ThreeWayToggle()
     hpv_status = ThreeWayToggle()
     neck_dissection = ThreeWayToggle()
