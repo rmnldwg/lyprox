@@ -72,6 +72,7 @@ class DashboardForm(FormLoggerMixin, forms.Form):
     nicotine_abuse = ThreeWayToggle()
     hpv_status = ThreeWayToggle()
     neck_dissection = ThreeWayToggle()
+    n_status = ThreeWayToggle()
     
     # tumor specific info
     subsite__in = forms.MultipleChoiceField(

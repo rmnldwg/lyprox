@@ -32,6 +32,11 @@ class DashboardView(ViewLoggerMixin, generic.ListView):
             queryset, combined_involvement = query.diagnose_specific(
                 patient_queryset=queryset, **self.form.cleaned_data
             )
+            queryset, combined_involvement = query.n_zero_specific(
+                patient_queryset=queryset,
+                combined_involvement=combined_involvement,
+                n_status=self.form.cleaned_data['n_status']
+            )
             queryset, counts = query.count_patients(
                 patient_queryset=queryset,
                 combined_involvement=combined_involvement

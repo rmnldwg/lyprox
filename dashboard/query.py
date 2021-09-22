@@ -204,6 +204,38 @@ def diagnose_specific(
     return patient_queryset, combined_involvement
 
 
+def n_zero_specific(
+    patient_queryset: QuerySet,
+    combined_involvement: Dict[str, Dict[str, np.ndarray]],
+    n_status: Optional[bool] = None
+):
+    """Filter for N+ or N0. `n_status` is `True` when we only want to see N+ 
+    patients and `False` when we only want to see N0 patients.
+    """
+    if n_status is None:
+        return patient_queryset, combined_involvement
+    
+    patients = patient_queryset.values("id")
+    for pat in patients:
+        pat_id = pat["id"]
+        try:
+            has_ipsi_inv = any(combined_involvement["ipsi"][pat_id])
+        except KeyError:
+            has_ipsi_inv = False
+        
+        try:
+            has_contra_inv = any(combined_involvement["contra"][pat_id])
+        except KeyError:
+            has_contra_inv = False
+        
+        if n_status and not (has_ipsi_inv or has_contra_inv):
+            patient_queryset = patient_queryset.exclude(id=pat_id)
+        elif not n_status and (has_ipsi_inv or has_contra_inv):
+            patient_queryset = patient_queryset.exclude(id=pat_id)
+    
+    return patient_queryset, combined_involvement
+
+
 def count_patients(
     patient_queryset: QuerySet,
     combined_involvement: Dict[str, Dict[str, np.ndarray]]
@@ -220,6 +252,7 @@ def count_patients(
         'nicotine_abuse': np.zeros(shape=(3,), dtype=int),
         'hpv_status': np.zeros(shape=(3,), dtype=int),
         'neck_dissection': np.zeros(shape=(3,), dtype=int),
+        'n_zero': np.zeros(shape=(3,), dtype=int),
         
         'subsites': np.zeros(shape=(3,), dtype=int),
         't_stages': np.zeros(shape=(len(Patient.T_stages),), dtype=int),
@@ -244,6 +277,14 @@ def count_patients(
         counts['t_stages'][tumor.t_stage-1] += 1
         counts['central'] += side2arr(tumor.side)
         counts['extension'] += tf2arr(tumor.extension)
+        
+        # N0/N+ counts
+        has_contra = np.any(combined_involvement["contra"][patient.id])
+        has_ipsi = np.any(combined_involvement["ipsi"][patient.id])
+        if not has_ipsi and not has_contra:
+            counts['n_zero'] += np.array([0,0,1])
+        else:
+            counts['n_zero'] += np.array([0,1,0])
         
         # DIAGNOSE specific (involvement) counts
         for side in ['ipsi', 'contra']:
