@@ -24,9 +24,6 @@ function bothClickHandler(radio_both) {
             radio_a.value = 0;
             radio_b.value = 0;
         };
-    } else if (radio_both.value == -1) {
-        radio_a.value = -1;
-        radio_b.value = -1;
     };
 };
 
