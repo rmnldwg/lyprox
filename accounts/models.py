@@ -1,7 +1,7 @@
 from time import timezone
 from django.core.exceptions import ValidationError
 from django.db.models.expressions import Value
-from django.utils.translation import ugettext as _
+from django.utils.translation import gettext as _
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, BaseUserManager
 from django.utils import timezone
@@ -281,7 +281,7 @@ class Institution(ModelLoggerMixin, models.Model):
     city = models.CharField(max_length=100)
     country = CountryField(blank=False)
     phone = PhoneNumberField()
-    logo = models.FileField(upload_to="institution_logos/", blank=True)
+    logo = models.FileField(upload_to="institution_logos/", blank=True, null=True)
     
     def __str__(self):
         return f"{self.shortname}, {self.get_country_display()}"

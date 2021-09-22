@@ -41,7 +41,11 @@
                 <div class="control">
                     <span class="tag is-info is-medium">
                         <span class="icon" data-tooltip="{{ patient.institution.name }}">
+                            {% if patient.institution.logo %}
                             <img src="{{ patient.institution.logo.url }}" alt="{{ patient.institution.shortname }}">
+                            {% else %}
+                            <i class="fas fa-university"></i>
+                            {% endif %}
                         </span>
                     </span>
                 </div>

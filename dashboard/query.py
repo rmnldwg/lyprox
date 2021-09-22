@@ -229,7 +229,13 @@ def count_patients(
         # DIAGNOSE specific (involvement) counts
         for side in ['ipsi', 'contra']:
             for i,lnl in enumerate(Diagnose.LNLs):
-                tmp = combined_involvement[side][patient.id][i]
+                try:
+                    tmp = combined_involvement[side][patient.id][i]
+                except KeyError:
+                    # Not all patients have necessarily symmetric diagnoses, 
+                    # which my code takes care of in the `diagnose_specific` 
+                    # function, but not here, which is why this try is needed.
+                    pass
                 counts[f'{side}_{lnl}'] += tf2arr(tmp)
                 
     return patient_queryset, counts
