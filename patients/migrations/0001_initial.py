@@ -31,7 +31,7 @@ class Migration(migrations.Migration):
                 ('m_stage', models.PositiveSmallIntegerField(choices=[(0, 'M0'), (1, 'M1'), (2, 'MX')])),
                 ('institution', models.ForeignKey(blank=True, on_delete=django.db.models.deletion.PROTECT, to='accounts.institution')),
             ],
-            bases=(core.loggers.ModeLoggerMixin, models.Model),
+            bases=(core.loggers.ModelLoggerMixin, models.Model),
         ),
         migrations.CreateModel(
             name='Tumor',
@@ -46,7 +46,7 @@ class Migration(migrations.Migration):
                 ('stage_prefix', models.CharField(choices=[('c', 'c'), ('p', 'p')], max_length=1)),
                 ('patient', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='patients.patient')),
             ],
-            bases=(core.loggers.ModeLoggerMixin, models.Model),
+            bases=(core.loggers.ModelLoggerMixin, models.Model),
         ),
         migrations.CreateModel(
             name='Diagnose',

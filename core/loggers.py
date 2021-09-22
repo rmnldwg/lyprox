@@ -1,7 +1,7 @@
 import logging
 
 
-class ModeLoggerMixin(object):
+class ModelLoggerMixin(object):
     """Mixin for django models that provide logging capabilities."""
     
     @property

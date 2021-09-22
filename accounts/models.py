@@ -8,6 +8,8 @@ from django.utils import timezone
 
 from phonenumber_field.modelfields import PhoneNumberField
 
+from core.loggers import ModelLoggerMixin
+
 
 # ISO 3166-1 country names and codes adapted from http://opencountrycodes.appspot.com/python/
 COUNTRIES = (
@@ -271,7 +273,7 @@ class CountryField(models.CharField):
         return "CharField"
 
 
-class Institution(models.Model):
+class Institution(ModelLoggerMixin, models.Model):
     """Class for an institution like a hospital/clinic."""
     name = models.CharField(max_length=100, unique=True, blank=False)
     shortname = models.CharField(max_length=10, unique=True, blank=False)
@@ -320,7 +322,7 @@ class UserManager(BaseUserManager):
         return self.create_user(email, password, **extra_fields)
 
 
-class User(AbstractBaseUser, PermissionsMixin):
+class User(ModelLoggerMixin, AbstractBaseUser, PermissionsMixin):
     """Extending the base functionality of the default User class."""
     email = models.EmailField(
         "email address", unique=True, blank=False
@@ -356,4 +358,4 @@ class User(AbstractBaseUser, PermissionsMixin):
     EMAIL_FIELD = "email"
     
     def __str__(self):
-        return f"{self.first_name} {self.last_name}, {self.institution.shortname}"
+        return f"{self.first_name} {self.last_name}"

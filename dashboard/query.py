@@ -71,6 +71,7 @@ def patient_specific(
 
 def tumor_specific(
     patient_queryset: QuerySet = Patient.objects.all(),
+    # restrict to Oropharynx
     subsite__in: List[str] = ["C01.9",
                               "C09.0", "C09.1", "C09.8", "C09.9",
                               "C10.0", "C10.1", "C10.2", "C10.3", "C10.4", 

@@ -115,14 +115,49 @@
 
         <table class="block table is-fullwidth is-hoverable">
             <thead>
-                <tr>
-                    <th>Patient</th>
-                    <th>Hash</th>
-                    <th>Date of diagnosis</th>
-                    <th>gender</th>
+                <tr class="is-size-5">
+                    <th>
+                        <span class="icon-text">
+                            <span class="icon is-medium">
+                                <i class="fas fa-user"></i>
+                            </span>
+                        </span>
+                        <span>Patient</span>
+                    </th>
+                    <th>
+                        <span class="icon-text">
+                            <span class="icon is-medium">
+                                <i class="fas fa-key"></i>
+                            </span>
+                        </span>
+                        <span>Hash</span>
+                    </th>
+                    <th>
+                        <span class="icon-text">
+                            <span class="icon is-medium">
+                                <i class="far fa-calendar-alt"></i>
+                            </span>
+                        </span>
+                        <span>Diagnose date</span>
+                    </th>
+                    <th>
+                        <span class="icon-text">
+                            <span class="icon is-medium">
+                                <i class="fas fa-venus-mars"></i>
+                            </span>
+                        </span>
+                        <span>gender</span>
+                    </th>
                     <th>Age</th>
                     <th>TNM stage</th>
-                    <th>Institution</th>
+                    <th>
+                        <span class="icon-text">
+                            <span class="icon is-medium">
+                                <i class="fas fa-university"></i>
+                            </span>
+                        </span>
+                        <span>Institution</span>
+                    </th>
                     <th></th>
                 </tr>
             </thead>
@@ -133,16 +168,28 @@
                     <td>{{ patient.pk }} </td>
                     <td>{{ patient.hash_value }} </td>
                     <td>{{ patient.diagnose_date | date:"Y-m-d" }} </td>
-                    <td>{{ patient.gender }} </td>
+                    <td>
+                        <span class="icon-text">
+                            <span class="icon">
+                                {% if patient.gender == "male" %}
+                                <i class="fas fa-mars"></i>
+                                {% else %}
+                                <i class="fas fa-venus"></i>
+                                {% endif %}
+                            </span>
+                            <span>{{ patient.gender }}</span>
+                        </span>
+                    </td>
                     <td>{{ patient.age }} </td>
                     <td>{{ patient.get_t_stage_display }} {{ patient.get_n_stage_display }} {{ patient.get_m_stage_display }} </td>
-                    <td class="py-1">
-                        <span class="icon is-medium">
-                            {% if patient.institution.logo %}
-                            <img class="institution-logo" src="{{ patient.institution.logo.url }}" alt="{{ patient.institution.shortname }}" title="{{ patient.institution.shortname }}">
-                            {% else %}
-                            <i class="fas fa-university"></i>
-                            {% endif %}
+                    <td>
+                        <span class="icon-text">
+                            <span class="icon mr-2">
+                                <img src="{{ patient.institution.logo.url }}" alt="{{ patient.institution.shortname }} logo" title="{{ patient.institution.shortname }}">
+                            </span>
+                            <span>
+                                {{ patient.institution.name }}
+                            </span>
                         </span>
                     </td>
                     <td>
