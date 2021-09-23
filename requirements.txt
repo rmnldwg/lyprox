@@ -1,4 +1,4 @@
-Django==3.2
+Django>=3.2.5
 django-filter==2.4
 django-address==0.2
 django-phonenumber-field==5.2
