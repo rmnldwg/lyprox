@@ -5,6 +5,7 @@ from typing import Any, Dict
 
 from core.loggers import ViewLoggerMixin
 from patients.models import Patient, Tumor, Diagnose
+from accounts.models import Institution
 
 from . import query
 from.forms import DashboardForm
@@ -54,9 +55,9 @@ class DashboardView(ViewLoggerMixin, generic.ListView):
 
             if initial_form.is_valid():
                 queryset = query.patient_specific(patient_queryset=queryset, 
-                                                **initial_form.cleaned_data)
+                                                  **initial_form.cleaned_data)
                 queryset = query.tumor_specific(patient_queryset=queryset,
-                                               **initial_form.cleaned_data)
+                                                **initial_form.cleaned_data)
                 queryset, combined_involvement = query.diagnose_specific(
                     patient_queryset=queryset, **initial_form.cleaned_data
                 )
@@ -81,6 +82,7 @@ class DashboardView(ViewLoggerMixin, generic.ListView):
         context = super(DashboardView, self).get_context_data(**kwargs)
         context["show_filter"] = False
         context["form"] = self.form
+        context["institutions"] = Institution.objects.all()
         
         if self.form.is_valid():
             context["show_percent"] = self.form.cleaned_data["show_percent"]

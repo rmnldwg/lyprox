@@ -108,6 +108,16 @@
                                 </div>
                             </div>
                         </div>
+
+                        <div class="buttons is-grouped is-multiline is-fullwidth">
+                            {% for institution in form.institutions %}
+                            <label class="button is-primary is-light is-fullwidth"  title="{{ institution.name }}">
+                                <span class="icon">
+                                    <img src="{{ institution.logo.url }}" alt="{{ institution.shortname }} logo">
+                                </span>
+                            </label>
+                            {% endfor %}
+                        </div>
                     </div>
 
                     <div class="tile is-child box">
