@@ -11,17 +11,13 @@ input[type="checkbox"].checkbox:checked:hover + label {
     color: white;
 }
 
-input[type="checkbox"].checkbox:checked + label.for-institution span.icon {
-    background-color: white;
-    border: 1px solid white;
-    border-radius: 1px;
-    color: white;
+input[type="checkbox"].checkbox:checked + label.for-institution {
+    outline: 2px solid #005EA8;
+    background-color: #EBF6FF;
 }
-input[type="checkbox"].checkbox:checked:hover + label.for-institution span.icon {
-    background-color: white;
-    border: 1px solid white;
-    border-radius: 1px;
-    color: white;
+input[type="checkbox"].checkbox:checked:hover + label.for-institution {
+    outline: 2px solid #005EA8;
+    background-color: #DEF0FF;
 }
 
 input[type="radio"].radio:checked + label {
