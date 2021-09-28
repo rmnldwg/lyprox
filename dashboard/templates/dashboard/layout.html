@@ -110,10 +110,11 @@
                         </div>
 
                         <div class="buttons is-grouped is-multiline is-fullwidth">
-                            {% for institution in form.institutions %}
-                            <label class="button is-primary is-light is-fullwidth"  title="{{ institution.name }}">
+                            {% for checkbox in form.institutions %}
+                            {{ checkbox.tag }}
+                            <label for="{{ checkbox.id_for_label }}" class="for-institution button is-primary is-inverted is-fullwidth" title="{{ checkbox.choice_label }}">
                                 <span class="icon">
-                                    <img src="{{ institution.logo.url }}" alt="{{ institution.shortname }} logo">
+                                    <img src="{{ checkbox.choice_label }}" alt="">
                                 </span>
                             </label>
                             {% endfor %}

@@ -82,7 +82,7 @@ class DashboardView(ViewLoggerMixin, generic.ListView):
         context = super(DashboardView, self).get_context_data(**kwargs)
         context["show_filter"] = False
         context["form"] = self.form
-        context["institutions"] = Institution.objects.all()
+        # context["institutions"] = Institution.objects.all()
         
         if self.form.is_valid():
             context["show_percent"] = self.form.cleaned_data["show_percent"]

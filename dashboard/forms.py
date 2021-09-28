@@ -3,6 +3,7 @@ from django.db.models.expressions import Value
 
 from core.loggers import FormLoggerMixin
 from patients.models import Patient, Tumor, Diagnose
+from accounts.models import Institution
 
 
 class ThreeWayToggle(forms.ChoiceField):
@@ -43,6 +44,12 @@ class ThreeWayToggle(forms.ChoiceField):
             return value
 
 
+class InstitutionMultipleChoiceField(forms.ModelMultipleChoiceField):
+    """Return logo URL for institution."""
+    def label_from_instance(self, obj: Institution) -> str:
+        return obj.logo.url
+
+
 
 class DashboardForm(FormLoggerMixin, forms.Form):
     """Form for querying the database."""
@@ -73,6 +80,15 @@ class DashboardForm(FormLoggerMixin, forms.Form):
     hpv_status = ThreeWayToggle()
     neck_dissection = ThreeWayToggle()
     n_status = ThreeWayToggle()
+    institutions = InstitutionMultipleChoiceField(
+        required=False,
+        widget=forms.CheckboxSelectMultiple(
+            attrs={"class": "checkbox is-hidden", 
+                   "onchange": "changeHandler();"}
+        ),
+        queryset=Institution.objects.all(),
+        initial=Institution.objects.all().filter(shortname="USZ")
+    )
     
     # tumor specific info
     subsite__in = forms.MultipleChoiceField(
