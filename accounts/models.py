@@ -3,7 +3,9 @@ from django.core.exceptions import ValidationError
 from django.db.models.expressions import Value
 from django.utils.translation import gettext as _
 from django.db import models
-from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, BaseUserManager
+from django.contrib.auth.models import (
+    AbstractBaseUser, PermissionsMixin, BaseUserManager, Permission
+)
 from django.utils import timezone
 
 from phonenumber_field.modelfields import PhoneNumberField
@@ -262,7 +264,6 @@ COUNTRIES = (
 )
 
 class CountryField(models.CharField):
-    
     def __init__(self, *args, **kwargs):
         kwargs.setdefault('max_length', 2)
         kwargs.setdefault('choices', COUNTRIES)
@@ -301,6 +302,7 @@ class UserManager(BaseUserManager):
     
     def create_user(self, email, password, **extra_fields):
         """Clean email input and set staff status and `is_active` to `False`."""
+        extra_fields.setdefault("is_active", True)
         extra_fields.setdefault("is_staff", False)
         extra_fields.setdefault("is_superuser", False)
         email = self.normalize_email(email)
@@ -308,7 +310,6 @@ class UserManager(BaseUserManager):
     
     def create_superuser(self, email, password, **extra_fields):
         """Create a superuser, making sure they have all necessary rights."""
-        extra_fields.setdefault("is_active", True)
         extra_fields.setdefault("is_staff", True)
         extra_fields.setdefault("is_superuser", True)
         

@@ -97,6 +97,14 @@
                                         {{ filterset.form.m_stage }}
                                     </div>
                                 </div>
+                                <div class="control">
+                                    <label for="{{ filterset.form.institution.id_for_label }}" class="label has-text-primary">
+                                        {{ filterset.form.institution.label }}
+                                    </label>
+                                    <div class="select is-multiple">
+                                        {{ filterset.form.institution }}
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>

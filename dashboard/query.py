@@ -5,6 +5,7 @@ import logging
 from typing import Optional, List, Dict
 
 from patients.models import Patient, Diagnose, Tumor
+from accounts.models import Institution
 
 logger = logging.getLogger(__name__)
 
@@ -72,15 +73,19 @@ def patient_specific(
     nicotine_abuse: Optional[bool] = None,
     hpv_status: Optional[bool] = None,
     neck_dissection: Optional[bool] = None,
+    institution__in: Optional[Institution] = None,
     **rest
 ) -> QuerySet:
     """Filter `QuerySet` of `Patient`s based on patient-specific properties.
     """
-    kwargs = locals()              # extract keyword arguments and...
-    kwargs.pop('patient_queryset') # ...remove the patient queryset and...
-    kwargs.pop('rest')             # ...any other kwargs from this dictionary.
-    for key, value in kwargs.items():   # iterate over provided kwargs and ...
-        if value is not None:             # ...if it's of interest, then filter
+    kwargs = locals()
+    kwargs.pop('patient_queryset')
+    kwargs.pop('rest')
+    
+    # the form fields are named such that they can be inserted into the 
+    # QuerySet filtering function directly
+    for key, value in kwargs.items():
+        if value is not None:
             patient_queryset = patient_queryset.filter(**{key: value})
     
     return patient_queryset

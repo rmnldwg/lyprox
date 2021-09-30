@@ -64,23 +64,14 @@
                             </div>
                         </div>
                         
-                        <div class="columns is-multiline">
-                            <div class="column">
-                                {% include 'dashboard/three-way-toggle.html' with name='gender' radio_buttons=form.gender stat=stats.gender show_percent=show_percent %}
-                            </div>
+                        <div class="columns">
                             <div class="column">
                                 {% include 'dashboard/three-way-toggle.html' with name='smoking status' radio_buttons=form.nicotine_abuse stat=stats.nicotine_abuse show_percent=show_percent %}
-                            </div>
-                        
-                            <div class="column">
                                 {% include 'dashboard/three-way-toggle.html' with name='HPV status' radio_buttons=form.hpv_status stat=stats.hpv_status show_percent=show_percent %}
                             </div>
                         
                             <div class="column">
                                 {% include 'dashboard/three-way-toggle.html' with name='neck dissection' radio_buttons=form.neck_dissection stat=stats.neck_dissection show_percent=show_percent %}
-                            </div>
-
-                            <div class="column">
                                 <p class="heading has-text-centered">N+ vs N0</p>
                                 <div class="field has-addons is-justify-content-center mb-1">
                                     {% for radio in form.n_status %}
@@ -94,7 +85,7 @@
                                     </div>
                                     {% endfor %}
                                 </div>
-
+    
                                 <div class="tags has-addons is-justify-content-center">
                                     {% for i in '102' %}
                                     <div class="tag stat-tag button is-static">
@@ -109,14 +100,17 @@
                             </div>
                         </div>
 
-                        <div class="buttons is-grouped is-multiline is-fullwidth">
-                            {% for checkbox in form.institutions %}
-                            {{ checkbox.tag }}
-                            <label for="{{ checkbox.id_for_label }}" class="for-institution button is-primary is-light" title="{{ checkbox.choice_label }}">
-                                <span class="icon">
-                                    <img src="{{ checkbox.choice_label }}" alt="">
-                                </span>
-                            </label>
+                        <p class="title is-5 mb-2">Institutions</p>
+                        <div class="field is-grouped">
+                            {% for checkbox in form.institution__in %}
+                            <div class="control is-expanded">
+                                {{ checkbox.tag }}
+                                <label for="{{ checkbox.id_for_label }}" class="for-institution button is-primary is-light is-fullwidth" title="{{ checkbox.choice_label }}">
+                                    <span class="icon">
+                                        <img src="{{ checkbox.choice_label }}" alt="">
+                                    </span>
+                                </label>
+                            </div>
                             {% endfor %}
                         </div>
                     </div>

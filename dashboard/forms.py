@@ -80,14 +80,14 @@ class DashboardForm(FormLoggerMixin, forms.Form):
     hpv_status = ThreeWayToggle()
     neck_dissection = ThreeWayToggle()
     n_status = ThreeWayToggle()
-    institutions = InstitutionMultipleChoiceField(
+    institution__in = InstitutionMultipleChoiceField(
         required=False,
         widget=forms.CheckboxSelectMultiple(
             attrs={"class": "checkbox is-hidden", 
                    "onchange": "changeHandler();"}
         ),
         queryset=Institution.objects.all(),
-        initial=Institution.objects.all().filter(shortname="USZ")
+        initial=Institution.objects.all()
     )
     
     # tumor specific info
