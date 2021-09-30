@@ -73,9 +73,6 @@ class DashboardForm(FormLoggerMixin, forms.Form):
     )
     
     # patient specific fields
-    gender = ThreeWayToggle(choices=[("male", "mars"), 
-                                     (0, "ban"), 
-                                     ("female", "venus")])
     nicotine_abuse = ThreeWayToggle()
     hpv_status = ThreeWayToggle()
     neck_dissection = ThreeWayToggle()
