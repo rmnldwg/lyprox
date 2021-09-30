@@ -302,7 +302,6 @@ class UserManager(BaseUserManager):
     
     def create_user(self, email, password, **extra_fields):
         """Clean email input and set staff status and `is_active` to `False`."""
-        extra_fields.setdefault("is_active", True)
         extra_fields.setdefault("is_staff", False)
         extra_fields.setdefault("is_superuser", False)
         email = self.normalize_email(email)
@@ -310,6 +309,7 @@ class UserManager(BaseUserManager):
     
     def create_superuser(self, email, password, **extra_fields):
         """Create a superuser, making sure they have all necessary rights."""
+        extra_fields.setdefault("is_active", True)
         extra_fields.setdefault("is_staff", True)
         extra_fields.setdefault("is_superuser", True)
         
