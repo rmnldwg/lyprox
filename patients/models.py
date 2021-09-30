@@ -1,13 +1,11 @@
+from accounts.models import Institution
 from django.db import models
 from django.urls import reverse
 
-import pandas
-import numpy as np
-
-from .loggers import ModeLoggerMixin
+from core.loggers import ModelLoggerMixin
 
 
-class Patient(ModeLoggerMixin, models.Model):
+class Patient(ModelLoggerMixin, models.Model):
     """Base model class of a patient. Contains patient specific information."""
     
     class T_stages(models.IntegerChoices):
@@ -44,10 +42,13 @@ class Patient(ModeLoggerMixin, models.Model):
     n_stage = models.PositiveSmallIntegerField(choices=N_stages.choices)
     m_stage = models.PositiveSmallIntegerField(choices=M_stages.choices)
     
+    institution = models.ForeignKey(Institution, blank=True, on_delete=models.PROTECT)
+    
     
     def __str__(self):
         """Report some patient specifics."""
-        return f"pk {self.pk} | {self.age} yo | {self.gender}"
+        return (f"#{self.pk}: {self.gender} ({self.age}) at "
+                f"{self.institution.shortname}")
     
     def get_absolute_url(self):
         return reverse("patients:detail", args=[self.pk])
@@ -68,7 +69,7 @@ class Patient(ModeLoggerMixin, models.Model):
                           f"{self.get_t_stage_display()}.")
 
 
-class Tumor(ModeLoggerMixin, models.Model):
+class Tumor(ModelLoggerMixin, models.Model):
     """Report of primary tumor(s)."""
     
     class Locations(models.TextChoices):
@@ -147,7 +148,7 @@ class Tumor(ModeLoggerMixin, models.Model):
     
     def __str__(self):
         """Report some main characteristics."""
-        return f"pk {self.pk} | belongs to {self.patient.pk} | subsite {self.subsite} | T{self.t_stage}"
+        return f"#{self.pk}: T{self.t_stage} tumor of patient #{self.patient.pk}"
     
     def save(self, *args, **kwargs):
         """Extract location and update patient's T-stage upon saving tumor."""
@@ -206,7 +207,30 @@ class Diagnose(models.Model):
     
     def __str__(self):
         """Report some info for admin view."""
-        return f"pk {self.pk} | belongs to {self.patient.pk} | {self.get_modality_display()} | {self.side} side"
+        return (f"#{self.pk}: {self.get_modality_display()} diagnose "
+                f"({self.side}) of patient #{self.patient.pk}")
+    
+    def save(self, *args, **kwargs):
+        """Make sure LNLs and their sublevels (e.g. 'a' and 'b') are treated 
+        consistelntly.
+        """
+        safe_negate = lambda x: False if x is None else not x
+        
+        # LNL I (a and b)
+        if any([self.Ia, self.Ib]):
+            self.I = True
+        elif all([safe_negate(self.Ia), safe_negate(self.Ib)]):
+            self.I = False
+
+
+        # LNL II (a and b)
+        if any([self.IIa, self.IIb]):
+            self.II = True
+        elif all([safe_negate(self.IIa), safe_negate(self.IIb)]):
+            self.II = False
+
+        
+        return super().save(*args, **kwargs)
     
     
 # add lymph node level fields to model 'Diagnose'

@@ -1,0 +1,82 @@
+{% load static %}
+
+<nav class="navbar is-fixed-top is-primary" role="navigation">
+    <div class="container">
+        <div class="navbar-brand">
+            <a class="navbar-item" href="{% url 'index' %}" title="home">
+                <img src="{% static 'logo-white.svg' %}" alt="LyProX Logo">
+            </a>
+        </div>
+        <div class="navbar-menu">
+            <div class="navbar-start">
+                <a href="{% url 'patients:list' %}" class="navbar-item" title="list of all patients in database">
+                    List
+                </a>
+                <a href="{% url 'patients:create' %}" class="navbar-item" title="add new patients to database">
+                    Create
+                </a>
+
+                <a href="{% url 'patients:upload' %}" class="navbar-item" title="upload batch of patients">
+                    Upload
+                </a>
+
+                <a href="{% url 'patients:download' %}" class="navbar-item" title="export CSV of all patients">
+                    Download
+                </a>
+
+                <a href="{% url 'dashboard:dashboard' %}" class="navbar-item" title="explore patterns of progression">
+                    Dashboard
+                </a>
+            </div>
+            <div class="navbar-end">
+                <div class="navbar-item">
+                    <div class="field is-grouped">
+                        <div class="control">
+                            {% if user.is_authenticated %}
+                            <div class="buttons has-addons">
+                                <div class="button is-primary is-inverted">
+                                    <span class="icon-text">
+                                        <span class="icon mr-2">
+                                            <img src="{{ user.institution.logo.url }}" alt="{{ user.institution.shortname }} logo">
+                                        </span>
+                                        <span>{{ user }}</span>
+                                    </span>
+                                </div>
+                                <a href="{% url 'accounts:logout' %}" class="button is-primary is-inverted is-outlined" title="logout">
+                                    <span>Log out</span>
+                                    <span class="icon">
+                                        <i class="fas fa-sign-out-alt"></i>
+                                    </span>
+                                </a>
+                            </div>
+                            {% else %}
+                            <a href="{% url 'accounts:login' %}" class="button is-primary is-inverted is-outlined" title="login">
+                                <span class="icon">
+                                    <i class="fas fa-sign-in-alt"></i>
+                                </span>
+                                <span>Log in</span>
+                            </a>
+                        </div>
+                        <div class="control">
+                            <a href="{% url 'accounts:signup_request' %}" class="button is-primary is-inverted is-outlined" title="request to sign up">
+                                <span class="icon">
+                                    <i class="fas fa-edit"></i>
+                                </span>
+                                <span>Sign up</span>
+                            </a>
+                            {% endif %}
+                        </div>
+                        <div class="control">
+                            <a href="https://github.com/rmnldwg/lymph-interface" target="_blank" title="Source code on GitHub"
+                                class="button is-primary is-inverted has-tooltip-bottom">
+                                <span class="icon">
+                                    <i class="fab fa-lg fa-github"></i>
+                                </span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</nav>

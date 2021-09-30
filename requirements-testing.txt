@@ -1,0 +1,3 @@
+-r requirements.txt
+pytest-factoryboy==2.1
+pytest-django==4.2

@@ -19,3 +19,7 @@ label.filter-label {
 form {
     width: 100%;
 }
+
+img.institution-logo {
+    height: 18px;
+}

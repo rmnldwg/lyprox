@@ -1,0 +1,254 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+{% load static %}
+{% load mytags %}
+
+
+<div class="hero is-primary has-background-primary-light">
+    <div class="hero-body">
+        <div class="container">
+            <div class="columns">
+                <div class="column is-3">
+                    <figure class="image is-fullwidth">
+                        <img src="{% static 'logo.svg' %}" alt="LyProX logo">
+                    </figure>
+                </div>
+
+                <div class="column is-1"></div>
+
+                <div class="column">
+                    <h1 class="title is-2 has-text-danger">
+                        <b>Ly</b>mphatic <b>Pro</b>gression e<b>X</b>plorer
+                    </h1>
+                    <p class="subtitle is-4 has-text-primary">
+                        Welcome to our online interface with which we aim to visualize the patterns of lymphatic progression in head and neck squamous cell carcinoma.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<section class="section">
+    <div class="container">
+        <div class="content">
+            {% include_md 'index.md' %}
+        </div>
+    </div>
+</section>
+
+<section class="section">
+    <div class="container">
+        <h1 class="title">Features</h1>
+        <div class="tile is-ancestor">
+            <div class="tile is-parent is-vertical">
+                <a href="{% url 'dashboard:dashboard' %}" class="tile is-child notification is-primary is-light">
+                    <div class="media">
+                        <figure class="media-left">
+                            <span class="icon is-large">
+                                <i class="fas fa-2x fa-chart-pie"></i>
+                            </span>
+                        </figure>
+                        <div class="media-content">
+                            <h2 class="title is-4">Dashboard</h2>
+                            <p>
+                                Interactive page that aggregates information on all patient's lymphatic metastatic involvement in a visual and
+                                intuitive dashboard. Here, one can explore correlations between involvements of different lymph node levels as well
+                                as estimate the impact of various risk factors on nodal involvement.
+                            </p>
+                        </div>
+                        <div class="media-right">
+                            <span class="icon">
+                                <i class="fas fa-external-link-alt"></i>
+                            </span>
+                        </div>
+                    </div>
+                </a>
+
+                <a href="{% url 'patients:list' %}" class="tile is-child notification is-primary is-light">
+                    <div class="media">
+                        <figure class="media-left">
+                            <p class="icon is-large">
+                                <i class="fas fa-2x fa-th-list"></i>
+                            </p>
+                        </figure>
+                        <div class="media-content">
+                            <h2 class="title is-4">List of patients</h2>
+                            <p>
+                                Look at a table of all the patients in the database. This view can be filtered for different patient-specific
+                                properties like age, date of diagnosis, TNM stage and more.
+                            </p>
+                        </div>
+                        <div class="media-right">
+                            <span class="icon">
+                                <i class="fas fa-external-link-alt"></i>
+                            </span>
+                        </div>
+                    </div>
+                </a>
+            </div>
+
+            <div class="tile is-parent is-vertical">
+                <a href="{% url 'patients:download' %}" class="tile is-child notification is-primary is-light">
+                    <div class="media">
+                        <figure class="media-left">
+                            <span class="icon is-large">
+                                <i class="fas fa-2x fa-cloud-download-alt"></i>
+                            </span>
+                        </figure>
+                        <div class="media-content">
+                            <h2 class="title is-4">Export database *</h2>
+                            <p>
+                                Download a CSV table of all patients in the database. This table can also be used as a template for uploading a
+                                batch of patients, as it has the required format for uploading.
+                            </p>
+                        </div>
+                        <div class="media-right">
+                            <span class="icon">
+                                <i class="fas fa-external-link-alt"></i>
+                            </span>
+                        </div>
+                    </div>
+                </a>
+
+                <a href="{% url 'patients:create' %}" class="tile is-child notification is-primary is-light">
+                    <div class="media">
+                        <figure class="media-left">
+                            <span class="icon is-large">
+                                <i class="fas fa-2x fa-user-plus"></i>
+                            </span>
+                        </figure>
+                        <div class="media-content">
+                            <h2 class="title is-4">Create new patient *</h2>
+                            <p>
+                                Manually add a new patient to the database using a pre-defined form.
+                            </p>
+                        </div>
+                        <div class="media-right">
+                            <span class="icon">
+                                <i class="fas fa-external-link-alt"></i>
+                            </span>
+                        </div>
+                    </div>
+                </a>
+
+                <a href="{% url 'patients:upload' %}" class="tile is-child notification is-primary is-light">
+                    <div class="media">
+                        <figure class="media-left">
+                            <span class="icon is-large">
+                                <i class="fas fa-2x fa-cloud-upload-alt"></i>
+                            </span>
+                        </figure>
+                        <div class="media-content">
+                            <h2 class="title is-4">Upload patients *</h2>
+                            <p>
+                                Add a batch of patients to the database via a CSV table of a specific format.
+                            </p>
+                        </div>
+                        <div class="media-right">
+                            <span class="icon">
+                                <i class="fas fa-external-link-alt"></i>
+                            </span>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </div>
+        <p class="has-text-right has-text-danger has-text-weight-bold is-italic">
+            * login required
+        </p>
+    </div>
+</section>
+
+<section class="section">
+    <div class="container">
+        <h1 class="title">Publications</h1>
+
+        <div class="media">
+            <div class="media-left">
+                <figure class="image is-96x96">
+                    <img class="is-rounded" src="{% static 'data-paper.svg' %}" alt="paper icon">
+                </figure>
+            </div>
+            <div class="media-content">
+                <p class="is-size-5">
+                    Jean-Marc Hoffmann, Bertrand Pouymayou, Roman Ludwig, Matthias Guckenberger, Panagiotis Balermpas, Jan Unkelbach;
+                    <br>
+                    <strong class="has-text-secondary">
+                        Detailed analysis of lymphatic progression patterns in oropharyngeal squamous cell carcinoma,
+                    </strong>
+                    <br>
+                    <span class="has-text-danger">Not yet published</span>
+                </p>
+            </div>
+        </div>
+
+        <div class="media">
+            <div class="media-left">
+                <figure class="image is-96x96">
+                    <img class="is-rounded is-outlined" src="{% static 'hmm-paper.png' %}" alt="paper icon">
+                </figure>
+            </div>
+            <div class="media-content">
+                <p class="is-size-5">
+                    Roman Ludwig, Bertrand Pouymayou, Panagiotis Balermpas, Jan Unkelbach;
+                    <br>
+                    <strong class="has-text-secondary">
+                        A hidden Markov model for lymphatic tumor progression in the head and neck,
+                    </strong>
+                    <br>
+                    <em>Sci Rep</em> <strong>11,</strong> 12261 (2021)
+                    <a href="https://doi.org/10.1038/s41598-021-91544-1" target="_blank">https://doi.org/10.1038/s41598-021-91544-1</a>
+                </p>
+            </div>
+        </div>
+
+        <div class="media">
+            <div class="media-left">
+                <figure class="image is-96x96">
+                    <img class="is-rounded is-outlined" src="{% static 'budapest-paper.png' %}" alt="paper icon">
+                </figure>
+            </div>
+            <div class="media-content">
+                <p class="is-size-5">
+                    Jan Unkelbach, Thomas Bortfeld, Carlos E. Cardenas, Vincent Gregoire, Wille Hager, Ben Heijmen, Robert Jeraj, Stine S.
+                    Korreman, Roman Ludwig, Bertrand Pouymayou, Nadya Shusharina, Jonas Söderberg, Iuliana Toma-Dasu, Esther G.C. Troost,
+                    Eliana Vasquez Osorio;
+                    <br>
+                    <strong class="has-text-secondary">
+                        The role of computational methods for automating and improving clinical target volume definition,
+                    </strong>
+                    <br>
+                    <em>Radiotherapy and Oncology</em> <strong>153,</strong> 15-25 (2020)
+                    <a href="https://doi.org/10.1016/j.radonc.2020.10.002"
+                        target="_blank">https://doi.org/10.1016/j.radonc.2020.10.002</a>
+                </p>
+            </div>
+        </div>
+
+        <div class="media">
+            <div class="media-left">
+                <figure class="image is-96x96">
+                    <img class="is-rounded" src="{% static 'bn-paper.png' %}" alt="paper icon">
+                </figure>
+            </div>
+            <div class="media-content">
+                <p class="is-size-5">
+                    Bertrand Pouymayou, Panagiotis Balermpas, Oliver Riesterer, Matthias Guckenberger, Jan Unkelbach;
+                    <br>
+                    <strong class="has-text-secondary">
+                        A Bayesian network model of lymphatic tumor progression for personalized elective CTV definition in head and neck
+                        cancers,
+                    </strong>
+                    <br>
+                    <em>Phys. Med. Biol.</em> <strong>64,</strong> 165003 (2019)
+                    <a href="https://doi.org/10.1088/1361-6560/ab2a18" target="_blank">https://doi.org/10.1088/1361-6560/ab2a18</a>
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock content %}

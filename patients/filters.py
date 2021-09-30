@@ -1,3 +1,4 @@
+from accounts.models import Institution
 from django.forms import widgets
 import django_filters
 
@@ -29,6 +30,9 @@ class PatientFilter(django_filters.FilterSet):
     m_stage = django_filters.MultipleChoiceFilter(
         choices=Patient.M_stages.choices,
         widget=widgets.SelectMultiple()
+    )
+    institution = django_filters.ModelMultipleChoiceFilter(
+        queryset=Institution.objects.all()
     )
     
     # additional form field for sorting
