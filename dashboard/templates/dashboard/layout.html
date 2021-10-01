@@ -152,49 +152,43 @@
                         
                             <div class="column is-full-widescreen">
                                 <p class="title is-5 mb-2">Subsite</p>
-                                {% for checkbox in form.subsite__in %}
-                                <div class="field is-grouped">
+                                <div class="field is-grouped is-grouped-multiline">
+                                    {% for checkbox in form.subsite__in %}
                                     <div class="control is-expanded">
                                         {{ checkbox.tag }}
-                                        <label for="{{ checkbox.id_for_label }}" class="button is-primary is-light is-fullwidth">
-                                            <span>{{ checkbox.choice_label }}</span>
-                                        </label>
+                                        <div class="buttons has-addons">
+                                            <label for="{{ checkbox.id_for_label }}" class="button is-primary is-light is-expanded">
+                                                <span>{{ checkbox.choice_label }}</span>
+                                            </label>
+                                            <p class="button is-info is-static">
+                                                {% if show_percent %}
+                                                <span>{{ stats.subsites|percent:forloop.counter0 }}%</span>
+                                                {% else %}
+                                                <span>{{ stats.subsites|index:forloop.counter0 }}</span>
+                                                {% endif %}
+                                            </p>
+                                        </div>
                                     </div>
-                                    <div class="control">
-                                        <p class="button is-info is-static">
-                                            {% if show_percent %}
-                                            <span>{{ stats.subsites|percent:forloop.counter0 }}%</span>
-                                            {% else %}
-                                            <span>{{ stats.subsites|index:forloop.counter0 }}</span>
-                                            {% endif %}
-                                        </p>
-                                    </div>
+                                    {% endfor %}
                                 </div>
-                                {% endfor %}
                             </div>
                         
                             <div class="column is-full-widescreen">
                                 <p class="title is-5 mb-2">T-stage</p>
-                                <div class="columns is-multiline">
+                                <div class="field is-grouped is-grouped-multiline">
                                     {% for checkbox in form.t_stage__in %}
-                                    <div class="column">
-                                        <div class="field mb-1">
-                                            <div class="control is-expanded">
-                                                {{ checkbox.tag }}
-                                                <label for="{{ checkbox.id_for_label }}" class="button is-primary is-light is-fullwidth">
-                                                    <span>{{ checkbox.choice_label }}</span>
-                                                </label>
-                                            </div>
-                                        </div>
-                                        <div class="field">
-                                            <div class="control is-expanded">
-                                                <p class="button is-info is-static is-fullwidth px-2">
-                                                    {% if show_percent %}
-                                                    <span>{{ stats.t_stages|percent:forloop.counter0 }}%</span>
-                                                    {% else %}
-                                                    <span>{{ stats.t_stages|index:forloop.counter0 }}</span>
-                                                    {% endif %}
-                                                </p>
+                                    <div class="control is-expanded">
+                                        {{ checkbox.tag }}
+                                        <div class="buttons has-addons">
+                                            <label for="{{ checkbox.id_for_label }}" class="button is-primary is-light is-expanded">
+                                                <span>{{ checkbox.choice_label }}</span>
+                                            </label>
+                                            <div class="button is-info is-static">
+                                                {% if show_percent %}
+                                                <span>{{ stats.t_stages|percent:forloop.counter0 }}%</span>
+                                                {% else %}
+                                                <span>{{ stats.t_stages|index:forloop.counter0 }}</span>
+                                                {% endif %}
                                             </div>
                                         </div>
                                     </div>

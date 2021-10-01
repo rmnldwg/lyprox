@@ -96,7 +96,7 @@ class DashboardForm(FormLoggerMixin, forms.Form):
         ),
         choices=[("base", "base of tongue"),
                  ("tonsil", "tonsil"), 
-                 ("rest" , "other/multiple")],
+                 ("rest" , "other")],
         initial=["base", "tonsil", "rest"]
     )
     t_stage__in = forms.MultipleChoiceField(
