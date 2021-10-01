@@ -94,3 +94,29 @@ span[data-tooltip] {
 .table td {
     padding: 0.3em;
 }
+
+.tooltip {
+  position: relative;
+}
+ 
+.tooltip .box {
+  display: none;
+}
+
+.tooltip:hover .box {
+  display: inherit;
+  position: absolute;
+  top: 0;
+  z-index: 1000;
+  width: 700px;
+}
+ 
+.tooltip:hover .box.appear-right {
+  left: 0;
+  margin-left: 32px;
+}
+
+.tooltip:hover .box.appear-left {
+  right: 0;
+  margin-right: 32px;
+}

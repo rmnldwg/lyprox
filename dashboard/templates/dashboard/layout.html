@@ -56,10 +56,13 @@
                                 </div>
                             </div>
                             <div class="level-right">
-                                <div class="level-item has-tooltip-left" data-tooltip="Specify which patients to consider">
-                                    <span class="icon">
-                                        <i class="fas fa-question"></i>
-                                    </span>
+                                <div class="level-item">
+                                    <div class="tooltip">
+                                        <span class="icon">
+                                            <i class="fas fa-question"></i>
+                                        </span>
+                                        {% include 'dashboard/help-tooltip.html' with side="right" image='dashboard/toggle.gif' markdown='dashboard/help_patient.md' %}
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -123,19 +126,19 @@
                                 </div>
                             </div>
                             <div class="level-right">
-                                <div class="level-item has-tooltip-left has-tooltip-multiline"
-                                    data-tooltip="Of the selected patients, consider only those that have primary tumors matching the selection in this box">
-                                    <span class="icon">
-                                        <i class="fas fa-question"></i>
-                                    </span>
+                                <div class="level-item">
+                                    <div class="tooltip">
+                                        <span class="icon">
+                                            <i class="fas fa-question"></i>
+                                        </span>
+                                        {% include 'dashboard/help-tooltip.html' with side="right" image='dashboard/subsite_t-stage.gif' markdown='dashboard/help_tumor.md' %}
+                                    </div>
                                 </div>
                             </div>
                         </div>
                         
                         <div class="columns is-multiline">
                             <div class="column is-full-widescreen">
-                                <p class="title is-5 mb-2">Lateralization</p>
-                        
                                 <div class="columns is-multiline">
                                     <div class="column">
                                         {% include 'dashboard/three-way-toggle.html' with name='central' radio_buttons=form.central stat=stats.central show_percent=show_percent %}
@@ -220,11 +223,13 @@
                                         </p>
                                     </div>
                         
-                                    <div class="level-item has-tooltip-left has-tooltip-multiline"
-                                        data-tooltip="Select the diagnostic modalities to consider in this dashboard and how to combine them">
-                                        <span class="icon">
-                                            <i class="fas fa-question"></i>
-                                        </span>
+                                    <div class="level-item">
+                                        <div class="tooltip">
+                                            <span class="icon">
+                                                <i class="fas fa-question"></i>
+                                            </span>
+                                            {% include 'dashboard/help-tooltip.html' with side="left" image='dashboard/modalities.gif' markdown='dashboard/help_modalities.md' %}
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -397,12 +402,12 @@
                                 </div>
                                 <div class="level-right">
                                     <div class="level-item">
-                                        <p class="button is-medium is-primary is-light is-rounded is-outlined" style="width: 0;"
-                                            id="show-help-modal" data-tooltip="Display documentation on how to use this dashboard">
-                                            <span class="icon">
-                                                <i class="fas fa-question"></i>
+                                        <div class="tooltip" id="show-help-modal" style="cursor: pointer;">
+                                            <span class="icon is-large has-text-primary">
+                                                <i class="fas fa-2x fa-question"></i>
                                             </span>
-                                        </p>
+                                            {% include 'dashboard/help-tooltip.html' with side="left" image='dashboard/buttons.gif' markdown='dashboard/help_buttons.md' %}
+                                        </div>
                                     </div>
                             
                                     <div class="level-item">
