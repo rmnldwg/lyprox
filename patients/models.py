@@ -42,6 +42,7 @@ class Patient(ModelLoggerMixin, models.Model):
     n_stage = models.PositiveSmallIntegerField(choices=N_stages.choices)
     m_stage = models.PositiveSmallIntegerField(choices=M_stages.choices)
     
+    #: testing attribute docstring
     institution = models.ForeignKey(Institution, blank=True, on_delete=models.PROTECT)
     
     
@@ -54,8 +55,8 @@ class Patient(ModelLoggerMixin, models.Model):
         return reverse("patients:detail", args=[self.pk])
     
     def update_t_stage(self):
-        """Update T-stage after new `Tumor` is added to `Patient` (gets called 
-        in `Tumor.save()` method)"""
+        """Update T-stage after new :class:`Tumor` is added to :class:`Patient` 
+        (gets called in :meth:`Tumor.save()` method)"""
         tumors = Tumor.objects.all().filter(patient=self)
         
         max_t_stage = 0

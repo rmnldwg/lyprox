@@ -123,7 +123,6 @@ INSTALLED_APPS = [
     # third party apps
     "django_filters",
     "phonenumber_field",
-    # "address",
 
     'django.contrib.admin',
     'django.contrib.auth',

@@ -1,102 +1,31 @@
-patients package
-================
+.. module: patients
 
-Subpackages
------------
 
-.. toctree::
-   :maxdepth: 4
+Patient representation
+======================
 
-   patients.migrations
-   patients.templatetags
+Here's all the code about how the patients are represented internally.
 
-Submodules
-----------
 
-patients.admin module
----------------------
+Patient
+-------
 
-.. automodule:: patients.admin
-   :members:
-   :undoc-members:
-   :show-inheritance:
+.. autoclass:: patients.models.Patient
+    :members:
+    :show-inheritance:
 
-patients.apps module
---------------------
 
-.. automodule:: patients.apps
-   :members:
-   :undoc-members:
-   :show-inheritance:
+Tumor
+-----
 
-patients.filters module
------------------------
+.. autoclass:: patients.models.Tumor
+    :members:
+    :show-inheritance:
 
-.. automodule:: patients.filters
-   :members:
-   :undoc-members:
-   :show-inheritance:
 
-patients.forms module
----------------------
+Diagnose
+--------
 
-.. automodule:: patients.forms
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-patients.ioports module
------------------------
-
-.. automodule:: patients.ioports
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-patients.mixins module
-----------------------
-
-.. automodule:: patients.mixins
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-patients.models module
-----------------------
-
-.. automodule:: patients.models
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-patients.tests module
----------------------
-
-.. automodule:: patients.tests
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-patients.urls module
---------------------
-
-.. automodule:: patients.urls
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-patients.views module
----------------------
-
-.. automodule:: patients.views
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-Module contents
----------------
-
-.. automodule:: patients
-   :members:
-   :undoc-members:
-   :show-inheritance:
+.. autoclass:: patients.models.Diagnose
+    :members:
+    :show-inheritance:
