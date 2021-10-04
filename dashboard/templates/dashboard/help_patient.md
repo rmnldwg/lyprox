@@ -9,3 +9,7 @@ Narrow down the subset of patients by their characteristics, like HPV status or 
 <p class="notification is-info is-light">
     <strong>Note:</strong> Just below the buttons there are three numbers that give a preview of how many of the currently selected patients can be categorized according to the respective characteristic.
 </p>
+
+<p class="notification is-warning is-light">
+    <strong>Warning:</strong> Dont forget to hit <strong>compute</strong> after you have changed your selection criteria.
+</p>
