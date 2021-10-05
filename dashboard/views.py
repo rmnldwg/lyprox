@@ -1,4 +1,6 @@
+from django.http.response import HttpResponse
 from django.views import generic
+from django.shortcuts import render
 
 import time
 from typing import Any, Dict
@@ -9,6 +11,12 @@ from accounts.models import Institution
 
 from . import query
 from.forms import DashboardForm
+
+
+def help_view(request) -> HttpResponse:
+    """Simply display the help text."""
+    template_name = "dashboard/help.html"
+    return render(request, template_name)
 
 
 class DashboardView(ViewLoggerMixin, generic.ListView):

@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% load mytags %}
+
+{% block content %}
+
+<section class="section">
+    <div class="container">
+        <div class="content">
+            {% include_md 'dashboard/help.md' %}
+        </div>
+    </div>
+</section>
+
+{% endblock content %}

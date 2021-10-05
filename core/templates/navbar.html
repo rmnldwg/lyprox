@@ -24,9 +24,17 @@
                     Download
                 </a>
 
-                <a href="{% url 'dashboard:dashboard' %}" class="navbar-item" title="explore patterns of progression">
-                    Dashboard
-                </a>
+                <div class="navbar-item has-dropdown is-hoverable">
+                    <a href="{% url 'dashboard:dashboard' %}" class="navbar-link" title="explore patterns of progression">
+                        Dashboard
+                    </a>
+
+                    <div class="navbar-dropdown">
+                        <a href="{% url 'dashboard:help' %}" class="navbar-item">
+                            Help
+                        </a>
+                    </div>
+                </div>
             </div>
             <div class="navbar-end">
                 <div class="navbar-item">
