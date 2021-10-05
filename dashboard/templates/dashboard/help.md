@@ -1,8 +1,12 @@
 {% load mytags %}
 
-# How to use this dashboard
+# The Dashboard
 
-This tab is designed to give an overview over patterns of lymphatic metastatic involvement in head & neck cancer. It can - for example - be used to identify correlations between risk factors and occurence of metastases, but also give indications which lymph node levels (LNLs) are frequently involved together.
+Here, one can visualize the patients in the database. The aim is to make it easy to see and understand a complex dataset with regard to lymphatic involvement in head & neck cancer. Ideally, it is "hypothesis-generating", meaning that you, the user, becomes curious and asks questions about certain correlations (or even causations). Some of them will be explorable using this interface, while others maybe not. In the latter case we encourage you to [download]({% url 'patients:download' %}) the database and test your ideas and hypotheses with your own tools.
+
+<p class="notification is-warning is-light">
+    <strong>Note:</strong> This is NOT a risk prediction. All we do here is visualize data of previously seen patients. For actual risk predictions for individual and newly diagnosed patients, check out our <a href="https://www.nature.com/articles/s41598-021-91544-1">paper on modelling tumor progression</a> or wait a bit, since we are thinking about implementing it also here.
+</p>
 
 ## Components
 
@@ -20,7 +24,7 @@ This tab is designed to give an overview over patterns of lymphatic metastatic i
 
 ### contra- (center left) & ipsilateral (center right)
 
-Here the most important information is visualized. For each side of the neck (ipsilateral being the same side as the tumor, contralateral the opposite) it displays a row for each LNL. From left to right, that row consists of its roman numeral label, a three-way toggle-button to select a subset with a particular involvement pattern and a horizontal stacked bar that displays the ratio of patients with reports of metastases in that LNL (red) to patients with a healthily appearing LNL (green). Numbers to the left and right of that bar plot indicate the absolute numbers and give a brief explanation when hovering over them with a mouse pointer.
+{% include_md 'dashboard/help_involvement.md' %}
 
 ### Buttons (bottom right)
 
