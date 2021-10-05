@@ -25,11 +25,15 @@ from core.loggers import ViewLoggerMixin
 
 # PATIENT related views
 class PatientListView(generic.ListView):
+    """Renders a list of all patients in the database showing basic information 
+    and links to the individual entries. Depending from where this view is 
+    called, the list is filterable.
+    """
     model = Patient
-    template_name = "patients/list.html"
-    context_object_name = "patient_list"
+    template_name = "patients/list.html"  #:
+    context_object_name = "patient_list"  #:
     filterset_class = PatientFilter
-    action = "show_patient_list"
+    action = "show_patient_list"  #:
     
     def get_queryset(self):
         """Add ability to filter queryset via FilterSets to generic ListView."""
@@ -47,11 +51,13 @@ class PatientListView(generic.ListView):
     
     
 class PatientDetailView(generic.DetailView):
+    """Show details of a particular patient."""
     model = Patient
-    template_name = "patients/patient_detail.html"
-    action = "show_patient_detail"
+    template_name = "patients/patient_detail.html"  #:
+    action = "show_patient_detail"  #:
     
     def get_context_data(self, **kwargs: Any) -> Dict[str, Any]:
+        """Add this patient's tumors and diagnoses to the context."""
         context = super().get_context_data(**kwargs)
         
         tumors = Tumor.objects.all().filter(patient=context["patient"])
@@ -66,17 +72,21 @@ class PatientDetailView(generic.DetailView):
 class CreatePatientView(ViewLoggerMixin, 
                         LoginRequiredMixin, 
                         generic.CreateView):
+    """View used to create a new patient entry in the database."""
     model = Patient
     form_class = PatientForm
-    template_name = "patients/patient_form.html"
-    action = "create_patient"
+    template_name = "patients/patient_form.html"  #:
+    action = "create_patient"  #:
     
     def get_context_data(self, **kwargs: Any) -> Dict[str, Any]:
+        """Add ``action`` to context for rendering purposes."""
         context = super().get_context_data(**kwargs)
         context["action"] = self.action
         return context
     
     def get_form_kwargs(self) -> Dict[str, Any]:
+        """Pass user to form, so that a newly created patient can be assigned 
+        to the same institution as the user who created them."""
         kwargs = super().get_form_kwargs()
         kwargs["user"] = self.request.user
         return kwargs
@@ -86,20 +96,25 @@ class UpdatePatientView(ViewLoggerMixin,
                         LoginRequiredMixin, 
                         InstitutionCheckPatientMixin,
                         generic.UpdateView):
+    """Update a given patient's information."""
     model = Patient
     form_class = PatientForm
-    template_name = "patients/patient_form.html"
-    action = "edit_patient"
+    template_name = "patients/patient_form.html"  #:
+    action = "edit_patient"  #:
     
     def get_success_url(self) -> str:
+        """When successfully edited, redirect to that patient's 
+        :class:`PatientDetailView`"""
         return reverse("patients:detail", kwargs=self.kwargs)
     
     def get_context_data(self, **kwargs: Any) -> Dict[str, Any]:
+        """Add ``action`` to context for rendering purposes."""
         context = super().get_context_data(**kwargs)
         context["action"] = self.action
         return context
     
     def get_form_kwargs(self) -> Dict[str, Any]:
+        """Pass current user to the form."""
         kwargs = super().get_form_kwargs()
         kwargs["user"] = self.request.user
         return kwargs
@@ -109,10 +124,11 @@ class DeletePatientView(ViewLoggerMixin,
                         LoginRequiredMixin, 
                         InstitutionCheckPatientMixin,
                         generic.DeleteView):
+    """Remove this patient from the database."""
     model = Patient
-    template_name = "patients/patient_delete.html"
-    success_url = "/patients"
-    action = "delete_patient"
+    template_name = "patients/patient_delete.html"  #:
+    success_url = "/patients"  #:
+    action = "delete_patient"  #:
 
 
 @login_required
@@ -151,7 +167,8 @@ def upload_patients(request):
 @login_required
 def generate_and_download_csv(request):
     """Allow user to generate a CSV table from the current database and 
-    download it."""
+    download it. The returned CSV table has exactly the structure that is 
+    necessary to upload a batch of patients."""
     
     # NOTE: This is only possible as long as the static files are served from 
     #   the same directory as the root directory of the django app.
@@ -186,12 +203,14 @@ class CreateTumorView(ViewLoggerMixin,
                       LoginRequiredMixin,
                       InstitutionCheckObjectMixin,
                       generic.CreateView):
+    """Create a tumor and add it to a given patient."""
     model = Tumor
     form_class = TumorForm
-    template_name = "patients/patient_detail.html"
-    action = "create_tumor"
+    template_name = "patients/patient_detail.html"  #:
+    action = "create_tumor"  #:
 
     def form_valid(self, form: TumorForm) -> HttpResponse:
+        """After form validation, add the tumor to the given patient."""
         # assign tumor to current patient
         tumor = form.save(commit=False)
         tumor.patient = Patient.objects.get(**self.kwargs)
@@ -199,9 +218,13 @@ class CreateTumorView(ViewLoggerMixin,
         return super(CreateTumorView, self).form_valid(form)
 
     def get_success_url(self) -> str:
+        """After successfull creation, redirect to the patient's detail view 
+        that also contains info about this tumor."""
         return reverse("patients:detail", kwargs=self.kwargs)
     
     def get_context_data(self, **kwargs: Any) -> Dict[str, Any]:
+        """Add this tumor's patient, the patient's tumor and diagnoses, as well 
+        as the currently performed action to the context dictionary."""
         context = super().get_context_data(**kwargs)
         context["action"] = self.action
         
@@ -221,19 +244,25 @@ class UpdateTumorView(ViewLoggerMixin,
                       LoginRequiredMixin, 
                       InstitutionCheckObjectMixin,
                       generic.UpdateView):
+    """Update specifics of a patient's tumor."""
     model = Tumor
     form_class = TumorForm
-    template_name = "patients/patient_detail.html"
-    action = "update_tumor"
+    template_name = "patients/patient_detail.html"  #:
+    action = "update_tumor"  #:
     
     def get_object(self):
+        """Get tumor by ``PK``."""
         return Tumor.objects.get(pk=self.kwargs["tumor_pk"])
     
     def get_success_url(self) -> str:
+        """After successfully updating the tumor, redirect to patient's detail 
+        view."""
         return reverse("patients:detail", 
                        kwargs={"pk": self.kwargs["pk"]})
     
     def get_context_data(self, **kwargs: Any) -> Dict[str, Any]:
+        """Add this tumor's patient, the patient's tumor and diagnoses, as well 
+        as the currently performed action to the context dictionary."""
         context = super().get_context_data(**kwargs)
         context["action"] = self.action
         
@@ -257,17 +286,23 @@ class DeleteTumorView(ViewLoggerMixin,
                       LoginRequiredMixin, 
                       InstitutionCheckObjectMixin,
                       generic.DeleteView):
+    """Delete a patient's tumor."""
     model = Tumor
     template_name = "patients/patient_detail.html"
     action = "delete_tumor"
     
     def get_object(self):
+        """Get tumor by ``PK``."""
         return Tumor.objects.get(pk=self.kwargs["tumor_pk"])
     
     def get_success_url(self) -> str:
+        """After successfully updating the tumor, redirect to patient's detail 
+        view."""
         return reverse("patients:detail", kwargs={"pk": self.kwargs["pk"]})
     
     def get_context_data(self, **kwargs: Any) -> Dict[str, Any]:
+        """Add this tumor's patient, the patient's tumor and diagnoses, as well 
+        as the currently performed action to the context dictionary."""
         context = super().get_context_data(**kwargs)
         context["action"] = self.action
         
@@ -292,20 +327,27 @@ class CreateDiagnoseView(ViewLoggerMixin,
                          LoginRequiredMixin, 
                          InstitutionCheckObjectMixin,
                          generic.CreateView):
+    """Add a diagnose for a patient's lymphatic system."""
     model = Diagnose
     form_class = DiagnoseForm
-    template_name = "patients/patient_detail.html"
-    action = "create_diagnose"
+    template_name = "patients/patient_detail.html"  #:
+    action = "create_diagnose"  #:
 
     def form_valid(self, form: DiagnoseForm) -> HttpResponse:
+        """As with the tumor, add the diagnose to the already existing patient 
+        after the form was validated."""
         diagnose = form.save(commit=False)
         diagnose.patient = Patient.objects.get(**self.kwargs)
         return super(CreateDiagnoseView, self).form_valid(form)
 
     def get_success_url(self) -> str:
+        """After successfully updating the diagnose, redirect to patient's 
+        detail view."""
         return reverse("patients:detail", kwargs=self.kwargs)
     
     def get_context_data(self, **kwargs: Any) -> Dict[str, Any]:
+        """Add this diagnose's patient, the patient's tumor and diagnoses, as 
+        well as the currently performed action to the context dictionary."""
         context = super().get_context_data(**kwargs)
         context["action"] = self.action
         
@@ -325,19 +367,25 @@ class UpdateDiagnoseView(ViewLoggerMixin,
                          LoginRequiredMixin, 
                          InstitutionCheckObjectMixin,
                          generic.UpdateView):
+    """Change a patient's diagnose."""
     model = Diagnose
     form_class = DiagnoseForm
-    template_name = "patients/patient_detail.html"
-    action = "update_diagnose"
+    template_name = "patients/patient_detail.html"  #:
+    action = "update_diagnose"  #:
     
     def get_object(self):
+        """Get diagnose by ``PK``."""
         return Diagnose.objects.get(pk=self.kwargs["diagnose_pk"])
     
     def get_success_url(self) -> str:
+        """After successfully updating the diagnose, redirect to patient's 
+        detail view."""
         return reverse("patients:detail", 
                        kwargs={"pk": self.kwargs["pk"]})
     
     def get_context_data(self, **kwargs: Any) -> Dict[str, Any]:
+        """Add this diagnose's patient, the patient's tumor and diagnoses, as 
+        well as the currently performed action to the context dictionary."""
         context = super().get_context_data(**kwargs)
         context["action"] = self.action
         
@@ -361,17 +409,23 @@ class DeleteDiagnoseView(ViewLoggerMixin,
                          LoginRequiredMixin, 
                          InstitutionCheckObjectMixin,
                          generic.DeleteView):
+    """Remove a particular diagnose frm a patient's entry."""
     model = Diagnose
-    template_name = "patients/patient_detail.html"
-    action = "delete_diagnose"
+    template_name = "patients/patient_detail.html"  #:
+    action = "delete_diagnose"  #:
     
     def get_object(self):
+        """Get diagnose by ``PK``."""
         return Diagnose.objects.get(pk=self.kwargs["diagnose_pk"])
     
     def get_success_url(self) -> str:
+        """After successfully updating the diagnose, redirect to patient's 
+        detail view."""
         return reverse("patients:detail", kwargs={"pk": self.kwargs["pk"]})
     
     def get_context_data(self, **kwargs: Any) -> Dict[str, Any]:
+        """Add this diagnose's patient, the patient's tumor and diagnoses, as 
+        well as the currently performed action to the context dictionary."""
         context = super().get_context_data(**kwargs)
         context["action"] = self.action
         

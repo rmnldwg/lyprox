@@ -122,6 +122,7 @@ INSTALLED_APPS = [
 
     # third party apps
     "django_filters",
+    "django_extensions",
     "phonenumber_field",
 
     'django.contrib.admin',

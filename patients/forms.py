@@ -1,3 +1,4 @@
+from typing import Dict, Any
 from django import forms
 from django.forms import widgets
 from django.core.exceptions import ValidationError
@@ -11,6 +12,7 @@ from core.loggers import FormLoggerMixin
 
 
 class PatientForm(FormLoggerMixin, forms.ModelForm):
+    """Form to create and edit patients, based on their model definition."""
     class Meta:
         model = Patient
         fields = ["gender", 
@@ -50,13 +52,13 @@ class PatientForm(FormLoggerMixin, forms.ModelForm):
 
     first_name = forms.CharField(
         widget=widgets.TextInput(attrs={"class": "input",
-                                        "placeholder": "First name"}))
+                                        "placeholder": "First name"}))  #:
     last_name = forms.CharField(
         widget=widgets.TextInput(attrs={"class": "input",
-                                        "placeholder": "Last name"}))   
+                                        "placeholder": "Last name"}))    #: 
     birthday = forms.DateField(
         widget=widgets.NumberInput(attrs={"class": "input",
-                                          "type": "date"}))
+                                          "type": "date"}))  #:
     check_for_duplicate = forms.BooleanField(
         widget=widgets.HiddenInput(),
         required=False)
@@ -77,8 +79,8 @@ class PatientForm(FormLoggerMixin, forms.ModelForm):
     
     
     def clean(self):
-        """Override superclass clean method to raise a ValidationError when a 
-        duplicate identifier is found."""
+        """Override superclass clean method to raise a ``ValidationError`` when 
+        a duplicate identifier is found."""
         cleaned_data = super(PatientForm, self).clean()
         unique_hash, cleaned_data = self._get_identifier(cleaned_data)
         
@@ -125,6 +127,7 @@ class PatientForm(FormLoggerMixin, forms.ModelForm):
 
 
 class TumorForm(FormLoggerMixin, forms.ModelForm):
+    """Form to create and edit tumors, based on their model definition."""
     class Meta:
         model = Tumor
         fields = ["t_stage",
@@ -144,6 +147,7 @@ class TumorForm(FormLoggerMixin, forms.ModelForm):
         }
         
     def clean_volume(self):
+        """Process the input for volume size."""
         volume = self.cleaned_data["volume"]
         if volume is not None and volume < 0.:
             raise ValidationError("volume must be a positive number.")
@@ -162,6 +166,7 @@ class TumorForm(FormLoggerMixin, forms.ModelForm):
         
         
 class DiagnoseForm(FormLoggerMixin, forms.ModelForm):
+    """Form to create and edit diagnoses, based on their model definition."""
     class Meta:
         model = Diagnose
         fields = ["diagnose_date",
@@ -199,11 +204,15 @@ class DiagnoseForm(FormLoggerMixin, forms.ModelForm):
     
     
 class DataFileForm(FormLoggerMixin, forms.Form):
+    """Accept and process a CSV file that can then be parsed to batch-create a 
+    number of patients at once."""
     data_file = forms.FileField(
         widget=forms.widgets.FileInput(attrs={"class": "file-input"})
     )
     
-    def clean(self):
+    def clean(self) -> Dict[str, Any]:
+        """Cleaning method that makes sure the uploaded data is in fact a CSV 
+        file and can be parsed by ``pandas`` into a :class:`pandas.DataFrame`."""
         cleaned_data = super(DataFileForm, self).clean()
         suffix = cleaned_data["data_file"].name.split(".")[-1]
         if suffix != "csv":
@@ -228,5 +237,6 @@ class DataFileForm(FormLoggerMixin, forms.Form):
 
 
 class InsitutionForm(FormLoggerMixin, forms.Form):
+    """Form for creating an institution."""
     class Meta:
         model = Institution
