@@ -66,22 +66,6 @@ $("#close-help-modal").click(function () {
     $("#help-modal").removeClass("is-active");
 });
 
-$("#pCT-note").click(function () {
-    $("#pCT-modal").addClass("is-active");
-});
-
-$("#close-pCT-modal").click(function () {
-    $("#pCT-modal").removeClass("is-active");
-});
-
-$("#id_modalities_5").change(function () {
-    if ($("#id_modalities_5").is(':checked')) {
-        $("#pCT-note").removeClass("is-hidden");
-    } else if (!$("#id_modalities_5").is(':checked')) {
-        $("#pCT-note").addClass("is-hidden");
-    };
-});
-
 document.onkeyup = function (e) {
     if (e.altKey && e.key == 'c') {
         $("[name=dashboardform]").submit();

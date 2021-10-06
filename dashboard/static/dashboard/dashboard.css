@@ -138,3 +138,11 @@ span[data-tooltip] {
     top: 0;
     margin-top: 32px;
 }
+
+.level-left .level-item .title {
+    width: 150px;
+}
+
+.level-item .field {
+    width: 90%;
+}

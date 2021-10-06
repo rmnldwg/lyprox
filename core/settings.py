@@ -103,6 +103,10 @@ def set_LOGGING(LOG_LEVEL):
             'auth_logger': {
                 'level': LOG_LEVEL,
                 'handlers': ['console', 'file']
+            },
+            'dashboard': {
+                'level': LOG_LEVEL,
+                'handlers': ['console', 'file']
             }
         }
     }

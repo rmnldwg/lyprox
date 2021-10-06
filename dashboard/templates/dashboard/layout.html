@@ -102,20 +102,6 @@
                                 </div>
                             </div>
                         </div>
-
-                        <p class="title is-5 mb-2">Institutions</p>
-                        <div class="field is-grouped">
-                            {% for checkbox in form.institution__in %}
-                            <div class="control is-expanded">
-                                {{ checkbox.tag }}
-                                <label for="{{ checkbox.id_for_label }}" class="for-institution button is-primary is-light is-fullwidth" title="{{ checkbox.choice_label }}">
-                                    <span class="icon">
-                                        <img src="{{ checkbox.choice_label }}" alt="">
-                                    </span>
-                                </label>
-                            </div>
-                            {% endfor %}
-                        </div>
                     </div>
 
                     <div class="tile is-child box">
@@ -197,23 +183,35 @@
                 </div>
 
                 <div class="tile is-9 is-vertical">
-                    <div class="tile is-parent">
+                    <div class="tile is-parent is-vertical">
                         <div class="tile is-child box">
                             <div class="level">
                                 <div class="level-left">
                                     <div class="level-item">
-                                        <p class="title is-4">Modalities</p>
+                                        <p class="title is-4">Institutions</p>
                                     </div>
                                 </div>
-                                <div class="level-right">
-                                    <div class="level-item">
-                                        <p class="button tag is-danger is-light is-hidden" id="pCT-note">
-                                            <strong>Note:&nbsp;</strong>
-                                            Modality "planning CT" is not strictly a diagnostic modality.
-                                            Click here for more info
-                                        </p>
+
+                                <div class="level-item">
+                                    <div class="field is-grouped is-grouped-multiline">
+                                        {% for checkbox in form.institution__in %}
+                                        {% with idx=forloop.counter0 %}
+                                        {% with name_and_url=form.institution__in.field.names_and_urls|index:idx %}
+                                        <div class="control">
+                                            {{ checkbox.tag }}
+                                            <label for="{{ checkbox.id_for_label }}" class="for-institution button is-primary is-light is-fullwidth" data-tooltip="{{ name_and_url.0 }}">
+                                                <span class="icon">
+                                                    <img src="{{ name_and_url.1 }}" alt="{{ name_and_url.0 }} logo">
+                                                </span>
+                                            </label>
+                                        </div>
+                                        {% endwith %}
+                                        {% endwith %}
+                                        {% endfor %}
                                     </div>
-                        
+                                </div>
+
+                                <div class="level-right">
                                     <div class="level-item">
                                         <div class="tooltip">
                                             <span class="icon">
@@ -224,20 +222,40 @@
                                     </div>
                                 </div>
                             </div>
-                        
-                            <div class="columns">
-                                {% for checkbox in form.modalities %}
-                                <div class="column">
-                                    {{ checkbox.tag }}
-                                    <label for="{{ checkbox.id_for_label }}" class="button is-primary is-light is-fullwidth">
-                                        <span>{{ checkbox.choice_label }}</span>
-                                    </label>
+                        </div>
+                        <div class="tile is-child box">
+                            <div class="level">
+                                <div class="level-left">
+                                    <div class="level-item">
+                                        <p class="title is-4">Modalities</p>
+                                    </div>
                                 </div>
-                                {% endfor %}
-                        
-                                <div class="column is-narrow">
-                                    <div class="select">
-                                        {{ form.modality_combine }}
+
+                                <div class="level-item">
+                                    <div class="field is-grouped is-grouped-multiline">
+                                        {% for checkbox in form.modalities %}
+                                        <div class="control is-expanded">
+                                            {{ checkbox.tag }}
+                                            <label for="{{ checkbox.id_for_label }}" class="button is-primary is-light is-fullwidth">
+                                                <span>{{ checkbox.choice_label }}</span>
+                                            </label>
+                                        </div>
+                                        {% endfor %}
+                                        
+                                        <div class="select">
+                                            {{ form.modality_combine }}
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="level-right">
+                                    <div class="level-item">
+                                        <div class="tooltip">
+                                            <span class="icon">
+                                                <i class="fas fa-question"></i>
+                                            </span>
+                                            {% include 'dashboard/help-tooltip.html' with side="left" position="bottom" image='dashboard/modalities.gif' markdown='dashboard/help_modalities.md' %}
+                                        </div>
                                     </div>
                                 </div>
                             </div>
