@@ -11,7 +11,9 @@ class InstitutionCheckPatientMixin(UserPassesTestMixin):
     """Mixin that makes sure only users from the institution that created the 
     patient can edit it.
     """
-    def test_func(self) -> Optional[bool]:
+    def test_func(self) -> bool:
+        """Simply returnd ``True`` if the logged-in user comes from the same 
+        institution as the user who created the patient."""
         user = self.request.user
         patient = self.model.objects.get(**self.kwargs)
         msg = (f"User {user} is trying to edit/delete patient {patient}.")
@@ -27,10 +29,14 @@ class InstitutionCheckPatientMixin(UserPassesTestMixin):
 
 
 class InstitutionCheckObjectMixin(UserPassesTestMixin):
-    """Mixin that makes sure only users from the institution that created the 
-    patient can edit that patient's diagnose and tumor.
+    """Mixin that makes sure only users from the institution that created this 
+    object's patient can edit it.
     """
-    def test_func(self) -> Optional[bool]:
+    def test_func(self) -> bool:
+        """Simply returnd ``True`` if the logged-in user comes from the same 
+        institution as the user who created the patient this object (tumor or 
+        diagnose) belongs to.
+        """
         user = self.request.user
         patient = Patient.objects.get(pk=self.kwargs["pk"])
         msg = (f"User {user} is trying to edit/delete a {self.model} on "

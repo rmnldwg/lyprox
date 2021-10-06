@@ -264,6 +264,7 @@ COUNTRIES = (
 )
 
 class CountryField(models.CharField):
+    """Holds all countries and their respective country codes as a CharField."""
     def __init__(self, *args, **kwargs):
         kwargs.setdefault('max_length', 2)
         kwargs.setdefault('choices', COUNTRIES)
@@ -275,20 +276,28 @@ class CountryField(models.CharField):
 
 
 class Institution(ModelLoggerMixin, models.Model):
-    """Class for an institution like a hospital/clinic."""
-    name = models.CharField(max_length=100, unique=True, blank=False)
-    shortname = models.CharField(max_length=10, unique=True, blank=False)
-    street = models.CharField(max_length=100)
-    city = models.CharField(max_length=100)
-    country = CountryField(blank=False)
-    phone = PhoneNumberField()
-    logo = models.FileField(upload_to="institution_logos/", blank=True, null=True)
+    """Class for an institution like a hospital/clinic. Every patient and every 
+    user will be assigned to at least one institution.
+    """
+    name = models.CharField(max_length=100, unique=True, blank=False)  #:
+    shortname = models.CharField(max_length=10, unique=True, blank=False)  #:
+    street = models.CharField(max_length=100)  #:
+    city = models.CharField(max_length=100)  #:
+    country = CountryField(blank=False)  #:
+    phone = PhoneNumberField()  #:
+    #: Logo of the institution that can be uploaded for visual clues in the app
+    logo = models.FileField(
+        upload_to="institution_logos/", blank=True, null=True
+    )
     
     def __str__(self):
         return f"{self.shortname}, {self.get_country_display()}"
 
 
 class UserManager(BaseUserManager):
+    """Slightly modified version of the base user manager that handles the safe 
+    creation of users.
+    """
     def _create_user(self, email, password, **extra_fields):
         """Create and save user with the fields for email and password."""
         if not email:

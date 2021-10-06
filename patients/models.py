@@ -103,8 +103,6 @@ class Tumor(ModelLoggerMixin, models.Model):
                         ("C04.9", "floor of mouth, nos"),
 
                         ("C05.0", "hard palate"),
-                        ("C05.1", "soft palate, nos"),
-                        ("C05.2", "uvula"),
                         ("C05.8", "overlapping lesion of palate"),
                         ("C05.9", "palate, nos"),
 
@@ -116,6 +114,9 @@ class Tumor(ModelLoggerMixin, models.Model):
         ),
         ("oropharynx",  (("C01.9", "base of tongue, nos"),
 
+                        ("C05.1", "soft palate, nos"),
+                        ("C05.2", "uvula"),
+                        
                         ("C09.0", "tonsillar fossa"),
                         ("C09.1", "tonsillar pillar"),
                         ("C09.8", "overlapping lesion of tonsil"),

@@ -3,11 +3,12 @@ from django.db.models import QuerySet
 
 import numpy as np
 import pandas as pd
-from typing import List
+from typing import List, Tuple
 import logging
 logger = logging.getLogger(__name__)
 
 from .models import (Patient, Diagnose, Tumor)
+from accounts.models import User
 
 
 class ParsingError(Exception):
@@ -30,15 +31,16 @@ def compute_hash(*args):
 
 
 def nan_to_None(sth):
+    """Converts ``NaN`` from the pabdas table to pythonic ``None``."""
     if sth != sth:
         return None
     else:
         return sth
 
 
-def get_model_fields(model, remove: List[str] = []):
+def get_model_fields(model, remove: List[str] = []) -> List[str]:
     """Get list of names of model fields and remove the ones provided via the
-    `remove` argument."""
+    ``remove`` argument."""
     fields = model._meta.get_fields()
     field_names = [f.name for f in fields]
     for entry in remove:
@@ -50,9 +52,18 @@ def get_model_fields(model, remove: List[str] = []):
     return field_names
 
 
-def row2patient(row, user, anonymize: List[str]):
-    """Create a `Patient` instance from a row of a `DataFrame` containing the 
-    appropriate information, as well as the user that uploaded the information.
+def row2patient(row: pd.Series, user: User, anonymize: List[str]) -> Patient:
+    """Create a patient from a row of a table.
+    
+    Args:
+        row: The row of the :class:`pd.DataFrame` table.
+        user: The currently logged in user that will pass on their institution 
+            to the newly created :class:`Patient`
+        anonymize: List of fields used to anonymize the patient by computing a 
+            hash from the content of those fields.
+    
+    Returns:
+        The patient created from the row of a table.
     """
     patient_dict = row.to_dict()
     _ = nan_to_None
@@ -93,9 +104,22 @@ def row2patient(row, user, anonymize: List[str]):
     return new_patient
 
 
-def row2tumors(row, patient):
-    """Create `Tumor` instances from row of a `DataFrame` and add them to an 
-    existing `Patient` instance."""
+def row2tumors(row: pd.Series, patient: Patient) -> Tumor:
+    """Create a new tumor from a table row and connect it to an already created 
+    patient.
+    
+    Args:
+        row: The row of the :class:`pd.DataFrame` table.
+        patient: A previously created patient who's tumor is created in this 
+            function.
+    
+    Returns:
+        The patient's tumor, extracted from a table row.
+    
+    See Also:
+        :func:`row2diagnoses`: Same function, but for a diagnose instead of a 
+            tumor.
+    """
     # extract number of tumors in row
     level_zero = row.index.get_level_values(0)
     num_tumors = np.max([int(num) for num in level_zero])
@@ -123,9 +147,22 @@ def row2tumors(row, patient):
         new_tumor.save()
 
 
-def row2diagnoses(row, patient):
-    """Create `Diagnose` instances from row of `DataFrame` and add them to an 
-    existing `Patient` instance."""
+def row2diagnoses(row: pd.Series, patient: Patient) -> Diagnose:
+    """Create a new diagnose from a table row and connect it to an already 
+    created patient.
+    
+    Args:
+        row: The row of the :class:`pd.DataFrame` table.
+        patient: A previously created patient who's diagnose is created in this 
+            function.
+    
+    Returns:
+        The patient's diagnose, extracted from a table row.
+        
+    See Also:
+        :func:`row2tumors`: Same function, but for a tumor instead of a 
+            diagnose.
+    """
     modalities_list = list(set(row.index.get_level_values(0)))
     if not set(modalities_list).issubset(Diagnose.Modalities.labels):
         message = ("Unknown diagnostic modalities were provided. Known are "
@@ -169,8 +206,23 @@ def import_from_pandas(
     data_frame: pd.DataFrame, 
     user,
     anonymize: List[str] = ["id"]
-):
-    """Import patients from pandas `DataFrame`."""
+) -> Tuple[int]:
+    """Batch-import patients from a ``pandas`` :class:`DataFrame` by iterating 
+    through the rows and creating first the patient, their tumor(s) and then 
+    their diagnose(s).
+    
+    Args:
+        data_frame: The table containing rows of patients.
+        user: The currently logged-in user. They will pass on their institution 
+            to the new patients.
+        anonymize: This will be passed on to :func:`row2patient`. It specifies 
+            which fields are going to be used to compute the patient's hash and 
+            thereby anonymize the patient.
+    
+    Returns:
+        A tuple with the number of newly added patients and the number of 
+        skipped rows, because they were already in the database.
+    """
     num_new = 0
     num_skipped = 0
     
@@ -219,9 +271,16 @@ def import_from_pandas(
     return num_new, num_skipped
     
 
-def export_to_pandas(patients: QuerySet):
-    """Export `QuerySet` of patients into a pandas `DataFrame` of the same 
-    format as it is needed for importing."""
+def export_to_pandas(patients: QuerySet) -> pd.DataFrame:
+    """Export a QuerySet of patients to a pandas DataFrame of the same 
+    structure as the one that is necessary to batch-import patients.
+    
+    Args:
+        patients: A QuerySet of patients.
+        
+    Returns:
+        The properly formatted table where each row corresponds to a patient.
+    """
     
     # create list of tuples for MultiIndex and use that to create DataFrame
     patient_fields = get_model_fields(

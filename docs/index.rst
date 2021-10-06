@@ -12,3 +12,4 @@ Welcome to LyProX's documentation!
    :caption: Contents:
 
    patient_representation
+   user_management
