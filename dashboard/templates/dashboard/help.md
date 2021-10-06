@@ -18,7 +18,11 @@ Here, one can visualize the patients in the database. The aim is to make it easy
 
 {% include_md 'dashboard/help_tumor.md' %}
 
-### Modalities (center top)
+### Institutions (center top)
+
+{% include_md 'dashboard/help_institutions.md' %}
+
+### Modalities (center, below Institutions)
 
 {% include_md 'dashboard/help_modalities.md' %}
 
