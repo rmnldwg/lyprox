@@ -1,7 +1,7 @@
 {% load mytags %}
 
 {% if name is not None %}<p class="heading has-text-centered">{{ name }}</p>{% endif %}
-<div class="field has-addons is-justify-content-center mb-1">
+<div class="field has-addons is-justify-content-center mb-1" {% if tooltip_text %} data-tooltip="{{ tooltip_text }}" {% endif %}>
     {% for radio in radio_buttons %}
     <div class="control">
         {{ radio.tag }}

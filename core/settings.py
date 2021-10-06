@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 from pathlib import Path
 import json
 import warnings
+import subprocess
 
 
 try:
@@ -51,6 +52,15 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 FILE_UPLOAD_TEMP_DIR = BASE_DIR / "tmp"
 
 LOGIN_REDIRECT_URL = "/"
+
+
+# versioning
+try:
+    VERSION = subprocess.check_output(
+        "git describe --tags --always", cwd=BASE_DIR, shell=True
+    ).decode("utf-8").strip()
+except Exception as e:
+    VERSION = e
 
 
 # Logging
@@ -93,6 +103,10 @@ def set_LOGGING(LOG_LEVEL):
             'auth_logger': {
                 'level': LOG_LEVEL,
                 'handlers': ['console', 'file']
+            },
+            'dashboard': {
+                'level': LOG_LEVEL,
+                'handlers': ['console', 'file']
             }
         }
     }
@@ -112,8 +126,8 @@ INSTALLED_APPS = [
 
     # third party apps
     "django_filters",
+    "django_extensions",
     "phonenumber_field",
-    # "address",
 
     'django.contrib.admin',
     'django.contrib.auth',
@@ -146,6 +160,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'core.context_processors.selected_settings'
             ],
         },
     },

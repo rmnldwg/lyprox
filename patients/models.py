@@ -6,42 +6,53 @@ from core.loggers import ModelLoggerMixin
 
 
 class Patient(ModelLoggerMixin, models.Model):
-    """Base model class of a patient. Contains patient specific information."""
+    """The representation of a patient in the database. It contains some 
+    demographic information, as well as patient-specific characteristics that 
+    are important in the context of cancer, e.g. HPV status."""
     
     class T_stages(models.IntegerChoices):
+        """:meta private:"""
         T1 = 1, "T1"
         T2 = 2, "T2"
         T3 = 3, "T3"
         T4 = 4, "T4"
     
     class N_stages(models.IntegerChoices):
+        """:meta private:"""
         N0 = 0, "N0"
         N1 = 1, "N1"
         N2 = 2, "N2"
         N3 = 3, "N3"
         
     class M_stages(models.IntegerChoices):
+        """:meta private:"""
         M0 = 0, "M0"
         M1 = 1, "M1"
         MX = 2, "MX"
     
-    # this first field should be computed from the fields that must be deleted 
-    # for anomymization.
+    #: Unique ID that should be computed from sensitive info upon patient 
+    #: creation to avoid duplicates and respect the patient's privacy.
     hash_value = models.CharField(max_length=200, unique=True)
     gender = models.CharField(max_length=10, choices=[("female", "female"), 
-                                                      ("male"  , "male"  )])
-    age = models.IntegerField()
-    diagnose_date = models.DateField()
+                                                      ("male"  , "male"  )])  #:
+    age = models.IntegerField()  #:
+    diagnose_date = models.DateField()  #:
     
+    #: Was the patient a drinker?
     alcohol_abuse = models.BooleanField(blank=True, null=True)
+    #: Was the patient a smoker?
     nicotine_abuse = models.BooleanField(blank=True, null=True)
+    #: HPV status of the patient (postive or negative).
     hpv_status = models.BooleanField(blank=True, null=True) 
+    #: Has the patient been treated with some form of neck dissection?
     neck_dissection = models.BooleanField(blank=True, null=True)
     
-    t_stage = models.PositiveSmallIntegerField(choices=T_stages.choices, default=0)
-    n_stage = models.PositiveSmallIntegerField(choices=N_stages.choices)
-    m_stage = models.PositiveSmallIntegerField(choices=M_stages.choices)
+    t_stage = models.PositiveSmallIntegerField(choices=T_stages.choices, default=0)  #:
+    n_stage = models.PositiveSmallIntegerField(choices=N_stages.choices)  #:
+    m_stage = models.PositiveSmallIntegerField(choices=M_stages.choices)  #:
     
+    #: By default, every newly created patient is assigned to the institution 
+    #: of the :class:`User` that created them.
     institution = models.ForeignKey(Institution, blank=True, on_delete=models.PROTECT)
     
     
@@ -51,11 +62,12 @@ class Patient(ModelLoggerMixin, models.Model):
                 f"{self.institution.shortname}")
     
     def get_absolute_url(self):
+        """Return the absolute URL for a particular patient."""
         return reverse("patients:detail", args=[self.pk])
     
     def update_t_stage(self):
-        """Update T-stage after new `Tumor` is added to `Patient` (gets called 
-        in `Tumor.save()` method)"""
+        """Update T-stage after new :class:`Tumor` is added to :class:`Patient` 
+        (gets called in :meth:`Tumor.save()` method)"""
         tumors = Tumor.objects.all().filter(patient=self)
         
         max_t_stage = 0
@@ -70,9 +82,11 @@ class Patient(ModelLoggerMixin, models.Model):
 
 
 class Tumor(ModelLoggerMixin, models.Model):
-    """Report of primary tumor(s)."""
+    """Model to describe tumors in detail. It is connected to a patient via 
+    a ``ForeignKey`` relation."""
     
     class Locations(models.TextChoices):
+        """:meta private:"""
         ORAL_CAVITY = "oral cavity"
         OROPHARYNX  = "oropharynx"
         HYPOPHARYNX = "hypopharynx"
@@ -132,17 +146,25 @@ class Tumor(ModelLoggerMixin, models.Model):
         )
     ]
     
+    #: ``ForeignKey`` to :class:`Patient`
     patient = models.ForeignKey(Patient, on_delete=models.CASCADE)
     
+    #: Tumor location within the Head & Neck region
     location = models.CharField(max_length=20, choices=Locations.choices)
+    #: More detailed information about the location of the tumor
     subsite = models.CharField(max_length=10, choices=SUBSITES)
+    #: Lateralization of the tumor.
     side = models.CharField(max_length=10, choices=[("left", "left"),
                                                     ("right", "right"),
                                                     ("central", "central")])
+    #: Does the tumor extend over the mid-sagittal plane?
     extension = models.BooleanField(blank=True, null=True)
+    #: Size of the tumor.
     volume = models.FloatField(blank=True, null=True)
     
+    #:
     t_stage = models.PositiveSmallIntegerField(choices=Patient.T_stages.choices)
+    #: Prefix for the tumor's T-stage (``c`` or ``p``)
     stage_prefix = models.CharField(max_length=1, choices=[("c", "c"), 
                                                            ("p", "p")])
     
@@ -151,8 +173,11 @@ class Tumor(ModelLoggerMixin, models.Model):
         return f"#{self.pk}: T{self.t_stage} tumor of patient #{self.patient.pk}"
     
     def save(self, *args, **kwargs):
-        """Extract location and update patient's T-stage upon saving tumor."""
-        # automatically extract location from subsite
+        """Before creating the database entry, determine the location of the 
+        tumor from the specified subsite and update the patient it is assigned 
+        to, to the correct T-stage."""
+        
+        # Automatically extract location from subsite
         subsite_dict = dict(self.SUBSITES)
         location_list = self.Locations.values
         
@@ -175,21 +200,23 @@ class Tumor(ModelLoggerMixin, models.Model):
         return tmp_return
         
     def delete(self, *args, **kwargs):
+        """Upon deletion, update the patient's T-stage."""
         patient = self.patient
         tmp = super(Tumor, self).delete(*args, **kwargs)
         patient.update_t_stage()
         return tmp
     
 
-class Diagnose(models.Model):
-    """Report of pattern of lymphatic metastases for a given diagnostic 
-    modality."""
+class Diagnose(ModelLoggerMixin, models.Model):
+    """Model describing the diagnosis of one side of a patient's neck with 
+    regard to their lymphaitc metastatic involvement."""
     
     LNLs = [
         "I", "Ia" , "Ib", "II", "IIa", "IIb", "III", "IV", "V", "VII"
     ]
     
     class Modalities(models.IntegerChoices):
+        """:meta private:"""
         CT   = 0, "CT"
         MRI  = 1, "MRI"
         PET  = 2, "PET"
@@ -197,11 +224,14 @@ class Diagnose(models.Model):
         PATH = 4, "path"
         PCT  = 5, "pCT"
     
+    #: ``ForeignKey`` to :class:`Patient`
     patient = models.ForeignKey(Patient, on_delete=models.CASCADE)
     
+    #: The used diagnostic modality. E.g. ``MRI``, ``PET`` or ``FNA``.
     modality = models.PositiveSmallIntegerField(choices=Modalities.choices)
+    #:
     diagnose_date = models.DateField(blank=True, null=True)
-    
+    #: diagnosed side
     side = models.CharField(max_length=10, choices=[("left", "left"),
                                                     ("right", "right")])
     
@@ -212,7 +242,8 @@ class Diagnose(models.Model):
     
     def save(self, *args, **kwargs):
         """Make sure LNLs and their sublevels (e.g. 'a' and 'b') are treated 
-        consistelntly.
+        consistelntly. E.g. when sublevel ``Ia`` is reported to be involved, 
+        the involvement status of level ``I`` cannot be reported as healthy.
         """
         safe_negate = lambda x: False if x is None else not x
         

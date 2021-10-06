@@ -1,9 +1,14 @@
 from django import forms
 from django.db.models.expressions import Value
+from django.forms import fields
 
 from core.loggers import FormLoggerMixin
 from patients.models import Patient, Tumor, Diagnose
 from accounts.models import Institution
+
+from typing import Tuple
+import logging
+logger = logging.getLogger(__name__)
 
 
 class ThreeWayToggle(forms.ChoiceField):
@@ -44,12 +49,46 @@ class ThreeWayToggle(forms.ChoiceField):
             return value
 
 
+class InstitutionModelChoiceIndexer:
+    """Custom class with which one can access additional information from 
+    the model that is chosen by the :class:`InstitutionMultipleChoiceField`."""
+    
+    def __init__(self, field) -> None:
+        self.field = field
+        self.queryset = field.queryset
+    
+    def __getitem__(self, key):
+        obj = self.queryset[key]
+        return self.info(obj)
+    
+    def info(self, obj: Institution) -> Tuple[int, str]:
+        return (
+            self.field.label_from_instance(obj),
+            self.field.logo_url_from_instance(obj)
+        )
+
+
 class InstitutionMultipleChoiceField(forms.ModelMultipleChoiceField):
-    """Return logo URL for institution."""
+    """Customize label description and add method that returns the logo URL for 
+    institutions. The implementation is inspired by how the ``choices`` are 
+    implemented. But since some other functionality depends on how those 
+    choices are implemented, it cannot be changed easily."""
+    
+    #: Allows one to extract more info about the objects. E.g. name and logo url
+    name_and_url_indexer = InstitutionModelChoiceIndexer
+    
     def label_from_instance(self, obj: Institution) -> str:
+        """Institution name as label."""
+        return obj.name
+    
+    def logo_url_from_instance(self, obj: Institution) -> str:
+        """Return URL of Institution's logo."""
         return obj.logo.url
-
-
+    
+    @property
+    def names_and_urls(self):
+        return self.name_and_url_indexer(self)
+    
 
 class DashboardForm(FormLoggerMixin, forms.Form):
     """Form for querying the database."""
@@ -80,6 +119,7 @@ class DashboardForm(FormLoggerMixin, forms.Form):
     institution__in = InstitutionMultipleChoiceField(
         required=False,
         widget=forms.CheckboxSelectMultiple(
+            # doesn't do anythin since it's written by hand
             attrs={"class": "checkbox is-hidden", 
                    "onchange": "changeHandler();"}
         ),
@@ -96,7 +136,7 @@ class DashboardForm(FormLoggerMixin, forms.Form):
         ),
         choices=[("base", "base of tongue"),
                  ("tonsil", "tonsil"), 
-                 ("rest" , "other/multiple")],
+                 ("rest" , "other")],
         initial=["base", "tonsil", "rest"]
     )
     t_stage__in = forms.MultipleChoiceField(
