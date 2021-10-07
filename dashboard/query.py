@@ -2,7 +2,7 @@ from django.db.models import Q, F, QuerySet
 
 import numpy as np
 import logging
-from typing import Optional, List, Dict
+from typing import Optional, List, Dict, Tuple, Any
 
 from patients.models import Patient, Diagnose, Tumor
 from accounts.models import Institution
@@ -10,12 +10,20 @@ from accounts.models import Institution
 logger = logging.getLogger(__name__)
 
 
-def tf2arr(value):
-    """Map `True`, `False` & `None` to one-hot-arrays of length 3. This 
-    particular mapping comes from the fact that in the form `True`, `None`, 
-    `False` are represented by integers 1, 0, -1. So, the one-hot encoding 
-    uses an array of length 3 that is one only at these respective indices, 
-    where -1 is the last item."""
+def tf2arr(value: Optional[bool]) -> np.ndarray:
+    """Map `True`, `False` & `None` to required format for counting the 
+    occurrences.
+    
+    Args:
+        value: The value to be transformed into the one-hot encoding.
+    
+    Returns:
+        A one-hot encoding in the form of an array with length 3. The first 
+        element (index 0) corresponds to a ``value`` of ``None``. The second 
+        element (index 1) to a ``value`` of ``True`` (1 <-> ``True``, that 
+        is the logic behind the choice of this encoding) and the third and last 
+        element (index -1) to a ``value`` of ``False`` (-1 <-> ``False``).
+    """
     if value is None:
         return np.array([1, 0, 0], dtype=int)
     else:
@@ -25,10 +33,18 @@ def tf2arr(value):
             return np.array([0, 0, 1], dtype=int)    
         
         
-def subsite2arr(subsite):
-    """Map different subsites to an one-hot-array of length three. A one in the 
-    first place means "base of tongue", at the second place is "tonsil" and at 
-    the tird place it's "rest"."""
+def subsite2arr(subsite: str) -> np.ndarray:
+    """Map ICD codes for primary tumor subsites to required format for counting 
+    the occurrences.
+    
+    Args:
+        subsite: IDC code for the specific tumor subsite.
+    
+    Returns:
+        A one-hot encoding in the form of an array with length 3. The first 
+        element corresponds to the subsite "base of tongue", the second to 
+        "tonsil" and the last to any other subsite.
+    """
     if subsite in ["C01.9"]:
         return np.array([1, 0, 0], dtype=int)
     elif subsite in ["C09.0", "C09.1", "C09.8", "C09.9"]:
@@ -37,11 +53,17 @@ def subsite2arr(subsite):
         return np.array([0, 0, 1], dtype=int)
     
     
-def side2arr(side):
-    """Map side to one-hot-array of length three. A one in the first place 
-    means unknown lateralization, in the second place it means the tumor is 
-    central and in the last place corresponds to a laterlalized tumor (right or 
-    left)."""
+def side2arr(side: str) -> np.ndarray:
+    """Map the side of the primary tumor to a one-hot encoding of length three.
+    
+    Args:
+        side: Lateralization of the tumor.
+    
+    Returns:
+        A one-hot encoding of the different sides: The array has a one at index 
+        0 if the lateralization is unknown, at index 1 if it is known and 
+        lateralized and at index -1 if it is not lateralized.
+    """
     if side == "central":
         return np.array([0, 1, 0], dtype=int)
     elif (side == "left") or (side == "right"):
@@ -52,14 +74,33 @@ def side2arr(side):
 
 
 def patient_specific(
-    patient_queryset: QuerySet = Patient.objects.all(),
+    patient_queryset: QuerySet,
     nicotine_abuse: Optional[bool] = None,
     hpv_status: Optional[bool] = None,
     neck_dissection: Optional[bool] = None,
-    institution__in: Optional[Institution] = None,
+    institution__in: Optional[List[Institution]] = None,
     **rest
 ) -> QuerySet:
-    """Filter `QuerySet` of `Patient`s based on patient-specific properties.
+    """Filter patients based on person-specific characteristics.
+    
+    Args:
+        patient_queryset: The :class:`QuerSey` of :class:`Patient` instances.
+        nicotine_abuse: Filter for patients that are/were smokers (``True``) or 
+            non-smoking persons (``False``). Ignore if set to ``None``.
+        hpv_status: In- or exclude depending on HPV status: If ``True``, only
+            patients that are HPV positive are included, when set to ``False`` 
+            HPV negative patients are included and if set to ``None``, no 
+            selection is made w.r.t. HPV.
+        neck_dissection: Choose patients that have undergone neck dissection 
+            (``True``) or not (``False``). Ignore this attribute if set to 
+            ``None``.
+        institution__in: List of institutions the patients can come from. If 
+            the patient's institution is not in the list, they are excluded. 
+            This parameter's naming is chosen such that it can, as a ``kwarg``, 
+            be inserted into the QuerySet's ``filter`` function directly.
+    
+    Returns:
+        The filtered set of patients.
     """
     kwargs = locals()
     kwargs.pop('patient_queryset')
@@ -75,8 +116,7 @@ def patient_specific(
 
 
 def tumor_specific(
-    patient_queryset: QuerySet = Patient.objects.all(),
-    # restrict to Oropharynx
+    patient_queryset: QuerySet,
     subsite__in: List[str] = ["C01.9",
                               "C09.0", "C09.1", "C09.8", "C09.9",
                               "C10.0", "C10.1", "C10.2", "C10.3", "C10.4", 
@@ -88,7 +128,22 @@ def tumor_specific(
     extension: Optional[bool] = None,
     **rest
 ) -> QuerySet:
-    """Filter `QuerySet` of `Patient`s based on tumor-specific properties.
+    """Filter patients based on characteristics of their tumors.
+    
+    Args:
+        patient_queryset: The :class:`QuerSey` of :class:`Patient` instances 
+            that is to be filtered.
+        subsite__in: List of subsites the primary tumor should be in. Nameing 
+            of this parameter is chosen such that it can be inserted into the 
+            QuerSet's ``filter`` fuction directly as a ``kwarg``.
+        t_stage__in: List of T-stages the tumor can be in. Naming like for the 
+            ``subsite__in`` parameter.
+        side__in: Lateralizations that can be included in the final QuerySet.
+        extension: Filter patients based on whether their tumor extends over 
+            the mid-sagittal extension or not.
+    
+    Returns:
+        The filtered set of patients.
     """
     kwargs = locals()              # extract keyword arguments and...
     kwargs.pop('patient_queryset') # ...remove the patient queryset and...
@@ -101,14 +156,28 @@ def tumor_specific(
 
 
 def diagnose_specific(
-    patient_queryset: QuerySet = Patient.objects.all(),
+    patient_queryset: QuerySet,
+    cleaned_data: Dict[str, Any],
     assign_central: str = "left",
-    **kwargs
-):
-    """"""
+) -> Tuple[QuerySet, QuerySet]:
+    """Filter patients based on a pattern of lymphatic involvement that should 
+    match the combination of the selected diagnostc modalities available.
+    
+    Args:
+        patient_queryset: The :class:`QuerSey` of :class:`Patient` instances 
+            that is to be filtered.
+        cleaned_data: The cleaned data from the :class:`DashboardForm`. The 
+            function extracts the pattern of nodal involvement from this 
+            dictionary.
+        assign_central: For patients with a central tumor, assign this side to 
+            be the ipsilateral one.
+    
+    Returns:
+        The filtered QuerySet, as well as the respective QuerySet of diagnoses.
+    """
     # DIAGNOSES
     d = Diagnose.objects.all().filter(patient__in=patient_queryset,
-                                      modality__in=kwargs['modalities'])
+                                      modality__in=cleaned_data['modalities'])
     q_ipsi = (Q(side=F("patient__tumor__side"))
               | (Q(patient__tumor__side="central")
                  & Q(side=assign_central)))
@@ -137,7 +206,7 @@ def diagnose_specific(
                             'contra': {}}
     for side in ['ipsi', 'contra']:
         for i,lnl in enumerate(Diagnose.LNLs):
-            if (selected_inv := kwargs[f'{side}_{lnl}']) is not None:
+            if (selected_inv := cleaned_data[f'{side}_{lnl}']) is not None:
                 selected_diagnose[side][i] = selected_inv
                 
         for diagnose in diagnose_querysets[side]:
@@ -157,9 +226,9 @@ def diagnose_specific(
         
         # ...and aggregate/combine each patient's diag    
         for pat_id, diag_table in diagnose_tables[side].items():
-            if kwargs['modality_combine'] == 'OR':
+            if cleaned_data['modality_combine'] == 'OR':
                 combine = any
-            elif kwargs['modality_combine'] == 'AND':
+            elif cleaned_data['modality_combine'] == 'AND':
                 combine = all
             else:
                 msg = ("Modalities can only be combined using logical OR or "

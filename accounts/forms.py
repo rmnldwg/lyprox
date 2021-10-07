@@ -11,11 +11,13 @@ class CustomAuthenticationForm(AuthenticationForm):
     to the inheritance from `AuthenticationForm` the email field, which is used 
     to log in users, is called username.
     """
+    #: The email address is used as a username field
     username = UsernameField(
         label="Email address",
         widget=forms.TextInput(attrs={'autofocus': True, 
                                       "class": "input"})
     )
+    #: 
     password = forms.CharField(
         label="Password",
         strip=False,
@@ -25,8 +27,10 @@ class CustomAuthenticationForm(AuthenticationForm):
 
 
 class SignupRequestForm(forms.ModelForm):
-    """Form for requesting to be signed up by an administrator."""
+    """Form for requesting to be signed up by an administrator. Currentrly not 
+    in use."""
     class Meta:
+        """Meta class defining the user model and all the fields of interest."""
         model = User
         fields = ["title", "first_name", "last_name", "email", "institution"]
         widgets = {
@@ -49,7 +53,8 @@ class SignupRequestForm(forms.ModelForm):
     
     def save(self, commit: bool):
         """Override save method, so that the entered data is not used to create 
-        a `User` instance, but the information is just stored/sent to an admin.
+        a `User` instance, but the information is just stored/sent to an admin. 
+        Not implemented yet.
         """
         # TODO: Store the cleaned data somewhere or send it via email to the 
         #   admin(s).

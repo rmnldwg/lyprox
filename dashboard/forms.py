@@ -6,25 +6,36 @@ from core.loggers import FormLoggerMixin
 from patients.models import Patient, Tumor, Diagnose
 from accounts.models import Institution
 
-from typing import Tuple
+from typing import Tuple, Dict, List, Optional, Any
 import logging
 logger = logging.getLogger(__name__)
 
 
 class ThreeWayToggle(forms.ChoiceField):
     """A toggle switch than can be in three different states: Positive/True, 
-    unkown/None and negative/False."""
+    unkown/None and negative/False.
     
-    def __init__(self, 
-                 widget=None, 
-                 attrs={"class": "radio is-hidden",
-                        "onchange": "changeHandler();"},
-                 choices=[( 1 , "plus"),
-                          ( 0 , "ban"), 
-                          (-1, "minus")],
-                 initial=0,
-                 required=False,
-                 **kwargs):
+    Args:
+        widget: Widget to be used. Should probably be left at ``None`` (then it 
+            uses :class:`RadioSelect` by default), since it is somewhat 
+            specifically written as a radio button.
+        attrs: HTML attributes that can be added to the element in the template. 
+        choices: List of options to choose from.
+        initial: Initial value.
+        required: Specify whether it is required to fill out this field.
+    """
+    def __init__(
+        self, 
+        widget: Optional[Any] = None, 
+        attrs: Dict[str, str] = {"class": "radio is-hidden", 
+                                 "onchange": "changeHandler();"}, 
+        choices: List[Tuple] = [( 1 , "plus"), 
+                                ( 0 , "ban"), 
+                                (-1, "minus")], 
+        initial: int = 0, 
+        required: bool = False, 
+        **kwargs
+    ):
         """Overwrite the defaults of the ChoiceField."""
         if widget is not None:
             super(ThreeWayToggle, self).__init__(
@@ -42,7 +53,8 @@ class ThreeWayToggle(forms.ChoiceField):
                 **kwargs)
     
     def to_python(self, value):
-        """Cast the string to an integer."""
+        """Cast the string that is returned by the POST request to an integer.
+        """
         try:
             return int(value)
         except ValueError:
@@ -51,17 +63,23 @@ class ThreeWayToggle(forms.ChoiceField):
 
 class InstitutionModelChoiceIndexer:
     """Custom class with which one can access additional information from 
-    the model that is chosen by the :class:`InstitutionMultipleChoiceField`."""
-    
+    the model that is chosen by the :class:`InstitutionMultipleChoiceField`. 
+    It has a ``__getitem__`` function, so while one loops over the checkboxes 
+    of the :class:`InstitutionMultipleChoiceField`, the loop index can be used 
+    to access additional information, such as here the name and logo URL of the 
+    institution in question.
+    """
     def __init__(self, field) -> None:
         self.field = field
         self.queryset = field.queryset
     
     def __getitem__(self, key):
+        """Make the object indexable."""
         obj = self.queryset[key]
         return self.info(obj)
     
     def info(self, obj: Institution) -> Tuple[int, str]:
+        """Return the additional info."""
         return (
             self.field.label_from_instance(obj),
             self.field.logo_url_from_instance(obj)
@@ -69,9 +87,9 @@ class InstitutionModelChoiceIndexer:
 
 
 class InstitutionMultipleChoiceField(forms.ModelMultipleChoiceField):
-    """Customize label description and add method that returns the logo URL for 
-    institutions. The implementation is inspired by how the ``choices`` are 
-    implemented. But since some other functionality depends on how those 
+    """Customize label description and add method that returns name and logo 
+    URL for institutions. The implementation is inspired by how the ``choices`` 
+    are implemented. But since some other functionality depends on how those 
     choices are implemented, it cannot be changed easily."""
     
     #: Allows one to extract more info about the objects. E.g. name and logo url
@@ -87,13 +105,20 @@ class InstitutionMultipleChoiceField(forms.ModelMultipleChoiceField):
     
     @property
     def names_and_urls(self):
+        """Custom property that returns name and URL of the institution from 
+        a small indexer class (defined by the attribute 
+        ``name_and_url_indexer``), which is also somewhat inspired by Django's 
+        :class:`ModelChoiceIterator`."""
         return self.name_and_url_indexer(self)
     
 
 class DashboardForm(FormLoggerMixin, forms.Form):
-    """Form for querying the database."""
-    
-    # select modalities to show
+    """Form for querying the database. It contains patient- and tumor-specific 
+    selection criteria to filter out subsets of patients. Upon creation, it 
+    creates all fields for the individual lymph node level selection 
+    dynamically. It makes heavy use of the :class:`ThreeWayToggle` class.
+    """
+    #: modalities the user can select
     modalities = forms.MultipleChoiceField(
         required=False, 
         widget=forms.CheckboxSelectMultiple(
@@ -103,6 +128,7 @@ class DashboardForm(FormLoggerMixin, forms.Form):
         choices=Diagnose.Modalities.choices,
         initial=[1,2]
     )
+    #: How to combine the modalities?
     modality_combine = forms.ChoiceField(
         widget=forms.Select(attrs={"onchange": "changeHandler();"}),
         choices=[("AND", "AND"), 
@@ -111,11 +137,16 @@ class DashboardForm(FormLoggerMixin, forms.Form):
         initial="OR"
     )
     
-    # patient specific fields
+    #: Smoking status. Uses the :class:`ThreeWayToggle`
     nicotine_abuse = ThreeWayToggle()
+    #: HPV status. Uses the :class:`ThreeWayToggle`
     hpv_status = ThreeWayToggle()
+    #: Did patient receive neck dissection? Uses the :class:`ThreeWayToggle`
     neck_dissection = ThreeWayToggle()
+    #: Select all N+ or N0 patients. Uses the :class:`ThreeWayToggle`
     n_status = ThreeWayToggle()
+    
+    #: Choose from which institutions data should be included
     institution__in = InstitutionMultipleChoiceField(
         required=False,
         widget=forms.CheckboxSelectMultiple(
@@ -127,7 +158,7 @@ class DashboardForm(FormLoggerMixin, forms.Form):
         initial=Institution.objects.all()
     )
     
-    # tumor specific info
+    #: Tumor subsite. Naming of field such that querying can be done easier.
     subsite__in = forms.MultipleChoiceField(
         required=False,
         widget=forms.CheckboxSelectMultiple(
@@ -139,6 +170,7 @@ class DashboardForm(FormLoggerMixin, forms.Form):
                  ("rest" , "other")],
         initial=["base", "tonsil", "rest"]
     )
+    #: Tumor T-stage. Naming of field such that querying can be done easier.
     t_stage__in = forms.MultipleChoiceField(
         required=False,
         widget=forms.CheckboxSelectMultiple(
@@ -148,10 +180,12 @@ class DashboardForm(FormLoggerMixin, forms.Form):
         choices=Patient.T_stages.choices,
         initial=[1,2,3,4]
     )
+    #: Central or lateralized tumor?
     central = ThreeWayToggle()
+    #: Does the tumor extend over mid-sagittal line?
     extension = ThreeWayToggle()
     
-    # checkbutton for switching to percent
+    #: Checkbutton for switching to percent
     show_percent = forms.BooleanField(
         required=False, initial=False, 
         widget=forms.widgets.RadioSelect(
@@ -196,7 +230,9 @@ class DashboardForm(FormLoggerMixin, forms.Form):
                 
     def clean(self):
         """Make sure LNLs I & II have correct values corresponding to their 
-        sublevels a & b. Also convert tstages from list of str to list of int."""
+        sublevels a & b. Also convert T-stages from list of ``str`` to 
+        list of ``int``.
+        """
         cleaned_data = super(DashboardForm, self).clean()
         
         # map all -1,0,1 fields to False,None,True

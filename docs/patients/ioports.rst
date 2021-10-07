@@ -11,7 +11,7 @@ creating first a :class:`pandas.DataFrame` and then a CSV file from the SQL
 database I use.
 
 .. autoclass:: patients.ioports.ParsingError
-    :mambers:
+    :members:
     :show-inheritance:
 
 .. autofunction:: patients.ioports.compute_hash

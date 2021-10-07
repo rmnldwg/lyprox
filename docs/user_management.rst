@@ -14,5 +14,5 @@ user's and the patient's models.
     :maxdepth: 2
 
     accounts/models
-    accounts/views
     accounts/forms
+    accounts/views

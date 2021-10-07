@@ -1,7 +1,0 @@
-.. module: usage
-
-
-Usage 
-=====
-
-Ladida

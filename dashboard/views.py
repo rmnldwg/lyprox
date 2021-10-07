@@ -20,15 +20,36 @@ def help_view(request) -> HttpResponse:
 
 
 class DashboardView(ViewLoggerMixin, generic.ListView):
-    model = Patient
-    form_class = DashboardForm
-    context_object_name = "patient_list"
-    template_name = "dashboard/layout.html"
-    action = "display_dashboard"
+    """View for extracting all patients that match the possibly complicated 
+    selection criteria chosen by the user and creates the statistics and 
+    displays of interest from it.
+    """
+    model = Patient  #:
+    form_class = DashboardForm  #:
+    context_object_name = "patient_list"  #:
+    template_name = "dashboard/layout.html"  #:
+    action = "display_dashboard"  #:
 
     def get_queryset(self):
+        """Use the cleaned form data to narrow down the set of all patients in 
+        the database.
+        
+        See Also:
+            :py:func:`dashboard.query.patient_specific`: First part of querying 
+                where patients are selected based on person-specific 
+                characteristics.
+            :py:func:`dashboard.query.tumor_specific`: Choose patients who's 
+                tumors match selected criteria.
+            :py:func:`dashboard.query.diagnose_specific`: Then, narrow it down 
+                further by the selected patterns of involvement and combine 
+                the chosen diagnostic modalities appropriately.
+            :py:func:`dashboard.query.n_zero_specific`: This is finally used 
+                to select N+ or N0 patients if that is of interest to the user.
+            :py:func:`dashboard.query.count_patients`: Create the statistics 
+                using the final queryset and combined involvement data.
+        """
         self.form = self.form_class(self.request.GET or None)
-        queryset = Patient.objects.all()
+        queryset = self.model.objects.all()
         start_querying = time.time()
 
         if self.request.method == "GET" and self.form.is_valid():
@@ -39,7 +60,8 @@ class DashboardView(ViewLoggerMixin, generic.ListView):
                 patient_queryset=queryset, **self.form.cleaned_data
             )
             queryset, combined_involvement = query.diagnose_specific(
-                patient_queryset=queryset, **self.form.cleaned_data
+                patient_queryset=queryset, 
+                cleaned_data=self.form.cleaned_data
             )
             queryset, combined_involvement = query.n_zero_specific(
                 patient_queryset=queryset,
@@ -67,7 +89,8 @@ class DashboardView(ViewLoggerMixin, generic.ListView):
                 queryset = query.tumor_specific(patient_queryset=queryset,
                                                 **initial_form.cleaned_data)
                 queryset, combined_involvement = query.diagnose_specific(
-                    patient_queryset=queryset, **initial_form.cleaned_data
+                    patient_queryset=queryset, 
+                    cleaned_data=initial_form.cleaned_data
                 )
                 queryset, counts = query.count_patients(
                     patient_queryset=queryset,
@@ -87,6 +110,7 @@ class DashboardView(ViewLoggerMixin, generic.ListView):
         return queryset
 
     def get_context_data(self, **kwargs: Any) -> Dict[str, Any]:
+        """Pass all necessary context to the template renderer."""
         context = super(DashboardView, self).get_context_data(**kwargs)
         context["show_filter"] = False
         context["form"] = self.form
@@ -99,6 +123,10 @@ class DashboardView(ViewLoggerMixin, generic.ListView):
         return context
 
     def get_template_names(self) -> str:
+        """Depending on whether the user wants to see the dashboard with its 
+        visualizations or just a list of the selected patients, choose the 
+        corresponding HTML template for that.
+        """
         if self.request.GET.get("render") == "subset_list":
             return "patients/list.html"
         else:

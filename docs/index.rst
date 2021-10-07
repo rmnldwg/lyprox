@@ -12,4 +12,5 @@ Welcome to LyProX's documentation!
    :caption: Contents:
 
    patient_representation
+   dashboard
    user_management
