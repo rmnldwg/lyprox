@@ -84,7 +84,8 @@ def patient_specific(
     """Filter patients based on person-specific characteristics.
     
     Args:
-        patient_queryset: The :class:`QuerSey` of :class:`Patient` instances.
+        patient_queryset: The :class:`QuerSey` of :class:`patients.models.Patient` 
+            instances that is to be filtered.
         nicotine_abuse: Filter for patients that are/were smokers (``True``) or 
             non-smoking persons (``False``). Ignore if set to ``None``.
         hpv_status: In- or exclude depending on HPV status: If ``True``, only
@@ -131,8 +132,8 @@ def tumor_specific(
     """Filter patients based on characteristics of their tumors.
     
     Args:
-        patient_queryset: The :class:`QuerSey` of :class:`Patient` instances 
-            that is to be filtered.
+        patient_queryset: The :class:`QuerSey` of :class:`patients.models.Patient` 
+            instances that is to be filtered.
         subsite__in: List of subsites the primary tumor should be in. Nameing 
             of this parameter is chosen such that it can be inserted into the 
             QuerSet's ``filter`` fuction directly as a ``kwarg``.
@@ -164,10 +165,10 @@ def diagnose_specific(
     match the combination of the selected diagnostc modalities available.
     
     Args:
-        patient_queryset: The :class:`QuerSey` of :class:`Patient` instances 
-            that is to be filtered.
-        cleaned_data: The cleaned data from the :class:`DashboardForm`. The 
-            function extracts the pattern of nodal involvement from this 
+        patient_queryset: The :class:`QuerSey` of :class:`patients.models.Patient` 
+            instances that is to be filtered.
+        cleaned_data: The cleaned data from the :class:`dashboard.forms.DashboardForm`. 
+            The function extracts the pattern of nodal involvement from this 
             dictionary.
         assign_central: For patients with a central tumor, assign this side to 
             be the ipsilateral one.
@@ -266,8 +267,8 @@ def n_zero_specific(
     combined_involvement: Dict[str, Dict[str, np.ndarray]],
     n_status: Optional[bool] = None
 ):
-    """Filter for N+ or N0. `n_status` is `True` when we only want to see N+ 
-    patients and `False` when we only want to see N0 patients.
+    """Filter for N+ or N0. ``n_status`` is ``True`` when we only want to see N+ 
+    patients and ``False`` when we only want to see N0 patients.
     """
     if n_status is None:
         return patient_queryset, combined_involvement

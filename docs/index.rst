@@ -14,3 +14,4 @@ Welcome to LyProX's documentation!
    patient_representation
    dashboard
    user_management
+   logging

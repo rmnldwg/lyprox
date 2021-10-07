@@ -8,8 +8,8 @@ from .models import Institution, User
 
 class CustomAuthenticationForm(AuthenticationForm):
     """Custom form that allows assignment of classes to widgets. Note that due 
-    to the inheritance from `AuthenticationForm` the email field, which is used 
-    to log in users, is called username.
+    to the inheritance from :class:`AuthenticationForm` the email field, which 
+    is used to log in users, is called username.
     """
     #: The email address is used as a username field
     username = UsernameField(
@@ -53,8 +53,8 @@ class SignupRequestForm(forms.ModelForm):
     
     def save(self, commit: bool):
         """Override save method, so that the entered data is not used to create 
-        a `User` instance, but the information is just stored/sent to an admin. 
-        Not implemented yet.
+        a :class:`accounts.models.User` instance, but the information is just 
+        stored/sent to an admin. Not implemented yet.
         """
         # TODO: Store the cleaned data somewhere or send it via email to the 
         #   admin(s).
