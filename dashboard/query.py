@@ -118,12 +118,14 @@ def patient_specific(
 
 def tumor_specific(
     patient_queryset: QuerySet,
-    subsite__in: List[str] = ["C01.9",
-                              "C09.0", "C09.1", "C09.8", "C09.9",
-                              "C10.0", "C10.1", "C10.2", "C10.3", "C10.4", 
-                              "C10.8", "C10.9", "C12.9", "C13.0", "C13.1", 
-                              "C13.2", "C13.8", "C13.9", "C32.0", "C32.1", 
-                              "C32.2", "C32.3", "C32.8", "C32.9"],
+    subsite__in: List[str] = [
+        "C01.9",
+        "C09.0", "C09.1", "C09.8", "C09.9",
+        "C10.0", "C10.1", "C10.2", "C10.3", "C10.4", 
+        "C10.8", "C10.9", "C12.9", "C13.0", "C13.1", 
+        "C13.2", "C13.8", "C13.9", "C32.0", "C32.1", 
+        "C32.2", "C32.3", "C32.8", "C32.9"
+    ],
     t_stage__in: List[int] = [1,2,3,4],
     side__in: List[str] = ['left', 'right', 'central'],
     extension: Optional[bool] = None,

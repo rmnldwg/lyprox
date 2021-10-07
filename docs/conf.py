@@ -64,6 +64,7 @@ html_title = project + " documentation"
 # a list of builtin themes.
 html_permalinks_icon = '§'
 html_theme = "furo"
+html_favicon = "../core/static/favicon.ico"
 
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
