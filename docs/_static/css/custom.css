@@ -1,0 +1,11 @@
+h1, h2, h3 {
+    font-weight: 600;
+}
+
+.sidebar-brand {
+    text-align: left;
+}
+
+.caption-text {
+    font-size: 1rem;
+}

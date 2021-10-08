@@ -35,18 +35,25 @@ class DashboardView(ViewLoggerMixin, generic.ListView):
         the database.
         
         See Also:
-            :py:func:`dashboard.query.patient_specific`: First part of querying 
-                where patients are selected based on person-specific 
-                characteristics.
-            :py:func:`dashboard.query.tumor_specific`: Choose patients who's 
-                tumors match selected criteria.
-            :py:func:`dashboard.query.diagnose_specific`: Then, narrow it down 
-                further by the selected patterns of involvement and combine 
-                the chosen diagnostic modalities appropriately.
-            :py:func:`dashboard.query.n_zero_specific`: This is finally used 
-                to select N+ or N0 patients if that is of interest to the user.
-            :py:func:`dashboard.query.count_patients`: Create the statistics 
-                using the final queryset and combined involvement data.
+            :py:func:`dashboard.query.patient_specific`: 
+                First part of querying where patients are selected based on 
+                person-specific characteristics.
+                
+            :py:func:`dashboard.query.tumor_specific`: 
+                Choose patients who's tumors match selected criteria.
+                
+            :py:func:`dashboard.query.diagnose_specific`: 
+                Then, narrow it down further by the selected patterns of 
+                involvement and combine the chosen diagnostic modalities 
+                appropriately.
+                
+            :py:func:`dashboard.query.n_zero_specific`: 
+                This is finally used to select N+ or N0 patients if that is of 
+                interest to the user.
+                
+            :py:func:`dashboard.query.count_patients`: 
+                Create the statistics using the final queryset and combined 
+                involvement data.
         """
         self.form = self.form_class(self.request.GET or None)
         queryset = self.model.objects.all()

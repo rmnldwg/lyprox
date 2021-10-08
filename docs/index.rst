@@ -21,7 +21,3 @@ Django websie themselves with parts of the implementation.
    dashboard
    user_management
    logging
-
-
-.. attention:: 
-   Test test
