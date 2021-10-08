@@ -7,11 +7,21 @@
 Welcome to LyProX's documentation!
 ==================================
 
+Here we try to give a good overview of the Django app's API. Understanding how 
+LyProX was written is certainly not necessary to make good use of it. But since 
+we are mere humans and make mistakes, maybe this documentation might help 
+someone spot errors we overlooked. Or it just helps others that want to build a 
+Django websie themselves with parts of the implementation.
+
 .. toctree::
    :maxdepth: 2
-   :caption: Contents:
+   :caption: Content:
 
    patient_representation
    dashboard
    user_management
    logging
+
+
+.. attention:: 
+   Test test

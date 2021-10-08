@@ -44,7 +44,8 @@ release = VERSION
 extensions = [
     "sphinx.ext.autodoc",
     "sphinx.ext.napoleon",
-    "sphinx_autodoc_typehints"
+    "sphinx_autodoc_typehints",
+    "sphinx_markdown_builder"
 ]
 
 # Add any paths that contain templates here, relative to this directory.
@@ -62,9 +63,26 @@ html_title = project + " documentation"
 
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
-html_permalinks_icon = '§'
+html_permalinks_icon = '#'
+html_title = "Documentation"
 html_theme = "furo"
 html_favicon = "../core/static/favicon.ico"
+html_logo = "../core/static/logo.svg"
+html_theme_options = {
+    "light_css_variables": {
+        "color-brand-primary": "#005EA8",
+        "color-brand-content": "#005EA8",
+        "color-problematic": "#AE0060",
+        "color-foreground-border": "#BDCFD6",
+        "color-background-secondary": "#EBF6FF",
+        "color-background-hover": "#DEF0FF",
+        "color-admonition-title--attention": "#AE0060",
+        "color-admonition-title-background--attention": "#FFEBF6",
+        "font-stack": "Segoe UI, sans-serif",
+        "font-stack--monospace": "Cascadia Code, monospace"
+            
+    }
+}
 
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
