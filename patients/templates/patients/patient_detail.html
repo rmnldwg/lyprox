@@ -136,12 +136,10 @@
                 <caption class="title is-4">lymph node level involvement</caption>
 
                 <col style="width: 10%;">
-                <col style="width: 10%;">
-                <col style="width: 10%;">
-                <col style="width: 5%;">
-                <col style="width: 5%;">
-                <col style="width: 5%;">
-                <col style="width: 5%;">
+                <col style="width: 8%;">
+                <col style="width: 8%;">
+                <col style="width: 12%;">
+                <col style="width: 12%;">
                 <col style="width: 5%;">
                 <col style="width: 5%;">
                 <col style="width: 5%;">
@@ -149,14 +147,26 @@
                 <col style="width: 15%;">
 
                 <thead>
-                    <tr class="header">
+                    <tr>
                         <th>diagnose date</th>
                         <th>modality</th>
                         <th>side</th>
-                        <th>Ia</th>
-                        <th>Ib</th>
-                        <th>IIa</th>
-                        <th>IIb</th>
+                        <th class="tooltip has-tooltip-multiline" data-tooltip="The color of the outline refers to the overall involvement of the level. E.g., some diagnoses might not have reported the sublevel (a or b), so those are indicated by None and only the outline tells the state of this LNL.">
+                            <span class="icon-text">
+                                <span>I (a / b)</span>
+                                <span class="icon">
+                                    <i class="fas fa-question"></i>
+                                </span>
+                            </span>
+                        </th>
+                        <th class="tooltip has-tooltip-multiline" data-tooltip="The color of the outline refers to the overall involvement of the level. E.g., some diagnoses might not have reported the sublevel (a or b), so those are indicated by None and only the outline tells the state of this LNL.">
+                            <span class="icon-text">
+                                <span>II (a / b)</span>
+                                <span class="icon">
+                                    <i class="fas fa-question"></i>
+                                </span>
+                            </span>
+                        </th>
                         <th>III</th>
                         <th>IV</th>
                         <th>V</th>
@@ -193,21 +203,6 @@
                 </tbody>
             </table>
         </section>
-
-        <div class="level">
-            <button class="button level-left">
-                <span class="icon">
-                    <i class="fas fa-angle-left"></i>
-                </span>
-                <span>Previous</span>
-            </button>
-            <button class="button level-right">
-                <span>Next</span>
-                <span class="icon">
-                    <i class="fas fa-angle-right"></i>
-                </span>
-            </button>
-        </div>
     </div>
 </section>
 

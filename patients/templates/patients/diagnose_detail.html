@@ -2,10 +2,18 @@
     <td>{{ diagnose.diagnose_date|date:"d. M Y" }}</td>
     <td>{{ diagnose.get_modality_display }}</td>
     <td>{{ diagnose.get_side_display }}</td>
-    <td><span class="tag {{ diagnose.Ia }}">{{ diagnose.Ia }}</span></td>
-    <td><span class="tag {{ diagnose.Ib }}">{{ diagnose.Ib }}</span></td>
-    <td><span class="tag {{ diagnose.IIa }}">{{ diagnose.IIa }}</span></td>
-    <td><span class="tag {{ diagnose.IIb }}">{{ diagnose.IIb }}</span></td>
+    <td>
+        <div class="tags has-addons {{ diagnose.I }}">
+            <span class="tag {{ diagnose.Ia }}">{{ diagnose.Ia }}</span>
+            <span class="tag {{ diagnose.Ib }}">{{ diagnose.Ib }}</span>
+        </div>
+    </td>
+    <td>
+        <div class="tags has-addons {{ diagnose.II }}">
+            <span class="tag {{ diagnose.IIa }}">{{ diagnose.IIa }}</span>
+            <span class="tag {{ diagnose.IIb }}">{{ diagnose.IIb }}</span>
+        </div>
+    </td>
     <td><span class="tag {{ diagnose.III }}">{{ diagnose.III }}</span></td>
     <td><span class="tag {{ diagnose.IV }}">{{ diagnose.IV }}</span></td>
     <td><span class="tag {{ diagnose.V }}">{{ diagnose.V }}</span></td>

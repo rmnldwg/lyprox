@@ -5,14 +5,26 @@
 span.tag.False {
     background-color: #BCFFFB;
     color: #00AFA5;
-    min-width: 50px;
+    min-width: 55px;
 }
 span.tag.True {
     background-color: #FFBCE1;
     color: #AE0060;
-    min-width: 50px;
+    min-width: 55px;
 }
 span.tag.None {
     background-color: #C5D5DB;
-    min-width: 50px;
+    min-width: 55px;
+}
+
+.tags.True span {
+    border: 3px solid #FFBCE1;
+}
+
+.tags.False span {
+    border: 3px solid #BCFFFB;
+}
+
+.tags.None span {
+    border: 3px solid #C5D5DB;
 }
