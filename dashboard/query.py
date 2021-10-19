@@ -160,7 +160,12 @@ def diagnose_specific(
             if kwargs['modality_combine'] == 'OR':
                 combine = any
             elif kwargs['modality_combine'] == 'AND':
-                combine = all
+                # the function below is - from a logics persepctive - the same 
+                # as the `all` function, but this one handles `None` the way we 
+                # want to: It's ignored.
+                combine = lambda col: not(any(
+                    [not(e) if e is not None else None for e in col]
+                ))
             else:
                 msg = ("Modalities can only be combined using logical OR or "
                        "logical AND")
