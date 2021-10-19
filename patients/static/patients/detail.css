@@ -28,3 +28,7 @@ span.tag.None {
 .tags.None span {
     border: 3px solid #C5D5DB;
 }
+
+.tag.tnm {
+    border: 3px solid #005EA8;
+}

@@ -21,6 +21,7 @@ class PatientForm(FormLoggerMixin, forms.ModelForm):
                   "nicotine_abuse", 
                   "hpv_status",
                   "neck_dissection", 
+                  "tnm_edition",
                   "n_stage",
                   "m_stage"]
         widgets = {"gender": widgets.Select(attrs={"class": "select"}),
@@ -42,6 +43,7 @@ class PatientForm(FormLoggerMixin, forms.ModelForm):
                                                               (False, "no"),
                                                               (None, "unknown")],
                                                      attrs={"class": "select"}),
+                   "tnm_edition": widgets.NumberInput(attrs={"class": "input"}),
                    "n_stage": widgets.Select(attrs={"class": "select"}),
                    "m_stage": widgets.Select(attrs={"class": "select"})}
     

@@ -68,9 +68,10 @@
                     </div>            
                 </div>
                 <div class="control">
-                    <div class="tags has-addons are-medium">
+                    <div class="tags has-addons are-medium tooltip" data-tooltip="According to {{ patient.tnm_edition }}th TNM edition">
                         <span class="tag is-info">stage</span>
                         <span class="tag is-primary">{{ patient.get_t_stage_display }} {{ patient.get_n_stage_display }} {{ patient.get_m_stage_display }}</span>
+                        <span class="tag is-primary is-light tnm">{{ patient.tnm_edition }}th</span>
                     </div>            
                 </div>
             </div>

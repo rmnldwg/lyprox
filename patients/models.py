@@ -47,6 +47,7 @@ class Patient(ModelLoggerMixin, models.Model):
     #: Has the patient been treated with some form of neck dissection?
     neck_dissection = models.BooleanField(blank=True, null=True)
     
+    tnm_edition = models.PositiveSmallIntegerField(default=8)  #:
     t_stage = models.PositiveSmallIntegerField(choices=T_stages.choices, default=0)  #:
     n_stage = models.PositiveSmallIntegerField(choices=N_stages.choices)  #:
     m_stage = models.PositiveSmallIntegerField(choices=M_stages.choices)  #:

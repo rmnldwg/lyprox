@@ -102,8 +102,14 @@
 
                         <div class="field is-grouped">
                             <div class="control">
+                                <label for="{{ form.tnm_edition.id_for_label }}" class="label">
+                                    TNM Edition
+                                </label>
+                                {{ form.tnm_edition }}
+                            </div>
+                            <div class="control">
                                 <label for="{{ form.n_stage.id_for_label }}" class="label">
-                                    {{ form.n_stage.label }}
+                                    N-category
                                 </label>
                                 <div class="select">
                                     {{ form.n_stage }}
@@ -111,7 +117,7 @@
                             </div>
                             <div class="control">
                                 <label for="{{ form.m_stage.id_for_label }}" class="label">
-                                    {{ form.m_stage.label }}
+                                    M-category
                                 </label>
                                 <div class="select">
                                     {{ form.m_stage }}
