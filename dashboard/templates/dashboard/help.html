@@ -1,13 +1,82 @@
 {% extends 'base.html' %}
 
 {% load mytags %}
+{% load static %}
 
 {% block content %}
 
+<link rel="stylesheet" href="{% static 'dashboard/help.css' %}">
+
+
 <section class="section">
     <div class="container">
-        <div class="content">
-            {% include_md 'dashboard/help.md' %}
+        <div class="columns">
+            <div class="column is-3">
+                <aside class="menu is-size-4 is-fixed">
+                    <p class="menu-label">General</p>
+                    <ul class="menu-list is-size-5">
+                        <li><a href="">The Dashboard</a></li>
+                    </ul>
+
+                    <p class="menu-label">Components</p>
+                    <ul class="menu-list is-size-5">
+                        <li><a href="#Components">Patient details</a></li>
+                        <li><a href="#Primary tumor">Primary tumor</a></li>
+                        <li><a href="#Institutions">Institutions</a></li>
+                        <li><a href="#Modalities">Modalities</a></li>
+                        <li><a href="#Involvement">Involvement</a></li>
+                        <li><a href="#Buttons">Buttons</a></li>
+                    </ul>
+                </aside>
+            </div>
+            <div class="column">
+                <div class="content">
+                    <h1 id="The Dashboard">The Dashboard</h1>
+                    <p>
+                        Here, one can visualize the patients in the database. The aim 
+                        is to make it easy to see and understand a complex dataset with 
+                        regard to lymphatic involvement in head & neck cancer. Ideally, 
+                        it is "hypothesis-generating", meaning that you, the user, 
+                        becomes curious and asks questions about certain correlations 
+                        (or even causations). Some of them will be explorable using 
+                        this interface, while others maybe not. In the latter case we 
+                        encourage you to 
+                        <a href="{% url 'patients:download' %}">download</a> 
+                        the database and test your ideas and hypotheses with your own 
+                        tools.
+                    </p>
+                    <p class="notification is-warning is-light">
+                        <strong>Note:</strong> This is NOT a risk prediction. All we do 
+                        here is visualize data of previously seen patients. For actual 
+                        risk predictions for individual and newly diagnosed patients, 
+                        check out our 
+                        <a href="https://www.nature.com/articles/s41598-021-91544-1">
+                            paper on modelling tumor progression
+                        </a> or wait a bit, since we are thinking about implementing it 
+                        also here.
+                    </p>
+        
+                    <h2 id="Components" class="pt-6">Components</h2>
+        
+                    <h3 id="Patient details" class="pb-4">Patient details (top left)</h3>
+                    {% include 'dashboard/help-media.html' with image='dashboard/toggle.gif' size='large' html='dashboard/help_patient.html' %}
+                    
+                    <h3 id="Primary tumor" class="pt-6 pb-4">Primary tumor (bottom left)</h3>
+                    {% include 'dashboard/help-media.html' with image='dashboard/subsite_t-stage.gif' size='large' markdown='dashboard/help_tumor.md' %}
+                    
+                    <h3 id="Institutions" class="pt-6 pb-4">Institutions (center top)</h3>
+                    {% include 'dashboard/help-media.html' with image='dashboard/institutions.gif' size='large' markdown='dashboard/help_institutions.md' %}
+                    
+                    <h3 id="Modalities" class="pt-6 pb-4">Modalities (center, below Institutions)</h3>
+                    {% include 'dashboard/help-media.html' with image='dashboard/modalities.gif' size='large' markdown='dashboard/help_modalities.md' %}
+                    
+                    <h3 id="Involvement" class="pt-6 pb-4">contra- (center left) & ipsilateral (center right)</h3>
+                    {% include 'dashboard/help-media.html' with image='dashboard/involvement.gif' size='large' markdown='dashboard/help_involvement.md' %}
+                    
+                    <h3 id="Buttons" class="pt-6 pb-4">Buttons (bottom right)</h3>
+                    {% include 'dashboard/help-media.html' with image='dashboard/buttons.gif' size='large' markdown='dashboard/help_buttons.md' %}
+                </div>
+            </div>
         </div>
     </div>
 </section>

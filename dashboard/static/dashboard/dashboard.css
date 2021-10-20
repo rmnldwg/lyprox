@@ -131,7 +131,7 @@ span[data-tooltip] {
 
 .tooltip:hover .box.top {
     bottom: 0;
-    margin-bottom: 32px;
+    margin-bottom: 60px;
 }
 
 .tooltip:hover .box.bottom {
@@ -139,10 +139,10 @@ span[data-tooltip] {
     margin-top: 32px;
 }
 
-.level-left .level-item .title {
-    width: 150px;
-}
-
 .level-item .field {
     width: 90%;
+}
+
+#institutions-title,#modalities-title {
+    width: 150px;
 }

@@ -10,18 +10,6 @@
 <body>
     {% include 'navbar.html' %}
 
-    <div class="modal" id="help-modal">
-        <div class="modal-background"></div>
-        <div class="modal-content">
-            <div class="box">
-                <div class="content">
-                    {% include_md 'dashboard/help.md' %}
-                </div>
-            </div>
-        </div>
-        <button class="modal-close is-large" id="close-help-modal" aria-label="close"></button>
-    </div>
-
     <div class="modal" id="pCT-modal">
         <div class="modal-background"></div>
         <div class="modal-content">
@@ -188,7 +176,7 @@
                             <div class="level">
                                 <div class="level-left">
                                     <div class="level-item">
-                                        <p class="title is-4">Institutions</p>
+                                        <p id="institutions-title" class="title is-4">Institutions</p>
                                     </div>
                                 </div>
 
@@ -227,7 +215,7 @@
                             <div class="level">
                                 <div class="level-left">
                                     <div class="level-item">
-                                        <p class="title is-4">Modalities</p>
+                                        <p id="modalities-title" class="title is-4">Modalities</p>
                                     </div>
                                 </div>
 
@@ -439,30 +427,30 @@
                                 </div>
                                 <div class="level-right">
                                     <div class="level-item">
-                                        <div class="tooltip" id="show-help-modal" style="cursor: pointer;">
-                                            <span class="icon is-large has-text-primary">
-                                                <i class="fas fa-2x fa-question"></i>
-                                            </span>
-                                            {% include 'dashboard/help-tooltip.html' with side="left" position="top" image='dashboard/buttons.gif' markdown='dashboard/help_buttons.md' %}
+                                        <div class="buttons">
+                                            <div class="tooltip">
+                                                <a href="{% url 'dashboard:help' %}" class="button is-medium is-primary is-outlined">
+                                                    <span class="icon">
+                                                        <i class="fas fa-question"></i>
+                                                    </span>
+                                                    <span>Help</span>
+                                                </a>
+                                                {% include 'dashboard/help-tooltip.html' with side="left" position="top" image='dashboard/buttons.gif' markdown='dashboard/help_buttons.md' %}
+                                            </div>
+                                            <button class="button is-medium is-warning is-light is-outlined" type="submit" name="render"
+                                                value="subset_list" data-tooltip="Display selected subset in list">
+                                                <span>Patients in selection: {{ stats.total }}</span>
+                                            </button>
+
+                                            <button class="button is-medium is-warning has-tooltip-multiline" type="submit" id="compute" disabled
+                                                name="render" value="dashboard"
+                                                data-tooltip="Display statistic of selected subset. Change selection to activate button">
+                                                <span class="icon">
+                                                    <i class="fas fa-cogs"></i>
+                                                </span>
+                                                <span><strong>Compute</strong></span>
+                                            </button>
                                         </div>
-                                    </div>
-                            
-                                    <div class="level-item">
-                                        <button class="button is-medium is-warning is-light is-outlined" type="submit" name="render"
-                                            value="subset_list" data-tooltip="Display selected subset in list">
-                                            <span>Patients in selection: {{ stats.total }}</span>
-                                        </button>
-                                    </div>
-                            
-                                    <div class="level-item">
-                                        <button class="button is-medium is-warning has-tooltip-multiline" type="submit" id="compute" disabled
-                                            name="render" value="dashboard"
-                                            data-tooltip="Display statistic of selected subset. Change selection to activate button">
-                                            <span class="icon">
-                                                <i class="fas fa-cogs"></i>
-                                            </span>
-                                            <span><strong>Compute</strong></span>
-                                        </button>
                                     </div>
                                 </div>
                             </div>
