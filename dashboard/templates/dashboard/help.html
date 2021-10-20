@@ -27,6 +27,11 @@
                         <li><a href="#Involvement">Involvement</a></li>
                         <li><a href="#Buttons">Buttons</a></li>
                     </ul>
+
+                    <p class="menu-label">Examples</p>
+                    <ul class="menu-list is-size-5">
+                        <li><a href="#Full example">Full example</a></li>
+                    </ul>
                 </aside>
             </div>
             <div class="column">
@@ -75,6 +80,17 @@
                     
                     <h3 id="Buttons" class="pt-6 pb-4">Buttons (bottom right)</h3>
                     {% include 'dashboard/help-media.html' with image='dashboard/buttons.gif' size='large' markdown='dashboard/help_buttons.md' %}
+
+                    <h2 id="Examples" class="pt-6">Examples</h2>
+
+                    <h3 id="Full example">Full example</h3>
+                    <p>
+                        Below is an annotated screenshot of a concrete example 
+                        for how to use the dasboard.
+                    </p>
+                    <figure class="image">
+                        <img src="{% static 'dashboard/example_usage.png' %}" alt="annotated screenshot">
+                    </figure>
                 </div>
             </div>
         </div>

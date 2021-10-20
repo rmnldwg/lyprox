@@ -1,73 +1,26 @@
-# Lymph Interface
+![img](./core/static/github-social-card.png)
 
-This web app is for clinitians who are faced with the task of electively defining clinical target volumes (CTV-N). It allows the user to view a database of detailed patterns of lymphatic involvements that was extracted mainly by Jean-Marc Hofmann and we will soon publish a paper on it. Also, the database can be used for building probabilistic models that can predict risks of involvements based on diagnoses and various patient characterisitcs. For example, the work based on Bayesian networks by [(Pouymayou et al., 2019)](https://iopscience.iop.org/article/10.1088/1361-6560/ab2a18/meta), or the work by [(Roman Ludwig et al., 2021)](https://www.nature.com/articles/s41598-021-91544-1) using hidden Markov models.
 
-## Run the interface locally
+## What is this?
 
-To use this interfce before it is hosted online, you can follow these steps below to get it up and running locally on your computer.
+This [Django](https://www.djangoproject.com/) web app displays the detailed patterns of lymphatic metastases in head & neck cancer and allows one to explore the underlying dataset(s) in much detail. It is hosted under the URL [www.lyprox.org](www.lyprox.org).
 
-### Cloning the repo
 
-Start by cloning this GitHub repository to you machine. In a terminal enter:
+## Our Goal
 
-```shell
-git clone https://github.com/rmnldwg/lymph-interface.git
-```
+With the interface we primarily aim to make our extracted dataset easily accessible (it can also be downloaded as CSV table as soon as we have submitted our paper on the work) and motivate other clinical researchers on the field to also share their raw data.
 
-and provide your credentials when prompted. Afterwards, ``cd`` into ``lymph-interface``.
+This, in turn would enable us (or anyone, really) to build more accurate and precise tumor progression models. E.g. like previous work on using Bayesian networks to predict the personalized probability of involvement by [Pouymayou et al., 2019](https://doi.org/10.1088/1361-6560/ab2a18) or our recent publication on this issue using hidden Markov models and thereby introducing an explicit way of modelling time by [Ludwig et al., 2021](https://doi.org/10.1038/s41598-021-91544-1).
 
-### Set up environment
 
-When working with python, it is always recommended to set up a virtual environment. You can create virtual environments in many different ways, but here we are going to use [``venv``](https://docs.python.org/3/library/venv.html), which is pretty simple to use and the recommended tool, according to the Python documentation.
+## How to contribute
 
-``venv`` comes with a Python installation, which I assume you have. So create a blank virtual environment, use this command:
+There are two ways you can contribute to this project:
 
-```shell
-python3 -m venv yournewenvironment
-```
+1. If you are a clinical researcher in the field and would like to share your data with us, please get in touch with us via email: [roman.ludwig@usz.ch](mailto:roman.ludwig@usz.ch).
+2. The other way is by contributing to this repository, e.g. if you are a software developer. I guess this is somewhat unlikely, due to the very specific scope of this Django app, but we still welcome any contribution.
 
-where you can replace ``yournewenvironment`` with the name you want to give to your new environment. A common choice is ``.venv``, since it's short and the created directory is "hidden" (not really hidden, but it doesn't show up when you type ``ls``).
 
-Then, depending on your operating system and used shell, you can activate the environment by typing
+## Run this interface locally
 
-| Platform | shell           | command to activate                     |
-| :------- | :-------------- | :-------------------------------------- |
-| POSIX    | bash / zsh      | ``$ source <venv>/bin/activate``        |
-|          | fish            | ``$ source <venv>/bin/activate.fish``   |
-|          | csh / tcsh      | ``$ source <venv>/bin/activate.csh``    |
-|          | PowerShell Core | ``$ source <venv>/bin/Activate.ps1``    |
-| Windows  | cmd.exe         | ``C:\> <venv>\Scripts\activate.bat``    |
-|          | cmd.exe         | ``PS C:\> <venv>\Scripts\Activate.ps1`` |
-
-where ``<venv>`` should be replaced by the name you have given your virtual environment.
-
-If everythin went according to plan, your terminal should now prefix everything with the name of the environment in brackets. E.g. on Ubuntu with bash the terminal now looks like this:
-
-```shell
-(.venv) user@machine:~$
-```
-
-### Installing prerequisites
-
-In order to start the interface's server, you need to have [django](https://www.djangoproject.com/) along with several other prerequisites installed. The repository comes with a ``requirements.txt`` file, which one can use to install everything that is necessary. While inside the ``lymph-interface`` folder and with your virtual environment activated, type
-
-```shell
-pip install -r requirements.txt
-```
-
-### Running the interface
-
-Now you should be ready to execute the following commands:
-
-```shell
-python manage.py makemigrations
-python manage.py migrate
-```
-
-This will prepare django's database. If that worked, it is finally time to launch the server locally:
-
-```shell
-python manage.py runserver
-```
-
-If everything goes according to plan, django will ouput a link to the locally hosted web server. It usually runs at [http://127.0.0.1:8000/](http://127.0.0.1:8000/).
+If you want to host your data yourself or try how your data looks in the web app without committing to an upload, feel free to follow [these instructions](run-local.md) to get it up and running on your local machine.
