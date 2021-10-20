@@ -1,9 +1,9 @@
 ![img](./core/static/github-social-card.png)
 
 
-## What is this?
+## What is LyProX?
 
-This [Django](https://www.djangoproject.com/) web app displays the detailed patterns of lymphatic metastases in head & neck cancer and allows one to explore the underlying dataset(s) in much detail. It is hosted under the URL [http://www.lyprox.org](www.lyprox.org).
+It is a [Django](https://www.djangoproject.com/) web app that displays the detailed patterns of lymphatic metastases in head & neck cancer and allows one to explore the underlying dataset(s) in much detail. It is hosted under the URL [http://www.lyprox.org](https://www.lyprox.org).
 
 
 ## Our Goal
