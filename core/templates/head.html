@@ -1,13 +1,24 @@
 {% load static %}
 
 <head>
-    <link rel="stylesheet" type="text/css" href="{% static 'usz.css' %}">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="https://kit.fontawesome.com/c702fb8f68.js" crossorigin="anonymous"></script>
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Web app for exploring patterns and correlations in data of lymph node level involvements from head & neck cancer patients.">
+
+    <!-- Primary Meta Tags -->
     <title>LyProX - Lymphatic Progression eXplorer</title>
+    <meta name="LyProX - Lymphatic Progression eXplorer">
+    <meta name="description" content="Web app for exploring patterns and correlations in data of lymph node level involvements from head & neck cancer patients.">
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://lyprox.org">
+    <meta property="og:title" content="LyProX - Lymphatic Progression eXplorer">
+    <meta property="og:description" content="Web app for exploring patterns and correlations in data of lymph node level involvements from head & neck cancer patients.">
+    <meta property="og:image" content="{% static 'github-social-card.png' %}">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <link rel="shortcut icon" href="{% static 'favicon.ico' %}" type="image/x-icon">
+    <link rel="stylesheet" type="text/css" href="{% static 'usz.css' %}">
+    <script src="https://kit.fontawesome.com/c702fb8f68.js" crossorigin="anonymous"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 </head>
