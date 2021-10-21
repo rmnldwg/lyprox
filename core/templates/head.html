@@ -5,15 +5,25 @@
 
     <!-- Primary Meta Tags -->
     <title>LyProX - Lymphatic Progression eXplorer</title>
-    <meta name="LyProX - Lymphatic Progression eXplorer">
     <meta name="description" content="Web app for exploring patterns and correlations in data of lymph node level involvements from head & neck cancer patients.">
+
+    <!-- Google / Search Engine Tags -->
+    <meta itemprop="name" content="LyProX - Lymphatic Progression eXplorer">
+    <meta itemprop="description" content="Web app for exploring patterns and correlations in data of lymph node level involvements from head & neck cancer patients.">
+    <meta itemprop="image" content="{{ request.scheme }}://{{ request.get_host }}{% static 'github-social-card.png' %}">
 
     <!-- Open Graph -->
     <meta property="og:type" content="website">
-    <meta property="og:url" content="https://lyprox.org">
+    <meta property="og:url" content="{{ request.scheme }}://{{ request.get_host }}">
     <meta property="og:title" content="LyProX - Lymphatic Progression eXplorer">
     <meta property="og:description" content="Web app for exploring patterns and correlations in data of lymph node level involvements from head & neck cancer patients.">
     <meta property="og:image" content="{{ request.scheme }}://{{ request.get_host }}{% static 'github-social-card.png' %}">
+
+    <!-- Twitter Meta Tags -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="LyProX - Lymphatic Progression eXplorer">
+    <meta name="twitter:description" content="Web app for exploring patterns and correlations in data of lymph node level involvements from head & neck cancer patients.">
+    <meta name="twitter:image" content="{{ request.scheme }}://{{ request.get_host }}{% static 'github-social-card.png' %}">
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="shortcut icon" href="{% static 'favicon.ico' %}" type="image/x-icon">
