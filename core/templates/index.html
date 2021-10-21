@@ -1,11 +1,13 @@
 {% extends 'base.html' %}
-
-{% block content %}
-
 {% load static %}
 {% load mytags %}
 
+{% block head %}
+{% include 'head.html' with title="LyProX · Lymphatic Progression eXplorer" %}
+{% endblock head %}
 
+
+{% block content %}
 <div class="hero is-primary has-background-primary-light">
     <div class="hero-body">
         <div class="container">

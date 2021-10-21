@@ -3,10 +3,14 @@
 {% load mytags %}
 {% load static %}
 
+
+{% block head %}
+{% include 'head.html' with title="LyProX · Dashboard help" %}
+{% endblock head %}
+
+
 {% block content %}
-
 <link rel="stylesheet" href="{% static 'dashboard/help.css' %}">
-
 
 <section class="section">
     <div class="container">

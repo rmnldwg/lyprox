@@ -1,37 +1,36 @@
 <!DOCTYPE html>
 <html lang="en">
-{% include 'head.html' %}
+    {% include 'head.html' with title="403 · Permission denied" %}
 
-<body>
-    <section class="section">
-        <div class="container">
-            <div class="columns is-centered">
-                <div class="column is-5">
-                    <div class="notification is-warning">
-                        <p class="title is-1">
-                            <i class="fas fa-hand-paper"></i>
-                            403
-                        </p>
-                        <p class="subtitle is-3">Forbidden</p>
-                        <p>
-                            You don't have permissions to access this part of the site.
-                            <span class="icon-text">
-                                <span class="icon">
-                                    <i class="fas fa-home"></i>
+    <body>
+        <section class="section">
+            <div class="container">
+                <div class="columns is-centered">
+                    <div class="column is-5">
+                        <div class="notification is-warning">
+                            <p class="title is-1">
+                                <i class="fas fa-hand-paper"></i>
+                                403
+                            </p>
+                            <p class="subtitle is-3">Forbidden</p>
+                            <p>
+                                You don't have permissions to access this part of the site.
+                                <span class="icon-text">
+                                    <span class="icon">
+                                        <i class="fas fa-home"></i>
+                                    </span>
+                                    <span>
+                                        <a href="{% url 'index' %}">
+                                            home page
+                                        </a>
+                                    </span>
                                 </span>
-                                <span>
-                                    <a href="{% url 'index' %}">
-                                        home page
-                                    </a>
-                                </span>
-                            </span>
-                            .
-                        </p>
+                                .
+                            </p>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </section>
-</body>
-
+        </section>
+    </body>
 </html>

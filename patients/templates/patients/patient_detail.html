@@ -1,8 +1,14 @@
 {% extends "base.html" %}
+{% load static %}
+
+
+{% block head %}
+{% include 'head.html' with title="LyProX · Patient detail" %}
+{% endblock head %}
+
 
 {% block content %}
 
-{% load static %}
 <link rel="stylesheet" type="text/css" href="{% static 'patients/detail.css' %}">
 
 <section class="section">

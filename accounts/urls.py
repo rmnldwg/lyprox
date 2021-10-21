@@ -19,5 +19,5 @@ logout_view = auth_views.LogoutView.as_view(
 urlpatterns = [
     path('login/', login_view, name='login'),
     path('logout/', logout_view, name='logout'),
-    path('signup/', signup_request_view, name='signup_request')
+    # path('signup/', signup_request_view, name='signup_request')
 ]
