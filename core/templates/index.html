@@ -79,8 +79,9 @@
                         <div class="media-content">
                             <h2 class="title is-4">List of patients</h2>
                             <p>
-                                Look at a table of all the patients in the database. This view can be filtered for different patient-specific
-                                properties like age, date of diagnosis, TNM stage and more.
+                                Look at a table of all the patients in the database. This view can be filtered for different patient-specific 
+                                properties like age, date of diagnosis, TNM stage and more. Via the patient list, all patient-individual 
+                                information is accessible.
                             </p>
                         </div>
                         <div class="media-right">
@@ -167,87 +168,103 @@
 <section class="section">
     <div class="container">
         <h1 class="title">Publications</h1>
-
-        <div class="media">
-            <div class="media-left">
-                <figure class="image is-96x96">
-                    <img class="is-rounded" src="{% static 'data-paper.svg' %}" alt="paper icon">
-                </figure>
-            </div>
-            <div class="media-content">
-                <p class="is-size-5">
-                    Jean-Marc Hoffmann, Bertrand Pouymayou, Roman Ludwig, Matthias Guckenberger, Panagiotis Balermpas, Jan Unkelbach;
-                    <br>
-                    <strong class="has-text-secondary">
-                        Detailed analysis of lymphatic progression patterns in oropharyngeal squamous cell carcinoma,
-                    </strong>
-                    <br>
-                    <span class="has-text-danger">Not yet published</span>
-                </p>
-            </div>
-        </div>
-
-        <div class="media">
-            <div class="media-left">
-                <figure class="image is-96x96">
-                    <img class="is-rounded is-outlined" src="{% static 'hmm-paper.png' %}" alt="paper icon">
-                </figure>
-            </div>
-            <div class="media-content">
-                <p class="is-size-5">
-                    Roman Ludwig, Bertrand Pouymayou, Panagiotis Balermpas, Jan Unkelbach;
-                    <br>
-                    <strong class="has-text-secondary">
-                        A hidden Markov model for lymphatic tumor progression in the head and neck,
-                    </strong>
-                    <br>
-                    <em>Sci Rep</em> <strong>11,</strong> 12261 (2021)
-                    <a href="https://doi.org/10.1038/s41598-021-91544-1" target="_blank">https://doi.org/10.1038/s41598-021-91544-1</a>
-                </p>
+        
+        <div class="block">
+            <h2 class="title is-5 has-text-info">
+                The publication describing the USZ dataset and this online interface
+            </h2>
+            <div class="media">
+                <div class="media-left">
+                    <figure class="image is-96x96">
+                        <img class="is-rounded" src="{% static 'data-paper.svg' %}" alt="paper icon">
+                    </figure>
+                </div>
+                <div class="media-content">
+                    <p class="is-size-5">
+                        Jean-Marc Hoffmann, Bertrand Pouymayou, Roman Ludwig, Matthias Guckenberger, Panagiotis Balermpas, Jan Unkelbach;
+                        <br>
+                        <strong class="has-text-secondary">
+                            Detailed analysis of lymphatic progression patterns in oropharyngeal squamous cell carcinoma,
+                        </strong>
+                        <br>
+                        <span class="has-text-danger">Not yet published</span>
+                    </p>
+                </div>
             </div>
         </div>
 
-        <div class="media">
-            <div class="media-left">
-                <figure class="image is-96x96">
-                    <img class="is-rounded is-outlined" src="{% static 'budapest-paper.png' %}" alt="paper icon">
-                </figure>
+        <div class="block">
+            <h2 class="title is-5 has-text-info">
+                Publications on statistical models of lymphatic progression for estimating the probability of occult metastases 
+                in lymph node levels, which can be trained based on the data presented here:
+            </h2>
+            <div class="media">
+                <div class="media-left">
+                    <figure class="image is-96x96">
+                        <img class="is-rounded is-outlined" src="{% static 'hmm-paper.png' %}" alt="paper icon">
+                    </figure>
+                </div>
+                <div class="media-content">
+                    <p class="is-size-5">
+                        Roman Ludwig, Bertrand Pouymayou, Panagiotis Balermpas, Jan Unkelbach;
+                        <br>
+                        <strong class="has-text-secondary">
+                            A hidden Markov model for lymphatic tumor progression in the head and neck,
+                        </strong>
+                        <br>
+                        <em>Sci Rep</em> <strong>11,</strong> 12261 (2021)
+                        <a href="https://doi.org/10.1038/s41598-021-91544-1" target="_blank">https://doi.org/10.1038/s41598-021-91544-1</a>
+                    </p>
+                </div>
             </div>
-            <div class="media-content">
-                <p class="is-size-5">
-                    Jan Unkelbach, Thomas Bortfeld, Carlos E. Cardenas, Vincent Gregoire, Wille Hager, Ben Heijmen, Robert Jeraj, Stine S.
-                    Korreman, Roman Ludwig, Bertrand Pouymayou, Nadya Shusharina, Jonas Söderberg, Iuliana Toma-Dasu, Esther G.C. Troost,
-                    Eliana Vasquez Osorio;
-                    <br>
-                    <strong class="has-text-secondary">
-                        The role of computational methods for automating and improving clinical target volume definition,
-                    </strong>
-                    <br>
-                    <em>Radiotherapy and Oncology</em> <strong>153,</strong> 15-25 (2020)
-                    <a href="https://doi.org/10.1016/j.radonc.2020.10.002"
-                        target="_blank">https://doi.org/10.1016/j.radonc.2020.10.002</a>
-                </p>
+
+            <div class="media">
+                <div class="media-left">
+                    <figure class="image is-96x96">
+                        <img class="is-rounded" src="{% static 'bn-paper.png' %}" alt="paper icon">
+                    </figure>
+                </div>
+                <div class="media-content">
+                    <p class="is-size-5">
+                        Bertrand Pouymayou, Panagiotis Balermpas, Oliver Riesterer, Matthias Guckenberger, Jan Unkelbach;
+                        <br>
+                        <strong class="has-text-secondary">
+                            A Bayesian network model of lymphatic tumor progression for personalized elective CTV definition in head and neck
+                            cancers,
+                        </strong>
+                        <br>
+                        <em>Phys. Med. Biol.</em> <strong>64,</strong> 165003 (2019)
+                        <a href="https://doi.org/10.1088/1361-6560/ab2a18" target="_blank">https://doi.org/10.1088/1361-6560/ab2a18</a>
+                    </p>
+                </div>
             </div>
         </div>
 
-        <div class="media">
-            <div class="media-left">
-                <figure class="image is-96x96">
-                    <img class="is-rounded" src="{% static 'bn-paper.png' %}" alt="paper icon">
-                </figure>
-            </div>
-            <div class="media-content">
-                <p class="is-size-5">
-                    Bertrand Pouymayou, Panagiotis Balermpas, Oliver Riesterer, Matthias Guckenberger, Jan Unkelbach;
-                    <br>
-                    <strong class="has-text-secondary">
-                        A Bayesian network model of lymphatic tumor progression for personalized elective CTV definition in head and neck
-                        cancers,
-                    </strong>
-                    <br>
-                    <em>Phys. Med. Biol.</em> <strong>64,</strong> 165003 (2019)
-                    <a href="https://doi.org/10.1088/1361-6560/ab2a18" target="_blank">https://doi.org/10.1088/1361-6560/ab2a18</a>
-                </p>
+        <div class="block">
+            <h2 class="title is-5 has-text-info">
+                A review paper summarizing how models of tumor progression may support CTV definition:
+            </h2>
+            <div class="media">
+                <div class="media-left">
+                    <figure class="image is-96x96">
+                        <img class="is-rounded is-outlined" src="{% static 'budapest-paper.png' %}" alt="paper icon">
+                    </figure>
+                </div>
+                <div class="media-content">
+                    <p class="is-size-5">
+                        Jan Unkelbach, Thomas Bortfeld, Carlos E. Cardenas, Vincent Gregoire, Wille Hager, Ben Heijmen, Robert Jeraj, Stine S.
+                        Korreman, Roman Ludwig, Bertrand Pouymayou, Nadya Shusharina, Jonas Söderberg, Iuliana Toma-Dasu, Esther G.C. Troost,
+                        Eliana Vasquez Osorio;
+                        <br>
+                        <strong class="has-text-secondary">
+                            The role of computational methods for automating and improving clinical target volume definition,
+                        </strong>
+                        <br>
+                        <em>Radiotherapy and Oncology</em> <strong>153,</strong> 15-25 (2020)
+                        <a href="https://doi.org/10.1016/j.radonc.2020.10.002"
+                            target="_blank">https://doi.org/10.1016/j.radonc.2020.10.002</a>
+                    </p>
+                </div>
             </div>
         </div>
     </div>

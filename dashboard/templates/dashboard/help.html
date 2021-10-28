@@ -35,6 +35,7 @@
                     <p class="menu-label">Examples</p>
                     <ul class="menu-list is-size-5">
                         <li><a href="#Full example">Full example</a></li>
+                        <li><a href="#The bar plots">The bar plots</a></li>
                     </ul>
                 </aside>
             </div>
@@ -42,27 +43,33 @@
                 <div class="content">
                     <h1 id="The Dashboard">The Dashboard</h1>
                     <p>
-                        Here, one can visualize the patients in the database. The aim 
-                        is to make it easy to see and understand a complex dataset with 
-                        regard to lymphatic involvement in head & neck cancer. Ideally, 
-                        it is "hypothesis-generating", meaning that you, the user, 
-                        becomes curious and asks questions about certain correlations 
-                        (or even causations). Some of them will be explorable using 
-                        this interface, while others maybe not. In the latter case we 
-                        encourage you to 
-                        <a href="{% url 'patients:download' %}">download</a> 
-                        the database and test your ideas and hypotheses with your own 
-                        tools.
+                        Here, one can visualize patterns of lymph node involvement 
+                        for the patients in the database. The aim is to make it 
+                        easy to explore the complex dataset and understand correlations 
+                        between lymph node involvement in different levels and primary 
+                        tumor characteristics. The basic concept is that buttons 
+                        on the dashboard act as filters. They allow the user to 
+                        select subsets of patients from the database. The GUI will 
+                        then show the number (or percentage) of patients that show 
+                        involvement in each lymph node level. As such, the dashboard 
+                        may be used for generating hypotheses, meaning that you, 
+                        the user, becomes curious and asks questions about correlations 
+                        or whether lymph node involvement differs between certain 
+                        patient groups. Most patient characteristics will be explorable 
+                        using this interface, while others maybe not. In the latter 
+                        case we encourage you to <a href="{% url 'patients:download' %}">download</a> 
+                        the database and test your ideas and hypotheses with your 
+                        own tools.
                     </p>
                     <p class="notification is-warning is-light">
-                        <strong>Note:</strong> This is NOT a risk prediction. All we do 
-                        here is visualize data of previously seen patients. For actual 
-                        risk predictions for individual and newly diagnosed patients, 
-                        check out our 
+                        <strong>Warning:</strong> dashboard is NOT for predicting the risk of occult 
+                        metastases in individual patients. All we do here is visualize 
+                        data of previously seen patients. For actual risk predictions 
+                        for individual and newly diagnosed patients, check out our 
                         <a href="https://www.nature.com/articles/s41598-021-91544-1">
                             paper on modelling tumor progression
-                        </a> or wait a bit, since we are thinking about implementing it 
-                        also here.
+                        </a> or wait a bit, since 
+                        we are thinking about implementing it also here.
                     </p>
         
                     <h2 id="Components" class="pt-6">Components</h2>
@@ -94,6 +101,19 @@
                     </p>
                     <figure class="image">
                         <img src="{% static 'dashboard/example_usage.png' %}" alt="annotated screenshot">
+                    </figure>
+
+                    <h3 id="The bar plots">The bar plots</h3>
+                    <p>
+                        Here we have annotated the bar plots showing the actual 
+                        involvement numbers and statistics. In this case we're 
+                        looking at a concrete example for the ipsilateral levels 
+                        III and IV. Note that the absolute numbers are displayed. 
+                        If one switches views, all the number here become 
+                        percentages. 
+                    </p>
+                    <figure class="image">
+                        <img src="{% static 'dashboard/annotated_bar.png' %}" alt="annotated bar plot">
                     </figure>
                 </div>
             </div>

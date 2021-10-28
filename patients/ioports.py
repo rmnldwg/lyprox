@@ -65,7 +65,8 @@ def row2patient(row, user, anonymize: List[str]):
     
     patient_fields = get_model_fields(
         Patient, remove=[
-            "id", "hash_value", "tumor", "diagnose", "t_stage", "institution"
+            "id", "hash_value", "tumor", "t_stage", "stage_prefix",
+            "diagnose", "institution"
         ]
     )
     

@@ -48,15 +48,20 @@ class Patient(ModelLoggerMixin, models.Model):
     neck_dissection = models.BooleanField(blank=True, null=True)
     
     tnm_edition = models.PositiveSmallIntegerField(default=8)  #:
-    stage_prefix = models.CharField(max_length=1, choices=[("c", "c"),
-                                                           ("p", "p")])  #:
-    t_stage = models.PositiveSmallIntegerField(choices=T_stages.choices, default=0)  #:
+    stage_prefix = models.CharField(
+        max_length=1, choices=[("c", "c"), ("p", "p")], default='c'
+    )  #:
+    t_stage = models.PositiveSmallIntegerField(
+        choices=T_stages.choices, default=0
+    )  #:
     n_stage = models.PositiveSmallIntegerField(choices=N_stages.choices)  #:
     m_stage = models.PositiveSmallIntegerField(choices=M_stages.choices)  #:
     
     #: By default, every newly created patient is assigned to the institution 
     #: of the :class:`User` that created them.
-    institution = models.ForeignKey(Institution, blank=True, on_delete=models.PROTECT)
+    institution = models.ForeignKey(
+        Institution, blank=True, on_delete=models.PROTECT
+    )
     
     
     def __str__(self):

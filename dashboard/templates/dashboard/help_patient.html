@@ -1,34 +1,46 @@
-<p>
-    Narrow down the subset of patients by their characteristics, like HPV 
-    status or whether they are smokers. To do so, put the toggle buttons in 
-    one of the following three states:
+<p class="pb-1">
+    In this panel, one can narrow down the subset of selected patients based on 
+    criteria that characterize the patient as a whole, such as HPV status or whether 
+    they are smokers. To do so, put the toggle buttons in one of the following three 
+    states:
 </p>
 
-<ul class="fa-ul" style="list-style: none;">
+<ul class="fa-ul pb-2" style="list-style: none;">
     <li>
         <span class="fa-li">
             <i class="fas fa-plus"></i>
         </span>
-            Only patients are selected where the respective characterisitc is *positive*. E.g. in the case of "smoking status" this would select all smokers.
+        Only patients are selected where the respective characterisitc is *positive*. 
+        E.g. in the case of "smoking status" this would select all smokers.
     </li>
     <li>
         <span class="fa-li">
             <i class="fas fa-ban"></i>
         </span>
-            This selection means that no filtering will be performed regarding the corresponding patient characteristic.
+            This selection means that no filtering will be performed regarding the 
+            corresponding patient characteristic.
     </li>
     <li>
         <span class="fa-li">
             <i class="fas fa-minus"></i>
         </span>
-            Selecting this will only include patients in the subset that do not have the respective characteristic or it is negative (e.g. not-smoking or HPV negative).
+            Selecting this will only include patients in the subset that do not have 
+            the respective characteristic or it is negative (e.g. not-smoking or HPV negative).
     </li>
 </ul>
 
 <p class="notification is-info is-light">
     <strong>Note:</strong> Just below the buttons there are three numbers that 
     give a preview of how many of the currently selected patients can be 
-    categorized according to the respective characteristic.
+    categorized according to the respective characteristic. Here, the middle number 
+    indicates for how many patients the characteristic is unknown.
+</p>
+
+<p class="notification is-info is-light">
+    <strong>Note:</strong> All filters in the Patient characteristics panel are 
+    combined via AND operations. This means, if one selects + for HPV status and 
+    - for neck dissection, the selection includes only patients who are HPV positive 
+    AND did not receive neck dissction.
 </p>
 
 <p class="notification is-warning is-light">

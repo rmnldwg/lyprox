@@ -11,7 +11,9 @@
     {% endif %}
     <div class="media-content">
         {% if markdown %}
+        <div class="content">
             {% include_md markdown %}
+        </div>
         {% elif html %}
             {% include html %}
         {% endif %}
