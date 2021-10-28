@@ -9068,3 +9068,6 @@ span[data-tooltip] {
 
 .control span[data-tooltip] {
   border-bottom: none; }
+
+code {
+  color: #AE0060; }

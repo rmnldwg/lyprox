@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load static %}
+{% load mytags %}
 
 
 {% block head %}
@@ -128,10 +129,10 @@
 
         <table class="block table is-fullwidth is-hoverable">
             <thead>
-                <tr class="is-size-5">
+                <tr class="is-size-6">
                     <th>
                         <span class="icon-text">
-                            <span class="icon is-medium">
+                            <span class="icon">
                                 <i class="fas fa-user"></i>
                             </span>
                         </span>
@@ -139,7 +140,7 @@
                     </th>
                     <th>
                         <span class="icon-text">
-                            <span class="icon is-medium">
+                            <span class="icon">
                                 <i class="fas fa-key"></i>
                             </span>
                         </span>
@@ -147,15 +148,15 @@
                     </th>
                     <th>
                         <span class="icon-text">
-                            <span class="icon is-medium">
+                            <span class="icon">
                                 <i class="far fa-calendar-alt"></i>
                             </span>
                         </span>
-                        <span>Diagnose date</span>
+                        <span>Histological diagnose</span>
                     </th>
                     <th>
                         <span class="icon-text">
-                            <span class="icon is-medium">
+                            <span class="icon">
                                 <i class="fas fa-venus-mars"></i>
                             </span>
                         </span>
@@ -165,7 +166,7 @@
                     <th>TNM stage</th>
                     <th>
                         <span class="icon-text">
-                            <span class="icon is-medium">
+                            <span class="icon">
                                 <i class="fas fa-university"></i>
                             </span>
                         </span>
@@ -179,7 +180,7 @@
                 {% for patient in patient_list %}
                 <tr>
                     <td>{{ patient.pk }} </td>
-                    <td>{{ patient.hash_value }} </td>
+                    <td><code>{{ patient.hash_value | hashdisplay }}</code></td>
                     <td>{{ patient.diagnose_date | date:"Y-m-d" }} </td>
                     <td>
                         <span class="icon-text">
@@ -194,7 +195,7 @@
                         </span>
                     </td>
                     <td>{{ patient.age }} </td>
-                    <td>{{ patient.get_t_stage_display }} {{ patient.get_n_stage_display }} {{ patient.get_m_stage_display }} </td>
+                    <td>{{ patient.get_stage_prefix_display }} {{ patient.get_t_stage_display }} {{ patient.get_n_stage_display }} {{ patient.get_m_stage_display }} </td>
                     <td>
                         <span class="icon-text">
                             <span class="icon mr-2">

@@ -48,6 +48,8 @@ class Patient(ModelLoggerMixin, models.Model):
     neck_dissection = models.BooleanField(blank=True, null=True)
     
     tnm_edition = models.PositiveSmallIntegerField(default=8)  #:
+    stage_prefix = models.CharField(max_length=1, choices=[("c", "c"),
+                                                           ("p", "p")])  #:
     t_stage = models.PositiveSmallIntegerField(choices=T_stages.choices, default=0)  #:
     n_stage = models.PositiveSmallIntegerField(choices=N_stages.choices)  #:
     m_stage = models.PositiveSmallIntegerField(choices=M_stages.choices)  #:
@@ -68,17 +70,23 @@ class Patient(ModelLoggerMixin, models.Model):
     
     def update_t_stage(self):
         """Update T-stage after new :class:`Tumor` is added to :class:`Patient` 
-        (gets called in :meth:`Tumor.save()` method)"""
+        (gets called in :meth:`Tumor.save()` method). Also updates the patient's 
+        stage prefix to that of the tumor with the highest T-category.
+        """
         tumors = Tumor.objects.all().filter(patient=self)
         
         max_t_stage = 0
+        stage_prefix = 'c'
         for tumor in tumors:
             if max_t_stage < tumor.t_stage:
                 max_t_stage = tumor.t_stage
+                stage_prefix = tumor.stage_prefix
                 
         self.t_stage = max_t_stage
+        self.stage_prefix = stage_prefix
         self.save()
         self.logger.debug(f"T-stage of patient {self} updated to "
+                          f"{self.get_stage_prefix_display()}"
                           f"{self.get_t_stage_display()}.")
 
 

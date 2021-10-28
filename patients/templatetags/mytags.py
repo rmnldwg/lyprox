@@ -30,6 +30,13 @@ def percent(indexable, i):
     i = int(f"{i}".lower())
     return f"{100 * indexable[i] / sum(indexable):.0f}"
 
+@register.filter(name="hashdisplay")
+def hashdisplay(string):
+    num = int(string)
+    byte_num = int.to_bytes(num, length=8, byteorder="big", signed=True)
+    hex_str = [f"{b:02x}" for b in byte_num]
+    return ":".join(hex_str)
+
 
 
 @register.simple_tag(name="include_md", takes_context=True)

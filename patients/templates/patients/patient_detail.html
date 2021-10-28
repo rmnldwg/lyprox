@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load static %}
+{% load mytags %}
 
 
 {% block head %}
@@ -18,7 +19,7 @@
                 <div class="level-item">
                     <div>
                         <p class="title">Patient {{ patient.pk }}</p>
-                        <p class="is-size-5">Hash-ID: {{ patient.hash_value }}</p>
+                        <p class="is-size-5">Hash-ID: <code>{{ patient.hash_value | hashdisplay }}</code></p>
                     </div>
                 </div>
             </div>
@@ -57,7 +58,7 @@
                 </div>
                 <div class="control">
                     <div class="tags has-addons are-medium">
-                        <span class="tag is-info">date of diagnosis</span>
+                        <span class="tag is-info">histological diagnosis</span>
                         <span class="tag is-primary">{{ patient.diagnose_date }}</span>
                     </div>
                 </div>
@@ -76,7 +77,7 @@
                 <div class="control">
                     <div class="tags has-addons are-medium tooltip" data-tooltip="According to {{ patient.tnm_edition }}th TNM edition">
                         <span class="tag is-info">stage</span>
-                        <span class="tag is-primary">{{ patient.get_t_stage_display }} {{ patient.get_n_stage_display }} {{ patient.get_m_stage_display }}</span>
+                        <span class="tag is-primary">{{ patient.get_stage_prefix_display }} {{ patient.get_t_stage_display }} {{ patient.get_n_stage_display }} {{ patient.get_m_stage_display }}</span>
                         <span class="tag is-primary is-light tnm">{{ patient.tnm_edition }}th</span>
                     </div>            
                 </div>
