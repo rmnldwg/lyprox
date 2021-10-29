@@ -1,28 +1,30 @@
 {% load static %}
 
+{% with description="Web app for exploring patterns and correlations in the lymph node level involvements of head & neck cancer patients." %}
+
 <head>
     <meta charset="UTF-8">
 
     <!-- Primary Meta Tags -->
-    <title>{{ title }}</title>
-    <meta name="description" content="Web app for exploring patterns and correlations in the lymph node level involvements of head & neck cancer patients.">
+    <title>{{ title }} {% if IS_FROZEN %}(frozen){% endif %}</title>
+    <meta name="description" content="{{ description }}">
 
     <!-- Google / Search Engine Tags -->
-    <meta itemprop="name" content="{{ title }}">
-    <meta itemprop="description" content="Web app for exploring patterns and correlations in the lymph node level involvements of head & neck cancer patients.">
+    <meta itemprop="name" content="{{ title }} {% if IS_FROZEN %}(frozen){% endif %}">
+    <meta itemprop="description" content="{{ description }}">
     <meta itemprop="image" content="{{ request.scheme }}://{{ request.get_host }}{% static 'github-social-card.png' %}">
 
     <!-- Open Graph -->
     <meta property="og:type" content="website">
     <meta property="og:url" content="{{ request.scheme }}://{{ request.get_host }}">
-    <meta property="og:title" content="{{ title }}">
-    <meta property="og:description" content="Web app for exploring patterns and correlations in the lymph node level involvements of head & neck cancer patients.">
+    <meta property="og:title" content="{{ title }} {% if IS_FROZEN %}(frozen){% endif %}">
+    <meta property="og:description" content="{{ description }}">
     <meta property="og:image" content="{{ request.scheme }}://{{ request.get_host }}{% static 'github-social-card.png' %}">
 
     <!-- Twitter Meta Tags -->
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="{{ title }}">
-    <meta name="twitter:description" content="Web app for exploring patterns and correlations in the lymph node level involvements of head & neck cancer patients.">
+    <meta name="twitter:title" content="{{ title }} {% if IS_FROZEN %}(frozen){% endif %}">
+    <meta name="twitter:description" content="{{ description }}">
     <meta name="twitter:image" content="{{ request.scheme }}://{{ request.get_host }}{% static 'github-social-card.png' %}">
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -31,3 +33,5 @@
     <script src="https://kit.fontawesome.com/c702fb8f68.js" crossorigin="anonymous"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 </head>
+
+{% endwith %}

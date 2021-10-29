@@ -34,7 +34,8 @@ except FileNotFoundError:
         "CSRF_COOKIE_SECURE": False,
         "SESSION_COOKIE_SECURE": False,
         "GOOGLE_API_KEY": "AIzaSyAZDXINmEGM6LFl2RVnVxfRsd6M9hDgSKw",
-        "AUTH_USER_MODEL": "accounts.User"
+        "AUTH_USER_MODEL": "accounts.User",
+        "IS_FROZEN": False
     }
     
 
@@ -61,6 +62,9 @@ try:
     ).decode("utf-8").strip()
 except Exception as e:
     VERSION = e
+
+# the frozen version is the one we keep for reference to the paper
+IS_FROZEN = config["IS_FROZEN"]
 
 
 # Logging

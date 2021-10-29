@@ -38,6 +38,20 @@
         <div class="content">
             {% include_md 'index.md' %}
         </div>
+        {% if IS_FROZEN %}
+        <div class="notification is-warning is-light">
+            <strong>Note:</strong> You are looking at version {{ VERSION }} of the 
+            interface, which is frozen to serve as a reference for readers of our 
+            recent publication. If you want to use the latest version of this website 
+            that we try to continually develop and improve, click 
+            <a href="https://www.lyprox.org">
+                <span class="icon">
+                    <i class="fas fa-external-link-alt"></i>
+                </span>
+                here.
+            </a>
+        </div>
+        {% endif %}
     </div>
 </section>
 
@@ -170,9 +184,21 @@
         <h1 class="title">Publications</h1>
         
         <div class="block">
-            <h2 class="title is-5 has-text-info">
-                The publication describing the USZ dataset and this online interface
-            </h2>
+            <p class="title is-5 has-text-info">
+                The publication describing the USZ dataset and this online interface. <br>
+                {% if not IS_FROZEN %}
+                <span class="has-text-warning">
+                    Note that this paper refers to a specific version of the 
+                    interface which can be viewed 
+                    <a href="https://frozen.lyprox.org">
+                        <span class="icon">
+                            <i class="fas fa-sm fa-external-link-alt"></i>
+                        </span>
+                        here
+                    </a>
+                </span>
+                {% endif %}
+            </p>
             <div class="media">
                 <div class="media-left">
                     <figure class="image is-96x96">
@@ -194,10 +220,10 @@
         </div>
 
         <div class="block">
-            <h2 class="title is-5 has-text-info">
+            <p class="title is-5 has-text-info">
                 Publications on statistical models of lymphatic progression for estimating the probability of occult metastases 
                 in lymph node levels, which can be trained based on the data presented here:
-            </h2>
+            </p>
             <div class="media">
                 <div class="media-left">
                     <figure class="image is-96x96">
@@ -241,9 +267,9 @@
         </div>
 
         <div class="block">
-            <h2 class="title is-5 has-text-info">
+            <p class="title is-5 has-text-info">
                 A review paper summarizing how models of tumor progression may support CTV definition:
-            </h2>
+            </p>
             <div class="media">
                 <div class="media-left">
                     <figure class="image is-96x96">
