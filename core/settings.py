@@ -17,7 +17,7 @@ import subprocess
 
 
 try:
-    with open("/etc/lymph-interface_config.json") as config_file:
+    with open("/etc/lyprox_config.json") as config_file:
         config = json.load(config_file)
 except FileNotFoundError:
     warnings.warn(
