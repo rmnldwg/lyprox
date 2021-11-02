@@ -20,16 +20,20 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 FILE_UPLOAD_TEMP_DIR = BASE_DIR / "tmp"
 LOGIN_REDIRECT_URL = "/"
 
+# GitHub repository URL
+GITHUB_REPO_OWNER = "rmnldwg"
+GITHUB_REPO_NAME = "lyprox"
+
 # versioning
 try:
     VERSION = subprocess.check_output(
-        "git describe --tags --always", cwd=BASE_DIR, shell=True
+        "git describe --tags --abbrev=0", cwd=BASE_DIR, shell=True
     ).decode("utf-8").strip()
 except Exception as e:
     VERSION = e
 
 # the frozen version is the one we keep for reference to the paper
-IS_FROZEN = False
+IS_FROZEN = True
 
 # Logging
 def set_LOGGING(LOG_LEVEL):

@@ -68,12 +68,22 @@
                             {% endif %}
                         </div>
                         <div class="control">
-                            <a href="https://github.com/rmnldwg/lymph-interface" target="_blank" title="Source code on GitHub"
-                                class="button is-primary is-inverted has-tooltip-bottom">
-                                <span class="icon">
-                                    <i class="fab fa-lg fa-github"></i>
-                                </span>
-                            </a>
+                            <div class="buttons has-addons">
+                                <a href="https://github.com/rmnldwg/lymph-interface" target="_blank" title="Source code on GitHub"
+                                    class="button is-primary is-inverted has-tooltip-bottom">
+                                    <span class="icon">
+                                        <i class="fab fa-lg fa-github"></i>
+                                    </span>
+                                </a>
+                                <a href="{% url 'versions' %}" class="button is-primary is-inverted is-outlined" title="View other/older versions">
+                                    <span>v{{ VERSION }}</span>
+                                    {% if IS_FROZEN %}
+                                    <span class="icon" title="frozen version">
+                                        <i class="far fa-snowflake"></i>
+                                    </span>
+                                    {% endif %}
+                                </a>
+                            </div>
                         </div>
                     </div>
                 </div>
