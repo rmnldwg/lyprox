@@ -69,7 +69,7 @@ db.sqlite3-journal
 /uploads/
 /downloads/
 */migrations
-core/*.settings.py
+core/settings.py
 */wsgi.py
 */asgi.py
 
