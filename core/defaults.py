@@ -32,8 +32,14 @@ try:
 except Exception as e:
     VERSION = e
 
-# the frozen version is the one we keep for reference to the paper
+# a frozen version is one we keep for reference to e.g. a publication
 IS_FROZEN = True
+FROZEN_VERSIONS = [
+    {
+        "name": "2021 oropharynx data", 
+        "url" : "https://2021-oropharynx.lyprox.org",
+    }
+]
 
 # Logging
 def set_LOGGING(LOG_LEVEL):
