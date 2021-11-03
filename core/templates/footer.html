@@ -12,8 +12,7 @@
                             </span>
                         </figure>
                         <div class="media-content">
-                            <p>Website Version</p>
-                            <p>{{ VERSION }} {% if IS_FROZEN %}(frozen){% endif %}</p>
+                            <p>Website Version {{ VERSION }} {% if IS_FROZEN %}(frozen){% endif %}</p>
                             {% if IS_FROZEN %}
                             <a href="https://www.lyprox.org">
                                 <span class="icon-text">
@@ -21,15 +20,6 @@
                                         <i class="fas fa-arrow-alt-circle-up"></i>
                                     </span>
                                     <span>Go to latest version</span>
-                                </span>
-                            </a>
-                            {% else %}
-                            <a href="https://frozen.lyprox.org">
-                                <span class="icon-text">
-                                    <span class="icon" style="width: 1rem;">
-                                        <i class="far fa-snowflake"></i>
-                                    </span>
-                                    <span>Go to frozen version</span>
                                 </span>
                             </a>
                             {% endif %}

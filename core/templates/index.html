@@ -183,31 +183,23 @@
     <div class="container">
         <h1 class="title">Publications</h1>
         
-        <div class="block">
-            <p class="title is-5 has-text-info">
-                The publication describing the USZ dataset and this online interface. <br>
-                {% if not IS_FROZEN %}
+        <div class="box">
+            <p class="block is-size-5">
+                The publication describing the USZ dataset and this online interface.
                 <span class="has-text-warning">
-                    Note that this paper refers to a specific version of the 
-                    interface which can be viewed 
-                    <a href="https://frozen.lyprox.org">
-                        <span class="icon">
-                            <i class="fas fa-sm fa-external-link-alt"></i>
-                        </span>
-                        here
-                    </a>
+                    <strong class="has-text-warning">Note:</strong> This refers to a specific version of the interface that can be viewed 
+                    <a href="https://lyprox.org">here.</a>
                 </span>
-                {% endif %}
             </p>
             <div class="media">
                 <div class="media-left">
-                    <figure class="image is-96x96">
-                        <img class="is-rounded" src="{% static 'data-paper.svg' %}" alt="paper icon">
+                    <figure class="image is-64x64">
+                        <img class="is-rounded" src="{% static 'data-paper.png' %}" alt="paper icon">
                     </figure>
                 </div>
                 <div class="media-content">
-                    <p class="is-size-5">
-                        Jean-Marc Hoffmann, Bertrand Pouymayou, Roman Ludwig, Matthias Guckenberger, Panagiotis Balermpas, Jan Unkelbach;
+                    <p>
+                        Jean-Marc Hoffmann, Bertrand Pouymayou, Roman Ludwig, Grégoire Morand, Martina Däppen, Matthias Guckenberger, Panagiotis Balermpas, Jan Unkelbach;
                         <br>
                         <strong class="has-text-secondary">
                             Detailed analysis of lymphatic progression patterns in oropharyngeal squamous cell carcinoma,
@@ -219,19 +211,19 @@
             </div>
         </div>
 
-        <div class="block">
-            <p class="title is-5 has-text-info">
-                Publications on statistical models of lymphatic progression for estimating the probability of occult metastases 
-                in lymph node levels, which can be trained based on the data presented here:
+        <div class="box">
+            <p class="block is-size-5">
+                Our publications on statistical models of lymphatic progression for estimating the probability of occult metastases 
+                in lymph node levels. These models can be trained using data like the one we present here.
             </p>
             <div class="media">
                 <div class="media-left">
-                    <figure class="image is-96x96">
-                        <img class="is-rounded is-outlined" src="{% static 'hmm-paper.png' %}" alt="paper icon">
+                    <figure class="image is-64x64">
+                        <img class="is-rounded" src="{% static 'hmm-paper.png' %}" alt="paper icon">
                     </figure>
                 </div>
                 <div class="media-content">
-                    <p class="is-size-5">
+                    <p>
                         Roman Ludwig, Bertrand Pouymayou, Panagiotis Balermpas, Jan Unkelbach;
                         <br>
                         <strong class="has-text-secondary">
@@ -246,12 +238,12 @@
 
             <div class="media">
                 <div class="media-left">
-                    <figure class="image is-96x96">
+                    <figure class="image is-64x64">
                         <img class="is-rounded" src="{% static 'bn-paper.png' %}" alt="paper icon">
                     </figure>
                 </div>
                 <div class="media-content">
-                    <p class="is-size-5">
+                    <p>
                         Bertrand Pouymayou, Panagiotis Balermpas, Oliver Riesterer, Matthias Guckenberger, Jan Unkelbach;
                         <br>
                         <strong class="has-text-secondary">
@@ -266,18 +258,18 @@
             </div>
         </div>
 
-        <div class="block">
-            <p class="title is-5 has-text-info">
+        <div class="box">
+            <p class="block is-size-5">
                 A review paper summarizing how models of tumor progression may support CTV definition:
             </p>
             <div class="media">
                 <div class="media-left">
-                    <figure class="image is-96x96">
+                    <figure class="image is-64x64">
                         <img class="is-rounded is-outlined" src="{% static 'budapest-paper.png' %}" alt="paper icon">
                     </figure>
                 </div>
                 <div class="media-content">
-                    <p class="is-size-5">
+                    <p>
                         Jan Unkelbach, Thomas Bortfeld, Carlos E. Cardenas, Vincent Gregoire, Wille Hager, Ben Heijmen, Robert Jeraj, Stine S.
                         Korreman, Roman Ludwig, Bertrand Pouymayou, Nadya Shusharina, Jonas Söderberg, Iuliana Toma-Dasu, Esther G.C. Troost,
                         Eliana Vasquez Osorio;
