@@ -33,7 +33,7 @@ except Exception as e:
     VERSION = e
 
 # a frozen version is one we keep for reference to e.g. a publication
-IS_FROZEN = True
+IS_FROZEN = False
 FROZEN_VERSIONS = [
     {
         "name": "2021 oropharynx data", 

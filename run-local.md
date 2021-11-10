@@ -2,6 +2,7 @@
 
 To use this interface on your machine, you can follow these steps below to get it up and running locally on your computer.
 
+
 ## Cloning the repo
 
 Start by cloning this GitHub repository to you machine. In a terminal enter:
@@ -11,6 +12,7 @@ git clone https://github.com/rmnldwg/lymph-interface.git
 ```
 
 and provide your credentials when prompted. Afterwards, ``cd`` into ``lymph-interface``.
+
 
 ## Set up environment
 
@@ -43,6 +45,7 @@ If everythin went according to plan, your terminal should now prefix everything 
 (.venv) user@machine:~$
 ```
 
+
 ## Installing prerequisites
 
 In order to start the interface's server, you need to have [django](https://www.djangoproject.com/) along with several other prerequisites installed. The repository comes with a ``requirements.txt`` file, which one can use to install everything that is necessary. While inside the ``lymph-interface`` folder and with your virtual environment activated, type
@@ -50,6 +53,18 @@ In order to start the interface's server, you need to have [django](https://www.
 ```shell
 pip install -r requirements.txt
 ```
+
+
+## Adding a `settings.py` file
+
+Usually, every django project has a `settings.py` file where all the project's settings live. E.g. security relevant options, which apps and plug-ins are used and so on. Since we wanted to be able to deploy multiple different version of the interface, we changed the approach to the settings slightly: There exists a `defaults.py` file that contains all default settings for the interface, which can then be modified using a custom (and untracked) `settings.py`. So, to use the interface, just simply create a `settings.py` containing one line of code:
+
+```python
+from .defaults import *
+```
+
+After that line you can change or add any setting you wish.
+
 
 ## Running the interface
 
