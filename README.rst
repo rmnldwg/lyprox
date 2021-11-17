@@ -37,7 +37,7 @@ There are two ways you can contribute to this project:
 Run this interface locally
 ==========================
 
-If you want to host your data yourself or try how your data looks in the web app without committing to an upload, feel free to follow [these instructions](run-local.md) to get it up and running on your local machine.
+If you want to host your data yourself or try how your data looks in the web app without committing to an upload, feel free to follow `these instructions <run-local.md>`_ to get it up and running on your local machine.
 
 
 References
