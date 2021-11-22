@@ -27,5 +27,7 @@ jobs:
           cd ${{ secrets.REPO_NAME }}
           git pull --tags origin main
           source .venv/bin/activate
+          python manage.py makemigrations accounts patients --noinput
+          python manage.py migrate --noinput
           python manage.py collectstatic --noinput
           sudo service apache2 restart
