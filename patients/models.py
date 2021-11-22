@@ -33,8 +33,8 @@ class Patient(ModelLoggerMixin, models.Model):
     #: Unique ID that should be computed from sensitive info upon patient 
     #: creation to avoid duplicates and respect the patient's privacy.
     hash_value = models.CharField(max_length=200, unique=True)
-    gender = models.CharField(max_length=10, choices=[("female", "female"), 
-                                                      ("male"  , "male"  )])  #:
+    sex = models.CharField(max_length=10, choices=[("female", "female"),
+                                                   ("male"  , "male"  )])  #:
     age = models.IntegerField()  #:
     diagnose_date = models.DateField()  #:
     
@@ -66,7 +66,7 @@ class Patient(ModelLoggerMixin, models.Model):
     
     def __str__(self):
         """Report some patient specifics."""
-        return (f"#{self.pk}: {self.gender} ({self.age}) at "
+        return (f"#{self.pk}: {self.sex} ({self.age}) at "
                 f"{self.institution.shortname}")
     
     def get_absolute_url(self):

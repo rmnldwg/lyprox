@@ -58,11 +58,11 @@
                                     </div>
                                 </div>
                                 <div class="control">
-                                    <label for="{{ filterset.form.gender.id_for_label }}" class="label has-text-primary">
-                                        {{ filterset.form.gender.label }}
+                                    <label for="{{ filterset.form.sex.id_for_label }}" class="label has-text-primary">
+                                        {{ filterset.form.sex.label }}
                                     </label>
                                     <div class="select">
-                                        {{ filterset.form.gender }}
+                                        {{ filterset.form.sex }}
                                     </div>
                                 </div>
                             </div>
@@ -160,7 +160,7 @@
                                 <i class="fas fa-venus-mars"></i>
                             </span>
                         </span>
-                        <span>gender</span>
+                        <span>sex</span>
                     </th>
                     <th>Age</th>
                     <th>TNM stage</th>
@@ -185,13 +185,13 @@
                     <td>
                         <span class="icon-text">
                             <span class="icon">
-                                {% if patient.gender == "male" %}
+                                {% if patient.sex == "male" %}
                                 <i class="fas fa-mars"></i>
                                 {% else %}
                                 <i class="fas fa-venus"></i>
                                 {% endif %}
                             </span>
-                            <span>{{ patient.gender }}</span>
+                            <span>{{ patient.sex }}</span>
                         </span>
                     </td>
                     <td>{{ patient.age }} </td>

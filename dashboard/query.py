@@ -241,7 +241,7 @@ def count_patients(
     counts = {   # initialize counts of patient- & tumor-related fields
         'total': len(patients),
         
-        'gender': np.zeros(shape=(3,), dtype=int),
+        'sex': np.zeros(shape=(3,), dtype=int),
         'nicotine_abuse': np.zeros(shape=(3,), dtype=int),
         'hpv_status': np.zeros(shape=(3,), dtype=int),
         'neck_dissection': np.zeros(shape=(3,), dtype=int),
