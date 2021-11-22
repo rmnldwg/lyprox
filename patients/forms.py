@@ -15,7 +15,7 @@ class PatientForm(FormLoggerMixin, forms.ModelForm):
     """Form to create and edit patients, based on their model definition."""
     class Meta:
         model = Patient
-        fields = ["gender", 
+        fields = ["sex", 
                   "diagnose_date", 
                   "alcohol_abuse", 
                   "nicotine_abuse", 
@@ -24,7 +24,7 @@ class PatientForm(FormLoggerMixin, forms.ModelForm):
                   "tnm_edition",
                   "n_stage",
                   "m_stage"]
-        widgets = {"gender": widgets.Select(attrs={"class": "select"}),
+        widgets = {"sex": widgets.Select(attrs={"class": "select"}),
                    "diagnose_date": widgets.NumberInput(attrs={"class": "input",
                                                                "type": "date"}),
                    "alcohol_abuse": widgets.Select(choices=[(True, "yes"),
