@@ -164,7 +164,6 @@ def upload_patients(request):
     return render(request, "patients/upload.html", context)
 
 
-@login_required
 def generate_and_download_csv(request):
     """Allow user to generate a CSV table from the current database and 
     download it. The returned CSV table has exactly the structure that is 
