@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {% load static %}
-
+{% load mytags %}
 
 {% block head %}
 {% include 'head.html' with title="LyProX · Upload CSV" %}
@@ -19,7 +19,8 @@
                         Import multiple patients at once from a 
                         <a href="{% url 'patients:download' %}" data-tooltip="click to download example CSV">
                             specifically formatted
-                        </a> CSV table.
+                        </a>
+                        CSV table. See also below for an explanation of the expected columns.
                     </p>
 
                     {% if form.errors %}
@@ -70,6 +71,10 @@
                     {% endif %}
                 </div>
             </div>
+        </div>
+
+        <div class="content">
+            {% include_md 'patients/data_description.md' %}
         </div>
     </div>
 </section>
