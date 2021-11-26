@@ -26,15 +26,20 @@ def tf2arr(value):
         
         
 def subsite2arr(subsite):
-    """Map different subsites to an one-hot-array of length three. A one in the 
-    first place means "base of tongue", at the second place is "tonsil" and at 
-    the tird place it's "rest"."""
-    if subsite in ["C01.9"]:
-        return np.array([1, 0, 0], dtype=int)
-    elif subsite in ["C09.0", "C09.1", "C09.8", "C09.9"]:
-        return np.array([0, 1, 0], dtype=int)
-    else:
-        return np.array([0, 0, 1], dtype=int)
+    """Map different subsites to an one-hot-array of subsite groups. E.g., a 
+    one in the first place means "base of tongue", at the second place is 
+    "tonsil" and so on.
+    """
+    res = np.zeros(shape=len(Tumor.SUBSITE_DICT), dtype=int)
+    
+    for i,subsite_list in enumerate(Tumor.SUBSITE_DICT.values()):
+        if subsite in subsite_list:
+            res[i] = 1
+    
+    if np.sum(res) > 1:
+        logger.warn("A tumor has been associated with more than one subsite.")
+    
+    return res
     
     
 def side2arr(side):
@@ -247,7 +252,7 @@ def count_patients(
         'neck_dissection': np.zeros(shape=(3,), dtype=int),
         'n_zero': np.zeros(shape=(3,), dtype=int),
         
-        'subsites': np.zeros(shape=(3,), dtype=int),
+        'subsites': np.zeros(shape=len(Tumor.SUBSITE_DICT), dtype=int),
         't_stages': np.zeros(shape=(len(Patient.T_stages),), dtype=int),
         'central': np.zeros(shape=(3,), dtype=int),
         'extension': np.zeros(shape=(3,), dtype=int), 

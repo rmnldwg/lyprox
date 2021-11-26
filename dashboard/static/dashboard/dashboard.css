@@ -11,11 +11,15 @@ input[type="checkbox"].checkbox:checked:hover + label {
     color: white;
 }
 
-input[type="checkbox"].checkbox:checked + .buttons label {
+input[type="checkbox"].checkbox:checked + .buttons label,
+input[type="checkbox"].checkbox:checked + .tags label 
+{
     background-color: #005EA8;
     color: white;
 }
-input[type="checkbox"].checkbox:checked:hover + .buttons label {
+input[type="checkbox"].checkbox:checked:hover + .buttons label,
+input[type="checkbox"].checkbox:checked:hover + .tags label 
+{
     background-color: #005392;
     color: white;
 }

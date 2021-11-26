@@ -128,17 +128,37 @@ class DashboardForm(FormLoggerMixin, forms.Form):
     )
     
     # tumor specific info
-    subsite__in = forms.MultipleChoiceField(
+    subsite_oropharynx = forms.MultipleChoiceField(
         required=False,
         widget=forms.CheckboxSelectMultiple(
             attrs={"class": "checkbox is-hidden",
                    "onchange": "changeHandler();"},
         ),
-        choices=[("base", "base of tongue"),
-                 ("tonsil", "tonsil"), 
-                 ("rest" , "other")],
-        initial=["base", "tonsil", "rest"]
+        choices=[("base", "base of tongue"),  # choices here must match entries 
+                 ("tonsil", "tonsil"),        # in the Tumor.SUBSITE_DICT keys
+                 ("rest_oro" , "other")],
+        initial=["base", "tonsil", "rest_oro"]
     )
+    subsite_hypopharynx = forms.MultipleChoiceField(
+        required=False,
+        widget=forms.CheckboxSelectMultiple(
+            attrs={"class": "checkbox is-hidden",
+                   "onchange": "changeHandler();"},
+        ),
+        choices=[("rest_hypo" , "all")],  # choices here must match entries in 
+        initial=["rest_hypo"]               # the Tumor.SUBSITE_DICT keys
+    )
+    subsite_larynx = forms.MultipleChoiceField(
+        required=False,
+        widget=forms.CheckboxSelectMultiple(
+            attrs={"class": "checkbox is-hidden",
+                   "onchange": "changeHandler();"},
+        ),
+        choices=[("glottis", "glottis"),      # choices here must match entries 
+                 ("rest_larynx" , "other")],  # in the Tumor.SUBSITE_DICT keys
+        initial=["glottis", "rest_larynx"]
+    )
+    
     t_stage__in = forms.MultipleChoiceField(
         required=False,
         widget=forms.CheckboxSelectMultiple(
@@ -225,16 +245,13 @@ class DashboardForm(FormLoggerMixin, forms.Form):
             cleaned_data["side__in"] = ['left', 'right', 'central']
         
         # map subsites 'base','tonsil','rest' to list of ICD codes.
-        subsites = cleaned_data["subsite__in"]
-        subsite_dict = {"base":   ["C01.9"], 
-                        "tonsil": ["C09.0", "C09.1", "C09.8", "C09.9"],
-                        "rest":   ["C10.0", "C10.1", "C10.2", "C10.3", "C10.4", 
-                                   "C10.8", "C10.9", "C12.9", "C13.0", "C13.1", 
-                                   "C13.2", "C13.8", "C13.9", "C32.0", "C32.1", 
-                                   "C32.2", "C32.3", "C32.8", "C32.9"]}
+        subsites = (cleaned_data["subsite_oropharynx"] 
+                    + cleaned_data["subsite_hypopharynx"] 
+                    + cleaned_data["subsite_larynx"])
+
         icd_codes = []
         for sub in subsites:
-            icd_codes += subsite_dict[sub]
+            icd_codes += Tumor.SUBSITE_DICT[sub]
         cleaned_data["subsite__in"] = icd_codes
         
         # make sure T-stages are list of ints
