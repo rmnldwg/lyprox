@@ -1,4 +1,5 @@
 from django import forms
+from django.core.exceptions import ValidationError
 from django.db.models.expressions import Value
 from django.forms import fields
 
@@ -47,6 +48,8 @@ class ThreeWayToggle(forms.ChoiceField):
             return int(value)
         except ValueError:
             return value
+        except TypeError:
+            raise ValidationError("Expects a number")
 
 
 class InstitutionModelChoiceIndexer:
@@ -218,6 +221,10 @@ class DashboardForm(FormLoggerMixin, forms.Form):
         """Make sure LNLs I & II have correct values corresponding to their 
         sublevels a & b. Also convert tstages from list of str to list of int."""
         cleaned_data = super(DashboardForm, self).clean()
+        
+        # necessary to prevent errors from processing invalid data
+        if len(self.errors) != 0:
+            return {}
         
         # map all -1,0,1 fields to False,None,True
         cleaned_data = {

@@ -36,13 +36,10 @@ class FormLoggerMixin(object):
     
     def is_valid(self) -> bool:
         if super().is_valid():
-            msg = f"Form successfully cleaned."
-            self.logger.info(msg)
+            self.logger.info(f"Form successfully cleaned.")
             return True
-        
         else:
-            msg = f"Form has errors (or is unbound)."
-            self.logger.info(msg)
+            self.logger.info(f"Form has errors (or is unbound).")
             return False
 
 

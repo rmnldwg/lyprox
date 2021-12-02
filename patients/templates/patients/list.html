@@ -15,7 +15,7 @@
 <section class="section">
     <div class="container">
         <div class="block">
-            {% if not show_filter %}
+            {% if not is_filterable %}
             <p class="title">Subset <span class="has-text-info">(not filterable)</span></p>
             <p class="subtitle">{{ stats.total }} patients selected via the dashboard</p>
             {% else %}
@@ -24,7 +24,7 @@
             {% endif %}
         </div>
 
-        {% if show_filter %}
+        {% if is_filterable %}
         <input type="checkbox" name="expand-select" id="filter-container">
         <div class="filter-container notification is-primary is-light">
             <label class="filter-label icon-text" for="filter-container">
