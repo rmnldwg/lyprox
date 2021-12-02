@@ -109,6 +109,7 @@ INSTALLED_APPS = [
     "django_filters",
     # "django_extensions",  # only needed for plotting the model graph
     "phonenumber_field",
+    "fontawesomefree",
 
     'django.contrib.admin',
     'django.contrib.auth',

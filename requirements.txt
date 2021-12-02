@@ -7,3 +7,4 @@ django-auth-logger==2.1
 Markdown==3.3
 numpy==1.21
 pandas==1.2
+fontawesomefree==5.15.4
