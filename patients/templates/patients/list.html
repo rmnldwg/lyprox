@@ -127,120 +127,123 @@
         </div>
         {% endif %}
 
-        <table class="block table is-fullwidth is-hoverable">
-            <thead>
-                <tr class="is-size-6">
-                    <th>
-                        <span class="icon-text">
-                            <span class="icon">
-                                <i class="fas fa-user"></i>
-                            </span>
-                        </span>
-                        <span>Patient</span>
-                    </th>
-                    <th>
-                        <span class="icon-text">
-                            <span class="icon">
-                                <i class="fas fa-key"></i>
-                            </span>
-                        </span>
-                        <span>Hash</span>
-                    </th>
-                    <th>
-                        <span class="icon-text">
-                            <span class="icon">
-                                <i class="far fa-calendar-alt"></i>
-                            </span>
-                        </span>
-                        <span>Histological diagnose</span>
-                    </th>
-                    <th>
-                        <span class="icon-text">
-                            <span class="icon">
-                                <i class="fas fa-venus-mars"></i>
-                            </span>
-                        </span>
-                        <span>sex</span>
-                    </th>
-                    <th>Age</th>
-                    <th>TNM stage</th>
-                    <th>
-                        <span class="icon-text">
-                            <span class="icon">
-                                <i class="fas fa-university"></i>
-                            </span>
-                        </span>
-                        <span>Institution</span>
-                    </th>
-                    <th></th>
-                </tr>
-            </thead>
-
-            <tbody>
-                {% for patient in patient_list %}
-                <tr>
-                    <td>{{ patient.pk }} </td>
-                    <td><code>{{ patient.hash_value | hashdisplay }}</code></td>
-                    <td>{{ patient.diagnose_date | date:"Y-m-d" }} </td>
-                    <td>
-                        <span class="icon-text">
-                            <span class="icon">
-                                {% if patient.sex == "male" %}
-                                <i class="fas fa-mars"></i>
-                                {% else %}
-                                <i class="fas fa-venus"></i>
-                                {% endif %}
-                            </span>
-                            <span>{{ patient.sex }}</span>
-                        </span>
-                    </td>
-                    <td>{{ patient.age }} </td>
-                    <td>{{ patient.get_stage_prefix_display }} {{ patient.get_t_stage_display }} {{ patient.get_n_stage_display }} {{ patient.get_m_stage_display }} </td>
-                    <td>
-                        <span class="icon-text">
-                            <span class="icon mr-2">
-                                <img src="{{ patient.institution.logo.url }}" alt="{{ patient.institution.shortname }} logo" title="{{ patient.institution.shortname }}">
-                            </span>
-                            <span>
-                                {{ patient.institution.name }}
-                            </span>
-                        </span>
-                    </td>
-                    <td>
-                        <div class="buttons is-grouped is-right">
-                            <a href="{% url 'patients:detail' patient.pk %}" class="tag button is-info is-small">
+        <form action="{% url 'patients:paginated_detail' %}" method="GET">
+            <table class="block table is-fullwidth is-hoverable">
+                <thead>
+                    <tr class="is-size-6">
+                        <th>
+                            <span class="icon-text">
                                 <span class="icon">
-                                    <i class="fas fa-address-card"></i>
+                                    <i class="fas fa-user"></i>
                                 </span>
-                                <span>details</span>
-                            </a>
-                            <a href="{% url 'patients:delete' patient.pk %}" class="tag button is-danger is-small">
-                                <span>delete</span>
+                            </span>
+                            <span>Patient</span>
+                        </th>
+                        <th class="is-hidden-touch is-hidden-desktop-only is-hidden-widescreen-only">
+                            <span class="icon-text">
                                 <span class="icon">
-                                    <i class="fas fa-trash"></i>
+                                    <i class="fas fa-key"></i>
                                 </span>
-                            </a>
-                        </div>
-                    </td>
-                </tr>
-                {% endfor %}
-
-                <tr>
-                    <td colspan="7">
-                        <div class="field is-grouped is-grouped-centered">
-                            <div class="control">
-                                <a class="button is-info" href="{% url 'patients:create' %}">
+                            </span>
+                            <span>Hash</span>
+                        </th>
+                        <th>
+                            <span class="icon-text">
+                                <span class="icon">
+                                    <i class="far fa-calendar-alt"></i>
+                                </span>
+                            </span>
+                            <span>Histological diagnose</span>
+                        </th>
+                        <th>
+                            <span class="icon-text">
+                                <span class="icon">
+                                    <i class="fas fa-venus-mars"></i>
+                                </span>
+                            </span>
+                            <span>sex</span>
+                        </th>
+                        <th>Age</th>
+                        <th>TNM stage</th>
+                        <th>
+                            <span class="icon-text">
+                                <span class="icon">
+                                    <i class="fas fa-university"></i>
+                                </span>
+                            </span>
+                            <span>Institution</span>
+                        </th>
+                        <th></th>
+                    </tr>
+                </thead>
+    
+                <tbody>
+                    {% for patient in patient_list %}
+                    <tr>
+                        <td>{{ patient.pk }} <input type="checkbox" class="is-hidden" name="queryset_pk_list" value="{{ patient.pk }}" checked> </td>
+                        <td class="is-hidden-touch is-hidden-desktop-only is-hidden-widescreen-only"><code>{{ patient.hash_value | hashdisplay }}</code></td>
+                        <td>{{ patient.diagnose_date | date:"Y-m-d" }} </td>
+                        <td>
+                            <span class="icon-text">
+                                <span class="icon">
+                                    {% if patient.sex == "male" %}
+                                    <i class="fas fa-mars"></i>
+                                    {% else %}
+                                    <i class="fas fa-venus"></i>
+                                    {% endif %}
+                                </span>
+                                <span>{{ patient.sex }}</span>
+                            </span>
+                        </td>
+                        <td>{{ patient.age }} </td>
+                        <td>{{ patient.get_stage_prefix_display }} {{ patient.get_t_stage_display }} {{ patient.get_n_stage_display }} {{ patient.get_m_stage_display }} </td>
+                        <td>
+                            <span class="icon-text">
+                                <span class="icon mr-2">
+                                    <img src="{{ patient.institution.logo.url }}" alt="{{ patient.institution.shortname }} logo" title="{{ patient.institution.shortname }}">
+                                </span>
+                                <span class="is-hidden-touch is-hidden-desktop-only">
+                                    {{ patient.institution.name }}
+                                </span>
+                            </span>
+                        </td>
+                        <td>
+                            <div class="buttons is-grouped is-right">
+                                <button type="submit" class="tag button is-info is-small" name="selected_patient_pk" value="{{ patient.pk }}">
                                     <span class="icon">
-                                        <i class="fas fa-plus"></i>
+                                        <i class="fas fa-address-card"></i>
                                     </span>
-                                    <span>Add patient</span>
+                                    <span>details</span>
+                                </button>
+                                <a href="{% url 'patients:delete' patient.pk %}" class="tag button is-danger is-small">
+                                    <span>delete</span>
+                                    <span class="icon">
+                                        <i class="fas fa-trash"></i>
+                                    </span>
                                 </a>
                             </div>
-                        </div>
-                    </td>
-                </tr>
-            </tbody>
-        </table>        
+                        </td>
+                    </tr>
+                    {% endfor %}
+    
+                    <tr>
+                        <td colspan="7">
+                            <div class="field is-grouped is-grouped-centered">
+                                <div class="control">
+                                    <a class="button is-info" href="{% url 'patients:create' %}">
+                                        <span class="icon">
+                                            <i class="fas fa-plus"></i>
+                                        </span>
+                                        <span>Add patient</span>
+                                    </a>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </form>
+        
     </div>
 </section>
 

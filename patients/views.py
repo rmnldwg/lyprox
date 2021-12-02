@@ -1,3 +1,4 @@
+from django.db.models.query import QuerySet
 from accounts.models import User
 from django.shortcuts import render
 from django.http import HttpResponse
@@ -17,7 +18,7 @@ from dashboard import query
 logger = logging.getLogger(__name__)
 
 from .models import Patient, Tumor, Diagnose
-from .forms import (PatientForm, 
+from .forms import (PatientForm, PatientPaginationForm, 
                     TumorForm, 
                     DiagnoseForm, 
                     DataFileForm)
@@ -42,9 +43,9 @@ class PatientListView(ViewLoggerMixin, generic.ListView):
     is_filterable = True
     queryset_pk_list = []
     
-    def get_queryset(self):
+    def get_queryset(self) -> QuerySet[Patient]:
         """Add ability to filter queryset via FilterSets to generic ListView."""
-        queryset = Patient.objects.all()
+        queryset = super().get_queryset()
         start_querying = time.perf_counter()
         
         self.filterset = self.filterset_class(self.request.GET or None, 
@@ -85,11 +86,45 @@ class PatientListView(ViewLoggerMixin, generic.ListView):
         """Add FilterSet to context for displaying filter form."""
         context = super().get_context_data(**kwargs)
         
-        context["queryset_pk_list"] = ",".join(str(pk) for pk in self.queryset_pk_list)
+        context["queryset_pk_list"] = self.queryset_pk_list
         context["is_filterable"] = self.is_filterable
         if self.is_filterable:
             context["filterset"] = self.filterset
 
+        return context
+
+
+class PatientPaginatedDetailView(generic.ListView):
+    model = Patient
+    paginate_by = 1
+    form_class = PatientPaginationForm
+    template_name = "patients/patient_detail.html"
+    action = "show_paginated_patient_detail"
+    
+    def get_queryset(self) -> QuerySet[Patient]:
+        queryset = super().get_queryset()
+        self.form = self.form_class(self.request.GET or None)
+        
+        if self.form.is_valid():
+            queryset_pk_list = self.form.cleaned_data["queryset_pk_list"]
+            queryset = queryset.filter(pk_in=queryset_pk_list)
+            
+        return queryset
+    
+    def get_context_data(self, **kwargs: Any) -> Dict[str, Any]:
+        context = super().get_context_data(**kwargs)
+        
+        if self.form.is_valid():
+            selected_patient_pk = self.form.cleaned_data["selected_patient_pk"]
+            queryset_pk_list = self.form.cleaned_data["queryset_pk_list"]
+            try:
+                current_page = queryset_pk_list.index(selected_patient_pk)
+                paginator = context["paginator"]
+                page_obj = paginator.get_page(current_page)
+                context["page_obj"] = page_obj
+            except ValueError:
+                pass
+            
         return context
     
     

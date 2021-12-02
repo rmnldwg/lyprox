@@ -127,6 +127,12 @@ class PatientForm(FormLoggerMixin, forms.ModelForm):
         return hash_value, cleaned_data
 
 
+class PatientPaginationForm(forms.Form):
+    selected_patient_pk = forms.IntegerField()
+    queryset_pk_list = forms.TypedMultipleChoiceField(
+        choices=list(Patient.objects.all().values_list("pk", flat=True)),
+        coerce=int, empty_value=[]
+    )
 
 class TumorForm(FormLoggerMixin, forms.ModelForm):
     """Form to create and edit tumors, based on their model definition."""
