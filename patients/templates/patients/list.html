@@ -127,7 +127,8 @@
         </div>
         {% endif %}
 
-        <form action="{% url 'patients:paginated_detail' %}" method="GET">
+        <form action="{% url 'patients:paginated_detail' %}" method="POST">
+            {% csrf_token %}
             <table class="block table is-fullwidth is-hoverable">
                 <thead>
                     <tr class="is-size-6">
@@ -180,7 +181,10 @@
                 <tbody>
                     {% for patient in patient_list %}
                     <tr>
-                        <td>{{ patient.pk }} <input type="checkbox" class="is-hidden" name="queryset_pk_list" value="{{ patient.pk }}" checked> </td>
+                        <td>
+                            <input type="checkbox" class="is-hidden" id="queryset_pk_list_{{ patient.pk }}" name="queryset_pk_list" value="{{ patient.pk }}" checked/>
+                            <label for="queryset_pk_list_{{ patient.pk }}">{{ patient.pk }}</label>
+                        </td>
                         <td class="is-hidden-touch is-hidden-desktop-only is-hidden-widescreen-only"><code>{{ patient.hash_value | hashdisplay }}</code></td>
                         <td>{{ patient.diagnose_date | date:"Y-m-d" }} </td>
                         <td>
@@ -242,8 +246,7 @@
                     </tr>
                 </tbody>
             </table>
-        </form>
-        
+        </form>        
     </div>
 </section>
 

@@ -1,7 +1,7 @@
 from django.db.models.query import QuerySet
 from accounts.models import User
 from django.shortcuts import render
-from django.http import HttpResponse
+from django.http import HttpResponse, Http404
 from django.urls.base import reverse
 from django.views import generic
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -73,7 +73,7 @@ class PatientListView(ViewLoggerMixin, generic.ListView):
             )
         
         self.queryset_pk_list = list(queryset.values_list("pk", flat=True))
-        self.logger.info(",".join(str(pk) for pk in self.queryset_pk_list))
+        self.logger.debug(",".join(str(pk) for pk in self.queryset_pk_list))
         
         end_querying = time.perf_counter()
         self.logger.info(
@@ -94,7 +94,7 @@ class PatientListView(ViewLoggerMixin, generic.ListView):
         return context
 
 
-class PatientPaginatedDetailView(generic.ListView):
+class PatientPaginatedDetailView(ViewLoggerMixin, generic.ListView):
     model = Patient
     paginate_by = 1
     form_class = PatientPaginationForm
@@ -103,11 +103,13 @@ class PatientPaginatedDetailView(generic.ListView):
     
     def get_queryset(self) -> QuerySet[Patient]:
         queryset = super().get_queryset()
-        self.form = self.form_class(self.request.GET or None)
+        self.form = self.form_class(self.request.POST or None)
+        
+        self.logger.info(self.request.POST)
         
         if self.form.is_valid():
             queryset_pk_list = self.form.cleaned_data["queryset_pk_list"]
-            queryset = queryset.filter(pk_in=queryset_pk_list)
+            queryset = queryset.filter(pk__in=queryset_pk_list)
             
         return queryset
     
@@ -118,14 +120,17 @@ class PatientPaginatedDetailView(generic.ListView):
             selected_patient_pk = self.form.cleaned_data["selected_patient_pk"]
             queryset_pk_list = self.form.cleaned_data["queryset_pk_list"]
             try:
-                current_page = queryset_pk_list.index(selected_patient_pk)
+                current_page = queryset_pk_list.index(selected_patient_pk) + 1
                 paginator = context["paginator"]
                 page_obj = paginator.get_page(current_page)
                 context["page_obj"] = page_obj
             except ValueError:
-                pass
+                self.logger.warn("Unable to find current page.")
             
         return context
+
+    def post(self, request, *args, **kwargs):
+        return self.get(request, *args, **kwargs)
     
     
 class PatientDetailView(generic.DetailView):
@@ -135,15 +140,8 @@ class PatientDetailView(generic.DetailView):
     action = "show_patient_detail"  #:
     
     def get_context_data(self, **kwargs: Any) -> Dict[str, Any]:
-        """Add this patient's tumors and diagnoses to the context."""
         context = super().get_context_data(**kwargs)
-        
-        tumors = Tumor.objects.all().filter(patient=context["patient"])
-        context["tumors"] = tumors
-        
-        diagnoses = Diagnose.objects.all().filter(patient=context["patient"])
-        context["diagnoses"] = diagnoses
-        
+        context["page_obj"] = [context["patient"]]
         return context
 
 

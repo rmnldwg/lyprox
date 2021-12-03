@@ -12,6 +12,8 @@
 
 <link rel="stylesheet" type="text/css" href="{% static 'patients/detail.css' %}">
 
+{% with patient=page_obj|first %}
+
 <section class="section">
     <div class="container">
         <div class="level">
@@ -111,7 +113,7 @@
         </div>
 
         <section class="columns is-multiline">
-            {% for tumor in tumors %}
+            {% for tumor in patient.get_tumors %}
             {% include 'patients/tumor_detail.html' %}
             {% endfor %}
             
@@ -184,7 +186,7 @@
                 </thead>
 
                 <tbody>
-                    {% for diagnose in diagnoses %}
+                    {% for diagnose in patient.get_diagnoses %}
                     {% include 'patients/diagnose_detail.html' %}
                     {% endfor %}
 
@@ -213,5 +215,6 @@
         </section>
     </div>
 </section>
+{% endwith %}
 
 {% endblock content %}

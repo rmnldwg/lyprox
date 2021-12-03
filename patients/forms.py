@@ -127,12 +127,15 @@ class PatientForm(FormLoggerMixin, forms.ModelForm):
         return hash_value, cleaned_data
 
 
+QUERYSET_PK_CHOICES = [(pk, pk) for pk in Patient.objects.all().values_list("pk", flat=True)]
+
 class PatientPaginationForm(forms.Form):
     selected_patient_pk = forms.IntegerField()
     queryset_pk_list = forms.TypedMultipleChoiceField(
-        choices=list(Patient.objects.all().values_list("pk", flat=True)),
+        choices=QUERYSET_PK_CHOICES,
         coerce=int, empty_value=[]
     )
+
 
 class TumorForm(FormLoggerMixin, forms.ModelForm):
     """Form to create and edit tumors, based on their model definition."""
@@ -150,8 +153,8 @@ class TumorForm(FormLoggerMixin, forms.ModelForm):
             "subsite": forms.Select(attrs={"class": "select shorten"}),
             "side": forms.Select(attrs={"class": "select"}),
             "extension": forms.CheckboxInput(attrs={"class": "checkbox"}),
-            "volume": forms.NumberInput(attrs={"class": "input", 
-                                             "min": 0.0}),
+            "volume": forms.NumberInput(attrs={"class": "input",
+                                               "min": 0.0}),
         }
         
     def clean_volume(self):
@@ -170,9 +173,8 @@ class TumorForm(FormLoggerMixin, forms.ModelForm):
             tumor.save()
             
         return tumor
-        
-        
-        
+
+    
 class DiagnoseForm(FormLoggerMixin, forms.ModelForm):
     """Form to create and edit diagnoses, based on their model definition."""
     class Meta:
@@ -193,7 +195,6 @@ class DiagnoseForm(FormLoggerMixin, forms.ModelForm):
                                                  (None, "???")],
                                         attrs={"class": "select"})
             
-
     def save(self, commit=True):
         """Save diagnose to existing patient."""
         diagnose = super(DiagnoseForm, self).save(commit=False)
@@ -208,9 +209,8 @@ class DiagnoseForm(FormLoggerMixin, forms.ModelForm):
             diagnose.save()
             
         return diagnose
-    
-    
-    
+
+
 class DataFileForm(FormLoggerMixin, forms.Form):
     """Accept and process a CSV file that can then be parsed to batch-create a 
     number of patients at once."""
