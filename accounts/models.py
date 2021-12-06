@@ -283,6 +283,7 @@ class Institution(ModelLoggerMixin, models.Model):
     country = CountryField(blank=False)
     phone = PhoneNumberField()
     logo = models.FileField(upload_to="institution_logos/", blank=True, null=True)
+    is_hidden = models.BooleanField(default=False)
     
     def __str__(self):
         return f"{self.shortname}, {self.get_country_display()}"

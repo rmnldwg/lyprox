@@ -121,28 +121,81 @@
                                 </div>
                             </div>
 
-                            <p class="title is-5 mb-2">Subsite</p>
-                            <div class="field is-grouped is-grouped-multiline">
-                                {% for checkbox in form.subsite__in %}
-                                <div class="control">
-                                    {{ checkbox.tag }}
-                                    <div class="buttons has-addons">
-                                        <label for="{{ checkbox.id_for_label }}" class="button is-primary is-light is-expanded">
-                                            <span>{{ checkbox.choice_label }}</span>
-                                        </label>
-                                        <p class="button is-info is-static">
-                                            {% if show_percent %}
-                                            <span>{{ stats.subsites|percent:forloop.counter0 }}%</span>
-                                            {% else %}
-                                            <span>{{ stats.subsites|index:forloop.counter0 }}</span>
-                                            {% endif %}
-                                        </p>
+                            <p class="title is-5 mb-2">Location & Subsite</p>
+                            <div class="notification is-info is-light p-2 mb-2">
+                                <div class="field is-grouped is-grouped-multiline">
+                                    <p class="control">Oropharynx:</p>
+                                    {% for checkbox in form.subsite_oropharynx %}
+                                    <div class="control mr-1">
+                                        {{ checkbox.tag }}
+                                        <div class="tags has-addons">
+                                            <label for="{{ checkbox.id_for_label }}" class="tag button is-primary is-light is-expanded">
+                                                <span>{{ checkbox.choice_label }}</span>
+                                            </label>
+                                            <p class="tag button is-static">
+                                                {% with counter=forloop.counter0|add:0 %}
+                                                {% if show_percent %}
+                                                <span>{{ stats.subsites|percent:counter }}%</span>
+                                                {% else %}
+                                                <span>{{ stats.subsites|index:counter }}</span>
+                                                {% endif %}
+                                                {% endwith %}
+                                            </p>
+                                        </div>
                                     </div>
+                                    {% endfor %}
                                 </div>
-                                {% endfor %}
+                            </div>
+                            <div class="notification is-info is-light p-2 mb-2">
+                                <div class="field is-grouped is-grouped-multiline">
+                                    <p class="control">Hypopharynx:</p>
+                                    {% for checkbox in form.subsite_hypopharynx %}
+                                    <div class="control mr-1">
+                                        {{ checkbox.tag }}
+                                        <div class="tags has-addons">
+                                            <label for="{{ checkbox.id_for_label }}" class="tag button is-primary is-light is-expanded">
+                                                <span>{{ checkbox.choice_label }}</span>
+                                            </label>
+                                            <p class="tag button is-static">
+                                                {% with counter=forloop.counter0|add:3 %}
+                                                {% if show_percent %}
+                                                <span>{{ stats.subsites|percent:counter }}%</span>
+                                                {% else %}
+                                                <span>{{ stats.subsites|index:counter }}</span>
+                                                {% endif %}
+                                                {% endwith %}
+                                            </p>
+                                        </div>
+                                    </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                            <div class="notification is-info is-light p-2 mb-2">
+                                <div class="field is-grouped is-grouped-multiline">
+                                    <p class="control">Larynx:</p>
+                                    {% for checkbox in form.subsite_larynx %}
+                                    <div class="control mr-1">
+                                        {{ checkbox.tag }}
+                                        <div class="tags has-addons">
+                                            <label for="{{ checkbox.id_for_label }}" class="tag button is-primary is-light is-expanded">
+                                                <span>{{ checkbox.choice_label }}</span>
+                                            </label>
+                                            <p class="tag button is-static">
+                                                {% with counter=forloop.counter0|add:4 %}
+                                                {% if show_percent %}
+                                                <span>{{ stats.subsites|percent:counter }}%</span>
+                                                {% else %}
+                                                <span>{{ stats.subsites|index:counter }}</span>
+                                                {% endif %}
+                                                {% endwith %}
+                                            </p>
+                                        </div>
+                                    </div>
+                                    {% endfor %}
+                                </div>
                             </div>
 
-                            <p class="title is-5 mb-2">T-stage</p>
+                            <p class="title is-5 mb-2 mt-4">T-stage</p>
                             <div class="field is-grouped is-grouped-multiline">
                                 {% for checkbox in form.t_stage__in %}
                                 <div class="control is-expanded">
@@ -437,13 +490,12 @@
                                                     </a>
                                                     {% include 'dashboard/help-tooltip.html' with side="left" position="top" image='dashboard/buttons.gif' markdown='dashboard/help_buttons.md' %}
                                                 </div>
-                                                <button class="button is-medium is-warning is-light is-outlined" type="submit" name="render"
-                                                    value="subset_list" data-tooltip="Display selected subset in list">
+                                                <button class="button is-medium is-warning is-light is-outlined" type="submit" formaction="{% url 'patients:list' %}"
+                                                    data-tooltip="Display selected subset in list">
                                                     <span>Patients in selection: {{ stats.total }}</span>
                                                 </button>
 
                                                 <button class="button is-medium is-warning has-tooltip-multiline" type="submit" id="compute" disabled
-                                                    name="render" value="dashboard"
                                                     data-tooltip="Display statistic of selected subset. Change selection to activate button">
                                                     <span class="icon">
                                                         <i class="fas fa-cogs"></i>

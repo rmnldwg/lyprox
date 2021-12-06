@@ -22,14 +22,13 @@ def help_view(request) -> HttpResponse:
 class DashboardView(ViewLoggerMixin, generic.ListView):
     model = Patient
     form_class = DashboardForm
-    context_object_name = "patient_list"
     template_name = "dashboard/layout.html"
-    action = "display_dashboard"
+    action = "display_dashboard_stats"
 
     def get_queryset(self):
         self.form = self.form_class(self.request.GET or None)
         queryset = Patient.objects.all()
-        start_querying = time.time()
+        start_querying = time.perf_counter()
 
         if self.request.method == "GET" and self.form.is_valid():
             queryset = query.patient_specific(
@@ -80,26 +79,22 @@ class DashboardView(ViewLoggerMixin, generic.ListView):
                                  f"{initial_form.errors.as_data()}")
                 queryset = Patient.objects.none()
         
-        end_querying = time.time()
+        end_querying = time.perf_counter()
         self.logger.info(
             f'Querying finished in {end_querying - start_querying:.3f} seconds'
         ) 
         return queryset
 
-    def get_context_data(self, **kwargs: Any) -> Dict[str, Any]:
-        context = super(DashboardView, self).get_context_data(**kwargs)
-        context["show_filter"] = False
-        context["form"] = self.form
-        # context["institutions"] = Institution.objects.all()
-        
+    def get_context_data(self) -> Dict[str, Any]:
+        """Pass form and stats to the context. No need to have the list of 
+        patients in there too.
+        """
+        context = {
+            "form": self.form,
+            "stats": self.stats
+        }
+
         if self.form.is_valid():
             context["show_percent"] = self.form.cleaned_data["show_percent"]
             
-        context["stats"] = self.stats
         return context
-
-    def get_template_names(self) -> str:
-        if self.request.GET.get("render") == "subset_list":
-            return "patients/list.html"
-        else:
-            return super(DashboardView, self).get_template_names()

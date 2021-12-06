@@ -15,7 +15,7 @@
 <section class="section">
     <div class="container">
         <div class="block">
-            {% if not show_filter %}
+            {% if not is_filterable %}
             <p class="title">Subset <span class="has-text-info">(not filterable)</span></p>
             <p class="subtitle">{{ stats.total }} patients selected via the dashboard</p>
             {% else %}
@@ -24,7 +24,7 @@
             {% endif %}
         </div>
 
-        {% if show_filter %}
+        {% if is_filterable %}
         <input type="checkbox" name="expand-select" id="filter-container">
         <div class="filter-container notification is-primary is-light">
             <label class="filter-label icon-text" for="filter-container">
@@ -138,7 +138,7 @@
                         </span>
                         <span>Patient</span>
                     </th>
-                    <th>
+                    <th class="is-hidden-touch is-hidden-desktop-only is-hidden-widescreen-only">
                         <span class="icon-text">
                             <span class="icon">
                                 <i class="fas fa-key"></i>
@@ -179,8 +179,10 @@
             <tbody>
                 {% for patient in patient_list %}
                 <tr>
-                    <td>{{ patient.pk }} </td>
-                    <td><code>{{ patient.hash_value | hashdisplay }}</code></td>
+                    <td>
+                        <span>{{ patient.pk }}</span>
+                    </td>
+                    <td class="is-hidden-touch is-hidden-desktop-only is-hidden-widescreen-only"><code>{{ patient.hash_value | hashdisplay }}</code></td>
                     <td>{{ patient.diagnose_date | date:"Y-m-d" }} </td>
                     <td>
                         <span class="icon-text">
@@ -201,14 +203,14 @@
                             <span class="icon mr-2">
                                 <img src="{{ patient.institution.logo.url }}" alt="{{ patient.institution.shortname }} logo" title="{{ patient.institution.shortname }}">
                             </span>
-                            <span>
+                            <span class="is-hidden-touch is-hidden-desktop-only">
                                 {{ patient.institution.name }}
                             </span>
                         </span>
                     </td>
                     <td>
                         <div class="buttons is-grouped is-right">
-                            <a href="{% url 'patients:detail' patient.pk %}" class="tag button is-info is-small">
+                            <a href="{% url 'patients:detail' patient.pk %}" class="tag button is-info is-small" >
                                 <span class="icon">
                                     <i class="fas fa-address-card"></i>
                                 </span>
@@ -240,7 +242,7 @@
                     </td>
                 </tr>
             </tbody>
-        </table>        
+        </table>    
     </div>
 </section>
 

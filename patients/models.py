@@ -63,7 +63,6 @@ class Patient(ModelLoggerMixin, models.Model):
         Institution, blank=True, on_delete=models.PROTECT
     )
     
-    
     def __str__(self):
         """Report some patient specifics."""
         return (f"#{self.pk}: {self.sex} ({self.age}) at "
@@ -72,6 +71,14 @@ class Patient(ModelLoggerMixin, models.Model):
     def get_absolute_url(self):
         """Return the absolute URL for a particular patient."""
         return reverse("patients:detail", args=[self.pk])
+    
+    def get_tumors(self):
+        tumors = Tumor.objects.all().filter(patient=self)
+        return tumors
+    
+    def get_diagnoses(self):
+        diagnoses = Diagnose.objects.all().filter(patient=self)
+        return diagnoses
     
     def update_t_stage(self):
         """Update T-stage after new :class:`Tumor` is added to :class:`Patient` 
@@ -159,6 +166,15 @@ class Tumor(ModelLoggerMixin, models.Model):
                         ("C32.9", "larynx, nos"),)
         )
     ]
+    
+    SUBSITE_DICT = {"base":        ["C01.9"], 
+                    "tonsil":      ["C09.0", "C09.1", "C09.8", "C09.9"],
+                    "rest_oro":    ["C10.0", "C10.1", "C10.2", "C10.3", 
+                                    "C10.4","C10.8", "C10.9"],
+                    "rest_hypo":   ["C12.9", "C13.0", "C13.1", "C13.2", 
+                                    "C13.8", "C13.9"],
+                    "glottis":     ["C32.0"],
+                    "rest_larynx": ["C32.1", "C32.2", "C32.3", "C32.8", "C32.9"]}
     
     #: ``ForeignKey`` to :class:`Patient`
     patient = models.ForeignKey(Patient, on_delete=models.CASCADE)

@@ -1,3 +1,4 @@
+from django.db.models.query import QuerySet
 from accounts.models import User
 from django.shortcuts import render
 from django.http import HttpResponse
@@ -7,13 +8,17 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
 from django.conf import settings
 
-from typing import Any, Dict, Optional
+import time
+from typing import Any, Dict
 from pathlib import Path
 import logging
+
+from dashboard.forms import DashboardForm
+from dashboard import query
 logger = logging.getLogger(__name__)
 
 from .models import Patient, Tumor, Diagnose
-from .forms import (PatientForm, 
+from .forms import (PatientForm,
                     TumorForm, 
                     DiagnoseForm, 
                     DataFileForm)
@@ -24,29 +29,68 @@ from core.loggers import ViewLoggerMixin
 
 
 # PATIENT related views
-class PatientListView(generic.ListView):
+class PatientListView(ViewLoggerMixin, generic.ListView):
     """Renders a list of all patients in the database showing basic information 
     and links to the individual entries. Depending from where this view is 
     called, the list is filterable.
     """
     model = Patient
+    form_class = DashboardForm
+    filterset_class = PatientFilter
     template_name = "patients/list.html"  #:
     context_object_name = "patient_list"  #:
-    filterset_class = PatientFilter
     action = "show_patient_list"  #:
+    is_filterable = True
+    queryset_pk_list = []
     
-    def get_queryset(self):
+    def get_queryset(self) -> QuerySet[Patient]:
         """Add ability to filter queryset via FilterSets to generic ListView."""
         queryset = super().get_queryset()
-        self.filterset = self.filterset_class(self.request.GET, 
-                                              queryset=queryset)
-        return self.filterset.qs.distinct()
+        start_querying = time.perf_counter()
+        
+        self.filterset = self.filterset_class(self.request.GET or None, 
+                                              queryset)
+        self.form = self.form_class(self.request.GET or None)
+        
+        if self.filterset.is_valid():
+            queryset = self.filterset.qs.distinct()
+        
+        if self.form.is_valid():
+            self.is_filterable = False
+            queryset = query.patient_specific(
+                patient_queryset=queryset, **self.form.cleaned_data
+            )
+            queryset = query.tumor_specific(
+                patient_queryset=queryset, **self.form.cleaned_data
+            )
+            queryset, combined_involvement = query.diagnose_specific(
+                patient_queryset=queryset, **self.form.cleaned_data
+            )
+            queryset, _ = query.n_zero_specific(
+                patient_queryset=queryset,
+                combined_involvement=combined_involvement,
+                n_status=self.form.cleaned_data['n_status']
+            )
+        
+        self.queryset_pk_list = list(queryset.values_list("pk", flat=True))
+        self.logger.debug(",".join(str(pk) for pk in self.queryset_pk_list))
+        
+        end_querying = time.perf_counter()
+        self.logger.info(
+            f'Querying finished in {end_querying - start_querying:.3f} seconds'
+        ) 
+        return queryset
+    
     
     def get_context_data(self, **kwargs: Any) -> Dict[str, Any]:
         """Add FilterSet to context for displaying filter form."""
         context = super().get_context_data(**kwargs)
-        context["filterset"] = self.filterset
-        context["show_filter"] = True
+        
+        context["queryset_pk_list"] = self.queryset_pk_list
+        context["is_filterable"] = self.is_filterable
+        if self.is_filterable:
+            context["filterset"] = self.filterset
+
         return context
     
     
@@ -55,18 +99,6 @@ class PatientDetailView(generic.DetailView):
     model = Patient
     template_name = "patients/patient_detail.html"  #:
     action = "show_patient_detail"  #:
-    
-    def get_context_data(self, **kwargs: Any) -> Dict[str, Any]:
-        """Add this patient's tumors and diagnoses to the context."""
-        context = super().get_context_data(**kwargs)
-        
-        tumors = Tumor.objects.all().filter(patient=context["patient"])
-        context["tumors"] = tumors
-        
-        diagnoses = Diagnose.objects.all().filter(patient=context["patient"])
-        context["diagnoses"] = diagnoses
-        
-        return context
 
 
 class CreatePatientView(ViewLoggerMixin, 

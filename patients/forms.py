@@ -2,7 +2,6 @@ from typing import Dict, Any
 from django import forms
 from django.forms import widgets
 from django.core.exceptions import ValidationError
-from django.utils.translation import gettext as _
 
 import pandas
 
@@ -89,13 +88,12 @@ class PatientForm(FormLoggerMixin, forms.ModelForm):
         if cleaned_data["check_for_duplicate"]:
             try:
                 prev_patient_hash = Patient.objects.get(hash_value=unique_hash)
-                
-                msg = ("Hash value already in database. Entered patient might be "
-                    "duplicate.")
+                msg = ("Hash value already in database. Entered patient might "
+                       "be duplicate.")
                 self.logger.warning(msg)
-                raise forms.ValidationError(_(msg))
+                raise forms.ValidationError(msg)
                 
-            # if the above does not throw an exception, one can proceed
+            # iff the above does not throw an exception, one can proceed
             except Patient.DoesNotExist: 
                 pass
 
@@ -127,7 +125,6 @@ class PatientForm(FormLoggerMixin, forms.ModelForm):
         return hash_value, cleaned_data
 
 
-
 class TumorForm(FormLoggerMixin, forms.ModelForm):
     """Form to create and edit tumors, based on their model definition."""
     class Meta:
@@ -144,8 +141,8 @@ class TumorForm(FormLoggerMixin, forms.ModelForm):
             "subsite": forms.Select(attrs={"class": "select shorten"}),
             "side": forms.Select(attrs={"class": "select"}),
             "extension": forms.CheckboxInput(attrs={"class": "checkbox"}),
-            "volume": forms.NumberInput(attrs={"class": "input", 
-                                             "min": 0.0}),
+            "volume": forms.NumberInput(attrs={"class": "input",
+                                               "min": 0.0}),
         }
         
     def clean_volume(self):
@@ -164,9 +161,8 @@ class TumorForm(FormLoggerMixin, forms.ModelForm):
             tumor.save()
             
         return tumor
-        
-        
-        
+
+    
 class DiagnoseForm(FormLoggerMixin, forms.ModelForm):
     """Form to create and edit diagnoses, based on their model definition."""
     class Meta:
@@ -187,7 +183,6 @@ class DiagnoseForm(FormLoggerMixin, forms.ModelForm):
                                                  (None, "???")],
                                         attrs={"class": "select"})
             
-
     def save(self, commit=True):
         """Save diagnose to existing patient."""
         diagnose = super(DiagnoseForm, self).save(commit=False)
@@ -202,9 +197,8 @@ class DiagnoseForm(FormLoggerMixin, forms.ModelForm):
             diagnose.save()
             
         return diagnose
-    
-    
-    
+
+
 class DataFileForm(FormLoggerMixin, forms.Form):
     """Accept and process a CSV file that can then be parsed to batch-create a 
     number of patients at once."""
