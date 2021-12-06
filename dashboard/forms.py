@@ -104,7 +104,7 @@ class DashboardForm(FormLoggerMixin, forms.Form):
                    "onchange": "changeHandler();"}
         ), 
         choices=Diagnose.Modalities.choices,
-        initial=[1,2]
+        initial=[0,1,2,3]
     )
     modality_combine = forms.ChoiceField(
         widget=forms.Select(attrs={"onchange": "changeHandler();"}),
@@ -148,8 +148,8 @@ class DashboardForm(FormLoggerMixin, forms.Form):
             attrs={"class": "checkbox is-hidden",
                    "onchange": "changeHandler();"},
         ),
-        choices=[("rest_hypo" , "all")],  # choices here must match entries in 
-        initial=["rest_hypo"]               # the Tumor.SUBSITE_DICT keys
+        choices=[("rest_hypo" , "all")],   # choices here must match entries in 
+        initial=["rest_hypo"]              # the Tumor.SUBSITE_DICT keys
     )
     subsite_larynx = forms.MultipleChoiceField(
         required=False,
