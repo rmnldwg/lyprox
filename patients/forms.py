@@ -2,7 +2,6 @@ from typing import Dict, Any
 from django import forms
 from django.forms import widgets
 from django.core.exceptions import ValidationError
-from django.utils.translation import gettext as _
 
 import pandas
 
@@ -89,13 +88,12 @@ class PatientForm(FormLoggerMixin, forms.ModelForm):
         if cleaned_data["check_for_duplicate"]:
             try:
                 prev_patient_hash = Patient.objects.get(hash_value=unique_hash)
-                
-                msg = ("Hash value already in database. Entered patient might be "
-                    "duplicate.")
+                msg = ("Hash value already in database. Entered patient might "
+                       "be duplicate.")
                 self.logger.warning(msg)
-                raise forms.ValidationError(_(msg))
+                raise forms.ValidationError(msg)
                 
-            # if the above does not throw an exception, one can proceed
+            # iff the above does not throw an exception, one can proceed
             except Patient.DoesNotExist: 
                 pass
 
@@ -125,16 +123,6 @@ class PatientForm(FormLoggerMixin, forms.ModelForm):
         cleaned_data.pop("first_name")
         cleaned_data.pop("last_name")
         return hash_value, cleaned_data
-
-
-QUERYSET_PK_CHOICES = [(pk, pk) for pk in Patient.objects.all().values_list("pk", flat=True)]
-
-class PatientPaginationForm(forms.Form):
-    selected_patient_pk = forms.IntegerField()
-    queryset_pk_list = forms.TypedMultipleChoiceField(
-        choices=QUERYSET_PK_CHOICES,
-        coerce=int, empty_value=[]
-    )
 
 
 class TumorForm(FormLoggerMixin, forms.ModelForm):

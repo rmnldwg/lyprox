@@ -12,8 +12,6 @@
 
 <link rel="stylesheet" type="text/css" href="{% static 'patients/detail.css' %}">
 
-{% with patient=page_obj|first %}
-
 <section class="section">
     <div class="container">
         <div class="level">
@@ -215,6 +213,5 @@
         </section>
     </div>
 </section>
-{% endwith %}
 
 {% endblock content %}

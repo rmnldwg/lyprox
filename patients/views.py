@@ -1,7 +1,7 @@
 from django.db.models.query import QuerySet
 from accounts.models import User
 from django.shortcuts import render
-from django.http import HttpResponse, Http404
+from django.http import HttpResponse
 from django.urls.base import reverse
 from django.views import generic
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -9,7 +9,7 @@ from django.contrib.auth.decorators import login_required
 from django.conf import settings
 
 import time
-from typing import Any, Dict, Optional
+from typing import Any, Dict
 from pathlib import Path
 import logging
 
@@ -18,7 +18,7 @@ from dashboard import query
 logger = logging.getLogger(__name__)
 
 from .models import Patient, Tumor, Diagnose
-from .forms import (PatientForm, PatientPaginationForm, 
+from .forms import (PatientForm,
                     TumorForm, 
                     DiagnoseForm, 
                     DataFileForm)
@@ -92,45 +92,6 @@ class PatientListView(ViewLoggerMixin, generic.ListView):
             context["filterset"] = self.filterset
 
         return context
-
-
-class PatientPaginatedDetailView(ViewLoggerMixin, generic.ListView):
-    model = Patient
-    paginate_by = 1
-    form_class = PatientPaginationForm
-    template_name = "patients/patient_detail.html"
-    action = "show_paginated_patient_detail"
-    
-    def get_queryset(self) -> QuerySet[Patient]:
-        queryset = super().get_queryset()
-        self.form = self.form_class(self.request.POST or None)
-        
-        self.logger.info(self.request.POST)
-        
-        if self.form.is_valid():
-            queryset_pk_list = self.form.cleaned_data["queryset_pk_list"]
-            queryset = queryset.filter(pk__in=queryset_pk_list)
-            
-        return queryset
-    
-    def get_context_data(self, **kwargs: Any) -> Dict[str, Any]:
-        context = super().get_context_data(**kwargs)
-        
-        if self.form.is_valid():
-            selected_patient_pk = self.form.cleaned_data["selected_patient_pk"]
-            queryset_pk_list = self.form.cleaned_data["queryset_pk_list"]
-            try:
-                current_page = queryset_pk_list.index(selected_patient_pk) + 1
-                paginator = context["paginator"]
-                page_obj = paginator.get_page(current_page)
-                context["page_obj"] = page_obj
-            except ValueError:
-                self.logger.warn("Unable to find current page.")
-            
-        return context
-
-    def post(self, request, *args, **kwargs):
-        return self.get(request, *args, **kwargs)
     
     
 class PatientDetailView(generic.DetailView):
@@ -138,11 +99,6 @@ class PatientDetailView(generic.DetailView):
     model = Patient
     template_name = "patients/patient_detail.html"  #:
     action = "show_patient_detail"  #:
-    
-    def get_context_data(self, **kwargs: Any) -> Dict[str, Any]:
-        context = super().get_context_data(**kwargs)
-        context["page_obj"] = [context["patient"]]
-        return context
 
 
 class CreatePatientView(ViewLoggerMixin, 
