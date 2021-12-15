@@ -30,7 +30,7 @@ How to contribute
 
 There are two ways you can contribute to this project:
 
-1. If you are a clinical researcher in the field and would like to share your data with us, please get in touch with us via email: [roman.ludwig@usz.ch](mailto:roman.ludwig@usz.ch).
+1. If you are a clinical researcher in the field and would like to share your data with us, please get in touch with us via email: `roman.ludwig@usz.ch <mailto:roman.ludwig@usz.ch>`_.
 2. The other way is by contributing to this repository, e.g. if you are a software developer. I guess this is somewhat unlikely, due to the very specific scope of this Django app, but we still welcome any contribution.
 
 
@@ -48,11 +48,13 @@ Dataset(s)
 
 The data that is visualized in this interface lives in an open-source repository on its own: `lyDATA <https://github.com/rmnldwg/lydata>`_
 
+We have also written a paper on the dataset and the interface, which is currently under review in *Radiotherapy & Oncology*, but a preprint is available on medRxiv [7]_.
+
 
 Models
 ------
 
-We also work on probabilistic models [7]_, [8]_ that may predict the lymphatic spread of head & neck cancer. The underlying code is hosted in another repository: `lymph <https://github.com/rmnldwg/lymph>`_.
+We also work on probabilistic models [8]_, [9]_ that may predict the lymphatic spread of head & neck cancer. The underlying code is hosted in another repository: `lymph <https://github.com/rmnldwg/lymph>`_.
 
 
 References
@@ -65,4 +67,5 @@ References
 .. [5] Jatin. P. Shah, F. C. Candela, and A. K. Poddar, "The patterns of cervical lymph node metastases from squamous carcinoma of the oral cavity", Cancer, vol. 66, no. 1, pp. 109–113, 1990, doi: https://doi.org/10.1002/1097-0142(19900701)66:1<109::AID-CNCR2820660120>3.0.CO;2-A.
 .. [6] Laurence Bauwens et al., "Prevalence and distribution of cervical lymph node metastases in HPV-positive and HPV-negative oropharyngeal squamous cell carcinoma", Radiother Oncol, vol. 157, pp. 122–129, Apr. 2021, doi: https://doi.org/10.1016/j.radonc.2021.01.028.
 .. [7] Bertrand Pouymayou, P. Balermpas, O. Riesterer, M. Guckenberger, and J. Unkelbach, "A Bayesian network model of lymphatic tumor progression for personalized elective CTV definition in head and neck cancers", Physics in Medicine & Biology, vol. 64, no. 16, p. 165003, Aug. 2019, doi: https://doi.org/10.1088/1361-6560/ab2a18.
-.. [8] Roman Ludwig, B. Pouymayou, P. Balermpas, and J. Unkelbach, "A hidden Markov model for lymphatic tumor progression in the head and neck", Sci Rep, vol. 11, no. 1, p. 12261, Dec. 2021, doi: https://doi.org/10.1038/s41598-021-91544-1.
+.. [8] \R. Ludwig, B. Pouymayou, P. Balermpas, and J. Unkelbach, "A hidden Markov model for lymphatic tumor progression in the head and neck", Sci Rep, vol. 11, no. 1, p. 12261, Dec. 2021, doi: https://doi.org/10.1038/s41598-021-91544-1.
+.. [9] \R. Ludwig, J.-M. Hoffmann, B. Pouymayou et al., ‘Detailed patient-individual reporting of lymph node involvement in oropharyngeal squamous cell carcinoma with an online interface’, Dec. 2021. doi: https://doi.org/10.1101/2021.12.01.21267001.
