@@ -132,7 +132,7 @@ def row2diagnoses(row, patient):
     )
 
     modalities_intersection = list(
-        set(modalities_list) & Diagnose.Modalities.labels
+        set(modalities_list) & set(Diagnose.Modalities.labels)
     )
 
     for mod in modalities_intersection:
