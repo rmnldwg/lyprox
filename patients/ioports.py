@@ -131,7 +131,11 @@ def row2diagnoses(row, patient):
         Diagnose, remove=["id", "patient", "modality", "side", "diagnose_date"]
     )
 
-    for mod in Diagnose.Modalities.labels:
+    modalities_intersection = list(
+        set(modalities_list) & Diagnose.Modalities.labels
+    )
+
+    for mod in modalities_intersection:
         diagnose_date = _(row[(mod, "info", "date")])
         if diagnose_date is not None:
             for side in ["left", "right"]:
