@@ -1,25 +1,24 @@
-from django.contrib.auth.forms import UsernameField, AuthenticationForm, UserCreationForm
-from django.conf import settings
 from django import forms
+from django.contrib.auth.forms import AuthenticationForm, UsernameField
 from django.forms import widgets
 
-from .models import Institution, User
+from .models import User
 
 
 class CustomAuthenticationForm(AuthenticationForm):
-    """Custom form that allows assignment of classes to widgets. Note that due 
-    to the inheritance from `AuthenticationForm` the email field, which is used 
+    """Custom form that allows assignment of classes to widgets. Note that due
+    to the inheritance from `AuthenticationForm` the email field, which is used
     to log in users, is called username.
     """
     username = UsernameField(
         label="Email address",
-        widget=forms.TextInput(attrs={'autofocus': True, 
+        widget=forms.TextInput(attrs={'autofocus': True,
                                       "class": "input"})
     )
     password = forms.CharField(
         label="Password",
         strip=False,
-        widget=forms.PasswordInput(attrs={'autocomplete': 'current-password', 
+        widget=forms.PasswordInput(attrs={'autocomplete': 'current-password',
                                           "class": "input"}),
     )
 
@@ -30,27 +29,26 @@ class SignupRequestForm(forms.ModelForm):
         model = User
         fields = ["title", "first_name", "last_name", "email", "institution"]
         widgets = {
-            "title": widgets.TextInput(attrs={"class": "input", 
+            "title": widgets.TextInput(attrs={"class": "input",
                                               "style": "width: 100px;"}),
             "first_name": widgets.TextInput(attrs={"class": "input"}),
             "last_name": widgets.TextInput(attrs={"class": "input"}),
             "email": widgets.EmailInput(attrs={"class": "input"}),
             "institution": widgets.TextInput(attrs={"class": "input"})
         }
-    
+
     message = forms.CharField(
         label="Your message to us",
         widget=widgets.Textarea(
-            attrs={"class": "textarea", 
+            attrs={"class": "textarea",
                    "placeholder": ("Why do you need this login, i.e. what data "
-                                   "would you like to upload?"), 
+                                   "would you like to upload?"),
                    "rows": "5"})
     )
-    
+
     def save(self, commit: bool):
-        """Override save method, so that the entered data is not used to create 
+        """Override save method, so that the entered data is not used to create
         a `User` instance, but the information is just stored/sent to an admin.
         """
-        # TODO: Store the cleaned data somewhere or send it via email to the 
+        # TODO: Store the cleaned data somewhere or send it via email to the
         #   admin(s).
-        pass

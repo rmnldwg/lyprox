@@ -1,10 +1,7 @@
-from accounts.views import signup_request_view
-from django.urls import path
 from django.contrib.auth import views as auth_views
-from django.contrib.auth.forms import AuthenticationForm
+from django.urls import path
 
 from .forms import CustomAuthenticationForm
-from .views import signup_request_view
 
 app_name = "accounts"
 

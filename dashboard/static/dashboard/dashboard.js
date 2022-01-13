@@ -2,7 +2,7 @@ function bothClickHandler(radio_both) {
     both_name = radio_both.name;
     sub_a_name = both_name + "a";
     sub_b_name = both_name + "b";
-    
+
     radio_a = document.forms["dashboardform"].elements[sub_a_name];
     radio_b = document.forms["dashboardform"].elements[sub_b_name];
     a_val = radio_a.value;

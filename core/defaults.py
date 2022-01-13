@@ -1,12 +1,11 @@
 """Default Django settings for the lyprox web interfaces.
 
-This should not directly be used by e.g. WSGI, but rather another Python file 
-named <subdomain>.settings.py should be used for the respective subdomain of 
+This should not directly be used by e.g. WSGI, but rather another Python file
+named <subdomain>.settings.py should be used for the respective subdomain of
 the interface that overwrites the defaults with appropriate values.
 """
-from pathlib import Path
 import subprocess
-    
+from pathlib import Path
 
 # security
 DEBUG = True
@@ -36,15 +35,15 @@ except Exception as e:
 IS_FROZEN = False
 FROZEN_VERSIONS = [
     {
-        "name": "2021 oropharynx data", 
+        "name": "2021 oropharynx data",
         "url" : "https://2021-oropharynx.lyprox.org",
     }
 ]
 
 # Logging
 def set_LOGGING(LOG_LEVEL):
-    """Return logging settings in the form of a dictionary as function of the 
-    log-level. This is used so that in a subdomain settings file the function 
+    """Return logging settings in the form of a dictionary as function of the
+    log-level. This is used so that in a subdomain settings file the function
     can be called again to overwrite the logging settings easily.
     """
     LOGGING = {

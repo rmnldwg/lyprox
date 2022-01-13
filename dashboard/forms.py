@@ -1,27 +1,26 @@
+import logging
+from typing import Tuple
+
 from django import forms
 from django.core.exceptions import ValidationError
-from django.db.models.expressions import Value
-from django.forms import fields
 
-from core.loggers import FormLoggerMixin
-from patients.models import Patient, Tumor, Diagnose
 from accounts.models import Institution
+from core.loggers import FormLoggerMixin
+from patients.models import Diagnose, Patient, Tumor
 
-from typing import Tuple
-import logging
 logger = logging.getLogger(__name__)
 
 
 class ThreeWayToggle(forms.ChoiceField):
-    """A toggle switch than can be in three different states: Positive/True, 
+    """A toggle switch than can be in three different states: Positive/True,
     unkown/None and negative/False."""
-    
-    def __init__(self, 
-                 widget=None, 
+
+    def __init__(self,
+                 widget=None,
                  attrs={"class": "radio is-hidden",
                         "onchange": "changeHandler();"},
                  choices=[( 1 , "plus"),
-                          ( 0 , "ban"), 
+                          ( 0 , "ban"),
                           (-1, "minus")],
                  initial=0,
                  required=False,
@@ -41,7 +40,7 @@ class ThreeWayToggle(forms.ChoiceField):
                 initial=initial,
                 required=required,
                 **kwargs)
-    
+
     def to_python(self, value):
         """Cast the string to an integer."""
         try:
@@ -53,17 +52,17 @@ class ThreeWayToggle(forms.ChoiceField):
 
 
 class InstitutionModelChoiceIndexer:
-    """Custom class with which one can access additional information from 
+    """Custom class with which one can access additional information from
     the model that is chosen by the :class:`InstitutionMultipleChoiceField`."""
-    
+
     def __init__(self, field) -> None:
         self.field = field
         self.queryset = field.queryset
-    
+
     def __getitem__(self, key):
         obj = self.queryset[key]
         return self.info(obj)
-    
+
     def info(self, obj: Institution) -> Tuple[int, str]:
         return (
             self.field.label_from_instance(obj),
@@ -72,48 +71,48 @@ class InstitutionModelChoiceIndexer:
 
 
 class InstitutionMultipleChoiceField(forms.ModelMultipleChoiceField):
-    """Customize label description and add method that returns the logo URL for 
-    institutions. The implementation is inspired by how the ``choices`` are 
-    implemented. But since some other functionality depends on how those 
+    """Customize label description and add method that returns the logo URL for
+    institutions. The implementation is inspired by how the ``choices`` are
+    implemented. But since some other functionality depends on how those
     choices are implemented, it cannot be changed easily."""
-    
+
     #: Allows one to extract more info about the objects. E.g. name and logo url
     name_and_url_indexer = InstitutionModelChoiceIndexer
-    
+
     def label_from_instance(self, obj: Institution) -> str:
         """Institution name as label."""
         return obj.name
-    
+
     def logo_url_from_instance(self, obj: Institution) -> str:
         """Return URL of Institution's logo."""
         return obj.logo.url
-    
+
     @property
     def names_and_urls(self):
         return self.name_and_url_indexer(self)
-    
+
 
 class DashboardForm(FormLoggerMixin, forms.Form):
     """Form for querying the database."""
-    
+
     # select modalities to show
     modalities = forms.MultipleChoiceField(
-        required=False, 
+        required=False,
         widget=forms.CheckboxSelectMultiple(
             attrs={"class": "checkbox is-hidden",
                    "onchange": "changeHandler();"}
-        ), 
+        ),
         choices=Diagnose.Modalities.choices,
         initial=[0,1,2,3]
     )
     modality_combine = forms.ChoiceField(
         widget=forms.Select(attrs={"onchange": "changeHandler();"}),
-        choices=[("AND", "AND"), 
+        choices=[("AND", "AND"),
                  ("OR", "OR")],
         label="Combine",
         initial="OR"
     )
-    
+
     # patient specific fields
     nicotine_abuse = ThreeWayToggle()
     hpv_status = ThreeWayToggle()
@@ -123,13 +122,13 @@ class DashboardForm(FormLoggerMixin, forms.Form):
         required=False,
         widget=forms.CheckboxSelectMultiple(
             # doesn't do anythin since it's written by hand
-            attrs={"class": "checkbox is-hidden", 
+            attrs={"class": "checkbox is-hidden",
                    "onchange": "changeHandler();"}
         ),
         queryset=Institution.objects.all().filter(is_hidden=False),
         initial=Institution.objects.all().filter(is_hidden=False)
     )
-    
+
     # tumor specific info
     subsite_oropharynx = forms.MultipleChoiceField(
         required=False,
@@ -137,7 +136,7 @@ class DashboardForm(FormLoggerMixin, forms.Form):
             attrs={"class": "checkbox is-hidden",
                    "onchange": "changeHandler();"},
         ),
-        choices=[("base", "base of tongue"),  # choices here must match entries 
+        choices=[("base", "base of tongue"),  # choices here must match entries
                  ("tonsil", "tonsil"),        # in the Tumor.SUBSITE_DICT keys
                  ("rest_oro" , "other")],
         initial=["base", "tonsil", "rest_oro"]
@@ -148,7 +147,7 @@ class DashboardForm(FormLoggerMixin, forms.Form):
             attrs={"class": "checkbox is-hidden",
                    "onchange": "changeHandler();"},
         ),
-        choices=[("rest_hypo" , "all")],   # choices here must match entries in 
+        choices=[("rest_hypo" , "all")],   # choices here must match entries in
         initial=["rest_hypo"]              # the Tumor.SUBSITE_DICT keys
     )
     subsite_larynx = forms.MultipleChoiceField(
@@ -157,11 +156,11 @@ class DashboardForm(FormLoggerMixin, forms.Form):
             attrs={"class": "checkbox is-hidden",
                    "onchange": "changeHandler();"},
         ),
-        choices=[("glottis", "glottis"),      # choices here must match entries 
+        choices=[("glottis", "glottis"),      # choices here must match entries
                  ("rest_larynx" , "other")],  # in the Tumor.SUBSITE_DICT keys
         initial=["glottis", "rest_larynx"]
     )
-    
+
     t_stage__in = forms.MultipleChoiceField(
         required=False,
         widget=forms.CheckboxSelectMultiple(
@@ -173,19 +172,19 @@ class DashboardForm(FormLoggerMixin, forms.Form):
     )
     central = ThreeWayToggle()
     extension = ThreeWayToggle()
-    
+
     # checkbutton for switching to percent
     show_percent = forms.BooleanField(
-        required=False, initial=False, 
+        required=False, initial=False,
         widget=forms.widgets.RadioSelect(
             attrs={"class": "radio is-hidden", "onchange": "changeHandler();"},
             choices=[(True, "percent"), (False, "absolute")]
         )
     )
-    
-    
+
+
     def __init__(self, *args, **kwargs):
-        """Extend default initialization to create lots of fields for the 
+        """Extend default initialization to create lots of fields for the
         LNLs from a list."""
         super(DashboardForm, self).__init__(*args, **kwargs)
         for side in ["ipsi", "contra"]:
@@ -202,10 +201,10 @@ class DashboardForm(FormLoggerMixin, forms.Form):
                                            "changeHandler();")})
                 else:
                     self.fields[f"{side}_{lnl}"] = ThreeWayToggle()
-                    
-                    
+
+
     def _to_bool(self, value: int):
-        """Transform values of -1, 0 and 1 to False, None and True respectively. 
+        """Transform values of -1, 0 and 1 to False, None and True respectively.
         Anything else is just passed through."""
         if value == 1:
             return True
@@ -215,28 +214,28 @@ class DashboardForm(FormLoggerMixin, forms.Form):
             return None
         else:
             return value
-           
-                
+
+
     def clean(self):
-        """Make sure LNLs I & II have correct values corresponding to their 
+        """Make sure LNLs I & II have correct values corresponding to their
         sublevels a & b. Also convert tstages from list of str to list of int."""
         cleaned_data = super(DashboardForm, self).clean()
-        
+
         # necessary to prevent errors from processing invalid data
         if len(self.errors) != 0:
             return {}
-        
+
         # map all -1,0,1 fields to False,None,True
         cleaned_data = {
             key: self._to_bool(value) for key,value in cleaned_data.items()
         }
-        
+
         # make sure LNLs I & II arent in conflict with their sublevels
         for side in ["ipsi", "contra"]:
             for lnl in ["I", "II"]:
                 a = cleaned_data[f"{side}_{lnl}a"]
                 b = cleaned_data[f"{side}_{lnl}b"]
-                
+
                 # make sure data regarding sublevels is not conflicting
                 if a is True or b is True:
                     cleaned_data[f"{side}_{lnl}"] = True
@@ -250,24 +249,24 @@ class DashboardForm(FormLoggerMixin, forms.Form):
             cleaned_data["side__in"] = ['left', 'right']
         else:
             cleaned_data["side__in"] = ['left', 'right', 'central']
-        
+
         # map subsites 'base','tonsil','rest' to list of ICD codes.
-        subsites = (cleaned_data["subsite_oropharynx"] 
-                    + cleaned_data["subsite_hypopharynx"] 
+        subsites = (cleaned_data["subsite_oropharynx"]
+                    + cleaned_data["subsite_hypopharynx"]
                     + cleaned_data["subsite_larynx"])
 
         icd_codes = []
         for sub in subsites:
             icd_codes += Tumor.SUBSITE_DICT[sub]
         cleaned_data["subsite__in"] = icd_codes
-        
+
         # make sure T-stages are list of ints
         str_list = cleaned_data["t_stage__in"]
         cleaned_data["t_stage__in"] = [int(s) for s in str_list]
-        
+
         # make sure list of modalities is list of ints
         str_list = cleaned_data["modalities"]
         cleaned_data["modalities"] = [int(s) for s in str_list]
-        
+
         self.logger.debug(f'cleaned data: {cleaned_data}')
         return cleaned_data

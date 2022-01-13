@@ -55,32 +55,32 @@
                 <div class="content">
                     <h1 id="The Dashboard">The Dashboard</h1>
                     <p>
-                        Here, one can visualize patterns of lymph node involvement 
-                        for the patients in the database. The aim is to make it 
-                        easy to explore the complex dataset and understand correlations 
-                        between lymph node involvement in different levels and primary 
-                        tumor characteristics. The basic concept is that buttons 
-                        on the dashboard act as filters. They allow the user to 
-                        select subsets of patients from the database. The GUI will 
-                        then show the number (or percentage) of patients that show 
-                        involvement in each lymph node level. As such, the dashboard 
-                        may be used for generating hypotheses, meaning that you, 
-                        the user, becomes curious and asks questions about correlations 
-                        or whether lymph node involvement differs between certain 
-                        patient groups. Most patient characteristics will be explorable 
-                        using this interface, while others maybe not. In the latter 
-                        case we encourage you to <a href="{% url 'patients:download' %}">download</a> 
-                        the database and test your ideas and hypotheses with your 
+                        Here, one can visualize patterns of lymph node involvement
+                        for the patients in the database. The aim is to make it
+                        easy to explore the complex dataset and understand correlations
+                        between lymph node involvement in different levels and primary
+                        tumor characteristics. The basic concept is that buttons
+                        on the dashboard act as filters. They allow the user to
+                        select subsets of patients from the database. The GUI will
+                        then show the number (or percentage) of patients that show
+                        involvement in each lymph node level. As such, the dashboard
+                        may be used for generating hypotheses, meaning that you,
+                        the user, becomes curious and asks questions about correlations
+                        or whether lymph node involvement differs between certain
+                        patient groups. Most patient characteristics will be explorable
+                        using this interface, while others maybe not. In the latter
+                        case we encourage you to <a href="{% url 'patients:download' %}">download</a>
+                        the database and test your ideas and hypotheses with your
                         own tools.
                     </p>
                     <p class="notification is-warning is-light">
-                        <strong>Warning:</strong> dashboard is NOT for predicting the risk of occult 
-                        metastases in individual patients. All we do here is visualize 
-                        data of previously seen patients. For actual risk predictions 
-                        for individual and newly diagnosed patients, check out our 
+                        <strong>Warning:</strong> dashboard is NOT for predicting the risk of occult
+                        metastases in individual patients. All we do here is visualize
+                        data of previously seen patients. For actual risk predictions
+                        for individual and newly diagnosed patients, check out our
                         <a href="https://www.nature.com/articles/s41598-021-91544-1">
                             paper on modelling tumor progression
-                        </a> or wait a bit, since 
+                        </a> or wait a bit, since
                         we are thinking about implementing it also here.
                     </p>
 
@@ -95,24 +95,24 @@
                     <figure class="image is-16by9">
                         <iframe class="has-ratio" width="640" height="360" src="https://tube.switch.ch/embed/W3vBTy8XU2" frameborder="0" allow="fullscreen" allowfullscreen></iframe>
                     </figure>
-        
+
                     <h2 id="Components" class="pt-6">Components</h2>
-        
+
                     <h3 id="Patient details" class="pb-4">Patient details (top left)</h3>
                     {% include 'dashboard/help-media.html' with image='dashboard/toggle.gif' size='large' html='dashboard/help_patient.html' %}
-                    
+
                     <h3 id="Primary tumor" class="pt-6 pb-4">Primary tumor (bottom left)</h3>
                     {% include 'dashboard/help-media.html' with image='dashboard/subsite_t-stage.gif' size='large' markdown='dashboard/help_tumor.md' %}
-                    
+
                     <h3 id="Institutions" class="pt-6 pb-4">Institutions (center top)</h3>
                     {% include 'dashboard/help-media.html' with image='dashboard/institutions.gif' size='large' markdown='dashboard/help_institutions.md' %}
-                    
+
                     <h3 id="Modalities" class="pt-6 pb-4">Modalities (center, below Institutions)</h3>
                     {% include 'dashboard/help-media.html' with image='dashboard/modalities.gif' size='large' markdown='dashboard/help_modalities.md' %}
-                    
+
                     <h3 id="Involvement" class="pt-6 pb-4">contra- (center left) & ipsilateral (center right)</h3>
                     {% include 'dashboard/help-media.html' with image='dashboard/involvement.gif' size='large' markdown='dashboard/help_involvement.md' %}
-                    
+
                     <h3 id="Buttons" class="pt-6 pb-4">Buttons (bottom right)</h3>
                     {% include 'dashboard/help-media.html' with image='dashboard/buttons.gif' size='large' markdown='dashboard/help_buttons.md' %}
 
@@ -120,7 +120,7 @@
 
                     <h3 id="Full example">Full example</h3>
                     <p>
-                        Below is an annotated screenshot of a concrete example 
+                        Below is an annotated screenshot of a concrete example
                         for how to use the dasboard.
                     </p>
                     <figure class="image">
@@ -129,12 +129,12 @@
 
                     <h3 id="The bar plots">The bar plots</h3>
                     <p>
-                        Here we have annotated the bar plots showing the actual 
-                        involvement numbers and statistics. In this case we're 
-                        looking at a concrete example for the ipsilateral levels 
-                        III and IV. Note that the absolute numbers are displayed. 
-                        If one switches views, all the number here become 
-                        percentages. 
+                        Here we have annotated the bar plots showing the actual
+                        involvement numbers and statistics. In this case we're
+                        looking at a concrete example for the ipsilateral levels
+                        III and IV. Note that the absolute numbers are displayed.
+                        If one switches views, all the number here become
+                        percentages.
                     </p>
                     <figure class="image">
                         <img src="{% static 'dashboard/annotated_bar.png' %}" alt="annotated bar plot">
@@ -143,12 +143,12 @@
                     <h2 class="pt-6" id="Contribute">Contribute</h2>
                     <h3 id="data">Data</h3>
                     <p>
-                        The most straightforward way to support our goal of improving 
-                        CTV-N definition by better quantifying the patterns of lymphatic 
-                        progression is to share data from your institution. We would 
-                        recommend that - if you have data with a sufficient amount 
-                        of detail - you submit that dataset e.g. to a journal like 
-                        <a href="https://www.sciencedirect.com/journal/data-in-brief">Data in Brief</a>. 
+                        The most straightforward way to support our goal of improving
+                        CTV-N definition by better quantifying the patterns of lymphatic
+                        progression is to share data from your institution. We would
+                        recommend that - if you have data with a sufficient amount
+                        of detail - you submit that dataset e.g. to a journal like
+                        <a href="https://www.sciencedirect.com/journal/data-in-brief">Data in Brief</a>.
                     </p>
                     <p>
                         Doing so has a number of benefits:
@@ -159,23 +159,23 @@
                         <li>It's actually pretty simple and quick to prepare the <em>Data in Brief</em> submission</li>
                     </ul>
                     <p>
-                        In case you are unsure in which format to publish the data 
-                        or in which repository to store it, feel free to <a href="mailto:roman.ludwig@usz.ch">contact</a> 
+                        In case you are unsure in which format to publish the data
+                        or in which repository to store it, feel free to <a href="mailto:roman.ludwig@usz.ch">contact</a>
                         us and we willl gladly help you with it!
                     </p>
 
                     <h3 id="features">Features</h3>
                     <p>
-                        If you think our dashboard (or other parts of the interface) 
-                        are missing some critical features, we would love to learn 
-                        about it, so that we can expand and adapt the functionalities 
+                        If you think our dashboard (or other parts of the interface)
+                        are missing some critical features, we would love to learn
+                        about it, so that we can expand and adapt the functionalities
                         according to what you need.
                     </p>
                     <p>
-                        The best way for us to tell us what features and functionalities 
-                        you'd like to see is if you could <a href="https://github.com/rmnldwg/lyprox/issues" target="_blank">open an issue</a> 
-                        on the GitHub page of the project by simply clicking on the 
-                        <em>New Issue</em> button and then describing what you have 
+                        The best way for us to tell us what features and functionalities
+                        you'd like to see is if you could <a href="https://github.com/rmnldwg/lyprox/issues" target="_blank">open an issue</a>
+                        on the GitHub page of the project by simply clicking on the
+                        <em>New Issue</em> button and then describing what you have
                         in mind.
                     </p>
                     <p>

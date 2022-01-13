@@ -66,20 +66,20 @@
                     <div class="tags has-addons are-medium">
                         <span class="tag is-info">age</span>
                         <span class="tag is-primary">{{ patient.age }}</span>
-                    </div>            
+                    </div>
                 </div>
                 <div class="control">
                     <div class="tags has-addons are-medium">
                         <span class="tag is-info">sex</span>
                         <span class="tag is-primary">{{ patient.sex }}</span>
-                    </div>            
+                    </div>
                 </div>
                 <div class="control">
                     <div class="tags has-addons are-medium tooltip" data-tooltip="According to {{ patient.tnm_edition }}th TNM edition">
                         <span class="tag is-info">stage</span>
                         <span class="tag is-primary">{{ patient.get_stage_prefix_display }} {{ patient.get_t_stage_display }} {{ patient.get_n_stage_display }} {{ patient.get_m_stage_display }}</span>
                         <span class="tag is-primary is-light tnm">{{ patient.tnm_edition }}th</span>
-                    </div>            
+                    </div>
                 </div>
             </div>
             <div class="field is-grouped is-grouped-multiline">
@@ -87,19 +87,19 @@
                     <div class="tags has-addons are-medium">
                         <span class="tag is-info">alcohol abuse</span>
                         <span class="tag is-primary">{{ patient.alcohol_abuse }}</span>
-                    </div>            
+                    </div>
                 </div>
                 <div class="control">
                     <div class="tags has-addons are-medium">
                         <span class="tag is-info">nicotine abuse</span>
                         <span class="tag is-primary">{{ patient.nicotine_abuse }}</span>
-                    </div>            
+                    </div>
                 </div>
                 <div class="control">
                     <div class="tags has-addons are-medium">
                         <span class="tag is-info">HPV status</span>
                         <span class="tag is-primary">{{ patient.hpv_status }}</span>
-                    </div>            
+                    </div>
                 </div>
                 <div class="control">
                     <div class="tags has-addons are-medium">
@@ -114,7 +114,7 @@
             {% for tumor in patient.get_tumors %}
             {% include 'patients/tumor_detail.html' %}
             {% endfor %}
-            
+
             {% if action == "create_tumor" or action == "update_tumor" %}
             {% include 'patients/tumor_form.html' %}
             {% elif action == "delete_tumor" %}

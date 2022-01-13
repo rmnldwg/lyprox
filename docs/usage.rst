@@ -1,7 +1,7 @@
 .. module: usage
 
 
-Usage 
+Usage
 =====
 
 Ladida

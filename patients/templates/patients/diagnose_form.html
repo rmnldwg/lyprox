@@ -3,7 +3,7 @@
 <tr>
     {% if action == "create_diagnose" %}
     <form method="POST" action="{% url 'patients:diagnose_create' pk=patient.pk %}">
-    
+
     {% elif action == "update_diagnose" %}
     <form action="{% url 'patients:diagnose_update' pk=patient.pk diagnose_pk=diagnose.pk %}" method="post">
 

@@ -4,9 +4,9 @@
 Views
 =====
 
-The view classes and methods are responsible for filling HTML templates with 
-information and rendering out a response to a user's request. In our project, 
-we were able to use class-based views quite extensively, relying on pre-built 
+The view classes and methods are responsible for filling HTML templates with
+information and rendering out a response to a user's request. In our project,
+we were able to use class-based views quite extensively, relying on pre-built
 functionalities to create, edit, inspect and delete objects.
 
 Patient
@@ -36,7 +36,7 @@ Patient
 Tumor
 -----
 
-Views to display, create, edit and delete the tumor(s) of a patient are always 
+Views to display, create, edit and delete the tumor(s) of a patient are always
 shown as part of the :class:`PatientDetailView`.
 
 .. autoclass:: patients.views.CreateTumorView
@@ -55,7 +55,7 @@ shown as part of the :class:`PatientDetailView`.
 Diagnose
 --------
 
-Like the tumor, a diagnose isn't displayed alone (or created/edited in 
+Like the tumor, a diagnose isn't displayed alone (or created/edited in
 isolation), but always in the context and view of the patient it belongs to.
 
 .. autoclass:: patients.views.CreateDiagnoseView
