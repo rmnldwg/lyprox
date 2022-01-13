@@ -12,11 +12,12 @@
 
 import os
 import sys
+
 sys.path.insert(0, os.path.abspath('..'))
 import django
 from django.conf import settings
-from core.settings import INSTALLED_APPS, SECRET_KEY, VERSION
 
+from core.settings import INSTALLED_APPS, SECRET_KEY, VERSION
 
 settings.configure(
     INSTALLED_APPS = INSTALLED_APPS,

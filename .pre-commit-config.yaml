@@ -3,3 +3,14 @@ repos:
   rev: v2.3.0
   hooks:
   - id: trailing-whitespace
+- repo: https://github.com/hadialqattan/pycln
+  rev: v1.1.0
+  hooks:
+  - id: pycln
+    args: [--config=pyproject.toml]
+- repo: https://github.com/PyCQA/isort
+  rev: 5.10.1
+  hooks:
+  - id: isort
+    files: "\\.(py)$"
+    args: [--settings-path=pyproject.toml]

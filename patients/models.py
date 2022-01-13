@@ -1,8 +1,8 @@
-from accounts.models import Institution
+from dateutil.parser import ParserError, parse
 from django.db import models
 from django.urls import reverse
-from dateutil.parser import ParserError, parse
 
+from accounts.models import Institution
 from core.loggers import ModelLoggerMixin
 
 

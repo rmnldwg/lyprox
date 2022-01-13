@@ -1,13 +1,14 @@
-from typing import Dict, Any
-from django import forms
-from django.forms import widgets
-from django.core.exceptions import ValidationError
+from typing import Any, Dict
 
 import pandas
+from django import forms
+from django.core.exceptions import ValidationError
+from django.forms import widgets
 
-from .models import Institution, Patient, Tumor, Diagnose
-from .ioports import compute_hash
 from core.loggers import FormLoggerMixin
+
+from .ioports import compute_hash
+from .models import Diagnose, Institution, Patient, Tumor
 
 
 class PatientForm(FormLoggerMixin, forms.ModelForm):

@@ -1,9 +1,11 @@
-import pytest
-
+from factories import (
+    DiagnoseFactory,
+    InstitutionFactory,
+    PatientFactory,
+    TumorFactory,
+    UserFactory,
+)
 from pytest_factoryboy import register
-
-from factories import (InstitutionFactory, UserFactory,
-                       PatientFactory, TumorFactory, DiagnoseFactory)
 
 register(UserFactory)
 register(InstitutionFactory)

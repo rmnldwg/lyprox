@@ -1,9 +1,9 @@
-import pytest
 from typing import List
 
+import pytest
 from django import urls
 
-from patients.models import Patient, Tumor, Diagnose
+from patients.models import Diagnose, Tumor
 
 
 @pytest.mark.django_db

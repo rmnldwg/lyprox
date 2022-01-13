@@ -1,17 +1,16 @@
 from time import timezone
-from django.core.exceptions import ValidationError
-from django.db.models.expressions import Value
-from django.utils.translation import gettext as _
-from django.db import models
-from django.contrib.auth.models import (
-    AbstractBaseUser, PermissionsMixin, BaseUserManager, Permission
-)
-from django.utils import timezone
 
+from django.contrib.auth.models import (
+    AbstractBaseUser,
+    BaseUserManager,
+    PermissionsMixin,
+)
+from django.db import models
+from django.utils import timezone
+from django.utils.translation import gettext as _
 from phonenumber_field.modelfields import PhoneNumberField
 
 from core.loggers import ModelLoggerMixin
-
 
 # ISO 3166-1 country names and codes adapted from http://opencountrycodes.appspot.com/python/
 COUNTRIES = (

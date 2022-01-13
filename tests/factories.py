@@ -1,12 +1,13 @@
-import numpy as np
 import factory
+import numpy as np
 from factory.django import DjangoModelFactory
 from faker import Faker
+
 fake = Faker()
 # Faker.seed(42)
 
-from accounts.models import User, Institution
-from patients.models import Patient, Tumor, Diagnose
+from accounts.models import Institution, User
+from patients.models import Diagnose, Patient, Tumor
 
 
 class InstitutionFactory(DjangoModelFactory):

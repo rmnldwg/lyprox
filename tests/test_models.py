@@ -1,6 +1,4 @@
-import pytest
 
-from accounts.models import Institution
 
 
 def test_patient(patient_factory):

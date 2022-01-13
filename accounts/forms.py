@@ -1,9 +1,8 @@
-from django.contrib.auth.forms import UsernameField, AuthenticationForm, UserCreationForm
-from django.conf import settings
 from django import forms
+from django.contrib.auth.forms import AuthenticationForm, UsernameField
 from django.forms import widgets
 
-from .models import Institution, User
+from .models import User
 
 
 class CustomAuthenticationForm(AuthenticationForm):
@@ -53,4 +52,3 @@ class SignupRequestForm(forms.ModelForm):
         """
         # TODO: Store the cleaned data somewhere or send it via email to the
         #   admin(s).
-        pass

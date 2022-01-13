@@ -1,15 +1,15 @@
-from django.http.response import HttpResponse
-from django.views import generic
-from django.shortcuts import render
-
 import time
 from typing import Any, Dict
 
+from django.http.response import HttpResponse
+from django.shortcuts import render
+from django.views import generic
+
 from core.loggers import ViewLoggerMixin
-from patients.models import Patient, Tumor, Diagnose
-from accounts.models import Institution
+from patients.models import Patient
 
 from . import query
+
 from.forms import DashboardForm
 
 

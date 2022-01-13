@@ -1,6 +1,7 @@
-from accounts.models import Institution
-from django.forms import widgets
 import django_filters
+from django.forms import widgets
+
+from accounts.models import Institution
 
 from .models import Patient
 

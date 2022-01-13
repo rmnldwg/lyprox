@@ -1,13 +1,14 @@
-from django.db import IntegrityError
-from django.db.models import QuerySet
+import logging
+from typing import List
 
 import numpy as np
 import pandas as pd
-from typing import List
-import logging
+from django.db import IntegrityError
+from django.db.models import QuerySet
+
 logger = logging.getLogger(__name__)
 
-from .models import (Patient, Diagnose, Tumor)
+from .models import Diagnose, Patient, Tumor
 
 
 class ParsingError(Exception):

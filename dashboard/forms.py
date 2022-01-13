@@ -1,14 +1,13 @@
+import logging
+from typing import Tuple
+
 from django import forms
 from django.core.exceptions import ValidationError
-from django.db.models.expressions import Value
-from django.forms import fields
 
-from core.loggers import FormLoggerMixin
-from patients.models import Patient, Tumor, Diagnose
 from accounts.models import Institution
+from core.loggers import FormLoggerMixin
+from patients.models import Diagnose, Patient, Tumor
 
-from typing import Tuple
-import logging
 logger = logging.getLogger(__name__)
 
 

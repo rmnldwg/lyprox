@@ -1,31 +1,29 @@
+import logging
+import time
+from pathlib import Path
+from typing import Any, Dict
+
+from django.conf import settings
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models.query import QuerySet
-from accounts.models import User
-from django.shortcuts import render
 from django.http import HttpResponse
+from django.shortcuts import render
 from django.urls.base import reverse
 from django.views import generic
-from django.contrib.auth.mixins import LoginRequiredMixin
-from django.contrib.auth.decorators import login_required
-from django.conf import settings
 
-import time
-from typing import Any, Dict
-from pathlib import Path
-import logging
-
-from dashboard.forms import DashboardForm
 from dashboard import query
+from dashboard.forms import DashboardForm
+
 logger = logging.getLogger(__name__)
 
-from .models import Patient, Tumor, Diagnose
-from .forms import (PatientForm,
-                    TumorForm,
-                    DiagnoseForm,
-                    DataFileForm)
-from .ioports import export_to_pandas, import_from_pandas, ParsingError
-from .filters import PatientFilter
-from .mixins import InstitutionCheckPatientMixin, InstitutionCheckObjectMixin
 from core.loggers import ViewLoggerMixin
+
+from .filters import PatientFilter
+from .forms import DataFileForm, DiagnoseForm, PatientForm, TumorForm
+from .ioports import ParsingError, export_to_pandas, import_from_pandas
+from .mixins import InstitutionCheckObjectMixin, InstitutionCheckPatientMixin
+from .models import Diagnose, Patient, Tumor
 
 
 # PATIENT related views

@@ -1,9 +1,7 @@
+import markdown as md
 from django import template
 from django.template.loader import render_to_string
 from django.utils.html import format_html
-
-
-import markdown as md
 
 register = template.Library()
 

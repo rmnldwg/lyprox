@@ -1,10 +1,12 @@
-from django.contrib.auth.mixins import UserPassesTestMixin
 import logging
+
+from django.contrib.auth.mixins import UserPassesTestMixin
+
 logger = logging.getLogger(__name__)
 
-from .models import Patient
-
 from typing import Optional
+
+from .models import Patient
 
 
 class InstitutionCheckPatientMixin(UserPassesTestMixin):

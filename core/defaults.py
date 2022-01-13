@@ -4,9 +4,8 @@ This should not directly be used by e.g. WSGI, but rather another Python file
 named <subdomain>.settings.py should be used for the respective subdomain of
 the interface that overwrites the defaults with appropriate values.
 """
-from pathlib import Path
 import subprocess
-
+from pathlib import Path
 
 # security
 DEBUG = True
