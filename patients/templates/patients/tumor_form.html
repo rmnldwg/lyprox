@@ -7,7 +7,7 @@
 
         {% elif action == "update_tumor" %}
         <form method="POST" action="{% url 'patients:tumor_update' pk=patient.pk tumor_pk=tumor.pk %}">
-            
+
         {% endif %}
             {% csrf_token %}
             <table class="table">

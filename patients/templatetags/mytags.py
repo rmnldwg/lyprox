@@ -3,7 +3,7 @@ from django.template.loader import render_to_string
 from django.utils.html import format_html
 
 
-import markdown as md 
+import markdown as md
 
 register = template.Library()
 
@@ -45,6 +45,6 @@ def include_md(context, template_name):
     context_dict = {k: v for subdict in context.dicts for k,v in subdict.items()}
     # parse the template and fill the tags with context variables
     template = render_to_string(template_name, context=context_dict)
-    
+
     html_string = md.markdown(template)
     return format_html(html_string)

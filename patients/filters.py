@@ -34,7 +34,7 @@ class PatientFilter(django_filters.FilterSet):
     institution = django_filters.ModelMultipleChoiceFilter(
         queryset=Institution.objects.all()
     )
-    
+
     # additional form field for sorting
     ordering = django_filters.OrderingFilter(
         fields=[
@@ -48,8 +48,8 @@ class PatientFilter(django_filters.FilterSet):
             "t_stage": "T-stage"
         }
     )
-    
+
     class Meta:
         model = Patient
-        fields = ["diagnose_date", "gender", "age", 
+        fields = ["diagnose_date", "gender", "age",
                   "t_stage", "n_stage", "m_stage"]

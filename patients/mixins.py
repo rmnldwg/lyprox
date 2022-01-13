@@ -8,7 +8,7 @@ from typing import Optional
 
 
 class InstitutionCheckPatientMixin(UserPassesTestMixin):
-    """Mixin that makes sure only users from the institution that created the 
+    """Mixin that makes sure only users from the institution that created the
     patient can edit it.
     """
     def test_func(self) -> Optional[bool]:
@@ -27,7 +27,7 @@ class InstitutionCheckPatientMixin(UserPassesTestMixin):
 
 
 class InstitutionCheckObjectMixin(UserPassesTestMixin):
-    """Mixin that makes sure only users from the institution that created the 
+    """Mixin that makes sure only users from the institution that created the
     patient can edit that patient's diagnose and tumor.
     """
     def test_func(self) -> Optional[bool]:

@@ -61,7 +61,7 @@ class DashboardView(ViewLoggerMixin, generic.ListView):
             initial_form = self.form_class(initial_data)
 
             if initial_form.is_valid():
-                queryset = query.patient_specific(patient_queryset=queryset, 
+                queryset = query.patient_specific(patient_queryset=queryset,
                                                   **initial_form.cleaned_data)
                 queryset = query.tumor_specific(patient_queryset=queryset,
                                                 **initial_form.cleaned_data)
@@ -73,20 +73,20 @@ class DashboardView(ViewLoggerMixin, generic.ListView):
                     combined_involvement=combined_involvement
                 )
                 self.stats = counts
-            
+
             else:
                 self.logger.warn("Initial form is invalid, errors are: "
                                  f"{initial_form.errors.as_data()}")
                 queryset = Patient.objects.none()
-        
+
         end_querying = time.perf_counter()
         self.logger.info(
             f'Querying finished in {end_querying - start_querying:.3f} seconds'
-        ) 
+        )
         return queryset
 
     def get_context_data(self) -> Dict[str, Any]:
-        """Pass form and stats to the context. No need to have the list of 
+        """Pass form and stats to the context. No need to have the list of
         patients in there too.
         """
         context = {
@@ -96,5 +96,5 @@ class DashboardView(ViewLoggerMixin, generic.ListView):
 
         if self.form.is_valid():
             context["show_percent"] = self.form.cleaned_data["show_percent"]
-            
+
         return context

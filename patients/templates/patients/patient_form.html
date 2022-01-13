@@ -22,7 +22,7 @@
                     <p class="title is-3">Edit patient {{ patient.pk }}</p>
                     <form action="{% url 'patients:update' pk=patient.pk %}" method="post">
                         <input type="hidden" id="{{ form.check_for_duplicate.auto_id }}" name="{{ form.check_for_duplicate.name }}" value="False">
-                    
+
                     {% endif %}
 
                         {% if form.errors %}

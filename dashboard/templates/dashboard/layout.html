@@ -54,13 +54,13 @@
                                     </div>
                                 </div>
                             </div>
-                            
+
                             <div class="columns">
                                 <div class="column">
                                     {% include 'dashboard/three-way-toggle.html' with name='smoking status' tooltip_text='Select smokers or non-smokers' radio_buttons=form.nicotine_abuse stat=stats.nicotine_abuse show_percent=show_percent %}
                                     {% include 'dashboard/three-way-toggle.html' with name='HPV status' tooltip_text='Select patients being HPV positive or negative' radio_buttons=form.hpv_status stat=stats.hpv_status show_percent=show_percent %}
                                 </div>
-                            
+
                                 <div class="column">
                                     {% include 'dashboard/three-way-toggle.html' with name='neck dissection' tooltip_text='Include only patients that have (or have not) received neck dissection' radio_buttons=form.neck_dissection stat=stats.neck_dissection show_percent=show_percent %}
                                     <p class="heading has-text-centered">N+ vs N0</p>
@@ -76,7 +76,7 @@
                                         </div>
                                         {% endfor %}
                                     </div>
-        
+
                                     <div class="tags has-addons is-justify-content-center">
                                         {% for i in '102' %}
                                         <div class="tag stat-tag button is-static">
@@ -110,12 +110,12 @@
                                     </div>
                                 </div>
                             </div>
-                            
+
                             <div class="columns is-multiline">
                                 <div class="column">
                                     {% include 'dashboard/three-way-toggle.html' with name='central' tooltip_text='Choose to in- or exclude patients with central tumors' radio_buttons=form.central stat=stats.central show_percent=show_percent %}
                                 </div>
-                    
+
                                 <div class="column">
                                     {% include 'dashboard/three-way-toggle.html' with name='midline extension' tooltip_text='Investigate patients with tumors that do (or do not) cross the mid-sagittal line' radio_buttons=form.extension stat=stats.extension show_percent=show_percent %}
                                 </div>
@@ -282,7 +282,7 @@
                                                 </label>
                                             </div>
                                             {% endfor %}
-                                            
+
                                             <div class="select">
                                                 {{ form.modality_combine }}
                                             </div>
