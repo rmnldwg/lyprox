@@ -14,13 +14,9 @@ class ParsingError(Exception):
     """Exception raised when the parsing of an uploaded CSV fails due to 
     missing data columns."""
     
-    def __init__(self, column, message="Missing column in uploaded table"):
-        self.column = column
-        self.message = message
+    def __init__(self, column, msg="is missing"):
+        self.message = f"Column {column} {msg}."
         super().__init__(self.message)
-    
-    def __str__(self):
-        return f"{self.column}: {self.message}"
 
 
 def compute_hash(*args):

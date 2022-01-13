@@ -1,8 +1,23 @@
 from accounts.models import Institution
 from django.db import models
 from django.urls import reverse
+from dateutil.parser import ParserError, parse
 
 from core.loggers import ModelLoggerMixin
+
+
+class RobustDateField(models.DateField):
+    """DateField that doesn't raise a ValidationError when the date string isn't 
+    formated according to ISO (YYYY-MM-DD)
+    """
+    def to_python(self, value):
+        if type(value) == str:
+            try:
+                value = parse(value).date()
+            except ParserError:
+                return None
+                
+        return super().to_python(value)
 
 
 class Patient(ModelLoggerMixin, models.Model):
@@ -36,7 +51,7 @@ class Patient(ModelLoggerMixin, models.Model):
     sex = models.CharField(max_length=10, choices=[("female", "female"),
                                                    ("male"  , "male"  )])  #:
     age = models.IntegerField()  #:
-    diagnose_date = models.DateField()  #:
+    diagnose_date = RobustDateField()  #:
     
     #: Was the patient a drinker?
     alcohol_abuse = models.BooleanField(blank=True, null=True)
@@ -260,7 +275,7 @@ class Diagnose(ModelLoggerMixin, models.Model):
     #: The used diagnostic modality. E.g. ``MRI``, ``PET`` or ``FNA``.
     modality = models.PositiveSmallIntegerField(choices=Modalities.choices)
     #:
-    diagnose_date = models.DateField(blank=True, null=True)
+    diagnose_date = RobustDateField(blank=True, null=True)
     #: diagnosed side
     side = models.CharField(max_length=10, choices=[("left", "left"),
                                                     ("right", "right")])
