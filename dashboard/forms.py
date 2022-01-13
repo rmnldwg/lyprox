@@ -182,23 +182,33 @@ class DashboardForm(FormLoggerMixin, forms.Form):
         )
     )
 
-
     def __init__(self, *args, **kwargs):
         """Extend default initialization to create lots of fields for the
-        LNLs from a list."""
+        LNLs from a list.
+        """
+        user = kwargs.pop("user")
         super(DashboardForm, self).__init__(*args, **kwargs)
+
+        # dynamically define which institutions should be selectable
+        if user.is_authenticated:
+            self.fields["institution__in"].queryset = Institution.objects.all()
+            self.fields["institution__in"].initial = Institution.objects.all()
+
+        # add all LNL ToggleButtons so I don't have to write a mriad of them
         for side in ["ipsi", "contra"]:
             for lnl in Diagnose.LNLs:
                 if lnl in ['I', 'II']:
                     self.fields[f"{side}_{lnl}"] = ThreeWayToggle(
                         attrs={"class": "radio is-hidden",
                                "onclick": ("bothClickHandler(this);"
-                                           "changeHandler();")})
+                                           "changeHandler();")}
+                    )
                 elif lnl in ['Ia', 'Ib', 'IIa', 'IIb']:
                     self.fields[f"{side}_{lnl}"] = ThreeWayToggle(
                         attrs={"class": "radio is-hidden",
                                "onclick": ("subClickHandler(this);"
-                                           "changeHandler();")})
+                                           "changeHandler();")}
+                    )
                 else:
                     self.fields[f"{side}_{lnl}"] = ThreeWayToggle()
 
