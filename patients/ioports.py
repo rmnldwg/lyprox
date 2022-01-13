@@ -13,11 +13,8 @@ from .models import Diagnose, Patient, Tumor
 
 class ParsingError(Exception):
     """Exception raised when the parsing of an uploaded CSV fails due to
-    missing data columns."""
-
-    def __init__(self, column, msg="is missing"):
-        self.message = f"Column {column} {msg}."
-        super().__init__(self.message)
+    missing data columns.
+    """
 
 
 def compute_hash(*args):
@@ -72,8 +69,7 @@ def row2patient(row, user, anonymize: List[str]):
         try:
             valid_patient_dict[field] = _(patient_dict[field])
         except KeyError:
-            column = field
-            raise ParsingError(column)
+            raise ParsingError(f"Column {field} is missing")
 
     try:
         new_patient = Patient(
@@ -111,8 +107,7 @@ def row2tumors(row, patient):
             try:
                 valid_tumor_dict[field] = _(tumor_dict[field])
             except KeyError:
-                column = field
-                raise ParsingError(column)
+                raise ParsingError(f"Columns {field} is missing.")
 
         new_tumor = Tumor(
             patient=patient,
@@ -125,14 +120,10 @@ def row2diagnoses(row, patient):
     """Create `Diagnose` instances from row of `DataFrame` and add them to an
     existing `Patient` instance."""
     modalities_list = list(set(row.index.get_level_values(0)))
-    if not set(modalities_list).issubset(Diagnose.Modalities.labels):
-        message = ("Unknown diagnostic modalities were provided. Known are "
-                   f"only {Diagnose.Modalities.labels}.")
-        raise ParsingError(column="Modalities", message=message)
-
     if len(modalities_list) == 0:
-        message = "No diagnostic modalities were found in the provided table."
-        raise ParsingError(column="Modalities", message=message)
+        raise ParsingError(
+            "No diagnostic modalities were found in the provided table."
+        )
 
     _ = nan_to_None
 
@@ -140,7 +131,7 @@ def row2diagnoses(row, patient):
         Diagnose, remove=["id", "patient", "modality", "side", "diagnose_date"]
     )
 
-    for mod in modalities_list:
+    for mod in Diagnose.modalities.labels:
         diagnose_date = _(row[(mod, "info", "date")])
         if diagnose_date is not None:
             for side in ["left", "right"]:
@@ -151,8 +142,7 @@ def row2diagnoses(row, patient):
                     try:
                         valid_diagnose_dict[field] = _(diagnose_dict[field])
                     except KeyError:
-                        column = field
-                        raise ParsingError(column)
+                        raise ParsingError(f"Column {field} is missing.")
 
                 mod_num = Diagnose.Modalities.labels.index(mod)
                 new_diagnosis = Diagnose(
@@ -177,10 +167,10 @@ def import_from_pandas(
         try:
             patient_row = row[("patient", "#")]
         except KeyError:
-            missing = "('patient', '#', '...')"
-            message = ("For patient info, first level must be 'patient', "
-                       "second level must be '#'.")
-            raise ParsingError(column=missing, message=message)
+            raise ParsingError(
+                "For patient info, first level must be 'patient', second level "
+                "must be '#'."
+            )
 
         # skip row if patient is already in database
         try:
@@ -197,10 +187,10 @@ def import_from_pandas(
         try:
             tumor_row = row[("tumor")]
         except KeyError:
-            missing = "('tumor', '1/2/3/...', '...')"
-            message = ("For tumor info, first level must be 'tumor' and "
-                       "second level must be number of tumor.")
-            raise ParsingError(column=missing, message=message)
+            raise ParsingError(
+                "For tumor info, first level must be 'tumor' and second level "
+                "must be number of tumor."
+            )
 
         row2tumors(
             tumor_row, new_patient
