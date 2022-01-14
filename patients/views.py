@@ -46,10 +46,15 @@ class PatientListView(ViewLoggerMixin, generic.ListView):
         queryset = super().get_queryset()
         start_querying = time.perf_counter()
 
-        self.filterset = self.filterset_class(self.request.GET or None,
-                                              queryset)
-        self.form = self.form_class(self.request.GET or None,
-                                    user=self.request.user)
+        if not self.request.user.is_authenticated:
+            queryset = queryset.filter(institution__is_hidden=False)
+
+        self.filterset = self.filterset_class(
+            self.request.GET or None, queryset
+        )
+        self.form = self.form_class(
+            self.request.GET or None, user=self.request.user
+        )
 
         if self.filterset.is_valid():
             queryset = self.filterset.qs.distinct()
