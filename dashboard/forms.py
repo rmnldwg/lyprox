@@ -184,7 +184,7 @@ class DashboardForm(FormLoggerMixin, forms.Form):
 
     def __init__(self, *args, **kwargs):
         """Extend default initialization to create lots of fields for the
-        LNLs from a list.
+        LNLs from a list and hide some datasets for unauthenticated users.
         """
         user = kwargs.pop("user")
         super(DashboardForm, self).__init__(*args, **kwargs)
@@ -194,7 +194,7 @@ class DashboardForm(FormLoggerMixin, forms.Form):
             self.fields["institution__in"].queryset = Institution.objects.all()
             self.fields["institution__in"].initial = Institution.objects.all()
 
-        # add all LNL ToggleButtons so I don't have to write a mriad of them
+        # add all LNL ToggleButtons so I don't have to write a myriad of them
         for side in ["ipsi", "contra"]:
             for lnl in Diagnose.LNLs:
                 if lnl in ['I', 'II']:
@@ -212,7 +212,6 @@ class DashboardForm(FormLoggerMixin, forms.Form):
                 else:
                     self.fields[f"{side}_{lnl}"] = ThreeWayToggle()
 
-
     def _to_bool(self, value: int):
         """Transform values of -1, 0 and 1 to False, None and True respectively.
         Anything else is just passed through."""
@@ -224,7 +223,6 @@ class DashboardForm(FormLoggerMixin, forms.Form):
             return None
         else:
             return value
-
 
     def clean(self):
         """Make sure LNLs I & II have correct values corresponding to their
@@ -240,7 +238,7 @@ class DashboardForm(FormLoggerMixin, forms.Form):
             key: self._to_bool(value) for key,value in cleaned_data.items()
         }
 
-        # make sure LNLs I & II arent in conflict with their sublevels
+        # make sure LNLs I & II aren't in conflict with their sublevels
         for side in ["ipsi", "contra"]:
             for lnl in ["I", "II"]:
                 a = cleaned_data[f"{side}_{lnl}a"]
