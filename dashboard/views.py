@@ -26,7 +26,8 @@ class DashboardView(ViewLoggerMixin, generic.ListView):
     action = "display_dashboard_stats"
 
     def get_queryset(self):
-        self.form = self.form_class(self.request.GET or None)
+        self.form = self.form_class(self.request.GET or None,
+                                    user=self.request.user)
         queryset = Patient.objects.all()
         start_querying = time.perf_counter()
 
@@ -58,7 +59,7 @@ class DashboardView(ViewLoggerMixin, generic.ListView):
                 initial_data[field_name] = self.form.get_initial_for_field(
                     field, field_name
                 )
-            initial_form = self.form_class(initial_data)
+            initial_form = self.form_class(initial_data, user=self.request.user)
 
             if initial_form.is_valid():
                 queryset = query.patient_specific(patient_queryset=queryset,

@@ -48,7 +48,8 @@ class PatientListView(ViewLoggerMixin, generic.ListView):
 
         self.filterset = self.filterset_class(self.request.GET or None,
                                               queryset)
-        self.form = self.form_class(self.request.GET or None)
+        self.form = self.form_class(self.request.GET or None,
+                                    user=self.request.user)
 
         if self.filterset.is_valid():
             queryset = self.filterset.qs.distinct()
