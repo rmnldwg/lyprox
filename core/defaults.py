@@ -189,7 +189,7 @@ STATIC_ROOT = BASE_DIR / "static"
 STATIC_URL = "/static/"
 
 # upload files
-MEDIA_ROOT = BASE_DIR / "uploads"
+MEDIA_ROOT = BASE_DIR / "media"
 MEDIA_URL = "/media/"
 
 # Download files
