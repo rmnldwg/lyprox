@@ -240,11 +240,20 @@
                                             {% with name_and_url=form.institution__in.field.names_and_urls|index:idx %}
                                             <div class="control">
                                                 {{ checkbox.tag }}
-                                                <label for="{{ checkbox.id_for_label }}" class="for-institution button is-primary is-light is-fullwidth" data-tooltip="{{ name_and_url.0 }}">
-                                                    <span class="icon">
-                                                        <img src="{{ name_and_url.1 }}" alt="{{ name_and_url.0 }} logo">
-                                                    </span>
-                                                </label>
+                                                <div class="buttons has-addons for-institutions">
+                                                    <label for="{{ checkbox.id_for_label }}" class="button is-primary is-light is-expanded px-5" data-tooltip="{{ name_and_url.0 }}">
+                                                        <span class="icon">
+                                                            <img src="{{ name_and_url.1 }}" alt="{{ name_and_url.0 }} logo">
+                                                        </span>
+                                                    </label>
+                                                    <div class="button is-info is-static">
+                                                        {% if show_percent %}
+                                                        <span>{{ stats.institutions|percent:idx }}%</span>
+                                                        {% else %}
+                                                        <span>{{ stats.institutions|index:idx }}</span>
+                                                        {% endif %}
+                                                    </div>
+                                                </div>
                                             </div>
                                             {% endwith %}
                                             {% endwith %}
