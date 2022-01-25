@@ -226,14 +226,12 @@
                     <div class="tile is-9 is-vertical">
                         <div class="tile is-parent is-vertical">
                             <div class="tile is-child box">
-                                <div class="level">
-                                    <div class="level-left">
-                                        <div class="level-item">
-                                            <p id="institutions-title" class="title is-4">Institutions</p>
-                                        </div>
+                                <div class="columns">
+                                    <div class="column is-2 is-flex is-flex-direction-row is-justify-content-left is-align-items-center">
+                                        <p id="institutions-title" class="title is-4">Institutions</p>
                                     </div>
 
-                                    <div class="level-item">
+                                    <div class="column is-8 pl-1">
                                         <div class="field is-grouped is-grouped-multiline">
                                             {% for checkbox in form.institution__in %}
                                             {% with idx=forloop.counter0 %}
@@ -261,54 +259,18 @@
                                         </div>
                                     </div>
 
-                                    <div class="level-right">
-                                        <div class="level-item">
-                                            <div class="tooltip">
-                                                <span class="icon">
-                                                    <i class="fas fa-question"></i>
-                                                </span>
-                                                {% include 'dashboard/help-tooltip.html' with side="left" position="bottom" image='dashboard/institutions.gif' markdown='dashboard/help_institutions.md' %}
-                                            </div>
+                                    <div class="column is-2 is-flex is-flex-direction-row is-justify-content-right is-align-items-center">
+                                        <div class="tooltip">
+                                            <span class="icon">
+                                                <i class="fas fa-question"></i>
+                                            </span>
+                                            {% include 'dashboard/help-tooltip.html' with side="left" position="bottom" image='dashboard/institutions.gif' markdown='dashboard/help_institutions.md' %}
                                         </div>
                                     </div>
                                 </div>
                             </div>
                             <div class="tile is-child box">
-                                <div class="level">
-                                    <div class="level-left">
-                                        <div class="level-item">
-                                            <p id="modalities-title" class="title is-4">Modalities</p>
-                                        </div>
-                                    </div>
-
-                                    <div class="level-item">
-                                        <div class="field is-grouped is-grouped-multiline">
-                                            {% for checkbox in form.modalities %}
-                                            <div class="control is-expanded">
-                                                {{ checkbox.tag }}
-                                                <label for="{{ checkbox.id_for_label }}" class="button is-primary is-light is-fullwidth">
-                                                    <span>{{ checkbox.choice_label }}</span>
-                                                </label>
-                                            </div>
-                                            {% endfor %}
-
-                                            <div class="select">
-                                                {{ form.modality_combine }}
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="level-right">
-                                        <div class="level-item">
-                                            <div class="tooltip">
-                                                <span class="icon">
-                                                    <i class="fas fa-question"></i>
-                                                </span>
-                                                {% include 'dashboard/help-tooltip.html' with side="left" position="bottom" image='dashboard/modalities.gif' markdown='dashboard/help_modalities.md' %}
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+                            {% include 'dashboard/modalities.html' with modalities=form.modalities combine=form.modality_combine %}
                             </div>
                         </div>
 
