@@ -100,7 +100,7 @@ class DashboardForm(FormLoggerMixin, forms.Form):
         required=False,
         widget=forms.CheckboxSelectMultiple(
             attrs={"class": "checkbox is-hidden",
-                   "onchange": "modalityClickHandler(this);"}
+                   "onchange": "changeHandler();"}
         ),
         choices=Diagnose.Modalities.choices,
         initial=[0,1,2,3,6]

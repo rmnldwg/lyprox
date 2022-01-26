@@ -54,18 +54,6 @@ function subClickHandler(radio_sub) {
     };
 };
 
-function modalityClickHandler(check_mod) {
-    if (check_mod.value == 6 && check_mod.checked) {
-        document.forms["dashboardform"].elements["id_modalities_0"].checked = true;
-        document.forms["dashboardform"].elements["id_modalities_1"].checked = true;
-        document.forms["dashboardform"].elements["id_modalities_2"].checked = true;
-        document.forms["dashboardform"].elements["id_modalities_3"].checked = true;
-    } else if (check_mod.value <= 4 && !check_mod.checked) {
-        document.forms["dashboardform"].elements["id_modalities_6"].checked = false;
-    }
-    changeHandler();
-}
-
 function changeHandler() {
     $("#compute").removeAttr("disabled");
 }
