@@ -26,11 +26,11 @@ input[type="checkbox"].checkbox:checked:hover + .tags label
 
 input[type="checkbox"].checkbox:checked + .buttons.for-institutions > * {
     box-shadow: 0 0 0 0.125em #005EA8;
-    z-index: 100;
+    z-index: 2;
 }
 input[type="checkbox"].checkbox:checked:hover + .buttons.for-institutions > * {
     box-shadow: 0 0 0 0.125em #005392;
-    z-index: 100;
+    z-index: 2;
 }
 
 input[type="radio"].radio:checked + label {
@@ -143,10 +143,7 @@ span[data-tooltip] {
     margin-top: 32px;
 }
 
-.level-item .field {
-    width: 90%;
-}
-
-#institutions-title,#modalities-title {
-    width: 150px;
+.mydiv {
+    display: flex;
+    flex-direction: row;
 }

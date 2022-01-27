@@ -103,7 +103,7 @@ class DashboardForm(FormLoggerMixin, forms.Form):
                    "onchange": "changeHandler();"}
         ),
         choices=Diagnose.Modalities.choices,
-        initial=[0,1,2,3]
+        initial=[0,1,2,3,6]
     )
     modality_combine = forms.ChoiceField(
         widget=forms.Select(attrs={"onchange": "changeHandler();"}),
