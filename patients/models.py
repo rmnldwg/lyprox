@@ -262,21 +262,21 @@ class Diagnose(ModelLoggerMixin, models.Model):
         "I", "Ia" , "Ib", "II", "IIa", "IIb", "III", "IV", "V", "VII"
     ]
 
-    class Modalities(models.IntegerChoices):
+    class Modalities(models.TextChoices):
         """:meta private:"""
-        CT   = 0, "CT"
-        MRI  = 1, "MRI"
-        PET  = 2, "PET"
-        FNA  = 3, "FNA"
-        PATH = 4, "path"
-        PCT  = 5, "pCT"
-        DC   = 6, "diagnostic_consens"
+        CT   = "CT"  , "Computed Tomography"
+        MRI  = "MRI" , "Magnetic Resonance Imaging"
+        PET  = "PET" , "Positron Emission Tomography"
+        FNA  = "FNA" , "Fine Needle Aspiration"
+        DC   = "DC"  , "Diagnostic Consensus"
+        PATH = "path", "Pathology"
+        PCT  = "pCT" , "Planning CT"
 
     #: ``ForeignKey`` to :class:`Patient`
     patient = models.ForeignKey(Patient, on_delete=models.CASCADE)
 
     #: The used diagnostic modality. E.g. ``MRI``, ``PET`` or ``FNA``.
-    modality = models.PositiveSmallIntegerField(choices=Modalities.choices)
+    modality = models.CharField(max_length=10, choices=Modalities.choices)
     #:
     diagnose_date = RobustDateField(blank=True, null=True)
     #: diagnosed side

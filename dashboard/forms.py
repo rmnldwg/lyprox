@@ -103,7 +103,7 @@ class DashboardForm(FormLoggerMixin, forms.Form):
                    "onchange": "changeHandler();"}
         ),
         choices=Diagnose.Modalities.choices,
-        initial=[0,1,2,3,6]
+        initial=["CT", "MRI", "PET", "FNA", "DC"]
     )
     modality_combine = forms.ChoiceField(
         widget=forms.Select(attrs={"onchange": "changeHandler();"}),
@@ -212,6 +212,9 @@ class DashboardForm(FormLoggerMixin, forms.Form):
                 else:
                     self.fields[f"{side}_{lnl}"] = ThreeWayToggle()
 
+    def get_modalities_values(self):
+        return [value for value, _ in self.fields["modalities"].choices]
+
     def _to_bool(self, value: int):
         """Transform values of -1, 0 and 1 to False, None and True respectively.
         Anything else is just passed through."""
@@ -271,10 +274,6 @@ class DashboardForm(FormLoggerMixin, forms.Form):
         # make sure T-stages are list of ints
         str_list = cleaned_data["t_stage__in"]
         cleaned_data["t_stage__in"] = [int(s) for s in str_list]
-
-        # make sure list of modalities is list of ints
-        str_list = cleaned_data["modalities"]
-        cleaned_data["modalities"] = [int(s) for s in str_list]
 
         self.logger.debug(f'cleaned data: {cleaned_data}')
         return cleaned_data
