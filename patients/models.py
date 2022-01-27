@@ -270,6 +270,7 @@ class Diagnose(ModelLoggerMixin, models.Model):
         FNA  = 3, "FNA"
         PATH = 4, "path"
         PCT  = 5, "pCT"
+        DC   = 6, "diagnostic_consens"
 
     #: ``ForeignKey`` to :class:`Patient`
     patient = models.ForeignKey(Patient, on_delete=models.CASCADE)

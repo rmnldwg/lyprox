@@ -26,7 +26,11 @@ def mysum(indexable):
 @register.filter(name="percent")
 def percent(indexable, i):
     i = int(f"{i}".lower())
-    return f"{100 * indexable[i] / sum(indexable):.0f}"
+    total = sum(indexable)
+    if total == 0:
+        return " - "
+    else:
+        return f"{100 * indexable[i] / total:.0f}"
 
 @register.filter(name="hashdisplay")
 def hashdisplay(string):

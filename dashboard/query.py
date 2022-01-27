@@ -238,8 +238,16 @@ def count_patients(
     """
     # prefetch patients and important fields for performance
     patients = patient_queryset.prefetch_related('tumor_set')
+
+    # get a QuerySet of all institutions
+    institutions = Institution.objects.all()
+
     counts = {   # initialize counts of patient- & tumor-related fields
         'total': len(patients),
+
+        'institutions': np.array([
+            len(patients.filter(institution=inst)) for inst in institutions
+        ], dtype=int),
 
         'sex': np.zeros(shape=(3,), dtype=int),
         'nicotine_abuse': np.zeros(shape=(3,), dtype=int),
