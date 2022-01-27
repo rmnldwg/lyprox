@@ -233,7 +233,7 @@ def export_to_pandas(patients: QuerySet):
         Diagnose, remove=["id", "patient", "modality", "side", "diagnose_date"]
     )
     diagnose_column_tuples = []
-    for mod in Diagnose.Modalities.labels:
+    for mod in Diagnose.Modalities.values:
         diagnose_column_tuples.append((mod, "info", "date"))
         for side in ["left", "right"]:
             for field in diagnose_fields:
@@ -260,7 +260,7 @@ def export_to_pandas(patients: QuerySet):
                 new_row[("tumor", f"{t+1}", field)] = getattr(tumor, field)
 
         for diagnose in patient.diagnose_set.all():
-            mod = Diagnose.Modalities(diagnose.modality).label
+            mod = Diagnose.Modalities(diagnose.modality).value
             side = diagnose.side
             new_row[(mod, "info", "date")] = diagnose.diagnose_date
             for field in diagnose_fields:
