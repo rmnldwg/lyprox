@@ -38,6 +38,8 @@ class FormLoggerMixin(object):
         if super().is_valid():
             self.logger.info(f"Form successfully cleaned.")
             return True
+        elif self.errors:
+            self.logger.warn(self.errors.as_data())
         else:
             self.logger.info(f"Form has errors (or is unbound).")
             return False
