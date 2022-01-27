@@ -76,6 +76,7 @@ def patient_specific(
         if value is not None:
             patient_queryset = patient_queryset.filter(**{key: value})
 
+    logger.info("Patient-specific querying done.")
     return patient_queryset
 
 
@@ -97,6 +98,7 @@ def tumor_specific(
         if value is not None:             # ...if it's of interest, then filter
             patient_queryset = patient_queryset.filter(**{f'tumor__{key}': value})
 
+    logger.info("Tumor-specific querying done.")
     return patient_queryset
 
 
@@ -107,6 +109,7 @@ def diagnose_specific(
 ):
     """"""
     # DIAGNOSES
+    logger.info(kwargs["modalities"])
     d = Diagnose.objects.all().filter(patient__in=patient_queryset,
                                       modality__in=kwargs['modalities'])
     q_ipsi = (Q(side=F("patient__tumor__side"))
@@ -194,6 +197,7 @@ def diagnose_specific(
             if not match:   # if it does not match, remove patient from queryset
                 patient_queryset = patient_queryset.exclude(id=pat_id)
 
+    logger.info("Diagnose-specific querying done.")
     return patient_queryset, combined_involvement
 
 
@@ -298,4 +302,5 @@ def count_patients(
                     pass
                 counts[f'{side}_{lnl}'] += tf2arr(tmp)
 
+    logger.info("Generating stats done.")
     return patient_queryset, counts

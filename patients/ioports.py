@@ -132,7 +132,7 @@ def row2diagnoses(row, patient):
     )
 
     modalities_intersection = list(
-        set(modalities_list) & set(Diagnose.Modalities.labels)
+        set(modalities_list) & set(Diagnose.Modalities.values)
     )
 
     for mod in modalities_intersection:
@@ -148,9 +148,8 @@ def row2diagnoses(row, patient):
                     except KeyError:
                         raise ParsingError(f"Column {field} is missing.")
 
-                mod_num = Diagnose.Modalities.labels.index(mod)
                 new_diagnosis = Diagnose(
-                    patient=patient, modality=mod_num, side=side,
+                    patient=patient, modality=mod, side=side,
                     diagnose_date=diagnose_date,
                     **valid_diagnose_dict
                 )

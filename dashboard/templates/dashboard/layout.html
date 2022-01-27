@@ -280,9 +280,9 @@
                                             {% for checkbox in form.modalities %}
                                             <div class="control is-expanded">
                                             {{ checkbox.tag }}
-                                            <label for="{{ checkbox.id_for_label }}" class="button is-primary is-light is-fullwidth", data-tooltip="{{ checkbox.choice_label }}">
-                                                {{ form.get_modalities_values|index:forloop.counter0 }}
-                                            </label>
+                                                <label for="{{ checkbox.id_for_label }}" class="button is-primary is-light is-fullwidth">
+                                                    {{ checkbox.choice_label }}
+                                                </label>
                                             </div>
                                             {% endfor %}
                                         </div>
@@ -290,7 +290,7 @@
 
                                     <div class="column is-2 is-flex is-flex-direction-row is-justify-content-right is-align-items-center">
                                         <div class="select">
-                                            {{ combine }}
+                                            {{ form.modality_combine }}
                                         </div>
 
                                         <div class="tooltip">

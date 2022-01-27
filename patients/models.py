@@ -264,19 +264,19 @@ class Diagnose(ModelLoggerMixin, models.Model):
 
     class Modalities(models.TextChoices):
         """:meta private:"""
-        CT   = "CT"  , "Computed Tomography"
-        MRI  = "MRI" , "Magnetic Resonance Imaging"
-        PET  = "PET" , "Positron Emission Tomography"
-        FNA  = "FNA" , "Fine Needle Aspiration"
-        DC   = "DC"  , "Diagnostic Consensus"
-        PATH = "path", "Pathology"
-        PCT  = "pCT" , "Planning CT"
+        CT   = "CT"                    , "CT"
+        MRI  = "MRI"                   , "MRI"
+        PET  = "PET"                   , "PET"
+        FNA  = "FNA"                   , "Fine Needle Aspiration"
+        DC   = "diagnostic_consensus"  , "Diagnostic Consensus"
+        PATH = "pathology"             , "Pathology"
+        PCT  = "pCT"                   , "Planning CT"
 
     #: ``ForeignKey`` to :class:`Patient`
     patient = models.ForeignKey(Patient, on_delete=models.CASCADE)
 
     #: The used diagnostic modality. E.g. ``MRI``, ``PET`` or ``FNA``.
-    modality = models.CharField(max_length=10, choices=Modalities.choices)
+    modality = models.CharField(max_length=20, choices=Modalities.choices)
     #:
     diagnose_date = RobustDateField(blank=True, null=True)
     #: diagnosed side

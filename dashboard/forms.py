@@ -103,7 +103,7 @@ class DashboardForm(FormLoggerMixin, forms.Form):
                    "onchange": "changeHandler();"}
         ),
         choices=Diagnose.Modalities.choices,
-        initial=["CT", "MRI", "PET", "FNA", "DC"]
+        initial=["CT", "MRI", "PET", "FNA", "diagnostic_consensus"]
     )
     modality_combine = forms.ChoiceField(
         widget=forms.Select(attrs={"onchange": "changeHandler();"}),
@@ -211,9 +211,6 @@ class DashboardForm(FormLoggerMixin, forms.Form):
                     )
                 else:
                     self.fields[f"{side}_{lnl}"] = ThreeWayToggle()
-
-    def get_modalities_values(self):
-        return [value for value, _ in self.fields["modalities"].choices]
 
     def _to_bool(self, value: int):
         """Transform values of -1, 0 and 1 to False, None and True respectively.
