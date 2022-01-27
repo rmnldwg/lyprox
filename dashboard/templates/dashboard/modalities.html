@@ -4,111 +4,15 @@
     </div>
 
     <div class="column is-8">
-        <div class="tile is-ancestor">
-            <div class="tile is-vertical is-8">
-                <div class="tile is-parent p-1">
-                    <div class="tile is-child">
-                        {% with checkbox=modalities.6 %}
-                        <div class="control is-expanded">
-                            {{ checkbox.tag }}
-                            <label for="{{ checkbox.id_for_label }}" class="button is-primary is-light is-fullwidth">
-                                <span>Diagnostic Consens</span>
-                            </label>
-                        </div>
-                        {% endwith %}
-                    </div>
-                </div>
-
-                <div class="tile">
-                    <div class="tile is-parent p-1">
-                        <div class="tile is-child">
-                            {% with checkbox=modalities.0 %}
-                            <div class="control is-expanded">
-                                {{ checkbox.tag }}
-                                <label for="{{ checkbox.id_for_label }}" class="button is-primary is-light is-fullwidth">
-                                    <span>{{ checkbox.choice_label }}</span>
-                                </label>
-                            </div>
-                            {% endwith %}
-                        </div>
-                    </div>
-
-                    <div class="tile is-parent p-1">
-                        <div class="tile is-child">
-                            {% with checkbox=modalities.1 %}
-                            <div class="control is-expanded">
-                                {{ checkbox.tag }}
-                                <label for="{{ checkbox.id_for_label }}" class="button is-primary is-light is-fullwidth">
-                                    <span>{{ checkbox.choice_label }}</span>
-                                </label>
-                            </div>
-                            {% endwith %}
-                        </div>
-                    </div>
-
-                    <div class="tile is-parent p-1">
-                        <div class="tile is-child">
-                            {% with checkbox=modalities.2 %}
-                            <div class="control is-expanded">
-                                {{ checkbox.tag }}
-                                <label for="{{ checkbox.id_for_label }}" class="button is-primary is-light is-fullwidth">
-                                    <span>{{ checkbox.choice_label }}</span>
-                                </label>
-                            </div>
-                            {% endwith %}
-                        </div>
-                    </div>
-
-                    <div class="tile is-parent p-1">
-                        <div class="tile is-child">
-                            {% with checkbox=modalities.3 %}
-                            <div class="control is-expanded">
-                                {{ checkbox.tag }}
-                                <label for="{{ checkbox.id_for_label }}" class="button is-primary is-light is-fullwidth">
-                                    <span>{{ checkbox.choice_label }}</span>
-                                </label>
-                            </div>
-                            {% endwith %}
-                        </div>
-                    </div>
-                </div>
+        <div class="field is-grouped is-grouped-multiline">
+            {% for checkbox in modalities %}
+            <div class="control is-expanded">
+            {{ checkbox.tag }}
+            <label for="{{ checkbox.id_for_label }}" class="button is-primary is-light is-fullwidth">
+                {{ checkbox.choice_label }}
+            </label>
             </div>
-
-            <div class="tile is-vertical">
-                <div class="tile is-parent p-1">
-                    <div class="tile is-child">
-
-                    </div>
-                </div>
-
-                <div class="tile">
-                    <div class="tile is-parent p-1">
-                        <div class="tile is-child">
-                            {% with checkbox=modalities.4 %}
-                            <div class="control is-expanded">
-                                {{ checkbox.tag }}
-                                <label for="{{ checkbox.id_for_label }}" class="button is-primary is-light is-fullwidth">
-                                    <span>{{ checkbox.choice_label }}</span>
-                                </label>
-                            </div>
-                            {% endwith %}
-                        </div>
-                    </div>
-
-                    <div class="tile is-parent p-1">
-                        <div class="tile is-child">
-                            {% with checkbox=modalities.5 %}
-                            <div class="control is-expanded">
-                                {{ checkbox.tag }}
-                                <label for="{{ checkbox.id_for_label }}" class="button is-primary is-light is-fullwidth">
-                                    <span>{{ checkbox.choice_label }}</span>
-                                </label>
-                            </div>
-                            {% endwith %}
-                        </div>
-                    </div>
-                </div>
-            </div>
+            {% endfor %}
         </div>
     </div>
 
