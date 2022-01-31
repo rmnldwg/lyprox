@@ -235,7 +235,7 @@ def export_to_pandas(patients: QuerySet):
     diagnose_column_tuples = []
     for mod in Diagnose.Modalities.values:
         diagnose_column_tuples.append((mod, "info", "date"))
-        for side in ["left", "right"]:
+        for side in ["ipsi", "contra"]:
             for field in diagnose_fields:
                 diagnose_column_tuples.append((mod, side, field))
 
