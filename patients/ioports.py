@@ -138,7 +138,7 @@ def row2diagnoses(row, patient):
     for mod in modalities_intersection:
         diagnose_date = _(row[(mod, "info", "date")])
         if diagnose_date is not None:
-            for side in ["left", "right"]:
+            for side in ["ipsi", "contra"]:
                 diagnose_dict = row[(mod, side)].to_dict()
 
                 valid_diagnose_dict = {}
