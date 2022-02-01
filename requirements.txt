@@ -1,10 +1,9 @@
 Django>=3.2.5
 django-filter==2.4
-django-address==0.2
-django-phonenumber-field==5.2
 phonenumbers==8.12
 django-auth-logger==2.1
 Markdown==3.3
 numpy==1.21
 pandas==1.2
 fontawesomefree==5.15.4
+django-dbbackup==3.3
