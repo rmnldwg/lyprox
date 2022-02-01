@@ -133,14 +133,14 @@ class TumorForm(FormLoggerMixin, forms.ModelForm):
         fields = ["t_stage",
                   "stage_prefix",
                   "subsite",
-                  "side",
+                  "central",
                   "extension",
                   "volume"]
         widgets = {
             "t_stage": forms.Select(attrs={"class": "select"}),
             "stage_prefix": forms.Select(attrs={"class": "select"}),
             "subsite": forms.Select(attrs={"class": "select shorten"}),
-            "side": forms.Select(attrs={"class": "select"}),
+            "central": forms.CheckboxInput(attrs={"class": "checkbox"}),
             "extension": forms.CheckboxInput(attrs={"class": "checkbox"}),
             "volume": forms.NumberInput(attrs={"class": "input",
                                                "min": 0.0}),
@@ -215,7 +215,7 @@ class DataFileForm(FormLoggerMixin, forms.Form):
         if suffix != "csv":
             msg = "Uploaded file is not a CSV table."
             self.logger.warning(msg)
-            raise ValidationError(_(msg))
+            raise ValidationError(msg)
 
         try:
             data_frame = pandas.read_csv(cleaned_data["data_file"],
@@ -226,7 +226,7 @@ class DataFileForm(FormLoggerMixin, forms.Form):
             msg = ("Error while parsing CSV table.")
             self.logger.error(msg)
             raise forms.ValidationError(
-                _(msg + " Make sure format is as specified")
+                msg + " Make sure format is as specified"
             )
 
         cleaned_data["data_frame"] = data_frame

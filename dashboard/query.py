@@ -2,7 +2,7 @@ import logging
 from typing import Dict, List, Optional
 
 import numpy as np
-from django.db.models import F, Q, QuerySet
+from django.db.models import Q, QuerySet
 
 from accounts.models import Institution
 from patients.models import Diagnose, Patient, Tumor
@@ -42,20 +42,6 @@ def subsite2arr(subsite):
     return res
 
 
-def side2arr(side):
-    """Map side to one-hot-array of length three. A one in the first place
-    means unknown lateralization, in the second place it means the tumor is
-    central and in the last place corresponds to a laterlalized tumor (right or
-    left)."""
-    if side == "central":
-        return np.array([0, 1, 0], dtype=int)
-    elif (side == "left") or (side == "right"):
-        return np.array([0, 0, 1], dtype=int)
-    else:
-        return np.array([1, 0, 0], dtype=int)
-
-
-
 def patient_specific(
     patient_queryset: QuerySet = Patient.objects.all(),
     nicotine_abuse: Optional[bool] = None,
@@ -85,7 +71,7 @@ def tumor_specific(
     # restrict to Oropharynx
     subsite__in: List[str] = Tumor.SUBSITE_LIST,
     t_stage__in: List[int] = [1,2,3,4],
-    side__in: List[str] = ['left', 'right', 'central'],
+    central: Optional[bool] = None,
     extension: Optional[bool] = None,
     **rest
 ) -> QuerySet:
@@ -104,7 +90,6 @@ def tumor_specific(
 
 def diagnose_specific(
     patient_queryset: QuerySet = Patient.objects.all(),
-    assign_central: str = "left",
     **kwargs
 ):
     """"""
@@ -112,9 +97,7 @@ def diagnose_specific(
     logger.info(kwargs["modalities"])
     d = Diagnose.objects.all().filter(patient__in=patient_queryset,
                                       modality__in=kwargs['modalities'])
-    q_ipsi = (Q(side=F("patient__tumor__side"))
-              | (Q(patient__tumor__side="central")
-                 & Q(side=assign_central)))
+    q_ipsi = Q(side="ipsi")
 
     diagnose_querysets = {
         'ipsi'  : d.filter(q_ipsi).select_related('patient').values(),
@@ -279,7 +262,7 @@ def count_patients(
         tumor = patient.tumor_set.first()
         counts['subsites'] += subsite2arr(tumor.subsite)
         counts['t_stages'][tumor.t_stage-1] += 1
-        counts['central'] += side2arr(tumor.side)
+        counts['central'] += tf2arr(tumor.central)
         counts['extension'] += tf2arr(tumor.extension)
 
         # N0/N+ counts
