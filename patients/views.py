@@ -181,11 +181,11 @@ def upload_patients(request):
             try:
                 num_new, num_skipped = import_from_pandas(data_frame, request.user)
             except ParsingError as pe:
-                logger.error(pe.message)
+                logger.error(pe)
                 form = DataFileForm()
                 context = {"upload_success": False,
                            "form": form,
-                           "error": pe.message}
+                           "error": pe}
                 return render(request, "patients/upload.html", context)
 
             context = {"upload_success": True,

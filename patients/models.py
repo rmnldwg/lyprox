@@ -200,10 +200,8 @@ class Tumor(ModelLoggerMixin, models.Model):
     location = models.CharField(max_length=20, choices=Locations.choices)
     #: More detailed information about the location of the tumor
     subsite = models.CharField(max_length=10, choices=SUBSITES)
-    #: Lateralization of the tumor.
-    side = models.CharField(max_length=10, choices=[("left", "left"),
-                                                    ("right", "right"),
-                                                    ("central", "central")])
+    #: Is the tumopr central or lateralized?
+    central = models.BooleanField(blank=True, null=True)
     #: Does the tumor extend over the mid-sagittal plane?
     extension = models.BooleanField(blank=True, null=True)
     #: Size of the tumor.
@@ -280,8 +278,8 @@ class Diagnose(ModelLoggerMixin, models.Model):
     #:
     diagnose_date = RobustDateField(blank=True, null=True)
     #: diagnosed side
-    side = models.CharField(max_length=10, choices=[("left", "left"),
-                                                    ("right", "right")])
+    side = models.CharField(max_length=10, choices=[("ipsi", "ipsi"),
+                                                    ("contra", "contra")])
 
     def __str__(self):
         """Report some info for admin view."""
