@@ -9,7 +9,7 @@ from pathlib import Path
 
 # security
 DEBUG = True
-MAINTENANCE = True
+MAINTENANCE = False
 SECRET_KEY = 'k_&(m5ymps%p=4&qjnwkv-avxb@@ez1tewc8g_eg4k#jx59ukx'
 ALLOWED_HOSTS = []
 CSRF_COOKIE_SECURE = False
