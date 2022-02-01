@@ -26,6 +26,7 @@ urlpatterns = [
     path("patients/", include("patients.urls")),
     path("dashboard/", include("dashboard.urls")),
     path("", views.index, name="index"),
+    path("maintenance/", views.maintenance, name="maintenance"),
 ]
 
 urlpatterns += static(settings.DOWNLOADS_URL,
