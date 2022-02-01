@@ -9,6 +9,7 @@ from pathlib import Path
 
 # security
 DEBUG = True
+MAINTENANCE = False
 SECRET_KEY = 'k_&(m5ymps%p=4&qjnwkv-avxb@@ez1tewc8g_eg4k#jx59ukx'
 ALLOWED_HOSTS = []
 CSRF_COOKIE_SECURE = False
@@ -106,9 +107,8 @@ INSTALLED_APPS = [
 
     # third party apps
     "django_filters",
-    # "django_extensions",  # only needed for plotting the model graph
-    "phonenumber_field",
     "fontawesomefree",
+    "dbbackup",
 
     'django.contrib.admin',
     'django.contrib.auth',
@@ -119,6 +119,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    'core.middleware.MaintenanceMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -157,6 +158,12 @@ DATABASES = {
 }
 
 DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
+
+# Database backup settings
+DBBACKUP_STORAGE = "django.core.files.storage.FileSystemStorage"
+DBBACKUP_STORAGE_OPTIONS = {
+    "location": "/home/rmnldwg/backups/lyprox/"
+}
 
 
 # Password validation
