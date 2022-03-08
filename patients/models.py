@@ -269,6 +269,16 @@ class Diagnose(ModelLoggerMixin, models.Model):
         DC   = "diagnostic_consensus"  , "Diagnostic Consensus"
         PATH = "pathology"             , "Pathology"
         PCT  = "pCT"                   , "Planning CT"
+    
+    modalities_spsn = {
+        "CT":                   [0.76, 0.81],
+        "MRI":                  [0.63, 0.81],
+        "PET":                  [0.86, 0.79],
+        "FNA":                  [0.98, 0.80],
+        "diagnostic_consensus": [0.86, 0.81],  # max of s_P & s_N respectively
+        "pathology":            [1.  , 1.  ],
+        "pCT":                  [0.86, 0.81],  # max of s_P & s_N respectively
+    }
 
     #: ``ForeignKey`` to :class:`Patient`
     patient = models.ForeignKey(Patient, on_delete=models.CASCADE)

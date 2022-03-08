@@ -118,6 +118,7 @@ def diagnose_specific(
         Q(diagnose__in=d_ipsi) | Q(diagnose__in=d_contra)
     ).distinct()
 
+    mod_to_idx = {mod: i for i,mod in enumerate(Diagnose.Modalities.values)}
     selected_diagnose = {
         'ipsi'  : np.array([None] * len(Diagnose.LNLs)),
         'contra': np.array([None] * len(Diagnose.LNLs))
@@ -137,17 +138,15 @@ def diagnose_specific(
 
         for diagnose in diagnose_querysets[side]:
             patient_id = diagnose['patient_id']
-            # double square brackets below to make sure the `diag_array` is 
-            # two-dimensional. Without it, `np.all(, axis=0)` wouldn't work
+            mod_idx = mod_to_idx[diagnose['modality']]
             diag_array = np.array([[diagnose[f'{lnl}'] for lnl in Diagnose.LNLs]])
 
-            if patient_id in diagnose_tables[side]:
-                diagnose_tables[side][patient_id] = np.vstack([
-                    diagnose_tables[side][patient_id],
-                    diag_array
-                ])
-            else:
-                diagnose_tables[side][patient_id] = diag_array
+            if patient_id not in diagnose_tables[side]:
+                diagnose_tables[side][patient_id] = np.empty(
+                    shape=(len(Diagnose.Modalities), len(Diagnose.LNLs)),
+                    dtype=object
+                )
+            diagnose_tables[side][patient_id][mod_idx] = diag_array
 
         for patient_id, diag_table in diagnose_tables[side].items():
             if kwargs['modality_combine'] == 'OR':
@@ -157,6 +156,9 @@ def diagnose_specific(
                 combine = lambda col: not(any(
                     [not(e) if e is not None else None for e in col]
                 ))
+            elif kwargs['modality_combine'] == 'maxLLH':
+                # TODO: Write maximum likelihood function
+                pass
             else:
                 msg = "Can only combine modalities using OR or AND (logical)"
                 logger.error(msg)
@@ -177,10 +179,14 @@ def diagnose_specific(
             combined_involvement[side][patient_id][all_none_idx] = None
 
             mask = selected_diagnose[side] != None
-            match = np.all(np.equal(combined_involvement[side][patient_id],
-                                    selected_diagnose[side],
-                                    where=mask,
-                                    out=np.ones_like(mask, dtype=bool)))
+            match = np.all(
+                np.equal(
+                    combined_involvement[side][patient_id],
+                    selected_diagnose[side],
+                    where=mask,
+                    out=np.ones_like(mask, dtype=bool)
+                )
+            )
             if not match:   # if it does not match, remove patient from queryset
                 patient_queryset = patient_queryset.exclude(id=patient_id)
 
