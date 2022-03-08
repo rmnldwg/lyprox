@@ -240,7 +240,7 @@ def count_patients(
         'nicotine_abuse': np.zeros(shape=(3,), dtype=int),
         'hpv_status': np.zeros(shape=(3,), dtype=int),
         'neck_dissection': np.zeros(shape=(3,), dtype=int),
-        'n_zero': np.zeros(shape=(3,), dtype=int),
+        'n_status': np.zeros(shape=(3,), dtype=int),
 
         'subsites': np.zeros(shape=len(Tumor.SUBSITE_DICT), dtype=int),
         't_stages': np.zeros(shape=(len(Patient.T_stages),), dtype=int),
@@ -269,9 +269,9 @@ def count_patients(
         has_contra = np.any(combined_involvement["contra"][patient.id])
         has_ipsi = np.any(combined_involvement["ipsi"][patient.id])
         if not has_ipsi and not has_contra:
-            counts['n_zero'] += np.array([0,0,1])
+            counts['n_status'] += np.array([0,0,1])
         else:
-            counts['n_zero'] += np.array([0,1,0])
+            counts['n_status'] += np.array([0,1,0])
 
         # DIAGNOSE specific (involvement) counts
         for side in ['ipsi', 'contra']:
