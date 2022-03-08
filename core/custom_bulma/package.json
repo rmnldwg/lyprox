@@ -13,7 +13,7 @@
   "license": "MIT",
   "devDependencies": {
     "bulma": "^0.9.3",
-    "node-sass": "^6.0.1",
+    "node-sass": "^7.0.0",
     "trim-newlines": ">=4.0.2"
   },
   "dependencies": {
