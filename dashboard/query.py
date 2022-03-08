@@ -1,3 +1,4 @@
+import time
 import logging
 from typing import Dict, List, Optional
 
@@ -53,6 +54,7 @@ def patient_specific(
     """Filter `QuerySet` of `Patient`s based on patient-specific properties.
     """
     kwargs = locals()
+    start_time = time.perf_counter()
     kwargs.pop('patient_queryset')
     kwargs.pop('rest')
 
@@ -62,7 +64,8 @@ def patient_specific(
         if value is not None:
             patient_queryset = patient_queryset.filter(**{key: value})
 
-    logger.info("Patient-specific querying done.")
+    end_time = time.perf_counter()
+    logger.debug(f"Patient-specific querying done in {end_time - start_time:.3f} s.")
     return patient_queryset
 
 
@@ -78,13 +81,15 @@ def tumor_specific(
     """Filter `QuerySet` of `Patient`s based on tumor-specific properties.
     """
     kwargs = locals()              # extract keyword arguments and...
+    start_time = time.perf_counter()
     kwargs.pop('patient_queryset') # ...remove the patient queryset and...
     kwargs.pop('rest')             # ...any other kwargs from this dictionary.
     for key, value in kwargs.items():   # iterate over provided kwargs and ...
         if value is not None:             # ...if it's of interest, then filter
             patient_queryset = patient_queryset.filter(**{f'tumor__{key}': value})
 
-    logger.info("Tumor-specific querying done.")
+    end_time = time.perf_counter()
+    logger.debug(f"Tumor-specific querying done in {end_time - start_time:.3f} s.")
     return patient_queryset
 
 
@@ -93,34 +98,38 @@ def diagnose_specific(
     **kwargs
 ):
     """"""
-    # DIAGNOSES
-    logger.info(kwargs["modalities"])
+    logger.debug(kwargs["modalities"])
+    start_time = time.perf_counter()
+    
+    # get diagnoses for all patients and the selected modalities
     d = Diagnose.objects.all().filter(patient__in=patient_queryset,
                                       modality__in=kwargs['modalities'])
     q_ipsi = Q(side="ipsi")
 
+    d_ipsi = d.filter(q_ipsi)
+    d_contra = d.exclude(q_ipsi)
     diagnose_querysets = {
-        'ipsi'  : d.filter(q_ipsi).select_related('patient').values(),
-        'contra': d.exclude(q_ipsi).select_related('patient').values()
+        'ipsi'  : d_ipsi.select_related('patient').values(),
+        'contra': d_contra.select_related('patient').values()
     }
 
-    diagnose_tables = {
-        'ipsi'  : {},
-        'contra': {}
-    }
-
+    # remove patients that don't have any of the diagnoses left
     patient_queryset = patient_queryset.filter(
-        Q(diagnose__in=d.filter(q_ipsi)) | Q(diagnose__in=d.exclude(q_ipsi))
+        Q(diagnose__in=d_ipsi) | Q(diagnose__in=d_contra)
     ).distinct()
 
-    selected_diagnose = {    # via form selected diagnoses will be stored here
+    selected_diagnose = {
         'ipsi'  : np.array([None] * len(Diagnose.LNLs)),
         'contra': np.array([None] * len(Diagnose.LNLs))
     }
-
-    # sort diags into patient bins...
-    combined_involvement = {'ipsi'  : {},
-                            'contra': {}}
+    diagnose_tables = {       # this will hold a table with rows for each 
+        'ipsi'  : {},         # modality and columns for each LNL for each 
+        'contra': {}          # patient, holding the involvement information.
+    }
+    combined_involvement = {  # the above tables will be reduced along the 
+        'ipsi'  : {},         # columns to produce the 'consensus', which will 
+        'contra': {}          # be stored in these dictionaries per patient.
+    }
     for side in ['ipsi', 'contra']:
         for i,lnl in enumerate(Diagnose.LNLs):
             if (selected_inv := kwargs[f'{side}_{lnl}']) is not None:
@@ -128,59 +137,55 @@ def diagnose_specific(
 
         for diagnose in diagnose_querysets[side]:
             patient_id = diagnose['patient_id']
-            # note the double square brackets below to make sure the
-            # `diag_array` is two-dimensional. Without it, the
-            # `np.all(, axis=0)` below would not work properly.
+            # double square brackets below to make sure the `diag_array` is 
+            # two-dimensional. Without it, `np.all(, axis=0)` wouldn't work
             diag_array = np.array([[diagnose[f'{lnl}'] for lnl in Diagnose.LNLs]])
 
-            try:
+            if patient_id in diagnose_tables[side]:
                 diagnose_tables[side][patient_id] = np.vstack([
                     diagnose_tables[side][patient_id],
                     diag_array
                 ])
-            except KeyError:
+            else:
                 diagnose_tables[side][patient_id] = diag_array
 
-        # ...and aggregate/combine each patient's diag
-        for pat_id, diag_table in diagnose_tables[side].items():
+        for patient_id, diag_table in diagnose_tables[side].items():
             if kwargs['modality_combine'] == 'OR':
                 combine = any
             elif kwargs['modality_combine'] == 'AND':
-                # the function below is - from a logics persepctive - the same
-                # as the `all` function, but this one handles `None` the way we
-                # want to: It's ignored.
+                # same as `all`, but handles `None` correctly by ignoring it
                 combine = lambda col: not(any(
                     [not(e) if e is not None else None for e in col]
                 ))
             else:
-                msg = ("Modalities can only be combined using logical OR or "
-                       "logical AND")
+                msg = "Can only combine modalities using OR or AND (logical)"
                 logger.error(msg)
                 raise ValueError(msg)
 
             try:
-                combined_involvement[side][pat_id] = np.array(
+                combined_involvement[side][patient_id] = np.array(
                     [combine(col) for col in diag_table.T],
                     dtype=object
                 )
             except TypeError:  # difference: square bracket around `col`
-                combined_involvement[side][pat_id] = np.array(
+                combined_involvement[side][patient_id] = np.array(
                     [combine([col]) for col in diag_table.T],
                     dtype=object
                 )
             # when all observations yield 'unknown' for a LNL, report 'unknown'
             all_none_idx = np.all(diag_table == None, axis=0)
-            combined_involvement[side][pat_id][all_none_idx] = None
+            combined_involvement[side][patient_id][all_none_idx] = None
 
             mask = selected_diagnose[side] != None
-            match = np.all(np.equal(combined_involvement[side][pat_id],
+            match = np.all(np.equal(combined_involvement[side][patient_id],
                                     selected_diagnose[side],
                                     where=mask,
                                     out=np.ones_like(mask, dtype=bool)))
             if not match:   # if it does not match, remove patient from queryset
-                patient_queryset = patient_queryset.exclude(id=pat_id)
+                patient_queryset = patient_queryset.exclude(id=patient_id)
 
-    logger.info("Diagnose-specific querying done.")
+    end_time = time.perf_counter()
+    logger.info(f"Diagnose-specific querying done in {end_time - start_time:.3f} s")
     return patient_queryset, combined_involvement
 
 
@@ -223,6 +228,7 @@ def count_patients(
     """Count how often patients have various characteristics like HPV status,
     certain lymph node level involvement, and so on.
     """
+    start_time = time.perf_counter()
     # prefetch patients and important fields for performance
     patients = patient_queryset.prefetch_related('tumor_set')
 
@@ -279,11 +285,10 @@ def count_patients(
                 try:
                     tmp = combined_involvement[side][patient.id][i]
                 except KeyError:
-                    # Not all patients have necessarily symmetric diagnoses,
-                    # which my code takes care of in the `diagnose_specific`
-                    # function, but not here, which is why this try is needed.
+                    # Not all patients have symmetric diagnoses
                     pass
                 counts[f'{side}_{lnl}'] += tf2arr(tmp)
 
-    logger.info("Generating stats done.")
+    end_time = time.perf_counter()
+    logger.info(f"Generating stats done after {end_time - start_time:.3f} s")
     return patient_queryset, counts
