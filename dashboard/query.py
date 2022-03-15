@@ -191,7 +191,7 @@ def diagnose_specific(
                 patient_queryset = patient_queryset.exclude(id=patient_id)
 
     end_time = time.perf_counter()
-    logger.info(f"Diagnose-specific querying done in {end_time - start_time:.3f} s")
+    logger.debug(f"Diagnose-specific querying done in {end_time - start_time:.3f} s")
     return patient_queryset, combined_involvement
 
 
@@ -235,18 +235,23 @@ def count_patients(
     certain lymph node level involvement, and so on.
     """
     start_time = time.perf_counter()
-    # prefetch patients and important fields for performance
-    patients = patient_queryset.prefetch_related('tumor_set')
+    # prefetch relevant patient and tumor fields for performance
+    patients = patient_queryset.values(
+        "id", "sex", "nicotine_abuse", "hpv_status", "neck_dissection",
+        "tumor__subsite", "tumor__t_stage", "tumor__central", "tumor__extension",
+        "institution__id",
+    )
 
     # get a QuerySet of all institutions
-    institutions = Institution.objects.all()
+    num_institutions = Institution.objects.count()
 
     counts = {   # initialize counts of patient- & tumor-related fields
         'total': len(patients),
 
-        'institutions': np.array([
-            len(patients.filter(institution=inst)) for inst in institutions
-        ], dtype=int),
+        # 'institutions': np.array([
+        #     len(patients.filter(institution=inst)) for inst in institutions
+        # ], dtype=int),
+        'institutions': np.zeros(shape=num_institutions, dtype=int),
 
         'sex': np.zeros(shape=(3,), dtype=int),
         'nicotine_abuse': np.zeros(shape=(3,), dtype=int),
@@ -265,21 +270,22 @@ def count_patients(
 
     # loop through patients to populate the counts dictionary
     for patient in patients:
+        counts['institutions'][patient["institution__id"]-1] += 1
+        
         # PATIENT specific counts
-        counts['nicotine_abuse'] += tf2arr(patient.nicotine_abuse)
-        counts['hpv_status'] += tf2arr(patient.hpv_status)
-        counts['neck_dissection'] += tf2arr(patient.neck_dissection)
+        counts['nicotine_abuse'] += tf2arr(patient["nicotine_abuse"])
+        counts['hpv_status'] += tf2arr(patient["hpv_status"])
+        counts['neck_dissection'] += tf2arr(patient["neck_dissection"])
 
         # TUMOR specific counts
-        tumor = patient.tumor_set.first()
-        counts['subsites'] += subsite2arr(tumor.subsite)
-        counts['t_stages'][tumor.t_stage-1] += 1
-        counts['central'] += tf2arr(tumor.central)
-        counts['extension'] += tf2arr(tumor.extension)
+        counts['subsites'] += subsite2arr(patient["tumor__subsite"])
+        counts['t_stages'][patient["tumor__t_stage"]-1] += 1
+        counts['central'] += tf2arr(patient["tumor__central"])
+        counts['extension'] += tf2arr(patient["tumor__extension"])
 
         # N0/N+ counts
-        has_contra = np.any(combined_involvement["contra"][patient.id])
-        has_ipsi = np.any(combined_involvement["ipsi"][patient.id])
+        has_contra = np.any(combined_involvement["contra"][patient["id"]])
+        has_ipsi = np.any(combined_involvement["ipsi"][patient["id"]])
         if not has_ipsi and not has_contra:
             counts['n_status'] += np.array([0,0,1])
         else:
@@ -289,7 +295,7 @@ def count_patients(
         for side in ['ipsi', 'contra']:
             for i,lnl in enumerate(Diagnose.LNLs):
                 try:
-                    tmp = combined_involvement[side][patient.id][i]
+                    tmp = combined_involvement[side][patient["id"]][i]
                 except KeyError:
                     # Not all patients have symmetric diagnoses
                     pass
