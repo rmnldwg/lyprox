@@ -223,6 +223,19 @@ class DashboardForm(FormLoggerMixin, forms.Form):
                  ("rest_larynx" , "other")],  # in the Tumor.SUBSITE_DICT keys
         initial=["glottis", "rest_larynx"]
     )
+    subsite_oral_cavity = forms.MultipleChoiceField(
+        required=False,
+        widget=forms.CheckboxSelectMultiple(
+            attrs={"class": "checkbox is-hidden",
+                   "onchange": "changeHandler();"},
+        ),
+        choices=[("tongue", "tongue"),         # choices here must match entries
+                 ("gum_cheek", "gums and cheek"), # in the Tumor.SUBSITE_DICT keys
+                 ("mouth_floor", "floor of mouth"),
+                 ("palate", "palate"),
+                 ("glands", "salivary glands")],  
+        initial=["tongue", "gum_cheek", "mouth_floor", "palate", "glands"]
+    )
 
     t_stage__in = forms.MultipleChoiceField(
         required=False,
@@ -331,7 +344,8 @@ class DashboardForm(FormLoggerMixin, forms.Form):
         # map subsites 'base','tonsil','rest' to list of ICD codes.
         subsites = (cleaned_data["subsite_oropharynx"]
                     + cleaned_data["subsite_hypopharynx"]
-                    + cleaned_data["subsite_larynx"])
+                    + cleaned_data["subsite_larynx"]
+                    + cleaned_data["subsite_oral_cavity"])
 
         icd_codes = []
         for sub in subsites:

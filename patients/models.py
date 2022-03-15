@@ -129,7 +129,15 @@ class Tumor(ModelLoggerMixin, models.Model):
         LARYNX      = "larynx"
 
     SUBSITES = [
-        ("oral cavity", (("C03.0", "upper gum"),
+        ("oral cavity", (("C02.0", "dorsal surface of tongue"), 
+                        ("C02.1", "border of tongue"),
+                        ("C02.2", "ventral surface of tongue"),
+                        ("C02.3", "anterior two thirds of tongue"),
+                        ("C02.4", "lingual tonsil"),
+                        ("C02.8", "overlapping sites of tongue"),
+                        ("C02.9", "tongue, nos"),
+
+                        ("C03.0", "upper gum"),
                         ("C03.1", "lower gum"),
                         ("C03.9", "gum, nos"),
 
@@ -148,7 +156,11 @@ class Tumor(ModelLoggerMixin, models.Model):
                         ("C06.1", "vestibule of mouth"),
                         ("C06.2", "retromolar area"),
                         ("C06.8", "overlapping lesion(s) of NOS parts of mouth"),
-                        ("C06.9", "mouth, nos"),)
+                        ("C06.9", "mouth, nos"),
+                        
+                        ("C08.0", "submandibular gland"),
+                        ("C08.1", "sublingual gland"),
+                        ("C08.9", "salivary gland, nos"))
         ),
         ("oropharynx",  (("C01.9", "base of tongue, nos"),
 
@@ -182,15 +194,22 @@ class Tumor(ModelLoggerMixin, models.Model):
         )
     ]
 
-    SUBSITE_DICT = {"base":        ["C01.9"],
-                    "tonsil":      ["C09.0", "C09.1", "C09.8", "C09.9"],
-                    "rest_oro":    ["C05.1", "C05.2",  # palate part of oro?
-                                    "C10.0", "C10.1", "C10.2", "C10.3",
-                                    "C10.4","C10.8", "C10.9"],
-                    "rest_hypo":   ["C12.9", "C13.0", "C13.1", "C13.2",
-                                    "C13.8", "C13.9"],
-                    "glottis":     ["C32.0"],
-                    "rest_larynx": ["C32.1", "C32.2", "C32.3", "C32.8", "C32.9"]}
+    SUBSITE_DICT = {
+        "base":        ["C01.9"],
+        "tonsil":      ["C09.0", "C09.1", "C09.8", "C09.9"],
+        "rest_oro":    ["C10.0", "C10.1", "C10.2", "C10.3",
+                        "C10.4","C10.8", "C10.9"],
+        "rest_hypo":   ["C12.9", "C13.0", "C13.1", "C13.2", "C13.8", "C13.9"],
+        "glottis":     ["C32.0"],
+        "rest_larynx": ["C32.1", "C32.2", "C32.3", "C32.8", "C32.9"],
+        "tongue":      ["C02.0", "C02.1", "C02.2", "C02.3", "C02.4", "C02.8", 
+                        "C02.9",],
+        "gum_cheek":   ["C03.0", "C03.1", "C03.9", "C06.0", "C06.1", "C06.2", 
+                        "C06.8", "C06.9",],
+        "mouth_floor": ["C04.0", "C04.1", "C04.8", "C04.9",],
+        "palate":      ["C05.0", "C05.1", "C05.2", "C05.8", "C05.9",],
+        "glands":      ["C08.0", "C08.1", "C08.9",],
+    }
     SUBSITE_LIST = [icd for icd_list in SUBSITE_DICT.values() for icd in icd_list]
 
     #: ``ForeignKey`` to :class:`Patient`

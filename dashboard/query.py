@@ -38,8 +38,10 @@ def subsite2arr(subsite):
             res[i] = 1
 
     if np.sum(res) > 1:
-        logger.warn("A tumor has been associated with more than one subsite.")
-
+        logger.warn(
+            f"A tumor has been associated with multiple subsites: {subsite}"
+        )
+    
     return res
 
 

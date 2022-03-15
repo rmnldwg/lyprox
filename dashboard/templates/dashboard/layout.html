@@ -160,6 +160,30 @@
                                     {% endfor %}
                                 </div>
                             </div>
+                            <div class="notification is-info is-light p-2 mb-2">
+                                <div class="field is-grouped is-grouped-multiline">
+                                    <p class="control">Oral cavity:</p>
+                                    {% for checkbox in form.subsite_oral_cavity %}
+                                    <div class="control mr-1">
+                                        {{ checkbox.tag }}
+                                        <div class="tags has-addons">
+                                            <label for="{{ checkbox.id_for_label }}" class="tag button is-primary is-light is-expanded">
+                                                <span>{{ checkbox.choice_label }}</span>
+                                            </label>
+                                            <p class="tag button is-static">
+                                                {% with counter=forloop.counter0|add:6 %}
+                                                {% if show_percent %}
+                                                <span>{{ stats.subsites|percent:counter }}%</span>
+                                                {% else %}
+                                                <span>{{ stats.subsites|index:counter }}</span>
+                                                {% endif %}
+                                                {% endwith %}
+                                            </p>
+                                        </div>
+                                    </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
 
                             <p class="title is-5 mb-2 mt-4">T-stage</p>
                             <div class="field is-grouped is-grouped-multiline">
