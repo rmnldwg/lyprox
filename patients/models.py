@@ -276,7 +276,7 @@ class Diagnose(ModelLoggerMixin, models.Model):
     regard to their lymphaitc metastatic involvement."""
 
     LNLs = [
-        "I", "Ia" , "Ib", "II", "IIa", "IIb", "III", "IV", "V", "VII"
+        "I", "Ia" , "Ib", "II", "IIa", "IIb", "III", "IV", "V", "Va", "Vb", "VII"
     ]
 
     class Modalities(models.TextChoices):
@@ -323,18 +323,22 @@ class Diagnose(ModelLoggerMixin, models.Model):
         safe_negate = lambda x: False if x is None else not x
 
         # LNL I (a and b)
-        if any([self.Ia, self.Ib]):
+        if self.Ia or self.Ib:
             self.I = True
-        elif all([safe_negate(self.Ia), safe_negate(self.Ib)]):
+        elif safe_negate(self.Ia) and safe_negate(self.Ib):
             self.I = False
 
-
         # LNL II (a and b)
-        if any([self.IIa, self.IIb]):
+        if self.IIa or self.IIb:
             self.II = True
-        elif all([safe_negate(self.IIa), safe_negate(self.IIb)]):
+        elif safe_negate(self.IIa) and safe_negate(self.IIb):
             self.II = False
-
+        
+        # LNL V (a and b)
+        if self.Va or self.Vb:
+            self.V = True
+        elif safe_negate(self.Va) and safe_negate(self.Vb):
+            self.V = False
 
         return super().save(*args, **kwargs)
 

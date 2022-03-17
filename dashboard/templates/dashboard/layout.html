@@ -370,9 +370,20 @@
                                                 {% include 'dashboard/barplot.html' with lnl="IV contralateral" stat=stats.contra_IV show_percent=show_percent %}
                                             </tr>
                                             <tr>
-                                                <td colspan="2">V</td>
+                                                <td rowspan="3">V</td>
+                                                <td>both</td>
                                                 <td>{{ form.contra_V }}</td>
                                                 {% include 'dashboard/barplot.html' with lnl="V contralateral" stat=stats.contra_V show_percent=show_percent %}
+                                            </tr>
+                                            <tr>
+                                                <td>a</td>
+                                                <td>{{ form.contra_Va }}</td>
+                                                {% include 'dashboard/barplot.html' with lnl="Va contralateral" stat=stats.contra_Va show_percent=show_percent %}
+                                            </tr>
+                                            <tr>
+                                                <td>b</td>
+                                                <td>{{ form.contra_Vb }}</td>
+                                                {% include 'dashboard/barplot.html' with lnl="Vb contralateral" stat=stats.contra_Vb show_percent=show_percent %}
                                             </tr>
                                             <tr>
                                                 <td colspan="2">VII</td>
@@ -454,9 +465,20 @@
                                                 {% include 'dashboard/barplot.html' with lnl="IV ipsilateral" stat=stats.ipsi_IV show_percent=show_percent %}
                                             </tr>
                                             <tr>
-                                                <td colspan="2">V</td>
+                                                <td rowspan="3">V</td>
+                                                <td>both</td>
                                                 <td>{{ form.ipsi_V }}</td>
                                                 {% include 'dashboard/barplot.html' with lnl="V ipsilateral" stat=stats.ipsi_V show_percent=show_percent %}
+                                            </tr>
+                                            <tr>
+                                                <td>a</td>
+                                                <td>{{ form.ipsi_Va }}</td>
+                                                {% include 'dashboard/barplot.html' with lnl="Va ipsilateral" stat=stats.ipsi_Va show_percent=show_percent %}
+                                            </tr>
+                                            <tr>
+                                                <td>b</td>
+                                                <td>{{ form.ipsi_Vb }}</td>
+                                                {% include 'dashboard/barplot.html' with lnl="Vb ipsilateral" stat=stats.ipsi_Vb show_percent=show_percent %}
                                             </tr>
                                             <tr>
                                                 <td colspan="2">VII</td>

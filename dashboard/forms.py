@@ -280,13 +280,13 @@ class DashboardForm(FormLoggerMixin, forms.Form):
         # add all LNL ToggleButtons so I don't have to write a myriad of them
         for side in ["ipsi", "contra"]:
             for lnl in Diagnose.LNLs:
-                if lnl in ['I', 'II']:
+                if lnl in ['I', 'II', 'V']:
                     self.fields[f"{side}_{lnl}"] = ThreeWayToggle(
                         option_attrs={
                             "onclick": "bothClickHandler(this)"
                         }
                     )
-                elif lnl in ['Ia', 'Ib', 'IIa', 'IIb']:
+                elif lnl in ['Ia', 'Ib', 'IIa', 'IIb', 'Va', 'Vb']:
                     self.fields[f"{side}_{lnl}"] = ThreeWayToggle(
                         option_attrs={
                             "onclick": "subClickHandler(this)"
