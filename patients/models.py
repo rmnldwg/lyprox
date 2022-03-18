@@ -130,67 +130,67 @@ class Tumor(ModelLoggerMixin, models.Model):
 
     SUBSITES = [
         ("oral cavity", (("C02.0", "dorsal surface of tongue"), 
-                        ("C02.1", "border of tongue"),
-                        ("C02.2", "ventral surface of tongue"),
-                        ("C02.3", "anterior two thirds of tongue"),
-                        ("C02.4", "lingual tonsil"),
-                        ("C02.8", "overlapping sites of tongue"),
-                        ("C02.9", "tongue, nos"),
-
-                        ("C03.0", "upper gum"),
-                        ("C03.1", "lower gum"),
-                        ("C03.9", "gum, nos"),
-
-                        ("C04.0", "anterior floor of mouth"),
-                        ("C04.1", "lateral floor of mouth"),
-                        ("C04.8", "overlapping lesion of floor of mouth"),
-                        ("C04.9", "floor of mouth, nos"),
-
-                        ("C05.0", "hard palate"),
-                        ("C05.1", "soft palate, nos"),
-                        ("C05.2", "uvula"),
-                        ("C05.8", "overlapping lesion of palate"),
-                        ("C05.9", "palate, nos"),
-
-                        ("C06.0", "cheeck mucosa"),
-                        ("C06.1", "vestibule of mouth"),
-                        ("C06.2", "retromolar area"),
-                        ("C06.8", "overlapping lesion(s) of NOS parts of mouth"),
-                        ("C06.9", "mouth, nos"),
-                        
-                        ("C08.0", "submandibular gland"),
-                        ("C08.1", "sublingual gland"),
-                        ("C08.9", "salivary gland, nos"))
+                         ("C02.1", "border of tongue"),
+                         ("C02.2", "ventral surface of tongue"),
+                         ("C02.3", "anterior two thirds of tongue"),
+                         ("C02.4", "lingual tonsil"),
+                         ("C02.8", "overlapping sites of tongue"),
+                         ("C02.9", "tongue, nos"),
+ 
+                         ("C03.0", "upper gum"),
+                         ("C03.1", "lower gum"),
+                         ("C03.9", "gum, nos"),
+ 
+                         ("C04.0", "anterior floor of mouth"),
+                         ("C04.1", "lateral floor of mouth"),
+                         ("C04.8", "overlapping lesion of floor of mouth"),
+                         ("C04.9", "floor of mouth, nos"),
+ 
+                         ("C05.0", "hard palate"),
+                         ("C05.1", "soft palate, nos"),
+                         ("C05.2", "uvula"),
+                         ("C05.8", "overlapping lesion of palate"),
+                         ("C05.9", "palate, nos"),
+ 
+                         ("C06.0", "cheeck mucosa"),
+                         ("C06.1", "vestibule of mouth"),
+                         ("C06.2", "retromolar area"),
+                         ("C06.8", "overlapping lesion(s) of NOS parts of mouth"),
+                         ("C06.9", "mouth, nos"),
+                         
+                         ("C08.0", "submandibular gland"),
+                         ("C08.1", "sublingual gland"),
+                         ("C08.9", "salivary gland, nos"))
         ),
         ("oropharynx",  (("C01.9", "base of tongue, nos"),
 
-                        ("C09.0", "tonsillar fossa"),
-                        ("C09.1", "tonsillar pillar"),
-                        ("C09.8", "overlapping lesion of tonsil"),
-                        ("C09.9", "tonsil, nos"),
-
-                        ("C10.0", "vallecula"),
-                        ("C10.1", "anterior surface of epiglottis"),
-                        ("C10.2", "lateral wall of oropharynx"),
-                        ("C10.3", "posterior wall of oropharynx"),
-                        ("C10.4", "branchial cleft"),
-                        ("C10.8", "overlapping lesions of oropharynx"),
-                        ("C10.9", "oropharynx, nos"),)
+                         ("C09.0", "tonsillar fossa"),
+                         ("C09.1", "tonsillar pillar"),
+                         ("C09.8", "overlapping lesion of tonsil"),
+                         ("C09.9", "tonsil, nos"),
+ 
+                         ("C10.0", "vallecula"),
+                         ("C10.1", "anterior surface of epiglottis"),
+                         ("C10.2", "lateral wall of oropharynx"),
+                         ("C10.3", "posterior wall of oropharynx"),
+                         ("C10.4", "branchial cleft"),
+                         ("C10.8", "overlapping lesions of oropharynx"),
+                         ("C10.9", "oropharynx, nos"),)
         ),
         ("hypopharynx", (("C12.9", "pyriform sinus"),
 
-                        ("C13.0", "postcricoid region"),
-                        ("C13.1", "hypopharyngeal aspect of aryepiglottic fold"),
-                        ("C13.2", "posterior wall of hypopharynx"),
-                        ("C13.8", "overlapping lesion of hypopharynx"),
-                        ("C13.9", "hypopharynx, nos"),)
+                         ("C13.0", "postcricoid region"),
+                         ("C13.1", "hypopharyngeal aspect of aryepiglottic fold"),
+                         ("C13.2", "posterior wall of hypopharynx"),
+                         ("C13.8", "overlapping lesion of hypopharynx"),
+                         ("C13.9", "hypopharynx, nos"),)
         ),
         ("larynx",      (("C32.0", "glottis"),
-                        ("C32.1", "supraglottis"),
-                        ("C32.2", "subglottis"),
-                        ("C32.3", "laryngeal cartilage"),
-                        ("C32.8", "overlapping lesion of larynx"),
-                        ("C32.9", "larynx, nos"),)
+                         ("C32.1", "supraglottis"),
+                         ("C32.2", "subglottis"),
+                         ("C32.3", "laryngeal cartilage"),
+                         ("C32.8", "overlapping lesion of larynx"),
+                         ("C32.9", "larynx, nos"),)
         )
     ]
 
@@ -319,7 +319,12 @@ class Diagnose(ModelLoggerMixin, models.Model):
         """Make sure LNLs and their sublevels (e.g. 'a' and 'b') are treated
         consistelntly. E.g. when sublevel ``Ia`` is reported to be involved,
         the involvement status of level ``I`` cannot be reported as healthy.
+        
+        Also, if all LNLs are reported as unknown (`None`), just delete it.
         """
+        if all([getattr(self, lnl) is None for lnl in self.LNLs]):
+            return self.delete()
+        
         safe_negate = lambda x: False if x is None else not x
 
         # LNL I (a and b)

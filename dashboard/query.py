@@ -286,8 +286,16 @@ def count_patients(
         counts['extension'] += tf2arr(patient["tumor__extension"])
 
         # N0/N+ counts
-        has_contra = np.any(combined_involvement["contra"][patient["id"]])
-        has_ipsi = np.any(combined_involvement["ipsi"][patient["id"]])
+        has_contra = (
+            patient["id"] in combined_involvement["contra"]
+            and
+            np.any(combined_involvement["contra"][patient["id"]])
+        )
+        has_ipsi = (
+            patient["id"] in combined_involvement["ipsi"]
+            and
+            np.any(combined_involvement["ipsi"][patient["id"]])
+        )
         if not has_ipsi and not has_contra:
             counts['n_status'] += np.array([0,0,1])
         else:
@@ -295,13 +303,13 @@ def count_patients(
 
         # DIAGNOSE specific (involvement) counts
         for side in ['ipsi', 'contra']:
-            for i,lnl in enumerate(Diagnose.LNLs):
-                try:
-                    tmp = combined_involvement[side][patient["id"]][i]
-                except KeyError:
-                    # Not all patients have symmetric diagnoses
-                    pass
-                counts[f'{side}_{lnl}'] += tf2arr(tmp)
+            if patient["id"] in combined_involvement[side]:
+                for i,lnl in enumerate(Diagnose.LNLs):
+                    comb_inv = combined_involvement[side][patient["id"]][i]
+                    counts[f'{side}_{lnl}'] += tf2arr(comb_inv)
+            else:
+                for lnl in Diagnose.LNLs:
+                    counts[f'{side}_{lnl}'] += tf2arr(None)
 
     end_time = time.perf_counter()
     logger.info(f"Generating stats done after {end_time - start_time:.3f} s")
