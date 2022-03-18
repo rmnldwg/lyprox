@@ -1,9 +1,14 @@
+from collections import namedtuple
+from attr import attr
+import numpy as np
+
 from dateutil.parser import ParserError, parse
 from django.db import models
 from django.urls import reverse
 
 from accounts.models import Institution
 from core.loggers import ModelLoggerMixin
+
 
 
 class RobustDateField(models.DateField):
@@ -271,6 +276,8 @@ class Tumor(ModelLoggerMixin, models.Model):
         return tmp
 
 
+Mod = namedtuple("Mod", "value label spec sens")
+
 class Diagnose(ModelLoggerMixin, models.Model):
     """Model describing the diagnosis of one side of a patient's neck with
     regard to their lymphaitc metastatic involvement."""
@@ -278,26 +285,60 @@ class Diagnose(ModelLoggerMixin, models.Model):
     LNLs = [
         "I", "Ia" , "Ib", "II", "IIa", "IIb", "III", "IV", "V", "Va", "Vb", "VII"
     ]
-
-    class Modalities(models.TextChoices):
-        """:meta private:"""
-        CT   = "CT"                    , "CT"
-        MRI  = "MRI"                   , "MRI"
-        PET  = "PET"                   , "PET"
-        FNA  = "FNA"                   , "Fine Needle Aspiration"
-        DC   = "diagnostic_consensus"  , "Diagnostic Consensus"
-        PATH = "pathology"             , "Pathology"
-        PCT  = "pCT"                   , "Planning CT"
     
-    modalities_spsn = {
-        "CT":                   [0.76, 0.81],
-        "MRI":                  [0.63, 0.81],
-        "PET":                  [0.86, 0.79],
-        "FNA":                  [0.98, 0.80],
-        "diagnostic_consensus": [0.86, 0.81],  # max of s_P & s_N respectively
-        "pathology":            [1.  , 1.  ],
-        "pCT":                  [0.86, 0.81],  # max of s_P & s_N respectively
-    }
+    class MetaModality(type):
+        """Meta class for providing the classmethod attributes to the 
+        ``Modalities`` class similar to what Django's enum types have.
+        
+        :meta private:"""
+        
+        def __init__(cls, classname, bases, classdict, *args, **kwargs):
+            cls._mods = []
+            for key, val in classdict.items():
+                if (
+                    not key.startswith("_")
+                    and not callable(val)
+                    and all([c.isupper() for c in key])
+                ):
+                    cls._mods.append(val)
+            
+            super().__init__(classname, bases, classdict, *args, **kwargs)
+        
+        def __len__(cls):
+            return len(cls._mods)
+        
+        @property
+        def choices(cls):
+            return [(mod.value, mod.label) for mod in cls._mods]
+        
+        @property
+        def values(cls):
+            return [mod.value for mod in cls._mods]
+        
+        @property
+        def labels(cls):
+            return [mod.label for mod in cls._mods]
+        
+        @property
+        def spsn(cls):
+            return [[mod.spec, mod.sens] for mod in cls._mods]
+            
+    
+    class Modalities(metaclass=MetaModality):
+        """Class that aims to replicate the functionality of ``TextChoices`` 
+        from Django's enum types, but with the added functionality of storing 
+        the sensitivity & specificity of the respective modality.
+        
+        :meta private:"""
+        
+        CT   = Mod("CT" ,                  "CT" ,                    0.76, 0.81)
+        MRI  = Mod("MRI",                  "MRI",                    0.63, 0.81)
+        PET  = Mod("PET",                  "PET",                    0.86, 0.79)
+        FNA  = Mod("FNA",                  "Fine Needle Aspiration", 0.98, 0.80)
+        DC   = Mod("diagnostic_consensus", "Diagnostic Consensus"  , 0.86, 0.81)
+        PATH = Mod("pathology",            "Pathology",              1.  , 1.  )
+        PCT  = Mod("pCT",                  "Planning CT",            0.86, 0.81)
+
 
     #: ``ForeignKey`` to :class:`Patient`
     patient = models.ForeignKey(Patient, on_delete=models.CASCADE)
