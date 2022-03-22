@@ -167,7 +167,7 @@ class Tumor(ModelLoggerMixin, models.Model):
                          ("C08.1", "sublingual gland"),
                          ("C08.9", "salivary gland, nos"))
         ),
-        ("oropharynx",  (("C01.9", "base of tongue, nos"),
+        ("oropharynx",  (("C01"  , "base of tongue, nos"),
 
                          ("C09.0", "tonsillar fossa"),
                          ("C09.1", "tonsillar pillar"),
@@ -182,7 +182,7 @@ class Tumor(ModelLoggerMixin, models.Model):
                          ("C10.8", "overlapping lesions of oropharynx"),
                          ("C10.9", "oropharynx, nos"),)
         ),
-        ("hypopharynx", (("C12.9", "pyriform sinus"),
+        ("hypopharynx", (("C12"  , "pyriform sinus"),
 
                          ("C13.0", "postcricoid region"),
                          ("C13.1", "hypopharyngeal aspect of aryepiglottic fold"),
@@ -200,11 +200,11 @@ class Tumor(ModelLoggerMixin, models.Model):
     ]
 
     SUBSITE_DICT = {
-        "base":        ["C01.9"],
+        "base":        ["C01"],
         "tonsil":      ["C09.0", "C09.1", "C09.8", "C09.9"],
         "rest_oro":    ["C10.0", "C10.1", "C10.2", "C10.3",
                         "C10.4","C10.8", "C10.9"],
-        "rest_hypo":   ["C12.9", "C13.0", "C13.1", "C13.2", "C13.8", "C13.9"],
+        "rest_hypo":   ["C12"  , "C13.0", "C13.1", "C13.2", "C13.8", "C13.9"],
         "glottis":     ["C32.0"],
         "rest_larynx": ["C32.1", "C32.2", "C32.3", "C32.8", "C32.9"],
         "tongue":      ["C02.0", "C02.1", "C02.2", "C02.3", "C02.4", "C02.8", 
@@ -364,6 +364,7 @@ class Diagnose(ModelLoggerMixin, models.Model):
         Also, if all LNLs are reported as unknown (`None`), just delete it.
         """
         if all([getattr(self, lnl) is None for lnl in self.LNLs]):
+            super().save(*args, **kwargs)
             return self.delete()
         
         safe_negate = lambda x: False if x is None else not x
