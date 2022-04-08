@@ -158,8 +158,10 @@ class DashboardForm(FormLoggerMixin, forms.Form):
     )
     modality_combine = forms.ChoiceField(
         widget=forms.Select(attrs={"onchange": "changeHandler();"}),
-        choices=[("AND", "AND"),
-                 ("OR", "OR")],
+        choices=[("AND"   , "AND"   ),
+                 ("OR"    , "OR"    ),
+                 ("maxLLH", "maxLLH"),
+                 ("RANK"  , "RANK"  )],
         label="Combine",
         initial="OR"
     )
@@ -223,6 +225,19 @@ class DashboardForm(FormLoggerMixin, forms.Form):
                  ("rest_larynx" , "other")],  # in the Tumor.SUBSITE_DICT keys
         initial=["glottis", "rest_larynx"]
     )
+    subsite_oral_cavity = forms.MultipleChoiceField(
+        required=False,
+        widget=forms.CheckboxSelectMultiple(
+            attrs={"class": "checkbox is-hidden",
+                   "onchange": "changeHandler();"},
+        ),
+        choices=[("tongue", "tongue"),         # choices here must match entries
+                 ("gum_cheek", "gums and cheek"), # in the Tumor.SUBSITE_DICT keys
+                 ("mouth_floor", "floor of mouth"),
+                 ("palate", "palate"),
+                 ("glands", "salivary glands")],  
+        initial=["tongue", "gum_cheek", "mouth_floor", "palate", "glands"]
+    )
 
     t_stage__in = forms.MultipleChoiceField(
         required=False,
@@ -267,13 +282,13 @@ class DashboardForm(FormLoggerMixin, forms.Form):
         # add all LNL ToggleButtons so I don't have to write a myriad of them
         for side in ["ipsi", "contra"]:
             for lnl in Diagnose.LNLs:
-                if lnl in ['I', 'II']:
+                if lnl in ['I', 'II', 'V']:
                     self.fields[f"{side}_{lnl}"] = ThreeWayToggle(
                         option_attrs={
                             "onclick": "bothClickHandler(this)"
                         }
                     )
-                elif lnl in ['Ia', 'Ib', 'IIa', 'IIb']:
+                elif lnl in ['Ia', 'Ib', 'IIa', 'IIb', 'Va', 'Vb']:
                     self.fields[f"{side}_{lnl}"] = ThreeWayToggle(
                         option_attrs={
                             "onclick": "subClickHandler(this)"
@@ -331,7 +346,8 @@ class DashboardForm(FormLoggerMixin, forms.Form):
         # map subsites 'base','tonsil','rest' to list of ICD codes.
         subsites = (cleaned_data["subsite_oropharynx"]
                     + cleaned_data["subsite_hypopharynx"]
-                    + cleaned_data["subsite_larynx"])
+                    + cleaned_data["subsite_larynx"]
+                    + cleaned_data["subsite_oral_cavity"])
 
         icd_codes = []
         for sub in subsites:

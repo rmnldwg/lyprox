@@ -160,6 +160,30 @@
                                     {% endfor %}
                                 </div>
                             </div>
+                            <div class="notification is-info is-light p-2 mb-2">
+                                <div class="field is-grouped is-grouped-multiline">
+                                    <p class="control">Oral cavity:</p>
+                                    {% for checkbox in form.subsite_oral_cavity %}
+                                    <div class="control mr-1">
+                                        {{ checkbox.tag }}
+                                        <div class="tags has-addons">
+                                            <label for="{{ checkbox.id_for_label }}" class="tag button is-primary is-light is-expanded">
+                                                <span>{{ checkbox.choice_label }}</span>
+                                            </label>
+                                            <p class="tag button is-static">
+                                                {% with counter=forloop.counter0|add:6 %}
+                                                {% if show_percent %}
+                                                <span>{{ stats.subsites|percent:counter }}%</span>
+                                                {% else %}
+                                                <span>{{ stats.subsites|index:counter }}</span>
+                                                {% endif %}
+                                                {% endwith %}
+                                            </p>
+                                        </div>
+                                    </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
 
                             <p class="title is-5 mb-2 mt-4">T-stage</p>
                             <div class="field is-grouped is-grouped-multiline">
@@ -346,9 +370,20 @@
                                                 {% include 'dashboard/barplot.html' with lnl="IV contralateral" stat=stats.contra_IV show_percent=show_percent %}
                                             </tr>
                                             <tr>
-                                                <td colspan="2">V</td>
+                                                <td rowspan="3">V</td>
+                                                <td>both</td>
                                                 <td>{{ form.contra_V }}</td>
                                                 {% include 'dashboard/barplot.html' with lnl="V contralateral" stat=stats.contra_V show_percent=show_percent %}
+                                            </tr>
+                                            <tr>
+                                                <td>a</td>
+                                                <td>{{ form.contra_Va }}</td>
+                                                {% include 'dashboard/barplot.html' with lnl="Va contralateral" stat=stats.contra_Va show_percent=show_percent %}
+                                            </tr>
+                                            <tr>
+                                                <td>b</td>
+                                                <td>{{ form.contra_Vb }}</td>
+                                                {% include 'dashboard/barplot.html' with lnl="Vb contralateral" stat=stats.contra_Vb show_percent=show_percent %}
                                             </tr>
                                             <tr>
                                                 <td colspan="2">VII</td>
@@ -430,9 +465,20 @@
                                                 {% include 'dashboard/barplot.html' with lnl="IV ipsilateral" stat=stats.ipsi_IV show_percent=show_percent %}
                                             </tr>
                                             <tr>
-                                                <td colspan="2">V</td>
+                                                <td rowspan="3">V</td>
+                                                <td>both</td>
                                                 <td>{{ form.ipsi_V }}</td>
                                                 {% include 'dashboard/barplot.html' with lnl="V ipsilateral" stat=stats.ipsi_V show_percent=show_percent %}
+                                            </tr>
+                                            <tr>
+                                                <td>a</td>
+                                                <td>{{ form.ipsi_Va }}</td>
+                                                {% include 'dashboard/barplot.html' with lnl="Va ipsilateral" stat=stats.ipsi_Va show_percent=show_percent %}
+                                            </tr>
+                                            <tr>
+                                                <td>b</td>
+                                                <td>{{ form.ipsi_Vb }}</td>
+                                                {% include 'dashboard/barplot.html' with lnl="Vb ipsilateral" stat=stats.ipsi_Vb show_percent=show_percent %}
                                             </tr>
                                             <tr>
                                                 <td colspan="2">VII</td>
