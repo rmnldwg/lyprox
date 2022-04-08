@@ -11,35 +11,86 @@ from patients.models import Diagnose, Patient, Tumor
 logger = logging.getLogger(__name__)
 
 
+class ThreeWayToggleWidget(forms.RadioSelect):
+    """Widget that renders the three-way toggle button and allows to set the 
+    attributes of the individual inputs (radio buttons) as `option_attrs` as 
+    well as the attributes of the container as `attrs`.
+    """
+    template_name = 'widgets/three_way_toggle.html'
+    option_template_name = 'widgets/three_way_toggle_option.html'
+    option_attrs = {
+        "class": "radio is-hidden",
+        "onchange": "changeHandler();"
+    }
+    
+    def __init__(
+        self, 
+        attrs=None, choices=(), 
+        option_attrs=None, label=None, tooltip=None
+    ):
+        """Store arguments and option attributes for later use."""
+        self.label = label
+        self.tooltip = tooltip
+        self.option_attrs = {
+            "class": "radio is-hidden",
+            "onchange": "changeHandler();",
+            **(option_attrs or {}),
+        }
+        super().__init__(attrs, choices)
+    
+    def get_context(self, name, value, attrs):
+        """Pass label and tooltip to the context variable"""
+        context = super().get_context(name, value, attrs)
+        context["widget"]["label"] = self.label
+        context["widget"]["tooltip"] = self.tooltip
+        return context
+    
+    def create_option(
+        self, name, value, label, selected, index, subindex=None, attrs=None
+    ):
+        """Pass the option attributes to the actual options"""
+        return super().create_option(
+            name, value, label, selected, index, subindex, 
+            attrs=self.build_attrs(self.option_attrs, attrs)
+        )
+
+
 class ThreeWayToggle(forms.ChoiceField):
     """A toggle switch than can be in three different states: Positive/True,
-    unkown/None and negative/False."""
-
-    def __init__(self,
-                 widget=None,
-                 attrs={"class": "radio is-hidden",
-                        "onchange": "changeHandler();"},
-                 choices=[( 1 , "plus"),
-                          ( 0 , "ban"),
-                          (-1, "minus")],
-                 initial=0,
-                 required=False,
-                 **kwargs):
-        """Overwrite the defaults of the ChoiceField."""
-        if widget is not None:
-            super(ThreeWayToggle, self).__init__(
-                widget=widget,
-                choices=choices,
-                initial=initial,
-                required=required,
-                **kwargs)
-        else:
-            super(ThreeWayToggle, self).__init__(
-                widget=forms.RadioSelect(attrs=attrs),
-                choices=choices,
-                initial=initial,
-                required=required,
-                **kwargs)
+    unkown/None and negative/False.
+    """
+    def __init__(
+        self,
+        attrs=None,
+        option_attrs=None,
+        label=None, 
+        tooltip=None,
+        choices=[
+            ( 1, "plus" ), 
+            ( 0, "ban"  ), 
+            (-1, "minus"),
+        ],
+        initial=0,
+        required=False,
+        **kwargs
+    ):
+        """Pass the arguments, like `label` and `tooltip` to the constructor 
+        of the custom widget."""
+        if len(choices) != 3:
+            raise ValueError("Three-way toggle button must have three choices")
+        
+        super().__init__(
+            widget=ThreeWayToggleWidget(
+                attrs=attrs, 
+                option_attrs=option_attrs, 
+                label=label, 
+                tooltip=tooltip
+            ),
+            choices=choices,
+            initial=initial,
+            required=required,
+            **kwargs
+        )
 
     def to_python(self, value):
         """Cast the string to an integer."""
@@ -107,17 +158,31 @@ class DashboardForm(FormLoggerMixin, forms.Form):
     )
     modality_combine = forms.ChoiceField(
         widget=forms.Select(attrs={"onchange": "changeHandler();"}),
-        choices=[("AND", "AND"),
-                 ("OR", "OR")],
+        choices=[("AND"   , "AND"   ),
+                 ("OR"    , "OR"    ),
+                 ("maxLLH", "maxLLH"),
+                 ("RANK"  , "RANK"  )],
         label="Combine",
         initial="OR"
     )
 
     # patient specific fields
-    nicotine_abuse = ThreeWayToggle()
-    hpv_status = ThreeWayToggle()
-    neck_dissection = ThreeWayToggle()
-    n_status = ThreeWayToggle()
+    nicotine_abuse = ThreeWayToggle(
+        label="smoking status", 
+        tooltip="Select smokers or non-smokers"
+    )
+    hpv_status = ThreeWayToggle(
+        label="HPV status", 
+        tooltip="Select patients being HPV positive or negative"
+    )
+    neck_dissection = ThreeWayToggle(
+        label="neck dissection",
+        tooltip="Include patients that have (or have not) received neck dissection"
+    )
+    n_status = ThreeWayToggle(
+        label="N+ vs N0",
+        tooltip="Select all N+ (or N0) patients"
+    )
     institution__in = InstitutionMultipleChoiceField(
         required=False,
         widget=forms.CheckboxSelectMultiple(
@@ -160,6 +225,19 @@ class DashboardForm(FormLoggerMixin, forms.Form):
                  ("rest_larynx" , "other")],  # in the Tumor.SUBSITE_DICT keys
         initial=["glottis", "rest_larynx"]
     )
+    subsite_oral_cavity = forms.MultipleChoiceField(
+        required=False,
+        widget=forms.CheckboxSelectMultiple(
+            attrs={"class": "checkbox is-hidden",
+                   "onchange": "changeHandler();"},
+        ),
+        choices=[("tongue", "tongue"),         # choices here must match entries
+                 ("gum_cheek", "gums and cheek"), # in the Tumor.SUBSITE_DICT keys
+                 ("mouth_floor", "floor of mouth"),
+                 ("palate", "palate"),
+                 ("glands", "salivary glands")],  
+        initial=["tongue", "gum_cheek", "mouth_floor", "palate", "glands"]
+    )
 
     t_stage__in = forms.MultipleChoiceField(
         required=False,
@@ -170,8 +248,15 @@ class DashboardForm(FormLoggerMixin, forms.Form):
         choices=Patient.T_stages.choices,
         initial=[1,2,3,4]
     )
-    central = ThreeWayToggle()
-    extension = ThreeWayToggle()
+    central = ThreeWayToggle(
+        label="central",
+        tooltip="Choose to in- or exclude patients with central tumors"
+    )
+    extension = ThreeWayToggle(
+        label="midline extension",
+        tooltip=("Investigate patients with tumors that do (or do not) cross "
+                 "the mid-sagittal line")
+    )
 
     # checkbutton for switching to percent
     show_percent = forms.BooleanField(
@@ -187,7 +272,7 @@ class DashboardForm(FormLoggerMixin, forms.Form):
         LNLs from a list and hide some datasets for unauthenticated users.
         """
         user = kwargs.pop("user")
-        super(DashboardForm, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
 
         # dynamically define which institutions should be selectable
         if user.is_authenticated:
@@ -197,17 +282,17 @@ class DashboardForm(FormLoggerMixin, forms.Form):
         # add all LNL ToggleButtons so I don't have to write a myriad of them
         for side in ["ipsi", "contra"]:
             for lnl in Diagnose.LNLs:
-                if lnl in ['I', 'II']:
+                if lnl in ['I', 'II', 'V']:
                     self.fields[f"{side}_{lnl}"] = ThreeWayToggle(
-                        attrs={"class": "radio is-hidden",
-                               "onclick": ("bothClickHandler(this);"
-                                           "changeHandler();")}
+                        option_attrs={
+                            "onclick": "bothClickHandler(this)"
+                        }
                     )
-                elif lnl in ['Ia', 'Ib', 'IIa', 'IIb']:
+                elif lnl in ['Ia', 'Ib', 'IIa', 'IIb', 'Va', 'Vb']:
                     self.fields[f"{side}_{lnl}"] = ThreeWayToggle(
-                        attrs={"class": "radio is-hidden",
-                               "onclick": ("subClickHandler(this);"
-                                           "changeHandler();")}
+                        option_attrs={
+                            "onclick": "subClickHandler(this)"
+                        }
                     )
                 else:
                     self.fields[f"{side}_{lnl}"] = ThreeWayToggle()
@@ -261,7 +346,8 @@ class DashboardForm(FormLoggerMixin, forms.Form):
         # map subsites 'base','tonsil','rest' to list of ICD codes.
         subsites = (cleaned_data["subsite_oropharynx"]
                     + cleaned_data["subsite_hypopharynx"]
-                    + cleaned_data["subsite_larynx"])
+                    + cleaned_data["subsite_larynx"]
+                    + cleaned_data["subsite_oral_cavity"])
 
         icd_codes = []
         for sub in subsites:

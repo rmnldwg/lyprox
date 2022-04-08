@@ -1,4 +1,4 @@
-Django>=3.2.5
+Django==3.2
 django-filter==2.4
 phonenumbers==8.12
 django-auth-logger==2.1
@@ -7,3 +7,4 @@ numpy==1.21
 pandas==1.2
 fontawesomefree==5.15.4
 django-dbbackup==3.3
+icd10-cm==0.0.4

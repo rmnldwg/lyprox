@@ -1,9 +1,14 @@
+from collections import namedtuple
+from attr import attr
+import numpy as np
+
 from dateutil.parser import ParserError, parse
 from django.db import models
 from django.urls import reverse
 
 from accounts.models import Institution
 from core.loggers import ModelLoggerMixin
+
 
 
 class RobustDateField(models.DateField):
@@ -129,68 +134,87 @@ class Tumor(ModelLoggerMixin, models.Model):
         LARYNX      = "larynx"
 
     SUBSITES = [
-        ("oral cavity", (("C03.0", "upper gum"),
-                        ("C03.1", "lower gum"),
-                        ("C03.9", "gum, nos"),
-
-                        ("C04.0", "anterior floor of mouth"),
-                        ("C04.1", "lateral floor of mouth"),
-                        ("C04.8", "overlapping lesion of floor of mouth"),
-                        ("C04.9", "floor of mouth, nos"),
-
-                        ("C05.0", "hard palate"),
-                        ("C05.1", "soft palate, nos"),
-                        ("C05.2", "uvula"),
-                        ("C05.8", "overlapping lesion of palate"),
-                        ("C05.9", "palate, nos"),
-
-                        ("C06.0", "cheeck mucosa"),
-                        ("C06.1", "vestibule of mouth"),
-                        ("C06.2", "retromolar area"),
-                        ("C06.8", "overlapping lesion(s) of NOS parts of mouth"),
-                        ("C06.9", "mouth, nos"),)
+        ("oral cavity", (("C02.0", "dorsal surface of tongue"), 
+                         ("C02.1", "border of tongue"),
+                         ("C02.2", "ventral surface of tongue"),
+                         ("C02.3", "anterior two thirds of tongue"),
+                         ("C02.4", "lingual tonsil"),
+                         ("C02.8", "overlapping sites of tongue"),
+                         ("C02.9", "tongue, nos"),
+ 
+                         ("C03.0", "upper gum"),
+                         ("C03.1", "lower gum"),
+                         ("C03.9", "gum, nos"),
+ 
+                         ("C04.0", "anterior floor of mouth"),
+                         ("C04.1", "lateral floor of mouth"),
+                         ("C04.8", "overlapping lesion of floor of mouth"),
+                         ("C04.9", "floor of mouth, nos"),
+ 
+                         ("C05.0", "hard palate"),
+                         ("C05.1", "soft palate, nos"),
+                         ("C05.2", "uvula"),
+                         ("C05.8", "overlapping lesion of palate"),
+                         ("C05.9", "palate, nos"),
+ 
+                         ("C06.0", "cheeck mucosa"),
+                         ("C06.1", "vestibule of mouth"),
+                         ("C06.2", "retromolar area"),
+                         ("C06.8", "overlapping lesion(s) of NOS parts of mouth"),
+                         ("C06.9", "mouth, nos"),
+                         
+                         ("C08.0", "submandibular gland"),
+                         ("C08.1", "sublingual gland"),
+                         ("C08.9", "salivary gland, nos"))
         ),
-        ("oropharynx",  (("C01.9", "base of tongue, nos"),
+        ("oropharynx",  (("C01"  , "base of tongue, nos"),
 
-                        ("C09.0", "tonsillar fossa"),
-                        ("C09.1", "tonsillar pillar"),
-                        ("C09.8", "overlapping lesion of tonsil"),
-                        ("C09.9", "tonsil, nos"),
-
-                        ("C10.0", "vallecula"),
-                        ("C10.1", "anterior surface of epiglottis"),
-                        ("C10.2", "lateral wall of oropharynx"),
-                        ("C10.3", "posterior wall of oropharynx"),
-                        ("C10.4", "branchial cleft"),
-                        ("C10.8", "overlapping lesions of oropharynx"),
-                        ("C10.9", "oropharynx, nos"),)
+                         ("C09.0", "tonsillar fossa"),
+                         ("C09.1", "tonsillar pillar"),
+                         ("C09.8", "overlapping lesion of tonsil"),
+                         ("C09.9", "tonsil, nos"),
+ 
+                         ("C10.0", "vallecula"),
+                         ("C10.1", "anterior surface of epiglottis"),
+                         ("C10.2", "lateral wall of oropharynx"),
+                         ("C10.3", "posterior wall of oropharynx"),
+                         ("C10.4", "branchial cleft"),
+                         ("C10.8", "overlapping lesions of oropharynx"),
+                         ("C10.9", "oropharynx, nos"),)
         ),
-        ("hypopharynx", (("C12.9", "pyriform sinus"),
+        ("hypopharynx", (("C12"  , "pyriform sinus"),
 
-                        ("C13.0", "postcricoid region"),
-                        ("C13.1", "hypopharyngeal aspect of aryepiglottic fold"),
-                        ("C13.2", "posterior wall of hypopharynx"),
-                        ("C13.8", "overlapping lesion of hypopharynx"),
-                        ("C13.9", "hypopharynx, nos"),)
+                         ("C13.0", "postcricoid region"),
+                         ("C13.1", "hypopharyngeal aspect of aryepiglottic fold"),
+                         ("C13.2", "posterior wall of hypopharynx"),
+                         ("C13.8", "overlapping lesion of hypopharynx"),
+                         ("C13.9", "hypopharynx, nos"),)
         ),
         ("larynx",      (("C32.0", "glottis"),
-                        ("C32.1", "supraglottis"),
-                        ("C32.2", "subglottis"),
-                        ("C32.3", "laryngeal cartilage"),
-                        ("C32.8", "overlapping lesion of larynx"),
-                        ("C32.9", "larynx, nos"),)
+                         ("C32.1", "supraglottis"),
+                         ("C32.2", "subglottis"),
+                         ("C32.3", "laryngeal cartilage"),
+                         ("C32.8", "overlapping lesion of larynx"),
+                         ("C32.9", "larynx, nos"),)
         )
     ]
 
-    SUBSITE_DICT = {"base":        ["C01.9"],
-                    "tonsil":      ["C09.0", "C09.1", "C09.8", "C09.9"],
-                    "rest_oro":    ["C05.1", "C05.2",  # palate part of oro?
-                                    "C10.0", "C10.1", "C10.2", "C10.3",
-                                    "C10.4","C10.8", "C10.9"],
-                    "rest_hypo":   ["C12.9", "C13.0", "C13.1", "C13.2",
-                                    "C13.8", "C13.9"],
-                    "glottis":     ["C32.0"],
-                    "rest_larynx": ["C32.1", "C32.2", "C32.3", "C32.8", "C32.9"]}
+    SUBSITE_DICT = {
+        "base":        ["C01"],
+        "tonsil":      ["C09.0", "C09.1", "C09.8", "C09.9"],
+        "rest_oro":    ["C10.0", "C10.1", "C10.2", "C10.3",
+                        "C10.4","C10.8", "C10.9"],
+        "rest_hypo":   ["C12"  , "C13.0", "C13.1", "C13.2", "C13.8", "C13.9"],
+        "glottis":     ["C32.0"],
+        "rest_larynx": ["C32.1", "C32.2", "C32.3", "C32.8", "C32.9"],
+        "tongue":      ["C02.0", "C02.1", "C02.2", "C02.3", "C02.4", "C02.8", 
+                        "C02.9",],
+        "gum_cheek":   ["C03.0", "C03.1", "C03.9", "C06.0", "C06.1", "C06.2", 
+                        "C06.8", "C06.9",],
+        "mouth_floor": ["C04.0", "C04.1", "C04.8", "C04.9",],
+        "palate":      ["C05.0", "C05.1", "C05.2", "C05.8", "C05.9",],
+        "glands":      ["C08.0", "C08.1", "C08.9",],
+    }
     SUBSITE_LIST = [icd for icd_list in SUBSITE_DICT.values() for icd in icd_list]
 
     #: ``ForeignKey`` to :class:`Patient`
@@ -252,23 +276,81 @@ class Tumor(ModelLoggerMixin, models.Model):
         return tmp
 
 
+Mod = namedtuple("Mod", "value label spec sens")
+
 class Diagnose(ModelLoggerMixin, models.Model):
     """Model describing the diagnosis of one side of a patient's neck with
     regard to their lymphaitc metastatic involvement."""
 
     LNLs = [
-        "I", "Ia" , "Ib", "II", "IIa", "IIb", "III", "IV", "V", "VII"
+        "I", "Ia" , "Ib", "II", "IIa", "IIb", "III", "IV", "V", "Va", "Vb", "VII"
     ]
+    
+    class MetaModality(type):
+        """Meta class for providing the classmethod attributes to the 
+        ``Modalities`` class similar to what Django's enum types have.
+        
+        :meta private:"""
+        
+        def __init__(cls, classname, bases, classdict, *args, **kwargs):
+            cls._mods = []
+            for key, val in classdict.items():
+                if (
+                    not key.startswith("_")
+                    and not callable(val)
+                    and all([c.isupper() for c in key])
+                ):
+                    cls._mods.append(val)
+            
+            super().__init__(classname, bases, classdict, *args, **kwargs)
+        
+        def __len__(cls):
+            return len(cls._mods)
+        
+        def __iter__(cls):
+            cls._i = 0
+            return cls
+        
+        def __next__(cls):
+            if cls._i < len(cls):
+                mod = cls._mods[cls._i]
+                cls._i += 1
+                return mod
+            else:
+                raise StopIteration
+        
+        @property
+        def choices(cls):
+            return [(mod.value, mod.label) for mod in cls._mods]
+        
+        @property
+        def values(cls):
+            return [mod.value for mod in cls._mods]
+        
+        @property
+        def labels(cls):
+            return [mod.label for mod in cls._mods]
+        
+        @property
+        def spsn(cls):
+            return [[mod.spec, mod.sens] for mod in cls._mods]
+            
+    
+    class Modalities(metaclass=MetaModality):
+        """Class that aims to replicate the functionality of ``TextChoices`` 
+        from Django's enum types, but with the added functionality of storing 
+        the sensitivity & specificity of the respective modality.
+        
+        :meta private:"""
+        
+        CT   = Mod("CT" ,                  "CT" ,                    0.76, 0.81)
+        MRI  = Mod("MRI",                  "MRI",                    0.63, 0.81)
+        PET  = Mod("PET",                  "PET",                    0.86, 0.79)
+        FNA  = Mod("FNA",                  "Fine Needle Aspiration", 0.98, 0.80)
+        DC   = Mod("diagnostic_consensus", "Diagnostic Consensus"  , 0.86, 0.81)
+        PATH = Mod("pathology",            "Pathology",              1.  , 1.  )
+        PCT  = Mod("pCT",                  "Planning CT",            0.86, 0.81)
 
-    class Modalities(models.TextChoices):
-        """:meta private:"""
-        CT   = "CT"                    , "CT"
-        MRI  = "MRI"                   , "MRI"
-        PET  = "PET"                   , "PET"
-        FNA  = "FNA"                   , "Fine Needle Aspiration"
-        DC   = "diagnostic_consensus"  , "Diagnostic Consensus"
-        PATH = "pathology"             , "Pathology"
-        PCT  = "pCT"                   , "Planning CT"
 
     #: ``ForeignKey`` to :class:`Patient`
     patient = models.ForeignKey(Patient, on_delete=models.CASCADE)
@@ -290,22 +372,32 @@ class Diagnose(ModelLoggerMixin, models.Model):
         """Make sure LNLs and their sublevels (e.g. 'a' and 'b') are treated
         consistelntly. E.g. when sublevel ``Ia`` is reported to be involved,
         the involvement status of level ``I`` cannot be reported as healthy.
+        
+        Also, if all LNLs are reported as unknown (`None`), just delete it.
         """
+        if all([getattr(self, lnl) is None for lnl in self.LNLs]):
+            super().save(*args, **kwargs)
+            return self.delete()
+        
         safe_negate = lambda x: False if x is None else not x
 
         # LNL I (a and b)
-        if any([self.Ia, self.Ib]):
+        if self.Ia or self.Ib:
             self.I = True
-        elif all([safe_negate(self.Ia), safe_negate(self.Ib)]):
+        elif safe_negate(self.Ia) and safe_negate(self.Ib):
             self.I = False
 
-
         # LNL II (a and b)
-        if any([self.IIa, self.IIb]):
+        if self.IIa or self.IIb:
             self.II = True
-        elif all([safe_negate(self.IIa), safe_negate(self.IIb)]):
+        elif safe_negate(self.IIa) and safe_negate(self.IIb):
             self.II = False
-
+        
+        # LNL V (a and b)
+        if self.Va or self.Vb:
+            self.V = True
+        elif safe_negate(self.Va) and safe_negate(self.Vb):
+            self.V = False
 
         return super().save(*args, **kwargs)
 
