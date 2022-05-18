@@ -1,40 +1,55 @@
+"""
+Module for importing and exporting CSV tables of patients with lymphatic
+patterns of progression into and from the Django database.
+"""
+
 import logging
-from typing import List
+from typing import List, Tuple
 
 import numpy as np
 import pandas as pd
 from django.db import IntegrityError
 from django.db.models import QuerySet
 
-logger = logging.getLogger(__name__)
-
 from .models import Diagnose, Patient, Tumor
+
+logger = logging.getLogger(__name__)
 
 
 class ParsingError(Exception):
-    """Exception raised when the parsing of an uploaded CSV fails due to
+    """
+    Exception raised when the parsing of an uploaded CSV fails due to
     missing data columns.
     """
 
 
 def compute_hash(*args):
-    """Compute a hash vlaue from three patient-specific fields that must be
-    removed due for respecting the patient's privacy."""
+    """
+    Compute a hash vlaue from three patient-specific fields that must be
+    removed due for respecting the patient's privacy.
+    """
     return hash(args)
 
 
-def nan_to_None(sth):
+def nan_to_none(sth):
+    """Transform NaNs to `None`."""
     if sth != sth:
         return None
     else:
         return sth
 
 
-def get_model_fields(model, remove: List[str] = []):
-    """Get list of names of model fields and remove the ones provided via the
-    `remove` argument."""
+def get_model_fields(model, remove: List[str] = None):
+    """
+    Get list of names of model fields and remove the ones provided via the
+    `remove` argument.
+    """
     fields = model._meta.get_fields()
     field_names = [f.name for f in fields]
+
+    if remove is None:
+        remove = []
+
     for entry in remove:
         try:
             field_names.remove(entry)
@@ -45,11 +60,12 @@ def get_model_fields(model, remove: List[str] = []):
 
 
 def row2patient(row, user, anonymize: List[str]):
-    """Create a `Patient` instance from a row of a `DataFrame` containing the
+    """
+    Create a `Patient` instance from a row of a `DataFrame` containing the
     appropriate information, as well as the user that uploaded the information.
     """
     patient_dict = row.to_dict()
-    _ = nan_to_None
+    _ = nan_to_none
 
     if len(anonymize) != 0:
         to_hash = [patient_dict.pop(a) for a in anonymize]
@@ -89,12 +105,14 @@ def row2patient(row, user, anonymize: List[str]):
 
 
 def row2tumors(row, patient):
-    """Create `Tumor` instances from row of a `DataFrame` and add them to an
-    existing `Patient` instance."""
+    """
+    Create `Tumor` instances from row of a `DataFrame` and add them to an
+    existing `Patient` instance.
+    """
     # extract number of tumors in row
     level_zero = row.index.get_level_values(0)
     num_tumors = np.max([int(num) for num in level_zero])
-    _ = nan_to_None
+    _ = nan_to_none
 
     tumor_fields = get_model_fields(
         Tumor, remove=["id", "patient"]
@@ -118,15 +136,17 @@ def row2tumors(row, patient):
 
 
 def row2diagnoses(row, patient):
-    """Create `Diagnose` instances from row of `DataFrame` and add them to an
-    existing `Patient` instance."""
+    """
+    Create `Diagnose` instances from row of `DataFrame` and add them to an
+    existing `Patient` instance.
+    """
     modalities_list = list(set(row.index.get_level_values(0)))
     if len(modalities_list) == 0:
         raise ParsingError(
             "No diagnostic modalities were found in the provided table."
         )
 
-    _ = nan_to_None
+    _ = nan_to_none
 
     diagnose_fields = get_model_fields(
         Diagnose, remove=["id", "patient", "modality", "side", "diagnose_date"]
@@ -165,7 +185,7 @@ def import_from_pandas(
     data_frame: pd.DataFrame,
     user,
     anonymize: List[str] = None
-):
+) -> Tuple[int]:
     """Import patients from pandas `DataFrame`."""
     num_new = 0
     num_skipped = 0
@@ -218,9 +238,10 @@ def import_from_pandas(
 
 
 def export_to_pandas(patients: QuerySet):
-    """Export `QuerySet` of patients into a pandas `DataFrame` of the same
-    format as it is needed for importing."""
-
+    """
+    Export `QuerySet` of patients into a pandas `DataFrame` of the same
+    format as it is needed for importing.
+    """
     # create list of tuples for MultiIndex and use that to create DataFrame
     patient_fields = get_model_fields(
         Patient, remove=["hash_value", "tumor", "diagnose", "t_stage"]
