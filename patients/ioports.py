@@ -1,5 +1,5 @@
 import logging
-from typing import List
+from typing import List, Tuple
 
 import numpy as np
 import pandas as pd
@@ -165,7 +165,7 @@ def import_from_pandas(
     data_frame: pd.DataFrame,
     user,
     anonymize: List[str] = None
-):
+) -> Tuple[int]:
     """Import patients from pandas `DataFrame`."""
     num_new = 0
     num_skipped = 0
