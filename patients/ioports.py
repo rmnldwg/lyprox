@@ -68,8 +68,8 @@ def row2patient(row, user, anonymize: List[str]):
     for field in patient_fields:
         try:
             valid_patient_dict[field] = _(patient_dict[field])
-        except KeyError:
-            raise ParsingError(f"Column {field} is missing")
+        except KeyError as key_err:
+            raise ParsingError(f"Column {field} is missing") from key_err
 
     try:
         new_patient = Patient(
@@ -78,11 +78,12 @@ def row2patient(row, user, anonymize: List[str]):
             **valid_patient_dict
         )
         new_patient.save()
-    except IntegrityError as ie:
-        msg = ("Hash value already in database. Patient might have been added "
-               "before")
-        logger.warn(msg)
-        raise ie
+    except IntegrityError as int_err:
+        logger.warning(
+            "Hash value already in database. "
+            "Patient might have been added before"
+        )
+        raise int_err
 
     return new_patient
 
@@ -106,8 +107,8 @@ def row2tumors(row, patient):
         for field in tumor_fields:
             try:
                 valid_tumor_dict[field] = _(tumor_dict[field])
-            except KeyError:
-                raise ParsingError(f"Columns {field} is missing.")
+            except KeyError as key_err:
+                raise ParsingError(f"Columns {field} is missing.") from key_err
 
         new_tumor = Tumor(
             patient=patient,
@@ -146,7 +147,11 @@ def row2diagnoses(row, patient):
                     try:
                         valid_diagnose_dict[field] = _(diagnose_dict[field])
                     except KeyError:
-                        raise ParsingError(f"Column {field} is missing.")
+                        logger.info(
+                            f"Column {field} not in table of modality {mod}, "
+                            "setting to `None`."
+                        )
+                        valid_diagnose_dict[field] = None
 
                 new_diagnosis = Diagnose(
                     patient=patient, modality=mod, side=side,
@@ -159,21 +164,24 @@ def row2diagnoses(row, patient):
 def import_from_pandas(
     data_frame: pd.DataFrame,
     user,
-    anonymize: List[str] = ["id"]
+    anonymize: List[str] = None
 ):
     """Import patients from pandas `DataFrame`."""
     num_new = 0
     num_skipped = 0
 
+    if anonymize is None:
+        anonymize = ["id"]
+
     for i, row in data_frame.iterrows():
         # Make sure first two levels are correct for patient data
         try:
             patient_row = row[("patient", "#")]
-        except KeyError:
+        except KeyError as key_err:
             raise ParsingError(
                 "For patient info, first level must be 'patient', second level "
                 "must be '#'."
-            )
+            ) from key_err
 
         # skip row if patient is already in database
         try:
@@ -181,19 +189,18 @@ def import_from_pandas(
                 patient_row, user=user, anonymize=anonymize
             )
         except IntegrityError:
-            msg = ("Skipping row")
-            logger.warn(msg)
+            logger.warning("Skipping row")
             num_skipped += 1
             continue
 
         # make sure first level is correct for tumor
         try:
             tumor_row = row[("tumor")]
-        except KeyError:
+        except KeyError as key_err:
             raise ParsingError(
                 "For tumor info, first level must be 'tumor' and second level "
                 "must be number of tumor."
-            )
+            ) from key_err
 
         row2tumors(
             tumor_row, new_patient

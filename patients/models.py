@@ -134,35 +134,35 @@ class Tumor(ModelLoggerMixin, models.Model):
         LARYNX      = "larynx"
 
     SUBSITES = [
-        ("oral cavity", (("C02.0", "dorsal surface of tongue"), 
+        ("oral cavity", (("C02.0", "dorsal surface of tongue"),
                          ("C02.1", "border of tongue"),
                          ("C02.2", "ventral surface of tongue"),
                          ("C02.3", "anterior two thirds of tongue"),
                          ("C02.4", "lingual tonsil"),
                          ("C02.8", "overlapping sites of tongue"),
                          ("C02.9", "tongue, nos"),
- 
+
                          ("C03.0", "upper gum"),
                          ("C03.1", "lower gum"),
                          ("C03.9", "gum, nos"),
- 
+
                          ("C04.0", "anterior floor of mouth"),
                          ("C04.1", "lateral floor of mouth"),
                          ("C04.8", "overlapping lesion of floor of mouth"),
                          ("C04.9", "floor of mouth, nos"),
- 
+
                          ("C05.0", "hard palate"),
                          ("C05.1", "soft palate, nos"),
                          ("C05.2", "uvula"),
                          ("C05.8", "overlapping lesion of palate"),
                          ("C05.9", "palate, nos"),
- 
+
                          ("C06.0", "cheeck mucosa"),
                          ("C06.1", "vestibule of mouth"),
                          ("C06.2", "retromolar area"),
                          ("C06.8", "overlapping lesion(s) of NOS parts of mouth"),
                          ("C06.9", "mouth, nos"),
-                         
+
                          ("C08.0", "submandibular gland"),
                          ("C08.1", "sublingual gland"),
                          ("C08.9", "salivary gland, nos"))
@@ -173,7 +173,7 @@ class Tumor(ModelLoggerMixin, models.Model):
                          ("C09.1", "tonsillar pillar"),
                          ("C09.8", "overlapping lesion of tonsil"),
                          ("C09.9", "tonsil, nos"),
- 
+
                          ("C10.0", "vallecula"),
                          ("C10.1", "anterior surface of epiglottis"),
                          ("C10.2", "lateral wall of oropharynx"),
@@ -199,17 +199,21 @@ class Tumor(ModelLoggerMixin, models.Model):
         )
     ]
 
+    # NOTE: The ICD-10 codes `C01` and `C01.9` refer to the same subsite. `C01`
+    # is correct, but for resilience, I also accept `C01.9` until I implement
+    # my own ICD interface.
     SUBSITE_DICT = {
-        "base":        ["C01"],
+        "base":        ["C01"  , "C01.9"],
         "tonsil":      ["C09.0", "C09.1", "C09.8", "C09.9"],
         "rest_oro":    ["C10.0", "C10.1", "C10.2", "C10.3",
-                        "C10.4","C10.8", "C10.9"],
-        "rest_hypo":   ["C12"  , "C13.0", "C13.1", "C13.2", "C13.8", "C13.9"],
+                        "C10.4", "C10.8", "C10.9"],
+        "rest_hypo":   ["C12"  , "C12.9",
+                        "C13.0", "C13.1", "C13.2", "C13.8", "C13.9"],
         "glottis":     ["C32.0"],
         "rest_larynx": ["C32.1", "C32.2", "C32.3", "C32.8", "C32.9"],
-        "tongue":      ["C02.0", "C02.1", "C02.2", "C02.3", "C02.4", "C02.8", 
+        "tongue":      ["C02.0", "C02.1", "C02.2", "C02.3", "C02.4", "C02.8",
                         "C02.9",],
-        "gum_cheek":   ["C03.0", "C03.1", "C03.9", "C06.0", "C06.1", "C06.2", 
+        "gum_cheek":   ["C03.0", "C03.1", "C03.9", "C06.0", "C06.1", "C06.2",
                         "C06.8", "C06.9",],
         "mouth_floor": ["C04.0", "C04.1", "C04.8", "C04.9",],
         "palate":      ["C05.0", "C05.1", "C05.2", "C05.8", "C05.9",],
@@ -258,8 +262,10 @@ class Tumor(ModelLoggerMixin, models.Model):
                 found_location = True
 
         if not found_location:
-            self.logger.warn("Could not extract location for this tumor's "
-                             f"({self}) subsite ({self.get_subsite_display()})")
+            self.logger.warning(
+                "Could not extract location for this tumor's "
+                f"({self}) subsite ({self.get_subsite_display()})"
+            )
 
         tmp_return = super(Tumor, self).save(*args, **kwargs)
 
@@ -285,13 +291,13 @@ class Diagnose(ModelLoggerMixin, models.Model):
     LNLs = [
         "I", "Ia" , "Ib", "II", "IIa", "IIb", "III", "IV", "V", "Va", "Vb", "VII"
     ]
-    
+
     class MetaModality(type):
-        """Meta class for providing the classmethod attributes to the 
+        """Meta class for providing the classmethod attributes to the
         ``Modalities`` class similar to what Django's enum types have.
-        
+
         :meta private:"""
-        
+
         def __init__(cls, classname, bases, classdict, *args, **kwargs):
             cls._mods = []
             for key, val in classdict.items():
@@ -301,16 +307,16 @@ class Diagnose(ModelLoggerMixin, models.Model):
                     and all([c.isupper() for c in key])
                 ):
                     cls._mods.append(val)
-            
+
             super().__init__(classname, bases, classdict, *args, **kwargs)
-        
+
         def __len__(cls):
             return len(cls._mods)
-        
+
         def __iter__(cls):
             cls._i = 0
             return cls
-        
+
         def __next__(cls):
             if cls._i < len(cls):
                 mod = cls._mods[cls._i]
@@ -318,31 +324,31 @@ class Diagnose(ModelLoggerMixin, models.Model):
                 return mod
             else:
                 raise StopIteration
-        
+
         @property
         def choices(cls):
             return [(mod.value, mod.label) for mod in cls._mods]
-        
+
         @property
         def values(cls):
             return [mod.value for mod in cls._mods]
-        
+
         @property
         def labels(cls):
             return [mod.label for mod in cls._mods]
-        
+
         @property
         def spsn(cls):
             return [[mod.spec, mod.sens] for mod in cls._mods]
-            
-    
+
+
     class Modalities(metaclass=MetaModality):
-        """Class that aims to replicate the functionality of ``TextChoices`` 
-        from Django's enum types, but with the added functionality of storing 
+        """Class that aims to replicate the functionality of ``TextChoices``
+        from Django's enum types, but with the added functionality of storing
         the sensitivity & specificity of the respective modality.
-        
+
         :meta private:"""
-        
+
         CT   = Mod("CT" ,                  "CT" ,                    0.76, 0.81)
         MRI  = Mod("MRI",                  "MRI",                    0.63, 0.81)
         PET  = Mod("PET",                  "PET",                    0.86, 0.79)
@@ -372,13 +378,13 @@ class Diagnose(ModelLoggerMixin, models.Model):
         """Make sure LNLs and their sublevels (e.g. 'a' and 'b') are treated
         consistelntly. E.g. when sublevel ``Ia`` is reported to be involved,
         the involvement status of level ``I`` cannot be reported as healthy.
-        
+
         Also, if all LNLs are reported as unknown (`None`), just delete it.
         """
         if all([getattr(self, lnl) is None for lnl in self.LNLs]):
             super().save(*args, **kwargs)
             return self.delete()
-        
+
         safe_negate = lambda x: False if x is None else not x
 
         # LNL I (a and b)
@@ -392,7 +398,7 @@ class Diagnose(ModelLoggerMixin, models.Model):
             self.II = True
         elif safe_negate(self.IIa) and safe_negate(self.IIb):
             self.II = False
-        
+
         # LNL V (a and b)
         if self.Va or self.Vb:
             self.V = True
