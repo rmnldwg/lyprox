@@ -154,7 +154,7 @@ class DashboardForm(FormLoggerMixin, forms.Form):
                    "onchange": "changeHandler();"}
         ),
         choices=Diagnose.Modalities.choices,
-        initial=["CT", "MRI", "PET", "FNA", "diagnostic_consensus"]
+        initial=["CT", "MRI", "PET", "FNA", "diagnostic_consensus", "pathology"]
     )
     modality_combine = forms.ChoiceField(
         widget=forms.Select(attrs={"onchange": "changeHandler();"}),
@@ -163,7 +163,7 @@ class DashboardForm(FormLoggerMixin, forms.Form):
                  ("maxLLH", "maxLLH"),
                  ("RANK"  , "RANK"  )],
         label="Combine",
-        initial="OR"
+        initial="maxLLH"
     )
 
     # patient specific fields
