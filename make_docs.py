@@ -18,6 +18,7 @@ if __name__ == "__main__":
 
     pdoc.render.configure(
         logo="https://lyprox.org/static/logo.svg",
-        logo_link="https://lyprox.org"
+        logo_link="https://lyprox.org",
+        favicon="https://lyprox.org/static/favicon.ico",
     )
     pdoc.pdoc(*module_paths, output_directory=output_dir)
