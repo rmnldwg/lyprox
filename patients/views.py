@@ -1,3 +1,14 @@
+"""
+Here, the generic views from ``django.views.generic`` are implemented for the
+``patients.models``.
+
+A view handles the actual rendering of the HTML template that needs to be
+filled with what the python backend computes/generates.
+
+It includes views for creating, editing, deleting and
+listing the models in the ``patients`` app.
+"""
+
 import logging
 import time
 from pathlib import Path
@@ -12,12 +23,9 @@ from django.shortcuts import render
 from django.urls.base import reverse
 from django.views import generic
 
+from core.loggers import ViewLoggerMixin
 from dashboard import query
 from dashboard.forms import DashboardForm
-
-logger = logging.getLogger(__name__)
-
-from core.loggers import ViewLoggerMixin
 
 from .filters import PatientFilter
 from .forms import DataFileForm, DiagnoseForm, PatientForm, TumorForm
@@ -25,19 +33,22 @@ from .ioports import ParsingError, export_to_pandas, import_from_pandas
 from .mixins import InstitutionCheckObjectMixin, InstitutionCheckPatientMixin
 from .models import Diagnose, Patient, Tumor
 
+logger = logging.getLogger(__name__)
+
 
 # PATIENT related views
 class PatientListView(ViewLoggerMixin, generic.ListView):
-    """Renders a list of all patients in the database showing basic information
+    """
+    Renders a list of all patients in the database showing basic information
     and links to the individual entries. Depending from where this view is
     called, the list is filterable.
     """
     model = Patient
     form_class = DashboardForm
     filterset_class = PatientFilter
-    template_name = "patients/list.html"  #:
-    context_object_name = "patient_list"  #:
-    action = "show_patient_list"  #:
+    template_name = "patients/list.html"
+    context_object_name = "patient_list"
+    action = "show_patient_list"
     is_filterable = True
     queryset_pk_list = []
 
@@ -169,8 +180,10 @@ class DeletePatientView(ViewLoggerMixin,
 
 @login_required
 def upload_patients(request):
-    """View to load many patients at once from a CSV file using pandas. This
-    requires the CSV file to be formatted in a certain way."""
+    """
+    View to load many patients at once from a CSV file using pandas. This
+    requires the CSV file to be formatted in a certain way.
+    """
     if request.method == "POST":
         form = DataFileForm(request.POST, request.FILES)
 
@@ -180,23 +193,30 @@ def upload_patients(request):
             # creating patients from the resulting pandas DataFrame
             try:
                 num_new, num_skipped = import_from_pandas(data_frame, request.user)
-            except ParsingError as pe:
-                logger.error(pe)
+            except ParsingError as parse_err:
+                logger.error(parse_err)
                 form = DataFileForm()
-                context = {"upload_success": False,
-                           "form": form,
-                           "error": pe}
+                context = {
+                    "upload_success": False,
+                    "form": form,
+                    "error": parse_err
+                }
                 return render(request, "patients/upload.html", context)
 
-            context = {"upload_success": True,
-                       "num_new": num_new,
-                       "num_skipped": num_skipped}
+            context = {
+                "upload_success": True,
+                "num_new": num_new,
+                "num_skipped": num_skipped
+            }
             return render(request, "patients/upload.html", context)
 
     else:
         form = DataFileForm()
 
-    context = {"upload_succes": False, "form": form}
+    context = {
+        "upload_succes": False,
+        "form": form
+    }
     return render(request, "patients/upload.html", context)
 
 

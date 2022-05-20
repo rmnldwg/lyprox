@@ -1,10 +1,3 @@
 """
-.. include:: ../README.rst
+This is the ``patients`` app.
 """
-
-__all__ = [
-    "models",
-    "forms",
-    "views",
-    "ioports",
-]

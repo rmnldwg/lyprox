@@ -1,3 +1,8 @@
+"""
+This module defines ``django.forms.ModelForms`` for the creation and deletion
+of the models defined in ``patients.models``.
+"""
+
 from typing import Any, Dict
 
 import pandas
@@ -14,6 +19,7 @@ from .models import Diagnose, Institution, Patient, Tumor
 class PatientForm(FormLoggerMixin, forms.ModelForm):
     """Form to create and edit patients, based on their model definition."""
     class Meta:
+        """Indicate which model this acts on."""
         model = Patient
         fields = ["sex",
                   "diagnose_date",
@@ -129,6 +135,7 @@ class PatientForm(FormLoggerMixin, forms.ModelForm):
 class TumorForm(FormLoggerMixin, forms.ModelForm):
     """Form to create and edit tumors, based on their model definition."""
     class Meta:
+        """Specifies the corresponding model."""
         model = Tumor
         fields = ["t_stage",
                   "stage_prefix",
@@ -167,6 +174,7 @@ class TumorForm(FormLoggerMixin, forms.ModelForm):
 class DiagnoseForm(FormLoggerMixin, forms.ModelForm):
     """Form to create and edit diagnoses, based on their model definition."""
     class Meta:
+        """Connects the form to the model."""
         model = Diagnose
         fields = ["diagnose_date",
                   "modality",

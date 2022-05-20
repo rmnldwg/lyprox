@@ -1,3 +1,8 @@
+"""
+Defining filters that the ``django_filters`` package uses to allow easy
+filtering of the patients in the ``ListView``.
+"""
+
 import django_filters
 from django.forms import widgets
 
@@ -7,6 +12,10 @@ from .models import Patient
 
 
 class PatientFilter(django_filters.FilterSet):
+    """
+    A ``django_filters.FilterSet`` which allows for easy filtering of a
+    patient queryset for any fields defined here.
+    """
     diagnose_date = django_filters.DateFromToRangeFilter(
         widget=django_filters.widgets.RangeWidget(attrs={"class": "input",
                                                          "type": "date"})
@@ -51,6 +60,7 @@ class PatientFilter(django_filters.FilterSet):
     )
 
     class Meta:
+        """Define which django model this should act on."""
         model = Patient
         fields = ["diagnose_date", "gender", "age",
                   "t_stage", "n_stage", "m_stage"]
