@@ -1,6 +1,14 @@
 """
-Defining filters that the ``django_filters`` package uses to allow easy
-filtering of the patients in the ``ListView``.
+This module defines a ``django_filters.FilterSet`` based class that allows
+relatively easy filtering and sorting of models. In our case, we have
+implemented only a ``PatientFilter`` for the ``views.PatientListView`` which
+almost automatically provides a form that can be passed and used in the HTML
+template of the list view.
+
+By using third-party app ``django_filters`` (`docs`_) we can define by what
+fields we want to filter/sort our models and how.
+
+.. _docs: https://django-filter.readthedocs.io/en/stable/
 """
 
 import django_filters
