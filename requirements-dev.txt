@@ -1,6 +1,6 @@
--r requirements.txt
+-r "requirements.txt"
+-r "requirements-docs.txt"
 pytest-factoryboy==2.1
 pytest-django==4.2
-pydoctor
 django-extensions
 pre-commit
