@@ -1,0 +1,2779 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+          "DTD/xhtml1-strict.dtd">
+<html>
+  
+  <head>
+    
+    <title>All Documents</title>
+    <meta name="generator" content="pydoctor 22.5.1"> 
+        
+    </meta>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1 maximum-scale=1" />
+    <link rel="stylesheet" type="text/css" href="bootstrap.min.css" />
+    <link rel="stylesheet" type="text/css" href="apidocs.css" />
+    <link rel="stylesheet" type="text/css" href="extra.css" />
+</head>
+  <body>
+    
+
+    
+  
+  <div class="container-fluid">
+
+
+    <div class="navbar-header">
+      
+      <div class="navlinks">
+        <span class="navbar-brand">
+          LyProX <a href="index.html">API Documentation</a>
+        </span>
+
+        <a href="moduleIndex.html">
+          Modules
+        </a>
+
+        <a href="classIndex.html">
+          Classes
+        </a>
+
+        <a href="nameIndex.html">
+          Names
+        </a>
+
+        <div id="search-box-container">
+          <div class="input-group">
+            <input id="search-box" type="search" name="search-query" placeholder="Search..." aria-label="Search" minlength="2" class="form-control" autocomplete="off" />
+            
+            <span class="input-group-btn">
+              <a style="display: none;" class="btn btn-default" id="search-clear-button" title="Clear" onclick="clearSearch()"><img src="fonts/x-circle.svg" alt="Clear" /></a>
+              <a class="btn btn-default" id="search-help-button" title="Help" onclick="toggleSearchHelpText()"><img src="fonts/info.svg" alt="Help" /></a>
+            </span>
+          </div>
+        </div>
+
+      </div>
+
+      <div id="search-results-container" style="display: none;">
+        
+        <div id="search-buttons">
+          <span class="label label-default" id="search-docstrings-button">
+          <label class="checkbox-inline">
+            <input type="checkbox" id="toggle-search-in-docstrings-checkbox" value="false" onclick="toggleSearchInDocstrings()">
+              search in docstrings
+            </input>
+          </label>
+          </span>
+          
+        </div>
+        
+        <noscript>
+            <h1>Cannot search: JavaScript is not supported/enabled in your browser.</h1>
+        </noscript>
+
+        <div class="hint" id="search-help-box">
+          <p class="rst-last">
+      
+            Search bar offers the following options:
+            <ul>   
+                <li>
+                  <strong>Term presence.</strong> The below example searches for documents that 
+                    must contain “foo”, might contain “bar” and must not contain “baz”: <code>+foo bar -baz</code>
+                </li> 
+
+                <li>
+                  <strong>Wildcards.</strong> The below example searches for documents with words beginning with “foo”: <code>foo*</code>
+                </li> 
+
+                <li>
+                  <strong>Search in specific fields.</strong> The following search matches all objects 
+                  in "twisted.mail" that matches “search”: <code>+qname:twisted.mail.* +search</code>
+
+                  <p>
+                    Possible fields: 'name', 'qname' (fully qualified name), 'docstring', and 'kind'.
+                    Last two fields are only applicable if "search in docstrings" is enabled.
+                  </p>
+                </li>
+
+                <li>
+                  <strong>Fuzzy matches.</strong> The following search matches all documents 
+                  that have a word within 1 edit distance of “foo”: <code>foo~1</code>
+                </li>
+            </ul>
+
+          </p>
+        </div>
+
+        <div id="search-status"> </div>
+
+        <div class="warning" id="search-warn-box" style="display: none;">
+          <p class="rst-last"><span id="search-warn"></span></p>
+        </div>
+
+        <table id="search-results">
+          <!-- Filled dynamically by JS -->
+        </table>
+        
+        <div style="margin-top: 8px;">
+          <p>Results provided by <a href="https://lunrjs.com">Lunr.js</a></p>
+        </div>
+      </div>
+
+    </div>
+
+
+  </div>
+
+
+    
+    
+    <div class="container">
+      <h1>All Documents</h1>
+
+       <ul>
+          <li id="core">
+            
+            <div class="fullName">core</div>
+            <div class="url">core.html</div>
+            <div class="type">Package</div>
+            <div class="kind">Package</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">This is the module at the heat of <a class="rst-reference external" href="https://lyprox.org" target="_top">LyProX</a></div>
+          </li><li id="core.defaults">
+            
+            <div class="fullName">core<wbr></wbr>.defaults</div>
+            <div class="url">core.defaults.html</div>
+            <div class="type">ZopeInterfaceModule</div>
+            <div class="kind">Module</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">Default Django settings for the LyProX web interfaces.</div>
+          </li><li id="core.views">
+            
+            <div class="fullName">core<wbr></wbr>.views</div>
+            <div class="url">core.views.html</div>
+            <div class="type">ZopeInterfaceModule</div>
+            <div class="kind">Module</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">Define the home view and a maintenance view.</div>
+          </li><li id="patients">
+            
+            <div class="fullName">patients</div>
+            <div class="url">patients.html</div>
+            <div class="type">Package</div>
+            <div class="kind">Package</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">The <code><a href="patients.html" class="internal-link">patients</a></code> app manages the database and its access. It allows the user to create, edit and delete new entries in the database and ensures that it is always consistent.</div>
+          </li><li id="patients.filters">
+            
+            <div class="fullName">patients<wbr></wbr>.filters</div>
+            <div class="url">patients.filters.html</div>
+            <div class="type">ZopeInterfaceModule</div>
+            <div class="kind">Module</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">This module defines a <tt class="rst-docutils literal">django_filters.FilterSet</tt> based class that allows relatively easy filtering and sorting of models. In our case, we have implemented only a <tt class="rst-docutils literal">PatientFilter</tt> for the <tt class="rst-docutils literal">views.PatientListView</tt>...</div>
+          </li><li id="patients.forms">
+            
+            <div class="fullName">patients<wbr></wbr>.forms</div>
+            <div class="url">patients.forms.html</div>
+            <div class="type">ZopeInterfaceModule</div>
+            <div class="kind">Module</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">This module defines <tt class="rst-docutils literal">django.forms.ModelForms</tt> for the creation and deletion of the models defined in <tt class="rst-docutils literal">patients.models</tt>. Generally, forms are used to capture user input in django and are rendered out by views into HTML elements.</div>
+          </li><li id="patients.ioports">
+            
+            <div class="fullName">patients<wbr></wbr>.ioports</div>
+            <div class="url">patients.ioports.html</div>
+            <div class="type">ZopeInterfaceModule</div>
+            <div class="kind">Module</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">Module for importing and exporting CSV tables of patients with lymphatic patterns of progression into and from the Django database.</div>
+          </li><li id="patients.management">
+            
+            <div class="fullName">patients<wbr></wbr>.management</div>
+            <div class="url">patients.management.html</div>
+            <div class="type">Package</div>
+            <div class="kind">Package</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">In this module one can define custom commands that can be called via</div>
+          </li><li id="patients.management.commands">
+            
+            <div class="fullName">patients<wbr></wbr>.management<wbr></wbr>.commands</div>
+            <div class="url">patients.management.commands.html</div>
+            <div class="type">Package</div>
+            <div class="kind">Package</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">Every python file in this module defines a custom command.</div>
+          </li><li id="patients.management.commands.import">
+            
+            <div class="fullName">patients<wbr></wbr>.management<wbr></wbr>.commands<wbr></wbr>.import</div>
+            <div class="url">patients.management.commands.import.html</div>
+            <div class="type">ZopeInterfaceModule</div>
+            <div class="kind">Module</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">This file defines the <tt class="rst-docutils literal">import</tt> command.</div>
+          </li><li id="patients.mixins">
+            
+            <div class="fullName">patients<wbr></wbr>.mixins</div>
+            <div class="url">patients.mixins.html</div>
+            <div class="type">ZopeInterfaceModule</div>
+            <div class="kind">Module</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">Mixins that ensure safety with respect to who can edit which patients.</div>
+          </li><li id="patients.models">
+            
+            <div class="fullName">patients<wbr></wbr>.models</div>
+            <div class="url">patients.models.html</div>
+            <div class="type">ZopeInterfaceModule</div>
+            <div class="kind">Module</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">This module defines how patient related models are defined and how they interact with each other. Currently, three models are implemented: The <code><a href="patients.models.Patient.html" class="internal-link" title="patients.models.Patient">Patient</a></code>, <code><a href="patients.models.Tumor.html" class="internal-link" title="patients.models.Tumor">Tumor</a></code> and the <code><a href="patients.models.Diagnose.html" class="internal-link" title="patients.models.Diagnose">Diagnose</a></code>. Each <code><a href="patients.models.Patient.html" class="internal-link" title="patients.models.Patient">Patient</a></code> can have multiple ...</div>
+          </li><li id="patients.views">
+            
+            <div class="fullName">patients<wbr></wbr>.views</div>
+            <div class="url">patients.views.html</div>
+            <div class="type">ZopeInterfaceModule</div>
+            <div class="kind">Module</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">Here, the generic views from <tt class="rst-docutils literal">django.views.generic</tt> are implemented for the <tt class="rst-docutils literal">patients.models</tt>.</div>
+          </li><li id="dashboard">
+            
+            <div class="fullName">dashboard</div>
+            <div class="url">dashboard.html</div>
+            <div class="type">Package</div>
+            <div class="kind">Package</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">The app <code><a href="dashboard.html" class="internal-link">dashboard</a></code> manages the querying and displaying of lymphatic progression patterns under the "Dashboard" tab on LyProX.</div>
+          </li><li id="dashboard.forms">
+            
+            <div class="fullName">dashboard<wbr></wbr>.forms</div>
+            <div class="url">dashboard.forms.html</div>
+            <div class="type">ZopeInterfaceModule</div>
+            <div class="kind">Module</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">The <code><a href="dashboard.forms.html" class="internal-link">dashboard.forms</a></code> module defines the relatively complex form that is used for querying the database later.</div>
+          </li><li id="dashboard.query">
+            
+            <div class="fullName">dashboard<wbr></wbr>.query</div>
+            <div class="url">dashboard.query.html</div>
+            <div class="type">ZopeInterfaceModule</div>
+            <div class="kind">Module</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">The <code><a href="dashboard.query.html" class="internal-link" title="dashboard.query">query</a></code> module takes the cleaned data from the <code><a href="dashboard.forms.html" class="internal-link" title="dashboard.forms">forms</a></code>, retrieves information from the database efficiently and puts everything into a dictionary with which the HTML response is then populated.</div>
+          </li><li id="dashboard.views">
+            
+            <div class="fullName">dashboard<wbr></wbr>.views</div>
+            <div class="url">dashboard.views.html</div>
+            <div class="type">ZopeInterfaceModule</div>
+            <div class="kind">Module</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">The <code><a href="dashboard.views.html" class="internal-link" title="dashboard.views">views</a></code> module in the <code><a href="dashboard.html" class="internal-link">dashboard</a></code> app mostly handles the <code><a href="dashboard.views.DashboardView.html" class="internal-link" title="dashboard.views.DashboardView">DashboardView</a></code>, which takes care of initializing the complex <code><a href="dashboard.forms.DashboardForm.html" class="internal-link" title="dashboard.forms.DashboardForm">forms.DashboardForm</a></code>, passing the cleaned values to all the filtering functions in the ...</div>
+          </li><li id="core.defaults.DEBUG">
+            
+            <div class="fullName">core<wbr></wbr>.defaults<wbr></wbr>.DEBUG</div>
+            <div class="url">core.defaults.html#DEBUG</div>
+            <div class="type">ZopeInterfaceAttribute</div>
+            <div class="kind">Constant</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">Set to <tt class="rst-docutils literal">False</tt> in production</div>
+          </li><li id="core.defaults.MAINTENANCE">
+            
+            <div class="fullName">core<wbr></wbr>.defaults<wbr></wbr>.MAINTENANCE</div>
+            <div class="url">core.defaults.html#MAINTENANCE</div>
+            <div class="type">ZopeInterfaceAttribute</div>
+            <div class="kind">Constant</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">Set to <tt class="rst-docutils literal">True</tt> during maintenance. This will redirect all incoming requests to a maintenance page.</div>
+          </li><li id="core.defaults.SECRET_KEY">
+            
+            <div class="fullName">core<wbr></wbr>.defaults<wbr></wbr>.SECRET<wbr></wbr>_KEY</div>
+            <div class="url">core.defaults.html#SECRET_KEY</div>
+            <div class="type">ZopeInterfaceAttribute</div>
+            <div class="kind">Constant</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">The secret key for security related functions like salt &amp; pepper of password hashes.</div>
+          </li><li id="core.defaults.ALLOWED_HOSTS">
+            
+            <div class="fullName">core<wbr></wbr>.defaults<wbr></wbr>.ALLOWED<wbr></wbr>_HOSTS</div>
+            <div class="url">core.defaults.html#ALLOWED_HOSTS</div>
+            <div class="type">ZopeInterfaceAttribute</div>
+            <div class="kind">Constant</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">List the URLs and IP addresses via which the site can be reached.</div>
+          </li><li id="core.defaults.CSRF_COOKIE_SECURE">
+            
+            <div class="fullName">core<wbr></wbr>.defaults<wbr></wbr>.CSRF<wbr></wbr>_COOKIE<wbr></wbr>_SECURE</div>
+            <div class="url">core.defaults.html#CSRF_COOKIE_SECURE</div>
+            <div class="type">ZopeInterfaceAttribute</div>
+            <div class="kind">Constant</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary"><span class="undocumented">Undocumented</span></div>
+          </li><li id="core.defaults.SESSION_COOKIE_SECURE">
+            
+            <div class="fullName">core<wbr></wbr>.defaults<wbr></wbr>.SESSION<wbr></wbr>_COOKIE<wbr></wbr>_SECURE</div>
+            <div class="url">core.defaults.html#SESSION_COOKIE_SECURE</div>
+            <div class="type">ZopeInterfaceAttribute</div>
+            <div class="kind">Constant</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary"><span class="undocumented">Undocumented</span></div>
+          </li><li id="core.defaults.BASE_DIR">
+            
+            <div class="fullName">core<wbr></wbr>.defaults<wbr></wbr>.BASE<wbr></wbr>_DIR</div>
+            <div class="url">core.defaults.html#BASE_DIR</div>
+            <div class="type">ZopeInterfaceAttribute</div>
+            <div class="kind">Constant</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary"><span class="undocumented">Undocumented</span></div>
+          </li><li id="core.defaults.FILE_UPLOAD_TEMP_DIR">
+            
+            <div class="fullName">core<wbr></wbr>.defaults<wbr></wbr>.FILE<wbr></wbr>_UPLOAD<wbr></wbr>_TEMP<wbr></wbr>_DIR</div>
+            <div class="url">core.defaults.html#FILE_UPLOAD_TEMP_DIR</div>
+            <div class="type">ZopeInterfaceAttribute</div>
+            <div class="kind">Constant</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary"><span class="undocumented">Undocumented</span></div>
+          </li><li id="core.defaults.LOGIN_REDIRECT_URL">
+            
+            <div class="fullName">core<wbr></wbr>.defaults<wbr></wbr>.LOGIN<wbr></wbr>_REDIRECT<wbr></wbr>_URL</div>
+            <div class="url">core.defaults.html#LOGIN_REDIRECT_URL</div>
+            <div class="type">ZopeInterfaceAttribute</div>
+            <div class="kind">Constant</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary"><span class="undocumented">Undocumented</span></div>
+          </li><li id="core.defaults.GITHUB_REPO_OWNER">
+            
+            <div class="fullName">core<wbr></wbr>.defaults<wbr></wbr>.GITHUB<wbr></wbr>_REPO<wbr></wbr>_OWNER</div>
+            <div class="url">core.defaults.html#GITHUB_REPO_OWNER</div>
+            <div class="type">ZopeInterfaceAttribute</div>
+            <div class="kind">Constant</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary"><span class="undocumented">Undocumented</span></div>
+          </li><li id="core.defaults.GITHUB_REPO_NAME">
+            
+            <div class="fullName">core<wbr></wbr>.defaults<wbr></wbr>.GITHUB<wbr></wbr>_REPO<wbr></wbr>_NAME</div>
+            <div class="url">core.defaults.html#GITHUB_REPO_NAME</div>
+            <div class="type">ZopeInterfaceAttribute</div>
+            <div class="kind">Constant</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary"><span class="undocumented">Undocumented</span></div>
+          </li><li id="core.defaults.VERSION">
+            
+            <div class="fullName">core<wbr></wbr>.defaults<wbr></wbr>.VERSION</div>
+            <div class="url">core.defaults.html#VERSION</div>
+            <div class="type">ZopeInterfaceAttribute</div>
+            <div class="kind">Constant</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary"><span class="undocumented">Undocumented</span></div>
+          </li><li id="core.defaults.IS_FROZEN">
+            
+            <div class="fullName">core<wbr></wbr>.defaults<wbr></wbr>.IS<wbr></wbr>_FROZEN</div>
+            <div class="url">core.defaults.html#IS_FROZEN</div>
+            <div class="type">ZopeInterfaceAttribute</div>
+            <div class="kind">Constant</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary"><span class="undocumented">Undocumented</span></div>
+          </li><li id="core.defaults.FROZEN_VERSIONS">
+            
+            <div class="fullName">core<wbr></wbr>.defaults<wbr></wbr>.FROZEN<wbr></wbr>_VERSIONS</div>
+            <div class="url">core.defaults.html#FROZEN_VERSIONS</div>
+            <div class="type">ZopeInterfaceAttribute</div>
+            <div class="kind">Constant</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary"><span class="undocumented">Undocumented</span></div>
+          </li><li id="core.defaults.set_LOGGING">
+            
+            <div class="fullName">core<wbr></wbr>.defaults<wbr></wbr>.set_<wbr></wbr>LOGGING</div>
+            <div class="url">core.defaults.html#set_LOGGING</div>
+            <div class="type">ZopeInterfaceFunction</div>
+            <div class="kind">Function</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">Return logging settings in the form of a dictionary as function of the log-level. This is used so that in a subdomain settings file the function can be called again to overwrite the logging settings easily.</div>
+          </li><li id="core.defaults.LOG_LEVEL">
+            
+            <div class="fullName">core<wbr></wbr>.defaults<wbr></wbr>.LOG<wbr></wbr>_LEVEL</div>
+            <div class="url">core.defaults.html#LOG_LEVEL</div>
+            <div class="type">ZopeInterfaceAttribute</div>
+            <div class="kind">Constant</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary"><span class="undocumented">Undocumented</span></div>
+          </li><li id="core.defaults.LOGGING">
+            
+            <div class="fullName">core<wbr></wbr>.defaults<wbr></wbr>.LOGGING</div>
+            <div class="url">core.defaults.html#LOGGING</div>
+            <div class="type">ZopeInterfaceAttribute</div>
+            <div class="kind">Constant</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary"><span class="undocumented">Undocumented</span></div>
+          </li><li id="core.defaults.INSTALLED_APPS">
+            
+            <div class="fullName">core<wbr></wbr>.defaults<wbr></wbr>.INSTALLED<wbr></wbr>_APPS</div>
+            <div class="url">core.defaults.html#INSTALLED_APPS</div>
+            <div class="type">ZopeInterfaceAttribute</div>
+            <div class="kind">Constant</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary"><span class="undocumented">Undocumented</span></div>
+          </li><li id="core.defaults.MIDDLEWARE">
+            
+            <div class="fullName">core<wbr></wbr>.defaults<wbr></wbr>.MIDDLEWARE</div>
+            <div class="url">core.defaults.html#MIDDLEWARE</div>
+            <div class="type">ZopeInterfaceAttribute</div>
+            <div class="kind">Constant</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary"><span class="undocumented">Undocumented</span></div>
+          </li><li id="core.defaults.ROOT_URLCONF">
+            
+            <div class="fullName">core<wbr></wbr>.defaults<wbr></wbr>.ROOT<wbr></wbr>_URLCONF</div>
+            <div class="url">core.defaults.html#ROOT_URLCONF</div>
+            <div class="type">ZopeInterfaceAttribute</div>
+            <div class="kind">Constant</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary"><span class="undocumented">Undocumented</span></div>
+          </li><li id="core.defaults.TEMPLATES">
+            
+            <div class="fullName">core<wbr></wbr>.defaults<wbr></wbr>.TEMPLATES</div>
+            <div class="url">core.defaults.html#TEMPLATES</div>
+            <div class="type">ZopeInterfaceAttribute</div>
+            <div class="kind">Constant</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary"><span class="undocumented">Undocumented</span></div>
+          </li><li id="core.defaults.DATABASES">
+            
+            <div class="fullName">core<wbr></wbr>.defaults<wbr></wbr>.DATABASES</div>
+            <div class="url">core.defaults.html#DATABASES</div>
+            <div class="type">ZopeInterfaceAttribute</div>
+            <div class="kind">Constant</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary"><span class="undocumented">Undocumented</span></div>
+          </li><li id="core.defaults.DEFAULT_AUTO_FIELD">
+            
+            <div class="fullName">core<wbr></wbr>.defaults<wbr></wbr>.DEFAULT<wbr></wbr>_AUTO<wbr></wbr>_FIELD</div>
+            <div class="url">core.defaults.html#DEFAULT_AUTO_FIELD</div>
+            <div class="type">ZopeInterfaceAttribute</div>
+            <div class="kind">Constant</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary"><span class="undocumented">Undocumented</span></div>
+          </li><li id="core.defaults.DBBACKUP_STORAGE">
+            
+            <div class="fullName">core<wbr></wbr>.defaults<wbr></wbr>.DBBACKUP<wbr></wbr>_STORAGE</div>
+            <div class="url">core.defaults.html#DBBACKUP_STORAGE</div>
+            <div class="type">ZopeInterfaceAttribute</div>
+            <div class="kind">Constant</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary"><span class="undocumented">Undocumented</span></div>
+          </li><li id="core.defaults.DBBACKUP_STORAGE_OPTIONS">
+            
+            <div class="fullName">core<wbr></wbr>.defaults<wbr></wbr>.DBBACKUP<wbr></wbr>_STORAGE<wbr></wbr>_OPTIONS</div>
+            <div class="url">core.defaults.html#DBBACKUP_STORAGE_OPTIONS</div>
+            <div class="type">ZopeInterfaceAttribute</div>
+            <div class="kind">Constant</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary"><span class="undocumented">Undocumented</span></div>
+          </li><li id="core.defaults.AUTH_PASSWORD_VALIDATORS">
+            
+            <div class="fullName">core<wbr></wbr>.defaults<wbr></wbr>.AUTH<wbr></wbr>_PASSWORD<wbr></wbr>_VALIDATORS</div>
+            <div class="url">core.defaults.html#AUTH_PASSWORD_VALIDATORS</div>
+            <div class="type">ZopeInterfaceAttribute</div>
+            <div class="kind">Constant</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary"><span class="undocumented">Undocumented</span></div>
+          </li><li id="core.defaults.AUTH_USER_MODEL">
+            
+            <div class="fullName">core<wbr></wbr>.defaults<wbr></wbr>.AUTH<wbr></wbr>_USER<wbr></wbr>_MODEL</div>
+            <div class="url">core.defaults.html#AUTH_USER_MODEL</div>
+            <div class="type">ZopeInterfaceAttribute</div>
+            <div class="kind">Constant</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary"><span class="undocumented">Undocumented</span></div>
+          </li><li id="core.defaults.LANGUAGE_CODE">
+            
+            <div class="fullName">core<wbr></wbr>.defaults<wbr></wbr>.LANGUAGE<wbr></wbr>_CODE</div>
+            <div class="url">core.defaults.html#LANGUAGE_CODE</div>
+            <div class="type">ZopeInterfaceAttribute</div>
+            <div class="kind">Constant</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary"><span class="undocumented">Undocumented</span></div>
+          </li><li id="core.defaults.TIME_ZONE">
+            
+            <div class="fullName">core<wbr></wbr>.defaults<wbr></wbr>.TIME<wbr></wbr>_ZONE</div>
+            <div class="url">core.defaults.html#TIME_ZONE</div>
+            <div class="type">ZopeInterfaceAttribute</div>
+            <div class="kind">Constant</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary"><span class="undocumented">Undocumented</span></div>
+          </li><li id="core.defaults.USE_I18N">
+            
+            <div class="fullName">core<wbr></wbr>.defaults<wbr></wbr>.USE<wbr></wbr>_I18N</div>
+            <div class="url">core.defaults.html#USE_I18N</div>
+            <div class="type">ZopeInterfaceAttribute</div>
+            <div class="kind">Constant</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary"><span class="undocumented">Undocumented</span></div>
+          </li><li id="core.defaults.USE_L10N">
+            
+            <div class="fullName">core<wbr></wbr>.defaults<wbr></wbr>.USE<wbr></wbr>_L10N</div>
+            <div class="url">core.defaults.html#USE_L10N</div>
+            <div class="type">ZopeInterfaceAttribute</div>
+            <div class="kind">Constant</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary"><span class="undocumented">Undocumented</span></div>
+          </li><li id="core.defaults.USE_TZ">
+            
+            <div class="fullName">core<wbr></wbr>.defaults<wbr></wbr>.USE<wbr></wbr>_TZ</div>
+            <div class="url">core.defaults.html#USE_TZ</div>
+            <div class="type">ZopeInterfaceAttribute</div>
+            <div class="kind">Constant</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary"><span class="undocumented">Undocumented</span></div>
+          </li><li id="core.defaults.STATICFILES_DIRS">
+            
+            <div class="fullName">core<wbr></wbr>.defaults<wbr></wbr>.STATICFILES<wbr></wbr>_DIRS</div>
+            <div class="url">core.defaults.html#STATICFILES_DIRS</div>
+            <div class="type">ZopeInterfaceAttribute</div>
+            <div class="kind">Constant</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary"><span class="undocumented">Undocumented</span></div>
+          </li><li id="core.defaults.STATIC_ROOT">
+            
+            <div class="fullName">core<wbr></wbr>.defaults<wbr></wbr>.STATIC<wbr></wbr>_ROOT</div>
+            <div class="url">core.defaults.html#STATIC_ROOT</div>
+            <div class="type">ZopeInterfaceAttribute</div>
+            <div class="kind">Constant</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary"><span class="undocumented">Undocumented</span></div>
+          </li><li id="core.defaults.STATIC_URL">
+            
+            <div class="fullName">core<wbr></wbr>.defaults<wbr></wbr>.STATIC<wbr></wbr>_URL</div>
+            <div class="url">core.defaults.html#STATIC_URL</div>
+            <div class="type">ZopeInterfaceAttribute</div>
+            <div class="kind">Constant</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary"><span class="undocumented">Undocumented</span></div>
+          </li><li id="core.defaults.MEDIA_ROOT">
+            
+            <div class="fullName">core<wbr></wbr>.defaults<wbr></wbr>.MEDIA<wbr></wbr>_ROOT</div>
+            <div class="url">core.defaults.html#MEDIA_ROOT</div>
+            <div class="type">ZopeInterfaceAttribute</div>
+            <div class="kind">Constant</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary"><span class="undocumented">Undocumented</span></div>
+          </li><li id="core.defaults.MEDIA_URL">
+            
+            <div class="fullName">core<wbr></wbr>.defaults<wbr></wbr>.MEDIA<wbr></wbr>_URL</div>
+            <div class="url">core.defaults.html#MEDIA_URL</div>
+            <div class="type">ZopeInterfaceAttribute</div>
+            <div class="kind">Constant</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary"><span class="undocumented">Undocumented</span></div>
+          </li><li id="core.defaults.DOWNLOADS_ROOT">
+            
+            <div class="fullName">core<wbr></wbr>.defaults<wbr></wbr>.DOWNLOADS<wbr></wbr>_ROOT</div>
+            <div class="url">core.defaults.html#DOWNLOADS_ROOT</div>
+            <div class="type">ZopeInterfaceAttribute</div>
+            <div class="kind">Constant</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary"><span class="undocumented">Undocumented</span></div>
+          </li><li id="core.defaults.DOWNLOADS_URL">
+            
+            <div class="fullName">core<wbr></wbr>.defaults<wbr></wbr>.DOWNLOADS<wbr></wbr>_URL</div>
+            <div class="url">core.defaults.html#DOWNLOADS_URL</div>
+            <div class="type">ZopeInterfaceAttribute</div>
+            <div class="kind">Constant</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary"><span class="undocumented">Undocumented</span></div>
+          </li><li id="core.views.index">
+            
+            <div class="fullName">core<wbr></wbr>.views<wbr></wbr>.index</div>
+            <div class="url">core.views.html#index</div>
+            <div class="type">ZopeInterfaceFunction</div>
+            <div class="kind">Function</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary"><span class="undocumented">Undocumented</span></div>
+          </li><li id="core.views.maintenance">
+            
+            <div class="fullName">core<wbr></wbr>.views<wbr></wbr>.maintenance</div>
+            <div class="url">core.views.html#maintenance</div>
+            <div class="type">ZopeInterfaceFunction</div>
+            <div class="kind">Function</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary"><span class="undocumented">Undocumented</span></div>
+          </li><li id="patients.models.RobustDateField">
+            
+            <div class="fullName">patients<wbr></wbr>.models<wbr></wbr>.<wbr></wbr>Robust<wbr></wbr>Date<wbr></wbr>Field</div>
+            <div class="url">patients.models.RobustDateField.html</div>
+            <div class="type">ZopeInterfaceClass</div>
+            <div class="kind">Class</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">DateField that doesn't raise a ValidationError when the date string isn't formated according to ISO (YYYY-MM-DD)</div>
+          </li><li id="patients.models.RobustDateField.to_python">
+            
+            <div class="fullName">patients<wbr></wbr>.models<wbr></wbr>.<wbr></wbr>Robust<wbr></wbr>Date<wbr></wbr>Field<wbr></wbr>.to<wbr></wbr>_python</div>
+            <div class="url">patients.models.RobustDateField.html#to_python</div>
+            <div class="type">ZopeInterfaceFunction</div>
+            <div class="kind">Method</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary"><span class="undocumented">Undocumented</span></div>
+          </li><li id="patients.models.Patient">
+            
+            <div class="fullName">patients<wbr></wbr>.models<wbr></wbr>.<wbr></wbr>Patient</div>
+            <div class="url">patients.models.Patient.html</div>
+            <div class="type">ZopeInterfaceClass</div>
+            <div class="kind">Class</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">The representation of a patient in the database. It contains some demographic information, as well as patient-specific characteristics that are important in the context of cancer, e.g. HPV status.</div>
+          </li><li id="patients.models.Patient.hash_value">
+            
+            <div class="fullName">patients<wbr></wbr>.models<wbr></wbr>.<wbr></wbr>Patient<wbr></wbr>.hash<wbr></wbr>_value</div>
+            <div class="url">patients.models.Patient.html#hash_value</div>
+            <div class="type">ZopeInterfaceAttribute</div>
+            <div class="kind">Class Variable</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">Unique ID computed from sensitive info upon patient creation.</div>
+          </li><li id="patients.models.Patient.sex">
+            
+            <div class="fullName">patients<wbr></wbr>.models<wbr></wbr>.<wbr></wbr>Patient<wbr></wbr>.sex</div>
+            <div class="url">patients.models.Patient.html#sex</div>
+            <div class="type">ZopeInterfaceAttribute</div>
+            <div class="kind">Class Variable</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary"><span class="undocumented">Undocumented</span></div>
+          </li><li id="patients.models.Patient.age">
+            
+            <div class="fullName">patients<wbr></wbr>.models<wbr></wbr>.<wbr></wbr>Patient<wbr></wbr>.age</div>
+            <div class="url">patients.models.Patient.html#age</div>
+            <div class="type">ZopeInterfaceAttribute</div>
+            <div class="kind">Class Variable</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary"><span class="undocumented">Undocumented</span></div>
+          </li><li id="patients.models.Patient.diagnose_date">
+            
+            <div class="fullName">patients<wbr></wbr>.models<wbr></wbr>.<wbr></wbr>Patient<wbr></wbr>.diagnose<wbr></wbr>_date</div>
+            <div class="url">patients.models.Patient.html#diagnose_date</div>
+            <div class="type">ZopeInterfaceAttribute</div>
+            <div class="kind">Class Variable</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">Date of histological confirmation with a squamous cell carcinoma.</div>
+          </li><li id="patients.models.Patient.alcohol_abuse">
+            
+            <div class="fullName">patients<wbr></wbr>.models<wbr></wbr>.<wbr></wbr>Patient<wbr></wbr>.alcohol<wbr></wbr>_abuse</div>
+            <div class="url">patients.models.Patient.html#alcohol_abuse</div>
+            <div class="type">ZopeInterfaceAttribute</div>
+            <div class="kind">Class Variable</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">Was the patient a drinker?</div>
+          </li><li id="patients.models.Patient.nicotine_abuse">
+            
+            <div class="fullName">patients<wbr></wbr>.models<wbr></wbr>.<wbr></wbr>Patient<wbr></wbr>.nicotine<wbr></wbr>_abuse</div>
+            <div class="url">patients.models.Patient.html#nicotine_abuse</div>
+            <div class="type">ZopeInterfaceAttribute</div>
+            <div class="kind">Class Variable</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">Was the patient a smoker</div>
+          </li><li id="patients.models.Patient.hpv_status">
+            
+            <div class="fullName">patients<wbr></wbr>.models<wbr></wbr>.<wbr></wbr>Patient<wbr></wbr>.hpv<wbr></wbr>_status</div>
+            <div class="url">patients.models.Patient.html#hpv_status</div>
+            <div class="type">ZopeInterfaceAttribute</div>
+            <div class="kind">Class Variable</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">Was the patient HPV positive (<tt class="rst-docutils literal">True</tt>) or negative (<tt class="rst-docutils literal">False</tt>)?</div>
+          </li><li id="patients.models.Patient.neck_dissection">
+            
+            <div class="fullName">patients<wbr></wbr>.models<wbr></wbr>.<wbr></wbr>Patient<wbr></wbr>.neck<wbr></wbr>_dissection</div>
+            <div class="url">patients.models.Patient.html#neck_dissection</div>
+            <div class="type">ZopeInterfaceAttribute</div>
+            <div class="kind">Class Variable</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">Did the patient undergo (radical) neck dissection?</div>
+          </li><li id="patients.models.Patient.tnm_edition">
+            
+            <div class="fullName">patients<wbr></wbr>.models<wbr></wbr>.<wbr></wbr>Patient<wbr></wbr>.tnm<wbr></wbr>_edition</div>
+            <div class="url">patients.models.Patient.html#tnm_edition</div>
+            <div class="type">ZopeInterfaceAttribute</div>
+            <div class="kind">Class Variable</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">The edition of the TNM staging system that was used.</div>
+          </li><li id="patients.models.Patient.stage_prefix">
+            
+            <div class="fullName">patients<wbr></wbr>.models<wbr></wbr>.<wbr></wbr>Patient<wbr></wbr>.stage<wbr></wbr>_prefix</div>
+            <div class="url">patients.models.Patient.html#stage_prefix</div>
+            <div class="type">ZopeInterfaceAttribute</div>
+            <div class="kind">Instance Variable</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">'c' for 'clinical' and 'p' for 'pathological'.</div>
+          </li><li id="patients.models.Patient.T_stages">
+            
+            <div class="fullName">patients<wbr></wbr>.models<wbr></wbr>.<wbr></wbr>Patient<wbr></wbr>.<wbr></wbr>T_stages</div>
+            <div class="url">patients.models.Patient.T_stages.html</div>
+            <div class="type">ZopeInterfaceClass</div>
+            <div class="kind">Class</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">Defines the possible T-stages as choice class.</div>
+          </li><li id="patients.models.Patient.T_stages.T1">
+            
+            <div class="fullName">patients<wbr></wbr>.models<wbr></wbr>.<wbr></wbr>Patient<wbr></wbr>.<wbr></wbr>T_stages<wbr></wbr>.T1</div>
+            <div class="url">patients.models.Patient.T_stages.html#T1</div>
+            <div class="type">ZopeInterfaceAttribute</div>
+            <div class="kind">Constant</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary"><span class="undocumented">Undocumented</span></div>
+          </li><li id="patients.models.Patient.T_stages.T2">
+            
+            <div class="fullName">patients<wbr></wbr>.models<wbr></wbr>.<wbr></wbr>Patient<wbr></wbr>.<wbr></wbr>T_stages<wbr></wbr>.T2</div>
+            <div class="url">patients.models.Patient.T_stages.html#T2</div>
+            <div class="type">ZopeInterfaceAttribute</div>
+            <div class="kind">Constant</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary"><span class="undocumented">Undocumented</span></div>
+          </li><li id="patients.models.Patient.T_stages.T3">
+            
+            <div class="fullName">patients<wbr></wbr>.models<wbr></wbr>.<wbr></wbr>Patient<wbr></wbr>.<wbr></wbr>T_stages<wbr></wbr>.T3</div>
+            <div class="url">patients.models.Patient.T_stages.html#T3</div>
+            <div class="type">ZopeInterfaceAttribute</div>
+            <div class="kind">Constant</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary"><span class="undocumented">Undocumented</span></div>
+          </li><li id="patients.models.Patient.T_stages.T4">
+            
+            <div class="fullName">patients<wbr></wbr>.models<wbr></wbr>.<wbr></wbr>Patient<wbr></wbr>.<wbr></wbr>T_stages<wbr></wbr>.T4</div>
+            <div class="url">patients.models.Patient.T_stages.html#T4</div>
+            <div class="type">ZopeInterfaceAttribute</div>
+            <div class="kind">Constant</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary"><span class="undocumented">Undocumented</span></div>
+          </li><li id="patients.models.Patient.t_stage">
+            
+            <div class="fullName">patients<wbr></wbr>.models<wbr></wbr>.<wbr></wbr>Patient<wbr></wbr>.t<wbr></wbr>_stage</div>
+            <div class="url">patients.models.Patient.html#t_stage</div>
+            <div class="type">ZopeInterfaceAttribute</div>
+            <div class="kind">Instance Variable</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">Stage of the primary tumor. Categorized the tumor by size and infiltration of tissue types.</div>
+          </li><li id="patients.models.Patient.N_stages">
+            
+            <div class="fullName">patients<wbr></wbr>.models<wbr></wbr>.<wbr></wbr>Patient<wbr></wbr>.<wbr></wbr>N_stages</div>
+            <div class="url">patients.models.Patient.N_stages.html</div>
+            <div class="type">ZopeInterfaceClass</div>
+            <div class="kind">Class</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">Defines the possible N-stages as choice class.</div>
+          </li><li id="patients.models.Patient.N_stages.N0">
+            
+            <div class="fullName">patients<wbr></wbr>.models<wbr></wbr>.<wbr></wbr>Patient<wbr></wbr>.<wbr></wbr>N_stages<wbr></wbr>.N0</div>
+            <div class="url">patients.models.Patient.N_stages.html#N0</div>
+            <div class="type">ZopeInterfaceAttribute</div>
+            <div class="kind">Constant</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary"><span class="undocumented">Undocumented</span></div>
+          </li><li id="patients.models.Patient.N_stages.N1">
+            
+            <div class="fullName">patients<wbr></wbr>.models<wbr></wbr>.<wbr></wbr>Patient<wbr></wbr>.<wbr></wbr>N_stages<wbr></wbr>.N1</div>
+            <div class="url">patients.models.Patient.N_stages.html#N1</div>
+            <div class="type">ZopeInterfaceAttribute</div>
+            <div class="kind">Constant</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary"><span class="undocumented">Undocumented</span></div>
+          </li><li id="patients.models.Patient.N_stages.N2">
+            
+            <div class="fullName">patients<wbr></wbr>.models<wbr></wbr>.<wbr></wbr>Patient<wbr></wbr>.<wbr></wbr>N_stages<wbr></wbr>.N2</div>
+            <div class="url">patients.models.Patient.N_stages.html#N2</div>
+            <div class="type">ZopeInterfaceAttribute</div>
+            <div class="kind">Constant</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary"><span class="undocumented">Undocumented</span></div>
+          </li><li id="patients.models.Patient.N_stages.N3">
+            
+            <div class="fullName">patients<wbr></wbr>.models<wbr></wbr>.<wbr></wbr>Patient<wbr></wbr>.<wbr></wbr>N_stages<wbr></wbr>.N3</div>
+            <div class="url">patients.models.Patient.N_stages.html#N3</div>
+            <div class="type">ZopeInterfaceAttribute</div>
+            <div class="kind">Constant</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary"><span class="undocumented">Undocumented</span></div>
+          </li><li id="patients.models.Patient.n_stage">
+            
+            <div class="fullName">patients<wbr></wbr>.models<wbr></wbr>.<wbr></wbr>Patient<wbr></wbr>.n<wbr></wbr>_stage</div>
+            <div class="url">patients.models.Patient.html#n_stage</div>
+            <div class="type">ZopeInterfaceAttribute</div>
+            <div class="kind">Class Variable</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">Categorizes the extend of regional metastases.</div>
+          </li><li id="patients.models.Patient.M_stages">
+            
+            <div class="fullName">patients<wbr></wbr>.models<wbr></wbr>.<wbr></wbr>Patient<wbr></wbr>.<wbr></wbr>M_stages</div>
+            <div class="url">patients.models.Patient.M_stages.html</div>
+            <div class="type">ZopeInterfaceClass</div>
+            <div class="kind">Class</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">Defines the possible M-stages as choice class.</div>
+          </li><li id="patients.models.Patient.M_stages.M0">
+            
+            <div class="fullName">patients<wbr></wbr>.models<wbr></wbr>.<wbr></wbr>Patient<wbr></wbr>.<wbr></wbr>M_stages<wbr></wbr>.M0</div>
+            <div class="url">patients.models.Patient.M_stages.html#M0</div>
+            <div class="type">ZopeInterfaceAttribute</div>
+            <div class="kind">Constant</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary"><span class="undocumented">Undocumented</span></div>
+          </li><li id="patients.models.Patient.M_stages.M1">
+            
+            <div class="fullName">patients<wbr></wbr>.models<wbr></wbr>.<wbr></wbr>Patient<wbr></wbr>.<wbr></wbr>M_stages<wbr></wbr>.M1</div>
+            <div class="url">patients.models.Patient.M_stages.html#M1</div>
+            <div class="type">ZopeInterfaceAttribute</div>
+            <div class="kind">Constant</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary"><span class="undocumented">Undocumented</span></div>
+          </li><li id="patients.models.Patient.M_stages.MX">
+            
+            <div class="fullName">patients<wbr></wbr>.models<wbr></wbr>.<wbr></wbr>Patient<wbr></wbr>.<wbr></wbr>M_stages<wbr></wbr>.MX</div>
+            <div class="url">patients.models.Patient.M_stages.html#MX</div>
+            <div class="type">ZopeInterfaceAttribute</div>
+            <div class="kind">Constant</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary"><span class="undocumented">Undocumented</span></div>
+          </li><li id="patients.models.Patient.m_stage">
+            
+            <div class="fullName">patients<wbr></wbr>.models<wbr></wbr>.<wbr></wbr>Patient<wbr></wbr>.m<wbr></wbr>_stage</div>
+            <div class="url">patients.models.Patient.html#m_stage</div>
+            <div class="type">ZopeInterfaceAttribute</div>
+            <div class="kind">Class Variable</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">Indicates whether or not there are distant metastases.</div>
+          </li><li id="patients.models.Patient.institution">
+            
+            <div class="fullName">patients<wbr></wbr>.models<wbr></wbr>.<wbr></wbr>Patient<wbr></wbr>.institution</div>
+            <div class="url">patients.models.Patient.html#institution</div>
+            <div class="type">ZopeInterfaceAttribute</div>
+            <div class="kind">Class Variable</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">A newly created patient is assigned to the institution of the user that entered the patient into the database.</div>
+          </li><li id="patients.models.Patient.__str__">
+            
+            <div class="fullName">patients<wbr></wbr>.models<wbr></wbr>.<wbr></wbr>Patient<wbr></wbr>.__str__</div>
+            <div class="url">patients.models.Patient.html#__str__</div>
+            <div class="type">ZopeInterfaceFunction</div>
+            <div class="kind">Method</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">Report some patient specifics.</div>
+          </li><li id="patients.models.Patient.get_absolute_url">
+            
+            <div class="fullName">patients<wbr></wbr>.models<wbr></wbr>.<wbr></wbr>Patient<wbr></wbr>.get<wbr></wbr>_absolute<wbr></wbr>_url</div>
+            <div class="url">patients.models.Patient.html#get_absolute_url</div>
+            <div class="type">ZopeInterfaceFunction</div>
+            <div class="kind">Method</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">Return the absolute URL for a particular patient.</div>
+          </li><li id="patients.models.Patient.get_tumors">
+            
+            <div class="fullName">patients<wbr></wbr>.models<wbr></wbr>.<wbr></wbr>Patient<wbr></wbr>.get<wbr></wbr>_tumors</div>
+            <div class="url">patients.models.Patient.html#get_tumors</div>
+            <div class="type">ZopeInterfaceFunction</div>
+            <div class="kind">Method</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">Return the primary tumor(s) of that patient.</div>
+          </li><li id="patients.models.Patient.get_diagnoses">
+            
+            <div class="fullName">patients<wbr></wbr>.models<wbr></wbr>.<wbr></wbr>Patient<wbr></wbr>.get<wbr></wbr>_diagnoses</div>
+            <div class="url">patients.models.Patient.html#get_diagnoses</div>
+            <div class="type">ZopeInterfaceFunction</div>
+            <div class="kind">Method</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">Return the LNL diagnose(s) of the patient.</div>
+          </li><li id="patients.models.Patient.update_t_stage">
+            
+            <div class="fullName">patients<wbr></wbr>.models<wbr></wbr>.<wbr></wbr>Patient<wbr></wbr>.update<wbr></wbr>_t<wbr></wbr>_stage</div>
+            <div class="url">patients.models.Patient.html#update_t_stage</div>
+            <div class="type">ZopeInterfaceFunction</div>
+            <div class="kind">Method</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">Update T-stage after new <code><a href="patients.models.Tumor.html" class="internal-link" title="patients.models.Tumor">Tumor</a></code> is added to <code><a href="patients.models.Patient.html" class="internal-link" title="patients.models.Patient">Patient</a></code> (gets called in <code><a href="patients.models.Tumor.html#save" class="internal-link" title="patients.models.Tumor.save">Tumor.save</a></code> method). Also updates the patient's stage prefix to that of the tumor with the highest T-category.</div>
+          </li><li id="patients.models.Tumor">
+            
+            <div class="fullName">patients<wbr></wbr>.models<wbr></wbr>.<wbr></wbr>Tumor</div>
+            <div class="url">patients.models.Tumor.html</div>
+            <div class="type">ZopeInterfaceClass</div>
+            <div class="kind">Class</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">Model to describe a patient's tumor in detail. It is connected to a patient via a <tt class="rst-docutils literal">django.db.models.ForeignKey</tt> relation.</div>
+          </li><li id="patients.models.Tumor.patient">
+            
+            <div class="fullName">patients<wbr></wbr>.models<wbr></wbr>.<wbr></wbr>Tumor<wbr></wbr>.patient</div>
+            <div class="url">patients.models.Tumor.html#patient</div>
+            <div class="type">ZopeInterfaceAttribute</div>
+            <div class="kind">Class Variable</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">This defines the connection to the <code><a href="patients.models.Patient.html" class="internal-link" title="patients.models.Patient">Patient</a></code> model.</div>
+          </li><li id="patients.models.Tumor.Locations">
+            
+            <div class="fullName">patients<wbr></wbr>.models<wbr></wbr>.<wbr></wbr>Tumor<wbr></wbr>.<wbr></wbr>Locations</div>
+            <div class="url">patients.models.Tumor.Locations.html</div>
+            <div class="type">ZopeInterfaceClass</div>
+            <div class="kind">Class</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">The primary tumor locations in the head and neck region.</div>
+          </li><li id="patients.models.Tumor.Locations.ORAL_CAVITY">
+            
+            <div class="fullName">patients<wbr></wbr>.models<wbr></wbr>.<wbr></wbr>Tumor<wbr></wbr>.<wbr></wbr>Locations<wbr></wbr>.ORAL<wbr></wbr>_CAVITY</div>
+            <div class="url">patients.models.Tumor.Locations.html#ORAL_CAVITY</div>
+            <div class="type">ZopeInterfaceAttribute</div>
+            <div class="kind">Constant</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary"><span class="undocumented">Undocumented</span></div>
+          </li><li id="patients.models.Tumor.Locations.OROPHARYNX">
+            
+            <div class="fullName">patients<wbr></wbr>.models<wbr></wbr>.<wbr></wbr>Tumor<wbr></wbr>.<wbr></wbr>Locations<wbr></wbr>.OROPHARYNX</div>
+            <div class="url">patients.models.Tumor.Locations.html#OROPHARYNX</div>
+            <div class="type">ZopeInterfaceAttribute</div>
+            <div class="kind">Constant</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary"><span class="undocumented">Undocumented</span></div>
+          </li><li id="patients.models.Tumor.Locations.HYPOPHARYNX">
+            
+            <div class="fullName">patients<wbr></wbr>.models<wbr></wbr>.<wbr></wbr>Tumor<wbr></wbr>.<wbr></wbr>Locations<wbr></wbr>.HYPOPHARYNX</div>
+            <div class="url">patients.models.Tumor.Locations.html#HYPOPHARYNX</div>
+            <div class="type">ZopeInterfaceAttribute</div>
+            <div class="kind">Constant</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary"><span class="undocumented">Undocumented</span></div>
+          </li><li id="patients.models.Tumor.Locations.LARYNX">
+            
+            <div class="fullName">patients<wbr></wbr>.models<wbr></wbr>.<wbr></wbr>Tumor<wbr></wbr>.<wbr></wbr>Locations<wbr></wbr>.LARYNX</div>
+            <div class="url">patients.models.Tumor.Locations.html#LARYNX</div>
+            <div class="type">ZopeInterfaceAttribute</div>
+            <div class="kind">Constant</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary"><span class="undocumented">Undocumented</span></div>
+          </li><li id="patients.models.Tumor.location">
+            
+            <div class="fullName">patients<wbr></wbr>.models<wbr></wbr>.<wbr></wbr>Tumor<wbr></wbr>.location</div>
+            <div class="url">patients.models.Tumor.html#location</div>
+            <div class="type">ZopeInterfaceAttribute</div>
+            <div class="kind">Instance Variable</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">The tumor location.</div>
+          </li><li id="patients.models.Tumor.SUBSITES">
+            
+            <div class="fullName">patients<wbr></wbr>.models<wbr></wbr>.<wbr></wbr>Tumor<wbr></wbr>.SUBSITES</div>
+            <div class="url">patients.models.Tumor.html#SUBSITES</div>
+            <div class="type">ZopeInterfaceAttribute</div>
+            <div class="kind">Constant</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">List of subsites with their ICD-10 code and respective description, grouped by location.</div>
+          </li><li id="patients.models.Tumor.SUBSITE_DICT">
+            
+            <div class="fullName">patients<wbr></wbr>.models<wbr></wbr>.<wbr></wbr>Tumor<wbr></wbr>.SUBSITE<wbr></wbr>_DICT</div>
+            <div class="url">patients.models.Tumor.html#SUBSITE_DICT</div>
+            <div class="type">ZopeInterfaceAttribute</div>
+            <div class="kind">Constant</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary"><span class="undocumented">Undocumented</span></div>
+          </li><li id="patients.models.Tumor.SUBSITE_LIST">
+            
+            <div class="fullName">patients<wbr></wbr>.models<wbr></wbr>.<wbr></wbr>Tumor<wbr></wbr>.SUBSITE<wbr></wbr>_LIST</div>
+            <div class="url">patients.models.Tumor.html#SUBSITE_LIST</div>
+            <div class="type">ZopeInterfaceAttribute</div>
+            <div class="kind">Constant</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary"><span class="undocumented">Undocumented</span></div>
+          </li><li id="patients.models.Tumor.subsite">
+            
+            <div class="fullName">patients<wbr></wbr>.models<wbr></wbr>.<wbr></wbr>Tumor<wbr></wbr>.subsite</div>
+            <div class="url">patients.models.Tumor.html#subsite</div>
+            <div class="type">ZopeInterfaceAttribute</div>
+            <div class="kind">Class Variable</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">The subsite is a more granular categorization by the anatomical region of the head and neck where the primary tumor occurs in. It is usually encoded using the ICD-10 codes.</div>
+          </li><li id="patients.models.Tumor.central">
+            
+            <div class="fullName">patients<wbr></wbr>.models<wbr></wbr>.<wbr></wbr>Tumor<wbr></wbr>.central</div>
+            <div class="url">patients.models.Tumor.html#central</div>
+            <div class="type">ZopeInterfaceAttribute</div>
+            <div class="kind">Class Variable</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">Is the tumor symmetric w.r.t. the patients mid-sagittal line?</div>
+          </li><li id="patients.models.Tumor.extension">
+            
+            <div class="fullName">patients<wbr></wbr>.models<wbr></wbr>.<wbr></wbr>Tumor<wbr></wbr>.extension</div>
+            <div class="url">patients.models.Tumor.html#extension</div>
+            <div class="type">ZopeInterfaceAttribute</div>
+            <div class="kind">Class Variable</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">Does the tumor cross the mid-sagittal line of the patient?</div>
+          </li><li id="patients.models.Tumor.volume">
+            
+            <div class="fullName">patients<wbr></wbr>.models<wbr></wbr>.<wbr></wbr>Tumor<wbr></wbr>.volume</div>
+            <div class="url">patients.models.Tumor.html#volume</div>
+            <div class="type">ZopeInterfaceAttribute</div>
+            <div class="kind">Class Variable</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">Volume of the patient's tumor.</div>
+          </li><li id="patients.models.Tumor.t_stage">
+            
+            <div class="fullName">patients<wbr></wbr>.models<wbr></wbr>.<wbr></wbr>Tumor<wbr></wbr>.t<wbr></wbr>_stage</div>
+            <div class="url">patients.models.Tumor.html#t_stage</div>
+            <div class="type">ZopeInterfaceAttribute</div>
+            <div class="kind">Class Variable</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">Stage of the primary tumor. Categorized the tumor by size and infiltration of tissue types.</div>
+          </li><li id="patients.models.Tumor.stage_prefix">
+            
+            <div class="fullName">patients<wbr></wbr>.models<wbr></wbr>.<wbr></wbr>Tumor<wbr></wbr>.stage<wbr></wbr>_prefix</div>
+            <div class="url">patients.models.Tumor.html#stage_prefix</div>
+            <div class="type">ZopeInterfaceAttribute</div>
+            <div class="kind">Class Variable</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">'c' for 'clinical' and 'p' for 'pathological'.</div>
+          </li><li id="patients.models.Tumor.__str__">
+            
+            <div class="fullName">patients<wbr></wbr>.models<wbr></wbr>.<wbr></wbr>Tumor<wbr></wbr>.__str__</div>
+            <div class="url">patients.models.Tumor.html#__str__</div>
+            <div class="type">ZopeInterfaceFunction</div>
+            <div class="kind">Method</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">Report some main characteristics.</div>
+          </li><li id="patients.models.Tumor.save">
+            
+            <div class="fullName">patients<wbr></wbr>.models<wbr></wbr>.<wbr></wbr>Tumor<wbr></wbr>.save</div>
+            <div class="url">patients.models.Tumor.html#save</div>
+            <div class="type">ZopeInterfaceFunction</div>
+            <div class="kind">Method</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">Before creating the database entry, determine the location of the tumor from the specified subsite and update the patient it is assigned to, to the correct T-stage.</div>
+          </li><li id="patients.models.Tumor.delete">
+            
+            <div class="fullName">patients<wbr></wbr>.models<wbr></wbr>.<wbr></wbr>Tumor<wbr></wbr>.delete</div>
+            <div class="url">patients.models.Tumor.html#delete</div>
+            <div class="type">ZopeInterfaceFunction</div>
+            <div class="kind">Method</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">Upon deletion, update the patient's T-stage.</div>
+          </li><li id="patients.models.Mod">
+            
+            <div class="fullName">patients<wbr></wbr>.models<wbr></wbr>.<wbr></wbr>Mod</div>
+            <div class="url">patients.models.html#Mod</div>
+            <div class="type">ZopeInterfaceAttribute</div>
+            <div class="kind">Variable</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary"><span class="undocumented">Undocumented</span></div>
+          </li><li id="patients.models.Diagnose">
+            
+            <div class="fullName">patients<wbr></wbr>.models<wbr></wbr>.<wbr></wbr>Diagnose</div>
+            <div class="url">patients.models.Diagnose.html</div>
+            <div class="type">ZopeInterfaceClass</div>
+            <div class="kind">Class</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">Model describing the diagnosis of one side of a patient's neck with regard to their lymphaitc metastatic involvement.</div>
+          </li><li id="patients.models.Diagnose.patient">
+            
+            <div class="fullName">patients<wbr></wbr>.models<wbr></wbr>.<wbr></wbr>Diagnose<wbr></wbr>.patient</div>
+            <div class="url">patients.models.Diagnose.html#patient</div>
+            <div class="type">ZopeInterfaceAttribute</div>
+            <div class="kind">Class Variable</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">This defines the connection to the <code><a href="patients.models.Patient.html" class="internal-link" title="patients.models.Patient">Patient</a></code> model.</div>
+          </li><li id="patients.models.Diagnose.MetaModality">
+            
+            <div class="fullName">patients<wbr></wbr>.models<wbr></wbr>.<wbr></wbr>Diagnose<wbr></wbr>.<wbr></wbr>Meta<wbr></wbr>Modality</div>
+            <div class="url">patients.models.Diagnose.MetaModality.html</div>
+            <div class="type">ZopeInterfaceClass</div>
+            <div class="kind">Class</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">Meta class for providing the classmethod attributes to the <code><a href="patients.models.Diagnose.Modalities.html" class="internal-link" title="patients.models.Diagnose.Modalities">Modalities</a></code> class similar to what Django's enum types have.</div>
+          </li><li id="patients.models.Diagnose.MetaModality.__init__">
+            
+            <div class="fullName">patients<wbr></wbr>.models<wbr></wbr>.<wbr></wbr>Diagnose<wbr></wbr>.<wbr></wbr>Meta<wbr></wbr>Modality<wbr></wbr>.__init__</div>
+            <div class="url">patients.models.Diagnose.MetaModality.html#__init__</div>
+            <div class="type">ZopeInterfaceFunction</div>
+            <div class="kind">Method</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary"><span class="undocumented">Undocumented</span></div>
+          </li><li id="patients.models.Diagnose.MetaModality.__len__">
+            
+            <div class="fullName">patients<wbr></wbr>.models<wbr></wbr>.<wbr></wbr>Diagnose<wbr></wbr>.<wbr></wbr>Meta<wbr></wbr>Modality<wbr></wbr>.__len__</div>
+            <div class="url">patients.models.Diagnose.MetaModality.html#__len__</div>
+            <div class="type">ZopeInterfaceFunction</div>
+            <div class="kind">Method</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary"><span class="undocumented">Undocumented</span></div>
+          </li><li id="patients.models.Diagnose.MetaModality.__iter__">
+            
+            <div class="fullName">patients<wbr></wbr>.models<wbr></wbr>.<wbr></wbr>Diagnose<wbr></wbr>.<wbr></wbr>Meta<wbr></wbr>Modality<wbr></wbr>.__iter__</div>
+            <div class="url">patients.models.Diagnose.MetaModality.html#__iter__</div>
+            <div class="type">ZopeInterfaceFunction</div>
+            <div class="kind">Method</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary"><span class="undocumented">Undocumented</span></div>
+          </li><li id="patients.models.Diagnose.MetaModality.__next__">
+            
+            <div class="fullName">patients<wbr></wbr>.models<wbr></wbr>.<wbr></wbr>Diagnose<wbr></wbr>.<wbr></wbr>Meta<wbr></wbr>Modality<wbr></wbr>.__next__</div>
+            <div class="url">patients.models.Diagnose.MetaModality.html#__next__</div>
+            <div class="type">ZopeInterfaceFunction</div>
+            <div class="kind">Method</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary"><span class="undocumented">Undocumented</span></div>
+          </li><li id="patients.models.Diagnose.MetaModality.choices">
+            
+            <div class="fullName">patients<wbr></wbr>.models<wbr></wbr>.<wbr></wbr>Diagnose<wbr></wbr>.<wbr></wbr>Meta<wbr></wbr>Modality<wbr></wbr>.choices</div>
+            <div class="url">patients.models.Diagnose.MetaModality.html#choices</div>
+            <div class="type">ZopeInterfaceAttribute</div>
+            <div class="kind">Property</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">Return list of tuples suitable for the <tt class="rst-docutils literal">django.db.models.ChoiceField</tt></div>
+          </li><li id="patients.models.Diagnose.MetaModality.values">
+            
+            <div class="fullName">patients<wbr></wbr>.models<wbr></wbr>.<wbr></wbr>Diagnose<wbr></wbr>.<wbr></wbr>Meta<wbr></wbr>Modality<wbr></wbr>.values</div>
+            <div class="url">patients.models.Diagnose.MetaModality.html#values</div>
+            <div class="type">ZopeInterfaceAttribute</div>
+            <div class="kind">Property</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">Database values the modality field can take on.</div>
+          </li><li id="patients.models.Diagnose.MetaModality.labels">
+            
+            <div class="fullName">patients<wbr></wbr>.models<wbr></wbr>.<wbr></wbr>Diagnose<wbr></wbr>.<wbr></wbr>Meta<wbr></wbr>Modality<wbr></wbr>.labels</div>
+            <div class="url">patients.models.Diagnose.MetaModality.html#labels</div>
+            <div class="type">ZopeInterfaceAttribute</div>
+            <div class="kind">Property</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">Human readable labels for the values of the modality field.</div>
+          </li><li id="patients.models.Diagnose.MetaModality.spsn">
+            
+            <div class="fullName">patients<wbr></wbr>.models<wbr></wbr>.<wbr></wbr>Diagnose<wbr></wbr>.<wbr></wbr>Meta<wbr></wbr>Modality<wbr></wbr>.spsn</div>
+            <div class="url">patients.models.Diagnose.MetaModality.html#spsn</div>
+            <div class="type">ZopeInterfaceAttribute</div>
+            <div class="kind">Property</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">Sensitiviy &amp; specificity of the implemented modalities.</div>
+          </li><li id="patients.models.Diagnose.Modalities">
+            
+            <div class="fullName">patients<wbr></wbr>.models<wbr></wbr>.<wbr></wbr>Diagnose<wbr></wbr>.<wbr></wbr>Modalities</div>
+            <div class="url">patients.models.Diagnose.Modalities.html</div>
+            <div class="type">ZopeInterfaceClass</div>
+            <div class="kind">Class</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">Class that aims to replicate the functionality of <tt class="rst-docutils literal">TextChoices</tt> from Django's enum types, but with the added functionality of storing the sensitivity &amp; specificity of the respective modality.</div>
+          </li><li id="patients.models.Diagnose.Modalities.CT">
+            
+            <div class="fullName">patients<wbr></wbr>.models<wbr></wbr>.<wbr></wbr>Diagnose<wbr></wbr>.<wbr></wbr>Modalities<wbr></wbr>.CT</div>
+            <div class="url">patients.models.Diagnose.Modalities.html#CT</div>
+            <div class="type">ZopeInterfaceAttribute</div>
+            <div class="kind">Constant</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary"><span class="undocumented">Undocumented</span></div>
+          </li><li id="patients.models.Diagnose.Modalities.MRI">
+            
+            <div class="fullName">patients<wbr></wbr>.models<wbr></wbr>.<wbr></wbr>Diagnose<wbr></wbr>.<wbr></wbr>Modalities<wbr></wbr>.MRI</div>
+            <div class="url">patients.models.Diagnose.Modalities.html#MRI</div>
+            <div class="type">ZopeInterfaceAttribute</div>
+            <div class="kind">Constant</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary"><span class="undocumented">Undocumented</span></div>
+          </li><li id="patients.models.Diagnose.Modalities.PET">
+            
+            <div class="fullName">patients<wbr></wbr>.models<wbr></wbr>.<wbr></wbr>Diagnose<wbr></wbr>.<wbr></wbr>Modalities<wbr></wbr>.PET</div>
+            <div class="url">patients.models.Diagnose.Modalities.html#PET</div>
+            <div class="type">ZopeInterfaceAttribute</div>
+            <div class="kind">Constant</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary"><span class="undocumented">Undocumented</span></div>
+          </li><li id="patients.models.Diagnose.Modalities.FNA">
+            
+            <div class="fullName">patients<wbr></wbr>.models<wbr></wbr>.<wbr></wbr>Diagnose<wbr></wbr>.<wbr></wbr>Modalities<wbr></wbr>.FNA</div>
+            <div class="url">patients.models.Diagnose.Modalities.html#FNA</div>
+            <div class="type">ZopeInterfaceAttribute</div>
+            <div class="kind">Constant</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary"><span class="undocumented">Undocumented</span></div>
+          </li><li id="patients.models.Diagnose.Modalities.DC">
+            
+            <div class="fullName">patients<wbr></wbr>.models<wbr></wbr>.<wbr></wbr>Diagnose<wbr></wbr>.<wbr></wbr>Modalities<wbr></wbr>.DC</div>
+            <div class="url">patients.models.Diagnose.Modalities.html#DC</div>
+            <div class="type">ZopeInterfaceAttribute</div>
+            <div class="kind">Constant</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary"><span class="undocumented">Undocumented</span></div>
+          </li><li id="patients.models.Diagnose.Modalities.PATH">
+            
+            <div class="fullName">patients<wbr></wbr>.models<wbr></wbr>.<wbr></wbr>Diagnose<wbr></wbr>.<wbr></wbr>Modalities<wbr></wbr>.PATH</div>
+            <div class="url">patients.models.Diagnose.Modalities.html#PATH</div>
+            <div class="type">ZopeInterfaceAttribute</div>
+            <div class="kind">Constant</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary"><span class="undocumented">Undocumented</span></div>
+          </li><li id="patients.models.Diagnose.Modalities.PCT">
+            
+            <div class="fullName">patients<wbr></wbr>.models<wbr></wbr>.<wbr></wbr>Diagnose<wbr></wbr>.<wbr></wbr>Modalities<wbr></wbr>.PCT</div>
+            <div class="url">patients.models.Diagnose.Modalities.html#PCT</div>
+            <div class="type">ZopeInterfaceAttribute</div>
+            <div class="kind">Constant</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary"><span class="undocumented">Undocumented</span></div>
+          </li><li id="patients.models.Diagnose.modality">
+            
+            <div class="fullName">patients<wbr></wbr>.models<wbr></wbr>.<wbr></wbr>Diagnose<wbr></wbr>.modality</div>
+            <div class="url">patients.models.Diagnose.html#modality</div>
+            <div class="type">ZopeInterfaceAttribute</div>
+            <div class="kind">Class Variable</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">The diagnostic modality that was used to reach the diagnosis.</div>
+          </li><li id="patients.models.Diagnose.diagnose_date">
+            
+            <div class="fullName">patients<wbr></wbr>.models<wbr></wbr>.<wbr></wbr>Diagnose<wbr></wbr>.diagnose<wbr></wbr>_date</div>
+            <div class="url">patients.models.Diagnose.html#diagnose_date</div>
+            <div class="type">ZopeInterfaceAttribute</div>
+            <div class="kind">Class Variable</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary"><span class="undocumented">Undocumented</span></div>
+          </li><li id="patients.models.Diagnose.side">
+            
+            <div class="fullName">patients<wbr></wbr>.models<wbr></wbr>.<wbr></wbr>Diagnose<wbr></wbr>.side</div>
+            <div class="url">patients.models.Diagnose.html#side</div>
+            <div class="type">ZopeInterfaceAttribute</div>
+            <div class="kind">Class Variable</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary"><span class="undocumented">Undocumented</span></div>
+          </li><li id="patients.models.Diagnose.LNLs">
+            
+            <div class="fullName">patients<wbr></wbr>.models<wbr></wbr>.<wbr></wbr>Diagnose<wbr></wbr>.<wbr></wbr>LNLs</div>
+            <div class="url">patients.models.Diagnose.html#LNLs</div>
+            <div class="type">ZopeInterfaceAttribute</div>
+            <div class="kind">Class Variable</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">List of implemented lymph node levels. When the <code><a href="patients.models.html" class="internal-link" title="patients.models">models</a></code> module is imported, a simple for-loop creates additional fields for the <code><a href="patients.models.Diagnose.html" class="internal-link" title="patients.models.Diagnose">Diagnose</a></code> class for each of the elements in this list.</div>
+          </li><li id="patients.models.Diagnose.__str__">
+            
+            <div class="fullName">patients<wbr></wbr>.models<wbr></wbr>.<wbr></wbr>Diagnose<wbr></wbr>.__str__</div>
+            <div class="url">patients.models.Diagnose.html#__str__</div>
+            <div class="type">ZopeInterfaceFunction</div>
+            <div class="kind">Method</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">Report some info for admin view.</div>
+          </li><li id="patients.models.Diagnose.save">
+            
+            <div class="fullName">patients<wbr></wbr>.models<wbr></wbr>.<wbr></wbr>Diagnose<wbr></wbr>.save</div>
+            <div class="url">patients.models.Diagnose.html#save</div>
+            <div class="type">ZopeInterfaceFunction</div>
+            <div class="kind">Method</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">Make sure LNLs and their sublevels (e.g. 'a' and 'b') are treated consistelntly. E.g. when sublevel <tt class="rst-docutils literal">Ia</tt> is reported to be involved, the involvement status of level <tt class="rst-docutils literal">I</tt> cannot be reported as healthy.</div>
+          </li><li id="patients.models.Diagnose.I">
+            
+            <div class="fullName">patients<wbr></wbr>.models<wbr></wbr>.<wbr></wbr>Diagnose<wbr></wbr>.I</div>
+            <div class="url">patients.models.Diagnose.html#I</div>
+            <div class="type">ZopeInterfaceAttribute</div>
+            <div class="kind">Instance Variable</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary"><span class="undocumented">Undocumented</span></div>
+          </li><li id="patients.models.Diagnose.II">
+            
+            <div class="fullName">patients<wbr></wbr>.models<wbr></wbr>.<wbr></wbr>Diagnose<wbr></wbr>.II</div>
+            <div class="url">patients.models.Diagnose.html#II</div>
+            <div class="type">ZopeInterfaceAttribute</div>
+            <div class="kind">Instance Variable</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary"><span class="undocumented">Undocumented</span></div>
+          </li><li id="patients.models.Diagnose.V">
+            
+            <div class="fullName">patients<wbr></wbr>.models<wbr></wbr>.<wbr></wbr>Diagnose<wbr></wbr>.V</div>
+            <div class="url">patients.models.Diagnose.html#V</div>
+            <div class="type">ZopeInterfaceAttribute</div>
+            <div class="kind">Instance Variable</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary"><span class="undocumented">Undocumented</span></div>
+          </li><li id="patients.filters.PatientFilter">
+            
+            <div class="fullName">patients<wbr></wbr>.filters<wbr></wbr>.<wbr></wbr>Patient<wbr></wbr>Filter</div>
+            <div class="url">patients.filters.PatientFilter.html</div>
+            <div class="type">ZopeInterfaceClass</div>
+            <div class="kind">Class</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">A <tt class="rst-docutils literal">django_filters.FilterSet</tt> which allows for easy filtering of a patient queryset for any fields defined here.</div>
+          </li><li id="patients.filters.PatientFilter.diagnose_date">
+            
+            <div class="fullName">patients<wbr></wbr>.filters<wbr></wbr>.<wbr></wbr>Patient<wbr></wbr>Filter<wbr></wbr>.diagnose<wbr></wbr>_date</div>
+            <div class="url">patients.filters.PatientFilter.html#diagnose_date</div>
+            <div class="type">ZopeInterfaceAttribute</div>
+            <div class="kind">Class Variable</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary"><span class="undocumented">Undocumented</span></div>
+          </li><li id="patients.filters.PatientFilter.gender">
+            
+            <div class="fullName">patients<wbr></wbr>.filters<wbr></wbr>.<wbr></wbr>Patient<wbr></wbr>Filter<wbr></wbr>.gender</div>
+            <div class="url">patients.filters.PatientFilter.html#gender</div>
+            <div class="type">ZopeInterfaceAttribute</div>
+            <div class="kind">Class Variable</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary"><span class="undocumented">Undocumented</span></div>
+          </li><li id="patients.filters.PatientFilter.age">
+            
+            <div class="fullName">patients<wbr></wbr>.filters<wbr></wbr>.<wbr></wbr>Patient<wbr></wbr>Filter<wbr></wbr>.age</div>
+            <div class="url">patients.filters.PatientFilter.html#age</div>
+            <div class="type">ZopeInterfaceAttribute</div>
+            <div class="kind">Class Variable</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary"><span class="undocumented">Undocumented</span></div>
+          </li><li id="patients.filters.PatientFilter.tumor__t_stage">
+            
+            <div class="fullName">patients<wbr></wbr>.filters<wbr></wbr>.<wbr></wbr>Patient<wbr></wbr>Filter<wbr></wbr>.tumor<wbr></wbr>_<wbr></wbr>_t<wbr></wbr>_stage</div>
+            <div class="url">patients.filters.PatientFilter.html#tumor__t_stage</div>
+            <div class="type">ZopeInterfaceAttribute</div>
+            <div class="kind">Class Variable</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary"><span class="undocumented">Undocumented</span></div>
+          </li><li id="patients.filters.PatientFilter.n_stage">
+            
+            <div class="fullName">patients<wbr></wbr>.filters<wbr></wbr>.<wbr></wbr>Patient<wbr></wbr>Filter<wbr></wbr>.n<wbr></wbr>_stage</div>
+            <div class="url">patients.filters.PatientFilter.html#n_stage</div>
+            <div class="type">ZopeInterfaceAttribute</div>
+            <div class="kind">Class Variable</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary"><span class="undocumented">Undocumented</span></div>
+          </li><li id="patients.filters.PatientFilter.m_stage">
+            
+            <div class="fullName">patients<wbr></wbr>.filters<wbr></wbr>.<wbr></wbr>Patient<wbr></wbr>Filter<wbr></wbr>.m<wbr></wbr>_stage</div>
+            <div class="url">patients.filters.PatientFilter.html#m_stage</div>
+            <div class="type">ZopeInterfaceAttribute</div>
+            <div class="kind">Class Variable</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary"><span class="undocumented">Undocumented</span></div>
+          </li><li id="patients.filters.PatientFilter.institution">
+            
+            <div class="fullName">patients<wbr></wbr>.filters<wbr></wbr>.<wbr></wbr>Patient<wbr></wbr>Filter<wbr></wbr>.institution</div>
+            <div class="url">patients.filters.PatientFilter.html#institution</div>
+            <div class="type">ZopeInterfaceAttribute</div>
+            <div class="kind">Class Variable</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary"><span class="undocumented">Undocumented</span></div>
+          </li><li id="patients.filters.PatientFilter.ordering">
+            
+            <div class="fullName">patients<wbr></wbr>.filters<wbr></wbr>.<wbr></wbr>Patient<wbr></wbr>Filter<wbr></wbr>.ordering</div>
+            <div class="url">patients.filters.PatientFilter.html#ordering</div>
+            <div class="type">ZopeInterfaceAttribute</div>
+            <div class="kind">Class Variable</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary"><span class="undocumented">Undocumented</span></div>
+          </li><li id="patients.filters.PatientFilter.Meta">
+            
+            <div class="fullName">patients<wbr></wbr>.filters<wbr></wbr>.<wbr></wbr>Patient<wbr></wbr>Filter<wbr></wbr>.<wbr></wbr>Meta</div>
+            <div class="url">patients.filters.PatientFilter.Meta.html</div>
+            <div class="type">ZopeInterfaceClass</div>
+            <div class="kind">Class</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">Define which django model this should act on.</div>
+          </li><li id="patients.filters.PatientFilter.Meta.fields">
+            
+            <div class="fullName">patients<wbr></wbr>.filters<wbr></wbr>.<wbr></wbr>Patient<wbr></wbr>Filter<wbr></wbr>.<wbr></wbr>Meta<wbr></wbr>.fields</div>
+            <div class="url">patients.filters.PatientFilter.Meta.html#fields</div>
+            <div class="type">ZopeInterfaceAttribute</div>
+            <div class="kind">Class Variable</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary"><span class="undocumented">Undocumented</span></div>
+          </li><li id="patients.ioports.logger">
+            
+            <div class="fullName">patients<wbr></wbr>.ioports<wbr></wbr>.logger</div>
+            <div class="url">patients.ioports.html#logger</div>
+            <div class="type">ZopeInterfaceAttribute</div>
+            <div class="kind">Variable</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary"><span class="undocumented">Undocumented</span></div>
+          </li><li id="patients.ioports.ParsingError">
+            
+            <div class="fullName">patients<wbr></wbr>.ioports<wbr></wbr>.<wbr></wbr>Parsing<wbr></wbr>Error</div>
+            <div class="url">patients.ioports.ParsingError.html</div>
+            <div class="type">ZopeInterfaceClass</div>
+            <div class="kind">Class</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">Exception raised when the parsing of an uploaded CSV fails due to missing data columns.</div>
+          </li><li id="patients.ioports.compute_hash">
+            
+            <div class="fullName">patients<wbr></wbr>.ioports<wbr></wbr>.compute<wbr></wbr>_hash</div>
+            <div class="url">patients.ioports.html#compute_hash</div>
+            <div class="type">ZopeInterfaceFunction</div>
+            <div class="kind">Function</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">Compute a hash vlaue from three patient-specific fields that must be removed due for respecting the patient's privacy.</div>
+          </li><li id="patients.ioports.nan_to_none">
+            
+            <div class="fullName">patients<wbr></wbr>.ioports<wbr></wbr>.nan<wbr></wbr>_to<wbr></wbr>_none</div>
+            <div class="url">patients.ioports.html#nan_to_none</div>
+            <div class="type">ZopeInterfaceFunction</div>
+            <div class="kind">Function</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">Transform NaNs to <tt class="rst-docutils literal">None</tt>.</div>
+          </li><li id="patients.ioports.get_model_fields">
+            
+            <div class="fullName">patients<wbr></wbr>.ioports<wbr></wbr>.get<wbr></wbr>_model<wbr></wbr>_fields</div>
+            <div class="url">patients.ioports.html#get_model_fields</div>
+            <div class="type">ZopeInterfaceFunction</div>
+            <div class="kind">Function</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">Get list of names of model fields and remove the ones provided via the <tt class="rst-docutils literal">remove</tt> argument.</div>
+          </li><li id="patients.ioports.row2patient">
+            
+            <div class="fullName">patients<wbr></wbr>.ioports<wbr></wbr>.row2patient</div>
+            <div class="url">patients.ioports.html#row2patient</div>
+            <div class="type">ZopeInterfaceFunction</div>
+            <div class="kind">Function</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">Create a <code><a href="patients.models.Patient.html" class="internal-link" title="patients.models.Patient">Patient</a></code> instance from a row of a <tt class="rst-docutils literal">DataFrame</tt> containing the appropriate information, as well as the user that uploaded the information.</div>
+          </li><li id="patients.ioports.row2tumors">
+            
+            <div class="fullName">patients<wbr></wbr>.ioports<wbr></wbr>.row2tumors</div>
+            <div class="url">patients.ioports.html#row2tumors</div>
+            <div class="type">ZopeInterfaceFunction</div>
+            <div class="kind">Function</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">Create <code><a href="patients.models.Tumor.html" class="internal-link" title="patients.models.Tumor">Tumor</a></code> instances from row of a <tt class="rst-docutils literal">DataFrame</tt> and add them to an existing <code><a href="patients.models.Patient.html" class="internal-link" title="patients.models.Patient">Patient</a></code> instance.</div>
+          </li><li id="patients.ioports.row2diagnoses">
+            
+            <div class="fullName">patients<wbr></wbr>.ioports<wbr></wbr>.row2diagnoses</div>
+            <div class="url">patients.ioports.html#row2diagnoses</div>
+            <div class="type">ZopeInterfaceFunction</div>
+            <div class="kind">Function</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">Create <code><a href="patients.models.Diagnose.html" class="internal-link" title="patients.models.Diagnose">Diagnose</a></code> instances from row of <tt class="rst-docutils literal">DataFrame</tt> and add them to an existing <code><a href="patients.models.Patient.html" class="internal-link" title="patients.models.Patient">Patient</a></code> instance.</div>
+          </li><li id="patients.ioports.import_from_pandas">
+            
+            <div class="fullName">patients<wbr></wbr>.ioports<wbr></wbr>.import<wbr></wbr>_from<wbr></wbr>_pandas</div>
+            <div class="url">patients.ioports.html#import_from_pandas</div>
+            <div class="type">ZopeInterfaceFunction</div>
+            <div class="kind">Function</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">Import patients from pandas <tt class="rst-docutils literal">DataFrame</tt>.</div>
+          </li><li id="patients.ioports.export_to_pandas">
+            
+            <div class="fullName">patients<wbr></wbr>.ioports<wbr></wbr>.export<wbr></wbr>_to<wbr></wbr>_pandas</div>
+            <div class="url">patients.ioports.html#export_to_pandas</div>
+            <div class="type">ZopeInterfaceFunction</div>
+            <div class="kind">Function</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">Export <tt class="rst-docutils literal">QuerySet</tt> of patients into a pandas <tt class="rst-docutils literal">DataFrame</tt> of the same format as it is needed for importing.</div>
+          </li><li id="patients.forms.PatientForm">
+            
+            <div class="fullName">patients<wbr></wbr>.forms<wbr></wbr>.<wbr></wbr>Patient<wbr></wbr>Form</div>
+            <div class="url">patients.forms.PatientForm.html</div>
+            <div class="type">ZopeInterfaceClass</div>
+            <div class="kind">Class</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">Form to create and edit patients, based on their model definition. Most notably, it includes custom cleaning methods like <tt class="rst-docutils literal">_compute_age</tt> that take - possibly sensitive - inputs and convert them into the - less sensitive - information we actually care about and want to store.</div>
+          </li><li id="patients.forms.PatientForm.Meta">
+            
+            <div class="fullName">patients<wbr></wbr>.forms<wbr></wbr>.<wbr></wbr>Patient<wbr></wbr>Form<wbr></wbr>.<wbr></wbr>Meta</div>
+            <div class="url">patients.forms.PatientForm.Meta.html</div>
+            <div class="type">ZopeInterfaceClass</div>
+            <div class="kind">Class</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">Indicate which model this acts on.</div>
+          </li><li id="patients.forms.PatientForm.Meta.fields">
+            
+            <div class="fullName">patients<wbr></wbr>.forms<wbr></wbr>.<wbr></wbr>Patient<wbr></wbr>Form<wbr></wbr>.<wbr></wbr>Meta<wbr></wbr>.fields</div>
+            <div class="url">patients.forms.PatientForm.Meta.html#fields</div>
+            <div class="type">ZopeInterfaceAttribute</div>
+            <div class="kind">Class Variable</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary"><span class="undocumented">Undocumented</span></div>
+          </li><li id="patients.forms.PatientForm.Meta.widgets">
+            
+            <div class="fullName">patients<wbr></wbr>.forms<wbr></wbr>.<wbr></wbr>Patient<wbr></wbr>Form<wbr></wbr>.<wbr></wbr>Meta<wbr></wbr>.widgets</div>
+            <div class="url">patients.forms.PatientForm.Meta.html#widgets</div>
+            <div class="type">ZopeInterfaceAttribute</div>
+            <div class="kind">Class Variable</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary"><span class="undocumented">Undocumented</span></div>
+          </li><li id="patients.forms.PatientForm.__init__">
+            
+            <div class="fullName">patients<wbr></wbr>.forms<wbr></wbr>.<wbr></wbr>Patient<wbr></wbr>Form<wbr></wbr>.__init__</div>
+            <div class="url">patients.forms.PatientForm.html#__init__</div>
+            <div class="type">ZopeInterfaceFunction</div>
+            <div class="kind">Method</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary"><span class="undocumented">Undocumented</span></div>
+          </li><li id="patients.forms.PatientForm.user">
+            
+            <div class="fullName">patients<wbr></wbr>.forms<wbr></wbr>.<wbr></wbr>Patient<wbr></wbr>Form<wbr></wbr>.user</div>
+            <div class="url">patients.forms.PatientForm.html#user</div>
+            <div class="type">ZopeInterfaceAttribute</div>
+            <div class="kind">Instance Variable</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary"><span class="undocumented">Undocumented</span></div>
+          </li><li id="patients.forms.PatientForm.first_name">
+            
+            <div class="fullName">patients<wbr></wbr>.forms<wbr></wbr>.<wbr></wbr>Patient<wbr></wbr>Form<wbr></wbr>.first<wbr></wbr>_name</div>
+            <div class="url">patients.forms.PatientForm.html#first_name</div>
+            <div class="type">ZopeInterfaceAttribute</div>
+            <div class="kind">Class Variable</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary"><span class="undocumented">Undocumented</span></div>
+          </li><li id="patients.forms.PatientForm.last_name">
+            
+            <div class="fullName">patients<wbr></wbr>.forms<wbr></wbr>.<wbr></wbr>Patient<wbr></wbr>Form<wbr></wbr>.last<wbr></wbr>_name</div>
+            <div class="url">patients.forms.PatientForm.html#last_name</div>
+            <div class="type">ZopeInterfaceAttribute</div>
+            <div class="kind">Class Variable</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary"><span class="undocumented">Undocumented</span></div>
+          </li><li id="patients.forms.PatientForm.birthday">
+            
+            <div class="fullName">patients<wbr></wbr>.forms<wbr></wbr>.<wbr></wbr>Patient<wbr></wbr>Form<wbr></wbr>.birthday</div>
+            <div class="url">patients.forms.PatientForm.html#birthday</div>
+            <div class="type">ZopeInterfaceAttribute</div>
+            <div class="kind">Class Variable</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary"><span class="undocumented">Undocumented</span></div>
+          </li><li id="patients.forms.PatientForm.check_for_duplicate">
+            
+            <div class="fullName">patients<wbr></wbr>.forms<wbr></wbr>.<wbr></wbr>Patient<wbr></wbr>Form<wbr></wbr>.check<wbr></wbr>_for<wbr></wbr>_duplicate</div>
+            <div class="url">patients.forms.PatientForm.html#check_for_duplicate</div>
+            <div class="type">ZopeInterfaceAttribute</div>
+            <div class="kind">Class Variable</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary"><span class="undocumented">Undocumented</span></div>
+          </li><li id="patients.forms.PatientForm.save">
+            
+            <div class="fullName">patients<wbr></wbr>.forms<wbr></wbr>.<wbr></wbr>Patient<wbr></wbr>Form<wbr></wbr>.save</div>
+            <div class="url">patients.forms.PatientForm.html#save</div>
+            <div class="type">ZopeInterfaceFunction</div>
+            <div class="kind">Method</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">Compute hashed ID and age from name, birthday and diagnose date.</div>
+          </li><li id="patients.forms.PatientForm.clean">
+            
+            <div class="fullName">patients<wbr></wbr>.forms<wbr></wbr>.<wbr></wbr>Patient<wbr></wbr>Form<wbr></wbr>.clean</div>
+            <div class="url">patients.forms.PatientForm.html#clean</div>
+            <div class="type">ZopeInterfaceFunction</div>
+            <div class="kind">Method</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">Override superclass clean method to raise a <tt class="rst-docutils literal">ValidationError</tt> when a duplicate identifier is found.</div>
+          </li><li id="patients.forms.PatientForm._compute_age">
+            
+            <div class="fullName">patients<wbr></wbr>.forms<wbr></wbr>.<wbr></wbr>Patient<wbr></wbr>Form<wbr></wbr>._compute<wbr></wbr>_age</div>
+            <div class="url">patients.forms.PatientForm.html#_compute_age</div>
+            <div class="type">ZopeInterfaceFunction</div>
+            <div class="kind">Method</div>
+            <div class="privacy">PRIVATE</div>
+            <div class="summary">Compute age of patient at diagnose/admission.</div>
+          </li><li id="patients.forms.PatientForm._get_identifier">
+            
+            <div class="fullName">patients<wbr></wbr>.forms<wbr></wbr>.<wbr></wbr>Patient<wbr></wbr>Form<wbr></wbr>._get<wbr></wbr>_identifier</div>
+            <div class="url">patients.forms.PatientForm.html#_get_identifier</div>
+            <div class="type">ZopeInterfaceFunction</div>
+            <div class="kind">Method</div>
+            <div class="privacy">PRIVATE</div>
+            <div class="summary">Compute the hashed undique identifier from fields that are of provacy concern.</div>
+          </li><li id="patients.forms.TumorForm">
+            
+            <div class="fullName">patients<wbr></wbr>.forms<wbr></wbr>.<wbr></wbr>Tumor<wbr></wbr>Form</div>
+            <div class="url">patients.forms.TumorForm.html</div>
+            <div class="type">ZopeInterfaceClass</div>
+            <div class="kind">Class</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">Form to create and edit tumors, based on their model definition. Very straightforward, not much custom validation. This class basically just defines how some of the fields that are already defined in <tt class="rst-docutils literal">models.Tumor</tt>...</div>
+          </li><li id="patients.forms.TumorForm.Meta">
+            
+            <div class="fullName">patients<wbr></wbr>.forms<wbr></wbr>.<wbr></wbr>Tumor<wbr></wbr>Form<wbr></wbr>.<wbr></wbr>Meta</div>
+            <div class="url">patients.forms.TumorForm.Meta.html</div>
+            <div class="type">ZopeInterfaceClass</div>
+            <div class="kind">Class</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">Specifies the corresponding model.</div>
+          </li><li id="patients.forms.TumorForm.Meta.fields">
+            
+            <div class="fullName">patients<wbr></wbr>.forms<wbr></wbr>.<wbr></wbr>Tumor<wbr></wbr>Form<wbr></wbr>.<wbr></wbr>Meta<wbr></wbr>.fields</div>
+            <div class="url">patients.forms.TumorForm.Meta.html#fields</div>
+            <div class="type">ZopeInterfaceAttribute</div>
+            <div class="kind">Class Variable</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary"><span class="undocumented">Undocumented</span></div>
+          </li><li id="patients.forms.TumorForm.Meta.widgets">
+            
+            <div class="fullName">patients<wbr></wbr>.forms<wbr></wbr>.<wbr></wbr>Tumor<wbr></wbr>Form<wbr></wbr>.<wbr></wbr>Meta<wbr></wbr>.widgets</div>
+            <div class="url">patients.forms.TumorForm.Meta.html#widgets</div>
+            <div class="type">ZopeInterfaceAttribute</div>
+            <div class="kind">Class Variable</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary"><span class="undocumented">Undocumented</span></div>
+          </li><li id="patients.forms.TumorForm.clean_volume">
+            
+            <div class="fullName">patients<wbr></wbr>.forms<wbr></wbr>.<wbr></wbr>Tumor<wbr></wbr>Form<wbr></wbr>.clean<wbr></wbr>_volume</div>
+            <div class="url">patients.forms.TumorForm.html#clean_volume</div>
+            <div class="type">ZopeInterfaceFunction</div>
+            <div class="kind">Method</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">Process the input for volume size.</div>
+          </li><li id="patients.forms.TumorForm.save">
+            
+            <div class="fullName">patients<wbr></wbr>.forms<wbr></wbr>.<wbr></wbr>Tumor<wbr></wbr>Form<wbr></wbr>.save</div>
+            <div class="url">patients.forms.TumorForm.html#save</div>
+            <div class="type">ZopeInterfaceFunction</div>
+            <div class="kind">Method</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">Save tumor to existing patient.</div>
+          </li><li id="patients.forms.DiagnoseForm">
+            
+            <div class="fullName">patients<wbr></wbr>.forms<wbr></wbr>.<wbr></wbr>Diagnose<wbr></wbr>Form</div>
+            <div class="url">patients.forms.DiagnoseForm.html</div>
+            <div class="type">ZopeInterfaceClass</div>
+            <div class="kind">Class</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">Form to create and edit diagnoses, based on their model definition. Nothing special is happening here: Only some widgets are defined for the few fields of the <tt class="rst-docutils literal">models.Diagnose</tt> model and a loop over all implemented LNLs saves us some hard-coding of a long list of widgets for the node levels.</div>
+          </li><li id="patients.forms.DiagnoseForm.Meta">
+            
+            <div class="fullName">patients<wbr></wbr>.forms<wbr></wbr>.<wbr></wbr>Diagnose<wbr></wbr>Form<wbr></wbr>.<wbr></wbr>Meta</div>
+            <div class="url">patients.forms.DiagnoseForm.Meta.html</div>
+            <div class="type">ZopeInterfaceClass</div>
+            <div class="kind">Class</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">Connects the form to the model.</div>
+          </li><li id="patients.forms.DiagnoseForm.Meta.fields">
+            
+            <div class="fullName">patients<wbr></wbr>.forms<wbr></wbr>.<wbr></wbr>Diagnose<wbr></wbr>Form<wbr></wbr>.<wbr></wbr>Meta<wbr></wbr>.fields</div>
+            <div class="url">patients.forms.DiagnoseForm.Meta.html#fields</div>
+            <div class="type">ZopeInterfaceAttribute</div>
+            <div class="kind">Class Variable</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary"><span class="undocumented">Undocumented</span></div>
+          </li><li id="patients.forms.DiagnoseForm.Meta.widgets">
+            
+            <div class="fullName">patients<wbr></wbr>.forms<wbr></wbr>.<wbr></wbr>Diagnose<wbr></wbr>Form<wbr></wbr>.<wbr></wbr>Meta<wbr></wbr>.widgets</div>
+            <div class="url">patients.forms.DiagnoseForm.Meta.html#widgets</div>
+            <div class="type">ZopeInterfaceAttribute</div>
+            <div class="kind">Class Variable</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary"><span class="undocumented">Undocumented</span></div>
+          </li><li id="patients.forms.DiagnoseForm.save">
+            
+            <div class="fullName">patients<wbr></wbr>.forms<wbr></wbr>.<wbr></wbr>Diagnose<wbr></wbr>Form<wbr></wbr>.save</div>
+            <div class="url">patients.forms.DiagnoseForm.html#save</div>
+            <div class="type">ZopeInterfaceFunction</div>
+            <div class="kind">Method</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">Save diagnose to existing patient.</div>
+          </li><li id="patients.forms.DataFileForm">
+            
+            <div class="fullName">patients<wbr></wbr>.forms<wbr></wbr>.<wbr></wbr>Data<wbr></wbr>File<wbr></wbr>Form</div>
+            <div class="url">patients.forms.DataFileForm.html</div>
+            <div class="type">ZopeInterfaceClass</div>
+            <div class="kind">Class</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">Accept and process a CSV file that can then be parsed to batch-create a number of patients at once.</div>
+          </li><li id="patients.forms.DataFileForm.data_file">
+            
+            <div class="fullName">patients<wbr></wbr>.forms<wbr></wbr>.<wbr></wbr>Data<wbr></wbr>File<wbr></wbr>Form<wbr></wbr>.data<wbr></wbr>_file</div>
+            <div class="url">patients.forms.DataFileForm.html#data_file</div>
+            <div class="type">ZopeInterfaceAttribute</div>
+            <div class="kind">Class Variable</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary"><span class="undocumented">Undocumented</span></div>
+          </li><li id="patients.forms.DataFileForm.clean">
+            
+            <div class="fullName">patients<wbr></wbr>.forms<wbr></wbr>.<wbr></wbr>Data<wbr></wbr>File<wbr></wbr>Form<wbr></wbr>.clean</div>
+            <div class="url">patients.forms.DataFileForm.html#clean</div>
+            <div class="type">ZopeInterfaceFunction</div>
+            <div class="kind">Method</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">Cleaning method that makes sure the uploaded data is in fact a CSV file and can be parsed by <tt class="rst-docutils literal">pandas</tt> into a <tt class="rst-docutils literal">DataFrame</tt>.</div>
+          </li><li id="patients.forms.InsitutionForm">
+            
+            <div class="fullName">patients<wbr></wbr>.forms<wbr></wbr>.<wbr></wbr>Insitution<wbr></wbr>Form</div>
+            <div class="url">patients.forms.InsitutionForm.html</div>
+            <div class="type">ZopeInterfaceClass</div>
+            <div class="kind">Class</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">Form for creating an institution. This is not yet in use or even functional.</div>
+          </li><li id="patients.forms.InsitutionForm.Meta">
+            
+            <div class="fullName">patients<wbr></wbr>.forms<wbr></wbr>.<wbr></wbr>Insitution<wbr></wbr>Form<wbr></wbr>.<wbr></wbr>Meta</div>
+            <div class="url">patients.forms.InsitutionForm.Meta.html</div>
+            <div class="type">ZopeInterfaceClass</div>
+            <div class="kind">Class</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary"><span class="undocumented">Undocumented</span></div>
+          </li><li id="patients.management.commands.import.Command">
+            
+            <div class="fullName">patients<wbr></wbr>.management<wbr></wbr>.commands<wbr></wbr>.import<wbr></wbr>.<wbr></wbr>Command</div>
+            <div class="url">patients.management.commands.import.Command.html</div>
+            <div class="type">ZopeInterfaceClass</div>
+            <div class="kind">Class</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">Populate the database with patients from a LyProX-style CSV table.</div>
+          </li><li id="patients.management.commands.import.Command.add_arguments">
+            
+            <div class="fullName">patients<wbr></wbr>.management<wbr></wbr>.commands<wbr></wbr>.import<wbr></wbr>.<wbr></wbr>Command<wbr></wbr>.add<wbr></wbr>_arguments</div>
+            <div class="url">patients.management.commands.import.Command.html#add_arguments</div>
+            <div class="type">ZopeInterfaceFunction</div>
+            <div class="kind">Method</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">Add arguments to the <tt class="rst-docutils literal">argparse.ArgumentParser</tt>.</div>
+          </li><li id="patients.management.commands.import.Command.handle">
+            
+            <div class="fullName">patients<wbr></wbr>.management<wbr></wbr>.commands<wbr></wbr>.import<wbr></wbr>.<wbr></wbr>Command<wbr></wbr>.handle</div>
+            <div class="url">patients.management.commands.import.Command.html#handle</div>
+            <div class="type">ZopeInterfaceFunction</div>
+            <div class="kind">Method</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">Execute the command given the arguments as options.</div>
+          </li><li id="patients.mixins.logger">
+            
+            <div class="fullName">patients<wbr></wbr>.mixins<wbr></wbr>.logger</div>
+            <div class="url">patients.mixins.html#logger</div>
+            <div class="type">ZopeInterfaceAttribute</div>
+            <div class="kind">Variable</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary"><span class="undocumented">Undocumented</span></div>
+          </li><li id="patients.mixins.InstitutionCheckPatientMixin">
+            
+            <div class="fullName">patients<wbr></wbr>.mixins<wbr></wbr>.<wbr></wbr>Institution<wbr></wbr>Check<wbr></wbr>Patient<wbr></wbr>Mixin</div>
+            <div class="url">patients.mixins.InstitutionCheckPatientMixin.html</div>
+            <div class="type">ZopeInterfaceClass</div>
+            <div class="kind">Class</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">Mixin that makes sure only users from the institution that created the patient can edit it.</div>
+          </li><li id="patients.mixins.InstitutionCheckPatientMixin.test_func">
+            
+            <div class="fullName">patients<wbr></wbr>.mixins<wbr></wbr>.<wbr></wbr>Institution<wbr></wbr>Check<wbr></wbr>Patient<wbr></wbr>Mixin<wbr></wbr>.test<wbr></wbr>_func</div>
+            <div class="url">patients.mixins.InstitutionCheckPatientMixin.html#test_func</div>
+            <div class="type">ZopeInterfaceFunction</div>
+            <div class="kind">Method</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary"><span class="undocumented">Undocumented</span></div>
+          </li><li id="patients.mixins.InstitutionCheckObjectMixin">
+            
+            <div class="fullName">patients<wbr></wbr>.mixins<wbr></wbr>.<wbr></wbr>Institution<wbr></wbr>Check<wbr></wbr>Object<wbr></wbr>Mixin</div>
+            <div class="url">patients.mixins.InstitutionCheckObjectMixin.html</div>
+            <div class="type">ZopeInterfaceClass</div>
+            <div class="kind">Class</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">Mixin that makes sure only users from the institution that created the patient can edit that patient's diagnose and tumor.</div>
+          </li><li id="patients.mixins.InstitutionCheckObjectMixin.test_func">
+            
+            <div class="fullName">patients<wbr></wbr>.mixins<wbr></wbr>.<wbr></wbr>Institution<wbr></wbr>Check<wbr></wbr>Object<wbr></wbr>Mixin<wbr></wbr>.test<wbr></wbr>_func</div>
+            <div class="url">patients.mixins.InstitutionCheckObjectMixin.html#test_func</div>
+            <div class="type">ZopeInterfaceFunction</div>
+            <div class="kind">Method</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary"><span class="undocumented">Undocumented</span></div>
+          </li><li id="dashboard.query.logger">
+            
+            <div class="fullName">dashboard<wbr></wbr>.query<wbr></wbr>.logger</div>
+            <div class="url">dashboard.query.html#logger</div>
+            <div class="type">ZopeInterfaceAttribute</div>
+            <div class="kind">Variable</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary"><span class="undocumented">Undocumented</span></div>
+          </li><li id="dashboard.query.MODALITIES_SPSN">
+            
+            <div class="fullName">dashboard<wbr></wbr>.query<wbr></wbr>.MODALITIES<wbr></wbr>_SPSN</div>
+            <div class="url">dashboard.query.html#MODALITIES_SPSN</div>
+            <div class="type">ZopeInterfaceAttribute</div>
+            <div class="kind">Constant</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary"><span class="undocumented">Undocumented</span></div>
+          </li><li id="dashboard.query.tf2arr">
+            
+            <div class="fullName">dashboard<wbr></wbr>.query<wbr></wbr>.tf2arr</div>
+            <div class="url">dashboard.query.html#tf2arr</div>
+            <div class="type">ZopeInterfaceFunction</div>
+            <div class="kind">Function</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">Map <tt class="rst-docutils literal">True</tt>, <tt class="rst-docutils literal">False</tt> &amp; <tt class="rst-docutils literal">None</tt> to one-hot-arrays of length 3. This particular mapping comes from the fact that in the form <tt class="rst-docutils literal">True</tt>, <tt class="rst-docutils literal">None</tt>, <tt class="rst-docutils literal">False</tt> are represented by integers 1, 0, -1. So, the one-hot encoding uses an array of length 3 that is one only at these respective indices, where -1 is the last item.</div>
+          </li><li id="dashboard.query.subsite2arr">
+            
+            <div class="fullName">dashboard<wbr></wbr>.query<wbr></wbr>.subsite2arr</div>
+            <div class="url">dashboard.query.html#subsite2arr</div>
+            <div class="type">ZopeInterfaceFunction</div>
+            <div class="kind">Function</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">Map different subsites to an one-hot-array of subsite groups. E.g., a one in the first place means "base of tongue", at the second place is "tonsil" and so on.</div>
+          </li><li id="dashboard.query.patient_specific">
+            
+            <div class="fullName">dashboard<wbr></wbr>.query<wbr></wbr>.patient<wbr></wbr>_specific</div>
+            <div class="url">dashboard.query.html#patient_specific</div>
+            <div class="type">ZopeInterfaceFunction</div>
+            <div class="kind">Function</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">Filter <tt class="rst-docutils literal">QuerySet</tt> of patients based on patient-specific properties.</div>
+          </li><li id="dashboard.query.tumor_specific">
+            
+            <div class="fullName">dashboard<wbr></wbr>.query<wbr></wbr>.tumor<wbr></wbr>_specific</div>
+            <div class="url">dashboard.query.html#tumor_specific</div>
+            <div class="type">ZopeInterfaceFunction</div>
+            <div class="kind">Function</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">Filter <tt class="rst-docutils literal">QuerySet</tt> of patients based on tumor-specific properties.</div>
+          </li><li id="dashboard.query.maxllh_consensus">
+            
+            <div class="fullName">dashboard<wbr></wbr>.query<wbr></wbr>.maxllh<wbr></wbr>_consensus</div>
+            <div class="url">dashboard.query.html#maxllh_consensus</div>
+            <div class="type">ZopeInterfaceFunction</div>
+            <div class="kind">Function</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">Compute the consensus of different diagnostic modalities using their respective specificity &amp; sensitivity.</div>
+          </li><li id="dashboard.query.rank_consensus">
+            
+            <div class="fullName">dashboard<wbr></wbr>.query<wbr></wbr>.rank<wbr></wbr>_consensus</div>
+            <div class="url">dashboard.query.html#rank_consensus</div>
+            <div class="type">ZopeInterfaceFunction</div>
+            <div class="kind">Function</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">Compute the consensus of different diagnostic modalities using a ranking based on sensitivity &amp; specificity.</div>
+          </li><li id="dashboard.query.diagnose_specific">
+            
+            <div class="fullName">dashboard<wbr></wbr>.query<wbr></wbr>.diagnose<wbr></wbr>_specific</div>
+            <div class="url">dashboard.query.html#diagnose_specific</div>
+            <div class="type">ZopeInterfaceFunction</div>
+            <div class="kind">Function</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">Filter <tt class="rst-docutils literal">QuerySet</tt> of patients by their involvement according to the diagnoses.</div>
+          </li><li id="dashboard.query.n_zero_specific">
+            
+            <div class="fullName">dashboard<wbr></wbr>.query<wbr></wbr>.n<wbr></wbr>_zero<wbr></wbr>_specific</div>
+            <div class="url">dashboard.query.html#n_zero_specific</div>
+            <div class="type">ZopeInterfaceFunction</div>
+            <div class="kind">Function</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">Filter for N+ or N0. <tt class="rst-docutils literal">n_status</tt> is <tt class="rst-docutils literal">True</tt> when we only want to see N+ patients and <tt class="rst-docutils literal">False</tt> when we only want to see N0 patients.</div>
+          </li><li id="dashboard.query.count_patients">
+            
+            <div class="fullName">dashboard<wbr></wbr>.query<wbr></wbr>.count<wbr></wbr>_patients</div>
+            <div class="url">dashboard.query.html#count_patients</div>
+            <div class="type">ZopeInterfaceFunction</div>
+            <div class="kind">Function</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">Count how often patients have various characteristics like HPV status, certain lymph node level involvement, and so on.</div>
+          </li><li id="dashboard.forms.logger">
+            
+            <div class="fullName">dashboard<wbr></wbr>.forms<wbr></wbr>.logger</div>
+            <div class="url">dashboard.forms.html#logger</div>
+            <div class="type">ZopeInterfaceAttribute</div>
+            <div class="kind">Variable</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary"><span class="undocumented">Undocumented</span></div>
+          </li><li id="dashboard.forms.ThreeWayToggleWidget">
+            
+            <div class="fullName">dashboard<wbr></wbr>.forms<wbr></wbr>.<wbr></wbr>Three<wbr></wbr>Way<wbr></wbr>Toggle<wbr></wbr>Widget</div>
+            <div class="url">dashboard.forms.ThreeWayToggleWidget.html</div>
+            <div class="type">ZopeInterfaceClass</div>
+            <div class="kind">Class</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">Widget that renders the three-way toggle button and allows to set the attributes of the individual inputs (radio buttons) as <code><a href="dashboard.forms.ThreeWayToggleWidget.html#option_attrs" class="internal-link" title="dashboard.forms.ThreeWayToggleWidget.option_attrs">option_attrs</a></code> as well as the attributes of the container as <tt class="rst-docutils literal">attrs</tt>.</div>
+          </li><li id="dashboard.forms.ThreeWayToggleWidget.template_name">
+            
+            <div class="fullName">dashboard<wbr></wbr>.forms<wbr></wbr>.<wbr></wbr>Three<wbr></wbr>Way<wbr></wbr>Toggle<wbr></wbr>Widget<wbr></wbr>.template<wbr></wbr>_name</div>
+            <div class="url">dashboard.forms.ThreeWayToggleWidget.html#template_name</div>
+            <div class="type">ZopeInterfaceAttribute</div>
+            <div class="kind">Class Variable</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary"><span class="undocumented">Undocumented</span></div>
+          </li><li id="dashboard.forms.ThreeWayToggleWidget.option_template_name">
+            
+            <div class="fullName">dashboard<wbr></wbr>.forms<wbr></wbr>.<wbr></wbr>Three<wbr></wbr>Way<wbr></wbr>Toggle<wbr></wbr>Widget<wbr></wbr>.option<wbr></wbr>_template<wbr></wbr>_name</div>
+            <div class="url">dashboard.forms.ThreeWayToggleWidget.html#option_template_name</div>
+            <div class="type">ZopeInterfaceAttribute</div>
+            <div class="kind">Class Variable</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary"><span class="undocumented">Undocumented</span></div>
+          </li><li id="dashboard.forms.ThreeWayToggleWidget.option_attrs">
+            
+            <div class="fullName">dashboard<wbr></wbr>.forms<wbr></wbr>.<wbr></wbr>Three<wbr></wbr>Way<wbr></wbr>Toggle<wbr></wbr>Widget<wbr></wbr>.option<wbr></wbr>_attrs</div>
+            <div class="url">dashboard.forms.ThreeWayToggleWidget.html#option_attrs</div>
+            <div class="type">ZopeInterfaceAttribute</div>
+            <div class="kind">Instance Variable</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary"><span class="undocumented">Undocumented</span></div>
+          </li><li id="dashboard.forms.ThreeWayToggleWidget.__init__">
+            
+            <div class="fullName">dashboard<wbr></wbr>.forms<wbr></wbr>.<wbr></wbr>Three<wbr></wbr>Way<wbr></wbr>Toggle<wbr></wbr>Widget<wbr></wbr>.__init__</div>
+            <div class="url">dashboard.forms.ThreeWayToggleWidget.html#__init__</div>
+            <div class="type">ZopeInterfaceFunction</div>
+            <div class="kind">Method</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">Store arguments and option attributes for later use.</div>
+          </li><li id="dashboard.forms.ThreeWayToggleWidget.label">
+            
+            <div class="fullName">dashboard<wbr></wbr>.forms<wbr></wbr>.<wbr></wbr>Three<wbr></wbr>Way<wbr></wbr>Toggle<wbr></wbr>Widget<wbr></wbr>.label</div>
+            <div class="url">dashboard.forms.ThreeWayToggleWidget.html#label</div>
+            <div class="type">ZopeInterfaceAttribute</div>
+            <div class="kind">Instance Variable</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary"><span class="undocumented">Undocumented</span></div>
+          </li><li id="dashboard.forms.ThreeWayToggleWidget.tooltip">
+            
+            <div class="fullName">dashboard<wbr></wbr>.forms<wbr></wbr>.<wbr></wbr>Three<wbr></wbr>Way<wbr></wbr>Toggle<wbr></wbr>Widget<wbr></wbr>.tooltip</div>
+            <div class="url">dashboard.forms.ThreeWayToggleWidget.html#tooltip</div>
+            <div class="type">ZopeInterfaceAttribute</div>
+            <div class="kind">Instance Variable</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary"><span class="undocumented">Undocumented</span></div>
+          </li><li id="dashboard.forms.ThreeWayToggleWidget.get_context">
+            
+            <div class="fullName">dashboard<wbr></wbr>.forms<wbr></wbr>.<wbr></wbr>Three<wbr></wbr>Way<wbr></wbr>Toggle<wbr></wbr>Widget<wbr></wbr>.get<wbr></wbr>_context</div>
+            <div class="url">dashboard.forms.ThreeWayToggleWidget.html#get_context</div>
+            <div class="type">ZopeInterfaceFunction</div>
+            <div class="kind">Method</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">Pass label and tooltip to the context variable</div>
+          </li><li id="dashboard.forms.ThreeWayToggleWidget.create_option">
+            
+            <div class="fullName">dashboard<wbr></wbr>.forms<wbr></wbr>.<wbr></wbr>Three<wbr></wbr>Way<wbr></wbr>Toggle<wbr></wbr>Widget<wbr></wbr>.create<wbr></wbr>_option</div>
+            <div class="url">dashboard.forms.ThreeWayToggleWidget.html#create_option</div>
+            <div class="type">ZopeInterfaceFunction</div>
+            <div class="kind">Method</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">Pass the option attributes to the actual options</div>
+          </li><li id="dashboard.forms.ThreeWayToggle">
+            
+            <div class="fullName">dashboard<wbr></wbr>.forms<wbr></wbr>.<wbr></wbr>Three<wbr></wbr>Way<wbr></wbr>Toggle</div>
+            <div class="url">dashboard.forms.ThreeWayToggle.html</div>
+            <div class="type">ZopeInterfaceClass</div>
+            <div class="kind">Class</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">A toggle switch than can be in three different states: Positive/True, unkown/None and negative/False.</div>
+          </li><li id="dashboard.forms.ThreeWayToggle.__init__">
+            
+            <div class="fullName">dashboard<wbr></wbr>.forms<wbr></wbr>.<wbr></wbr>Three<wbr></wbr>Way<wbr></wbr>Toggle<wbr></wbr>.__init__</div>
+            <div class="url">dashboard.forms.ThreeWayToggle.html#__init__</div>
+            <div class="type">ZopeInterfaceFunction</div>
+            <div class="kind">Method</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">Pass the arguments, like <code><a href="dashboard.forms.ThreeWayToggleWidget.html#label" class="internal-link" title="dashboard.forms.ThreeWayToggleWidget.label">label</a></code> and <code><a href="dashboard.forms.ThreeWayToggleWidget.html#tooltip" class="internal-link" title="dashboard.forms.ThreeWayToggleWidget.tooltip">tooltip</a></code> to the constructor of the custom widget.</div>
+          </li><li id="dashboard.forms.ThreeWayToggle.to_python">
+            
+            <div class="fullName">dashboard<wbr></wbr>.forms<wbr></wbr>.<wbr></wbr>Three<wbr></wbr>Way<wbr></wbr>Toggle<wbr></wbr>.to<wbr></wbr>_python</div>
+            <div class="url">dashboard.forms.ThreeWayToggle.html#to_python</div>
+            <div class="type">ZopeInterfaceFunction</div>
+            <div class="kind">Method</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">Cast the string to an integer.</div>
+          </li><li id="dashboard.forms.InstitutionModelChoiceIndexer">
+            
+            <div class="fullName">dashboard<wbr></wbr>.forms<wbr></wbr>.<wbr></wbr>Institution<wbr></wbr>Model<wbr></wbr>Choice<wbr></wbr>Indexer</div>
+            <div class="url">dashboard.forms.InstitutionModelChoiceIndexer.html</div>
+            <div class="type">ZopeInterfaceClass</div>
+            <div class="kind">Class</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">Custom class with which one can access additional information from the model that is chosen by the <code><a href="dashboard.forms.InstitutionMultipleChoiceField.html" class="internal-link" title="dashboard.forms.InstitutionMultipleChoiceField">InstitutionMultipleChoiceField</a></code>.</div>
+          </li><li id="dashboard.forms.InstitutionModelChoiceIndexer.__init__">
+            
+            <div class="fullName">dashboard<wbr></wbr>.forms<wbr></wbr>.<wbr></wbr>Institution<wbr></wbr>Model<wbr></wbr>Choice<wbr></wbr>Indexer<wbr></wbr>.__init__</div>
+            <div class="url">dashboard.forms.InstitutionModelChoiceIndexer.html#__init__</div>
+            <div class="type">ZopeInterfaceFunction</div>
+            <div class="kind">Method</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary"><span class="undocumented">Undocumented</span></div>
+          </li><li id="dashboard.forms.InstitutionModelChoiceIndexer.field">
+            
+            <div class="fullName">dashboard<wbr></wbr>.forms<wbr></wbr>.<wbr></wbr>Institution<wbr></wbr>Model<wbr></wbr>Choice<wbr></wbr>Indexer<wbr></wbr>.field</div>
+            <div class="url">dashboard.forms.InstitutionModelChoiceIndexer.html#field</div>
+            <div class="type">ZopeInterfaceAttribute</div>
+            <div class="kind">Instance Variable</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary"><span class="undocumented">Undocumented</span></div>
+          </li><li id="dashboard.forms.InstitutionModelChoiceIndexer.queryset">
+            
+            <div class="fullName">dashboard<wbr></wbr>.forms<wbr></wbr>.<wbr></wbr>Institution<wbr></wbr>Model<wbr></wbr>Choice<wbr></wbr>Indexer<wbr></wbr>.queryset</div>
+            <div class="url">dashboard.forms.InstitutionModelChoiceIndexer.html#queryset</div>
+            <div class="type">ZopeInterfaceAttribute</div>
+            <div class="kind">Instance Variable</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary"><span class="undocumented">Undocumented</span></div>
+          </li><li id="dashboard.forms.InstitutionModelChoiceIndexer.__getitem__">
+            
+            <div class="fullName">dashboard<wbr></wbr>.forms<wbr></wbr>.<wbr></wbr>Institution<wbr></wbr>Model<wbr></wbr>Choice<wbr></wbr>Indexer<wbr></wbr>.__getitem__</div>
+            <div class="url">dashboard.forms.InstitutionModelChoiceIndexer.html#__getitem__</div>
+            <div class="type">ZopeInterfaceFunction</div>
+            <div class="kind">Method</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary"><span class="undocumented">Undocumented</span></div>
+          </li><li id="dashboard.forms.InstitutionModelChoiceIndexer.info">
+            
+            <div class="fullName">dashboard<wbr></wbr>.forms<wbr></wbr>.<wbr></wbr>Institution<wbr></wbr>Model<wbr></wbr>Choice<wbr></wbr>Indexer<wbr></wbr>.info</div>
+            <div class="url">dashboard.forms.InstitutionModelChoiceIndexer.html#info</div>
+            <div class="type">ZopeInterfaceFunction</div>
+            <div class="kind">Method</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">Return the label and logo URL for the institution.</div>
+          </li><li id="dashboard.forms.InstitutionMultipleChoiceField">
+            
+            <div class="fullName">dashboard<wbr></wbr>.forms<wbr></wbr>.<wbr></wbr>Institution<wbr></wbr>Multiple<wbr></wbr>Choice<wbr></wbr>Field</div>
+            <div class="url">dashboard.forms.InstitutionMultipleChoiceField.html</div>
+            <div class="type">ZopeInterfaceClass</div>
+            <div class="kind">Class</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">Customize label description and add method that returns the logo URL for institutions. The implementation is inspired by how the <tt class="rst-docutils literal">choices</tt> are implemented. But since some other functionality depends on how those choices are implemented, it cannot be changed easily.</div>
+          </li><li id="dashboard.forms.InstitutionMultipleChoiceField.label_from_instance">
+            
+            <div class="fullName">dashboard<wbr></wbr>.forms<wbr></wbr>.<wbr></wbr>Institution<wbr></wbr>Multiple<wbr></wbr>Choice<wbr></wbr>Field<wbr></wbr>.label<wbr></wbr>_from<wbr></wbr>_instance</div>
+            <div class="url">dashboard.forms.InstitutionMultipleChoiceField.html#label_from_instance</div>
+            <div class="type">ZopeInterfaceFunction</div>
+            <div class="kind">Method</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">Institution name as label.</div>
+          </li><li id="dashboard.forms.InstitutionMultipleChoiceField.logo_url_from_instance">
+            
+            <div class="fullName">dashboard<wbr></wbr>.forms<wbr></wbr>.<wbr></wbr>Institution<wbr></wbr>Multiple<wbr></wbr>Choice<wbr></wbr>Field<wbr></wbr>.logo<wbr></wbr>_url<wbr></wbr>_from<wbr></wbr>_instance</div>
+            <div class="url">dashboard.forms.InstitutionMultipleChoiceField.html#logo_url_from_instance</div>
+            <div class="type">ZopeInterfaceFunction</div>
+            <div class="kind">Method</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">Return URL of Institution's logo.</div>
+          </li><li id="dashboard.forms.InstitutionMultipleChoiceField.names_and_urls">
+            
+            <div class="fullName">dashboard<wbr></wbr>.forms<wbr></wbr>.<wbr></wbr>Institution<wbr></wbr>Multiple<wbr></wbr>Choice<wbr></wbr>Field<wbr></wbr>.names<wbr></wbr>_and<wbr></wbr>_urls</div>
+            <div class="url">dashboard.forms.InstitutionMultipleChoiceField.html#names_and_urls</div>
+            <div class="type">ZopeInterfaceAttribute</div>
+            <div class="kind">Property</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary"><span class="undocumented">Undocumented</span></div>
+          </li><li id="dashboard.forms.DashboardForm">
+            
+            <div class="fullName">dashboard<wbr></wbr>.forms<wbr></wbr>.<wbr></wbr>Dashboard<wbr></wbr>Form</div>
+            <div class="url">dashboard.forms.DashboardForm.html</div>
+            <div class="type">ZopeInterfaceClass</div>
+            <div class="kind">Class</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">Form for querying the database.</div>
+          </li><li id="dashboard.forms.DashboardForm.modalities">
+            
+            <div class="fullName">dashboard<wbr></wbr>.forms<wbr></wbr>.<wbr></wbr>Dashboard<wbr></wbr>Form<wbr></wbr>.modalities</div>
+            <div class="url">dashboard.forms.DashboardForm.html#modalities</div>
+            <div class="type">ZopeInterfaceAttribute</div>
+            <div class="kind">Class Variable</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary"><span class="undocumented">Undocumented</span></div>
+          </li><li id="dashboard.forms.DashboardForm.modality_combine">
+            
+            <div class="fullName">dashboard<wbr></wbr>.forms<wbr></wbr>.<wbr></wbr>Dashboard<wbr></wbr>Form<wbr></wbr>.modality<wbr></wbr>_combine</div>
+            <div class="url">dashboard.forms.DashboardForm.html#modality_combine</div>
+            <div class="type">ZopeInterfaceAttribute</div>
+            <div class="kind">Class Variable</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary"><span class="undocumented">Undocumented</span></div>
+          </li><li id="dashboard.forms.DashboardForm.nicotine_abuse">
+            
+            <div class="fullName">dashboard<wbr></wbr>.forms<wbr></wbr>.<wbr></wbr>Dashboard<wbr></wbr>Form<wbr></wbr>.nicotine<wbr></wbr>_abuse</div>
+            <div class="url">dashboard.forms.DashboardForm.html#nicotine_abuse</div>
+            <div class="type">ZopeInterfaceAttribute</div>
+            <div class="kind">Class Variable</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary"><span class="undocumented">Undocumented</span></div>
+          </li><li id="dashboard.forms.DashboardForm.hpv_status">
+            
+            <div class="fullName">dashboard<wbr></wbr>.forms<wbr></wbr>.<wbr></wbr>Dashboard<wbr></wbr>Form<wbr></wbr>.hpv<wbr></wbr>_status</div>
+            <div class="url">dashboard.forms.DashboardForm.html#hpv_status</div>
+            <div class="type">ZopeInterfaceAttribute</div>
+            <div class="kind">Class Variable</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary"><span class="undocumented">Undocumented</span></div>
+          </li><li id="dashboard.forms.DashboardForm.neck_dissection">
+            
+            <div class="fullName">dashboard<wbr></wbr>.forms<wbr></wbr>.<wbr></wbr>Dashboard<wbr></wbr>Form<wbr></wbr>.neck<wbr></wbr>_dissection</div>
+            <div class="url">dashboard.forms.DashboardForm.html#neck_dissection</div>
+            <div class="type">ZopeInterfaceAttribute</div>
+            <div class="kind">Class Variable</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary"><span class="undocumented">Undocumented</span></div>
+          </li><li id="dashboard.forms.DashboardForm.n_status">
+            
+            <div class="fullName">dashboard<wbr></wbr>.forms<wbr></wbr>.<wbr></wbr>Dashboard<wbr></wbr>Form<wbr></wbr>.n<wbr></wbr>_status</div>
+            <div class="url">dashboard.forms.DashboardForm.html#n_status</div>
+            <div class="type">ZopeInterfaceAttribute</div>
+            <div class="kind">Class Variable</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary"><span class="undocumented">Undocumented</span></div>
+          </li><li id="dashboard.forms.DashboardForm.institution__in">
+            
+            <div class="fullName">dashboard<wbr></wbr>.forms<wbr></wbr>.<wbr></wbr>Dashboard<wbr></wbr>Form<wbr></wbr>.institution<wbr></wbr>_<wbr></wbr>_in</div>
+            <div class="url">dashboard.forms.DashboardForm.html#institution__in</div>
+            <div class="type">ZopeInterfaceAttribute</div>
+            <div class="kind">Class Variable</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary"><span class="undocumented">Undocumented</span></div>
+          </li><li id="dashboard.forms.DashboardForm.subsite_oropharynx">
+            
+            <div class="fullName">dashboard<wbr></wbr>.forms<wbr></wbr>.<wbr></wbr>Dashboard<wbr></wbr>Form<wbr></wbr>.subsite<wbr></wbr>_oropharynx</div>
+            <div class="url">dashboard.forms.DashboardForm.html#subsite_oropharynx</div>
+            <div class="type">ZopeInterfaceAttribute</div>
+            <div class="kind">Class Variable</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary"><span class="undocumented">Undocumented</span></div>
+          </li><li id="dashboard.forms.DashboardForm.subsite_hypopharynx">
+            
+            <div class="fullName">dashboard<wbr></wbr>.forms<wbr></wbr>.<wbr></wbr>Dashboard<wbr></wbr>Form<wbr></wbr>.subsite<wbr></wbr>_hypopharynx</div>
+            <div class="url">dashboard.forms.DashboardForm.html#subsite_hypopharynx</div>
+            <div class="type">ZopeInterfaceAttribute</div>
+            <div class="kind">Class Variable</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary"><span class="undocumented">Undocumented</span></div>
+          </li><li id="dashboard.forms.DashboardForm.subsite_larynx">
+            
+            <div class="fullName">dashboard<wbr></wbr>.forms<wbr></wbr>.<wbr></wbr>Dashboard<wbr></wbr>Form<wbr></wbr>.subsite<wbr></wbr>_larynx</div>
+            <div class="url">dashboard.forms.DashboardForm.html#subsite_larynx</div>
+            <div class="type">ZopeInterfaceAttribute</div>
+            <div class="kind">Class Variable</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary"><span class="undocumented">Undocumented</span></div>
+          </li><li id="dashboard.forms.DashboardForm.subsite_oral_cavity">
+            
+            <div class="fullName">dashboard<wbr></wbr>.forms<wbr></wbr>.<wbr></wbr>Dashboard<wbr></wbr>Form<wbr></wbr>.subsite<wbr></wbr>_oral<wbr></wbr>_cavity</div>
+            <div class="url">dashboard.forms.DashboardForm.html#subsite_oral_cavity</div>
+            <div class="type">ZopeInterfaceAttribute</div>
+            <div class="kind">Class Variable</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary"><span class="undocumented">Undocumented</span></div>
+          </li><li id="dashboard.forms.DashboardForm.t_stage__in">
+            
+            <div class="fullName">dashboard<wbr></wbr>.forms<wbr></wbr>.<wbr></wbr>Dashboard<wbr></wbr>Form<wbr></wbr>.t<wbr></wbr>_stage<wbr></wbr>_<wbr></wbr>_in</div>
+            <div class="url">dashboard.forms.DashboardForm.html#t_stage__in</div>
+            <div class="type">ZopeInterfaceAttribute</div>
+            <div class="kind">Class Variable</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary"><span class="undocumented">Undocumented</span></div>
+          </li><li id="dashboard.forms.DashboardForm.central">
+            
+            <div class="fullName">dashboard<wbr></wbr>.forms<wbr></wbr>.<wbr></wbr>Dashboard<wbr></wbr>Form<wbr></wbr>.central</div>
+            <div class="url">dashboard.forms.DashboardForm.html#central</div>
+            <div class="type">ZopeInterfaceAttribute</div>
+            <div class="kind">Class Variable</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary"><span class="undocumented">Undocumented</span></div>
+          </li><li id="dashboard.forms.DashboardForm.extension">
+            
+            <div class="fullName">dashboard<wbr></wbr>.forms<wbr></wbr>.<wbr></wbr>Dashboard<wbr></wbr>Form<wbr></wbr>.extension</div>
+            <div class="url">dashboard.forms.DashboardForm.html#extension</div>
+            <div class="type">ZopeInterfaceAttribute</div>
+            <div class="kind">Class Variable</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary"><span class="undocumented">Undocumented</span></div>
+          </li><li id="dashboard.forms.DashboardForm.show_percent">
+            
+            <div class="fullName">dashboard<wbr></wbr>.forms<wbr></wbr>.<wbr></wbr>Dashboard<wbr></wbr>Form<wbr></wbr>.show<wbr></wbr>_percent</div>
+            <div class="url">dashboard.forms.DashboardForm.html#show_percent</div>
+            <div class="type">ZopeInterfaceAttribute</div>
+            <div class="kind">Class Variable</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary"><span class="undocumented">Undocumented</span></div>
+          </li><li id="dashboard.forms.DashboardForm.__init__">
+            
+            <div class="fullName">dashboard<wbr></wbr>.forms<wbr></wbr>.<wbr></wbr>Dashboard<wbr></wbr>Form<wbr></wbr>.__init__</div>
+            <div class="url">dashboard.forms.DashboardForm.html#__init__</div>
+            <div class="type">ZopeInterfaceFunction</div>
+            <div class="kind">Method</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">Extend default initialization to create lots of fields for the LNLs from a list and hide some datasets for unauthenticated users.</div>
+          </li><li id="dashboard.forms.DashboardForm._to_bool">
+            
+            <div class="fullName">dashboard<wbr></wbr>.forms<wbr></wbr>.<wbr></wbr>Dashboard<wbr></wbr>Form<wbr></wbr>._to<wbr></wbr>_bool</div>
+            <div class="url">dashboard.forms.DashboardForm.html#_to_bool</div>
+            <div class="type">ZopeInterfaceFunction</div>
+            <div class="kind">Method</div>
+            <div class="privacy">PRIVATE</div>
+            <div class="summary">Transform values of -1, 0 and 1 to False, None and True respectively. Anything else is just passed through.</div>
+          </li><li id="dashboard.forms.DashboardForm.clean">
+            
+            <div class="fullName">dashboard<wbr></wbr>.forms<wbr></wbr>.<wbr></wbr>Dashboard<wbr></wbr>Form<wbr></wbr>.clean</div>
+            <div class="url">dashboard.forms.DashboardForm.html#clean</div>
+            <div class="type">ZopeInterfaceFunction</div>
+            <div class="kind">Method</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">Make sure LNLs I &amp; II have correct values corresponding to their sublevels a &amp; b. Also convert tstages from list of str to list of int.</div>
+          </li><li id="patients.views.logger">
+            
+            <div class="fullName">patients<wbr></wbr>.views<wbr></wbr>.logger</div>
+            <div class="url">patients.views.html#logger</div>
+            <div class="type">ZopeInterfaceAttribute</div>
+            <div class="kind">Variable</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary"><span class="undocumented">Undocumented</span></div>
+          </li><li id="patients.views.PatientListView">
+            
+            <div class="fullName">patients<wbr></wbr>.views<wbr></wbr>.<wbr></wbr>Patient<wbr></wbr>List<wbr></wbr>View</div>
+            <div class="url">patients.views.PatientListView.html</div>
+            <div class="type">ZopeInterfaceClass</div>
+            <div class="kind">Class</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">Renders a list of all patients in the database showing basic information and links to the individual entries. Depending from where this view is called, the list is filterable.</div>
+          </li><li id="patients.views.PatientListView.template_name">
+            
+            <div class="fullName">patients<wbr></wbr>.views<wbr></wbr>.<wbr></wbr>Patient<wbr></wbr>List<wbr></wbr>View<wbr></wbr>.template<wbr></wbr>_name</div>
+            <div class="url">patients.views.PatientListView.html#template_name</div>
+            <div class="type">ZopeInterfaceAttribute</div>
+            <div class="kind">Class Variable</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary"><span class="undocumented">Undocumented</span></div>
+          </li><li id="patients.views.PatientListView.context_object_name">
+            
+            <div class="fullName">patients<wbr></wbr>.views<wbr></wbr>.<wbr></wbr>Patient<wbr></wbr>List<wbr></wbr>View<wbr></wbr>.context<wbr></wbr>_object<wbr></wbr>_name</div>
+            <div class="url">patients.views.PatientListView.html#context_object_name</div>
+            <div class="type">ZopeInterfaceAttribute</div>
+            <div class="kind">Class Variable</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary"><span class="undocumented">Undocumented</span></div>
+          </li><li id="patients.views.PatientListView.action">
+            
+            <div class="fullName">patients<wbr></wbr>.views<wbr></wbr>.<wbr></wbr>Patient<wbr></wbr>List<wbr></wbr>View<wbr></wbr>.action</div>
+            <div class="url">patients.views.PatientListView.html#action</div>
+            <div class="type">ZopeInterfaceAttribute</div>
+            <div class="kind">Class Variable</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary"><span class="undocumented">Undocumented</span></div>
+          </li><li id="patients.views.PatientListView.is_filterable">
+            
+            <div class="fullName">patients<wbr></wbr>.views<wbr></wbr>.<wbr></wbr>Patient<wbr></wbr>List<wbr></wbr>View<wbr></wbr>.is<wbr></wbr>_filterable</div>
+            <div class="url">patients.views.PatientListView.html#is_filterable</div>
+            <div class="type">ZopeInterfaceAttribute</div>
+            <div class="kind">Instance Variable</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary"><span class="undocumented">Undocumented</span></div>
+          </li><li id="patients.views.PatientListView.queryset_pk_list">
+            
+            <div class="fullName">patients<wbr></wbr>.views<wbr></wbr>.<wbr></wbr>Patient<wbr></wbr>List<wbr></wbr>View<wbr></wbr>.queryset<wbr></wbr>_pk<wbr></wbr>_list</div>
+            <div class="url">patients.views.PatientListView.html#queryset_pk_list</div>
+            <div class="type">ZopeInterfaceAttribute</div>
+            <div class="kind">Instance Variable</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary"><span class="undocumented">Undocumented</span></div>
+          </li><li id="patients.views.PatientListView.get_queryset">
+            
+            <div class="fullName">patients<wbr></wbr>.views<wbr></wbr>.<wbr></wbr>Patient<wbr></wbr>List<wbr></wbr>View<wbr></wbr>.get<wbr></wbr>_queryset</div>
+            <div class="url">patients.views.PatientListView.html#get_queryset</div>
+            <div class="type">ZopeInterfaceFunction</div>
+            <div class="kind">Method</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">Add ability to filter queryset via FilterSets to generic ListView.</div>
+          </li><li id="patients.views.PatientListView.filterset">
+            
+            <div class="fullName">patients<wbr></wbr>.views<wbr></wbr>.<wbr></wbr>Patient<wbr></wbr>List<wbr></wbr>View<wbr></wbr>.filterset</div>
+            <div class="url">patients.views.PatientListView.html#filterset</div>
+            <div class="type">ZopeInterfaceAttribute</div>
+            <div class="kind">Instance Variable</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary"><span class="undocumented">Undocumented</span></div>
+          </li><li id="patients.views.PatientListView.form">
+            
+            <div class="fullName">patients<wbr></wbr>.views<wbr></wbr>.<wbr></wbr>Patient<wbr></wbr>List<wbr></wbr>View<wbr></wbr>.form</div>
+            <div class="url">patients.views.PatientListView.html#form</div>
+            <div class="type">ZopeInterfaceAttribute</div>
+            <div class="kind">Instance Variable</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary"><span class="undocumented">Undocumented</span></div>
+          </li><li id="patients.views.PatientListView.get_context_data">
+            
+            <div class="fullName">patients<wbr></wbr>.views<wbr></wbr>.<wbr></wbr>Patient<wbr></wbr>List<wbr></wbr>View<wbr></wbr>.get<wbr></wbr>_context<wbr></wbr>_data</div>
+            <div class="url">patients.views.PatientListView.html#get_context_data</div>
+            <div class="type">ZopeInterfaceFunction</div>
+            <div class="kind">Method</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">Add FilterSet to context for displaying filter form.</div>
+          </li><li id="patients.views.PatientDetailView">
+            
+            <div class="fullName">patients<wbr></wbr>.views<wbr></wbr>.<wbr></wbr>Patient<wbr></wbr>Detail<wbr></wbr>View</div>
+            <div class="url">patients.views.PatientDetailView.html</div>
+            <div class="type">ZopeInterfaceClass</div>
+            <div class="kind">Class</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">Show details of a particular patient.</div>
+          </li><li id="patients.views.PatientDetailView.template_name">
+            
+            <div class="fullName">patients<wbr></wbr>.views<wbr></wbr>.<wbr></wbr>Patient<wbr></wbr>Detail<wbr></wbr>View<wbr></wbr>.template<wbr></wbr>_name</div>
+            <div class="url">patients.views.PatientDetailView.html#template_name</div>
+            <div class="type">ZopeInterfaceAttribute</div>
+            <div class="kind">Class Variable</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary"><span class="undocumented">Undocumented</span></div>
+          </li><li id="patients.views.PatientDetailView.action">
+            
+            <div class="fullName">patients<wbr></wbr>.views<wbr></wbr>.<wbr></wbr>Patient<wbr></wbr>Detail<wbr></wbr>View<wbr></wbr>.action</div>
+            <div class="url">patients.views.PatientDetailView.html#action</div>
+            <div class="type">ZopeInterfaceAttribute</div>
+            <div class="kind">Class Variable</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary"><span class="undocumented">Undocumented</span></div>
+          </li><li id="patients.views.CreatePatientView">
+            
+            <div class="fullName">patients<wbr></wbr>.views<wbr></wbr>.<wbr></wbr>Create<wbr></wbr>Patient<wbr></wbr>View</div>
+            <div class="url">patients.views.CreatePatientView.html</div>
+            <div class="type">ZopeInterfaceClass</div>
+            <div class="kind">Class</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">View used to create a new patient entry in the database.</div>
+          </li><li id="patients.views.CreatePatientView.template_name">
+            
+            <div class="fullName">patients<wbr></wbr>.views<wbr></wbr>.<wbr></wbr>Create<wbr></wbr>Patient<wbr></wbr>View<wbr></wbr>.template<wbr></wbr>_name</div>
+            <div class="url">patients.views.CreatePatientView.html#template_name</div>
+            <div class="type">ZopeInterfaceAttribute</div>
+            <div class="kind">Class Variable</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary"><span class="undocumented">Undocumented</span></div>
+          </li><li id="patients.views.CreatePatientView.action">
+            
+            <div class="fullName">patients<wbr></wbr>.views<wbr></wbr>.<wbr></wbr>Create<wbr></wbr>Patient<wbr></wbr>View<wbr></wbr>.action</div>
+            <div class="url">patients.views.CreatePatientView.html#action</div>
+            <div class="type">ZopeInterfaceAttribute</div>
+            <div class="kind">Class Variable</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary"><span class="undocumented">Undocumented</span></div>
+          </li><li id="patients.views.CreatePatientView.get_context_data">
+            
+            <div class="fullName">patients<wbr></wbr>.views<wbr></wbr>.<wbr></wbr>Create<wbr></wbr>Patient<wbr></wbr>View<wbr></wbr>.get<wbr></wbr>_context<wbr></wbr>_data</div>
+            <div class="url">patients.views.CreatePatientView.html#get_context_data</div>
+            <div class="type">ZopeInterfaceFunction</div>
+            <div class="kind">Method</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">Add <tt class="rst-docutils literal">action</tt> to context for rendering purposes.</div>
+          </li><li id="patients.views.CreatePatientView.get_form_kwargs">
+            
+            <div class="fullName">patients<wbr></wbr>.views<wbr></wbr>.<wbr></wbr>Create<wbr></wbr>Patient<wbr></wbr>View<wbr></wbr>.get<wbr></wbr>_form<wbr></wbr>_kwargs</div>
+            <div class="url">patients.views.CreatePatientView.html#get_form_kwargs</div>
+            <div class="type">ZopeInterfaceFunction</div>
+            <div class="kind">Method</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">Pass user to form, so that a newly created patient can be assigned to the same institution as the user who created them.</div>
+          </li><li id="patients.views.UpdatePatientView">
+            
+            <div class="fullName">patients<wbr></wbr>.views<wbr></wbr>.<wbr></wbr>Update<wbr></wbr>Patient<wbr></wbr>View</div>
+            <div class="url">patients.views.UpdatePatientView.html</div>
+            <div class="type">ZopeInterfaceClass</div>
+            <div class="kind">Class</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">Update a given patient's information.</div>
+          </li><li id="patients.views.UpdatePatientView.template_name">
+            
+            <div class="fullName">patients<wbr></wbr>.views<wbr></wbr>.<wbr></wbr>Update<wbr></wbr>Patient<wbr></wbr>View<wbr></wbr>.template<wbr></wbr>_name</div>
+            <div class="url">patients.views.UpdatePatientView.html#template_name</div>
+            <div class="type">ZopeInterfaceAttribute</div>
+            <div class="kind">Class Variable</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary"><span class="undocumented">Undocumented</span></div>
+          </li><li id="patients.views.UpdatePatientView.action">
+            
+            <div class="fullName">patients<wbr></wbr>.views<wbr></wbr>.<wbr></wbr>Update<wbr></wbr>Patient<wbr></wbr>View<wbr></wbr>.action</div>
+            <div class="url">patients.views.UpdatePatientView.html#action</div>
+            <div class="type">ZopeInterfaceAttribute</div>
+            <div class="kind">Class Variable</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary"><span class="undocumented">Undocumented</span></div>
+          </li><li id="patients.views.UpdatePatientView.get_success_url">
+            
+            <div class="fullName">patients<wbr></wbr>.views<wbr></wbr>.<wbr></wbr>Update<wbr></wbr>Patient<wbr></wbr>View<wbr></wbr>.get<wbr></wbr>_success<wbr></wbr>_url</div>
+            <div class="url">patients.views.UpdatePatientView.html#get_success_url</div>
+            <div class="type">ZopeInterfaceFunction</div>
+            <div class="kind">Method</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">When successfully edited, redirect to that patient's <code><a href="patients.views.PatientDetailView.html" class="internal-link" title="patients.views.PatientDetailView">PatientDetailView</a></code></div>
+          </li><li id="patients.views.UpdatePatientView.get_context_data">
+            
+            <div class="fullName">patients<wbr></wbr>.views<wbr></wbr>.<wbr></wbr>Update<wbr></wbr>Patient<wbr></wbr>View<wbr></wbr>.get<wbr></wbr>_context<wbr></wbr>_data</div>
+            <div class="url">patients.views.UpdatePatientView.html#get_context_data</div>
+            <div class="type">ZopeInterfaceFunction</div>
+            <div class="kind">Method</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">Add <tt class="rst-docutils literal">action</tt> to context for rendering purposes.</div>
+          </li><li id="patients.views.UpdatePatientView.get_form_kwargs">
+            
+            <div class="fullName">patients<wbr></wbr>.views<wbr></wbr>.<wbr></wbr>Update<wbr></wbr>Patient<wbr></wbr>View<wbr></wbr>.get<wbr></wbr>_form<wbr></wbr>_kwargs</div>
+            <div class="url">patients.views.UpdatePatientView.html#get_form_kwargs</div>
+            <div class="type">ZopeInterfaceFunction</div>
+            <div class="kind">Method</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">Pass current user to the form.</div>
+          </li><li id="patients.views.DeletePatientView">
+            
+            <div class="fullName">patients<wbr></wbr>.views<wbr></wbr>.<wbr></wbr>Delete<wbr></wbr>Patient<wbr></wbr>View</div>
+            <div class="url">patients.views.DeletePatientView.html</div>
+            <div class="type">ZopeInterfaceClass</div>
+            <div class="kind">Class</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">Remove this patient from the database.</div>
+          </li><li id="patients.views.DeletePatientView.template_name">
+            
+            <div class="fullName">patients<wbr></wbr>.views<wbr></wbr>.<wbr></wbr>Delete<wbr></wbr>Patient<wbr></wbr>View<wbr></wbr>.template<wbr></wbr>_name</div>
+            <div class="url">patients.views.DeletePatientView.html#template_name</div>
+            <div class="type">ZopeInterfaceAttribute</div>
+            <div class="kind">Class Variable</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary"><span class="undocumented">Undocumented</span></div>
+          </li><li id="patients.views.DeletePatientView.success_url">
+            
+            <div class="fullName">patients<wbr></wbr>.views<wbr></wbr>.<wbr></wbr>Delete<wbr></wbr>Patient<wbr></wbr>View<wbr></wbr>.success<wbr></wbr>_url</div>
+            <div class="url">patients.views.DeletePatientView.html#success_url</div>
+            <div class="type">ZopeInterfaceAttribute</div>
+            <div class="kind">Class Variable</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary"><span class="undocumented">Undocumented</span></div>
+          </li><li id="patients.views.DeletePatientView.action">
+            
+            <div class="fullName">patients<wbr></wbr>.views<wbr></wbr>.<wbr></wbr>Delete<wbr></wbr>Patient<wbr></wbr>View<wbr></wbr>.action</div>
+            <div class="url">patients.views.DeletePatientView.html#action</div>
+            <div class="type">ZopeInterfaceAttribute</div>
+            <div class="kind">Class Variable</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary"><span class="undocumented">Undocumented</span></div>
+          </li><li id="patients.views.upload_patients">
+            
+            <div class="fullName">patients<wbr></wbr>.views<wbr></wbr>.upload<wbr></wbr>_patients</div>
+            <div class="url">patients.views.html#upload_patients</div>
+            <div class="type">ZopeInterfaceFunction</div>
+            <div class="kind">Function</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">View to load many patients at once from a CSV file using pandas. This requires the CSV file to be formatted in a certain way.</div>
+          </li><li id="patients.views.generate_and_download_csv">
+            
+            <div class="fullName">patients<wbr></wbr>.views<wbr></wbr>.generate<wbr></wbr>_and<wbr></wbr>_download<wbr></wbr>_csv</div>
+            <div class="url">patients.views.html#generate_and_download_csv</div>
+            <div class="type">ZopeInterfaceFunction</div>
+            <div class="kind">Function</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">Allow user to generate a CSV table from the current database and download it. The returned CSV table has exactly the structure that is necessary to upload a batch of patients.</div>
+          </li><li id="patients.views.CreateTumorView">
+            
+            <div class="fullName">patients<wbr></wbr>.views<wbr></wbr>.<wbr></wbr>Create<wbr></wbr>Tumor<wbr></wbr>View</div>
+            <div class="url">patients.views.CreateTumorView.html</div>
+            <div class="type">ZopeInterfaceClass</div>
+            <div class="kind">Class</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">Create a tumor and add it to a given patient.</div>
+          </li><li id="patients.views.CreateTumorView.template_name">
+            
+            <div class="fullName">patients<wbr></wbr>.views<wbr></wbr>.<wbr></wbr>Create<wbr></wbr>Tumor<wbr></wbr>View<wbr></wbr>.template<wbr></wbr>_name</div>
+            <div class="url">patients.views.CreateTumorView.html#template_name</div>
+            <div class="type">ZopeInterfaceAttribute</div>
+            <div class="kind">Class Variable</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary"><span class="undocumented">Undocumented</span></div>
+          </li><li id="patients.views.CreateTumorView.action">
+            
+            <div class="fullName">patients<wbr></wbr>.views<wbr></wbr>.<wbr></wbr>Create<wbr></wbr>Tumor<wbr></wbr>View<wbr></wbr>.action</div>
+            <div class="url">patients.views.CreateTumorView.html#action</div>
+            <div class="type">ZopeInterfaceAttribute</div>
+            <div class="kind">Class Variable</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary"><span class="undocumented">Undocumented</span></div>
+          </li><li id="patients.views.CreateTumorView.form_valid">
+            
+            <div class="fullName">patients<wbr></wbr>.views<wbr></wbr>.<wbr></wbr>Create<wbr></wbr>Tumor<wbr></wbr>View<wbr></wbr>.form<wbr></wbr>_valid</div>
+            <div class="url">patients.views.CreateTumorView.html#form_valid</div>
+            <div class="type">ZopeInterfaceFunction</div>
+            <div class="kind">Method</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">After form validation, add the tumor to the given patient.</div>
+          </li><li id="patients.views.CreateTumorView.get_success_url">
+            
+            <div class="fullName">patients<wbr></wbr>.views<wbr></wbr>.<wbr></wbr>Create<wbr></wbr>Tumor<wbr></wbr>View<wbr></wbr>.get<wbr></wbr>_success<wbr></wbr>_url</div>
+            <div class="url">patients.views.CreateTumorView.html#get_success_url</div>
+            <div class="type">ZopeInterfaceFunction</div>
+            <div class="kind">Method</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">After successfull creation, redirect to the patient's detail view that also contains info about this tumor.</div>
+          </li><li id="patients.views.CreateTumorView.get_context_data">
+            
+            <div class="fullName">patients<wbr></wbr>.views<wbr></wbr>.<wbr></wbr>Create<wbr></wbr>Tumor<wbr></wbr>View<wbr></wbr>.get<wbr></wbr>_context<wbr></wbr>_data</div>
+            <div class="url">patients.views.CreateTumorView.html#get_context_data</div>
+            <div class="type">ZopeInterfaceFunction</div>
+            <div class="kind">Method</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">Add this tumor's patient, the patient's tumor and diagnoses, as well as the currently performed action to the context dictionary.</div>
+          </li><li id="patients.views.UpdateTumorView">
+            
+            <div class="fullName">patients<wbr></wbr>.views<wbr></wbr>.<wbr></wbr>Update<wbr></wbr>Tumor<wbr></wbr>View</div>
+            <div class="url">patients.views.UpdateTumorView.html</div>
+            <div class="type">ZopeInterfaceClass</div>
+            <div class="kind">Class</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">Update specifics of a patient's tumor.</div>
+          </li><li id="patients.views.UpdateTumorView.template_name">
+            
+            <div class="fullName">patients<wbr></wbr>.views<wbr></wbr>.<wbr></wbr>Update<wbr></wbr>Tumor<wbr></wbr>View<wbr></wbr>.template<wbr></wbr>_name</div>
+            <div class="url">patients.views.UpdateTumorView.html#template_name</div>
+            <div class="type">ZopeInterfaceAttribute</div>
+            <div class="kind">Class Variable</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary"><span class="undocumented">Undocumented</span></div>
+          </li><li id="patients.views.UpdateTumorView.action">
+            
+            <div class="fullName">patients<wbr></wbr>.views<wbr></wbr>.<wbr></wbr>Update<wbr></wbr>Tumor<wbr></wbr>View<wbr></wbr>.action</div>
+            <div class="url">patients.views.UpdateTumorView.html#action</div>
+            <div class="type">ZopeInterfaceAttribute</div>
+            <div class="kind">Class Variable</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary"><span class="undocumented">Undocumented</span></div>
+          </li><li id="patients.views.UpdateTumorView.get_object">
+            
+            <div class="fullName">patients<wbr></wbr>.views<wbr></wbr>.<wbr></wbr>Update<wbr></wbr>Tumor<wbr></wbr>View<wbr></wbr>.get<wbr></wbr>_object</div>
+            <div class="url">patients.views.UpdateTumorView.html#get_object</div>
+            <div class="type">ZopeInterfaceFunction</div>
+            <div class="kind">Method</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">Get tumor by <tt class="rst-docutils literal">PK</tt>.</div>
+          </li><li id="patients.views.UpdateTumorView.get_success_url">
+            
+            <div class="fullName">patients<wbr></wbr>.views<wbr></wbr>.<wbr></wbr>Update<wbr></wbr>Tumor<wbr></wbr>View<wbr></wbr>.get<wbr></wbr>_success<wbr></wbr>_url</div>
+            <div class="url">patients.views.UpdateTumorView.html#get_success_url</div>
+            <div class="type">ZopeInterfaceFunction</div>
+            <div class="kind">Method</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">After successfully updating the tumor, redirect to patient's detail view.</div>
+          </li><li id="patients.views.UpdateTumorView.get_context_data">
+            
+            <div class="fullName">patients<wbr></wbr>.views<wbr></wbr>.<wbr></wbr>Update<wbr></wbr>Tumor<wbr></wbr>View<wbr></wbr>.get<wbr></wbr>_context<wbr></wbr>_data</div>
+            <div class="url">patients.views.UpdateTumorView.html#get_context_data</div>
+            <div class="type">ZopeInterfaceFunction</div>
+            <div class="kind">Method</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">Add this tumor's patient, the patient's tumor and diagnoses, as well as the currently performed action to the context dictionary.</div>
+          </li><li id="patients.views.DeleteTumorView">
+            
+            <div class="fullName">patients<wbr></wbr>.views<wbr></wbr>.<wbr></wbr>Delete<wbr></wbr>Tumor<wbr></wbr>View</div>
+            <div class="url">patients.views.DeleteTumorView.html</div>
+            <div class="type">ZopeInterfaceClass</div>
+            <div class="kind">Class</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">Delete a patient's tumor.</div>
+          </li><li id="patients.views.DeleteTumorView.template_name">
+            
+            <div class="fullName">patients<wbr></wbr>.views<wbr></wbr>.<wbr></wbr>Delete<wbr></wbr>Tumor<wbr></wbr>View<wbr></wbr>.template<wbr></wbr>_name</div>
+            <div class="url">patients.views.DeleteTumorView.html#template_name</div>
+            <div class="type">ZopeInterfaceAttribute</div>
+            <div class="kind">Class Variable</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary"><span class="undocumented">Undocumented</span></div>
+          </li><li id="patients.views.DeleteTumorView.action">
+            
+            <div class="fullName">patients<wbr></wbr>.views<wbr></wbr>.<wbr></wbr>Delete<wbr></wbr>Tumor<wbr></wbr>View<wbr></wbr>.action</div>
+            <div class="url">patients.views.DeleteTumorView.html#action</div>
+            <div class="type">ZopeInterfaceAttribute</div>
+            <div class="kind">Class Variable</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary"><span class="undocumented">Undocumented</span></div>
+          </li><li id="patients.views.DeleteTumorView.get_object">
+            
+            <div class="fullName">patients<wbr></wbr>.views<wbr></wbr>.<wbr></wbr>Delete<wbr></wbr>Tumor<wbr></wbr>View<wbr></wbr>.get<wbr></wbr>_object</div>
+            <div class="url">patients.views.DeleteTumorView.html#get_object</div>
+            <div class="type">ZopeInterfaceFunction</div>
+            <div class="kind">Method</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">Get tumor by <tt class="rst-docutils literal">PK</tt>.</div>
+          </li><li id="patients.views.DeleteTumorView.get_success_url">
+            
+            <div class="fullName">patients<wbr></wbr>.views<wbr></wbr>.<wbr></wbr>Delete<wbr></wbr>Tumor<wbr></wbr>View<wbr></wbr>.get<wbr></wbr>_success<wbr></wbr>_url</div>
+            <div class="url">patients.views.DeleteTumorView.html#get_success_url</div>
+            <div class="type">ZopeInterfaceFunction</div>
+            <div class="kind">Method</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">After successfully updating the tumor, redirect to patient's detail view.</div>
+          </li><li id="patients.views.DeleteTumorView.get_context_data">
+            
+            <div class="fullName">patients<wbr></wbr>.views<wbr></wbr>.<wbr></wbr>Delete<wbr></wbr>Tumor<wbr></wbr>View<wbr></wbr>.get<wbr></wbr>_context<wbr></wbr>_data</div>
+            <div class="url">patients.views.DeleteTumorView.html#get_context_data</div>
+            <div class="type">ZopeInterfaceFunction</div>
+            <div class="kind">Method</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">Add this tumor's patient, the patient's tumor and diagnoses, as well as the currently performed action to the context dictionary.</div>
+          </li><li id="patients.views.CreateDiagnoseView">
+            
+            <div class="fullName">patients<wbr></wbr>.views<wbr></wbr>.<wbr></wbr>Create<wbr></wbr>Diagnose<wbr></wbr>View</div>
+            <div class="url">patients.views.CreateDiagnoseView.html</div>
+            <div class="type">ZopeInterfaceClass</div>
+            <div class="kind">Class</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">Add a diagnose for a patient's lymphatic system.</div>
+          </li><li id="patients.views.CreateDiagnoseView.template_name">
+            
+            <div class="fullName">patients<wbr></wbr>.views<wbr></wbr>.<wbr></wbr>Create<wbr></wbr>Diagnose<wbr></wbr>View<wbr></wbr>.template<wbr></wbr>_name</div>
+            <div class="url">patients.views.CreateDiagnoseView.html#template_name</div>
+            <div class="type">ZopeInterfaceAttribute</div>
+            <div class="kind">Class Variable</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary"><span class="undocumented">Undocumented</span></div>
+          </li><li id="patients.views.CreateDiagnoseView.action">
+            
+            <div class="fullName">patients<wbr></wbr>.views<wbr></wbr>.<wbr></wbr>Create<wbr></wbr>Diagnose<wbr></wbr>View<wbr></wbr>.action</div>
+            <div class="url">patients.views.CreateDiagnoseView.html#action</div>
+            <div class="type">ZopeInterfaceAttribute</div>
+            <div class="kind">Class Variable</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary"><span class="undocumented">Undocumented</span></div>
+          </li><li id="patients.views.CreateDiagnoseView.form_valid">
+            
+            <div class="fullName">patients<wbr></wbr>.views<wbr></wbr>.<wbr></wbr>Create<wbr></wbr>Diagnose<wbr></wbr>View<wbr></wbr>.form<wbr></wbr>_valid</div>
+            <div class="url">patients.views.CreateDiagnoseView.html#form_valid</div>
+            <div class="type">ZopeInterfaceFunction</div>
+            <div class="kind">Method</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">As with the tumor, add the diagnose to the already existing patient after the form was validated.</div>
+          </li><li id="patients.views.CreateDiagnoseView.get_success_url">
+            
+            <div class="fullName">patients<wbr></wbr>.views<wbr></wbr>.<wbr></wbr>Create<wbr></wbr>Diagnose<wbr></wbr>View<wbr></wbr>.get<wbr></wbr>_success<wbr></wbr>_url</div>
+            <div class="url">patients.views.CreateDiagnoseView.html#get_success_url</div>
+            <div class="type">ZopeInterfaceFunction</div>
+            <div class="kind">Method</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">After successfully updating the diagnose, redirect to patient's detail view.</div>
+          </li><li id="patients.views.CreateDiagnoseView.get_context_data">
+            
+            <div class="fullName">patients<wbr></wbr>.views<wbr></wbr>.<wbr></wbr>Create<wbr></wbr>Diagnose<wbr></wbr>View<wbr></wbr>.get<wbr></wbr>_context<wbr></wbr>_data</div>
+            <div class="url">patients.views.CreateDiagnoseView.html#get_context_data</div>
+            <div class="type">ZopeInterfaceFunction</div>
+            <div class="kind">Method</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">Add this diagnose's patient, the patient's tumor and diagnoses, as well as the currently performed action to the context dictionary.</div>
+          </li><li id="patients.views.UpdateDiagnoseView">
+            
+            <div class="fullName">patients<wbr></wbr>.views<wbr></wbr>.<wbr></wbr>Update<wbr></wbr>Diagnose<wbr></wbr>View</div>
+            <div class="url">patients.views.UpdateDiagnoseView.html</div>
+            <div class="type">ZopeInterfaceClass</div>
+            <div class="kind">Class</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">Change a patient's diagnose.</div>
+          </li><li id="patients.views.UpdateDiagnoseView.template_name">
+            
+            <div class="fullName">patients<wbr></wbr>.views<wbr></wbr>.<wbr></wbr>Update<wbr></wbr>Diagnose<wbr></wbr>View<wbr></wbr>.template<wbr></wbr>_name</div>
+            <div class="url">patients.views.UpdateDiagnoseView.html#template_name</div>
+            <div class="type">ZopeInterfaceAttribute</div>
+            <div class="kind">Class Variable</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary"><span class="undocumented">Undocumented</span></div>
+          </li><li id="patients.views.UpdateDiagnoseView.action">
+            
+            <div class="fullName">patients<wbr></wbr>.views<wbr></wbr>.<wbr></wbr>Update<wbr></wbr>Diagnose<wbr></wbr>View<wbr></wbr>.action</div>
+            <div class="url">patients.views.UpdateDiagnoseView.html#action</div>
+            <div class="type">ZopeInterfaceAttribute</div>
+            <div class="kind">Class Variable</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary"><span class="undocumented">Undocumented</span></div>
+          </li><li id="patients.views.UpdateDiagnoseView.get_object">
+            
+            <div class="fullName">patients<wbr></wbr>.views<wbr></wbr>.<wbr></wbr>Update<wbr></wbr>Diagnose<wbr></wbr>View<wbr></wbr>.get<wbr></wbr>_object</div>
+            <div class="url">patients.views.UpdateDiagnoseView.html#get_object</div>
+            <div class="type">ZopeInterfaceFunction</div>
+            <div class="kind">Method</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">Get diagnose by <tt class="rst-docutils literal">PK</tt>.</div>
+          </li><li id="patients.views.UpdateDiagnoseView.get_success_url">
+            
+            <div class="fullName">patients<wbr></wbr>.views<wbr></wbr>.<wbr></wbr>Update<wbr></wbr>Diagnose<wbr></wbr>View<wbr></wbr>.get<wbr></wbr>_success<wbr></wbr>_url</div>
+            <div class="url">patients.views.UpdateDiagnoseView.html#get_success_url</div>
+            <div class="type">ZopeInterfaceFunction</div>
+            <div class="kind">Method</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">After successfully updating the diagnose, redirect to patient's detail view.</div>
+          </li><li id="patients.views.UpdateDiagnoseView.get_context_data">
+            
+            <div class="fullName">patients<wbr></wbr>.views<wbr></wbr>.<wbr></wbr>Update<wbr></wbr>Diagnose<wbr></wbr>View<wbr></wbr>.get<wbr></wbr>_context<wbr></wbr>_data</div>
+            <div class="url">patients.views.UpdateDiagnoseView.html#get_context_data</div>
+            <div class="type">ZopeInterfaceFunction</div>
+            <div class="kind">Method</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">Add this diagnose's patient, the patient's tumor and diagnoses, as well as the currently performed action to the context dictionary.</div>
+          </li><li id="patients.views.DeleteDiagnoseView">
+            
+            <div class="fullName">patients<wbr></wbr>.views<wbr></wbr>.<wbr></wbr>Delete<wbr></wbr>Diagnose<wbr></wbr>View</div>
+            <div class="url">patients.views.DeleteDiagnoseView.html</div>
+            <div class="type">ZopeInterfaceClass</div>
+            <div class="kind">Class</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">Remove a particular diagnose frm a patient's entry.</div>
+          </li><li id="patients.views.DeleteDiagnoseView.template_name">
+            
+            <div class="fullName">patients<wbr></wbr>.views<wbr></wbr>.<wbr></wbr>Delete<wbr></wbr>Diagnose<wbr></wbr>View<wbr></wbr>.template<wbr></wbr>_name</div>
+            <div class="url">patients.views.DeleteDiagnoseView.html#template_name</div>
+            <div class="type">ZopeInterfaceAttribute</div>
+            <div class="kind">Class Variable</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary"><span class="undocumented">Undocumented</span></div>
+          </li><li id="patients.views.DeleteDiagnoseView.action">
+            
+            <div class="fullName">patients<wbr></wbr>.views<wbr></wbr>.<wbr></wbr>Delete<wbr></wbr>Diagnose<wbr></wbr>View<wbr></wbr>.action</div>
+            <div class="url">patients.views.DeleteDiagnoseView.html#action</div>
+            <div class="type">ZopeInterfaceAttribute</div>
+            <div class="kind">Class Variable</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary"><span class="undocumented">Undocumented</span></div>
+          </li><li id="patients.views.DeleteDiagnoseView.get_object">
+            
+            <div class="fullName">patients<wbr></wbr>.views<wbr></wbr>.<wbr></wbr>Delete<wbr></wbr>Diagnose<wbr></wbr>View<wbr></wbr>.get<wbr></wbr>_object</div>
+            <div class="url">patients.views.DeleteDiagnoseView.html#get_object</div>
+            <div class="type">ZopeInterfaceFunction</div>
+            <div class="kind">Method</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">Get diagnose by <tt class="rst-docutils literal">PK</tt>.</div>
+          </li><li id="patients.views.DeleteDiagnoseView.get_success_url">
+            
+            <div class="fullName">patients<wbr></wbr>.views<wbr></wbr>.<wbr></wbr>Delete<wbr></wbr>Diagnose<wbr></wbr>View<wbr></wbr>.get<wbr></wbr>_success<wbr></wbr>_url</div>
+            <div class="url">patients.views.DeleteDiagnoseView.html#get_success_url</div>
+            <div class="type">ZopeInterfaceFunction</div>
+            <div class="kind">Method</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">After successfully updating the diagnose, redirect to patient's detail view.</div>
+          </li><li id="patients.views.DeleteDiagnoseView.get_context_data">
+            
+            <div class="fullName">patients<wbr></wbr>.views<wbr></wbr>.<wbr></wbr>Delete<wbr></wbr>Diagnose<wbr></wbr>View<wbr></wbr>.get<wbr></wbr>_context<wbr></wbr>_data</div>
+            <div class="url">patients.views.DeleteDiagnoseView.html#get_context_data</div>
+            <div class="type">ZopeInterfaceFunction</div>
+            <div class="kind">Method</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">Add this diagnose's patient, the patient's tumor and diagnoses, as well as the currently performed action to the context dictionary.</div>
+          </li><li id="dashboard.views.help_view">
+            
+            <div class="fullName">dashboard<wbr></wbr>.views<wbr></wbr>.help<wbr></wbr>_view</div>
+            <div class="url">dashboard.views.html#help_view</div>
+            <div class="type">ZopeInterfaceFunction</div>
+            <div class="kind">Function</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">Simply display the dashboard help text.</div>
+          </li><li id="dashboard.views.DashboardView">
+            
+            <div class="fullName">dashboard<wbr></wbr>.views<wbr></wbr>.<wbr></wbr>Dashboard<wbr></wbr>View</div>
+            <div class="url">dashboard.views.DashboardView.html</div>
+            <div class="type">ZopeInterfaceClass</div>
+            <div class="kind">Class</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">Use the <code><a href="dashboard.forms.DashboardForm.html" class="internal-link" title="dashboard.forms.DashboardForm">forms.DashboardForm</a></code> and the <code><a href="patients.models.Patient.html" class="internal-link">patients.models.Patient</a></code> model along with the <code><a href="dashboard.query.html" class="internal-link" title="dashboard.query">query</a></code> functions to extract the requested information from the database and render it into the HTML response displaying the lymphatic patterns of progression.</div>
+          </li><li id="dashboard.views.DashboardView.template_name">
+            
+            <div class="fullName">dashboard<wbr></wbr>.views<wbr></wbr>.<wbr></wbr>Dashboard<wbr></wbr>View<wbr></wbr>.template<wbr></wbr>_name</div>
+            <div class="url">dashboard.views.DashboardView.html#template_name</div>
+            <div class="type">ZopeInterfaceAttribute</div>
+            <div class="kind">Class Variable</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary"><span class="undocumented">Undocumented</span></div>
+          </li><li id="dashboard.views.DashboardView.action">
+            
+            <div class="fullName">dashboard<wbr></wbr>.views<wbr></wbr>.<wbr></wbr>Dashboard<wbr></wbr>View<wbr></wbr>.action</div>
+            <div class="url">dashboard.views.DashboardView.html#action</div>
+            <div class="type">ZopeInterfaceAttribute</div>
+            <div class="kind">Class Variable</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary"><span class="undocumented">Undocumented</span></div>
+          </li><li id="dashboard.views.DashboardView.get_queryset">
+            
+            <div class="fullName">dashboard<wbr></wbr>.views<wbr></wbr>.<wbr></wbr>Dashboard<wbr></wbr>View<wbr></wbr>.get<wbr></wbr>_queryset</div>
+            <div class="url">dashboard.views.DashboardView.html#get_queryset</div>
+            <div class="type">ZopeInterfaceFunction</div>
+            <div class="kind">Method</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary"><span class="undocumented">Undocumented</span></div>
+          </li><li id="dashboard.views.DashboardView.form">
+            
+            <div class="fullName">dashboard<wbr></wbr>.views<wbr></wbr>.<wbr></wbr>Dashboard<wbr></wbr>View<wbr></wbr>.form</div>
+            <div class="url">dashboard.views.DashboardView.html#form</div>
+            <div class="type">ZopeInterfaceAttribute</div>
+            <div class="kind">Instance Variable</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary"><span class="undocumented">Undocumented</span></div>
+          </li><li id="dashboard.views.DashboardView.stats">
+            
+            <div class="fullName">dashboard<wbr></wbr>.views<wbr></wbr>.<wbr></wbr>Dashboard<wbr></wbr>View<wbr></wbr>.stats</div>
+            <div class="url">dashboard.views.DashboardView.html#stats</div>
+            <div class="type">ZopeInterfaceAttribute</div>
+            <div class="kind">Instance Variable</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary"><span class="undocumented">Undocumented</span></div>
+          </li><li id="dashboard.views.DashboardView.get_context_data">
+            
+            <div class="fullName">dashboard<wbr></wbr>.views<wbr></wbr>.<wbr></wbr>Dashboard<wbr></wbr>View<wbr></wbr>.get<wbr></wbr>_context<wbr></wbr>_data</div>
+            <div class="url">dashboard.views.DashboardView.html#get_context_data</div>
+            <div class="type">ZopeInterfaceFunction</div>
+            <div class="kind">Method</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">Pass form and stats to the context. No need to have the list of patients in there too.</div>
+          </li>
+       </ul>
+    </div>
+  </body>
+</html>
