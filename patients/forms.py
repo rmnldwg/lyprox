@@ -1,3 +1,14 @@
+"""
+This module defines ``django.forms.ModelForms`` for the creation and deletion
+of the models defined in ``patients.models``. Generally, forms are used to
+capture user input in django and are rendered out by views into HTML elements.
+
+To a large extent, these forms only define which widgets should be used for
+creating and changing database entries via the website itself. But they are
+also used to implement custom logic to check that all the inputs are valid or
+that the data is properly cleaned before its being passed on to the next step.
+"""
+
 from typing import Any, Dict
 
 import pandas
@@ -12,40 +23,64 @@ from .models import Diagnose, Institution, Patient, Tumor
 
 
 class PatientForm(FormLoggerMixin, forms.ModelForm):
-    """Form to create and edit patients, based on their model definition."""
+    """
+    Form to create and edit patients, based on their model definition. Most
+    notably, it includes custom cleaning methods like ``_compute_age`` that
+    take - possibly sensitive - inputs and convert them into the - less
+    sensitive - information we actually care about and want to store.
+
+    .. note::
+        Click the "Show Private API" button in the top-right corner to reveal
+        the private methods of this class.
+    """
     class Meta:
+        """Indicate which model this acts on."""
         model = Patient
-        fields = ["sex",
-                  "diagnose_date",
-                  "alcohol_abuse",
-                  "nicotine_abuse",
-                  "hpv_status",
-                  "neck_dissection",
-                  "tnm_edition",
-                  "n_stage",
-                  "m_stage"]
-        widgets = {"sex": widgets.Select(attrs={"class": "select"}),
-                   "diagnose_date": widgets.NumberInput(attrs={"class": "input",
-                                                               "type": "date"}),
-                   "alcohol_abuse": widgets.Select(choices=[(True, "yes"),
-                                                            (False, "no"),
-                                                            (None, "unknown")],
-                                                   attrs={"class": "select"}),
-                   "nicotine_abuse": widgets.Select(choices=[(True, "yes"),
-                                                             (False, "no"),
-                                                             (None, "unknown")],
-                                                  attrs={"class": "select"}),
-                   "hpv_status": widgets.Select(choices=[(True, "positive"),
-                                                         (False, "negative"),
-                                                         (None, "unknown")],
-                                                attrs={"class": "select"}),
-                   "neck_dissection": widgets.Select(choices=[(True, "yes"),
-                                                              (False, "no"),
-                                                              (None, "unknown")],
-                                                     attrs={"class": "select"}),
-                   "tnm_edition": widgets.NumberInput(attrs={"class": "input"}),
-                   "n_stage": widgets.Select(attrs={"class": "select"}),
-                   "m_stage": widgets.Select(attrs={"class": "select"})}
+        fields = [
+            "sex",
+            "diagnose_date",
+            "alcohol_abuse",
+            "nicotine_abuse",
+            "hpv_status",
+            "neck_dissection",
+            "tnm_edition",
+            "n_stage",
+            "m_stage"
+        ]
+        widgets = {
+            "sex": widgets.Select(attrs={"class": "select"}),
+            "diagnose_date": widgets.NumberInput(
+                attrs={"class": "input",
+                       "type": "date"}
+            ),
+            "alcohol_abuse": widgets.Select(
+                choices=[(True, "yes"),
+                         (False, "no"),
+                         (None, "unknown")],
+                attrs={"class": "select"}
+            ),
+            "nicotine_abuse": widgets.Select(
+                choices=[(True, "yes"),
+                         (False, "no"),
+                         (None, "unknown")],
+                attrs={"class": "select"}
+            ),
+            "hpv_status": widgets.Select(
+                choices=[(True, "positive"),
+                         (False, "negative"),
+                         (None, "unknown")],
+                attrs={"class": "select"}
+            ),
+            "neck_dissection": widgets.Select(
+                choices=[(True, "yes"),
+                         (False, "no"),
+                         (None, "unknown")],
+                attrs={"class": "select"}
+            ),
+            "tnm_edition": widgets.NumberInput(attrs={"class": "input"}),
+            "n_stage": widgets.Select(attrs={"class": "select"}),
+            "m_stage": widgets.Select(attrs={"class": "select"})
+        }
 
     def __init__(self, *args, **kwargs):
         user = kwargs.pop("user")
@@ -65,7 +100,6 @@ class PatientForm(FormLoggerMixin, forms.ModelForm):
         widget=widgets.HiddenInput(),
         required=False)
 
-
     def save(self, commit=True):
         """Compute hashed ID and age from name, birthday and diagnose date."""
         patient = super(PatientForm, self).save(commit=False)
@@ -78,7 +112,6 @@ class PatientForm(FormLoggerMixin, forms.ModelForm):
             patient.save()
 
         return patient
-
 
     def clean(self):
         """Override superclass clean method to raise a ``ValidationError`` when
@@ -101,7 +134,6 @@ class PatientForm(FormLoggerMixin, forms.ModelForm):
         cleaned_data["hash_value"] = unique_hash
         return cleaned_data
 
-
     def _compute_age(self):
         """Compute age of patient at diagnose/admission."""
         bd = self.cleaned_data["birthday"]
@@ -113,7 +145,6 @@ class PatientForm(FormLoggerMixin, forms.ModelForm):
 
         self.cleaned_data.pop("birthday")
         return age
-
 
     def _get_identifier(self, cleaned_data):
         """Compute the hashed undique identifier from fields that are of
@@ -127,15 +158,23 @@ class PatientForm(FormLoggerMixin, forms.ModelForm):
 
 
 class TumorForm(FormLoggerMixin, forms.ModelForm):
-    """Form to create and edit tumors, based on their model definition."""
+    """
+    Form to create and edit tumors, based on their model definition. Very
+    straightforward, not much custom validation. This class basically just
+    defines how some of the fields that are already defined in ``models.Tumor``
+    should appear in the HTML form.
+    """
     class Meta:
+        """Specifies the corresponding model."""
         model = Tumor
-        fields = ["t_stage",
-                  "stage_prefix",
-                  "subsite",
-                  "central",
-                  "extension",
-                  "volume"]
+        fields = [
+            "t_stage",
+            "stage_prefix",
+            "subsite",
+            "central",
+            "extension",
+            "volume"
+        ]
         widgets = {
             "t_stage": forms.Select(attrs={"class": "select"}),
             "stage_prefix": forms.Select(attrs={"class": "select"}),
@@ -153,7 +192,6 @@ class TumorForm(FormLoggerMixin, forms.ModelForm):
             raise ValidationError("volume must be a positive number.")
         return volume
 
-
     def save(self, commit=True):
         """Save tumor to existing patient."""
         tumor = super(TumorForm, self).save(commit=False)
@@ -165,24 +203,37 @@ class TumorForm(FormLoggerMixin, forms.ModelForm):
 
 
 class DiagnoseForm(FormLoggerMixin, forms.ModelForm):
-    """Form to create and edit diagnoses, based on their model definition."""
+    """
+    Form to create and edit diagnoses, based on their model definition. Nothing
+    special is happening here: Only some widgets are defined for the few fields
+    of the ``models.Diagnose`` model and a loop over all implemented LNLs saves
+    us some hard-coding of a long list of widgets for the node levels.
+    """
     class Meta:
+        """Connects the form to the model."""
         model = Diagnose
-        fields = ["diagnose_date",
-                  "modality",
-                  "side",]
-
-        widgets = {"diagnose_date": forms.NumberInput(attrs={"class": "input is-small",
-                                                             "type": "date"}),
-                   "modality": forms.Select(attrs={"class": "select is-small"}),
-                   "side": forms.Select(attrs={"class": "select is-small"})}
+        fields = [
+            "diagnose_date",
+            "modality",
+            "side"
+        ]
+        widgets = {
+            "diagnose_date": forms.NumberInput(
+                attrs={"class": "input is-small",
+                       "type": "date"}
+            ),
+            "modality": forms.Select(attrs={"class": "select is-small"}),
+            "side": forms.Select(attrs={"class": "select is-small"})
+        }
 
         for lnl in Diagnose.LNLs:
             fields.append(lnl)
-            widgets[lnl] = forms.Select(choices=[(True, "pos"),
-                                                 (False, "neg"),
-                                                 (None, "???")],
-                                        attrs={"class": "select"})
+            widgets[lnl] = forms.Select(
+                choices=[(True, "pos"),
+                         (False, "neg"),
+                         (None, "???")],
+                attrs={"class": "select"}
+            )
 
     def save(self, commit=True):
         """Save diagnose to existing patient."""
@@ -201,15 +252,19 @@ class DiagnoseForm(FormLoggerMixin, forms.ModelForm):
 
 
 class DataFileForm(FormLoggerMixin, forms.Form):
-    """Accept and process a CSV file that can then be parsed to batch-create a
-    number of patients at once."""
+    """
+    Accept and process a CSV file that can then be parsed to batch-create a
+    number of patients at once.
+    """
     data_file = forms.FileField(
         widget=forms.widgets.FileInput(attrs={"class": "file-input"})
     )
 
     def clean(self) -> Dict[str, Any]:
-        """Cleaning method that makes sure the uploaded data is in fact a CSV
-        file and can be parsed by ``pandas`` into a :class:`pandas.DataFrame`."""
+        """
+        Cleaning method that makes sure the uploaded data is in fact a CSV
+        file and can be parsed by ``pandas`` into a ``DataFrame``.
+        """
         cleaned_data = super(DataFileForm, self).clean()
         suffix = cleaned_data["data_file"].name.split(".")[-1]
         if suffix != "csv":
@@ -218,10 +273,12 @@ class DataFileForm(FormLoggerMixin, forms.Form):
             raise ValidationError(msg)
 
         try:
-            data_frame = pandas.read_csv(cleaned_data["data_file"],
-                                         header=[0,1,2],
-                                         skip_blank_lines=True,
-                                         infer_datetime_format=True)
+            data_frame = pandas.read_csv(
+                cleaned_data["data_file"],
+                header=[0,1,2],
+                skip_blank_lines=True,
+                infer_datetime_format=True
+            )
         except:
             msg = ("Error while parsing CSV table.")
             self.logger.error(msg)
@@ -234,6 +291,8 @@ class DataFileForm(FormLoggerMixin, forms.Form):
 
 
 class InsitutionForm(FormLoggerMixin, forms.Form):
-    """Form for creating an institution."""
+    """
+    Form for creating an institution. This is not yet in use or even functional.
+    """
     class Meta:
         model = Institution

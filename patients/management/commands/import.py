@@ -1,3 +1,13 @@
+"""
+This file defines the ``import`` command.
+
+.. code-block:: bash
+    
+    python manage.py import <path-to-CSV> <user@mail.com>
+
+It allows one to import a CSV table into the database via the command line.
+"""
+
 from pathlib import Path
 
 import pandas as pd
@@ -14,6 +24,9 @@ class Command(BaseCommand):
     help = __doc__
 
     def add_arguments(self, parser):
+        """
+        Add arguments to the ``argparse.ArgumentParser``.
+        """
         parser.add_argument(
             "filepath", type=str, help="Path to CSV table"
         )
@@ -22,6 +35,9 @@ class Command(BaseCommand):
         )
 
     def handle(self, *args, **options):
+        """
+        Execute the command given the arguments as options.
+        """
         filepath = Path(options["filepath"]).resolve()
         table = pd.read_csv(filepath, header=[0,1,2])
 
