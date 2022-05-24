@@ -1,3 +1,11 @@
+"""
+The `views` module in the `dashboard` app mostly handles the
+`DashboardView`, which takes care of initializing the complex
+`forms.DashboardForm`, passing the cleaned values to all the filtering
+functions in the `query` module to finally pass the queried information to
+the context variable that is rendered into the HTML response.
+"""
+
 import time
 from typing import Any, Dict
 
@@ -14,13 +22,19 @@ from.forms import DashboardForm
 
 
 def help_view(request) -> HttpResponse:
-    """Simply display the help text."""
+    """Simply display the dashboard help text."""
     template_name = "dashboard/help.html"
     context = {"modalities": list(Diagnose.Modalities)}
     return render(request, template_name, context)
 
 
 class DashboardView(ViewLoggerMixin, generic.ListView):
+    """
+    Use the `forms.DashboardForm` and the `patients.models.Patient` model
+    along with the `query` functions to extract the requested information
+    from the database and render it into the HTML response displaying the
+    lymphatic patterns of progression.
+    """
     model = Patient
     form_class = DashboardForm
     template_name = "dashboard/layout.html"

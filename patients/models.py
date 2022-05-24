@@ -3,11 +3,11 @@ This module defines how patient related models are defined and how they
 interact with each other. Currently, three models are implemented: The
 `Patient`, `Tumor` and the `Diagnose`. Each `Patient` can have multiple `Tumor`
 and `Diagnose` entries associated with it, which is defined by the
-`django.db.models.ForeignKey` attribute in the `Tumor` and `Diagnose` class.
+``django.db.models.ForeignKey`` attribute in the `Tumor` and `Diagnose` class.
 
 There are also custom methods implemented, making sure that e.g. the diagnosis
-of a sublevel (lets say `Ia`) is consistent with the diagnosis of the
-respective superlevel (in that case `I`).
+of a sublevel (lets say ``Ia``) is consistent with the diagnosis of the
+respective superlevel (in that case ``I``).
 """
 # pylint: disable=no-member
 # pylint: disable=logging-fstring-interpolation
@@ -63,7 +63,7 @@ class Patient(ModelLoggerMixin, models.Model):
     """Was the patient a smoker"""
 
     hpv_status = models.BooleanField(blank=True, null=True)
-    """Was the patient HPV positive (`True`) or negative (`False`)?"""
+    """Was the patient HPV positive (``True``) or negative (``False``)?"""
 
     neck_dissection = models.BooleanField(blank=True, null=True)
     """Did the patient undergo (radical) neck dissection?"""
@@ -137,8 +137,8 @@ class Patient(ModelLoggerMixin, models.Model):
 
     def update_t_stage(self):
         """
-        Update T-stage after new :class:`Tumor` is added to :class:`Patient`
-        (gets called in :meth:`Tumor.save()` method). Also updates the patient's
+        Update T-stage after new `Tumor` is added to `Patient`
+        (gets called in `Tumor.save` method). Also updates the patient's
         stage prefix to that of the tumor with the highest T-category.
         """
         tumors = Tumor.objects.all().filter(patient=self)
@@ -162,7 +162,7 @@ class Patient(ModelLoggerMixin, models.Model):
 class Tumor(ModelLoggerMixin, models.Model):
     """
     Model to describe a patient's tumor in detail. It is connected to a patient
-    via a `django.db.models.ForeignKey` relation.
+    via a ``django.db.models.ForeignKey`` relation.
     """
 
     patient = models.ForeignKey(Patient, on_delete=models.CASCADE)
@@ -378,7 +378,7 @@ class Diagnose(ModelLoggerMixin, models.Model):
         @property
         def choices(cls):
             """Return list of tuples suitable for the
-            `django.db.models.ChoiceField`"""
+            ``django.db.models.ChoiceField``"""
             return [(mod.value, mod.label) for mod in cls._mods]
 
         @property
@@ -398,7 +398,7 @@ class Diagnose(ModelLoggerMixin, models.Model):
 
     class Modalities(metaclass=MetaModality):
         """
-        Class that aims to replicate the functionality of `TextChoices`
+        Class that aims to replicate the functionality of ``TextChoices``
         from Django's enum types, but with the added functionality of storing
         the sensitivity & specificity of the respective modality.
         """
@@ -436,7 +436,7 @@ class Diagnose(ModelLoggerMixin, models.Model):
         consistelntly. E.g. when sublevel ``Ia`` is reported to be involved,
         the involvement status of level ``I`` cannot be reported as healthy.
 
-        Also, if all LNLs are reported as unknown (`None`), just delete it.
+        Also, if all LNLs are reported as unknown (``None``), just delete it.
         """
         if all([getattr(self, lnl) is None for lnl in self.LNLs]):
             super().save(*args, **kwargs)

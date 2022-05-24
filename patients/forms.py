@@ -263,7 +263,7 @@ class DataFileForm(FormLoggerMixin, forms.Form):
     def clean(self) -> Dict[str, Any]:
         """
         Cleaning method that makes sure the uploaded data is in fact a CSV
-        file and can be parsed by ``pandas`` into a :class:`pandas.DataFrame`.
+        file and can be parsed by ``pandas`` into a ``DataFrame``.
         """
         cleaned_data = super(DataFileForm, self).clean()
         suffix = cleaned_data["data_file"].name.split(".")[-1]

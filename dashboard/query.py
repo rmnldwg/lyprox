@@ -1,5 +1,5 @@
 """
-The ``query`` module takes the cleaned data from the ``forms``, retrieves
+The `query` module takes the cleaned data from the `forms`, retrieves
 information from the database efficiently and puts everything into a dictionary
 with which the HTML response is then populated.
 """
@@ -8,7 +8,6 @@ import logging
 import time
 from functools import lru_cache
 from typing import Dict, List, Optional, Tuple
-from unittest.mock import NonCallableMagicMock
 
 import numpy as np
 from django.db.models import Q, QuerySet
@@ -22,9 +21,9 @@ logger = logging.getLogger(__name__)
 MODALITIES_SPSN = np.array(Diagnose.Modalities.spsn)
 
 def tf2arr(value):
-    """Map `True`, `False` & `None` to one-hot-arrays of length 3. This
-    particular mapping comes from the fact that in the form `True`, `None`,
-    `False` are represented by integers 1, 0, -1. So, the one-hot encoding
+    """Map ``True``, ``False`` & ``None`` to one-hot-arrays of length 3. This
+    particular mapping comes from the fact that in the form ``True``, ``None``,
+    ``False`` are represented by integers 1, 0, -1. So, the one-hot encoding
     uses an array of length 3 that is one only at these respective indices,
     where -1 is the last item."""
     if value is None:
@@ -63,12 +62,12 @@ def patient_specific(
     institution__in: Optional[Institution] = None,
     **rest
 ) -> QuerySet:
-    """Filter `QuerySet` of `Patient`s based on patient-specific properties.
+    """Filter ``QuerySet`` of patients based on patient-specific properties.
 
     This function is designed in such a way that one can simply add another
     argument to its definition without actually changing the logic inside it
     and it will the be able to filter for that added argument (given that it
-    is also a field in the model ``patients.models.Patient``).
+    is also a field in the model `patients.models.Patient`).
 
     Args:
         patient_queryset: The ``QuerySet`` of patients to begin with.
@@ -108,14 +107,14 @@ def tumor_specific(
     extension: Optional[bool] = None,
     **rest
 ) -> QuerySet:
-    """Filter `QuerySet` of patients based on tumor-specific properties.
+    """Filter ``QuerySet`` of patients based on tumor-specific properties.
 
     It works almost exactly like the patient-specific querying function
-    ``patient_specific`` in terms of adding new arguments to filter by.
+    `patient_specific` in terms of adding new arguments to filter by.
 
     Args:
-        patient_queryset: `QuerySet` of patients to begin with. Usually, this is
-            the `QuerySet` returned by the ``patient_specific`` function.
+        patient_queryset: ``QuerySet`` of patients to begin with. Usually, this
+            is the ``QuerySet`` returned by the `patient_specific` function.
         subsite__in: Is the tumor's subsite in this list of subsites?
         t_stage__in: Does the tumor's T-stage match one of this list?
         central: Is the tumor symmetric w.r.t. the mid-sagittal line?
@@ -147,7 +146,7 @@ def maxllh_consensus(column: Tuple[np.ndarray]) -> Optional[bool]:
 
     Args:
         column: Array with the involvement, ordered as the modalities are
-            defined in the `Diagnose.Modalities`.
+            defined in the `patients.models.Diagnose.Modalities`.
 
     Returns:
         The most likely true state according to the consensus from the
@@ -201,22 +200,22 @@ def diagnose_specific(
     **kwargs
 ) -> Tuple[QuerySet, dict]:
     """
-    Filter `QuerySet` of patients by their involvement according to the
+    Filter ``QuerySet`` of patients by their involvement according to the
     diagnoses.
 
     Args:
         patient_queryset: The ``QuerySet`` of patients to start the filtering.
-        kwargs: Besides the `patient_queryset` argument, this function takes
-            the entire cleaned output of the ``forms.DashboardForm`` as
-            `kwargs` to extract which diagnostic modalities to use, how to
+        kwargs: Besides the ``patient_queryset`` argument, this function takes
+            the entire cleaned output of the `forms.DashboardForm` as
+            ``kwargs`` to extract which diagnostic modalities to use, how to
             combine possibly conflicting diagnoses and then select the patients
             where the diagnose and the selection of LNLs in the interface
             matches.
 
     Returns:
-        A `QuerySet` of patients filtered for lymphatic involvement, as well as
-        the combined involvement - meaning the consensus of all diagnostic
-        modalities - for the filtered patient `QuerySet`.
+        A ``QuerySet`` of patients filtered for lymphatic involvement, as well
+        as the combined involvement - meaning the consensus of all diagnostic
+        modalities - for the filtered patient ``QuerySet``.
     """
     if patient_queryset is None:
         patient_queryset = Patient.objects.all()
@@ -324,11 +323,11 @@ def n_zero_specific(
     combined_involvement: Dict[str, Dict[str, np.ndarray]],
     n_status: Optional[bool] = None
 ):
-    """Filter for N+ or N0. `n_status` is `True` when we only want to see N+
-    patients and `False` when we only want to see N0 patients.
+    """Filter for N+ or N0. ``n_status`` is ``True`` when we only want to see N+
+    patients and ``False`` when we only want to see N0 patients.
 
     Args:
-        patient_queryset: `QuerySet` of patients to be filtered.
+        patient_queryset: ``QuerySet`` of patients to be filtered.
         combined_involvement:
         n_status:
     """

@@ -1,5 +1,5 @@
 """
-The app ``dashboard`` manages the querying and displaying of lymphatic
+The app `dashboard` manages the querying and displaying of lymphatic
 progression patterns under the "Dashboard" tab on LyProX.
 
 It defines a relatively complex form for the dashboards interface and

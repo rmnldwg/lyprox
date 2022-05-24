@@ -1,9 +1,9 @@
 """
-The ``dashboard.forms`` module defines the relatively complex form that is
+The `dashboard.forms` module defines the relatively complex form that is
 used for querying the database later.
 
-It also implements some custom form elements, like ``ThreeWayToggle`` and
-``ThreeWayToggleWidget`` that represent the custom logic and appearance of a
+It also implements some custom form elements, like `ThreeWayToggle` and
+`ThreeWayToggleWidget` that represent the custom logic and appearance of a
 three-way toggle button respectively, which appears numerous times in the
 Dashboard interface.
 
@@ -28,7 +28,7 @@ logger = logging.getLogger(__name__)
 class ThreeWayToggleWidget(forms.RadioSelect):
     """Widget that renders the three-way toggle button and allows to set the
     attributes of the individual inputs (radio buttons) as `option_attrs` as
-    well as the attributes of the container as `attrs`.
+    well as the attributes of the container as ``attrs``.
     """
     template_name = 'widgets/three_way_toggle.html'
     option_template_name = 'widgets/three_way_toggle_option.html'
@@ -119,7 +119,7 @@ class ThreeWayToggle(forms.ChoiceField):
 class InstitutionModelChoiceIndexer:
     """
     Custom class with which one can access additional information from
-    the model that is chosen by the :class:`InstitutionMultipleChoiceField`.
+    the model that is chosen by the `InstitutionMultipleChoiceField`.
     """
 
     def __init__(self, field) -> None:

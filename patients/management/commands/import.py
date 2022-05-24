@@ -1,7 +1,7 @@
 """
 This file defines the ``import`` command.
 
-.. bash::
+.. code-block:: bash
     
     python manage.py import <path-to-CSV> <user@mail.com>
 

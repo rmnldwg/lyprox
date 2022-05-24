@@ -4,6 +4,10 @@ from core import settings
 
 
 class MaintenanceMiddleware:
+    """
+    Redirect a visitor to the maintenance page if the ``MAINTENANCE`` is set
+    to ``True`` in the `settings`.
+    """
     def __init__(self, get_response) -> None:
         self.get_response = get_response
 
