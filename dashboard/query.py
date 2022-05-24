@@ -1,7 +1,14 @@
+"""
+The ``query`` module takes the cleaned data from the ``forms``, retrieves
+information from the database efficiently and puts everything into a dictionary
+with which the HTML response is then populated.
+"""
+
 import logging
 import time
 from functools import lru_cache
 from typing import Dict, List, Optional, Tuple
+from unittest.mock import NonCallableMagicMock
 
 import numpy as np
 from django.db.models import Q, QuerySet
@@ -49,7 +56,7 @@ def subsite2arr(subsite):
 
 
 def patient_specific(
-    patient_queryset: QuerySet = Patient.objects.all(),
+    patient_queryset: Optional[QuerySet] = None,
     nicotine_abuse: Optional[bool] = None,
     hpv_status: Optional[bool] = None,
     neck_dissection: Optional[bool] = None,
@@ -57,7 +64,26 @@ def patient_specific(
     **rest
 ) -> QuerySet:
     """Filter `QuerySet` of `Patient`s based on patient-specific properties.
+
+    This function is designed in such a way that one can simply add another
+    argument to its definition without actually changing the logic inside it
+    and it will the be able to filter for that added argument (given that it
+    is also a field in the model ``patients.models.Patient``).
+
+    Args:
+        patient_queryset: The ``QuerySet`` of patients to begin with.
+        nicotine_abuse: Filter smokers or non-smokers?
+        hpv_status: Select based on HPV status.
+        neck_dissection: Filter thos that did or didn't undergo neck dissection.
+        institution__in: Select based on the institution that extracted the
+            respective patient.
+
+    Returns:
+        The filtered ``QuerySet``.
     """
+    if patient_queryset is None:
+        patient_queryset = Patient.objects.all()
+
     kwargs = locals()
     start_time = time.perf_counter()
     kwargs.pop('patient_queryset')
@@ -75,16 +101,32 @@ def patient_specific(
 
 
 def tumor_specific(
-    patient_queryset: QuerySet = Patient.objects.all(),
-    # restrict to Oropharynx
+    patient_queryset: Optional[QuerySet] = None,
     subsite__in: Optional[List[str]] = None,
     t_stage__in: Optional[List[int]] = None,
     central: Optional[bool] = None,
     extension: Optional[bool] = None,
     **rest
 ) -> QuerySet:
-    """Filter `QuerySet` of `Patient`s based on tumor-specific properties.
+    """Filter `QuerySet` of patients based on tumor-specific properties.
+
+    It works almost exactly like the patient-specific querying function
+    ``patient_specific`` in terms of adding new arguments to filter by.
+
+    Args:
+        patient_queryset: `QuerySet` of patients to begin with. Usually, this is
+            the `QuerySet` returned by the ``patient_specific`` function.
+        subsite__in: Is the tumor's subsite in this list of subsites?
+        t_stage__in: Does the tumor's T-stage match one of this list?
+        central: Is the tumor symmetric w.r.t. the mid-sagittal line?
+        extension: Does the tumor extend over the mid-sagittal line?
+
+    Returns:
+        Another ``QuerySet`` filtered for tumor-specific characterisics.
     """
+    if patient_queryset is None:
+        patient_queryset = Patient.objects.all()
+
     kwargs = locals()              # extract keyword arguments and...
     start_time = time.perf_counter()
     kwargs.pop('patient_queryset') # ...remove the patient queryset and...
@@ -99,7 +141,7 @@ def tumor_specific(
 
 
 @lru_cache
-def maxllh_consensus(column: Tuple[np.ndarray]):
+def maxllh_consensus(column: Tuple[np.ndarray]) -> Optional[bool]:
     """Compute the consensus of different diagnostic modalities using their
     respective specificity & sensitivity.
 
@@ -125,10 +167,10 @@ def maxllh_consensus(column: Tuple[np.ndarray]):
         involved_llh *= spsn2x2[obs,1]
 
     healthy_vs_involved = np.array([healthy_llh, involved_llh])
-    return np.argmax(healthy_vs_involved)
+    return bool(np.argmax(healthy_vs_involved))
 
 @lru_cache
-def rank_consensus(column: Tuple[np.ndarray]):
+def rank_consensus(column: Tuple[np.ndarray]) -> Optional[bool]:
     """Compute the consensus of different diagnostic modalities using a ranking
     based on sensitivity & specificity.
 
@@ -155,10 +197,30 @@ def rank_consensus(column: Tuple[np.ndarray]):
 
 
 def diagnose_specific(
-    patient_queryset: QuerySet = Patient.objects.all(),
+    patient_queryset: Optional[QuerySet] = None,
     **kwargs
-):
-    """"""
+) -> Tuple[QuerySet, dict]:
+    """
+    Filter `QuerySet` of patients by their involvement according to the
+    diagnoses.
+
+    Args:
+        patient_queryset: The ``QuerySet`` of patients to start the filtering.
+        kwargs: Besides the `patient_queryset` argument, this function takes
+            the entire cleaned output of the ``forms.DashboardForm`` as
+            `kwargs` to extract which diagnostic modalities to use, how to
+            combine possibly conflicting diagnoses and then select the patients
+            where the diagnose and the selection of LNLs in the interface
+            matches.
+
+    Returns:
+        A `QuerySet` of patients filtered for lymphatic involvement, as well as
+        the combined involvement - meaning the consensus of all diagnostic
+        modalities - for the filtered patient `QuerySet`.
+    """
+    if patient_queryset is None:
+        patient_queryset = Patient.objects.all()
+
     logger.debug(kwargs["modalities"])
     start_time = time.perf_counter()
 
@@ -264,6 +326,11 @@ def n_zero_specific(
 ):
     """Filter for N+ or N0. `n_status` is `True` when we only want to see N+
     patients and `False` when we only want to see N0 patients.
+
+    Args:
+        patient_queryset: `QuerySet` of patients to be filtered.
+        combined_involvement:
+        n_status:
     """
     if n_status is None:
         return patient_queryset, combined_involvement
