@@ -8,10 +8,6 @@ and `Diagnose` entries associated with it, which is defined by the
 There are also custom methods implemented, making sure that e.g. the diagnosis
 of a sublevel (lets say `Ia`) is consistent with the diagnosis of the
 respective superlevel (in that case `I`).
-
-.. include:: ../README.rst
-
-.. warning:: Test
 """
 # pylint: disable=no-member
 # pylint: disable=logging-fstring-interpolation
