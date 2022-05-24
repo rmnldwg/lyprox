@@ -22,7 +22,7 @@ jobs:
           source .venv/bin/activate
           python manage.py dbbackup --noinput
           rm db.sqlite3
-          cp ~/backups/lyprox/users_only_db.sqlite3 db.sqlite3
+          cp ~/backups/lyprox/users_and_institutions_db.sqlite3 db.sqlite3
           python manage.py migrate --noinput
           python manage.py import ~/lydata.private/2021-usz-oropharynx/data.csv roman.ludwig@usz.ch
           python manage.py import ~/lydata.private/2021-clb-oropharynx/data.csv vincent.gregoire@lyon.unicancer.fr
