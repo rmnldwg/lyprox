@@ -1,0 +1,30 @@
+name: Build docs and push to pages branch
+
+on:
+  push:
+    branches: [ main, dev ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@main
+    - name: Set up Python 3.8
+      uses: actions/setup-python@v2
+      with:
+        python-version: 3.8
+
+    - name: Install requirements for docs generation
+      run: |
+        python -m pip install --upgrade pip setuptools wheel
+        python -m pip install -r requirements-docs.txt
+
+    - name: Build docs
+      run: pydoctor -c pydoctor.ini
+    
+    - name: Push docs to github pages branch
+      uses: peaceiris/actions-gh-pages@v3
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: ./docs

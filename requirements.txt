@@ -1,10 +1,10 @@
-Django==3.2.12
+Django==4
 django-filter==2.4
-phonenumbers==8.12
+django-phonenumber-field[phonenumbers]==6.1
 django-auth-logger==2.1
 Markdown==3.3
 numpy==1.21
 pandas==1.2
 fontawesomefree==5.15.4
-django-dbbackup==3.3
+https://github.com/jazzband/django-dbbackup/tarball/4.0.0rc1
 icd10-cm==0.0.4

@@ -1,40 +1,55 @@
+"""
+Module for importing and exporting CSV tables of patients with lymphatic
+patterns of progression into and from the Django database.
+"""
+
 import logging
-from typing import List
+from typing import List, Tuple
 
 import numpy as np
 import pandas as pd
 from django.db import IntegrityError
 from django.db.models import QuerySet
 
-logger = logging.getLogger(__name__)
-
 from .models import Diagnose, Patient, Tumor
+
+logger = logging.getLogger(__name__)
 
 
 class ParsingError(Exception):
-    """Exception raised when the parsing of an uploaded CSV fails due to
+    """
+    Exception raised when the parsing of an uploaded CSV fails due to
     missing data columns.
     """
 
 
 def compute_hash(*args):
-    """Compute a hash vlaue from three patient-specific fields that must be
-    removed due for respecting the patient's privacy."""
+    """
+    Compute a hash vlaue from three patient-specific fields that must be
+    removed due for respecting the patient's privacy.
+    """
     return hash(args)
 
 
-def nan_to_None(sth):
+def nan_to_none(sth):
+    """Transform NaNs to ``None``."""
     if sth != sth:
         return None
     else:
         return sth
 
 
-def get_model_fields(model, remove: List[str] = []):
-    """Get list of names of model fields and remove the ones provided via the
-    `remove` argument."""
+def get_model_fields(model, remove: List[str] = None):
+    """
+    Get list of names of model fields and remove the ones provided via the
+    ``remove`` argument.
+    """
     fields = model._meta.get_fields()
     field_names = [f.name for f in fields]
+
+    if remove is None:
+        remove = []
+
     for entry in remove:
         try:
             field_names.remove(entry)
@@ -45,11 +60,12 @@ def get_model_fields(model, remove: List[str] = []):
 
 
 def row2patient(row, user, anonymize: List[str]):
-    """Create a `Patient` instance from a row of a `DataFrame` containing the
+    """
+    Create a `Patient` instance from a row of a ``DataFrame`` containing the
     appropriate information, as well as the user that uploaded the information.
     """
     patient_dict = row.to_dict()
-    _ = nan_to_None
+    _ = nan_to_none
 
     if len(anonymize) != 0:
         to_hash = [patient_dict.pop(a) for a in anonymize]
@@ -68,8 +84,8 @@ def row2patient(row, user, anonymize: List[str]):
     for field in patient_fields:
         try:
             valid_patient_dict[field] = _(patient_dict[field])
-        except KeyError:
-            raise ParsingError(f"Column {field} is missing")
+        except KeyError as key_err:
+            raise ParsingError(f"Column {field} is missing") from key_err
 
     try:
         new_patient = Patient(
@@ -78,22 +94,25 @@ def row2patient(row, user, anonymize: List[str]):
             **valid_patient_dict
         )
         new_patient.save()
-    except IntegrityError as ie:
-        msg = ("Hash value already in database. Patient might have been added "
-               "before")
-        logger.warn(msg)
-        raise ie
+    except IntegrityError as int_err:
+        logger.warning(
+            "Hash value already in database. "
+            "Patient might have been added before"
+        )
+        raise int_err
 
     return new_patient
 
 
 def row2tumors(row, patient):
-    """Create `Tumor` instances from row of a `DataFrame` and add them to an
-    existing `Patient` instance."""
+    """
+    Create `Tumor` instances from row of a ``DataFrame`` and add them to an
+    existing `Patient` instance.
+    """
     # extract number of tumors in row
     level_zero = row.index.get_level_values(0)
     num_tumors = np.max([int(num) for num in level_zero])
-    _ = nan_to_None
+    _ = nan_to_none
 
     tumor_fields = get_model_fields(
         Tumor, remove=["id", "patient"]
@@ -106,8 +125,8 @@ def row2tumors(row, patient):
         for field in tumor_fields:
             try:
                 valid_tumor_dict[field] = _(tumor_dict[field])
-            except KeyError:
-                raise ParsingError(f"Columns {field} is missing.")
+            except KeyError as key_err:
+                raise ParsingError(f"Columns {field} is missing.") from key_err
 
         new_tumor = Tumor(
             patient=patient,
@@ -117,15 +136,17 @@ def row2tumors(row, patient):
 
 
 def row2diagnoses(row, patient):
-    """Create `Diagnose` instances from row of `DataFrame` and add them to an
-    existing `Patient` instance."""
+    """
+    Create `Diagnose` instances from row of ``DataFrame`` and add them to an
+    existing `Patient` instance.
+    """
     modalities_list = list(set(row.index.get_level_values(0)))
     if len(modalities_list) == 0:
         raise ParsingError(
             "No diagnostic modalities were found in the provided table."
         )
 
-    _ = nan_to_None
+    _ = nan_to_none
 
     diagnose_fields = get_model_fields(
         Diagnose, remove=["id", "patient", "modality", "side", "diagnose_date"]
@@ -146,7 +167,11 @@ def row2diagnoses(row, patient):
                     try:
                         valid_diagnose_dict[field] = _(diagnose_dict[field])
                     except KeyError:
-                        raise ParsingError(f"Column {field} is missing.")
+                        logger.debug(
+                            f"Column {field} not in table of modality {mod}, "
+                            "setting to `None`."
+                        )
+                        valid_diagnose_dict[field] = None
 
                 new_diagnosis = Diagnose(
                     patient=patient, modality=mod, side=side,
@@ -159,21 +184,24 @@ def row2diagnoses(row, patient):
 def import_from_pandas(
     data_frame: pd.DataFrame,
     user,
-    anonymize: List[str] = ["id"]
-):
-    """Import patients from pandas `DataFrame`."""
+    anonymize: List[str] = None
+) -> Tuple[int]:
+    """Import patients from pandas ``DataFrame``."""
     num_new = 0
     num_skipped = 0
+
+    if anonymize is None:
+        anonymize = ["id"]
 
     for i, row in data_frame.iterrows():
         # Make sure first two levels are correct for patient data
         try:
             patient_row = row[("patient", "#")]
-        except KeyError:
+        except KeyError as key_err:
             raise ParsingError(
                 "For patient info, first level must be 'patient', second level "
                 "must be '#'."
-            )
+            ) from key_err
 
         # skip row if patient is already in database
         try:
@@ -181,19 +209,18 @@ def import_from_pandas(
                 patient_row, user=user, anonymize=anonymize
             )
         except IntegrityError:
-            msg = ("Skipping row")
-            logger.warn(msg)
+            logger.warning("Skipping row")
             num_skipped += 1
             continue
 
         # make sure first level is correct for tumor
         try:
             tumor_row = row[("tumor")]
-        except KeyError:
+        except KeyError as key_err:
             raise ParsingError(
                 "For tumor info, first level must be 'tumor' and second level "
                 "must be number of tumor."
-            )
+            ) from key_err
 
         row2tumors(
             tumor_row, new_patient
@@ -211,9 +238,10 @@ def import_from_pandas(
 
 
 def export_to_pandas(patients: QuerySet):
-    """Export `QuerySet` of patients into a pandas `DataFrame` of the same
-    format as it is needed for importing."""
-
+    """
+    Export ``QuerySet`` of patients into a pandas ``DataFrame`` of the same
+    format as it is needed for importing.
+    """
     # create list of tuples for MultiIndex and use that to create DataFrame
     patient_fields = get_model_fields(
         Patient, remove=["hash_value", "tumor", "diagnose", "t_stage"]

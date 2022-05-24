@@ -1,17 +1,31 @@
-"""Default Django settings for the lyprox web interfaces.
+"""Default Django settings for the LyProX web interfaces.
 
-This should not directly be used by e.g. WSGI, but rather another Python file
-named <subdomain>.settings.py should be used for the respective subdomain of
-the interface that overwrites the defaults with appropriate values.
+This should not directly be used by e.g. WSGI, but rather another Python module
+`settings` should be used for the respective subdomain of the interface that
+overwrites the defaults with appropriate values.
+
+.. note::
+    You should not edit *this* file, but rather the `settings` module.
 """
 import subprocess
 from pathlib import Path
 
 # security
 DEBUG = True
+"""Set to ``False`` in production"""
 MAINTENANCE = False
+"""Set to ``True`` during maintenance. This will redirect all incoming requests
+to a maintenance page.
+"""
 SECRET_KEY = 'k_&(m5ymps%p=4&qjnwkv-avxb@@ez1tewc8g_eg4k#jx59ukx'
+"""The secret key for security related functions like salt & pepper of password
+hashes.
+
+.. warning::
+    The secret key MUST be changed by the `settings` module!!!
+"""
 ALLOWED_HOSTS = []
+"""List the URLs and IP addresses via which the site can be reached."""
 CSRF_COOKIE_SECURE = False
 SESSION_COOKIE_SECURE = False
 
@@ -180,7 +194,7 @@ AUTH_USER_MODEL = "accounts.User"
 # Internationalization
 # https://docs.djangoproject.com/en/3.1/topics/i18n/
 LANGUAGE_CODE = 'en-us'
-# TIME_ZONE = 'UTC'
+TIME_ZONE = "Europe/Zurich"
 USE_I18N = True
 USE_L10N = True
 USE_TZ = True
