@@ -20,6 +20,8 @@ jobs:
           cd ${{ secrets.REPO_NAME }}
           git pull --tags origin main
           source .venv/bin/activate
+          pip install --upgrade pip setuptools wheel
+          pip install -r requirements.txt
           python manage.py dbbackup --noinput
           rm db.sqlite3
           python manage.py dbrestore -i users_and_institutions_db.dump --noinput
