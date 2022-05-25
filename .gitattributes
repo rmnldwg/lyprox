@@ -1,3 +1,3 @@
 docs/* linguist-documentation
 core/custom-bulma/* linguist-vendored
-**/static linguist-vendored
+**/static/** linguist-vendored
