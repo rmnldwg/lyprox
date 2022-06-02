@@ -6,7 +6,7 @@
 
   <head>
     
-    <title>patients.management.commands.import</title>
+    <title>patients.management.commands.makedownloadfiles</title>
     <meta name="generator" content="pydoctor 22.5.1"> 
         
     </meta>
@@ -142,7 +142,7 @@
 
       <div class="thingTitle">
         <span>Module</span>
-        <code class="thisobject"><a href="patients.management.commands.import.html" class="internal-link" title="This module">import</a></code> 
+        <code class="thisobject"><a href="patients.management.commands.makedownloadfiles.html" class="internal-link" title="This module">makedownloadfiles</a></code> 
       </div>
       
       <div>
@@ -160,7 +160,7 @@
         
 
         
-            <div class="itemName"><code><a href="patients.management.commands.import.Command.html" class="internal-link" title="patients.management.commands.import.Command"><wbr></wbr>Command</a></code>
+            <div class="itemName"><code><a href="patients.management.commands.makedownloadfiles.Command.html" class="internal-link" title="patients.management.commands.makedownloadfiles.Command"><wbr></wbr>Command</a></code>
             </div>
         
 
@@ -173,8 +173,21 @@
         
          
 
+        <div class="childrenKindTitle">Variables</div>
+        <ul>
+    
+    <li class="">
         
-         
+        
+        
+
+        
+            <div class="itemName"><code><a href="#logger" class="internal-link" title="patients.management.commands.makedownloadfiles.logger">logger</a></code>
+            </div>
+        
+
+    </li>
+</ul> 
 
         
          
@@ -193,7 +206,7 @@
         <div class="childrenKindTitle">Modules</div>
         <ul>
     
-    <li class=" thisobject">
+    <li class="">
         
         
         
@@ -203,7 +216,7 @@
             </div>
         
 
-    </li><li class="">
+    </li><li class=" thisobject">
         
         
         
@@ -250,7 +263,7 @@
         
 
         <div class="page-header">
-          <h1 class="module"><code><code><a href="patients.html" class="internal-link">patients</a></code><wbr></wbr>.<code><a href="patients.management.html" class="internal-link" title="patients.management">management</a></code><wbr></wbr>.<code><a href="patients.management.commands.html" class="internal-link" title="patients.management.commands">commands</a></code><wbr></wbr>.<code><a href="patients.management.commands.import.html" class="internal-link" title="patients.management.commands.import">import</a></code></code></h1>
+          <h1 class="module"><code><code><a href="patients.html" class="internal-link">patients</a></code><wbr></wbr>.<code><a href="patients.management.html" class="internal-link" title="patients.management">management</a></code><wbr></wbr>.<code><a href="patients.management.commands.html" class="internal-link" title="patients.management.commands">commands</a></code><wbr></wbr>.<code><a href="patients.management.commands.makedownloadfiles.html" class="internal-link" title="patients.management.commands.makedownloadfiles">makedownloadfiles</a></code></code></h1>
           <div id="showPrivate">
             <button class="btn btn-link" onclick="togglePrivate()">Toggle Private API</button>
           </div>
@@ -266,23 +279,30 @@
         </div>
 
         <div class="moduleDocstring">
-          <div><p>This file defines the <tt class="rst-docutils literal">import</tt> command.</p>
+          <div><p>This python script defines the <tt class="rst-docutils literal">makedownloadfiles</tt> command, which can be used
+to generate CSV tables for each institution's cohort of patients that is in the
+database.</p>
 <pre class="rst-code rst-bash rst-literal-block">
-python manage.py import &lt;path-to-CSV&gt; &lt;user@mail.com&gt;
+python manage.py makedownloadfiles
 </pre>
-<p>It allows one to import a CSV table into the database via the command line.</p>
+<p>No other arguments needed.</p>
 </div>
         </div>
 
         <div id="splitTables">
-          <table class="children sortable" id="id20">
+          <table class="children sortable" id="id22">
   
   
   <tr class="class">
     
     <td>Class</td>
-    <td><code><a href="patients.management.commands.import.Command.html" class="internal-link" title="patients.management.commands.import.Command"><wbr></wbr>Command</a></code></td>
-    <td>Populate the database with patients from a LyProX-style CSV table.</td>
+    <td><code><a href="patients.management.commands.makedownloadfiles.Command.html" class="internal-link" title="patients.management.commands.makedownloadfiles.Command"><wbr></wbr>Command</a></code></td>
+    <td>Export one CSV table per institution in the database and store them in a <tt class="rst-docutils literal">FileField</tt> of a model for later download.</td>
+  </tr><tr class="variable">
+    
+    <td>Variable</td>
+    <td><code><a href="#logger" class="internal-link" title="patients.management.commands.makedownloadfiles.logger">logger</a></code></td>
+    <td><span class="undocumented">Undocumented</span></td>
   </tr>
 </table>
           
@@ -291,7 +311,27 @@ python manage.py import &lt;path-to-CSV&gt; &lt;user@mail.com&gt;
         </div>
 
         <div id="childList">
-          
+          <div class="basevariable">
+  
+  
+  <a name="patients.management.commands.makedownloadfiles.logger">
+    
+  </a>
+  <a name="logger">
+    
+  </a>
+  <div class="functionHeader">
+    
+    <span class="py-defname">logger</span> =
+    
+  </div>
+  <div class="functionBody">
+    
+    
+    <div><p class="undocumented">Undocumented</p></div>
+    
+  </div>
+</div>
         </div>
       
       </div>

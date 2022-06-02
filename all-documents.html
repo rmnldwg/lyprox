@@ -212,6 +212,14 @@
             <div class="kind">Module</div>
             <div class="privacy">PUBLIC</div>
             <div class="summary">This file defines the <tt class="rst-docutils literal">import</tt> command.</div>
+          </li><li id="patients.management.commands.makedownloadfiles">
+            
+            <div class="fullName">patients<wbr></wbr>.management<wbr></wbr>.commands<wbr></wbr>.makedownloadfiles</div>
+            <div class="url">patients.management.commands.makedownloadfiles.html</div>
+            <div class="type">ZopeInterfaceModule</div>
+            <div class="kind">Module</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">This python script defines the <tt class="rst-docutils literal">makedownloadfiles</tt> command, which can be used to generate CSV tables for each institution's cohort of patients that is in the database.</div>
           </li><li id="patients.mixins">
             
             <div class="fullName">patients<wbr></wbr>.mixins</div>
@@ -560,22 +568,6 @@
             
             <div class="fullName">core<wbr></wbr>.defaults<wbr></wbr>.MEDIA<wbr></wbr>_URL</div>
             <div class="url">core.defaults.html#MEDIA_URL</div>
-            <div class="type">ZopeInterfaceAttribute</div>
-            <div class="kind">Constant</div>
-            <div class="privacy">PUBLIC</div>
-            <div class="summary"><span class="undocumented">Undocumented</span></div>
-          </li><li id="core.defaults.DOWNLOADS_ROOT">
-            
-            <div class="fullName">core<wbr></wbr>.defaults<wbr></wbr>.DOWNLOADS<wbr></wbr>_ROOT</div>
-            <div class="url">core.defaults.html#DOWNLOADS_ROOT</div>
-            <div class="type">ZopeInterfaceAttribute</div>
-            <div class="kind">Constant</div>
-            <div class="privacy">PUBLIC</div>
-            <div class="summary"><span class="undocumented">Undocumented</span></div>
-          </li><li id="core.defaults.DOWNLOADS_URL">
-            
-            <div class="fullName">core<wbr></wbr>.defaults<wbr></wbr>.DOWNLOADS<wbr></wbr>_URL</div>
-            <div class="url">core.defaults.html#DOWNLOADS_URL</div>
             <div class="type">ZopeInterfaceAttribute</div>
             <div class="kind">Constant</div>
             <div class="privacy">PUBLIC</div>
@@ -1276,6 +1268,78 @@
             <div class="kind">Instance Variable</div>
             <div class="privacy">PUBLIC</div>
             <div class="summary"><span class="undocumented">Undocumented</span></div>
+          </li><li id="patients.models.CSVTable">
+            
+            <div class="fullName">patients<wbr></wbr>.models<wbr></wbr>.<wbr></wbr>CSVTable</div>
+            <div class="url">patients.models.CSVTable.html</div>
+            <div class="type">ZopeInterfaceClass</div>
+            <div class="kind">Class</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">Model that has a <tt class="rst-docutils literal">FileField</tt> storing the CSV table of patients from a particular institution. This model is only needed to prohibit users that are not authenticated from downloading hidden datasets (i.e. ...</div>
+          </li><li id="patients.models.CSVTable.get_file_path">
+            
+            <div class="fullName">patients<wbr></wbr>.models<wbr></wbr>.<wbr></wbr>CSVTable<wbr></wbr>.get<wbr></wbr>_file<wbr></wbr>_path</div>
+            <div class="url">patients.models.CSVTable.html#get_file_path</div>
+            <div class="type">ZopeInterfaceFunction</div>
+            <div class="kind">Method</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">Dynamically determine file path of the CSV table.</div>
+          </li><li id="patients.models.CSVTable.institution">
+            
+            <div class="fullName">patients<wbr></wbr>.models<wbr></wbr>.<wbr></wbr>CSVTable<wbr></wbr>.institution</div>
+            <div class="url">patients.models.CSVTable.html#institution</div>
+            <div class="type">ZopeInterfaceAttribute</div>
+            <div class="kind">Class Variable</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary"><span class="undocumented">Undocumented</span></div>
+          </li><li id="patients.models.CSVTable.num_patients">
+            
+            <div class="fullName">patients<wbr></wbr>.models<wbr></wbr>.<wbr></wbr>CSVTable<wbr></wbr>.num<wbr></wbr>_patients</div>
+            <div class="url">patients.models.CSVTable.html#num_patients</div>
+            <div class="type">ZopeInterfaceAttribute</div>
+            <div class="kind">Class Variable</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary"><span class="undocumented">Undocumented</span></div>
+          </li><li id="patients.models.CSVTable.date_created">
+            
+            <div class="fullName">patients<wbr></wbr>.models<wbr></wbr>.<wbr></wbr>CSVTable<wbr></wbr>.date<wbr></wbr>_created</div>
+            <div class="url">patients.models.CSVTable.html#date_created</div>
+            <div class="type">ZopeInterfaceAttribute</div>
+            <div class="kind">Class Variable</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary"><span class="undocumented">Undocumented</span></div>
+          </li><li id="patients.models.CSVTable.file">
+            
+            <div class="fullName">patients<wbr></wbr>.models<wbr></wbr>.<wbr></wbr>CSVTable<wbr></wbr>.file</div>
+            <div class="url">patients.models.CSVTable.html#file</div>
+            <div class="type">ZopeInterfaceAttribute</div>
+            <div class="kind">Class Variable</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary"><span class="undocumented">Undocumented</span></div>
+          </li><li id="patients.models.CSVTable.github_url">
+            
+            <div class="fullName">patients<wbr></wbr>.models<wbr></wbr>.<wbr></wbr>CSVTable<wbr></wbr>.github<wbr></wbr>_url</div>
+            <div class="url">patients.models.CSVTable.html#github_url</div>
+            <div class="type">ZopeInterfaceAttribute</div>
+            <div class="kind">Class Variable</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary"><span class="undocumented">Undocumented</span></div>
+          </li><li id="patients.models.CSVTable.zenodo_url">
+            
+            <div class="fullName">patients<wbr></wbr>.models<wbr></wbr>.<wbr></wbr>CSVTable<wbr></wbr>.zenodo<wbr></wbr>_url</div>
+            <div class="url">patients.models.CSVTable.html#zenodo_url</div>
+            <div class="type">ZopeInterfaceAttribute</div>
+            <div class="kind">Class Variable</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary"><span class="undocumented">Undocumented</span></div>
+          </li><li id="patients.models.CSVTable.__str__">
+            
+            <div class="fullName">patients<wbr></wbr>.models<wbr></wbr>.<wbr></wbr>CSVTable<wbr></wbr>.__str__</div>
+            <div class="url">patients.models.CSVTable.html#__str__</div>
+            <div class="type">ZopeInterfaceFunction</div>
+            <div class="kind">Method</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">Report some information for easier management.</div>
           </li><li id="patients.filters.PatientFilter">
             
             <div class="fullName">patients<wbr></wbr>.filters<wbr></wbr>.<wbr></wbr>Patient<wbr></wbr>Filter</div>
@@ -1708,6 +1772,30 @@
             <div class="kind">Method</div>
             <div class="privacy">PUBLIC</div>
             <div class="summary">Execute the command given the arguments as options.</div>
+          </li><li id="patients.management.commands.makedownloadfiles.logger">
+            
+            <div class="fullName">patients<wbr></wbr>.management<wbr></wbr>.commands<wbr></wbr>.makedownloadfiles<wbr></wbr>.logger</div>
+            <div class="url">patients.management.commands.makedownloadfiles.html#logger</div>
+            <div class="type">ZopeInterfaceAttribute</div>
+            <div class="kind">Variable</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary"><span class="undocumented">Undocumented</span></div>
+          </li><li id="patients.management.commands.makedownloadfiles.Command">
+            
+            <div class="fullName">patients<wbr></wbr>.management<wbr></wbr>.commands<wbr></wbr>.makedownloadfiles<wbr></wbr>.<wbr></wbr>Command</div>
+            <div class="url">patients.management.commands.makedownloadfiles.Command.html</div>
+            <div class="type">ZopeInterfaceClass</div>
+            <div class="kind">Class</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">Export one CSV table per institution in the database and store them in a <tt class="rst-docutils literal">FileField</tt> of a model for later download.</div>
+          </li><li id="patients.management.commands.makedownloadfiles.Command.handle">
+            
+            <div class="fullName">patients<wbr></wbr>.management<wbr></wbr>.commands<wbr></wbr>.makedownloadfiles<wbr></wbr>.<wbr></wbr>Command<wbr></wbr>.handle</div>
+            <div class="url">patients.management.commands.makedownloadfiles.Command.html#handle</div>
+            <div class="type">ZopeInterfaceFunction</div>
+            <div class="kind">Method</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">Execute the CSV table generation.</div>
           </li><li id="patients.mixins.logger">
             
             <div class="fullName">patients<wbr></wbr>.mixins<wbr></wbr>.logger</div>
@@ -2412,14 +2500,46 @@
             <div class="kind">Function</div>
             <div class="privacy">PUBLIC</div>
             <div class="summary">View to load many patients at once from a CSV file using pandas. This requires the CSV file to be formatted in a certain way.</div>
-          </li><li id="patients.views.generate_and_download_csv">
+          </li><li id="patients.views.DownloadTablesListView">
             
-            <div class="fullName">patients<wbr></wbr>.views<wbr></wbr>.generate<wbr></wbr>_and<wbr></wbr>_download<wbr></wbr>_csv</div>
-            <div class="url">patients.views.html#generate_and_download_csv</div>
-            <div class="type">ZopeInterfaceFunction</div>
-            <div class="kind">Function</div>
+            <div class="fullName">patients<wbr></wbr>.views<wbr></wbr>.<wbr></wbr>Download<wbr></wbr>Tables<wbr></wbr>List<wbr></wbr>View</div>
+            <div class="url">patients.views.DownloadTablesListView.html</div>
+            <div class="type">ZopeInterfaceClass</div>
+            <div class="kind">Class</div>
             <div class="privacy">PUBLIC</div>
-            <div class="summary">Allow user to generate a CSV table from the current database and download it. The returned CSV table has exactly the structure that is necessary to upload a batch of patients.</div>
+            <div class="summary">View that displays all insitution's patient tables that are available for download.</div>
+          </li><li id="patients.views.DownloadTablesListView.template_name">
+            
+            <div class="fullName">patients<wbr></wbr>.views<wbr></wbr>.<wbr></wbr>Download<wbr></wbr>Tables<wbr></wbr>List<wbr></wbr>View<wbr></wbr>.template<wbr></wbr>_name</div>
+            <div class="url">patients.views.DownloadTablesListView.html#template_name</div>
+            <div class="type">ZopeInterfaceAttribute</div>
+            <div class="kind">Class Variable</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary"><span class="undocumented">Undocumented</span></div>
+          </li><li id="patients.views.DownloadTablesListView.get_queryset">
+            
+            <div class="fullName">patients<wbr></wbr>.views<wbr></wbr>.<wbr></wbr>Download<wbr></wbr>Tables<wbr></wbr>List<wbr></wbr>View<wbr></wbr>.get<wbr></wbr>_queryset</div>
+            <div class="url">patients.views.DownloadTablesListView.html#get_queryset</div>
+            <div class="type">ZopeInterfaceFunction</div>
+            <div class="kind">Method</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">Return the tables available for download, based on the (logged in) user.</div>
+          </li><li id="patients.views.DownloadTableView">
+            
+            <div class="fullName">patients<wbr></wbr>.views<wbr></wbr>.<wbr></wbr>Download<wbr></wbr>Table<wbr></wbr>View</div>
+            <div class="url">patients.views.DownloadTableView.html</div>
+            <div class="type">ZopeInterfaceClass</div>
+            <div class="kind">Class</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">View that serves the respective <code>CSVTables</code> CSV file.</div>
+          </li><li id="patients.views.DownloadTableView.get">
+            
+            <div class="fullName">patients<wbr></wbr>.views<wbr></wbr>.<wbr></wbr>Download<wbr></wbr>Table<wbr></wbr>View<wbr></wbr>.get</div>
+            <div class="url">patients.views.DownloadTableView.html#get</div>
+            <div class="type">ZopeInterfaceFunction</div>
+            <div class="kind">Method</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">Get correct table and render download response.</div>
           </li><li id="patients.views.CreateTumorView">
             
             <div class="fullName">patients<wbr></wbr>.views<wbr></wbr>.<wbr></wbr>Create<wbr></wbr>Tumor<wbr></wbr>View</div>
