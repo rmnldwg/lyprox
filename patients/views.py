@@ -246,17 +246,16 @@ class DownloadTableView(ViewLoggerMixin, View):
     """
     def get(self, request, relative_path):
         """Get correct table and render download response."""
-        _table = get_object_or_404(
+        csv_table = get_object_or_404(
             CSVTable, file=relative_path
         )
-        if not request.user.is_authenticated:
+        if csv_table.institution.is_hidden and not request.user.is_authenticated:
             return HttpResponseForbidden()
 
-        absolute_path = f"{settings.DOWNLOADS_ROOT}/{relative_path}"
+        absolute_path = f"{settings.MEDIA_ROOT}/{relative_path}"
 
-        with open(absolute_path, 'r') as csv_table:
-            response = FileResponse(csv_table, as_attachment=True)
-
+        csv_file = open(absolute_path, 'rb')
+        response = FileResponse(csv_file, as_attachment=True)
         return response
 
 
