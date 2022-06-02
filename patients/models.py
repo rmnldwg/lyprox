@@ -490,10 +490,12 @@ class CSVTable(ModelLoggerMixin, models.Model):
         num = instance.num_patients
         return f"{date_str}_{inst}_{num}.csv"
 
-    num_patients = models.IntegerField()
     institution = models.ForeignKey(Institution, on_delete=models.CASCADE)
+    num_patients = models.IntegerField()
     date_created = models.DateTimeField(default=timezone.now)
     file = models.FileField(upload_to=get_file_path)
+    github_url = models.URLField(blank=True, null=True)
+    zenodo_url = models.URLField(blank=True, null=True)
 
     def __str__(self):
         """Report some information for easier management."""

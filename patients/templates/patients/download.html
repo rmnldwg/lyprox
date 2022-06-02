@@ -8,6 +8,8 @@
 
 {% block content %}
 
+<link rel="stylesheet" href="{% static 'patients/download.css' %}">
+
 <section class="section">
     <div class="container">
         <div class="columns is-centered">
@@ -44,12 +46,27 @@
                                 <div class="level">
                                     <div class="level-left">
                                         <div class="level-item">
-                                            <a href="{{ table.file.url }}" class="button tag is-primary">
-                                                <span class="icon is-medium">
-                                                    <i class="fas fa-cloud-download-alt"></i>
-                                                </span>
-                                                <span>Download</span>
-                                            </a>
+                                            <div class="tags">
+                                                <a href="{{ table.file.url }}" class="button tag is-primary has-addons">
+                                                    <span class="icon">
+                                                        <i class="fas fa-cloud-download-alt"></i>
+                                                    </span>
+                                                    <span>Download</span>
+                                                </a>
+                                                {% if table.zenodo_url %}
+                                                <a href="{{ table.zenodo_url }}" class="button tag is-warning has-addons">
+                                                    Zenodo
+                                                </a>
+                                                {% endif %}
+                                                {% if table.github_url %}
+                                                <a href="{{ table.github_url }}" class="button tag is-black has-addons">
+                                                    <span class="icon">
+                                                        <i class="fab fa-github mr-1"></i>
+                                                    </span>
+                                                    <span>GitHub</span>
+                                                </a>
+                                                {% endif %}
+                                            </div>
                                         </div>
                                     </div>
                                 </div>

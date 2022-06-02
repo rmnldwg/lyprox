@@ -64,5 +64,5 @@ class Command(BaseCommand):
             except Exception as exc:
                 logger.error(exc)
                 raise CommandError(
-                    "Creating new institution table object failed."
+                    "Creating new CSV table object failed."
                 ) from exc
