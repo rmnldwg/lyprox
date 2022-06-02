@@ -16,7 +16,7 @@ from django.core.management.base import BaseCommand, CommandError
 
 from patients.ioports import export_to_pandas
 from accounts.models import Institution
-from patients.models import Patient, InstitutionPatientTable
+from patients.models import Patient, CSVTable
 
 logger = logging.getLogger(__name__)
 
@@ -48,9 +48,9 @@ class Command(BaseCommand):
                 raise CommandError("Writing to buffer failed") from exc
 
             try:
-                csv_table_qs = InstitutionPatientTable.objects.filter(institution=inst)
+                csv_table_qs = CSVTable.objects.filter(institution=inst)
                 if not csv_table_qs.exists():
-                    csv_table = InstitutionPatientTable(
+                    csv_table = CSVTable(
                         num_patients=len(inst_df),
                         institution=inst,
                     )

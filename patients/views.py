@@ -30,7 +30,7 @@ from .filters import PatientFilter
 from .forms import DataFileForm, DiagnoseForm, PatientForm, TumorForm
 from .ioports import ParsingError, export_to_pandas, import_from_pandas
 from .mixins import InstitutionCheckObjectMixin, InstitutionCheckPatientMixin
-from .models import Diagnose, Patient, Tumor, InstitutionPatientTable
+from .models import Diagnose, Patient, Tumor, CSVTable
 
 logger = logging.getLogger(__name__)
 
@@ -224,14 +224,14 @@ class DownloadTablesListView(ViewLoggerMixin, generic.ListView):
     View that displays all insitution's patient tables that are available for
     download.
     """
-    model = InstitutionPatientTable
+    model = CSVTable
     template_name: str = "patients/download.html"
 
     def get_queryset(self):
         """
         Return the tables available for download, based on the (logged in) user.
         """
-        queryset = InstitutionPatientTable.objects.all()
+        queryset = CSVTable.objects.all()
         user = self.request.user
 
         if not user.is_authenticated:
@@ -242,12 +242,12 @@ class DownloadTablesListView(ViewLoggerMixin, generic.ListView):
 
 class DownloadTableView(ViewLoggerMixin, View):
     """
-    View that serves the respective `InstitutionPatientTables` CSV file.
+    View that serves the respective `CSVTables` CSV file.
     """
     def get(self, request, relative_path):
         """Get correct table and render download response."""
         _table = get_object_or_404(
-            InstitutionPatientTable, file=relative_path
+            CSVTable, file=relative_path
         )
         if not request.user.is_authenticated:
             return HttpResponseForbidden()

@@ -9,7 +9,7 @@ There are also custom methods implemented, making sure that e.g. the diagnosis
 of a sublevel (lets say ``Ia``) is consistent with the diagnosis of the
 respective superlevel (in that case ``I``).
 
-In addition, the module defines a `InstitutionPatientTable` model that enables users to
+In addition, the module defines a `CSVTable` model that enables users to
 download CSV tables with patient of a particular institution's cohort.
 """
 # pylint: disable=no-member
@@ -474,7 +474,7 @@ for lnl in Diagnose.LNLs:
     Diagnose.add_to_class(lnl, models.BooleanField(blank=True, null=True))
 
 
-class InstitutionPatientTable(ModelLoggerMixin, models.Model):
+class CSVTable(ModelLoggerMixin, models.Model):
     """
     Model that has a ``FileField`` storing the CSV table of patients from a
     particular institution. This model is only needed to prohibit users that
