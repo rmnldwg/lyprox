@@ -8,6 +8,9 @@ and `Diagnose` entries associated with it, which is defined by the
 There are also custom methods implemented, making sure that e.g. the diagnosis
 of a sublevel (lets say ``Ia``) is consistent with the diagnosis of the
 respective superlevel (in that case ``I``).
+
+In addition, the module defines a `CSVTable` model that enables users to
+download CSV tables with patient of a particular institution's cohort.
 """
 # pylint: disable=no-member
 # pylint: disable=logging-fstring-interpolation
@@ -17,6 +20,7 @@ from collections import namedtuple
 from dateutil.parser import ParserError, parse
 from django.db import models
 from django.urls import reverse
+from django.utils import timezone
 
 from accounts.models import Institution
 from core.loggers import ModelLoggerMixin
@@ -468,3 +472,34 @@ class Diagnose(ModelLoggerMixin, models.Model):
 # add lymph node level fields to model 'Diagnose'
 for lnl in Diagnose.LNLs:
     Diagnose.add_to_class(lnl, models.BooleanField(blank=True, null=True))
+
+
+class CSVTable(ModelLoggerMixin, models.Model):
+    """
+    Model that has a ``FileField`` storing the CSV table of patients from a
+    particular institution. This model is only needed to prohibit users that
+    are not authenticated from downloading hidden datasets (i.e. `Patient`
+    objects belonging to a `accounts.models.Institution` where ``is_hidden`` is
+    set to ``True``).
+    """
+
+    def get_file_path(instance, _filename):
+        """Dynamically determine file path of the CSV table."""
+        date_str = timezone.now().strftime("%Y-%m-%d")
+        inst = instance.institution.shortname
+        num = instance.num_patients
+        return f"{date_str}_{inst}_{num}.csv"
+
+    institution = models.ForeignKey(Institution, on_delete=models.CASCADE)
+    num_patients = models.IntegerField()
+    date_created = models.DateTimeField(default=timezone.now)
+    file = models.FileField(upload_to=get_file_path)
+    github_url = models.URLField(blank=True, null=True)
+    zenodo_url = models.URLField(blank=True, null=True)
+
+    def __str__(self):
+        """Report some information for easier management."""
+        return (
+            f"{self.institution.shortname} ({self.num_patients}) "
+            f"@ {self.file.name}"
+        )
