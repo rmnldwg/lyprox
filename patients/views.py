@@ -30,7 +30,7 @@ from .filters import PatientFilter
 from .forms import DataFileForm, DiagnoseForm, PatientForm, TumorForm
 from .ioports import ParsingError, export_to_pandas, import_from_pandas
 from .mixins import InstitutionCheckObjectMixin, InstitutionCheckPatientMixin
-from .models import Diagnose, Patient, Tumor, CSVTable
+from .models import Diagnose, Patient, Tumor, Dataset
 
 logger = logging.getLogger(__name__)
 
@@ -219,37 +219,36 @@ def upload_patients(request):
     return render(request, "patients/upload.html", context)
 
 
-class DownloadTablesListView(ViewLoggerMixin, generic.ListView):
+class DatasetListView(ViewLoggerMixin, generic.ListView):
     """
-    View that displays all insitution's patient tables that are available for
-    download.
+    View that displays all datasets in a list.
     """
-    model = CSVTable
+    model = Dataset
     template_name: str = "patients/download.html"
 
     def get_queryset(self):
         """
         Return the tables available for download, based on the (logged in) user.
         """
-        queryset = CSVTable.objects.all()
+        queryset = Dataset.objects.all()
         user = self.request.user
 
         if not user.is_authenticated:
-            queryset = queryset.filter(institution__is_hidden=False)
+            queryset = queryset.filter(is_hidden=False)
 
         return queryset
 
 
-class DownloadTableView(ViewLoggerMixin, View):
+class DatasetView(ViewLoggerMixin, View):
     """
-    View that serves the respective `CSVTables` CSV file.
+    View that serves the respective `Dataset` CSV file.
     """
     def get(self, request, relative_path):
         """Get correct table and render download response."""
-        csv_table = get_object_or_404(
-            CSVTable, file=relative_path
+        dataset = get_object_or_404(
+            Dataset, file=relative_path
         )
-        if csv_table.institution.is_hidden and not request.user.is_authenticated:
+        if dataset.is_hidden and not request.user.is_authenticated:
             return HttpResponseForbidden()
 
         absolute_path = f"{settings.MEDIA_ROOT}/{relative_path}"

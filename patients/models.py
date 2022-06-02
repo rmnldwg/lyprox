@@ -9,18 +9,21 @@ There are also custom methods implemented, making sure that e.g. the diagnosis
 of a sublevel (lets say ``Ia``) is consistent with the diagnosis of the
 respective superlevel (in that case ``I``).
 
-In addition, the module defines a `CSVTable` model that enables users to
+In addition, the module defines a `Dataset` model that enables users to
 download CSV tables with patient of a particular institution's cohort.
 """
 # pylint: disable=no-member
 # pylint: disable=logging-fstring-interpolation
 
 from collections import namedtuple
+import hashlib
+import pandas as pd
 
 from dateutil.parser import ParserError, parse
 from django.db import models
 from django.urls import reverse
 from django.utils import timezone
+from django.core.validators import FileExtensionValidator
 
 from accounts.models import Institution
 from core.loggers import ModelLoggerMixin
@@ -39,6 +42,63 @@ class RobustDateField(models.DateField):
                 return None
 
         return super().to_python(value)
+
+
+class Dataset(ModelLoggerMixin, models.Model):
+    """
+    Model that represents a dataset as it was provided by the source. This
+    means e.g. that it captures the raw data in CSV format along with some
+    important metadata. It also serves as an interface between CSV and the SQL
+    database.
+    """
+    @staticmethod
+    def get_filepath(instance, _filename):
+        """Compile the filepath for a given dataset (``instance``)."""
+        filepath = "csv_tables/"
+        filepath += instance.upload_date.strftime("%Y-%m-%d") + "_"
+        filepath += instance.institution.shortname.lower() + "_"
+        filepath += instance.name
+        return filepath + ".csv"
+
+    name = models.CharField(max_length=128)
+    """Name of the dataset."""
+    description = models.TextField()
+    """A brief description of the dataset."""
+    upload_date = models.DateField(default=timezone.now)
+    """Date when the dataset was uploaded."""
+    csv_file = models.FileField(
+        upload_to=get_filepath, 
+        validators=[FileExtensionValidator(allowed_extensions=["csv"])]
+    )
+    """The actual CSV file, stored inside ``settings.MEDIA_ROOT/...``."""
+    md5_hash = models.BinaryField(unique=True)
+    """MD5 hash of the CSV file to prevent duplicates."""
+    is_hidden = models.BooleanField(default=True)
+    """Indicates if the dataset should be hidden to unauthenticated users."""
+
+    repo_provider = models.CharField(max_length=128, blank=True, null=True)
+    """Name of the repository provider, e.g. GitHub (optional)."""
+    repo_url = models.URLField(blank=True, null=True)
+    """URL to the repository, e.g. a DOI identifier (optional)."""
+
+    institution = models.ForeignKey(
+        Institution, null=True, on_delete=models.SET_NULL
+    )
+    """The institution that provided the dataset."""
+
+    def save(self, *args, **kwargs):
+        """Assign the MD5 hash of the data to the `md5_hash` field."""
+        with open(self.csv_file, "rb") as binary_data:
+            self.md5_hash = hashlib.md5(binary_data)
+        return super().save(*args, **kwargs)
+
+    def to_pandas(self) -> pd.DataFrame:
+        """
+        Export `Patient` objects belonging to this `Dataset` from the Django
+        database to a `pandas.DataFrame`.
+        """
+        # TODO
+        pass
 
 
 class Patient(ModelLoggerMixin, models.Model):
@@ -112,17 +172,16 @@ class Patient(ModelLoggerMixin, models.Model):
     m_stage = models.PositiveSmallIntegerField(choices=M_stages.choices)
     """Indicates whether or not there are distant metastases."""
 
-    institution = models.ForeignKey(
-        Institution, blank=True, on_delete=models.PROTECT
+    dataset = models.ForeignKey(
+        Dataset, blank=True, on_delete=models.CASCADE
     )
-    """A newly created patient is assigned to the institution of the user that
-    entered the patient into the database."""
+    """A newly created patient should be assigned to a dataset."""
 
     def __str__(self):
         """Report some patient specifics."""
         return (
-            f"#{self.pk}: {self.sex} ({self.age}) at "
-            f"{self.institution.shortname}"
+            f"#{self.pk}: {self.sex} ({self.age}) from "
+            f"{self.dataset.institution.shortname}"
         )
 
     def get_absolute_url(self):
@@ -472,34 +531,3 @@ class Diagnose(ModelLoggerMixin, models.Model):
 # add lymph node level fields to model 'Diagnose'
 for lnl in Diagnose.LNLs:
     Diagnose.add_to_class(lnl, models.BooleanField(blank=True, null=True))
-
-
-class CSVTable(ModelLoggerMixin, models.Model):
-    """
-    Model that has a ``FileField`` storing the CSV table of patients from a
-    particular institution. This model is only needed to prohibit users that
-    are not authenticated from downloading hidden datasets (i.e. `Patient`
-    objects belonging to a `accounts.models.Institution` where ``is_hidden`` is
-    set to ``True``).
-    """
-
-    def get_file_path(instance, _filename):
-        """Dynamically determine file path of the CSV table."""
-        date_str = timezone.now().strftime("%Y-%m-%d")
-        inst = instance.institution.shortname
-        num = instance.num_patients
-        return f"{date_str}_{inst}_{num}.csv"
-
-    institution = models.ForeignKey(Institution, on_delete=models.CASCADE)
-    num_patients = models.IntegerField()
-    date_created = models.DateTimeField(default=timezone.now)
-    file = models.FileField(upload_to=get_file_path)
-    github_url = models.URLField(blank=True, null=True)
-    zenodo_url = models.URLField(blank=True, null=True)
-
-    def __str__(self):
-        """Report some information for easier management."""
-        return (
-            f"{self.institution.shortname} ({self.num_patients}) "
-            f"@ {self.file.name}"
-        )

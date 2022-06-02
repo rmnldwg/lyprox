@@ -26,20 +26,34 @@
                         </p>
                     </div>
 
-                    {% for table in csvtable_list %}
+                    {% for dataset in dataset_list %}
                     <div class="notification">
                         <div class="media">
                             <div class="media-left">
                                 <figure class="block image is-48x48 is-flex is-align-items-center">
-                                    <img src="{{ table.institution.logo.url }}" alt="institution logo">
+                                    <img src="{{ dataset.institution.logo.url }}" alt="institution logo">
                                 </figure>
                             </div>
                             <div class="media-content">
                                 <div class="content">
                                     <p>
-                                        <strong>{{ table.institution.shortname }}</strong> @<small>{{ table.date_created | date:"Y/m/j" }}</small>
+                                        <strong>{{ dataset.name }}</strong>
+                                        <span class="icon-text">
+                                            <span class="icon">
+                                                <i class="fas fa-at"></i>
+                                            </span>
+                                            <span>{{ dataset.institution.shortname }}</span>
+                                        </span>
+                                        <span class="icon-text">
+                                            <span class="icon">
+                                                <i class="fas fa-map-marker-alt"></i>
+                                            </span>
+                                            <span>{{ dataset.institution.city }}, {{ dataset.institution.country }}</span>
+                                        </span>
+                                        
+                                        <small>{{ dataset.date_created | date:"Y/m/j" }}</small>
                                         <br>
-                                        Cohort of {{ table.num_patients }} patients from the {{ table.institution.name }}, exported from the database on {{ table.date_created | date:"F jS, Y" }}
+                                        Cohort of {{ dataset.num_patients }} patients from the {{ dataset.institution.name }}, exported from the database on {{ dataset.date_created | date:"F jS, Y" }}
                                         <br>
                                     </p>
                                 </div>
@@ -47,23 +61,15 @@
                                     <div class="level-left">
                                         <div class="level-item">
                                             <div class="tags">
-                                                <a href="{{ table.file.url }}" class="button tag is-primary has-addons">
+                                                <a href="{{ dataset.file.url }}" class="button tag is-primary has-addons">
                                                     <span class="icon">
                                                         <i class="fas fa-cloud-download-alt"></i>
                                                     </span>
                                                     <span>Download</span>
                                                 </a>
-                                                {% if table.zenodo_url %}
-                                                <a href="{{ table.zenodo_url }}" class="button tag is-warning has-addons">
-                                                    Zenodo
-                                                </a>
-                                                {% endif %}
-                                                {% if table.github_url %}
-                                                <a href="{{ table.github_url }}" class="button tag is-black has-addons">
-                                                    <span class="icon">
-                                                        <i class="fab fa-github mr-1"></i>
-                                                    </span>
-                                                    <span>GitHub</span>
+                                                {% if dataset.repo_url %}
+                                                <a href="{{ dataset.repo_url }}" class="button tag is-warning has-addons">
+                                                    {{ dataset.repo_provider }}
                                                 </a>
                                                 {% endif %}
                                             </div>

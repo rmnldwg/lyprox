@@ -6,4 +6,4 @@ from .models import *
 admin.site.register(Patient)
 admin.site.register(Tumor)
 admin.site.register(Diagnose)
-admin.site.register(CSVTable)
+admin.site.register(Dataset)
