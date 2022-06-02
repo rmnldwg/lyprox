@@ -37,12 +37,14 @@ class Command(BaseCommand):
 
             try:
                 inst_df = export_to_pandas(inst_queryset)
+                logger.info(f"Exported {inst.shortname} patients to pandas")
             except Exception as exc:
                 logger.error(exc)
                 raise CommandError("Exporting failed.") from exc
             
             try:
                 inst_df.to_csv(buffer, index=False)
+                logger.info("Saved pandas to buffer")
             except Exception as exc:
                 logger.error(exc)
                 raise CommandError("Writing to buffer failed") from exc
@@ -55,7 +57,7 @@ class Command(BaseCommand):
                         institution=inst,
                     )
                 else:
-                    csv_table = csv_table_qs[0]
+                    csv_table = csv_table_qs.first()
                 csv_table.file.save("tmp.csv", buffer)
             except Exception as exc:
                 logger.error(exc)
