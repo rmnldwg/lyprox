@@ -1,3 +1,17 @@
+"""
+The `dashboard.forms` module defines the relatively complex form that is
+used for querying the database later.
+
+It also implements some custom form elements, like `ThreeWayToggle` and
+`ThreeWayToggleWidget` that represent the custom logic and appearance of a
+three-way toggle button respectively, which appears numerous times in the
+Dashboard interface.
+
+Finally, a custom ``MultipleChoice`` field of somewhat unnecessary complexity
+is implemented here that allows us to select the institutions from which the
+ptients should be included via check boxes with the institution logo on it.
+"""
+
 import logging
 from typing import Tuple
 
@@ -12,9 +26,9 @@ logger = logging.getLogger(__name__)
 
 
 class ThreeWayToggleWidget(forms.RadioSelect):
-    """Widget that renders the three-way toggle button and allows to set the 
-    attributes of the individual inputs (radio buttons) as `option_attrs` as 
-    well as the attributes of the container as `attrs`.
+    """Widget that renders the three-way toggle button and allows to set the
+    attributes of the individual inputs (radio buttons) as `option_attrs` as
+    well as the attributes of the container as ``attrs``.
     """
     template_name = 'widgets/three_way_toggle.html'
     option_template_name = 'widgets/three_way_toggle_option.html'
@@ -22,10 +36,10 @@ class ThreeWayToggleWidget(forms.RadioSelect):
         "class": "radio is-hidden",
         "onchange": "changeHandler();"
     }
-    
+
     def __init__(
-        self, 
-        attrs=None, choices=(), 
+        self,
+        attrs=None, choices=(),
         option_attrs=None, label=None, tooltip=None
     ):
         """Store arguments and option attributes for later use."""
@@ -37,20 +51,20 @@ class ThreeWayToggleWidget(forms.RadioSelect):
             **(option_attrs or {}),
         }
         super().__init__(attrs, choices)
-    
+
     def get_context(self, name, value, attrs):
         """Pass label and tooltip to the context variable"""
         context = super().get_context(name, value, attrs)
         context["widget"]["label"] = self.label
         context["widget"]["tooltip"] = self.tooltip
         return context
-    
+
     def create_option(
         self, name, value, label, selected, index, subindex=None, attrs=None
     ):
         """Pass the option attributes to the actual options"""
         return super().create_option(
-            name, value, label, selected, index, subindex, 
+            name, value, label, selected, index, subindex,
             attrs=self.build_attrs(self.option_attrs, attrs)
         )
 
@@ -63,27 +77,27 @@ class ThreeWayToggle(forms.ChoiceField):
         self,
         attrs=None,
         option_attrs=None,
-        label=None, 
+        label=None,
         tooltip=None,
         choices=[
-            ( 1, "plus" ), 
-            ( 0, "ban"  ), 
+            ( 1, "plus" ),
+            ( 0, "ban"  ),
             (-1, "minus"),
         ],
         initial=0,
         required=False,
         **kwargs
     ):
-        """Pass the arguments, like `label` and `tooltip` to the constructor 
+        """Pass the arguments, like `label` and `tooltip` to the constructor
         of the custom widget."""
         if len(choices) != 3:
             raise ValueError("Three-way toggle button must have three choices")
-        
+
         super().__init__(
             widget=ThreeWayToggleWidget(
-                attrs=attrs, 
-                option_attrs=option_attrs, 
-                label=label, 
+                attrs=attrs,
+                option_attrs=option_attrs,
+                label=label,
                 tooltip=tooltip
             ),
             choices=choices,
@@ -103,8 +117,10 @@ class ThreeWayToggle(forms.ChoiceField):
 
 
 class InstitutionModelChoiceIndexer:
-    """Custom class with which one can access additional information from
-    the model that is chosen by the :class:`InstitutionMultipleChoiceField`."""
+    """
+    Custom class with which one can access additional information from
+    the model that is chosen by the `InstitutionMultipleChoiceField`.
+    """
 
     def __init__(self, field) -> None:
         self.field = field
@@ -115,6 +131,7 @@ class InstitutionModelChoiceIndexer:
         return self.info(obj)
 
     def info(self, obj: Institution) -> Tuple[int, str]:
+        """Return the label and logo URL for the institution."""
         return (
             self.field.label_from_instance(obj),
             self.field.logo_url_from_instance(obj)
@@ -127,8 +144,8 @@ class InstitutionMultipleChoiceField(forms.ModelMultipleChoiceField):
     implemented. But since some other functionality depends on how those
     choices are implemented, it cannot be changed easily."""
 
-    #: Allows one to extract more info about the objects. E.g. name and logo url
     name_and_url_indexer = InstitutionModelChoiceIndexer
+    """Allows one to extract more info (name and logo) about the objects."""
 
     def label_from_instance(self, obj: Institution) -> str:
         """Institution name as label."""
@@ -154,7 +171,7 @@ class DashboardForm(FormLoggerMixin, forms.Form):
                    "onchange": "changeHandler();"}
         ),
         choices=Diagnose.Modalities.choices,
-        initial=["CT", "MRI", "PET", "FNA", "diagnostic_consensus"]
+        initial=["CT", "MRI", "PET", "FNA", "diagnostic_consensus", "pathology"]
     )
     modality_combine = forms.ChoiceField(
         widget=forms.Select(attrs={"onchange": "changeHandler();"}),
@@ -163,16 +180,16 @@ class DashboardForm(FormLoggerMixin, forms.Form):
                  ("maxLLH", "maxLLH"),
                  ("RANK"  , "RANK"  )],
         label="Combine",
-        initial="OR"
+        initial="maxLLH"
     )
 
     # patient specific fields
     nicotine_abuse = ThreeWayToggle(
-        label="smoking status", 
+        label="smoking status",
         tooltip="Select smokers or non-smokers"
     )
     hpv_status = ThreeWayToggle(
-        label="HPV status", 
+        label="HPV status",
         tooltip="Select patients being HPV positive or negative"
     )
     neck_dissection = ThreeWayToggle(
@@ -235,7 +252,7 @@ class DashboardForm(FormLoggerMixin, forms.Form):
                  ("gum_cheek", "gums and cheek"), # in the Tumor.SUBSITE_DICT keys
                  ("mouth_floor", "floor of mouth"),
                  ("palate", "palate"),
-                 ("glands", "salivary glands")],  
+                 ("glands", "salivary glands")],
         initial=["tongue", "gum_cheek", "mouth_floor", "palate", "glands"]
     )
 

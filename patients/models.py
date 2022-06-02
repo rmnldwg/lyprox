@@ -1,6 +1,18 @@
+"""
+This module defines how patient related models are defined and how they
+interact with each other. Currently, three models are implemented: The
+`Patient`, `Tumor` and the `Diagnose`. Each `Patient` can have multiple `Tumor`
+and `Diagnose` entries associated with it, which is defined by the
+``django.db.models.ForeignKey`` attribute in the `Tumor` and `Diagnose` class.
+
+There are also custom methods implemented, making sure that e.g. the diagnosis
+of a sublevel (lets say ``Ia``) is consistent with the diagnosis of the
+respective superlevel (in that case ``I``).
+"""
+# pylint: disable=no-member
+# pylint: disable=logging-fstring-interpolation
+
 from collections import namedtuple
-from attr import attr
-import numpy as np
 
 from dateutil.parser import ParserError, parse
 from django.db import models
@@ -10,13 +22,13 @@ from accounts.models import Institution
 from core.loggers import ModelLoggerMixin
 
 
-
 class RobustDateField(models.DateField):
-    """DateField that doesn't raise a ValidationError when the date string isn't
+    """
+    DateField that doesn't raise a ValidationError when the date string isn't
     formated according to ISO (YYYY-MM-DD)
     """
     def to_python(self, value):
-        if type(value) == str:
+        if isinstance(value, str):
             try:
                 value = parse(value).date()
             except ParserError:
@@ -26,83 +38,107 @@ class RobustDateField(models.DateField):
 
 
 class Patient(ModelLoggerMixin, models.Model):
-    """The representation of a patient in the database. It contains some
+    """
+    The representation of a patient in the database. It contains some
     demographic information, as well as patient-specific characteristics that
-    are important in the context of cancer, e.g. HPV status."""
+    are important in the context of cancer, e.g. HPV status.
+
+    This model also ties together the information about the patient's tumor(s)
+    and the lymphatic progression pattern of that patient in the form of a
+    `Diagnose` model.
+    """
+    hash_value = models.CharField(max_length=200, unique=True)
+    """Unique ID computed from sensitive info upon patient creation."""
+
+    sex = models.CharField(max_length=10, choices=[("female", "female"),
+                                                   ("male"  , "male"  )])
+    age = models.IntegerField()
+    diagnose_date = RobustDateField()
+    """Date of histological confirmation with a squamous cell carcinoma."""
+
+    alcohol_abuse = models.BooleanField(blank=True, null=True)
+    """Was the patient a drinker?"""
+
+    nicotine_abuse = models.BooleanField(blank=True, null=True)
+    """Was the patient a smoker"""
+
+    hpv_status = models.BooleanField(blank=True, null=True)
+    """Was the patient HPV positive (``True``) or negative (``False``)?"""
+
+    neck_dissection = models.BooleanField(blank=True, null=True)
+    """Did the patient undergo (radical) neck dissection?"""
+
+    tnm_edition = models.PositiveSmallIntegerField(default=8)
+    """The edition of the TNM staging system that was used."""
+
+    stage_prefix = models.CharField(
+        max_length=1, choices=[("c", "c"), ("p", "p")], default='c'
+    )
+    """T-stage prefix: 'c' for 'clinical' and 'p' for 'pathological'."""
 
     class T_stages(models.IntegerChoices):
-        """:meta private:"""
+        """Defines the possible T-stages as choice class."""
         T1 = 1, "T1"
         T2 = 2, "T2"
         T3 = 3, "T3"
         T4 = 4, "T4"
 
+    t_stage = models.PositiveSmallIntegerField(
+        choices=T_stages.choices, default=0
+    )
+    """Stage of the primary tumor. Categorized the tumor by size and
+    infiltration of tissue types."""
+
     class N_stages(models.IntegerChoices):
-        """:meta private:"""
+        """Defines the possible N-stages as choice class."""
         N0 = 0, "N0"
         N1 = 1, "N1"
         N2 = 2, "N2"
         N3 = 3, "N3"
 
+    n_stage = models.PositiveSmallIntegerField(choices=N_stages.choices)
+    """Categorizes the extend of regional metastases."""
+
     class M_stages(models.IntegerChoices):
-        """:meta private:"""
+        """Defines the possible M-stages as choice class."""
         M0 = 0, "M0"
         M1 = 1, "M1"
         MX = 2, "MX"
 
-    #: Unique ID that should be computed from sensitive info upon patient
-    #: creation to avoid duplicates and respect the patient's privacy.
-    hash_value = models.CharField(max_length=200, unique=True)
-    sex = models.CharField(max_length=10, choices=[("female", "female"),
-                                                   ("male"  , "male"  )])  #:
-    age = models.IntegerField()  #:
-    diagnose_date = RobustDateField()  #:
+    m_stage = models.PositiveSmallIntegerField(choices=M_stages.choices)
+    """Indicates whether or not there are distant metastases."""
 
-    #: Was the patient a drinker?
-    alcohol_abuse = models.BooleanField(blank=True, null=True)
-    #: Was the patient a smoker?
-    nicotine_abuse = models.BooleanField(blank=True, null=True)
-    #: HPV status of the patient (postive or negative).
-    hpv_status = models.BooleanField(blank=True, null=True)
-    #: Has the patient been treated with some form of neck dissection?
-    neck_dissection = models.BooleanField(blank=True, null=True)
-
-    tnm_edition = models.PositiveSmallIntegerField(default=8)  #:
-    stage_prefix = models.CharField(
-        max_length=1, choices=[("c", "c"), ("p", "p")], default='c'
-    )  #:
-    t_stage = models.PositiveSmallIntegerField(
-        choices=T_stages.choices, default=0
-    )  #:
-    n_stage = models.PositiveSmallIntegerField(choices=N_stages.choices)  #:
-    m_stage = models.PositiveSmallIntegerField(choices=M_stages.choices)  #:
-
-    #: By default, every newly created patient is assigned to the institution
-    #: of the :class:`User` that created them.
     institution = models.ForeignKey(
         Institution, blank=True, on_delete=models.PROTECT
     )
+    """A newly created patient is assigned to the institution of the user that
+    entered the patient into the database."""
 
     def __str__(self):
         """Report some patient specifics."""
-        return (f"#{self.pk}: {self.sex} ({self.age}) at "
-                f"{self.institution.shortname}")
+        return (
+            f"#{self.pk}: {self.sex} ({self.age}) at "
+            f"{self.institution.shortname}"
+        )
 
     def get_absolute_url(self):
         """Return the absolute URL for a particular patient."""
         return reverse("patients:detail", args=[self.pk])
 
     def get_tumors(self):
+        """Return the primary tumor(s) of that patient."""
         tumors = Tumor.objects.all().filter(patient=self)
         return tumors
 
     def get_diagnoses(self):
+        """Return the LNL diagnose(s) of the patient."""
         diagnoses = Diagnose.objects.all().filter(patient=self)
         return diagnoses
 
     def update_t_stage(self):
-        """Update T-stage after new :class:`Tumor` is added to :class:`Patient`
-        (gets called in :meth:`Tumor.save()` method). Also updates the patient's
+        """
+        Update T-stage after new `Tumor` is added to `Patient`
+        (gets called in `Tumor.save` method). Also updates the patient's
         stage prefix to that of the tumor with the highest T-category.
         """
         tumors = Tumor.objects.all().filter(patient=self)
@@ -117,21 +153,30 @@ class Patient(ModelLoggerMixin, models.Model):
         self.t_stage = max_t_stage
         self.stage_prefix = stage_prefix
         self.save()
-        self.logger.debug(f"T-stage of patient {self} updated to "
-                          f"{self.get_stage_prefix_display()}"
-                          f"{self.get_t_stage_display()}.")
+        self.logger.debug(
+            f"T-stage of patient {self} updated to "
+            f"{self.get_stage_prefix_display()}{self.get_t_stage_display()}."
+        )
 
 
 class Tumor(ModelLoggerMixin, models.Model):
-    """Model to describe tumors in detail. It is connected to a patient via
-    a ``ForeignKey`` relation."""
+    """
+    Model to describe a patient's tumor in detail. It is connected to a patient
+    via a ``django.db.models.ForeignKey`` relation.
+    """
+
+    patient = models.ForeignKey(Patient, on_delete=models.CASCADE)
+    """This defines the connection to the `Patient` model."""
 
     class Locations(models.TextChoices):
-        """:meta private:"""
+        """The primary tumor locations in the head and neck region."""
         ORAL_CAVITY = "oral cavity"
         OROPHARYNX  = "oropharynx"
         HYPOPHARYNX = "hypopharynx"
         LARYNX      = "larynx"
+
+    location = models.CharField(max_length=20, choices=Locations.choices)
+    """The tumor location."""
 
     SUBSITES = [
         ("oral cavity", (("C02.0", "dorsal surface of tongue"),
@@ -198,6 +243,8 @@ class Tumor(ModelLoggerMixin, models.Model):
                          ("C32.9", "larynx, nos"),)
         )
     ]
+    """List of subsites with their ICD-10 code and respective description,
+    grouped by location."""
 
     # NOTE: The ICD-10 codes `C01` and `C01.9` refer to the same subsite. `C01`
     # is correct, but for resilience, I also accept `C01.9` until I implement
@@ -221,35 +268,38 @@ class Tumor(ModelLoggerMixin, models.Model):
     }
     SUBSITE_LIST = [icd for icd_list in SUBSITE_DICT.values() for icd in icd_list]
 
-    #: ``ForeignKey`` to :class:`Patient`
-    patient = models.ForeignKey(Patient, on_delete=models.CASCADE)
-
-    #: Tumor location within the Head & Neck region
-    location = models.CharField(max_length=20, choices=Locations.choices)
-    #: More detailed information about the location of the tumor
     subsite = models.CharField(max_length=10, choices=SUBSITES)
-    #: Is the tumopr central or lateralized?
-    central = models.BooleanField(blank=True, null=True)
-    #: Does the tumor extend over the mid-sagittal plane?
-    extension = models.BooleanField(blank=True, null=True)
-    #: Size of the tumor.
-    volume = models.FloatField(blank=True, null=True)
+    """The subsite is a more granular categorization by the anatomical region
+    of the head and neck where the primary tumor occurs in. It is usually
+    encoded using the ICD-10 codes."""
 
-    #:
+    central = models.BooleanField(blank=True, null=True)
+    """Is the tumor symmetric w.r.t. the patients mid-sagittal line?"""
+
+    extension = models.BooleanField(blank=True, null=True)
+    """Does the tumor cross the mid-sagittal line of the patient?"""
+
+    volume = models.FloatField(blank=True, null=True)
+    """Volume of the patient's tumor."""
+
     t_stage = models.PositiveSmallIntegerField(choices=Patient.T_stages.choices)
-    #: Prefix for the tumor's T-stage (``c`` or ``p``)
+    """Stage of the primary tumor. Categorized the tumor by size and
+    infiltration of tissue types."""
+
     stage_prefix = models.CharField(max_length=1, choices=[("c", "c"),
                                                            ("p", "p")])
+    """T-stage prefix: 'c' for 'clinical' and 'p' for 'pathological'."""
 
     def __str__(self):
         """Report some main characteristics."""
         return f"#{self.pk}: T{self.t_stage} tumor of patient #{self.patient.pk}"
 
     def save(self, *args, **kwargs):
-        """Before creating the database entry, determine the location of the
+        """
+        Before creating the database entry, determine the location of the
         tumor from the specified subsite and update the patient it is assigned
-        to, to the correct T-stage."""
-
+        to, to the correct T-stage.
+        """
         # Automatically extract location from subsite
         subsite_dict = dict(self.SUBSITES)
         location_list = self.Locations.values
@@ -285,19 +335,19 @@ class Tumor(ModelLoggerMixin, models.Model):
 Mod = namedtuple("Mod", "value label spec sens")
 
 class Diagnose(ModelLoggerMixin, models.Model):
-    """Model describing the diagnosis of one side of a patient's neck with
-    regard to their lymphaitc metastatic involvement."""
+    """
+    Model describing the diagnosis of one side of a patient's neck with
+    regard to their lymphaitc metastatic involvement.
+    """
 
-    LNLs = [
-        "I", "Ia" , "Ib", "II", "IIa", "IIb", "III", "IV", "V", "Va", "Vb", "VII"
-    ]
+    patient = models.ForeignKey(Patient, on_delete=models.CASCADE)
+    """This defines the connection to the `Patient` model."""
 
     class MetaModality(type):
-        """Meta class for providing the classmethod attributes to the
-        ``Modalities`` class similar to what Django's enum types have.
-
-        :meta private:"""
-
+        """
+        Meta class for providing the classmethod attributes to the
+        `Modalities` class similar to what Django's enum types have.
+        """
         def __init__(cls, classname, bases, classdict, *args, **kwargs):
             cls._mods = []
             for key, val in classdict.items():
@@ -327,28 +377,31 @@ class Diagnose(ModelLoggerMixin, models.Model):
 
         @property
         def choices(cls):
+            """Return list of tuples suitable for the
+            ``django.db.models.ChoiceField``"""
             return [(mod.value, mod.label) for mod in cls._mods]
 
         @property
         def values(cls):
+            """Database values the modality field can take on."""
             return [mod.value for mod in cls._mods]
 
         @property
         def labels(cls):
+            """Human readable labels for the values of the modality field."""
             return [mod.label for mod in cls._mods]
 
         @property
         def spsn(cls):
+            """Sensitiviy & specificity of the implemented modalities."""
             return [[mod.spec, mod.sens] for mod in cls._mods]
 
-
     class Modalities(metaclass=MetaModality):
-        """Class that aims to replicate the functionality of ``TextChoices``
+        """
+        Class that aims to replicate the functionality of ``TextChoices``
         from Django's enum types, but with the added functionality of storing
         the sensitivity & specificity of the respective modality.
-
-        :meta private:"""
-
+        """
         CT   = Mod("CT" ,                  "CT" ,                    0.76, 0.81)
         MRI  = Mod("MRI",                  "MRI",                    0.63, 0.81)
         PET  = Mod("PET",                  "PET",                    0.86, 0.79)
@@ -357,17 +410,20 @@ class Diagnose(ModelLoggerMixin, models.Model):
         PATH = Mod("pathology",            "Pathology",              1.  , 1.  )
         PCT  = Mod("pCT",                  "Planning CT",            0.86, 0.81)
 
-
-    #: ``ForeignKey`` to :class:`Patient`
-    patient = models.ForeignKey(Patient, on_delete=models.CASCADE)
-
-    #: The used diagnostic modality. E.g. ``MRI``, ``PET`` or ``FNA``.
     modality = models.CharField(max_length=20, choices=Modalities.choices)
+    """The diagnostic modality that was used to reach the diagnosis."""
     #:
     diagnose_date = RobustDateField(blank=True, null=True)
     #: diagnosed side
     side = models.CharField(max_length=10, choices=[("ipsi", "ipsi"),
                                                     ("contra", "contra")])
+
+    LNLs = [
+        "I", "Ia" , "Ib", "II", "IIa", "IIb", "III", "IV", "V", "Va", "Vb", "VII"
+    ]
+    """List of implemented lymph node levels. When the `models` module is
+    imported, a simple for-loop creates additional fields for the `Diagnose`
+    class for each of the elements in this list."""
 
     def __str__(self):
         """Report some info for admin view."""
@@ -375,11 +431,12 @@ class Diagnose(ModelLoggerMixin, models.Model):
                 f"({self.side}) of patient #{self.patient.pk}")
 
     def save(self, *args, **kwargs):
-        """Make sure LNLs and their sublevels (e.g. 'a' and 'b') are treated
+        """
+        Make sure LNLs and their sublevels (e.g. 'a' and 'b') are treated
         consistelntly. E.g. when sublevel ``Ia`` is reported to be involved,
         the involvement status of level ``I`` cannot be reported as healthy.
 
-        Also, if all LNLs are reported as unknown (`None`), just delete it.
+        Also, if all LNLs are reported as unknown (``None``), just delete it.
         """
         if all([getattr(self, lnl) is None for lnl in self.LNLs]):
             super().save(*args, **kwargs)

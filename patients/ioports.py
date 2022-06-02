@@ -32,7 +32,7 @@ def compute_hash(*args):
 
 
 def nan_to_none(sth):
-    """Transform NaNs to `None`."""
+    """Transform NaNs to ``None``."""
     if sth != sth:
         return None
     else:
@@ -42,7 +42,7 @@ def nan_to_none(sth):
 def get_model_fields(model, remove: List[str] = None):
     """
     Get list of names of model fields and remove the ones provided via the
-    `remove` argument.
+    ``remove`` argument.
     """
     fields = model._meta.get_fields()
     field_names = [f.name for f in fields]
@@ -61,7 +61,7 @@ def get_model_fields(model, remove: List[str] = None):
 
 def row2patient(row, user, anonymize: List[str]):
     """
-    Create a `Patient` instance from a row of a `DataFrame` containing the
+    Create a `Patient` instance from a row of a ``DataFrame`` containing the
     appropriate information, as well as the user that uploaded the information.
     """
     patient_dict = row.to_dict()
@@ -106,7 +106,7 @@ def row2patient(row, user, anonymize: List[str]):
 
 def row2tumors(row, patient):
     """
-    Create `Tumor` instances from row of a `DataFrame` and add them to an
+    Create `Tumor` instances from row of a ``DataFrame`` and add them to an
     existing `Patient` instance.
     """
     # extract number of tumors in row
@@ -137,7 +137,7 @@ def row2tumors(row, patient):
 
 def row2diagnoses(row, patient):
     """
-    Create `Diagnose` instances from row of `DataFrame` and add them to an
+    Create `Diagnose` instances from row of ``DataFrame`` and add them to an
     existing `Patient` instance.
     """
     modalities_list = list(set(row.index.get_level_values(0)))
@@ -167,7 +167,7 @@ def row2diagnoses(row, patient):
                     try:
                         valid_diagnose_dict[field] = _(diagnose_dict[field])
                     except KeyError:
-                        logger.info(
+                        logger.debug(
                             f"Column {field} not in table of modality {mod}, "
                             "setting to `None`."
                         )
@@ -186,7 +186,7 @@ def import_from_pandas(
     user,
     anonymize: List[str] = None
 ) -> Tuple[int]:
-    """Import patients from pandas `DataFrame`."""
+    """Import patients from pandas ``DataFrame``."""
     num_new = 0
     num_skipped = 0
 
@@ -239,7 +239,7 @@ def import_from_pandas(
 
 def export_to_pandas(patients: QuerySet):
     """
-    Export `QuerySet` of patients into a pandas `DataFrame` of the same
+    Export ``QuerySet`` of patients into a pandas ``DataFrame`` of the same
     format as it is needed for importing.
     """
     # create list of tuples for MultiIndex and use that to create DataFrame

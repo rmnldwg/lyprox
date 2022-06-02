@@ -1,3 +1,16 @@
+"""
+This module defines a ``django_filters.FilterSet`` based class that allows
+relatively easy filtering and sorting of models. In our case, we have
+implemented only a ``PatientFilter`` for the ``views.PatientListView`` which
+almost automatically provides a form that can be passed and used in the HTML
+template of the list view.
+
+By using third-party app ``django_filters`` (`docs`_) we can define by what
+fields we want to filter/sort our models and how.
+
+.. _docs: https://django-filter.readthedocs.io/en/stable/
+"""
+
 import django_filters
 from django.forms import widgets
 
@@ -7,6 +20,10 @@ from .models import Patient
 
 
 class PatientFilter(django_filters.FilterSet):
+    """
+    A ``django_filters.FilterSet`` which allows for easy filtering of a
+    patient queryset for any fields defined here.
+    """
     diagnose_date = django_filters.DateFromToRangeFilter(
         widget=django_filters.widgets.RangeWidget(attrs={"class": "input",
                                                          "type": "date"})
@@ -51,6 +68,7 @@ class PatientFilter(django_filters.FilterSet):
     )
 
     class Meta:
+        """Define which django model this should act on."""
         model = Patient
         fields = ["diagnose_date", "gender", "age",
                   "t_stage", "n_stage", "m_stage"]

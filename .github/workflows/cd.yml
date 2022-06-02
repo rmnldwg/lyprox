@@ -1,20 +1,13 @@
-# This is a basic workflow to push changes to a remote virtual machine
 name: Push to Azure VM
 
-# Controls when the workflow will run
 on:
-  # Triggers the workflow on push or pull request events but only for the main branch
   push:
     branches: [ main ]
 
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  # This workflow contains a single job called "build"
   build:
-    # The type of runner that the job will run on
     runs-on: ubuntu-latest
 
-    # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
     - name: SSH Remote Commands
       uses: appleboy/ssh-action@v0.1.4
@@ -27,7 +20,15 @@ jobs:
           cd ${{ secrets.REPO_NAME }}
           git pull --tags origin main
           source .venv/bin/activate
+          pip install --upgrade pip setuptools wheel
+          pip install -r requirements.txt
           python manage.py dbbackup --noinput
+          rm db.sqlite3
+          python manage.py dbrestore -i users_and_institutions_db.dump --noinput
           python manage.py migrate --noinput
+          python manage.py import ~/lydata.private/2021-usz-oropharynx/data.csv roman.ludwig@usz.ch
+          python manage.py import ~/lydata.private/2021-clb-oropharynx/data.csv vincent.gregoire@lyon.unicancer.fr
           python manage.py collectstatic --noinput
+          sudo chown rmnldwg:www-data db.sqlite3
+          chmod 664 db.sqlite3
           sudo service apache2 restart
