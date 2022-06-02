@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.urls import path
 
 from . import views
@@ -7,7 +8,8 @@ urlpatterns = [
     path("", views.PatientListView.as_view(), name="list"),
     path("create/", views.CreatePatientView.as_view(), name="create"),
     path("upload/", views.upload_patients, name="upload"),
-    path("download/", views.generate_and_download_csv, name="download"),
+    path("download/", views.DownloadTablesListView.as_view(), name="download"),
+    path(f"{settings.DOWNLOADS_URL}/<path:relative_path>", views.DownloadTableView.as_view(), name="table_download"),
     path("<int:pk>/", views.PatientDetailView.as_view(), name="detail"),
     path("<int:pk>/update", views.UpdatePatientView.as_view(), name="update"),
     path("<int:pk>/delete", views.DeletePatientView.as_view(), name="delete"),

@@ -215,4 +215,4 @@ MEDIA_URL = "/media/"
 
 # Download files
 DOWNLOADS_ROOT = BASE_DIR / "downloads"
-DOWNLOADS_URL = "/downloads/"
+DOWNLOADS_URL = "downloads/"
