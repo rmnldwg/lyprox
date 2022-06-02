@@ -11,17 +11,16 @@ listing the models in the ``patients`` app.
 
 import logging
 import time
-from pathlib import Path
 from typing import Any, Dict
-
 from django.conf import settings
+
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models.query import QuerySet
-from django.http import HttpResponse
-from django.shortcuts import render
+from django.http import FileResponse, HttpResponse, HttpResponseForbidden
+from django.shortcuts import get_object_or_404, render
 from django.urls.base import reverse
-from django.views import generic
+from django.views import generic, View
 
 from core.loggers import ViewLoggerMixin
 from dashboard import query
@@ -31,7 +30,7 @@ from .filters import PatientFilter
 from .forms import DataFileForm, DiagnoseForm, PatientForm, TumorForm
 from .ioports import ParsingError, export_to_pandas, import_from_pandas
 from .mixins import InstitutionCheckObjectMixin, InstitutionCheckPatientMixin
-from .models import Diagnose, Patient, Tumor
+from .models import Diagnose, Patient, Tumor, InstitutionPatientTable
 
 logger = logging.getLogger(__name__)
 
@@ -220,53 +219,45 @@ def upload_patients(request):
     return render(request, "patients/upload.html", context)
 
 
-def generate_and_download_csv(request):
+class DownloadTablesListView(ViewLoggerMixin, generic.ListView):
     """
-    Allow user to generate a CSV table from the current database and
-    download it. The returned CSV table has exactly the structure that is
-    necessary to upload a batch of patients.
-
-    Only logged in users can download the entire database. Unauthenticated
-    users can only download a CSV table of datasets that are not hidden.
+    View that displays all insitution's patient tables that are available for
+    download.
     """
+    model = InstitutionPatientTable
+    template_name: str = "patients/download.html"
 
-    # NOTE: This is only possible as long as the static files are served from
-    #   the same directory as the root directory of the django app.
-    # download_folder = settings.MEDIA_ROOT / "downloads"
-    download_file_path = settings.DOWNLOADS_ROOT / "latest.csv"
-    user = request.user
-    context = {}
+    def get_queryset(self):
+        """
+        Return the tables available for download, based on the (logged in) user.
+        """
+        queryset = InstitutionPatientTable.objects.all()
+        user = self.request.user
 
-    if request.method == "POST":
-        if user.is_authenticated:
-            queryset = Patient.objects.all()
-        else:
-            queryset = Patient.objects.all().filter(institution__is_hidden=False)
+        if not user.is_authenticated:
+            queryset = queryset.filter(institution__is_hidden=False)
 
-        if len(queryset) == 0:
-            context["generate_success"] = False
-            context["error"] = "List of exportable patients is empty"
-            return render(request, "patients/download.html", context)
+        return queryset
 
-        try:
-            patient_df = export_to_pandas(queryset)
-            patient_df.to_csv(download_file_path, index=False)
-            logger.info("Successfully generated and saved database as CSV.")
-            context["generate_success"] = True
 
-        except FileNotFoundError:
-            msg = ("Download folder is missing or can't be accessed.")
-            logger.error(msg)
-            context["generate_success"] = False
-            context["error"] = msg
+class DownloadTableView(ViewLoggerMixin, View):
+    """
+    View that serves the respective `InstitutionPatientTables` CSV file.
+    """
+    def get(self, request, relative_path):
+        """Get correct table and render download response."""
+        _table = get_object_or_404(
+            InstitutionPatientTable, file=relative_path
+        )
+        if not request.user.is_authenticated:
+            return HttpResponseForbidden()
 
-        except Exception as err:
-            logger.error(err)
-            context["generate_success"] = False
-            context["error"] = err
+        absolute_path = f"{settings.DOWNLOADS_ROOT}/{relative_path}"
 
-    context["download_available"] = Path(download_file_path).is_file()
-    return render(request, "patients/download.html", context)
+        with open(absolute_path, 'r') as csv_table:
+            response = FileResponse(csv_table, as_attachment=True)
+
+        return response
 
 
 # TUMOR related views
