@@ -28,7 +28,10 @@ jobs:
           python manage.py migrate --noinput
           python manage.py import ~/lydata.private/2021-usz-oropharynx/data.csv roman.ludwig@usz.ch
           python manage.py import ~/lydata.private/2021-clb-oropharynx/data.csv vincent.gregoire@lyon.unicancer.fr
+          python manage.py makedownloadfiles
           python manage.py collectstatic --noinput
           sudo chown rmnldwg:www-data db.sqlite3
           chmod 664 db.sqlite3
+          sudo chown -R rmnldwg:www-data media
+          find media/* -type f -exec chmod 664 {} \;
           sudo service apache2 restart
