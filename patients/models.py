@@ -476,11 +476,11 @@ for lnl in Diagnose.LNLs:
 
 class InstitutionPatientTable(ModelLoggerMixin, models.Model):
     """
-    Model that has a `FileField` storing the CSV table of patients from a
+    Model that has a ``FileField`` storing the CSV table of patients from a
     particular institution. This model is only needed to prohibit users that
     are not authenticated from downloading hidden datasets (i.e. `Patient`
-    objects belonging to a `accounts.models.Institution` where `is_hidden` is
-    set to `True`).
+    objects belonging to a `accounts.models.Institution` where ``is_hidden`` is
+    set to ``True``).
     """
 
     def get_file_path(instance, _filename):
