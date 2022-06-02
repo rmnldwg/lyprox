@@ -13,6 +13,7 @@ import io
 import logging
 
 from django.core.management.base import BaseCommand, CommandError
+from django.utils import timezone
 
 from patients.ioports import export_to_pandas
 from accounts.models import Institution
@@ -58,6 +59,7 @@ class Command(BaseCommand):
                     )
                 else:
                     csv_table = csv_table_qs.first()
+                csv_table.date_created = timezone.now()
                 csv_table.file.save("tmp.csv", buffer)
             except Exception as exc:
                 logger.error(exc)
