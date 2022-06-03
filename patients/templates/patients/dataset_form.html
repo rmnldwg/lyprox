@@ -13,13 +13,117 @@
                 <div class="box">
                     <form action="{% url 'patients:upload' %}" method="post" enctype="multipart/form-data">
                         {% csrf_token %}
-                        {{ form.as_p }}
-                        <button class="button" type="submit">Submit</button>
+                        <div class="block">
+                            <p class="title is-3">Upload Dataset</p>
+                            <p>
+                                Upload a CSV file and fill in some basic metadata. If
+                                the dataset can be found in an open repository, feel
+                                free to add the link to it as well.
+                            </p>
+                            {% if form.non_field_errors %}
+                            <p class="notification is-danger is-light">
+                                {{ form.non_field_errors }}
+                            </p>
+                            {% endif %}
+        
+                            {% if error %}
+                            <p class="notification is-danger is-light">
+                                {{ error }}
+                            </p>
+                            {% endif %}
+                        </div>
+                        <div class="block">
+                            <div class="field is-grouped">
+                                <div class="control is-expanded">
+                                    <label for="{{ form.name.if_for_label }}" class="label">
+                                        {{ form.name.label }}
+                                    </label>
+                                    {{ form.name }}
+                                    {% if form.errors.name %}
+                                    <small class="help is-danger">{{ form.errors.name }}</small>
+                                    {% endif %}
+                                </div>
+                                <div class="control">
+                                    <label for="{{ form.is_hidden.id_for_label }}" class="label">
+                                        Hide data?
+                                    </label>
+                                    <div class="select">
+                                        {{ form.is_hidden }}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="field">
+                                <div class="control">
+                                    <label for="{{ form.description.if_for_label }}" class="label">
+                                        {{ form.description.label }}
+                                    </label>
+                                    {{ form.description }}
+                                    {% if form.errors.description %}
+                                    <small class="help is-danger">{{ form.errors.description }}</small>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="field is-grouped">
+                                <div class="control">
+                                    <label for="{{ form.repo_provider.if_for_label }}" class="label">
+                                        {{ form.repo_provider.label }} <span class="has-text-info">(optional)</span>
+                                    </label>
+                                    {{ form.repo_provider }}
+                                </div>
+                                <div class="control is-expanded">
+                                    <label for="{{ form.repo_url.if_for_label }}" class="label">
+                                        {{ form.repo_url.label }} <span class="has-text-info">(optional)</span>
+                                    </label>
+                                    {{ form.repo_url }}
+                                    {% if form.errors.repo_url %}
+                                    <small class="help is-danger">{{ form.errors.repo_url }}</small>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="block">
+                            <div class="field is-grouped">
+                                <div class="control">
+                                    <div class="file" id="file-upload">
+                                        <label class="file-label">
+                                            {{ form.csv_file }}
+                                            <span class="file-cta">
+                                                <span class="file-icon">
+                                                    <i class="fas fa-folder-open"></i>
+                                                </span>
+                                                <span class="file-label" id="file-label-text">
+                                                    Choose CSV table...
+                                                </span>
+                                            </span>
+                                        </label>
+                                    </div>
+                                </div>
+                                <button class="button is-primary" type="submit">
+                                    <span class="icon">
+                                        <i class="fas fa-cloud-upload-alt"></i>
+                                    </span>
+                                    <span>Upload</span>
+                                </button>
+                            </div>
+                            {% if form.errors.csv_file %}
+                            <small class="help is-danger">{{ form.errors.csv_file }}</small>
+                            {% endif %}
+                        </div>
                     </form>
                 </div>
             </div>
         </div>
     </div>
 </section>
+
+<script>
+    const fileInput = document.querySelector('#file-upload input[type=file]');
+    fileInput.onchange = () => {
+        if (fileInput.files.length > 0) {
+            const fileName = document.querySelector('#file-upload #file-label-text');
+            fileName.textContent = fileInput.files[0].name;
+        }
+    };
+</script>
 
 {% endblock content %}

@@ -82,9 +82,15 @@ class Dataset(ModelLoggerMixin, models.Model):
     is_hidden = models.BooleanField(default=True)
     """Indicates if the dataset should be hidden to unauthenticated users."""
 
-    repo_provider = models.CharField(max_length=128, blank=True, null=True)
+    repo_provider = models.CharField(
+        verbose_name="Repository Provider", 
+        max_length=128, blank=True, null=True
+    )
     """Name of the repository provider, e.g. GitHub (optional)."""
-    repo_url = models.URLField(blank=True, null=True)
+    repo_url = models.URLField(
+        verbose_name="Link to Repository", 
+        blank=True, null=True
+    )
     """URL to the repository, e.g. a DOI identifier (optional)."""
 
     institution = models.ForeignKey(

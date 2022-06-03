@@ -13,8 +13,9 @@ from typing import Any, Dict
 
 import pandas
 from django import forms
-from django.core.exceptions import ValidationError
+from django.db import IntegrityError
 from django.forms import widgets
+from accounts.models import Institution
 
 from core.loggers import FormLoggerMixin
 
@@ -37,6 +38,57 @@ class DatasetForm(FormLoggerMixin, forms.ModelForm):
             "repo_provider",
             "repo_url",
         ]
+        widgets = {
+            "name": widgets.TextInput(
+                attrs={
+                    "class": "input", 
+                    "placeholder": "e.g. lyDATA"
+                }
+            ),
+            "description": widgets.TextInput(
+                attrs={
+                    "class": "textarea", 
+                    "placeholder": "A brief description of your dataset"
+                }
+            ),
+            "csv_file": widgets.FileInput(attrs={"class": "file-input"}),
+            "is_hidden": widgets.Select(
+                attrs={"class": "select"},
+                choices=[(True, "yes"), (False, "no")],
+            ),
+            "repo_provider": widgets.TextInput(
+                attrs={
+                    "class": "input", 
+                    "placeholder": "e.g. GitHub (optional)"
+                }
+            ),
+            "repo_url": widgets.TextInput(
+                attrs={
+                    "class": "input", 
+                    "placeholder": "a link to the data repository (optional)"
+                }
+            ),
+        }
+
+    def __init__(self, *args, **kwargs):
+        user = kwargs.pop("user")
+        self.user = user
+        super().__init__(*args, **kwargs)
+
+    def save(self, commit=True):
+        """Get the institution from the user."""
+        dataset = super(DatasetForm, self).save(commit=False)
+        dataset.institution = self.user.institution
+
+        if commit:
+            try:
+                dataset.save()
+            except IntegrityError as int_err:
+                raise forms.ValidationError(
+                    "Data was already uploaded."
+                ) from int_err
+
+        return dataset
 
 
 class PatientForm(FormLoggerMixin, forms.ModelForm):
@@ -208,7 +260,7 @@ class TumorForm(FormLoggerMixin, forms.ModelForm):
         """Process the input for volume size."""
         volume = self.cleaned_data["volume"]
         if volume is not None and volume < 0.:
-            raise ValidationError("volume must be a positive number.")
+            raise forms.ValidationError("volume must be a positive number.")
         return volume
 
     def save(self, commit=True):
@@ -276,7 +328,7 @@ class DataFileForm(FormLoggerMixin, forms.Form):
     number of patients at once.
     """
     data_file = forms.FileField(
-        widget=forms.widgets.FileInput(attrs={"class": "file-input"})
+        widget=widgets.FileInput(attrs={"class": "file-input"})
     )
 
     def clean(self) -> Dict[str, Any]:
@@ -289,7 +341,7 @@ class DataFileForm(FormLoggerMixin, forms.Form):
         if suffix != "csv":
             msg = "Uploaded file is not a CSV table."
             self.logger.warning(msg)
-            raise ValidationError(msg)
+            raise forms.ValidationError(msg)
 
         try:
             data_frame = pandas.read_csv(

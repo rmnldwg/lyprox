@@ -166,10 +166,12 @@ class UpdatePatientView(ViewLoggerMixin,
         return kwargs
 
 
-class DeletePatientView(ViewLoggerMixin,
-                        LoginRequiredMixin,
-                        InstitutionCheckPatientMixin,
-                        generic.DeleteView):
+class DeletePatientView(
+    ViewLoggerMixin,
+    LoginRequiredMixin,
+    InstitutionCheckPatientMixin,
+    generic.DeleteView
+):
     """Remove this patient from the database."""
     model = Patient
     template_name = "patients/patient_delete.html"  #:
@@ -190,50 +192,8 @@ class CreateDatasetView(
 
     def get_form_kwargs(self) -> Dict[str, Any]:
         kwargs = super().get_form_kwargs()
-        kwargs["files"] = self.request.FILES
+        kwargs["user"] = self.request.user
         return kwargs
-
-
-@login_required
-def upload_patients(request):
-    """
-    View to load many patients at once from a CSV file using pandas. This
-    requires the CSV file to be formatted in a certain way.
-    """
-    if request.method == "POST":
-        form = DataFileForm(request.POST, request.FILES)
-
-        # custom validator creates pandas DataFrame from uploaded CSV
-        if form.is_valid():
-            data_frame = form.cleaned_data["data_frame"]
-            # creating patients from the resulting pandas DataFrame
-            try:
-                num_new, num_skipped = import_from_pandas(data_frame, request.user)
-            except ParsingError as parse_err:
-                logger.error(parse_err)
-                form = DataFileForm()
-                context = {
-                    "upload_success": False,
-                    "form": form,
-                    "error": parse_err
-                }
-                return render(request, "patients/upload.html", context)
-
-            context = {
-                "upload_success": True,
-                "num_new": num_new,
-                "num_skipped": num_skipped
-            }
-            return render(request, "patients/upload.html", context)
-
-    else:
-        form = DataFileForm()
-
-    context = {
-        "upload_succes": False,
-        "form": form
-    }
-    return render(request, "patients/upload.html", context)
 
 
 class DatasetListView(ViewLoggerMixin, generic.ListView):
@@ -263,7 +223,7 @@ class DatasetView(ViewLoggerMixin, View):
     def get(self, request, relative_path):
         """Get correct table and render download response."""
         dataset = get_object_or_404(
-            Dataset, file=relative_path
+            Dataset, csv_file=relative_path
         )
         if dataset.is_hidden and not request.user.is_authenticated:
             return HttpResponseForbidden()
