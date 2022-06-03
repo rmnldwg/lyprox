@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block head %}
+{% include 'head.html' with title="LyProX · Upload Dataset" %}
+{% endblock head %}
+
+{% block content %}
+
+<section class="section">
+    <div class="container">
+        <div class="block columns is-centered">
+            <div class="column is-6">
+                <div class="box">
+                    <form action="{% url 'patients:upload' %}" method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        {{ form.as_p }}
+                        <button class="button" type="submit">Submit</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock content %}

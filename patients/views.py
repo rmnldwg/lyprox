@@ -27,7 +27,7 @@ from dashboard import query
 from dashboard.forms import DashboardForm
 
 from .filters import PatientFilter
-from .forms import DataFileForm, DiagnoseForm, PatientForm, TumorForm
+from .forms import DataFileForm, DiagnoseForm, PatientForm, TumorForm, DatasetForm
 from .ioports import ParsingError, export_to_pandas, import_from_pandas
 from .mixins import InstitutionCheckObjectMixin, InstitutionCheckPatientMixin
 from .models import Diagnose, Patient, Tumor, Dataset
@@ -175,6 +175,23 @@ class DeletePatientView(ViewLoggerMixin,
     template_name = "patients/patient_delete.html"  #:
     success_url = "/patients"  #:
     action = "delete_patient"  #:
+
+
+class CreateDatasetView(
+    ViewLoggerMixin,
+    LoginRequiredMixin,
+    generic.CreateView
+):
+    """Create a dataset from a form."""
+    model = Dataset
+    form_class = DatasetForm
+    template_name = "patients/dataset_form.html"
+    success_url = "/patients/download"
+
+    def get_form_kwargs(self) -> Dict[str, Any]:
+        kwargs = super().get_form_kwargs()
+        kwargs["files"] = self.request.FILES
+        return kwargs
 
 
 @login_required

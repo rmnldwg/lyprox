@@ -15,6 +15,7 @@ download CSV tables with patient of a particular institution's cohort.
 # pylint: disable=no-member
 # pylint: disable=logging-fstring-interpolation
 
+import os
 from collections import namedtuple
 import hashlib
 import pandas as pd
@@ -27,6 +28,7 @@ from django.core.validators import FileExtensionValidator
 
 from accounts.models import Institution
 from core.loggers import ModelLoggerMixin
+import patients.ioports as io
 
 
 class RobustDateField(models.DateField):
@@ -44,6 +46,19 @@ class RobustDateField(models.DateField):
         return super().to_python(value)
 
 
+def get_filepath(instance, _filename):
+    """Compile the filepath for a given dataset (``instance``)."""
+    filepath = "csv_tables/"
+    filepath += instance.upload_date.strftime("%Y-%m-%d") + "_"
+    # filepath += instance.institution.shortname.lower() + "_"
+    filepath += instance.name + ".csv"
+
+    if os.path.exists(filepath):
+        os.remove(filepath)
+
+    return filepath
+
+
 class Dataset(ModelLoggerMixin, models.Model):
     """
     Model that represents a dataset as it was provided by the source. This
@@ -51,15 +66,6 @@ class Dataset(ModelLoggerMixin, models.Model):
     important metadata. It also serves as an interface between CSV and the SQL
     database.
     """
-    @staticmethod
-    def get_filepath(instance, _filename):
-        """Compile the filepath for a given dataset (``instance``)."""
-        filepath = "csv_tables/"
-        filepath += instance.upload_date.strftime("%Y-%m-%d") + "_"
-        filepath += instance.institution.shortname.lower() + "_"
-        filepath += instance.name
-        return filepath + ".csv"
-
     name = models.CharField(max_length=128)
     """Name of the dataset."""
     description = models.TextField()
@@ -71,7 +77,7 @@ class Dataset(ModelLoggerMixin, models.Model):
         validators=[FileExtensionValidator(allowed_extensions=["csv"])]
     )
     """The actual CSV file, stored inside ``settings.MEDIA_ROOT/...``."""
-    md5_hash = models.BinaryField(unique=True)
+    md5_hash = models.BinaryField(unique=True, )
     """MD5 hash of the CSV file to prevent duplicates."""
     is_hidden = models.BooleanField(default=True)
     """Indicates if the dataset should be hidden to unauthenticated users."""
@@ -87,18 +93,44 @@ class Dataset(ModelLoggerMixin, models.Model):
     """The institution that provided the dataset."""
 
     def save(self, *args, **kwargs):
-        """Assign the MD5 hash of the data to the `md5_hash` field."""
-        with open(self.csv_file, "rb") as binary_data:
-            self.md5_hash = hashlib.md5(binary_data)
-        return super().save(*args, **kwargs)
+        """Assign the MD5 hash of the data to the `md5_hash` field and load the
+        CSV table into ."""
+        md5_hash = hashlib.md5()
+        for chunk in iter(lambda: self.csv_file.read(4096), b""):
+            md5_hash.update(chunk)
+        self.md5_hash = md5_hash.digest()
+
+        tmp = super().save(*args, **kwargs)
+        self.to_db()
+        return tmp
+
+    def to_db(self):
+        """
+        Import data from CSV file into database.
+        """
+        self.csv_file.open('r')
+        table = pd.read_csv(self.csv_file, header=[0,1,2])
+        n_new, n_skip = io.import_from_pandas(table=table, dataset=self)
+        self.logger.info(
+            f"{n_new} patients from dataset {self} added to database, "
+            f"{n_skip} entries skipped"
+        )
 
     def to_pandas(self) -> pd.DataFrame:
         """
         Export `Patient` objects belonging to this `Dataset` from the Django
         database to a `pandas.DataFrame`.
         """
-        # TODO
-        pass
+        patients = Patient.objects.all().filter(dataset=self)
+        return io.export_to_pandas(patients)
+
+    def to_csv(self, filepath):
+        """
+        Export `Patient` objects belonging to this `Dataset` from the Django
+        database first to a `pandas.DataFrame` and then save that as CSV file.
+        """
+        patients_table = self.to_pandas()
+        patients_table.to_csv(filepath, index=None)
 
 
 class Patient(ModelLoggerMixin, models.Model):
@@ -173,7 +205,7 @@ class Patient(ModelLoggerMixin, models.Model):
     """Indicates whether or not there are distant metastases."""
 
     dataset = models.ForeignKey(
-        Dataset, blank=True, on_delete=models.CASCADE
+        Dataset, blank=True, null=True, on_delete=models.CASCADE
     )
     """A newly created patient should be assigned to a dataset."""
 
@@ -181,7 +213,7 @@ class Patient(ModelLoggerMixin, models.Model):
         """Report some patient specifics."""
         return (
             f"#{self.pk}: {self.sex} ({self.age}) from "
-            f"{self.dataset.institution.shortname}"
+            f"{self.dataset.name}"
         )
 
     def get_absolute_url(self):

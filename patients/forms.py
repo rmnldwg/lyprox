@@ -19,7 +19,24 @@ from django.forms import widgets
 from core.loggers import FormLoggerMixin
 
 from .ioports import compute_hash
-from .models import Diagnose, Institution, Patient, Tumor
+from .models import Diagnose, Dataset, Patient, Tumor
+
+
+class DatasetForm(FormLoggerMixin, forms.ModelForm):
+    """
+    Form to create and edit datasets, based on their model definition.
+    """
+    class Meta:
+        """The underlying model."""
+        model = Dataset
+        fields = [
+            "name",
+            "description",
+            "csv_file",
+            "is_hidden",
+            "repo_provider",
+            "repo_url",
+        ]
 
 
 class PatientForm(FormLoggerMixin, forms.ModelForm):
@@ -149,9 +166,11 @@ class PatientForm(FormLoggerMixin, forms.ModelForm):
     def _get_identifier(self, cleaned_data):
         """Compute the hashed undique identifier from fields that are of
         provacy concern."""
-        hash_value = compute_hash(cleaned_data["first_name"],
-                                  cleaned_data["last_name"],
-                                  cleaned_data["birthday"])
+        hash_value = compute_hash(
+            cleaned_data["first_name"],
+            cleaned_data["last_name"],
+            cleaned_data["birthday"]
+        )
         cleaned_data.pop("first_name")
         cleaned_data.pop("last_name")
         return hash_value, cleaned_data
@@ -288,11 +307,3 @@ class DataFileForm(FormLoggerMixin, forms.Form):
 
         cleaned_data["data_frame"] = data_frame
         return cleaned_data
-
-
-class InsitutionForm(FormLoggerMixin, forms.Form):
-    """
-    Form for creating an institution. This is not yet in use or even functional.
-    """
-    class Meta:
-        model = Institution
