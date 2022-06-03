@@ -59,7 +59,7 @@ def patient_specific(
     nicotine_abuse: Optional[bool] = None,
     hpv_status: Optional[bool] = None,
     neck_dissection: Optional[bool] = None,
-    institution__in: Optional[Institution] = None,
+    dataset__institution__in: Optional[Institution] = None,
     **rest
 ) -> QuerySet:
     """Filter ``QuerySet`` of patients based on patient-specific properties.
@@ -367,7 +367,7 @@ def count_patients(
     patients = patient_queryset.values(
         "id", "sex", "nicotine_abuse", "hpv_status", "neck_dissection",
         "tumor__subsite", "tumor__t_stage", "tumor__central", "tumor__extension",
-        "institution__id",
+        "dataset__institution__id",
     )
 
     # get a QuerySet of all institutions
@@ -398,7 +398,7 @@ def count_patients(
 
     # loop through patients to populate the counts dictionary
     for patient in patients:
-        counts['institutions'][patient["institution__id"]-1] += 1
+        counts['institutions'][patient["dataset__institution__id"]-1] += 1
 
         # PATIENT specific counts
         counts['nicotine_abuse'] += tf2arr(patient["nicotine_abuse"])

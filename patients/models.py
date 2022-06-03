@@ -94,7 +94,7 @@ class Dataset(ModelLoggerMixin, models.Model):
     """URL to the repository, e.g. a DOI identifier (optional)."""
 
     institution = models.ForeignKey(
-        Institution, null=True, on_delete=models.SET_NULL
+        Institution, on_delete=models.CASCADE
     )
     """The institution that provided the dataset."""
 
@@ -211,7 +211,7 @@ class Patient(ModelLoggerMixin, models.Model):
     """Indicates whether or not there are distant metastases."""
 
     dataset = models.ForeignKey(
-        Dataset, blank=True, null=True, on_delete=models.CASCADE
+        Dataset, on_delete=models.CASCADE
     )
     """A newly created patient should be assigned to a dataset."""
 

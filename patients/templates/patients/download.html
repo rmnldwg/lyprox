@@ -37,23 +37,23 @@
                             <div class="media-content">
                                 <div class="content">
                                     <p>
-                                        <strong>{{ dataset.name }}</strong>
-                                        <span class="icon-text">
-                                            <span class="icon">
-                                                <i class="fas fa-at"></i>
+                                        <small>
+                                            <strong>{{ dataset.name | upper }}</strong>
+                                            <span class="icon-text">
+                                                <span class="icon">
+                                                    <i class="fas fa-map-marker-alt"></i>
+                                                </span>
+                                                <span>{{ dataset.institution.shortname }}, {{ dataset.institution.city }}, {{ dataset.institution.country }}</span>
                                             </span>
-                                            <span>{{ dataset.institution.shortname }}</span>
-                                        </span>
-                                        <span class="icon-text">
-                                            <span class="icon">
-                                                <i class="fas fa-map-marker-alt"></i>
+                                            <span class="icon-text">
+                                                <span class="icon">
+                                                    <i class="fas fa-calendar-alt"></i>
+                                                </span>
+                                                <span>{{ dataset.upload_date }}</span>
                                             </span>
-                                            <span>{{ dataset.institution.city }}, {{ dataset.institution.country }}</span>
-                                        </span>
-                                        
-                                        <small>{{ dataset.date_created | date:"Y/m/j" }}</small>
+                                        </small>
                                         <br>
-                                        Cohort of {{ dataset.num_patients }} patients from the {{ dataset.institution.name }}, exported from the database on {{ dataset.date_created | date:"F jS, Y" }}
+                                        {{ dataset.description }}
                                         <br>
                                     </p>
                                 </div>
