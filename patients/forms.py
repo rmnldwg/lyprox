@@ -27,14 +27,16 @@ class DatasetForm(FormLoggerMixin, forms.ModelForm):
     """
     Form to create and edit datasets, based on their model definition.
     """
+    initial = {
+        "is_public": False,
+    }
     class Meta:
         """The underlying model."""
         model = Dataset
         fields = [
             "name",
             "description",
-            "csv_file",
-            "is_hidden",
+            "is_public",
             "repo_provider",
             "repo_url",
         ]
@@ -51,8 +53,7 @@ class DatasetForm(FormLoggerMixin, forms.ModelForm):
                     "placeholder": "A brief description of your dataset"
                 }
             ),
-            "csv_file": widgets.FileInput(attrs={"class": "file-input"}),
-            "is_hidden": widgets.Select(
+            "is_public": widgets.Select(
                 attrs={"class": "select"},
                 choices=[(True, "yes"), (False, "no")],
             ),
@@ -69,6 +70,16 @@ class DatasetForm(FormLoggerMixin, forms.ModelForm):
                 }
             ),
         }
+
+    csv_file = forms.FileField(
+        required=True, 
+        widget=widgets.FileInput(
+            attrs={
+                "class": "file-input",
+                "type": "file"
+            }
+        )
+    )
 
     def __init__(self, *args, **kwargs):
         user = kwargs.pop("user")
@@ -114,7 +125,8 @@ class PatientForm(FormLoggerMixin, forms.ModelForm):
             "neck_dissection",
             "tnm_edition",
             "n_stage",
-            "m_stage"
+            "m_stage",
+            "dataset"
         ]
         widgets = {
             "sex": widgets.Select(attrs={"class": "select"}),
@@ -148,7 +160,8 @@ class PatientForm(FormLoggerMixin, forms.ModelForm):
             ),
             "tnm_edition": widgets.NumberInput(attrs={"class": "input"}),
             "n_stage": widgets.Select(attrs={"class": "select"}),
-            "m_stage": widgets.Select(attrs={"class": "select"})
+            "m_stage": widgets.Select(attrs={"class": "select"}),
+            "dataset": widgets.Select(attrs={"class": "select"}),
         }
 
     def __init__(self, *args, **kwargs):
@@ -175,7 +188,6 @@ class PatientForm(FormLoggerMixin, forms.ModelForm):
 
         patient.hash_value = self.cleaned_data["hash_value"]
         patient.age = self._compute_age()
-        patient.institution = self.user.institution
 
         if commit:
             patient.save()

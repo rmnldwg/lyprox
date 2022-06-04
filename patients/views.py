@@ -211,7 +211,7 @@ class DatasetListView(ViewLoggerMixin, generic.ListView):
         user = self.request.user
 
         if not user.is_authenticated:
-            queryset = queryset.filter(is_hidden=False)
+            queryset = queryset.filter(is_public=True)
 
         return queryset
 

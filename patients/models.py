@@ -25,6 +25,7 @@ from django.db import models
 from django.urls import reverse
 from django.utils import timezone
 from django.core.validators import FileExtensionValidator
+from django.core.exceptions import ValidationError
 
 from accounts.models import Institution
 from core.loggers import ModelLoggerMixin
@@ -49,7 +50,7 @@ class RobustDateField(models.DateField):
 def get_filepath(instance, _filename):
     """Compile the filepath for a given dataset (``instance``)."""
     filepath = "csv_tables/"
-    filepath += instance.upload_date.strftime("%Y-%m-%d") + "_"
+    filepath += instance.create_date.strftime("%Y-%m-%d") + "_"
     # filepath += instance.institution.shortname.lower() + "_"
     filepath += instance.name + ".csv"
 
@@ -70,21 +71,26 @@ class Dataset(ModelLoggerMixin, models.Model):
     """Name of the dataset."""
     description = models.TextField()
     """A brief description of the dataset."""
-    upload_date = models.DateField(default=timezone.now)
+    create_date = models.DateField(default=timezone.now)
     """Date when the dataset was uploaded."""
     csv_file = models.FileField(
         upload_to=get_filepath, 
-        validators=[FileExtensionValidator(allowed_extensions=["csv"])]
+        validators=[FileExtensionValidator(allowed_extensions=["csv"])],
+        null=True, blank=True,
     )
-    """The actual CSV file, stored inside ``settings.MEDIA_ROOT/...``."""
-    md5_hash = models.BinaryField(unique=True, )
+    """The actual CSV file, stored inside ``settings.MEDIA_ROOT/...``. Must be
+    provided to the `DatasetForm` in the `CreateDatasetView`, but for datasets
+    that are added one patient at a time through the interface, it can be left
+    empty in the database."""
+    md5_hash = models.BinaryField(unique=True, null=True)
     """MD5 hash of the CSV file to prevent duplicates."""
-    is_hidden = models.BooleanField(default=True)
-    """Indicates if the dataset should be hidden to unauthenticated users."""
+    is_public = models.BooleanField(default=False)
+    """Indicates if the dataset can be accessed by unauthenticated users."""
 
     repo_provider = models.CharField(
         verbose_name="Repository Provider", 
-        max_length=128, blank=True, null=True
+        max_length=128, 
+        blank=True, null=True
     )
     """Name of the repository provider, e.g. GitHub (optional)."""
     repo_url = models.URLField(
@@ -97,6 +103,11 @@ class Dataset(ModelLoggerMixin, models.Model):
         Institution, on_delete=models.CASCADE
     )
     """The institution that provided the dataset."""
+
+    def __str__(self):
+        year = self.create_date.strftime("%Y")
+        inst_short = self.institution.shortname
+        return f"{year}-{inst_short}-{self.name}"
 
     def save(self, *args, **kwargs):
         """Assign the MD5 hash of the data to the `md5_hash` field and load the

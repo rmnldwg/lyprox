@@ -207,8 +207,8 @@ class DashboardForm(FormLoggerMixin, forms.Form):
             attrs={"class": "checkbox is-hidden",
                    "onchange": "changeHandler();"}
         ),
-        queryset=Institution.objects.all().filter(is_hidden=False),
-        initial=Institution.objects.all().filter(is_hidden=False)
+        queryset=Institution.objects.all(),
+        initial=Institution.objects.all()
     )
 
     # tumor specific info
