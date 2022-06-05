@@ -16,6 +16,7 @@ download CSV tables with patient of a particular institution's cohort.
 # pylint: disable=logging-fstring-interpolation
 
 import os
+from io import StringIO
 from collections import namedtuple
 import hashlib
 import pandas as pd
@@ -25,11 +26,15 @@ from django.db import models
 from django.urls import reverse
 from django.utils import timezone
 from django.core.validators import FileExtensionValidator
-from django.core.exceptions import ValidationError
+from django.core.files.base import ContentFile
+from django.conf import settings
 
 from accounts.models import Institution
 from core.loggers import ModelLoggerMixin
 import patients.ioports as io
+
+
+CSV_TABLE_FOLDER = "csv_tables"
 
 
 class RobustDateField(models.DateField):
@@ -47,17 +52,29 @@ class RobustDateField(models.DateField):
         return super().to_python(value)
 
 
-def get_filepath(instance, _filename):
-    """Compile the filepath for a given dataset (``instance``)."""
-    filepath = "csv_tables/"
-    filepath += instance.create_date.strftime("%Y-%m-%d") + "_"
-    # filepath += instance.institution.shortname.lower() + "_"
-    filepath += instance.name + ".csv"
+class DatasetIsLocked(Exception):
+    """Indicates that a locked dataset cannot be changed."""
+    pass
 
-    if os.path.exists(filepath):
-        os.remove(filepath)
 
-    return filepath
+def compute_md5_hash(file):
+    """Compute the MD5 hash of a file."""
+    with file.open("r") as f:
+        md5_hash = hashlib.md5(f.read().encode("utf-8"))
+    return md5_hash.digest()
+
+
+def get_filepath(instance, filename) -> str:
+    """Compile the filepath for storing the CSV file."""
+    full_dirpath = os.path.join(settings.MEDIA_ROOT, CSV_TABLE_FOLDER)
+    os.makedirs(full_dirpath, exist_ok=True)
+    full_filepath = os.path.join(full_dirpath, instance.filename)
+
+    if os.path.exists(full_filepath):
+        os.remove(full_filepath)
+
+    rel_filepath = CSV_TABLE_FOLDER + "/" + instance.filename
+    return rel_filepath
 
 
 class Dataset(ModelLoggerMixin, models.Model):
@@ -74,7 +91,7 @@ class Dataset(ModelLoggerMixin, models.Model):
     create_date = models.DateField(default=timezone.now)
     """Date when the dataset was uploaded."""
     csv_file = models.FileField(
-        upload_to=get_filepath, 
+        upload_to=get_filepath,
         validators=[FileExtensionValidator(allowed_extensions=["csv"])],
         null=True, blank=True,
     )
@@ -88,13 +105,13 @@ class Dataset(ModelLoggerMixin, models.Model):
     """Indicates if the dataset can be accessed by unauthenticated users."""
 
     repo_provider = models.CharField(
-        verbose_name="Repository Provider", 
-        max_length=128, 
+        verbose_name="Repository Provider",
+        max_length=128,
         blank=True, null=True
     )
     """Name of the repository provider, e.g. GitHub (optional)."""
     repo_url = models.URLField(
-        verbose_name="Link to Repository", 
+        verbose_name="Link to Repository",
         blank=True, null=True
     )
     """URL to the repository, e.g. a DOI identifier (optional)."""
@@ -109,24 +126,60 @@ class Dataset(ModelLoggerMixin, models.Model):
         inst_short = self.institution.shortname
         return f"{year}-{inst_short}-{self.name}"
 
-    def save(self, *args, **kwargs):
+    @property
+    def filename(self):
+        """Compile filename from fields."""
+        return (
+            self.create_date.strftime("%Y-%m-%d") + "_"
+            + self.institution.shortname.lower() + "_"
+            + self.name + ".csv"
+        )
+
+    @property
+    def is_locked(self) -> bool:
+        """
+        Check whether the database is completed and should not be edited
+        anymore. This check also includes re-exporting the CSV file from the
+        database if, e.g., it has been deleted.
+        """
+        if self.md5_hash is None:
+            return False
+
+        if self.csv_file is None:
+            self.to_csv()
+
+        if self.md5_hash == compute_md5_hash(self.csv_file):
+            return True
+        else:
+            self.logger.warning(f"File and MD5 hash of {self} don't match.")
+            return False
+
+    def lock(self):
+        """
+        Lock a dataset by computing its MD5 hash for the patients in the
+        database associated with this dataset.
+        """
+        self.to_csv()
+        self.md5_hash = compute_md5_hash(self.csv_file)
+        self.save(override=True)
+
+    def save(self, *args, override=False, **kwargs):
         """Assign the MD5 hash of the data to the `md5_hash` field and load the
         CSV table into ."""
-        md5_hash = hashlib.md5()
-        for chunk in iter(lambda: self.csv_file.read(4096), b""):
-            md5_hash.update(chunk)
-        self.md5_hash = md5_hash.digest()
+        if self.is_locked and not override:
+            msg = "Cannot edit locked dataset."
+            self.logger.error(msg)
+            raise DatasetIsLocked(msg)
 
-        tmp = super().save(*args, **kwargs)
-        self.to_db()
-        return tmp
+        return super().save(*args, **kwargs)
 
     def to_db(self):
         """
         Import data from CSV file into database.
         """
-        self.csv_file.open('r')
-        table = pd.read_csv(self.csv_file, header=[0,1,2])
+        with self.csv_file.open('r') as csv_file:
+            table = pd.read_csv(csv_file, header=[0,1,2])
+
         n_new, n_skip = io.import_from_pandas(table=table, dataset=self)
         self.logger.info(
             f"{n_new} patients from dataset {self} added to database, "
@@ -141,13 +194,17 @@ class Dataset(ModelLoggerMixin, models.Model):
         patients = Patient.objects.all().filter(dataset=self)
         return io.export_to_pandas(patients)
 
-    def to_csv(self, filepath):
+    def to_csv(self):
         """
         Export `Patient` objects belonging to this `Dataset` from the Django
         database first to a `pandas.DataFrame` and then save that as CSV file.
         """
         patients_table = self.to_pandas()
-        patients_table.to_csv(filepath, index=None)
+        with StringIO() as buffer:
+            patients_table.to_csv(buffer, index=None)
+            csv_file = ContentFile(buffer.getvalue().encode("utf-8"))
+
+        self.csv_file.save(self.filename, csv_file)
 
 
 class Patient(ModelLoggerMixin, models.Model):
@@ -269,6 +326,22 @@ class Patient(ModelLoggerMixin, models.Model):
             f"T-stage of patient {self} updated to "
             f"{self.get_stage_prefix_display()}{self.get_t_stage_display()}."
         )
+
+    def save(self, *args, **kwargs):
+        """Make sure patient is not added to locked dataset."""
+        if self.dataset.is_locked:
+            raise DatasetIsLocked("Cannot add patient to locked dataset.")
+
+        return super().save(*args, **kwargs)
+
+    def delete(self, *args, **kwargs):
+        """Block deletion if dataset is locked."""
+        if self.dataset.is_locked:
+            msg = "Cannot delete patient if dataset is locked."
+            self.logger.error(msg)
+            raise DatasetIsLocked(msg)
+        
+        return super().delete(*args, **kwargs)
 
 
 class Tumor(ModelLoggerMixin, models.Model):
@@ -412,6 +485,11 @@ class Tumor(ModelLoggerMixin, models.Model):
         tumor from the specified subsite and update the patient it is assigned
         to, to the correct T-stage.
         """
+        if self.patient.dataset.is_locked:
+            msg = "Cannot edit tumor of patient in locked dataset"
+            self.logger.error(msg)
+            raise DatasetIsLocked(msg)
+
         # Automatically extract location from subsite
         subsite_dict = dict(self.SUBSITES)
         location_list = self.Locations.values
@@ -429,15 +507,23 @@ class Tumor(ModelLoggerMixin, models.Model):
                 f"({self}) subsite ({self.get_subsite_display()})"
             )
 
-        tmp_return = super(Tumor, self).save(*args, **kwargs)
+        tmp = super(Tumor, self).save(*args, **kwargs)
 
         # call patient's `update_t_stage` method
         self.patient.update_t_stage()
 
-        return tmp_return
+        return tmp
 
     def delete(self, *args, **kwargs):
-        """Upon deletion, update the patient's T-stage."""
+        """
+        Block if patient's dataset is locked. And upon deletion, update the
+        patient's T-stage.
+        """
+        if self.patient.dataset.is_locked:
+            msg = "Cannot delete tumor of patient in locked dataset"
+            self.logger.error(msg)
+            raise DatasetIsLocked(msg)
+
         patient = self.patient
         tmp = super(Tumor, self).delete(*args, **kwargs)
         patient.update_t_stage()
@@ -544,12 +630,20 @@ class Diagnose(ModelLoggerMixin, models.Model):
 
     def save(self, *args, **kwargs):
         """
-        Make sure LNLs and their sublevels (e.g. 'a' and 'b') are treated
+        Frist, check that the dataset the respective patient belongs to is not
+        locked.
+
+        Then make sure LNLs and their sublevels (e.g. 'a' and 'b') are treated
         consistelntly. E.g. when sublevel ``Ia`` is reported to be involved,
         the involvement status of level ``I`` cannot be reported as healthy.
 
         Also, if all LNLs are reported as unknown (``None``), just delete it.
         """
+        if self.patient.dataset.is_locked:
+            msg = "Cannot edit diagnose of patient in locked dataset"
+            self.logger.error(msg)
+            raise DatasetIsLocked(msg)
+
         if all([getattr(self, lnl) is None for lnl in self.LNLs]):
             super().save(*args, **kwargs)
             return self.delete()
@@ -575,6 +669,15 @@ class Diagnose(ModelLoggerMixin, models.Model):
             self.V = False
 
         return super().save(*args, **kwargs)
+
+    def delete(self, *args, **kwargs):
+        """Block diagnose deletion if patient's dataset is locked."""
+        if self.patient.dataset.is_locked:
+            msg = "Cannot delete diagnose of patient in locked dataset"
+            self.logger.error(msg)
+            raise DatasetIsLocked(msg)
+
+        return super().delete(*args, **kwargs)
 
 
 # add lymph node level fields to model 'Diagnose'

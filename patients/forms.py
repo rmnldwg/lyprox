@@ -129,7 +129,6 @@ class PatientForm(FormLoggerMixin, forms.ModelForm):
             "dataset"
         ]
         widgets = {
-            "sex": widgets.Select(attrs={"class": "select"}),
             "diagnose_date": widgets.NumberInput(
                 attrs={"class": "input",
                        "type": "date"}
@@ -138,30 +137,23 @@ class PatientForm(FormLoggerMixin, forms.ModelForm):
                 choices=[(True, "yes"),
                          (False, "no"),
                          (None, "unknown")],
-                attrs={"class": "select"}
             ),
             "nicotine_abuse": widgets.Select(
                 choices=[(True, "yes"),
                          (False, "no"),
                          (None, "unknown")],
-                attrs={"class": "select"}
             ),
             "hpv_status": widgets.Select(
                 choices=[(True, "positive"),
                          (False, "negative"),
                          (None, "unknown")],
-                attrs={"class": "select"}
             ),
             "neck_dissection": widgets.Select(
                 choices=[(True, "yes"),
                          (False, "no"),
                          (None, "unknown")],
-                attrs={"class": "select"}
             ),
             "tnm_edition": widgets.NumberInput(attrs={"class": "input"}),
-            "n_stage": widgets.Select(attrs={"class": "select"}),
-            "m_stage": widgets.Select(attrs={"class": "select"}),
-            "dataset": widgets.Select(attrs={"class": "select"}),
         }
 
     def __init__(self, *args, **kwargs):
