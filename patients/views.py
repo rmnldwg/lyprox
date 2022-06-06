@@ -12,25 +12,23 @@ listing the models in the ``patients`` app.
 import logging
 import time
 from typing import Any, Dict
-from django.conf import settings
 
-from django.contrib.auth.decorators import login_required
+from django.conf import settings
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models.query import QuerySet
 from django.http import FileResponse, HttpResponse, HttpResponseForbidden
-from django.shortcuts import get_object_or_404, render
+from django.shortcuts import get_object_or_404
 from django.urls.base import reverse
-from django.views import generic, View
+from django.views import View, generic
 
 from core.loggers import ViewLoggerMixin
 from dashboard import query
 from dashboard.forms import DashboardForm
 
 from .filters import PatientFilter
-from .forms import DataFileForm, DiagnoseForm, PatientForm, TumorForm, DatasetForm
-from .ioports import ParsingError, export_to_pandas, import_from_pandas
+from .forms import DatasetForm, DiagnoseForm, PatientForm, TumorForm
 from .mixins import InstitutionCheckObjectMixin, InstitutionCheckPatientMixin
-from .models import Diagnose, Patient, Tumor, Dataset
+from .models import Dataset, Diagnose, Patient, Tumor
 
 logger = logging.getLogger(__name__)
 

@@ -15,12 +15,11 @@ import pandas
 from django import forms
 from django.db import IntegrityError
 from django.forms import widgets
-from accounts.models import Institution
 
 from core.loggers import FormLoggerMixin
 
 from .ioports import compute_hash
-from .models import Diagnose, Dataset, Patient, Tumor
+from .models import Dataset, Diagnose, Patient, Tumor
 
 
 class DatasetForm(FormLoggerMixin, forms.ModelForm):
@@ -44,13 +43,13 @@ class DatasetForm(FormLoggerMixin, forms.ModelForm):
         widgets = {
             "name": widgets.TextInput(
                 attrs={
-                    "class": "input", 
+                    "class": "input",
                     "placeholder": "e.g. lyDATA"
                 }
             ),
             "description": widgets.TextInput(
                 attrs={
-                    "class": "textarea", 
+                    "class": "textarea",
                     "placeholder": "A brief description of your dataset"
                 }
             ),
@@ -60,20 +59,20 @@ class DatasetForm(FormLoggerMixin, forms.ModelForm):
             ),
             "repo_provider": widgets.TextInput(
                 attrs={
-                    "class": "input", 
+                    "class": "input",
                     "placeholder": "e.g. GitHub (optional)"
                 }
             ),
             "repo_url": widgets.TextInput(
                 attrs={
-                    "class": "input", 
+                    "class": "input",
                     "placeholder": "a link to the data repository (optional)"
                 }
             ),
         }
 
     upload_csv = forms.FileField(
-        required=True, 
+        required=True,
         widget=widgets.FileInput(
             attrs={
                 "class": "file-input",

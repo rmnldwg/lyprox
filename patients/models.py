@@ -15,24 +15,24 @@ download CSV tables with patient of a particular institution's cohort.
 # pylint: disable=no-member
 # pylint: disable=logging-fstring-interpolation
 
-import os
-from io import StringIO
-from collections import namedtuple
-import pandas as pd
 import hashlib
+import os
+from collections import namedtuple
+from io import StringIO
 
+import pandas as pd
 from dateutil.parser import ParserError, parse
+from django.conf import settings
+from django.core.exceptions import EmptyResultSet, ValidationError
+from django.core.files.base import ContentFile
+from django.core.validators import FileExtensionValidator
 from django.db import models
 from django.urls import reverse
 from django.utils import timezone
-from django.core.validators import FileExtensionValidator
-from django.core.files.base import ContentFile
-from django.core.exceptions import EmptyResultSet, ValidationError
-from django.conf import settings
 
+import patients.ioports as io
 from accounts.models import Institution
 from core.loggers import ModelLoggerMixin
-import patients.ioports as io
 
 
 class RobustDateField(models.DateField):
@@ -186,7 +186,7 @@ class Dataset(ModelLoggerMixin, models.Model):
                 "Only uploaded CSVs can be imported into database. Aborting"
             )
             return
-            
+
         with self.upload_csv.open('r') as csv_file:
             table = pd.read_csv(csv_file, header=[0,1,2])
 
@@ -367,7 +367,7 @@ class Patient(ModelLoggerMixin, models.Model):
             msg = "Cannot delete patient if dataset is locked."
             self.logger.error(msg)
             raise DatasetIsLocked(msg)
-        
+
         return super().delete(*args, **kwargs)
 
 

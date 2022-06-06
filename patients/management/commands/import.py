@@ -2,7 +2,7 @@
 This file defines the ``import`` command.
 
 .. code-block:: bash
-    
+
     python manage.py import <path-to-CSV> <user@mail.com>
 
 It allows one to import a CSV table into the database via the command line.

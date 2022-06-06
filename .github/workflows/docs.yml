@@ -22,7 +22,7 @@ jobs:
 
     - name: Build docs
       run: pydoctor -c pydoctor.ini
-    
+
     - name: Push docs to github pages branch
       uses: peaceiris/actions-gh-pages@v3
       with:
