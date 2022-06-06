@@ -35,9 +35,6 @@ from core.loggers import ModelLoggerMixin
 import patients.ioports as io
 
 
-CSV_TABLE_FOLDER = "csv_tables"
-
-
 class RobustDateField(models.DateField):
     """
     DateField that doesn't raise a ValidationError when the date string isn't
@@ -57,12 +54,12 @@ class DatasetIsLocked(Exception):
     """Indicates that a locked dataset cannot be changed."""
     pass
 
-
 def compute_md5_hash(file):
-    """Compute a file's MD5 hash."""
-    with file.open("rb") as f:
-        byte_f = f.read()
-        return hashlib.md5(byte_f)
+    """Compute md5 hash of file."""
+    file.open("rb")
+    md5_hash = hashlib.md5(file.read())
+    file.close()
+    return md5_hash
 
 def _get_filepath(instance, filename, folder, file=None) -> str:
     """Compile the filepath for storing the CSV file."""
@@ -109,7 +106,6 @@ class Dataset(ModelLoggerMixin, models.Model):
     """CSV file that is uploaded via the form. Can be null in the database to
     allow creating a dataset by manually creating patients one by one."""
     export_csv = models.FileField(
-        upload_to=get_export_filepath,
         validators=[FileExtensionValidator(allowed_extensions=["csv"])],
         null=True, blank=True,
     )
@@ -142,11 +138,6 @@ class Dataset(ModelLoggerMixin, models.Model):
         year = self.create_date.strftime("%Y")
         inst_short = self.institution.shortname
         return f"{year}-{inst_short}-{self.name}"
-
-    @property
-    def filename(self):
-        """Compile filename from fields."""
-        return f"{self}.csv"
 
     def lock(self):
         """Lock the dataset to prevent editing it or its patients."""
@@ -239,7 +230,8 @@ class Dataset(ModelLoggerMixin, models.Model):
         if self.export_csv is not None:
             self.export_csv.delete(save=False)
 
-        self.export_csv.save(self.filename, csv_file, save=False)
+        file_hash = compute_md5_hash(csv_file).hexdigest()
+        self.export_csv.save(f"export_csv/{file_hash}.csv", csv_file, save=True)
 
 
 class Patient(ModelLoggerMixin, models.Model):
