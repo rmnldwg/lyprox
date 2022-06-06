@@ -19,6 +19,7 @@ import os
 from io import StringIO
 from collections import namedtuple
 import pandas as pd
+import hashlib
 
 from dateutil.parser import ParserError, parse
 from django.db import models
@@ -26,7 +27,7 @@ from django.urls import reverse
 from django.utils import timezone
 from django.core.validators import FileExtensionValidator
 from django.core.files.base import ContentFile
-from django.core.exceptions import EmptyResultSet
+from django.core.exceptions import EmptyResultSet, ValidationError
 from django.conf import settings
 
 from accounts.models import Institution
@@ -57,20 +58,34 @@ class DatasetIsLocked(Exception):
     pass
 
 
-def _get_filepath(instance, filename, folder) -> str:
+def compute_md5_hash(file):
+    """Compute a file's MD5 hash."""
+    with file.open("rb") as f:
+        byte_f = f.read()
+        return hashlib.md5(byte_f)
+
+def _get_filepath(instance, filename, folder, file=None) -> str:
     """Compile the filepath for storing the CSV file."""
     full_dirpath = os.path.join(settings.MEDIA_ROOT, folder)
     os.makedirs(full_dirpath, exist_ok=True)
-    rel_filepath = f"{folder}/{instance.filename}"
+
+    if file is not None:
+        filename = compute_md5_hash(file).hexdigest()
+
+    rel_filepath = f"{folder}/{filename}.csv"
     return rel_filepath
 
 def get_upload_filepath(instance, filename) -> str:
     """Compile the filepath for storing the uploaded CSV file."""
-    return _get_filepath(instance, filename, folder="upload_csv")
+    return _get_filepath(
+        instance, filename, folder="upload_csv", file=instance.upload_csv
+    )
 
 def get_export_filepath(instance, filename) -> str:
     """Compile the filepath for storing the exported CSV file."""
-    return _get_filepath(instance, filename, folder="export_csv")
+    return _get_filepath(
+        instance, filename, folder="export_csv", file=instance.export_csv
+    )
 
 
 class Dataset(ModelLoggerMixin, models.Model):
@@ -89,19 +104,18 @@ class Dataset(ModelLoggerMixin, models.Model):
     upload_csv = models.FileField(
         upload_to=get_upload_filepath,
         validators=[FileExtensionValidator(allowed_extensions=["csv"])],
-        null=True, blank=True, unique=True
+        null=True, blank=True,
     )
-    """CSV file that is uploaded via the form. Must be unique. Can be null in
-    the database to allow creating a dataset by manually creating patients one
-    by one."""
+    """CSV file that is uploaded via the form. Can be null in the database to
+    allow creating a dataset by manually creating patients one by one."""
     export_csv = models.FileField(
         upload_to=get_export_filepath,
         validators=[FileExtensionValidator(allowed_extensions=["csv"])],
-        null=True, blank=True, unique=True
+        null=True, blank=True,
     )
-    """CSV file exported from the database. This too must be unique. This file
-    cannot be used to (re-)populate the database. It serves only the purpose to
-    export manually created datasets in CSV form."""
+    """CSV file exported from the database. This file cannot be used to
+    (re-)populate the database. It serves only the purpose to export manually
+    created datasets in CSV form."""
     is_public = models.BooleanField(default=False)
     """Indicates if the dataset can be accessed by unauthenticated users."""
     is_locked = models.BooleanField(default=False)
@@ -144,6 +158,18 @@ class Dataset(ModelLoggerMixin, models.Model):
         self.is_locked = False
         self.save()
 
+    def validate_unique(self, *args, **kwargs) -> None:
+        """Make sure the same file cannot be uploaded twice."""
+        super().validate_unique(*args, **kwargs)
+        upload_filename = compute_md5_hash(self.upload_csv).hexdigest() + ".csv"
+        filepath = os.path.join(
+            settings.MEDIA_ROOT, "upload_csv", upload_filename
+        )
+        if os.path.exists(filepath):
+            raise ValidationError(
+                {"upload_csv": "File has already been uploaded"}
+            )
+
     def save(self, *args, override=False, **kwargs):
         """Assign the MD5 hash of the data to the `md5_hash` field and load the
         CSV table into ."""
@@ -153,6 +179,12 @@ class Dataset(ModelLoggerMixin, models.Model):
             raise DatasetIsLocked(msg)
 
         return super().save(*args, **kwargs)
+
+    def delete(self, *args, **kwargs):
+        """Delete the files associated with the database as well."""
+        self.upload_csv.delete(save=False)
+        self.export_csv.delete(save=False)
+        return super().delete(*args, **kwargs)
 
     def to_db(self):
         """
