@@ -18,7 +18,6 @@ download CSV tables with patient of a particular institution's cohort.
 import os
 from io import StringIO
 from collections import namedtuple
-import hashlib
 import pandas as pd
 
 from dateutil.parser import ParserError, parse
@@ -27,6 +26,7 @@ from django.urls import reverse
 from django.utils import timezone
 from django.core.validators import FileExtensionValidator
 from django.core.files.base import ContentFile
+from django.core.exceptions import EmptyResultSet
 from django.conf import settings
 
 from accounts.models import Institution
@@ -57,24 +57,20 @@ class DatasetIsLocked(Exception):
     pass
 
 
-def compute_md5_hash(file):
-    """Compute the MD5 hash of a file."""
-    with file.open("r") as f:
-        md5_hash = hashlib.md5(f.read().encode("utf-8"))
-    return md5_hash.digest()
-
-
-def get_filepath(instance, filename) -> str:
+def _get_filepath(instance, filename, folder) -> str:
     """Compile the filepath for storing the CSV file."""
-    full_dirpath = os.path.join(settings.MEDIA_ROOT, CSV_TABLE_FOLDER)
+    full_dirpath = os.path.join(settings.MEDIA_ROOT, folder)
     os.makedirs(full_dirpath, exist_ok=True)
-    full_filepath = os.path.join(full_dirpath, instance.filename)
-
-    if os.path.exists(full_filepath):
-        os.remove(full_filepath)
-
-    rel_filepath = CSV_TABLE_FOLDER + "/" + instance.filename
+    rel_filepath = f"{folder}/{instance.filename}"
     return rel_filepath
+
+def get_upload_filepath(instance, filename) -> str:
+    """Compile the filepath for storing the uploaded CSV file."""
+    return _get_filepath(instance, filename, folder="upload_csv")
+
+def get_export_filepath(instance, filename) -> str:
+    """Compile the filepath for storing the exported CSV file."""
+    return _get_filepath(instance, filename, folder="export_csv")
 
 
 class Dataset(ModelLoggerMixin, models.Model):
@@ -90,19 +86,26 @@ class Dataset(ModelLoggerMixin, models.Model):
     """A brief description of the dataset."""
     create_date = models.DateField(default=timezone.now)
     """Date when the dataset was uploaded."""
-    csv_file = models.FileField(
-        upload_to=get_filepath,
+    upload_csv = models.FileField(
+        upload_to=get_upload_filepath,
         validators=[FileExtensionValidator(allowed_extensions=["csv"])],
-        null=True, blank=True,
+        null=True, blank=True, unique=True
     )
-    """The actual CSV file, stored inside ``settings.MEDIA_ROOT/...``. Must be
-    provided to the `DatasetForm` in the `CreateDatasetView`, but for datasets
-    that are added one patient at a time through the interface, it can be left
-    empty in the database."""
-    md5_hash = models.BinaryField(unique=True, null=True)
-    """MD5 hash of the CSV file to prevent duplicates."""
+    """CSV file that is uploaded via the form. Must be unique. Can be null in
+    the database to allow creating a dataset by manually creating patients one
+    by one."""
+    export_csv = models.FileField(
+        upload_to=get_export_filepath,
+        validators=[FileExtensionValidator(allowed_extensions=["csv"])],
+        null=True, blank=True, unique=True
+    )
+    """CSV file exported from the database. This too must be unique. This file
+    cannot be used to (re-)populate the database. It serves only the purpose to
+    export manually created datasets in CSV form."""
     is_public = models.BooleanField(default=False)
     """Indicates if the dataset can be accessed by unauthenticated users."""
+    is_locked = models.BooleanField(default=False)
+    """Prevents editing the dataset or patients associated with it."""
 
     repo_provider = models.CharField(
         verbose_name="Repository Provider",
@@ -129,39 +132,17 @@ class Dataset(ModelLoggerMixin, models.Model):
     @property
     def filename(self):
         """Compile filename from fields."""
-        return (
-            self.create_date.strftime("%Y-%m-%d") + "_"
-            + self.institution.shortname.lower() + "_"
-            + self.name + ".csv"
-        )
-
-    @property
-    def is_locked(self) -> bool:
-        """
-        Check whether the database is completed and should not be edited
-        anymore. This check also includes re-exporting the CSV file from the
-        database if, e.g., it has been deleted.
-        """
-        if self.md5_hash is None:
-            return False
-
-        if self.csv_file is None:
-            self.to_csv()
-
-        if self.md5_hash == compute_md5_hash(self.csv_file):
-            return True
-        else:
-            self.logger.warning(f"File and MD5 hash of {self} don't match.")
-            return False
+        return f"{self}.csv"
 
     def lock(self):
-        """
-        Lock a dataset by computing its MD5 hash for the patients in the
-        database associated with this dataset.
-        """
-        self.to_csv()
-        self.md5_hash = compute_md5_hash(self.csv_file)
+        """Lock the dataset to prevent editing it or its patients."""
+        self.is_locked = True
         self.save(override=True)
+
+    def unlock(self):
+        """Unlock the dataset to allow editing again."""
+        self.is_locked = False
+        self.save()
 
     def save(self, *args, override=False, **kwargs):
         """Assign the MD5 hash of the data to the `md5_hash` field and load the
@@ -175,10 +156,22 @@ class Dataset(ModelLoggerMixin, models.Model):
 
     def to_db(self):
         """
-        Import data from CSV file into database.
+        Import data from an uploaded CSV file into database.
         """
-        with self.csv_file.open('r') as csv_file:
+        if self.upload_csv is None:
+            self.logger.warning(
+                "Only uploaded CSVs can be imported into database. Aborting"
+            )
+            return
+            
+        with self.upload_csv.open('r') as csv_file:
             table = pd.read_csv(csv_file, header=[0,1,2])
+
+        if Patient.objects.all().filter(dataset=self).count() > 0:
+            self.logger.warning(
+                "There are already patients in the database. Aborting."
+            )
+            return
 
         n_new, n_skip = io.import_from_pandas(table=table, dataset=self)
         self.logger.info(
@@ -192,19 +185,29 @@ class Dataset(ModelLoggerMixin, models.Model):
         database to a `pandas.DataFrame`.
         """
         patients = Patient.objects.all().filter(dataset=self)
+        if patients.count() == 0:
+            msg = "Uploaded CSV has not been imported into database yet."
+            self.logger.error(msg)
+            raise EmptyResultSet(msg)
+
         return io.export_to_pandas(patients)
 
     def to_csv(self):
         """
         Export `Patient` objects belonging to this `Dataset` from the Django
         database first to a `pandas.DataFrame` and then save that as CSV file.
+        Note: It does not save the dataset instance. That needs to be done
+        separately afterwards.
         """
         patients_table = self.to_pandas()
         with StringIO() as buffer:
             patients_table.to_csv(buffer, index=None)
             csv_file = ContentFile(buffer.getvalue().encode("utf-8"))
 
-        self.csv_file.save(self.filename, csv_file)
+        if self.export_csv is not None:
+            self.export_csv.delete(save=False)
+
+        self.export_csv.save(self.filename, csv_file, save=False)
 
 
 class Patient(ModelLoggerMixin, models.Model):

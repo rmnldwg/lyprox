@@ -39,6 +39,7 @@ class DatasetForm(FormLoggerMixin, forms.ModelForm):
             "is_public",
             "repo_provider",
             "repo_url",
+            "upload_csv",
         ]
         widgets = {
             "name": widgets.TextInput(
@@ -71,7 +72,7 @@ class DatasetForm(FormLoggerMixin, forms.ModelForm):
             ),
         }
 
-    csv_file = forms.FileField(
+    upload_csv = forms.FileField(
         required=True, 
         widget=widgets.FileInput(
             attrs={
@@ -94,6 +95,9 @@ class DatasetForm(FormLoggerMixin, forms.ModelForm):
         if commit:
             try:
                 dataset.save()
+                dataset.to_db()
+                dataset.to_csv()
+                dataset.lock()
             except IntegrityError as int_err:
                 raise forms.ValidationError(
                     "Data was already uploaded."

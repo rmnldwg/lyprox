@@ -86,7 +86,7 @@
                                 <div class="control">
                                     <div class="file" id="file-upload">
                                         <label class="file-label">
-                                            {{ form.csv_file }}
+                                            {{ form.upload_csv }}
                                             <span class="file-cta">
                                                 <span class="file-icon">
                                                     <i class="fas fa-folder-open"></i>
@@ -105,8 +105,8 @@
                                     <span>Upload</span>
                                 </button>
                             </div>
-                            {% if form.errors.csv_file %}
-                            <small class="help is-danger">{{ form.errors.csv_file }}</small>
+                            {% if form.errors.upload_csv %}
+                            <small class="help is-danger">{{ form.errors.upload_csv }}</small>
                             {% endif %}
                         </div>
                     </form>

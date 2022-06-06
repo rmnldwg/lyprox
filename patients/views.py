@@ -223,7 +223,7 @@ class DatasetView(ViewLoggerMixin, View):
     def get(self, request, relative_path):
         """Get correct table and render download response."""
         dataset = get_object_or_404(
-            Dataset, csv_file=relative_path
+            Dataset, upload_csv=relative_path
         )
         if dataset.is_hidden and not request.user.is_authenticated:
             return HttpResponseForbidden()

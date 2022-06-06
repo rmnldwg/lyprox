@@ -61,14 +61,18 @@
                                     <div class="level-left">
                                         <div class="level-item">
                                             <div class="tags">
-                                                <a href="{{ dataset.csv_file.url }}" class="button tag is-primary has-addons">
-                                                    <span class="icon">
-                                                        <i class="fas fa-cloud-download-alt"></i>
-                                                    </span>
-                                                    <span>Download</span>
+                                                {% if dataset.upload_csv %}
+                                                <a href="{{ dataset.upload_csv.url }}" class="button tag is-primary has-addons">
+                                                    Uploaded CSV
                                                 </a>
+                                                {% endif %}
+                                                {% if dataset.export_csv %}
+                                                <a href="{{ dataset.export_csv.url }}" class="button tag is-success has-addons">
+                                                    Exported CSV
+                                                </a>
+                                                {% endif %}
                                                 {% if dataset.repo_url %}
-                                                <a href="{{ dataset.repo_url }}" class="button tag is-warning has-addons">
+                                                <a href="{{ dataset.repo_url }}" class="button tag is-black has-addons">
                                                     {{ dataset.repo_provider }}
                                                 </a>
                                                 {% endif %}
