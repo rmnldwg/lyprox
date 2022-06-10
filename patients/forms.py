@@ -95,7 +95,8 @@ class DatasetForm(FormLoggerMixin, forms.ModelForm):
         """Get the institution from the user."""
         dataset = super(DatasetForm, self).save(commit=False)
         dataset.institution = self.user.institution
-        dataset.upload_md5 = compute_md5_hash(dataset.upload_csv)
+        upload_file_hash = compute_md5_hash(dataset.upload_csv)
+        dataset.upload_md5 = upload_file_hash
 
         if commit:
             try:
@@ -106,7 +107,7 @@ class DatasetForm(FormLoggerMixin, forms.ModelForm):
             except IntegrityError as int_err:
                 dataset.upload_csv.delete(save=False)
                 raise forms.ValidationError(
-                    "Data was already uploaded."
+                    f"Data was already uploaded (MD5: {upload_file_hash})."
                 ) from int_err
 
         return dataset
