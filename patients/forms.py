@@ -8,8 +8,8 @@ creating and changing database entries via the website itself. But they are
 also used to implement custom logic to check that all the inputs are valid or
 that the data is properly cleaned before its being passed on to the next step.
 """
-
-from typing import Any, Dict
+import hashlib
+from typing import Any, Dict, Optional
 
 import pandas
 from django import forms
@@ -19,7 +19,7 @@ from django.forms import widgets
 from core.loggers import FormLoggerMixin
 
 from .ioports import compute_hash
-from .models import Dataset, Diagnose, Patient, Tumor
+from .models import Dataset, Diagnose, Patient, Tumor, compute_md5_hash
 
 
 class DatasetForm(FormLoggerMixin, forms.ModelForm):
@@ -86,10 +86,16 @@ class DatasetForm(FormLoggerMixin, forms.ModelForm):
         self.user = user
         super().__init__(*args, **kwargs)
 
+    # def clean(self) -> Optional[Dict[str, Any]]:
+    #     """Compute the uploaded data's MD5 hash."""
+    #     cleaned_data = super().clean()
+    #     return cleaned_data
+
     def save(self, commit=True):
         """Get the institution from the user."""
         dataset = super(DatasetForm, self).save(commit=False)
         dataset.institution = self.user.institution
+        dataset.upload_md5 = compute_md5_hash(dataset.upload_csv)
 
         if commit:
             try:
@@ -98,6 +104,7 @@ class DatasetForm(FormLoggerMixin, forms.ModelForm):
                 dataset.to_csv()
                 dataset.lock()
             except IntegrityError as int_err:
+                dataset.upload_csv.delete(save=False)
                 raise forms.ValidationError(
                     "Data was already uploaded."
                 ) from int_err

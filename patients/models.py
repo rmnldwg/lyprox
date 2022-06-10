@@ -18,7 +18,8 @@ download CSV tables with patient of a particular institution's cohort.
 import hashlib
 import os
 from collections import namedtuple
-from io import StringIO
+from io import StringIO, BytesIO
+import logging
 
 import pandas as pd
 from dateutil.parser import ParserError, parse
@@ -33,6 +34,8 @@ from django.utils import timezone
 import patients.ioports as io
 from accounts.models import Institution
 from core.loggers import ModelLoggerMixin
+
+logger = logging.getLogger(__name__)
 
 
 class RobustDateField(models.DateField):
@@ -54,35 +57,36 @@ class DatasetIsLocked(Exception):
     """Indicates that a locked dataset cannot be changed."""
     pass
 
+class MD5HashDoesNotMatch(Exception):
+    """Indicates that the stored CSV file is different than expected."""
+    pass
+
 def compute_md5_hash(file):
     """Compute md5 hash of file."""
-    file.open("rb")
-    md5_hash = hashlib.md5(file.read())
-    file.close()
-    return md5_hash
+    if hasattr(file, 'temporary_file_path'):
+        file = file.temporary_file_path()
+    else:
+        if hasattr(file, 'read'):
+            file = BytesIO(file.read())
+        else:
+            file = BytesIO(file['content'])
 
-def _get_filepath(instance, filename, folder, file=None) -> str:
+    return hashlib.md5(file.read()).hexdigest()
+
+def _get_filepath(instance, filename, folder) -> str:
     """Compile the filepath for storing the CSV file."""
     full_dirpath = os.path.join(settings.MEDIA_ROOT, folder)
     os.makedirs(full_dirpath, exist_ok=True)
-
-    if file is not None:
-        filename = compute_md5_hash(file).hexdigest()
-
-    rel_filepath = f"{folder}/{filename}.csv"
+    rel_filepath = f"{folder}/{instance}.csv"
     return rel_filepath
 
-def get_upload_filepath(instance, filename) -> str:
+def get_upload_filepath(instance, filename=None) -> str:
     """Compile the filepath for storing the uploaded CSV file."""
-    return _get_filepath(
-        instance, filename, folder="upload_csv", file=instance.upload_csv
-    )
+    return _get_filepath(instance, filename, folder="upload_csv")
 
-def get_export_filepath(instance, filename) -> str:
+def get_export_filepath(instance, filename=None) -> str:
     """Compile the filepath for storing the exported CSV file."""
-    return _get_filepath(
-        instance, filename, folder="export_csv", file=instance.export_csv
-    )
+    return _get_filepath(instance, filename, folder="export_csv")
 
 
 class Dataset(ModelLoggerMixin, models.Model):
@@ -105,17 +109,22 @@ class Dataset(ModelLoggerMixin, models.Model):
     )
     """CSV file that is uploaded via the form. Can be null in the database to
     allow creating a dataset by manually creating patients one by one."""
+    upload_md5 = models.CharField(max_length=32, blank=True, null=True, unique=True)
+    """MD5 hash of the uploaded file. Is used for the `is_locked` property."""
     export_csv = models.FileField(
+        upload_to=get_export_filepath,
         validators=[FileExtensionValidator(allowed_extensions=["csv"])],
-        null=True, blank=True,
+        null=True, blank=True, unique=True
     )
     """CSV file exported from the database. This file cannot be used to
     (re-)populate the database. It serves only the purpose to export manually
     created datasets in CSV form."""
+    export_md5 = models.CharField(max_length=32, blank=True, null=True, unique=True)
+    """MD5 hash of the exported file. Is used for the `is_locked` property."""
     is_public = models.BooleanField(default=False)
     """Indicates if the dataset can be accessed by unauthenticated users."""
     is_locked = models.BooleanField(default=False)
-    """Prevents editing the dataset or patients associated with it."""
+    """Enables one to block changes in the patients."""
 
     repo_provider = models.CharField(
         verbose_name="Repository Provider",
@@ -139,6 +148,18 @@ class Dataset(ModelLoggerMixin, models.Model):
         inst_short = self.institution.shortname
         return f"{year}-{inst_short}-{self.name}"
 
+    def _has_md5_match(self, name: str):
+        """Check if the uploaded or exported CSV match with their MD5 hashes."""
+        file = getattr(self, f"{name}_csv")
+        stored_hash = getattr(self, f"{name}_md5")
+        if file is not None and stored_hash is not None:
+            file_hash = compute_md5_hash(file)
+            if stored_hash == file_hash:
+                return True
+            else:
+                raise MD5HashDoesNotMatch(f"{name}ed CSV appears to be changed.")
+        return False
+            
     def lock(self):
         """Lock the dataset to prevent editing it or its patients."""
         self.is_locked = True
@@ -149,21 +170,26 @@ class Dataset(ModelLoggerMixin, models.Model):
         self.is_locked = False
         self.save()
 
-    def validate_unique(self, *args, **kwargs) -> None:
+    def validate_unique(self, exclude=None) -> None:
         """Make sure the same file cannot be uploaded twice."""
-        super().validate_unique(*args, **kwargs)
-        upload_filename = compute_md5_hash(self.upload_csv).hexdigest() + ".csv"
-        filepath = os.path.join(
-            settings.MEDIA_ROOT, "upload_csv", upload_filename
-        )
-        if os.path.exists(filepath):
+        super().validate_unique(exclude=exclude)
+        uploaded_file_hash = compute_md5_hash(self.upload_csv)
+        if Dataset.objects.all().filter(upload_md5=uploaded_file_hash).exists():
             raise ValidationError(
                 {"upload_csv": "File has already been uploaded"}
             )
 
+        for filename in os.listdir(os.path.join(settings.MEDIA_ROOT, "upload_csv")):
+            filepath = os.path.join(settings.MEDIA_ROOT, "upload_csv", filename)
+            with open(filepath, mode="rb") as binary_file:
+                stored_file_hash = compute_md5_hash(binary_file)
+            if uploaded_file_hash == stored_file_hash:
+                raise ValidationError(
+                    {"upload_csv": "File has already been uploaded"}
+                )
+
     def save(self, *args, override=False, **kwargs):
-        """Assign the MD5 hash of the data to the `md5_hash` field and load the
-        CSV table into ."""
+        """Block saving if dataset is locked."""
         if self.is_locked and not override:
             msg = "Cannot edit locked dataset."
             self.logger.error(msg)
@@ -171,8 +197,13 @@ class Dataset(ModelLoggerMixin, models.Model):
 
         return super().save(*args, **kwargs)
 
-    def delete(self, *args, **kwargs):
+    def delete(self, *args, override=False, **kwargs):
         """Delete the files associated with the database as well."""
+        if self.is_locked and not override:
+            msg = "Cannot delete locked dataset."
+            self.logger.error(msg)
+            raise DatasetIsLocked(msg)
+
         self.upload_csv.delete(save=False)
         self.export_csv.delete(save=False)
         return super().delete(*args, **kwargs)
@@ -230,8 +261,7 @@ class Dataset(ModelLoggerMixin, models.Model):
         if self.export_csv is not None:
             self.export_csv.delete(save=False)
 
-        file_hash = compute_md5_hash(csv_file).hexdigest()
-        self.export_csv.save(f"export_csv/{file_hash}.csv", csv_file, save=True)
+        self.export_csv.save("export", csv_file, save=False)
 
 
 class Patient(ModelLoggerMixin, models.Model):
@@ -358,16 +388,12 @@ class Patient(ModelLoggerMixin, models.Model):
         """Make sure patient is not added to locked dataset."""
         if self.dataset.is_locked:
             raise DatasetIsLocked("Cannot add patient to locked dataset.")
-
         return super().save(*args, **kwargs)
 
     def delete(self, *args, **kwargs):
-        """Block deletion if dataset is locked."""
+        """Block deletion if dataset doesn't allow it."""
         if self.dataset.is_locked:
-            msg = "Cannot delete patient if dataset is locked."
-            self.logger.error(msg)
-            raise DatasetIsLocked(msg)
-
+            raise DatasetIsLocked("Cannot add patient to locked dataset.")
         return super().delete(*args, **kwargs)
 
 
@@ -513,9 +539,7 @@ class Tumor(ModelLoggerMixin, models.Model):
         to, to the correct T-stage.
         """
         if self.patient.dataset.is_locked:
-            msg = "Cannot edit tumor of patient in locked dataset"
-            self.logger.error(msg)
-            raise DatasetIsLocked(msg)
+            raise DatasetIsLocked("Cannot edit tumor of patient in locked dataset")
 
         # Automatically extract location from subsite
         subsite_dict = dict(self.SUBSITES)
@@ -547,9 +571,7 @@ class Tumor(ModelLoggerMixin, models.Model):
         patient's T-stage.
         """
         if self.patient.dataset.is_locked:
-            msg = "Cannot delete tumor of patient in locked dataset"
-            self.logger.error(msg)
-            raise DatasetIsLocked(msg)
+            raise DatasetIsLocked("Cannot edit tumor of patient in locked dataset")
 
         patient = self.patient
         tmp = super(Tumor, self).delete(*args, **kwargs)
@@ -667,9 +689,7 @@ class Diagnose(ModelLoggerMixin, models.Model):
         Also, if all LNLs are reported as unknown (``None``), just delete it.
         """
         if self.patient.dataset.is_locked:
-            msg = "Cannot edit diagnose of patient in locked dataset"
-            self.logger.error(msg)
-            raise DatasetIsLocked(msg)
+            raise DatasetIsLocked("Cannot edit tumor of patient in locked dataset")
 
         if all([getattr(self, lnl) is None for lnl in self.LNLs]):
             super().save(*args, **kwargs)
@@ -700,10 +720,7 @@ class Diagnose(ModelLoggerMixin, models.Model):
     def delete(self, *args, **kwargs):
         """Block diagnose deletion if patient's dataset is locked."""
         if self.patient.dataset.is_locked:
-            msg = "Cannot delete diagnose of patient in locked dataset"
-            self.logger.error(msg)
-            raise DatasetIsLocked(msg)
-
+            raise DatasetIsLocked("Cannot edit tumor of patient in locked dataset")
         return super().delete(*args, **kwargs)
 
 
