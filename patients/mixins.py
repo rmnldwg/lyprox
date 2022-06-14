@@ -3,14 +3,13 @@ Mixins that ensure safety with respect to who can edit which patients.
 """
 
 import logging
+from typing import Optional
 
 from django.contrib.auth.mixins import UserPassesTestMixin
 
-logger = logging.getLogger(__name__)
-
-from typing import Optional
-
 from .models import Patient
+
+logger = logging.getLogger(__name__)
 
 
 class InstitutionCheckPatientMixin(UserPassesTestMixin):

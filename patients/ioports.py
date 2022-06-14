@@ -11,7 +11,7 @@ import pandas as pd
 from django.db import IntegrityError
 from django.db.models import QuerySet
 
-from .models import Diagnose, Patient, Tumor
+import patients.models as models
 
 logger = logging.getLogger(__name__)
 
@@ -74,7 +74,7 @@ def row2patient(row, user, anonymize: List[str]):
         hash_value = compute_hash(*patient_dict)
 
     patient_fields = get_model_fields(
-        Patient, remove=[
+        models.Patient, remove=[
             "id", "hash_value", "tumor", "t_stage", "stage_prefix",
             "diagnose", "institution"
         ]
@@ -88,7 +88,7 @@ def row2patient(row, user, anonymize: List[str]):
             raise ParsingError(f"Column {field} is missing") from key_err
 
     try:
-        new_patient = Patient(
+        new_patient = models.Patient(
             hash_value=hash_value,
             institution=user.institution,
             **valid_patient_dict
@@ -115,7 +115,7 @@ def row2tumors(row, patient):
     _ = nan_to_none
 
     tumor_fields = get_model_fields(
-        Tumor, remove=["id", "patient"]
+        models.Tumor, remove=["id", "patient"]
     )
 
     for i in range(num_tumors):
@@ -128,7 +128,7 @@ def row2tumors(row, patient):
             except KeyError as key_err:
                 raise ParsingError(f"Columns {field} is missing.") from key_err
 
-        new_tumor = Tumor(
+        new_tumor = models.Tumor(
             patient=patient,
             **valid_tumor_dict
         )
@@ -149,11 +149,11 @@ def row2diagnoses(row, patient):
     _ = nan_to_none
 
     diagnose_fields = get_model_fields(
-        Diagnose, remove=["id", "patient", "modality", "side", "diagnose_date"]
+        models.Diagnose, remove=["id", "patient", "modality", "side", "diagnose_date"]
     )
 
     modalities_intersection = list(
-        set(modalities_list) & set(Diagnose.Modalities.values)
+        set(modalities_list) & set(models.Diagnose.Modalities.values)
     )
 
     for mod in modalities_intersection:
@@ -173,7 +173,7 @@ def row2diagnoses(row, patient):
                         )
                         valid_diagnose_dict[field] = None
 
-                new_diagnosis = Diagnose(
+                new_diagnosis = models.Diagnose(
                     patient=patient, modality=mod, side=side,
                     diagnose_date=diagnose_date,
                     **valid_diagnose_dict
@@ -244,13 +244,13 @@ def export_to_pandas(patients: QuerySet):
     """
     # create list of tuples for MultiIndex and use that to create DataFrame
     patient_fields = get_model_fields(
-        Patient, remove=["hash_value", "tumor", "diagnose", "t_stage"]
+        models.Patient, remove=["hash_value", "tumor", "diagnose", "t_stage"]
     )
     patient_column_tuples = [("patient", "#", f) for f in patient_fields]
 
     num_tumors = np.max([pat.tumor_set.all().count() for pat in patients])
     tumor_fields = get_model_fields(
-        Tumor, remove=["id", "patient"]
+        models.Tumor, remove=["id", "patient"]
     )
     tumor_column_tuples = []
     for field in tumor_fields:
@@ -258,10 +258,10 @@ def export_to_pandas(patients: QuerySet):
             tumor_column_tuples.append(("tumor", f"{i+1}", field))
 
     diagnose_fields = get_model_fields(
-        Diagnose, remove=["id", "patient", "modality", "side", "diagnose_date"]
+        models.Diagnose, remove=["id", "patient", "modality", "side", "diagnose_date"]
     )
     diagnose_column_tuples = []
-    for mod in Diagnose.Modalities.values:
+    for mod in models.Diagnose.Modalities.values:
         diagnose_column_tuples.append((mod, "info", "date"))
         for side in ["ipsi", "contra"]:
             for field in diagnose_fields:
