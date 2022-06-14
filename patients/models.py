@@ -1,9 +1,14 @@
 """
-This module defines how patient related models are defined and how they
-interact with each other. Currently, three models are implemented: The
-`Patient`, `Tumor` and the `Diagnose`. Each `Patient` can have multiple `Tumor`
-and `Diagnose` entries associated with it, which is defined by the
-``django.db.models.ForeignKey`` attribute in the `Tumor` and `Diagnose` class.
+This module defines how patient related models work and how they interact with each
+other. Currently, four models are implemented: The `Dataset`, `Patient`, `Tumor`
+and the `Diagnose`. A `Dataset` groups `Patient` entries and associates them with an
+`Institution`, while also providing methods for importing and exporting from and to CSV
+file.
+
+A `Patient` holds demographic and relational information about each recorded patient.
+The respective entry can have multiple `Tumor` and `Diagnose` entries associated with
+it, which is defined by the ``django.db.models.ForeignKey`` attribute in the `Tumor`
+and `Diagnose` class.
 
 There are also custom methods implemented, making sure that e.g. the diagnosis
 of a sublevel (lets say ``Ia``) is consistent with the diagnosis of the
@@ -13,28 +18,141 @@ respective superlevel (in that case ``I``).
 # pylint: disable=logging-fstring-interpolation
 
 from collections import namedtuple
+from pathlib import Path
 
-from dateutil.parser import ParserError, parse
+from django.conf import settings
+from django.core.validators import FileExtensionValidator
 from django.db import models
+from django.forms import ValidationError
 from django.urls import reverse
+from django.utils import timezone
 
 from accounts.models import Institution
 from core.loggers import ModelLoggerMixin
 
+from .fields import DuplicateFileError, FileFieldWithHash, RobustDateField
 
-class RobustDateField(models.DateField):
+
+def directory_(used_for: str, instance):
     """
-    DateField that doesn't raise a ValidationError when the date string isn't
-    formated according to ISO (YYYY-MM-DD)
+    Function that compiles and returns the path to where uploaded or exported CSV
+    files will be stored. It also creates the respective folder and deletes any
+    existing iles with the same name if necessary.
     """
-    def to_python(self, value):
-        if isinstance(value, str):
+    media_root = Path(settings.MEDIA_ROOT)
+    folder_path = media_root.joinpath(used_for)
+    folder_path.mkdir(parents=True, exist_ok=True)
+    file_path = folder_path.joinpath(f"{instance}.csv")
+    file_path.unlink(missing_ok=True)
+    return f"{used_for}/{instance}.csv"
+
+def directory_for_uploads(instance, _filename) -> str:
+    """Calls `directory_` for 'uploads'."""
+    return directory_(used_for="uploads", instance=instance)
+
+def directory_for_exports(instance, _filename) -> str:
+    """Calls `directory_` for 'exports'."""
+    return directory_(used_for="exports", instance=instance)
+
+
+class Dataset(ModelLoggerMixin, models.Model):
+    """
+    This model represents a collection of patients that have been added to the
+    database together. E.g., via uploading a CSV file where each row represents a
+    patient. But also patients added via the interface one by one should be associated
+    to a dataset.
+
+    The dataset model's functionality includes an interface between the database and
+    CSV files. As mentioned, a user should be able to batch-import patients via a
+    specifically formatted CSV table. But one should also be able to export all
+    patients of a dataset to a CSV file.
+    """
+    name = models.CharField(max_length=100)
+    """The name of the dataset. Should not include any dates or the institution."""
+    description = models.TextField()
+    """A brief description of the dataset."""
+    create_date = models.DateField(default=timezone.now)
+    """Date when the dataset was uploaded."""
+    is_public = models.BooleanField(default=False)
+    """Should this dataset be visible to non-authenticated users?"""
+
+    upload_csv = FileFieldWithHash(
+        upload_to=directory_for_uploads,
+        validators=[FileExtensionValidator(allowed_extensions=["csv"])],
+        null=True, blank=True,
+    )
+    """The custom ``FileField`` that holds the uploaded CSV file."""
+    export_csv = FileFieldWithHash(
+        upload_to=directory_for_exports,
+        validators=[FileExtensionValidator(allowed_extensions=["csv"])],
+        null=True, blank=True,
+    )
+    """The custom ``FileField`` that holds the exported CSV file."""
+
+    def __str__(self) -> str:
+        year = self.create_date.strftime("%Y")
+        return f"{year}-{self.name}"
+
+    def _validate_unique(
+        self,
+        for_fieldname: str,
+        do_delete: bool = False,
+        do_warn: bool = True,
+        do_raise: bool = True,
+    ):
+        """
+        Make sure no other `Dataset` holds the same file in one of their ``FileFields``
+        or the uploaded file is already stored on disk.
+
+        With the argument `do_delete` one can control if the file should be deleted
+        (and with `do_warn` if that deletion should trigger a warning through the
+        logger) when a duplicate was found and with `do_raise` whether a
+        `DuplicateFileError` should ultimately be raised.
+        """
+        all_except_self = Dataset.objects.all().exclude(pk=self.pk)
+        for dataset in all_except_self:
+            self_filefield = getattr(self, for_fieldname)
+            ds_filefield = getattr(dataset, for_fieldname)
             try:
-                value = parse(value).date()
-            except ParserError:
-                return None
+                if self_filefield.md5_hash == ds_filefield.md5_hash:
+                    if do_delete:
+                        getattr(self, for_fieldname).delete(save=False)
+                        if do_warn:
+                            self.logger.warning(
+                                f"The {for_fieldname} of {self} was deleted because "
+                                f"it is a duplicate of {dataset}"
+                            )
+                    if do_raise:
+                        raise DuplicateFileError(
+                            "This file is already associated "
+                            f"with the dataset {dataset}"
+                        )
+            except ValueError:
+                # This is necessary because if no file has been assigned to the
+                # respective FileField, the ``_require_file`` method of the FieldFile
+                # will raise a ValueError, in which case we can just skip that one.
+                continue
 
-        return super().to_python(value)
+    def validate_unique(self, exclude=None) -> None:
+        """Validate uniqueness of the uploaded CSV file."""
+        try:
+            self._validate_unique(
+                for_fieldname="upload_csv", do_delete=False, do_raise=True
+            )
+        except DuplicateFileError as df_err:
+            raise ValidationError({
+                "upload_csv": "File has already been uploaded."
+            }) from df_err
+        super().validate_unique(exclude)
+
+    def save(self, *args, **kwargs):
+        self._validate_unique(
+            for_fieldname="upload_csv", do_delete=True, do_warn=True, do_raise=False
+        )
+        self._validate_unique(
+            for_fieldname="export_csv", do_delete=True, do_warn=True, do_raise=False
+        )
+        return super().save(*args, **kwargs)
 
 
 class Patient(ModelLoggerMixin, models.Model):

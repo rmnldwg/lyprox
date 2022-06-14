@@ -18,6 +18,12 @@ class CorruptedFileError(Exception):
     has been computed and fixed.
     """
 
+class DuplicateFileError(Exception):
+    """
+    Exception raised when e.g. during uploading or saving the `Dataset` model notices
+    a new file is already stored in one of the other datasets.
+    """
+
 
 class RobustDateField(models.DateField):
     """
