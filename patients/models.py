@@ -18,16 +18,19 @@ respective superlevel (in that case ``I``).
 # pylint: disable=logging-fstring-interpolation
 
 from collections import namedtuple
+from io import BytesIO
 from pathlib import Path
 
+import pandas as pd
 from django.conf import settings
+from django.core.files import File
 from django.core.validators import FileExtensionValidator
 from django.db import models
 from django.forms import ValidationError
 from django.urls import reverse
 from django.utils import timezone
 
-from accounts.models import Institution
+import patients.ioports as ioports
 from core.loggers import ModelLoggerMixin
 
 from .fields import DuplicateFileError, FileFieldWithHash, RobustDateField
@@ -75,6 +78,10 @@ class Dataset(ModelLoggerMixin, models.Model):
     """Date when the dataset was uploaded."""
     is_public = models.BooleanField(default=False)
     """Should this dataset be visible to non-authenticated users?"""
+    is_locked = models.BooleanField(default=False)
+    """This indicates that one is done adding patients to this dataset and it should
+    be prohibited to change the dataset or any of its associated entries when this is
+    set to ``True``."""
 
     upload_csv = FileFieldWithHash(
         upload_to=directory_for_uploads,
@@ -145,7 +152,28 @@ class Dataset(ModelLoggerMixin, models.Model):
             }) from df_err
         super().validate_unique(exclude)
 
-    def save(self, *args, **kwargs):
+    def lock(self):
+        """Set the field `is_locked` to ``True``"""
+        self.is_locked = True
+        self.save(override=True)
+
+    def unlock(self):
+        """
+        Set `is_locked` to ``False``, allowing the dataset and its patients to be
+        edited again.
+        """
+        self.is_locked = False
+        self.save()
+
+    def save(self, *args, override=False, **kwargs):
+        """
+        Add uniqueness checks to save method, as well as blocking any changes when
+        the dataset is locked (and `override` is not set to ``True``).
+        """
+        if self.is_locked and not override:
+            self.logger.warning("Editing a locked dataset is prohibited.")
+            return
+
         self._validate_unique(
             for_fieldname="upload_csv", do_delete=True, do_warn=True, do_raise=False
         )
@@ -153,6 +181,47 @@ class Dataset(ModelLoggerMixin, models.Model):
             for_fieldname="export_csv", do_delete=True, do_warn=True, do_raise=False
         )
         return super().save(*args, **kwargs)
+
+    def get_pandas_from_db(self):
+        """
+        Generate a `pandas.DataFrame` for all patients associated with this dataset
+        using the `ioports` module and then return that.
+        """
+        patients = Patient.objects.all().filter(dataset=self)
+        return ioports.export_to_pandas(patients)
+
+    def get_pandas_from_csv(self):
+        """
+        Simply extract a `pandas.DataFrame` from an uploaded CSV.
+        """
+        if not self.upload_csv.readable() or self.upload_csv.mode != "rb":
+            self.upload_csv.open(mode="rb")
+
+        file_content = self.upload_csv.read()
+        binary_buffer = BytesIO(file_content)
+        self.upload_csv.close()
+
+        table = pd.read_csv(binary_buffer, header=[0,1,2])
+        return table
+
+    def export_db_to_csv(self):
+        """
+        First, call the `get_pandas_from_db` method to get a `pandas.DataFrame` of
+        patients from the database. Then, save that table in the form of a CSV file
+        to disk and associate it with the `fields.FileFieldWithHash` called
+        `export_csv`.
+        """
+        table = self.get_pandas_from_db()
+        write_buffer = BytesIO()
+        table.to_csv(write_buffer, index=None)
+        file = File(write_buffer)
+        self.export_csv.save("this-has-no-effect", file, save=True)
+
+    def import_upload_csv_to_db(self):
+        """
+        Import an uploaded CSV into the database using the `ioports` module. Lock the
+        dataset right afterwards to prevent editing the uploaded patients.
+        """
 
 
 class Patient(ModelLoggerMixin, models.Model):
@@ -226,11 +295,9 @@ class Patient(ModelLoggerMixin, models.Model):
     m_stage = models.PositiveSmallIntegerField(choices=M_stages.choices)
     """Indicates whether or not there are distant metastases."""
 
-    institution = models.ForeignKey(
-        Institution, blank=True, on_delete=models.PROTECT
-    )
-    """A newly created patient is assigned to the institution of the user that
-    entered the patient into the database."""
+    dataset = models.ForeignKey(to=Dataset, on_delete=models.CASCADE)
+    """Every patient must belong to a dataset entry that manages importing, exporting
+    as well as preventing edits that compromise the integrity of the dataset."""
 
     def __str__(self):
         """Report some patient specifics."""
