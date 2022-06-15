@@ -2,6 +2,10 @@
 Module for importing and exporting CSV tables of patients with lymphatic
 patterns of progression into and from the Django database.
 """
+# pylint: disable=no-member
+# pylint: disable=logging-fstring-interpolation
+
+from __future__ import annotations
 
 import logging
 from typing import List, Tuple
@@ -59,10 +63,11 @@ def get_model_fields(model, remove: List[str] = None):
     return field_names
 
 
-def row2patient(row, user, anonymize: List[str]):
+def row2patient(row, dataset, anonymize: List[str]):
     """
     Create a `Patient` instance from a row of a ``DataFrame`` containing the
-    appropriate information, as well as the user that uploaded the information.
+    appropriate information, as well as the dataset in which the information was
+    uploaded.
     """
     patient_dict = row.to_dict()
     _ = nan_to_none
@@ -76,7 +81,7 @@ def row2patient(row, user, anonymize: List[str]):
     patient_fields = get_model_fields(
         models.Patient, remove=[
             "id", "hash_value", "tumor", "t_stage", "stage_prefix",
-            "diagnose", "institution"
+            "diagnose", "dataset"
         ]
     )
 
@@ -90,7 +95,7 @@ def row2patient(row, user, anonymize: List[str]):
     try:
         new_patient = models.Patient(
             hash_value=hash_value,
-            institution=user.institution,
+            dataset=dataset,
             **valid_patient_dict
         )
         new_patient.save()
@@ -183,7 +188,7 @@ def row2diagnoses(row, patient):
 
 def import_from_pandas(
     data_frame: pd.DataFrame,
-    user,
+    dataset: models.Dataset,
     anonymize: List[str] = None
 ) -> Tuple[int]:
     """Import patients from pandas ``DataFrame``."""
@@ -193,7 +198,7 @@ def import_from_pandas(
     if anonymize is None:
         anonymize = ["id"]
 
-    for i, row in data_frame.iterrows():
+    for _, row in data_frame.iterrows():
         # Make sure first two levels are correct for patient data
         try:
             patient_row = row[("patient", "#")]
@@ -206,7 +211,7 @@ def import_from_pandas(
         # skip row if patient is already in database
         try:
             new_patient = row2patient(
-                patient_row, user=user, anonymize=anonymize
+                patient_row, dataset=dataset, anonymize=anonymize
             )
         except IntegrityError:
             logger.warning("Skipping row")

@@ -76,6 +76,8 @@ class Dataset(ModelLoggerMixin, models.Model):
     """A brief description of the dataset."""
     create_date = models.DateField(default=timezone.now)
     """Date when the dataset was uploaded."""
+    # institution = models.ForeignKey(to=Institution, on_delete=models.CASCADE)
+    # """The clinic or research institute that collected and uploaded the patients."""
     is_public = models.BooleanField(default=False)
     """Should this dataset be visible to non-authenticated users?"""
     is_locked = models.BooleanField(default=False)
@@ -156,6 +158,7 @@ class Dataset(ModelLoggerMixin, models.Model):
         """Set the field `is_locked` to ``True``"""
         self.is_locked = True
         self.save(override=True)
+        self.logger.info(f"Dataset {self} successfully locked.")
 
     def unlock(self):
         """
@@ -164,6 +167,7 @@ class Dataset(ModelLoggerMixin, models.Model):
         """
         self.is_locked = False
         self.save()
+        self.logger.warning(f"Dataset {self} has been unlocked.")
 
     def save(self, *args, override=False, **kwargs):
         """
@@ -171,7 +175,7 @@ class Dataset(ModelLoggerMixin, models.Model):
         the dataset is locked (and `override` is not set to ``True``).
         """
         if self.is_locked and not override:
-            self.logger.warning("Editing a locked dataset is prohibited.")
+            self.logger.warning("Editing a locked dataset is prohibited. Aborting.")
             return
 
         self._validate_unique(
@@ -181,6 +185,28 @@ class Dataset(ModelLoggerMixin, models.Model):
             for_fieldname="export_csv", do_delete=True, do_warn=True, do_raise=False
         )
         return super().save(*args, **kwargs)
+
+    def delete(self, *args, override=False, **kwargs):
+        """
+        Block deletion if dataset is locked. Unless the red override is pushed.
+        """
+        if self.is_locked and not override:
+            self.logger.warning("Deleting a locked dataset is prohibited. Aborting.")
+            return
+
+        # Making sure that the files associated with the dataset get deleted. The
+        # `delete` method of the `FieldFiles` should already take care of that, but I
+        # noticed that this doesn't seem to always happen, so I made sure with `pathlib`
+
+        upload_path = Path(self.upload_csv.path)
+        self.upload_csv.delete(save=False)
+        upload_path.unlink(missing_ok=True)
+
+        export_path = Path(self.export_csv.path)
+        self.export_csv.delete(save=False)
+        export_path.unlink(missing_ok=True)
+
+        return super().delete(*args, **kwargs)
 
     def get_pandas_from_db(self):
         """
@@ -204,24 +230,48 @@ class Dataset(ModelLoggerMixin, models.Model):
         table = pd.read_csv(binary_buffer, header=[0,1,2])
         return table
 
-    def export_db_to_csv(self):
+    def export_db_to_csv(self, is_locked_ok=True):
         """
         First, call the `get_pandas_from_db` method to get a `pandas.DataFrame` of
         patients from the database. Then, save that table in the form of a CSV file
         to disk and associate it with the `fields.FileFieldWithHash` called
         `export_csv`.
+
+        Calling this method will lock the dataset in the end. If it is already locked,
+        the assignment of the generated file to the field `export_csv` will be blocked
+        unless `is_locked_ok` is set to ``True``.
         """
         table = self.get_pandas_from_db()
         write_buffer = BytesIO()
         table.to_csv(write_buffer, index=None)
         file = File(write_buffer)
-        self.export_csv.save("this-has-no-effect", file, save=True)
+
+        if not self.is_locked:
+            self.export_csv.save("this-has-no-effect", file, save=True)
+        elif is_locked_ok:
+            self.export_csv.save("this-has-no-effect", file, save=True)
+            self.save(override=True)
+        else:
+            self.logger.warning(f"Exporting of dataset {self} was blocked. Aborting.")
+            return
+
+        self.logger.info(
+            f"Exported patients of dataset {self} to CSV ({self.export_csv.path})"
+        )
+        self.lock()
 
     def import_upload_csv_to_db(self):
         """
         Import an uploaded CSV into the database using the `ioports` module. Lock the
         dataset right afterwards to prevent editing the uploaded patients.
         """
+        table = self.get_pandas_from_csv()
+        num_new, num_skipped = ioports.import_from_pandas(table, self)
+        self.logger.info(
+            f"{num_new} new patients were added to dataset {self}. "
+            f"{num_skipped} were skipped."
+        )
+        self.lock()
 
 
 class Patient(ModelLoggerMixin, models.Model):
@@ -301,10 +351,7 @@ class Patient(ModelLoggerMixin, models.Model):
 
     def __str__(self):
         """Report some patient specifics."""
-        return (
-            f"#{self.pk}: {self.sex} ({self.age}) at "
-            f"{self.institution.shortname}"
-        )
+        return (f"#{self.pk}: {self.sex} ({self.age})")
 
     def get_absolute_url(self):
         """Return the absolute URL for a particular patient."""
