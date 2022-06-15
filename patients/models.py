@@ -30,8 +30,9 @@ from django.forms import ValidationError
 from django.urls import reverse
 from django.utils import timezone
 
+import core.loggers as loggers
 import patients.ioports as ioports
-from core.loggers import ModelLoggerMixin
+import patients.mixins as mixins
 
 from .fields import DuplicateFileError, FileFieldWithHash, RobustDateField
 
@@ -58,7 +59,11 @@ def directory_for_exports(instance, _filename) -> str:
     return directory_(used_for="exports", instance=instance)
 
 
-class Dataset(ModelLoggerMixin, models.Model):
+class LockedDatasetError(Exception):
+    """Raised when a `Dataset` or an associated entry was tried to be edited."""
+
+
+class Dataset(loggers.ModelLoggerMixin, models.Model):
     """
     This model represents a collection of patients that have been added to the
     database together. E.g., via uploading a CSV file where each row represents a
@@ -175,8 +180,7 @@ class Dataset(ModelLoggerMixin, models.Model):
         the dataset is locked (and `override` is not set to ``True``).
         """
         if self.is_locked and not override:
-            self.logger.warning("Editing a locked dataset is prohibited. Aborting.")
-            return
+            raise LockedDatasetError("Cannot edit/save a locked dataset.")
 
         self._validate_unique(
             for_fieldname="upload_csv", do_delete=True, do_warn=True, do_raise=False
@@ -191,8 +195,7 @@ class Dataset(ModelLoggerMixin, models.Model):
         Block deletion if dataset is locked. Unless the red override is pushed.
         """
         if self.is_locked and not override:
-            self.logger.warning("Deleting a locked dataset is prohibited. Aborting.")
-            return
+            raise LockedDatasetError("Cannot delete a locked dataset.")
 
         # Making sure that the files associated with the dataset get deleted. The
         # `delete` method of the `FieldFiles` should already take care of that, but I
@@ -274,7 +277,7 @@ class Dataset(ModelLoggerMixin, models.Model):
         self.lock()
 
 
-class Patient(ModelLoggerMixin, models.Model):
+class Patient(mixins.LockedDatasetMixin, loggers.ModelLoggerMixin, models.Model):
     """
     The representation of a patient in the database. It contains some
     demographic information, as well as patient-specific characteristics that
@@ -391,7 +394,7 @@ class Patient(ModelLoggerMixin, models.Model):
         )
 
 
-class Tumor(ModelLoggerMixin, models.Model):
+class Tumor(mixins.LockedDatasetMixin, loggers.ModelLoggerMixin, models.Model):
     """
     Model to describe a patient's tumor in detail. It is connected to a patient
     via a ``django.db.models.ForeignKey`` relation.
@@ -566,7 +569,7 @@ class Tumor(ModelLoggerMixin, models.Model):
 
 Mod = namedtuple("Mod", "value label spec sens")
 
-class Diagnose(ModelLoggerMixin, models.Model):
+class Diagnose(mixins.LockedDatasetMixin, loggers.ModelLoggerMixin, models.Model):
     """
     Model describing the diagnosis of one side of a patient's neck with
     regard to their lymphaitc metastatic involvement.
