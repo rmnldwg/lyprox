@@ -7,7 +7,7 @@ from typing import Optional
 
 from django.contrib.auth.mixins import UserPassesTestMixin
 
-from .models import Patient
+from patients.models import Patient
 
 logger = logging.getLogger(__name__)
 

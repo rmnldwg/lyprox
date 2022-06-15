@@ -19,7 +19,7 @@ from django.forms import widgets
 from core.loggers import FormLoggerMixin
 
 from .ioports import compute_hash
-from .models import Diagnose, Institution, Patient, Tumor
+from .models import Diagnose, Patient, Tumor
 
 
 class PatientForm(FormLoggerMixin, forms.ModelForm):
@@ -288,11 +288,3 @@ class DataFileForm(FormLoggerMixin, forms.Form):
 
         cleaned_data["data_frame"] = data_frame
         return cleaned_data
-
-
-class InsitutionForm(FormLoggerMixin, forms.Form):
-    """
-    Form for creating an institution. This is not yet in use or even functional.
-    """
-    class Meta:
-        model = Institution

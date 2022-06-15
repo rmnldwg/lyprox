@@ -2,7 +2,9 @@ from django import forms
 from django.contrib.auth.forms import AuthenticationForm, UsernameField
 from django.forms import widgets
 
-from .models import User
+from core.loggers import FormLoggerMixin
+
+from .models import Institution, User
 
 
 class CustomAuthenticationForm(AuthenticationForm):
@@ -52,3 +54,10 @@ class SignupRequestForm(forms.ModelForm):
         """
         # TODO: Store the cleaned data somewhere or send it via email to the
         #   admin(s).
+
+class InsitutionForm(FormLoggerMixin, forms.Form):
+    """
+    Form for creating an institution. This is not yet in use or even functional.
+    """
+    class Meta:
+        model = Institution

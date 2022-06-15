@@ -8,6 +8,8 @@ filled with what the python backend computes/generates.
 It includes views for creating, editing, deleting and
 listing the models in the ``patients`` app.
 """
+# pylint: disable=no-member
+# pylint: disable=logging-fstring-interpolation
 
 import logging
 import time
@@ -23,6 +25,10 @@ from django.shortcuts import render
 from django.urls.base import reverse
 from django.views import generic
 
+from accounts.mixins import (
+    InstitutionCheckObjectMixin,
+    InstitutionCheckPatientMixin,
+)
 from core.loggers import ViewLoggerMixin
 from dashboard import query
 from dashboard.forms import DashboardForm
@@ -30,7 +36,6 @@ from dashboard.forms import DashboardForm
 from .filters import PatientFilter
 from .forms import DataFileForm, DiagnoseForm, PatientForm, TumorForm
 from .ioports import ParsingError, export_to_pandas, import_from_pandas
-from .mixins import InstitutionCheckObjectMixin, InstitutionCheckPatientMixin
 from .models import Diagnose, Patient, Tumor
 
 logger = logging.getLogger(__name__)
