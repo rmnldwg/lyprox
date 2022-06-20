@@ -34,6 +34,7 @@ import core.loggers as loggers
 import patients.ioports as ioports
 import patients.mixins as mixins
 
+from .validators import FileTypeValidator
 from .fields import DuplicateFileError, FileFieldWithHash, RobustDateField
 
 
@@ -90,15 +91,33 @@ class Dataset(loggers.ModelLoggerMixin, models.Model):
     be prohibited to change the dataset or any of its associated entries when this is
     set to ``True``."""
 
+    repo_provider = models.CharField(
+        verbose_name="Repository Provider",
+        max_length=100, blank=True, null=True
+    )
+    """(Optional) name of the repository provider from where the data for the upload
+    came from. This could e.g. be 'GitHub' or 'Zenodo'."""
+    repo_data_url = models.URLField(
+        verbose_name="Link to Data Download",
+        blank=True, null=True,
+    )
+    """(Optional) link to the repository's downloads page for the uploaded data. Note
+    that it is not checked whether the data behind this URL actually matches the
+    uploaded data or not."""
+
     upload_csv = FileFieldWithHash(
         upload_to=directory_for_uploads,
-        validators=[FileExtensionValidator(allowed_extensions=["csv"])],
+        validators=[
+            FileTypeValidator(max_size=1024 * 1000 * 10, file_types=("CSV text")),
+        ],
         null=True, blank=True,
     )
     """The custom ``FileField`` that holds the uploaded CSV file."""
     export_csv = FileFieldWithHash(
         upload_to=directory_for_exports,
-        validators=[FileExtensionValidator(allowed_extensions=["csv"])],
+        validators=[
+            FileTypeValidator(max_size=1024 * 1000 * 10, file_types=("CSV text")),
+        ],
         null=True, blank=True,
     )
     """The custom ``FileField`` that holds the exported CSV file."""
@@ -109,7 +128,7 @@ class Dataset(loggers.ModelLoggerMixin, models.Model):
 
     def _validate_unique(
         self,
-        for_fieldname: str,
+        fieldname: str,
         do_delete: bool = False,
         do_warn: bool = True,
         do_raise: bool = True,
@@ -125,21 +144,20 @@ class Dataset(loggers.ModelLoggerMixin, models.Model):
         """
         all_except_self = Dataset.objects.all().exclude(pk=self.pk)
         for dataset in all_except_self:
-            self_filefield = getattr(self, for_fieldname)
-            ds_filefield = getattr(dataset, for_fieldname)
+            self_filefield = getattr(self, fieldname)
+            ds_filefield = getattr(dataset, fieldname)
             try:
                 if self_filefield.md5_hash == ds_filefield.md5_hash:
                     if do_delete:
-                        getattr(self, for_fieldname).delete(save=False)
+                        getattr(self, fieldname).delete(save=False)
                         if do_warn:
                             self.logger.warning(
-                                f"The {for_fieldname} of {self} was deleted because "
+                                f"The {fieldname} of {self} was deleted because "
                                 f"it is a duplicate of {dataset}"
                             )
                     if do_raise:
                         raise DuplicateFileError(
-                            "This file is already associated "
-                            f"with the dataset {dataset}"
+                            f"This file is already associated with dataset {dataset}"
                         )
             except ValueError:
                 # This is necessary because if no file has been assigned to the
@@ -151,7 +169,7 @@ class Dataset(loggers.ModelLoggerMixin, models.Model):
         """Validate uniqueness of the uploaded CSV file."""
         try:
             self._validate_unique(
-                for_fieldname="upload_csv", do_delete=False, do_raise=True
+                fieldname="upload_csv", do_delete=False, do_raise=True
             )
         except DuplicateFileError as df_err:
             raise ValidationError({
@@ -183,10 +201,10 @@ class Dataset(loggers.ModelLoggerMixin, models.Model):
             raise LockedDatasetError("Cannot edit/save a locked dataset.")
 
         self._validate_unique(
-            for_fieldname="upload_csv", do_delete=True, do_warn=True, do_raise=False
+            fieldname="upload_csv", do_delete=True, do_warn=True, do_raise=False
         )
         self._validate_unique(
-            for_fieldname="export_csv", do_delete=True, do_warn=True, do_raise=False
+            fieldname="export_csv", do_delete=True, do_warn=True, do_raise=False
         )
         return super().save(*args, **kwargs)
 
