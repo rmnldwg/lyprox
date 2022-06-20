@@ -13,7 +13,7 @@ import numpy as np
 from django.db.models import Q, QuerySet
 
 from accounts.models import Institution
-from patients.models import Diagnose, Patient, Tumor
+from patients.models import Diagnose, Patient, Tumor, Dataset
 
 logger = logging.getLogger(__name__)
 
@@ -59,7 +59,7 @@ def patient_specific(
     nicotine_abuse: Optional[bool] = None,
     hpv_status: Optional[bool] = None,
     neck_dissection: Optional[bool] = None,
-    institution__in: Optional[Institution] = None,
+    dataset__in: Optional[Institution] = None,
     **rest
 ) -> QuerySet:
     """Filter ``QuerySet`` of patients based on patient-specific properties.
@@ -74,8 +74,7 @@ def patient_specific(
         nicotine_abuse: Filter smokers or non-smokers?
         hpv_status: Select based on HPV status.
         neck_dissection: Filter thos that did or didn't undergo neck dissection.
-        institution__in: Select based on the institution that extracted the
-            respective patient.
+        dataset__in: Select based on the dataset that describes the respective patient.
 
     Returns:
         The filtered ``QuerySet``.
@@ -367,19 +366,16 @@ def count_patients(
     patients = patient_queryset.values(
         "id", "sex", "nicotine_abuse", "hpv_status", "neck_dissection",
         "tumor__subsite", "tumor__t_stage", "tumor__central", "tumor__extension",
-        "institution__id",
+        "dataset__id",
     )
 
-    # get a QuerySet of all institutions
-    num_institutions = Institution.objects.count()
+    # get a QuerySet of all datasets
+    num_datasets = Dataset.objects.count()
 
     counts = {   # initialize counts of patient- & tumor-related fields
         'total': len(patients),
 
-        # 'institutions': np.array([
-        #     len(patients.filter(institution=inst)) for inst in institutions
-        # ], dtype=int),
-        'institutions': np.zeros(shape=num_institutions, dtype=int),
+        'datasets': np.zeros(shape=num_datasets, dtype=int),
 
         'sex': np.zeros(shape=(3,), dtype=int),
         'nicotine_abuse': np.zeros(shape=(3,), dtype=int),
@@ -398,7 +394,7 @@ def count_patients(
 
     # loop through patients to populate the counts dictionary
     for patient in patients:
-        counts['institutions'][patient["institution__id"]-1] += 1
+        counts['datasets'][patient["dataset__id"]-1] += 1
 
         # PATIENT specific counts
         counts['nicotine_abuse'] += tf2arr(patient["nicotine_abuse"])

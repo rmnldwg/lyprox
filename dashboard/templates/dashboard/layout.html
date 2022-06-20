@@ -216,21 +216,21 @@
                     <div class="tile is-9 is-vertical">
                         <div class="tile is-parent is-vertical">
 
-                            <!-- Insitutions -->
+                            <!-- Datasets -->
                             <div class="tile is-child box">
                                 <div class="columns">
                                     <div class="column is-2 is-flex is-flex-direction-row is-justify-content-left is-align-items-center">
-                                        <p id="institutions-title" class="title is-4">Institutions</p>
+                                        <p id="datasets-title" class="title is-4">Datasets</p>
                                     </div>
 
                                     <div class="column is-8">
                                         <div class="field is-grouped is-grouped-multiline">
-                                            {% for checkbox in form.institution__in %}
+                                            {% for checkbox in form.dataset__in %}
                                             {% with idx=forloop.counter0 %}
-                                            {% with name_and_url=form.institution__in.field.names_and_urls|index:idx %}
+                                            {% with name_and_url=form.dataset__in.field.names_and_urls|index:idx %}
                                             <div class="control">
                                                 {{ checkbox.tag }}
-                                                <div class="buttons has-addons for-institutions">
+                                                <div class="buttons has-addons for-datasets">
                                                     <label for="{{ checkbox.id_for_label }}" class="button is-primary is-light is-expanded px-5" data-tooltip="{{ name_and_url.0 }}">
                                                         <span class="icon">
                                                             <img src="{{ name_and_url.1 }}" alt="{{ name_and_url.0 }} logo">
@@ -238,9 +238,9 @@
                                                     </label>
                                                     <div class="button is-info is-static">
                                                         {% if show_percent %}
-                                                        <span>{{ stats.institutions|percent:idx }}%</span>
+                                                        <span>{{ stats.datasets|percent:idx }}%</span>
                                                         {% else %}
-                                                        <span>{{ stats.institutions|index:idx }}</span>
+                                                        <span>{{ stats.datasets|index:idx }}</span>
                                                         {% endif %}
                                                     </div>
                                                 </div>

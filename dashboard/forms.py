@@ -20,7 +20,7 @@ from django.core.exceptions import ValidationError
 
 from accounts.models import Institution
 from core.loggers import FormLoggerMixin
-from patients.models import Diagnose, Patient, Tumor
+from patients.models import Diagnose, Patient, Tumor, Dataset
 
 logger = logging.getLogger(__name__)
 
@@ -116,10 +116,10 @@ class ThreeWayToggle(forms.ChoiceField):
             raise ValidationError("Expects a number")
 
 
-class InstitutionModelChoiceIndexer:
+class DatasetModelChoiceIndexer:
     """
     Custom class with which one can access additional information from
-    the model that is chosen by the `InstitutionMultipleChoiceField`.
+    the model that is chosen by the `DatasetMultipleChoiceField`.
     """
 
     def __init__(self, field) -> None:
@@ -130,30 +130,31 @@ class InstitutionModelChoiceIndexer:
         obj = self.queryset[key]
         return self.info(obj)
 
-    def info(self, obj: Institution) -> Tuple[int, str]:
-        """Return the label and logo URL for the institution."""
+    def info(self, obj: Dataset) -> Tuple[int, str]:
+        """Return the label and logo URL for the Dataset."""
         return (
             self.field.label_from_instance(obj),
             self.field.logo_url_from_instance(obj)
         )
 
 
-class InstitutionMultipleChoiceField(forms.ModelMultipleChoiceField):
-    """Customize label description and add method that returns the logo URL for
-    institutions. The implementation is inspired by how the ``choices`` are
+class DatasetMultipleChoiceField(forms.ModelMultipleChoiceField):
+    """
+    Customize label description and add method that returns the logo URL for
+    Datasets. The implementation is inspired by how the ``choices`` are
     implemented. But since some other functionality depends on how those
-    choices are implemented, it cannot be changed easily."""
-
-    name_and_url_indexer = InstitutionModelChoiceIndexer
+    choices are implemented, it cannot be changed easily.
+    """
+    name_and_url_indexer = DatasetModelChoiceIndexer
     """Allows one to extract more info (name and logo) about the objects."""
 
-    def label_from_instance(self, obj: Institution) -> str:
-        """Institution name as label."""
-        return obj.name
+    def label_from_instance(self, obj: Dataset) -> str:
+        """Dataset name as label."""
+        return obj.__str__()
 
-    def logo_url_from_instance(self, obj: Institution) -> str:
-        """Return URL of Institution's logo."""
-        return obj.logo.url
+    def logo_url_from_instance(self, obj: Dataset) -> str:
+        """Return URL of Dataset's logo."""
+        return obj.institution.logo.url
 
     @property
     def names_and_urls(self):
@@ -200,15 +201,15 @@ class DashboardForm(FormLoggerMixin, forms.Form):
         label="N+ vs N0",
         tooltip="Select all N+ (or N0) patients"
     )
-    institution__in = InstitutionMultipleChoiceField(
+    dataset__in = DatasetMultipleChoiceField(
         required=False,
         widget=forms.CheckboxSelectMultiple(
             # doesn't do anythin since it's written by hand
             attrs={"class": "checkbox is-hidden",
                    "onchange": "changeHandler();"}
         ),
-        queryset=Institution.objects.all().filter(is_hidden=False),
-        initial=Institution.objects.all().filter(is_hidden=False)
+        queryset=Dataset.objects.all().filter(is_public=True),
+        initial=Dataset.objects.all().filter(is_public=True)
     )
 
     # tumor specific info
@@ -291,10 +292,10 @@ class DashboardForm(FormLoggerMixin, forms.Form):
         user = kwargs.pop("user")
         super().__init__(*args, **kwargs)
 
-        # dynamically define which institutions should be selectable
+        # dynamically define which datasets should be selectable
         if user.is_authenticated:
-            self.fields["institution__in"].queryset = Institution.objects.all()
-            self.fields["institution__in"].initial = Institution.objects.all()
+            self.fields["dataset__in"].queryset = Dataset.objects.all()
+            self.fields["dataset__in"].initial = Dataset.objects.all()
 
         # add all LNL ToggleButtons so I don't have to write a myriad of them
         for side in ["ipsi", "contra"]:

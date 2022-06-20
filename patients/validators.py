@@ -39,7 +39,7 @@ class FileTypeValidator:
             raise ValidationError(self.error_messages["max_size"], 'max_size', params)
 
         if self.file_types:
-            if not data.readable() or data.mode != "rb":
+            if not data.readable():
                 data.open(mode="rb")
             data_type = magic.from_buffer(data.read(), mime=True)
             data.close()

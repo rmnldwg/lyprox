@@ -108,7 +108,8 @@ class Dataset(loggers.ModelLoggerMixin, models.Model):
     upload_csv = FileFieldWithHash(
         upload_to=directory_for_uploads,
         validators=[
-            FileTypeValidator(max_size=1024 * 1000 * 10, file_types=("CSV text")),
+            FileTypeValidator(max_size=1024 * 1000 * 10,
+            file_types=("CSV text", "application/csv")),
         ],
         null=True, blank=True,
     )
@@ -116,7 +117,8 @@ class Dataset(loggers.ModelLoggerMixin, models.Model):
     export_csv = FileFieldWithHash(
         upload_to=directory_for_exports,
         validators=[
-            FileTypeValidator(max_size=1024 * 1000 * 10, file_types=("CSV text")),
+            FileTypeValidator(max_size=1024 * 1000 * 10,
+            file_types=("CSV text", "application/csv")),
         ],
         null=True, blank=True,
     )

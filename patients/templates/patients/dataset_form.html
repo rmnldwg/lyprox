@@ -1,0 +1,129 @@
+{% extends "base.html" %}
+
+{% block head %}
+{% include 'head.html' with title="LyProX · Upload Dataset" %}
+{% endblock head %}
+
+{% block content %}
+
+<section class="section">
+    <div class="container">
+        <div class="block columns is-centered">
+            <div class="column is-6">
+                <div class="box">
+                    <form action="{% url 'patients:upload' %}" method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="block">
+                            <p class="title is-3">Upload Dataset</p>
+                            <p>
+                                Upload a CSV file and fill in some basic metadata. If
+                                the dataset can be found in an open repository, feel
+                                free to add the link to it as well.
+                            </p>
+                            {% if form.non_field_errors %}
+                            <p class="notification is-danger is-light">
+                                {{ form.non_field_errors }}
+                            </p>
+                            {% endif %}
+
+                            {% if error %}
+                            <p class="notification is-danger is-light">
+                                {{ error }}
+                            </p>
+                            {% endif %}
+                        </div>
+                        <div class="block">
+                            <div class="field is-grouped">
+                                <div class="control is-expanded">
+                                    <label for="{{ form.name.if_for_label }}" class="label">
+                                        {{ form.name.label }}
+                                    </label>
+                                    {{ form.name }}
+                                    {% if form.errors.name %}
+                                    <small class="help is-danger">{{ form.errors.name }}</small>
+                                    {% endif %}
+                                </div>
+                                <div class="control">
+                                    <label for="{{ form.is_public.id_for_label }}" class="label">
+                                        Make public?
+                                    </label>
+                                    <div class="select">
+                                        {{ form.is_public }}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="field">
+                                <div class="control">
+                                    <label for="{{ form.description.if_for_label }}" class="label">
+                                        {{ form.description.label }}
+                                    </label>
+                                    {{ form.description }}
+                                    {% if form.errors.description %}
+                                    <small class="help is-danger">{{ form.errors.description }}</small>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="field is-grouped">
+                                <div class="control">
+                                    <label for="{{ form.repo_provider.if_for_label }}" class="label">
+                                        {{ form.repo_provider.label }} <span class="has-text-info">(optional)</span>
+                                    </label>
+                                    {{ form.repo_provider }}
+                                </div>
+                                <div class="control is-expanded">
+                                    <label for="{{ form.repo_data_url.if_for_label }}" class="label">
+                                        {{ form.repo_data_url.label }} <span class="has-text-info">(optional)</span>
+                                    </label>
+                                    {{ form.repo_data_url }}
+                                    {% if form.errors.repo_data_url %}
+                                    <small class="help is-danger">{{ form.errors.repo_data_url }}</small>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="block">
+                            <div class="field is-grouped">
+                                <div class="control">
+                                    <div class="file" id="file-upload">
+                                        <label class="file-label">
+                                            {{ form.upload_csv }}
+                                            <span class="file-cta">
+                                                <span class="file-icon">
+                                                    <i class="fas fa-folder-open"></i>
+                                                </span>
+                                                <span class="file-label" id="file-label-text">
+                                                    Choose CSV table...
+                                                </span>
+                                            </span>
+                                        </label>
+                                    </div>
+                                </div>
+                                <button class="button is-primary" type="submit">
+                                    <span class="icon">
+                                        <i class="fas fa-cloud-upload-alt"></i>
+                                    </span>
+                                    <span>Upload</span>
+                                </button>
+                            </div>
+                            {% if form.errors.upload_csv %}
+                            <small class="help is-danger">{{ form.errors.upload_csv }}</small>
+                            {% endif %}
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+    const fileInput = document.querySelector('#file-upload input[type=file]');
+    fileInput.onchange = () => {
+        if (fileInput.files.length > 0) {
+            const fileName = document.querySelector('#file-upload #file-label-text');
+            fileName.textContent = fileInput.files[0].name;
+        }
+    };
+</script>
+
+{% endblock content %}

@@ -20,10 +20,10 @@ from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models.query import QuerySet
-from django.http import HttpResponse
-from django.shortcuts import render
+from django.http import FileResponse, HttpResponse, HttpResponseForbidden
+from django.shortcuts import render, get_object_or_404
 from django.urls.base import reverse
-from django.views import generic
+from django.views import generic, View
 
 from accounts.mixins import (
     InstitutionCheckObjectMixin,
@@ -34,11 +34,65 @@ from dashboard import query
 from dashboard.forms import DashboardForm
 
 from .filters import PatientFilter
-from .forms import DataFileForm, DiagnoseForm, PatientForm, TumorForm
+from .forms import DatasetForm, DataFileForm, DiagnoseForm, PatientForm, TumorForm
 from .ioports import ParsingError, export_to_pandas, import_from_pandas
-from .models import Diagnose, Patient, Tumor
+from .models import Dataset, Diagnose, Patient, Tumor
 
 logger = logging.getLogger(__name__)
+
+
+# DATASET related views
+class CreateDatasetView(
+    ViewLoggerMixin,
+    LoginRequiredMixin,
+    generic.CreateView
+):
+    """Create a dataset from a form."""
+    model = Dataset
+    form_class = DatasetForm
+    template_name = "patients/dataset_form.html"
+    success_url = "/patients/download"
+
+    def get_form_kwargs(self) -> Dict[str, Any]:
+        kwargs = super().get_form_kwargs()
+        kwargs["user"] = self.request.user
+        return kwargs
+
+class DatasetListView(ViewLoggerMixin, generic.ListView):
+    """
+    View that displays all datasets in a list.
+    """
+    model = Dataset
+    template_name: str = "patients/download.html"
+
+    def get_queryset(self):
+        """
+        Return the tables available for download, based on the (logged in) user.
+        """
+        queryset = Dataset.objects.all()
+        user = self.request.user
+
+        if not user.is_authenticated:
+            queryset = queryset.filter(is_public=True)
+
+        return queryset
+
+class DatasetView(ViewLoggerMixin, View):
+    """
+    View that serves the respective `Dataset` CSV file.
+    """
+    def get(self, request, relative_path):
+        """Get correct table and render download response."""
+        dataset = get_object_or_404(
+            Dataset, upload_csv=relative_path
+        )
+        if not dataset.is_public and not request.user.is_authenticated:
+            return HttpResponseForbidden()
+
+        absolute_path = Path(f"{settings.MEDIA_ROOT}/{relative_path}")
+        csv_file = open(absolute_path, 'rb')
+        response = FileResponse(csv_file, as_attachment=True)
+        return response
 
 
 # PATIENT related views
@@ -63,7 +117,7 @@ class PatientListView(ViewLoggerMixin, generic.ListView):
         start_querying = time.perf_counter()
 
         if not self.request.user.is_authenticated:
-            queryset = queryset.filter(institution__is_hidden=False)
+            queryset = queryset.filter(dataset__is_public=True)
 
         self.filterset = self.filterset_class(
             self.request.GET or None, queryset

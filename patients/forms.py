@@ -19,7 +19,89 @@ from django.forms import widgets
 from core.loggers import FormLoggerMixin
 
 from .ioports import compute_hash
-from .models import Diagnose, Patient, Tumor
+from .models import Dataset, Diagnose, Patient, Tumor
+
+
+class DatasetForm(FormLoggerMixin, forms.ModelForm):
+    """
+    Form to create and edit datasets, based on their model definition.
+    """
+    initial = {
+        "is_public": False,
+    }
+    class Meta:
+        """The underlying model."""
+        model = Dataset
+        fields = [
+            "name",
+            "description",
+            "is_public",
+            "repo_provider",
+            "repo_data_url",
+            "upload_csv",
+        ]
+        widgets = {
+            "name": widgets.TextInput(
+                attrs={
+                    "class": "input",
+                    "placeholder": "e.g. lyDATA"
+                }
+            ),
+            "description": widgets.TextInput(
+                attrs={
+                    "class": "textarea",
+                    "placeholder": "A brief description of your dataset"
+                }
+            ),
+            "is_public": widgets.Select(
+                attrs={"class": "select"},
+                choices=[(True, "yes"), (False, "no")],
+            ),
+            "repo_provider": widgets.TextInput(
+                attrs={
+                    "class": "input",
+                    "placeholder": "e.g. GitHub"
+                }
+            ),
+            "repo_data_url": widgets.TextInput(
+                attrs={
+                    "class": "input",
+                    "placeholder": "link to the repository's download page"
+                }
+            ),
+        }
+
+    upload_csv = forms.FileField(
+        required=True,
+        widget=widgets.FileInput(
+            attrs={
+                "class": "file-input",
+                "type": "file"
+            }
+        )
+    )
+
+    def __init__(self, *args, **kwargs):
+        user = kwargs.pop("user")
+        self.user = user
+        super().__init__(*args, **kwargs)
+
+    def save(self, commit=True):
+        """
+        Get the institution from the user and import the uploaded CSV file into the
+        database. Also, export that to populate the ``export_csv`` field. Finally, lock
+        the dataset.
+        """
+        dataset = super(DatasetForm, self).save(commit=False)
+        dataset.institution = self.user.institution
+
+        if commit:
+            dataset.save()
+            dataset.import_upload_csv_to_db()
+            dataset.export_db_to_csv()
+            dataset.lock()
+
+        return dataset
 
 
 class PatientForm(FormLoggerMixin, forms.ModelForm):
@@ -45,7 +127,8 @@ class PatientForm(FormLoggerMixin, forms.ModelForm):
             "neck_dissection",
             "tnm_edition",
             "n_stage",
-            "m_stage"
+            "m_stage",
+            "dataset",
         ]
         widgets = {
             "sex": widgets.Select(attrs={"class": "select"}),
