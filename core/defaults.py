@@ -212,7 +212,3 @@ STATIC_URL = "/static/"
 # upload files
 MEDIA_ROOT = BASE_DIR / "media"
 MEDIA_URL = "/media/"
-
-# Download files
-DOWNLOADS_ROOT = BASE_DIR / "downloads"
-DOWNLOADS_URL = "/downloads/"

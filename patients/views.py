@@ -88,10 +88,16 @@ class DatasetView(ViewLoggerMixin, View):
     View that serves the respective `Dataset` CSV file.
     """
     def get(self, request, relative_path):
-        """Get correct table and render download response."""
-        dataset = get_object_or_404(
-            Dataset, upload_csv=relative_path
-        )
+        """
+        Get correct table and render download response.
+        """
+        kwargs = {}
+        if "uploads" in relative_path:
+            kwargs["upload_csv"] = relative_path
+        elif "exports" in relative_path:
+            kwargs["export_csv"] = relative_path
+
+        dataset = get_object_or_404(Dataset, **kwargs)
         if not dataset.is_public and not request.user.is_authenticated:
             return HttpResponseForbidden()
 
@@ -266,14 +272,14 @@ def upload_patients(request):
                     "form": form,
                     "error": parse_err
                 }
-                return render(request, "patients/upload.html", context)
+                return render(request, "patients/dataset_upload.html", context)
 
             context = {
                 "upload_success": True,
                 "num_new": num_new,
                 "num_skipped": num_skipped
             }
-            return render(request, "patients/upload.html", context)
+            return render(request, "patients/dataset_upload.html", context)
 
     else:
         form = DataFileForm()
@@ -282,7 +288,7 @@ def upload_patients(request):
         "upload_succes": False,
         "form": form
     }
-    return render(request, "patients/upload.html", context)
+    return render(request, "patients/dataset_upload.html", context)
 
 
 def generate_and_download_csv(request):

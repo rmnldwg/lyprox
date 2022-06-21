@@ -81,12 +81,12 @@
                                         <div class="level-item">
                                             <div class="tags">
                                                 {% if dataset.upload_csv %}
-                                                <a href="{{ dataset.upload_csv.url }}" class="button tag is-primary has-addons tooltip" data-tooltip="The originally uploaded CSV file&#10;MD5: {{ dataset.upload_csv.md5_hash }}">
+                                                <a href="{% url 'patients:dataset_download' relative_path=dataset.upload_csv.name %}" class="button tag is-primary has-addons tooltip" data-tooltip="The originally uploaded CSV file&#10;MD5: {{ dataset.upload_csv.md5_hash }}">
                                                     Uploaded CSV
                                                 </a>
                                                 {% endif %}
                                                 {% if dataset.export_csv %}
-                                                <a href="{{ dataset.export_csv.url }}" class="button tag is-success has-addons tooltip" data-tooltip="CSV fileexported from database&#10;MD5: {{ dataset.export_csv.md5_hash }}">
+                                                <a href="{% url 'patients:dataset_download' relative_path=dataset.export_csv.name %}" class="button tag is-success has-addons tooltip" data-tooltip="CSV fileexported from database&#10;MD5: {{ dataset.export_csv.md5_hash }}">
                                                     Exported CSV
                                                 </a>
                                                 {% endif %}
