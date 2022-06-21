@@ -24,7 +24,6 @@ from pathlib import Path
 import pandas as pd
 from django.conf import settings
 from django.core.files import File
-from django.core.validators import FileExtensionValidator
 from django.db import models
 from django.forms import ValidationError
 from django.urls import reverse
@@ -33,9 +32,10 @@ from django.utils import timezone
 import core.loggers as loggers
 import patients.ioports as ioports
 import patients.mixins as mixins
+from accounts.models import Institution
 
-from .validators import FileTypeValidator
 from .fields import DuplicateFileError, FileFieldWithHash, RobustDateField
+from .validators import FileTypeValidator
 
 
 def directory_(used_for: str, instance):
@@ -82,8 +82,8 @@ class Dataset(loggers.ModelLoggerMixin, models.Model):
     """A brief description of the dataset."""
     create_date = models.DateField(default=timezone.now)
     """Date when the dataset was uploaded."""
-    # institution = models.ForeignKey(to=Institution, on_delete=models.CASCADE)
-    # """The clinic or research institute that collected and uploaded the patients."""
+    institution = models.ForeignKey(to=Institution, on_delete=models.CASCADE)
+    """The clinic or research institute that collected and uploaded the patients."""
     is_public = models.BooleanField(default=False)
     """Should this dataset be visible to non-authenticated users?"""
     is_locked = models.BooleanField(default=False)
@@ -126,7 +126,7 @@ class Dataset(loggers.ModelLoggerMixin, models.Model):
 
     def __str__(self) -> str:
         year = self.create_date.strftime("%Y")
-        return f"{year}-{self.name}"
+        return f"{year}-{self.institution.shortname}-{self.name}"
 
     def _validate_unique(
         self,
@@ -181,18 +181,20 @@ class Dataset(loggers.ModelLoggerMixin, models.Model):
 
     def lock(self):
         """Set the field `is_locked` to ``True``"""
-        self.is_locked = True
-        self.save(override=True)
-        self.logger.info(f"Dataset {self} successfully locked.")
+        if not self.is_locked:
+            self.is_locked = True
+            self.save(override=True)
+            self.logger.info(f"Dataset {self} successfully locked.")
 
     def unlock(self):
         """
         Set `is_locked` to ``False``, allowing the dataset and its patients to be
         edited again.
         """
-        self.is_locked = False
-        self.save()
-        self.logger.warning(f"Dataset {self} has been unlocked.")
+        if self.is_locked:
+            self.is_locked = False
+            self.save()
+            self.logger.warning(f"Dataset {self} has been unlocked.")
 
     def save(self, *args, override=False, **kwargs):
         """
@@ -272,7 +274,7 @@ class Dataset(loggers.ModelLoggerMixin, models.Model):
         if not self.is_locked:
             self.export_csv.save("this-has-no-effect", file, save=True)
         elif is_locked_ok:
-            self.export_csv.save("this-has-no-effect", file, save=True)
+            self.export_csv.save("this-has-no-effect", file, save=False)
             self.save(override=True)
         else:
             self.logger.warning(f"Exporting of dataset {self} was blocked. Aborting.")
@@ -307,6 +309,7 @@ class Patient(mixins.LockedDatasetMixin, loggers.ModelLoggerMixin, models.Model)
     and the lymphatic progression pattern of that patient in the form of a
     `Diagnose` model.
     """
+    # pylint: disable=invalid-name
     hash_value = models.CharField(max_length=200, unique=True)
     """Unique ID computed from sensitive info upon patient creation."""
 
@@ -374,7 +377,7 @@ class Patient(mixins.LockedDatasetMixin, loggers.ModelLoggerMixin, models.Model)
 
     def __str__(self):
         """Report some patient specifics."""
-        return (f"#{self.pk}: {self.sex} ({self.age})")
+        return f"#{self.pk}: {self.sex} ({self.age})"
 
     def get_absolute_url(self):
         """Return the absolute URL for a particular patient."""
@@ -693,11 +696,16 @@ class Diagnose(mixins.LockedDatasetMixin, loggers.ModelLoggerMixin, models.Model
 
         Also, if all LNLs are reported as unknown (``None``), just delete it.
         """
-        if all([getattr(self, lnl) is None for lnl in self.LNLs]):
+        # pylint: disable=attribute-defined-outside-init
+        # pylint: disable=invalid-name
+        if all(getattr(self, lnl) is None for lnl in self.LNLs):
             super().save(*args, **kwargs)
             return self.delete()
 
-        safe_negate = lambda x: False if x is None else not x
+        def safe_negate(val):
+            if val is None:
+                return False
+            return not val
 
         # LNL I (a and b)
         if self.Ia or self.Ib:

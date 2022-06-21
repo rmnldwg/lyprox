@@ -58,12 +58,18 @@ class FieldFileWithHash(FieldFile):
         """
         self._require_file()
 
-        if not self.file.readable() or self.file.mode != "rb":
+        # `is_mode_binary` is a little hack that makes sure an `InMemoryUploadedFile`
+        # does not throw an error here, because that apparently doesn't have the
+        # property `mode`.
+        is_mode_binary = getattr(self.file, "mode", "rb") == "rb"
+        if not self.file.readable() or is_mode_binary:
             self.file.open(mode="rb")
 
         file_content = self.file.read()
         computed_hash = hashlib.md5(file_content).hexdigest()
-        self.file.close()
+
+        # Also, here again the file should not be closed. For some weird reason closed
+        # files cannot be reopened?!
 
         if getattr(self, "_md5_hash", None) is None:
             self._md5_hash = computed_hash
