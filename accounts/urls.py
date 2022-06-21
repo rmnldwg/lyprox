@@ -1,3 +1,9 @@
+"""
+Defines the login and logout views for authenticating users. A sign-up views has not
+been implemented yet.
+"""
+# pylint: disable=invalid-name
+
 from django.contrib.auth import views as auth_views
 from django.urls import path
 
