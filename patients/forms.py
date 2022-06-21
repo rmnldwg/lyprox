@@ -78,7 +78,7 @@ class DatasetForm(FormLoggerMixin, forms.ModelForm):
                 "class": "file-input",
                 "type": "file"
             }
-        )
+        ),
     )
 
     def __init__(self, *args, **kwargs):
@@ -99,7 +99,6 @@ class DatasetForm(FormLoggerMixin, forms.ModelForm):
             dataset.save()
             dataset.import_upload_csv_to_db()
             dataset.export_db_to_csv()
-            dataset.lock()
 
         return dataset
 

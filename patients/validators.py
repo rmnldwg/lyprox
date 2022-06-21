@@ -5,10 +5,9 @@ here.
 """
 
 import magic
-
 from django.forms import ValidationError
-from django.utils.deconstruct import deconstructible
 from django.template.defaultfilters import filesizeformat
+from django.utils.deconstruct import deconstructible
 
 
 @deconstructible
@@ -39,10 +38,11 @@ class FileTypeValidator:
             raise ValidationError(self.error_messages["max_size"], 'max_size', params)
 
         if self.file_types:
+            # IMPORTANT: Do not close the file after this! Doing so will cause a
+            # ValueError when trying to save the file to disk.
             if not data.readable():
                 data.open(mode="rb")
             data_type = magic.from_buffer(data.read(), mime=True)
-            data.close()
 
             if data_type not in self.file_types:
                 params = {
