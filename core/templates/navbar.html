@@ -1,37 +1,62 @@
 {% load static %}
 
-
 <nav class="navbar is-fixed-top is-primary" role="navigation">
     <div class="container">
         <div class="navbar-brand">
             <a class="navbar-item" href="{% url 'index' %}" title="home">
                 <img src="{% static 'logo-white.svg' %}" alt="LyProX Logo">
             </a>
+            <a role="button" class="navbar-burger" data-target="navMenu" aria-label="menu" aria-expanded="false">
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+              </a>
         </div>
-        <div class="navbar-menu">
+        <div class="navbar-menu" id="navMenu">
             <div class="navbar-start">
-                <a href="{% url 'patients:list' %}" class="navbar-item" title="list of all patients in database">
-                    Patients
-                </a>
-                <a href="{% url 'patients:create' %}" class="navbar-item" title="add new patients to database">
-                    Create
-                </a>
-
-                <a href="{% url 'patients:upload' %}" class="navbar-item" title="upload batch of patients">
-                    Upload
-                </a>
-
-                <a href="{% url 'patients:download' %}" class="navbar-item" title="export CSV of all patients">
-                    Download
-                </a>
-
                 <div class="navbar-item has-dropdown is-hoverable">
-                    <a href="{% url 'dashboard:dashboard' %}" class="navbar-link" title="explore patterns of progression">
-                        Dashboard
+                    <a href="{% url 'patients:list' %}" class="navbar-link" title="list all patients in database">
+                        Patients
                     </a>
 
                     <div class="navbar-dropdown">
-                        <a href="{% url 'dashboard:help' %}" class="navbar-item">
+                        <a href="{% url 'patients:list' %}" class="navbar-item" title="list all patients in database">
+                            List
+                        </a>
+                        <a href="{% url 'patients:create' %}" class="navbar-item" title="create new patient">
+                            Create
+                        </a>
+                    </div>
+                </div>
+
+                <div class="navbar-item has-dropdown is-hoverable">
+                    <a href="{% url 'patients:dataset_list' %}" class="navbar-link" title="list and download datasets">
+                        Datasets
+                    </a>
+
+                    <div class="navbar-dropdown">
+                        <a href="{% url 'patients:dataset_list' %}" class="navbar-item" title="list and download datasets">
+                            List
+                        </a>
+                        <a href="{% url 'patients:dataset_upload' %}" class="navbar-item" title="upload new datasets">
+                            Upload
+                        </a>
+                        <a href="" class="navbar-item" title="create empty datasets">
+                            Create
+                        </a>
+                    </div>
+                </div>
+
+                <div class="navbar-item has-dropdown is-hoverable">
+                    <a href="{% url 'dashboard:dashboard' %}" class="navbar-link" title="explore patterns of progression in datasets">
+                        Data Viewer
+                    </a>
+
+                    <div class="navbar-dropdown">
+                        <a href="{% url 'dashboard:dashboard' %}" class="navbar-item" title="explore patterns of progression in datasets">
+                            Dashboard
+                        </a>
+                        <a href="{% url 'dashboard:help' %}" class="navbar-item" title="videos and descriptions on how to use the dashboard">
                             Help
                         </a>
                     </div>
@@ -115,3 +140,5 @@
         </div>
     </div>
 </nav>
+
+<script src="{% static 'navbar.js' %}"></script>

@@ -21,9 +21,9 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models.query import QuerySet
 from django.http import FileResponse, HttpResponse, HttpResponseForbidden
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import get_object_or_404, render
 from django.urls.base import reverse
-from django.views import generic, View
+from django.views import View, generic
 
 from accounts.mixins import (
     InstitutionCheckObjectMixin,
@@ -34,7 +34,13 @@ from dashboard import query
 from dashboard.forms import DashboardForm
 
 from .filters import PatientFilter
-from .forms import DatasetForm, DataFileForm, DiagnoseForm, PatientForm, TumorForm
+from .forms import (
+    DataFileForm,
+    DatasetForm,
+    DiagnoseForm,
+    PatientForm,
+    TumorForm,
+)
 from .ioports import ParsingError, export_to_pandas, import_from_pandas
 from .models import Dataset, Diagnose, Patient, Tumor
 
@@ -63,7 +69,7 @@ class DatasetListView(ViewLoggerMixin, generic.ListView):
     View that displays all datasets in a list.
     """
     model = Dataset
-    template_name: str = "patients/download.html"
+    template_name: str = "patients/dataset_patient_list.html"
 
     def get_queryset(self):
         """
@@ -105,7 +111,7 @@ class PatientListView(ViewLoggerMixin, generic.ListView):
     model = Patient
     form_class = DashboardForm
     filterset_class = PatientFilter
-    template_name = "patients/list.html"
+    template_name = "patients/patient_list.html"
     context_object_name = "patient_list"
     action = "show_patient_list"
     is_filterable = True
@@ -305,7 +311,7 @@ def generate_and_download_csv(request):
         if len(queryset) == 0:
             context["generate_success"] = False
             context["error"] = "List of exportable patients is empty"
-            return render(request, "patients/download.html", context)
+            return render(request, "patients/dataset_patient_list.html", context)
 
         try:
             patient_df = export_to_pandas(queryset)
@@ -325,7 +331,7 @@ def generate_and_download_csv(request):
             context["error"] = err
 
     context["download_available"] = Path(download_file_path).is_file()
-    return render(request, "patients/download.html", context)
+    return render(request, "patients/dataset_patient_list.html", context)
 
 
 # TUMOR related views

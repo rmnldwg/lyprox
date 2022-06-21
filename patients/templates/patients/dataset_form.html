@@ -11,7 +11,7 @@
         <div class="block columns is-centered">
             <div class="column is-6">
                 <div class="box">
-                    <form action="{% url 'patients:upload' %}" method="post" enctype="multipart/form-data">
+                    <form action="{% url 'patients:dataset_upload' %}" method="post" enctype="multipart/form-data">
                         {% csrf_token %}
                         <div class="block">
                             <p class="title is-3">Upload Dataset</p>

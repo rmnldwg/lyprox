@@ -11,24 +11,24 @@ input[type="checkbox"].checkbox:checked:hover + label {
     color: white;
 }
 
-input[type="checkbox"].checkbox:checked + .buttons:not(.for-institutions) label,
+input[type="checkbox"].checkbox:checked + .buttons:not(.for-datasets) label,
 input[type="checkbox"].checkbox:checked + .tags label
 {
     background-color: #005EA8;
     color: white;
 }
-input[type="checkbox"].checkbox:checked:hover + .buttons:not(.for-institutions) label,
+input[type="checkbox"].checkbox:checked:hover + .buttons:not(.for-datasets) label,
 input[type="checkbox"].checkbox:checked:hover + .tags label
 {
     background-color: #005392;
     color: white;
 }
 
-input[type="checkbox"].checkbox:checked + .buttons.for-institutions > * {
+input[type="checkbox"].checkbox:checked + .buttons.for-datasets > * {
     box-shadow: 0 0 0 0.125em #005EA8;
     z-index: 2;
 }
-input[type="checkbox"].checkbox:checked:hover + .buttons.for-institutions > * {
+input[type="checkbox"].checkbox:checked:hover + .buttons.for-datasets > * {
     box-shadow: 0 0 0 0.125em #005392;
     z-index: 2;
 }
