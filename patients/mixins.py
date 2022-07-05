@@ -1,54 +1,40 @@
 """
-Mixins that ensure safety with respect to who can edit which patients.
+Here we define some mixins that add functionality to the patient-related objects. So
+far, this consists only of a mixin that blocks saving or deleting a `Patient`, `Tumor`
+or `Diagnose` if the associated `Dataset` is locked.
 """
+# pylint: disable=no-member
 
-import logging
-
-from django.contrib.auth.mixins import UserPassesTestMixin
-
-logger = logging.getLogger(__name__)
-
-from typing import Optional
-
-from .models import Patient
+import patients.models as models
 
 
-class InstitutionCheckPatientMixin(UserPassesTestMixin):
+class LockedDatasetMixin:
     """
-    Mixin that makes sure only users from the institution that created the
-    patient can edit it.
+    Mixin for the `Patient`, `Tumor` and `Diagnose` classes to block any editing or
+    deletion attempts when the `Dataset` they belong to is locked.
     """
-    def test_func(self) -> Optional[bool]:
-        user = self.request.user
-        patient = self.model.objects.get(**self.kwargs)
-        msg = (f"User {user} is trying to edit/delete patient {patient}.")
-        logger.info(msg)
-        if user.is_superuser or user.institution == patient.institution:
-            msg = ("Access granted")
-            logger.info(msg)
-            return True
-        else:
-            msg = ("Access denied")
-            logger.info(msg)
-            return False
+    @property
+    def _must_raise(self):
+        """Infer from class if an error should be raised on save/delete."""
+        if isinstance(self, models.Patient):
+            return self.dataset.is_locked
+        elif isinstance(self, (models.Tumor, models.Diagnose)):
+            return self.patient.dataset.is_locked
 
+    def save(self, *args, **kwargs):
+        """Raise `LockedDatasetError` before saving if associated dataset is locked."""
+        if self._must_raise:
+            raise models.LockedDatasetError(
+                f"Cannot edit/save {self.__class__.__name__} that is associated "
+                "with a locked dataset"
+            )
+        return super().save(*args, **kwargs)
 
-class InstitutionCheckObjectMixin(UserPassesTestMixin):
-    """
-    Mixin that makes sure only users from the institution that created the
-    patient can edit that patient's diagnose and tumor.
-    """
-    def test_func(self) -> Optional[bool]:
-        user = self.request.user
-        patient = Patient.objects.get(pk=self.kwargs["pk"])
-        msg = (f"User {user} is trying to edit/delete a {self.model} on "
-               f"patient {patient}.")
-        logger.info(msg)
-        if user.is_superuser or user.institution == patient.institution:
-            msg = ("Access granted")
-            logger.info(msg)
-            return True
-        else:
-            msg = ("Access denied")
-            logger.info(msg)
-            return False
+    def delete(self, *args, **kwargs):
+        """Raise `LockedDatasetError` befor deleting if associated dataset is locked."""
+        if self._must_raise:
+            raise models.LockedDatasetError(
+                f"Cannot delete {self.__class__.__name__} that is associated "
+                "with a locked dataset"
+            )
+        return super().delete(*args, **kwargs)

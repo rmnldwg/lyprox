@@ -9,7 +9,7 @@ also used to implement custom logic to check that all the inputs are valid or
 that the data is properly cleaned before its being passed on to the next step.
 """
 
-from typing import Any, Dict
+from typing import Any, Dict, Optional
 
 import pandas
 from django import forms
@@ -18,8 +18,88 @@ from django.forms import widgets
 
 from core.loggers import FormLoggerMixin
 
-from .ioports import compute_hash
-from .models import Diagnose, Institution, Patient, Tumor
+from .models import Dataset, Diagnose, Patient, Tumor
+
+
+class DatasetForm(FormLoggerMixin, forms.ModelForm):
+    """
+    Form to create and edit datasets, based on their model definition.
+    """
+    initial = {
+        "is_public": False,
+    }
+    class Meta:
+        """The underlying model."""
+        model = Dataset
+        fields = [
+            "name",
+            "description",
+            "is_public",
+            "repo_provider",
+            "repo_data_url",
+            "upload_csv",
+        ]
+        widgets = {
+            "name": widgets.TextInput(
+                attrs={
+                    "class": "input",
+                    "placeholder": "e.g. lyDATA"
+                }
+            ),
+            "description": widgets.TextInput(
+                attrs={
+                    "class": "textarea",
+                    "placeholder": "A brief description of your dataset"
+                }
+            ),
+            "is_public": widgets.Select(
+                attrs={"class": "select"},
+                choices=[(True, "yes"), (False, "no")],
+            ),
+            "repo_provider": widgets.TextInput(
+                attrs={
+                    "class": "input",
+                    "placeholder": "e.g. GitHub"
+                }
+            ),
+            "repo_data_url": widgets.TextInput(
+                attrs={
+                    "class": "input",
+                    "placeholder": "link to the repository's download page"
+                }
+            ),
+        }
+
+    upload_csv = forms.FileField(
+        required=True,
+        widget=widgets.FileInput(
+            attrs={
+                "class": "file-input",
+                "type": "file"
+            }
+        ),
+    )
+
+    def __init__(self, *args, **kwargs):
+        user = kwargs.pop("user")
+        self.user = user
+        super().__init__(*args, **kwargs)
+
+    def save(self, commit=True):
+        """
+        Get the institution from the user and import the uploaded CSV file into the
+        database. Also, export that to populate the ``export_csv`` field. Finally, lock
+        the dataset.
+        """
+        dataset = super(DatasetForm, self).save(commit=False)
+        dataset.institution = self.user.institution
+
+        if commit:
+            dataset.save()
+            dataset.import_upload_csv_to_db()
+            dataset.export_db_to_csv()
+
+        return dataset
 
 
 class PatientForm(FormLoggerMixin, forms.ModelForm):
@@ -38,6 +118,7 @@ class PatientForm(FormLoggerMixin, forms.ModelForm):
         model = Patient
         fields = [
             "sex",
+            "age",
             "diagnose_date",
             "alcohol_abuse",
             "nicotine_abuse",
@@ -45,10 +126,12 @@ class PatientForm(FormLoggerMixin, forms.ModelForm):
             "neck_dissection",
             "tnm_edition",
             "n_stage",
-            "m_stage"
+            "m_stage",
+            "dataset",
         ]
         widgets = {
             "sex": widgets.Select(attrs={"class": "select"}),
+            "age": widgets.NumberInput(attrs={"class": "input"}),
             "diagnose_date": widgets.NumberInput(
                 attrs={"class": "input",
                        "type": "date"}
@@ -82,79 +165,31 @@ class PatientForm(FormLoggerMixin, forms.ModelForm):
             "m_stage": widgets.Select(attrs={"class": "select"})
         }
 
+    dataset = forms.ModelChoiceField(
+        required=True,
+        widget=widgets.Select(attrs={"class": "select"}),
+        queryset=Dataset.objects.all().filter(is_locked=False),
+        initial=Dataset.objects.all().filter(is_locked=False),
+        empty_label="no matching dataset",
+    )
+
     def __init__(self, *args, **kwargs):
+        """
+        Extract user to only allow adding patients to datasets from same
+        institution as user.
+        """
         user = kwargs.pop("user")
-        super().__init__(*args, **kwargs)
         self.user = user
+        super().__init__(*args, **kwargs)
 
-    first_name = forms.CharField(
-        widget=widgets.TextInput(attrs={"class": "input",
-                                        "placeholder": "First name"}))  #:
-    last_name = forms.CharField(
-        widget=widgets.TextInput(attrs={"class": "input",
-                                        "placeholder": "Last name"}))    #:
-    birthday = forms.DateField(
-        widget=widgets.NumberInput(attrs={"class": "input",
-                                          "type": "date"}))  #:
-    check_for_duplicate = forms.BooleanField(
-        widget=widgets.HiddenInput(),
-        required=False)
-
-    def save(self, commit=True):
-        """Compute hashed ID and age from name, birthday and diagnose date."""
-        patient = super(PatientForm, self).save(commit=False)
-
-        patient.hash_value = self.cleaned_data["hash_value"]
-        patient.age = self._compute_age()
-        patient.institution = self.user.institution
-
-        if commit:
-            patient.save()
-
-        return patient
-
-    def clean(self):
-        """Override superclass clean method to raise a ``ValidationError`` when
-        a duplicate identifier is found."""
-        cleaned_data = super(PatientForm, self).clean()
-        unique_hash, cleaned_data = self._get_identifier(cleaned_data)
-
-        if cleaned_data["check_for_duplicate"]:
-            try:
-                prev_patient_hash = Patient.objects.get(hash_value=unique_hash)
-                msg = ("Hash value already in database. Entered patient might "
-                       "be duplicate.")
-                self.logger.warning(msg)
-                raise forms.ValidationError(msg)
-
-            # iff the above does not throw an exception, one can proceed
-            except Patient.DoesNotExist:
-                pass
-
-        cleaned_data["hash_value"] = unique_hash
-        return cleaned_data
-
-    def _compute_age(self):
-        """Compute age of patient at diagnose/admission."""
-        bd = self.cleaned_data["birthday"]
-        dd = self.cleaned_data["diagnose_date"]
-        age = dd.year - bd.year
-
-        if (dd.month < bd.month) or (dd.month == bd.month and dd.day < bd.day):
-            age -= 1
-
-        self.cleaned_data.pop("birthday")
-        return age
-
-    def _get_identifier(self, cleaned_data):
-        """Compute the hashed undique identifier from fields that are of
-        provacy concern."""
-        hash_value = compute_hash(cleaned_data["first_name"],
-                                  cleaned_data["last_name"],
-                                  cleaned_data["birthday"])
-        cleaned_data.pop("first_name")
-        cleaned_data.pop("last_name")
-        return hash_value, cleaned_data
+    def clean_dataset(self) -> Optional[Dict[str, Any]]:
+        """Make sure that the user is allowed to add patients to the dataset."""
+        dataset = self.cleaned_data["dataset"]
+        if not self.user.is_superuser and dataset.institution != self.user.institution:
+            raise ValidationError(
+                f"Only {dataset.institution.shortname} users can add to this dataset"
+            )
+        return dataset
 
 
 class TumorForm(FormLoggerMixin, forms.ModelForm):
@@ -288,11 +323,3 @@ class DataFileForm(FormLoggerMixin, forms.Form):
 
         cleaned_data["data_frame"] = data_frame
         return cleaned_data
-
-
-class InsitutionForm(FormLoggerMixin, forms.Form):
-    """
-    Form for creating an institution. This is not yet in use or even functional.
-    """
-    class Meta:
-        model = Institution

@@ -32,8 +32,8 @@ def _assemble_kwargs(patient_factory, tumor_factory, diagnose_factory,
 @pytest.mark.django_db
 @pytest.mark.parametrize(
     "url_name, required_kwargs",
-    [("patients:upload", None),
-     ("patients:download", None),
+    [("patients:dataset_upload", None),
+     ("patients:dataset_list", None),
      ("patients:create", None),
      ("patients:update", ["pk"]),
      ("patients:delete", ["pk"]),

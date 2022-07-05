@@ -10,13 +10,29 @@ fields we want to filter/sort our models and how.
 
 .. _docs: https://django-filter.readthedocs.io/en/stable/
 """
+import logging
 
 import django_filters
 from django.forms import widgets
 
-from accounts.models import Institution
+from .models import Dataset, Patient
 
-from .models import Patient
+logger = logging.getLogger(__name__)
+
+
+def public_or_logged_in(request):
+    """
+    Return a queryset of datasets, depending on whether a user is logged in or not.
+    """
+    public_datasets = Dataset.objects.all().filter(is_public=True)
+
+    if request is None:
+        return public_datasets
+
+    if request.user.is_authenticated:
+        return Dataset.objects.all()
+
+    return public_datasets
 
 
 class PatientFilter(django_filters.FilterSet):
@@ -24,6 +40,12 @@ class PatientFilter(django_filters.FilterSet):
     A ``django_filters.FilterSet`` which allows for easy filtering of a
     patient queryset for any fields defined here.
     """
+    class Meta:
+        """Define which django model this should act on."""
+        model = Patient
+        fields = ["diagnose_date", "gender", "age",
+                  "t_stage", "n_stage", "m_stage"]
+
     diagnose_date = django_filters.DateFromToRangeFilter(
         widget=django_filters.widgets.RangeWidget(attrs={"class": "input",
                                                          "type": "date"})
@@ -49,8 +71,8 @@ class PatientFilter(django_filters.FilterSet):
         choices=Patient.M_stages.choices,
         widget=widgets.SelectMultiple()
     )
-    institution = django_filters.ModelMultipleChoiceFilter(
-        queryset=Institution.objects.all()
+    dataset = django_filters.ModelMultipleChoiceFilter(
+        queryset=public_or_logged_in,
     )
 
     # additional form field for sorting
@@ -66,9 +88,3 @@ class PatientFilter(django_filters.FilterSet):
             "t_stage": "T-stage"
         }
     )
-
-    class Meta:
-        """Define which django model this should act on."""
-        model = Patient
-        fields = ["diagnose_date", "gender", "age",
-                  "t_stage", "n_stage", "m_stage"]

@@ -13,7 +13,7 @@ import numpy as np
 from django.db.models import Q, QuerySet
 
 from accounts.models import Institution
-from patients.models import Diagnose, Patient, Tumor
+from patients.models import Dataset, Diagnose, Patient, Tumor
 
 logger = logging.getLogger(__name__)
 
@@ -59,7 +59,7 @@ def patient_specific(
     nicotine_abuse: Optional[bool] = None,
     hpv_status: Optional[bool] = None,
     neck_dissection: Optional[bool] = None,
-    institution__in: Optional[Institution] = None,
+    dataset__in: Optional[Institution] = None,
     **rest
 ) -> QuerySet:
     """Filter ``QuerySet`` of patients based on patient-specific properties.
@@ -74,8 +74,7 @@ def patient_specific(
         nicotine_abuse: Filter smokers or non-smokers?
         hpv_status: Select based on HPV status.
         neck_dissection: Filter thos that did or didn't undergo neck dissection.
-        institution__in: Select based on the institution that extracted the
-            respective patient.
+        dataset__in: Select based on the dataset that describes the respective patient.
 
     Returns:
         The filtered ``QuerySet``.
@@ -152,7 +151,7 @@ def maxllh_consensus(column: Tuple[np.ndarray]) -> Optional[bool]:
         The most likely true state according to the consensus from the
         diagnoses provided.
     """
-    if all([obs is None for obs in column]):
+    if all(obs is None for obs in column):
         return None
 
     healthy_llh = 1.
@@ -275,9 +274,9 @@ def diagnose_specific(
                 combine = any
             elif kwargs['modality_combine'] == 'AND':
                 # same as `all`, but handles `None` correctly by ignoring it
-                combine = lambda col: not(any(
-                    [not(e) if e is not None else None for e in col]
-                ))
+                combine = lambda col: not(
+                    any(not(e) if e is not None else None for e in col)
+                )
             elif kwargs['modality_combine'] == 'maxLLH':
                 combine = lambda column: maxllh_consensus(tuple(column))
             elif kwargs['modality_combine'] == "RANK":
@@ -367,19 +366,13 @@ def count_patients(
     patients = patient_queryset.values(
         "id", "sex", "nicotine_abuse", "hpv_status", "neck_dissection",
         "tumor__subsite", "tumor__t_stage", "tumor__central", "tumor__extension",
-        "institution__id",
+        "dataset__id",
     )
-
-    # get a QuerySet of all institutions
-    num_institutions = Institution.objects.count()
 
     counts = {   # initialize counts of patient- & tumor-related fields
         'total': len(patients),
 
-        # 'institutions': np.array([
-        #     len(patients.filter(institution=inst)) for inst in institutions
-        # ], dtype=int),
-        'institutions': np.zeros(shape=num_institutions, dtype=int),
+        'datasets': {ds.id: 0 for ds in Dataset.objects.all()},
 
         'sex': np.zeros(shape=(3,), dtype=int),
         'nicotine_abuse': np.zeros(shape=(3,), dtype=int),
@@ -398,7 +391,7 @@ def count_patients(
 
     # loop through patients to populate the counts dictionary
     for patient in patients:
-        counts['institutions'][patient["institution__id"]-1] += 1
+        counts['datasets'][patient["dataset__id"]] += 1
 
         # PATIENT specific counts
         counts['nicotine_abuse'] += tf2arr(patient["nicotine_abuse"])
@@ -437,6 +430,7 @@ def count_patients(
                 for lnl in Diagnose.LNLs:
                     counts[f'{side}_{lnl}'] += tf2arr(None)
 
+    counts["datasets"] = [num for num in counts["datasets"].values()]
     end_time = time.perf_counter()
     logger.info(f"Generating stats done after {end_time - start_time:.3f} s")
     return patient_queryset, counts

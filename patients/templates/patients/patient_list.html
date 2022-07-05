@@ -103,11 +103,11 @@
                                     </div>
                                 </div>
                                 <div class="control">
-                                    <label for="{{ filterset.form.institution.id_for_label }}" class="label has-text-primary">
-                                        {{ filterset.form.institution.label }}
+                                    <label for="{{ filterset.form.dataset.id_for_label }}" class="label has-text-primary">
+                                        {{ filterset.form.dataset.label }}
                                     </label>
                                     <div class="select is-multiple">
-                                        {{ filterset.form.institution }}
+                                        {{ filterset.form.dataset }}
                                     </div>
                                 </div>
                             </div>
@@ -136,14 +136,6 @@
                             </span>
                         </span>
                         <span>Patient</span>
-                    </th>
-                    <th class="is-hidden-touch is-hidden-desktop-only is-hidden-widescreen-only">
-                        <span class="icon-text">
-                            <span class="icon">
-                                <i class="fas fa-key"></i>
-                            </span>
-                        </span>
-                        <span>Hash</span>
                     </th>
                     <th>
                         <span class="icon-text">
@@ -181,7 +173,6 @@
                     <td>
                         <span>{{ patient.pk }}</span>
                     </td>
-                    <td class="is-hidden-touch is-hidden-desktop-only is-hidden-widescreen-only"><code>{{ patient.hash_value | hashdisplay }}</code></td>
                     <td>{{ patient.diagnose_date | date:"Y-m-d" }} </td>
                     <td>
                         <span class="icon-text">
@@ -200,10 +191,10 @@
                     <td>
                         <span class="icon-text">
                             <span class="icon mr-2">
-                                <img src="{{ patient.institution.logo.url }}" alt="{{ patient.institution.shortname }} logo" title="{{ patient.institution.shortname }}">
+                                <img src="{{ patient.dataset.institution.logo.url }}" alt="{{ patient.dataset.institution.shortname }} logo" title="{{ patient.dataset.institution.shortname }}">
                             </span>
                             <span class="is-hidden-touch is-hidden-desktop-only">
-                                {{ patient.institution.name }}
+                                {{ patient.dataset.institution.name }}
                             </span>
                         </span>
                     </td>
