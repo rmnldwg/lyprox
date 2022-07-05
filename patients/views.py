@@ -13,14 +13,14 @@ listing the models in the ``patients`` app.
 
 import logging
 import time
+from pathlib import Path
 from typing import Any, Dict
 
 from django.conf import settings
-from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models.query import QuerySet
 from django.http import FileResponse, HttpResponse, HttpResponseForbidden
-from django.shortcuts import get_object_or_404, render
+from django.shortcuts import get_object_or_404
 from django.urls.base import reverse
 from django.views import View, generic
 
@@ -33,14 +33,7 @@ from dashboard import query
 from dashboard.forms import DashboardForm
 
 from .filters import PatientFilter
-from .forms import (
-    DataFileForm,
-    DatasetForm,
-    DiagnoseForm,
-    PatientForm,
-    TumorForm,
-)
-from .ioports import ParsingError, export_to_pandas, import_from_pandas
+from .forms import DatasetForm, DiagnoseForm, PatientForm, TumorForm
 from .models import Dataset, Diagnose, Patient, Tumor
 
 logger = logging.getLogger(__name__)
@@ -246,115 +239,6 @@ class DeletePatientView(ViewLoggerMixin,
     template_name = "patients/patient_delete.html"  #:
     success_url = "/patients"  #:
     action = "delete_patient"  #:
-
-
-@login_required
-def upload_patients(request):
-    """
-    View to load many patients at once from a CSV file using pandas. This
-    requires the CSV file to be formatted in a certain way.
-    """
-    if request.method == "POST":
-        form = DataFileForm(request.POST, request.FILES)
-
-        # custom validator creates pandas DataFrame from uploaded CSV
-        if form.is_valid():
-            data_frame = form.cleaned_data["data_frame"]
-            # creating patients from the resulting pandas DataFrame
-            try:
-                num_new, num_skipped = import_from_pandas(data_frame, request.user)
-            except ParsingError as parse_err:
-                logger.error(parse_err)
-                form = DataFileForm()
-                context = {
-                    "upload_success": False,
-                    "form": form,
-                    "error": parse_err
-                }
-                return render(request, "patients/dataset_upload.html", context)
-
-            context = {
-                "upload_success": True,
-                "num_new": num_new,
-                "num_skipped": num_skipped
-            }
-            return render(request, "patients/dataset_upload.html", context)
-
-    else:
-        form = DataFileForm()
-
-    context = {
-        "upload_succes": False,
-        "form": form
-    }
-    return render(request, "patients/dataset_upload.html", context)
-
-
-class DownloadTablesListView(ViewLoggerMixin, generic.ListView):
-    """
-    View that displays all insitution's patient tables that are available for
-    download.
-    """
-    model = CSVTable
-    template_name: str = "patients/download.html"
-
-    def get_queryset(self):
-        """
-        Return the tables available for download, based on the (logged in) user.
-        """
-        queryset = CSVTable.objects.all()
-        user = self.request.user
-
-        if not user.is_authenticated:
-            queryset = queryset.filter(institution__is_hidden=False)
-
-        return queryset
-
-
-class DownloadTableView(ViewLoggerMixin, View):
-    """
-    View that serves the respective `CSVTables` CSV file.
-    """
-    def get(self, request, relative_path):
-        """Get correct table and render download response."""
-        csv_table = get_object_or_404(
-            CSVTable, file=relative_path
-        )
-        if csv_table.institution.is_hidden and not request.user.is_authenticated:
-            return HttpResponseForbidden()
-
-        absolute_path = f"{settings.MEDIA_ROOT}/{relative_path}"
-
-    if request.method == "POST":
-        if user.is_authenticated:
-            queryset = Patient.objects.all()
-        else:
-            queryset = Patient.objects.all().filter(institution__is_hidden=False)
-
-        if len(queryset) == 0:
-            context["generate_success"] = False
-            context["error"] = "List of exportable patients is empty"
-            return render(request, "patients/dataset_patient_list.html", context)
-
-        try:
-            patient_df = export_to_pandas(queryset)
-            patient_df.to_csv(download_file_path, index=False)
-            logger.info("Successfully generated and saved database as CSV.")
-            context["generate_success"] = True
-
-        except FileNotFoundError:
-            msg = ("Download folder is missing or can't be accessed.")
-            logger.error(msg)
-            context["generate_success"] = False
-            context["error"] = msg
-
-        except Exception as err:
-            logger.error(err)
-            context["generate_success"] = False
-            context["error"] = err
-
-    context["download_available"] = Path(download_file_path).is_file()
-    return render(request, "patients/dataset_patient_list.html", context)
 
 
 # TUMOR related views

@@ -13,9 +13,6 @@ and `Diagnose` class.
 There are also custom methods implemented, making sure that e.g. the diagnosis
 of a sublevel (lets say ``Ia``) is consistent with the diagnosis of the
 respective superlevel (in that case ``I``).
-
-In addition, the module defines a `CSVTable` model that enables users to
-download CSV tables with patient of a particular institution's cohort.
 """
 # pylint: disable=no-member
 # pylint: disable=logging-fstring-interpolation
