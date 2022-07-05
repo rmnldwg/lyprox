@@ -6,7 +6,6 @@ from django.utils.html import format_html
 register = template.Library()
 
 
-
 @register.filter(name="index")
 def index(indexable, i):
     return indexable[int(f"{i}".lower())]
@@ -35,13 +34,6 @@ def percent(indexable, i):
         return " - "
     else:
         return f"{100 * indexable[i] / total:.0f}"
-
-@register.filter(name="hashdisplay")
-def hashdisplay(string):
-    num = int(string)
-    byte_num = int.to_bytes(num, length=8, byteorder="big", signed=True)
-    hex_str = [f"{b:02x}" for b in byte_num]
-    return ":".join(hex_str)
 
 @register.simple_tag(name="include_md", takes_context=True)
 def include_md(context, template_name):
