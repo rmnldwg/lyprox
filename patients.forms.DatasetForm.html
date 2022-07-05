@@ -6,7 +6,7 @@
 
   <head>
     
-    <title>patients.forms.DataFileForm</title>
+    <title>patients.forms.DatasetForm</title>
     <meta name="generator" content="pydoctor 22.5.1"> 
         
     </meta>
@@ -142,7 +142,7 @@
 
       <div class="thingTitle">
         <span>Class</span>
-        <code class="thisobject"><a href="patients.forms.DataFileForm.html" class="internal-link" title="This class"><wbr></wbr>Data<wbr></wbr>File<wbr></wbr>Form</a></code> 
+        <code class="thisobject"><a href="patients.forms.DatasetForm.html" class="internal-link" title="This class"><wbr></wbr>Dataset<wbr></wbr>Form</a></code> 
       </div>
       
       <div>
@@ -151,8 +151,21 @@
         
          
 
+        <div class="childrenKindTitle">Classes</div>
+        <ul>
+    
+    <li class="">
         
         
+        
+
+        
+            <div class="itemName"><code><a href="patients.forms.DatasetForm.Meta.html" class="internal-link" title="patients.forms.DatasetForm.Meta"><wbr></wbr>Meta</a></code>
+            </div>
+        
+
+    </li>
+</ul>
 
         <div class="childrenKindTitle">Methods</div>
         <ul>
@@ -163,7 +176,17 @@
         
 
         
-            <div class="itemName"><code><a href="#clean" class="internal-link" title="patients.forms.DataFileForm.clean">clean</a></code>
+            <div class="itemName"><code><a href="#__init__" class="internal-link" title="patients.forms.DatasetForm.__init__">__init__</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="#save" class="internal-link" title="patients.forms.DatasetForm.save">save</a></code>
             </div>
         
 
@@ -182,7 +205,27 @@
         
 
         
-            <div class="itemName"><code><a href="#data_file" class="internal-link" title="patients.forms.DataFileForm.data_file">data<wbr></wbr>_file</a></code>
+            <div class="itemName"><code><a href="#initial" class="internal-link" title="patients.forms.DatasetForm.initial">initial</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="#upload_csv" class="internal-link" title="patients.forms.DatasetForm.upload_csv">upload<wbr></wbr>_csv</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="#user" class="internal-link" title="patients.forms.DatasetForm.user">user</a></code>
             </div>
         
 
@@ -209,7 +252,7 @@
         <div class="childrenKindTitle">Classes</div>
         <ul>
     
-    <li class=" thisobject">
+    <li class="">
         
         
         
@@ -219,7 +262,7 @@
             </div>
         
 
-    </li><li class="">
+    </li><li class=" thisobject">
         
         
         
@@ -293,7 +336,7 @@
         
 
         <div class="page-header">
-          <h1 class="class"><code><code><a href="patients.html" class="internal-link">patients</a></code><wbr></wbr>.<code><a href="patients.forms.html" class="internal-link" title="patients.forms">forms</a></code><wbr></wbr>.<code><a href="patients.forms.DataFileForm.html" class="internal-link" title="patients.forms.DataFileForm">DataFileForm</a></code></code></h1>
+          <h1 class="class"><code><code><a href="patients.html" class="internal-link">patients</a></code><wbr></wbr>.<code><a href="patients.forms.html" class="internal-link" title="patients.forms">forms</a></code><wbr></wbr>.<code><a href="patients.forms.DatasetForm.html" class="internal-link" title="patients.forms.DatasetForm">DatasetForm</a></code></code></h1>
           <div id="showPrivate">
             <button class="btn btn-link" onclick="togglePrivate()">Toggle Private API</button>
           </div>
@@ -304,29 +347,48 @@
         </div>
 
         <div class="extrasDocstring">
-          <p><code><span class="py-keyword">class</span> <span class="py-defname">DataFileForm</span>(<a href="core.loggers.FormLoggerMixin.html" class="internal-link" title="core.loggers.FormLoggerMixin">FormLoggerMixin</a>, forms.Form):</code></p>
-          <p><a href="classIndex.html#patients.forms.DataFileForm">View In Hierarchy</a></p>
+          <p><code><span class="py-keyword">class</span> <span class="py-defname">DatasetForm</span>(<a href="core.loggers.FormLoggerMixin.html" class="internal-link" title="core.loggers.FormLoggerMixin">FormLoggerMixin</a>, forms.ModelForm):</code></p>
+          <p><a href="classIndex.html#patients.forms.DatasetForm">View In Hierarchy</a></p>
         </div>
 
         <div class="moduleDocstring">
-          <div><p>Accept and process a CSV file that can then be parsed to batch-create a
-number of patients at once.</p>
+          <div><p>Form to create and edit datasets, based on their model definition.</p>
 </div>
         </div>
 
         <div id="splitTables">
-          <table class="children sortable" id="id21">
+          <table class="children sortable" id="id13">
   
   
-  <tr class="method">
+  <tr class="class">
+    
+    <td>Class</td>
+    <td><code><a href="patients.forms.DatasetForm.Meta.html" class="internal-link" title="patients.forms.DatasetForm.Meta"><wbr></wbr>Meta</a></code></td>
+    <td>The underlying model.</td>
+  </tr><tr class="method">
     
     <td>Method</td>
-    <td><code><a href="#clean" class="internal-link" title="patients.forms.DataFileForm.clean">clean</a></code></td>
-    <td>Cleaning method that makes sure the uploaded data is in fact a CSV file and can be parsed by <tt class="rst-docutils literal">pandas</tt> into a <tt class="rst-docutils literal">DataFrame</tt>.</td>
+    <td><code><a href="#__init__" class="internal-link" title="patients.forms.DatasetForm.__init__">__init__</a></code></td>
+    <td><span class="undocumented">Undocumented</span></td>
+  </tr><tr class="method">
+    
+    <td>Method</td>
+    <td><code><a href="#save" class="internal-link" title="patients.forms.DatasetForm.save">save</a></code></td>
+    <td>Get the institution from the user and import the uploaded CSV file into the database. Also, export that to populate the <tt class="rst-docutils literal">export_csv</tt> field. Finally, lock the dataset.</td>
   </tr><tr class="classvariable">
     
     <td>Class Variable</td>
-    <td><code><a href="#data_file" class="internal-link" title="patients.forms.DataFileForm.data_file">data<wbr></wbr>_file</a></code></td>
+    <td><code><a href="#initial" class="internal-link" title="patients.forms.DatasetForm.initial">initial</a></code></td>
+    <td><span class="undocumented">Undocumented</span></td>
+  </tr><tr class="classvariable">
+    
+    <td>Class Variable</td>
+    <td><code><a href="#upload_csv" class="internal-link" title="patients.forms.DatasetForm.upload_csv">upload<wbr></wbr>_csv</a></code></td>
+    <td><span class="undocumented">Undocumented</span></td>
+  </tr><tr class="instancevariable">
+    
+    <td>Instance Variable</td>
+    <td><code><a href="#user" class="internal-link" title="patients.forms.DatasetForm.user">user</a></code></td>
     <td><span class="undocumented">Undocumented</span></td>
   </tr>
 </table>
@@ -339,36 +401,96 @@ number of patients at once.</p>
           <div class="basemethod">
   
   
-  <a name="patients.forms.DataFileForm.clean">
+  <a name="patients.forms.DatasetForm.__init__">
     
   </a>
-  <a name="clean">
+  <a name="__init__">
     
   </a>
   <div class="functionHeader">
     
-    <span class="py-keyword">def</span> <span class="py-defname">clean</span>(self):
+    <span class="py-keyword">def</span> <span class="py-defname">__init__</span>(self, *args, **kwargs):
     
   </div>
   <div class="docstring functionBody">
     
     
-    <div><p>Cleaning method that makes sure the uploaded data is in fact a CSV
-file and can be parsed by <tt class="rst-docutils literal">pandas</tt> into a <tt class="rst-docutils literal">DataFrame</tt>.</p>
-<table class="fieldTable"><tr class="fieldStart"><td class="fieldName" colspan="2">Returns</td></tr><tr><td class="fieldArgContainer"><code>Dict[<wbr></wbr>str, <wbr></wbr>Any]</code></td><td class="fieldArgDesc"><span class="undocumented">Undocumented</span></td></tr></table></div>
+    <div><p class="undocumented">Undocumented</p></div>
   </div>
-</div><div class="baseclassvariable">
+</div><div class="basemethod">
   
   
-  <a name="patients.forms.DataFileForm.data_file">
+  <a name="patients.forms.DatasetForm.save">
     
   </a>
-  <a name="data_file">
+  <a name="save">
     
   </a>
   <div class="functionHeader">
     
-    <span class="py-defname">data_file</span> =
+    <span class="py-keyword">def</span> <span class="py-defname">save</span>(self, commit=True):
+    
+  </div>
+  <div class="docstring functionBody">
+    
+    
+    <div><p>Get the institution from the user and import the uploaded CSV file into the
+database. Also, export that to populate the <tt class="rst-docutils literal">export_csv</tt> field. Finally, lock
+the dataset.</p>
+</div>
+  </div>
+</div><div class="baseclassvariable">
+  
+  
+  <a name="patients.forms.DatasetForm.initial">
+    
+  </a>
+  <a name="initial">
+    
+  </a>
+  <div class="functionHeader">
+    
+    <span class="py-defname">initial</span>: <code>dict[<wbr></wbr>str, <wbr></wbr>bool]</code> =
+    
+  </div>
+  <div class="functionBody">
+    
+    
+    <div><p class="undocumented">Undocumented</p></div>
+    
+  </div>
+</div><div class="baseclassvariable">
+  
+  
+  <a name="patients.forms.DatasetForm.upload_csv">
+    
+  </a>
+  <a name="upload_csv">
+    
+  </a>
+  <div class="functionHeader">
+    
+    <span class="py-defname">upload_csv</span> =
+    
+  </div>
+  <div class="functionBody">
+    
+    
+    <div><p class="undocumented">Undocumented</p></div>
+    
+  </div>
+</div><div class="baseinstancevariable">
+  
+  
+  <a name="patients.forms.DatasetForm.user">
+    
+  </a>
+  <a name="user">
+    
+  </a>
+  <div class="functionHeader">
+    
+    <span class="py-defname">user</span> =
     
   </div>
   <div class="functionBody">

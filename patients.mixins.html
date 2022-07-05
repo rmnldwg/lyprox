@@ -160,17 +160,7 @@
         
 
         
-            <div class="itemName"><code><a href="patients.mixins.InstitutionCheckObjectMixin.html" class="internal-link" title="patients.mixins.InstitutionCheckObjectMixin"><wbr></wbr>Institution<wbr></wbr>Check<wbr></wbr>Object<wbr></wbr>Mixin</a></code>
-            </div>
-        
-
-    </li><li class="">
-        
-        
-        
-
-        
-            <div class="itemName"><code><a href="patients.mixins.InstitutionCheckPatientMixin.html" class="internal-link" title="patients.mixins.InstitutionCheckPatientMixin"><wbr></wbr>Institution<wbr></wbr>Check<wbr></wbr>Patient<wbr></wbr>Mixin</a></code>
+            <div class="itemName"><code><a href="patients.mixins.LockedDatasetMixin.html" class="internal-link" title="patients.mixins.LockedDatasetMixin"><wbr></wbr>Locked<wbr></wbr>Dataset<wbr></wbr>Mixin</a></code>
             </div>
         
 
@@ -183,21 +173,8 @@
         
          
 
-        <div class="childrenKindTitle">Variables</div>
-        <ul>
-    
-    <li class="">
         
-        
-        
-
-        
-            <div class="itemName"><code><a href="#logger" class="internal-link" title="patients.mixins.logger">logger</a></code>
-            </div>
-        
-
-    </li>
-</ul> 
+         
 
         
          
@@ -223,6 +200,16 @@
 
         
             <div class="itemName"><code><a href="patients.management.html" class="internal-link" title="patients.management">management</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="patients.fields.html" class="internal-link" title="patients.fields">fields</a></code>
             </div>
         
 
@@ -273,6 +260,26 @@
 
         
             <div class="itemName"><code><a href="patients.models.html" class="internal-link" title="patients.models">models</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="patients.urls.html" class="internal-link" title="patients.urls">urls</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="patients.validators.html" class="internal-link" title="patients.validators">validators</a></code>
             </div>
         
 
@@ -339,29 +346,21 @@
         </div>
 
         <div class="moduleDocstring">
-          <div><p>Mixins that ensure safety with respect to who can edit which patients.</p>
+          <div><p>Here we define some mixins that add functionality to the patient-related objects. So
+far, this consists only of a mixin that blocks saving or deleting a <code><a href="patients.models.Patient.html" class="internal-link" title="patients.models.Patient">Patient</a></code>, <code><a href="patients.models.Tumor.html" class="internal-link" title="patients.models.Tumor">Tumor</a></code>
+or <code><a href="patients.models.Diagnose.html" class="internal-link" title="patients.models.Diagnose">Diagnose</a></code> if the associated <code><a href="patients.models.Dataset.html" class="internal-link" title="patients.models.Dataset">Dataset</a></code> is locked.</p>
 </div>
         </div>
 
         <div id="splitTables">
-          <table class="children sortable" id="id24">
+          <table class="children sortable" id="id29">
   
   
   <tr class="class">
     
     <td>Class</td>
-    <td><code><a href="patients.mixins.InstitutionCheckObjectMixin.html" class="internal-link" title="patients.mixins.InstitutionCheckObjectMixin"><wbr></wbr>Institution<wbr></wbr>Check<wbr></wbr>Object<wbr></wbr>Mixin</a></code></td>
-    <td>Mixin that makes sure only users from the institution that created the patient can edit that patient's diagnose and tumor.</td>
-  </tr><tr class="class">
-    
-    <td>Class</td>
-    <td><code><a href="patients.mixins.InstitutionCheckPatientMixin.html" class="internal-link" title="patients.mixins.InstitutionCheckPatientMixin"><wbr></wbr>Institution<wbr></wbr>Check<wbr></wbr>Patient<wbr></wbr>Mixin</a></code></td>
-    <td>Mixin that makes sure only users from the institution that created the patient can edit it.</td>
-  </tr><tr class="variable">
-    
-    <td>Variable</td>
-    <td><code><a href="#logger" class="internal-link" title="patients.mixins.logger">logger</a></code></td>
-    <td><span class="undocumented">Undocumented</span></td>
+    <td><code><a href="patients.mixins.LockedDatasetMixin.html" class="internal-link" title="patients.mixins.LockedDatasetMixin"><wbr></wbr>Locked<wbr></wbr>Dataset<wbr></wbr>Mixin</a></code></td>
+    <td>Mixin for the <code><a href="patients.models.Patient.html" class="internal-link" title="patients.models.Patient">Patient</a></code>, <code><a href="patients.models.Tumor.html" class="internal-link" title="patients.models.Tumor">Tumor</a></code> and <code><a href="patients.models.Diagnose.html" class="internal-link" title="patients.models.Diagnose">Diagnose</a></code> classes to block any editing or deletion attempts when the <code><a href="patients.models.Dataset.html" class="internal-link" title="patients.models.Dataset">Dataset</a></code> they belong to is locked.</td>
   </tr>
 </table>
           
@@ -370,27 +369,7 @@
         </div>
 
         <div id="childList">
-          <div class="basevariable">
-  
-  
-  <a name="patients.mixins.logger">
-    
-  </a>
-  <a name="logger">
-    
-  </a>
-  <div class="functionHeader">
-    
-    <span class="py-defname">logger</span> =
-    
-  </div>
-  <div class="functionBody">
-    
-    
-    <div><p class="undocumented">Undocumented</p></div>
-    
-  </div>
-</div>
+          
         </div>
       
       </div>
@@ -402,7 +381,7 @@
   <div class="container">
     <a href="index.html">API Documentation</a> for LyProX,
   generated by <a href="https://github.com/twisted/pydoctor/">pydoctor</a>
-    22.5.1 at 2022-06-02 14:40:24.
+    22.5.1 at 2022-07-05 15:00:23.
   </div>
 
   <!-- Search related scripts needs to be loaded at the end of HTML 

@@ -358,6 +358,16 @@
         
 
         
+            <div class="itemName"><code><a href="patients.models.Dataset.html" class="internal-link" title="patients.models.Dataset"><wbr></wbr>Dataset</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
             <div class="itemName"><code><a href="patients.models.Diagnose.html" class="internal-link" title="patients.models.Diagnose"><wbr></wbr>Diagnose</a></code>
             </div>
         
@@ -368,7 +378,7 @@
         
 
         
-            <div class="itemName"><code><a href="patients.models.Patient.html" class="internal-link" title="patients.models.Patient"><wbr></wbr>Patient</a></code>
+            <div class="itemName"><code><a href="patients.models.LockedDatasetError.html" class="internal-link" title="patients.models.LockedDatasetError"><wbr></wbr>Locked<wbr></wbr>Dataset<wbr></wbr>Error</a></code>
             </div>
         
 
@@ -378,7 +388,7 @@
         
 
         
-            <div class="itemName"><code><a href="patients.models.RobustDateField.html" class="internal-link" title="patients.models.RobustDateField"><wbr></wbr>Robust<wbr></wbr>Date<wbr></wbr>Field</a></code>
+            <div class="itemName"><code><a href="patients.models.Patient.html" class="internal-link" title="patients.models.Patient"><wbr></wbr>Patient</a></code>
             </div>
         
 
@@ -395,8 +405,41 @@
     </li>
 </ul>
 
+        <div class="childrenKindTitle">Functions</div>
+        <ul>
+    
+    <li class="">
         
-         
+        
+        
+
+        
+            <div class="itemName"><code><a href="patients.models.html#directory_" class="internal-link" title="patients.models.directory_">directory_</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="patients.models.html#directory_for_exports" class="internal-link" title="patients.models.directory_for_exports">directory<wbr></wbr>_for<wbr></wbr>_exports</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="patients.models.html#directory_for_uploads" class="internal-link" title="patients.models.directory_for_uploads">directory<wbr></wbr>_for<wbr></wbr>_uploads</a></code>
+            </div>
+        
+
+    </li>
+</ul> 
 
         
          
@@ -450,7 +493,7 @@
         </div>
 
         <div class="extrasDocstring">
-          <p><code><span class="py-keyword">class</span> <span class="py-defname">Tumor</span>(<a href="core.loggers.ModelLoggerMixin.html" class="internal-link" title="core.loggers.ModelLoggerMixin">ModelLoggerMixin</a>, models.Model):</code></p>
+          <p><code><span class="py-keyword">class</span> <span class="py-defname">Tumor</span>(<a href="patients.mixins.LockedDatasetMixin.html" class="internal-link" title="patients.mixins.LockedDatasetMixin">mixins.LockedDatasetMixin</a>, <a href="core.loggers.ModelLoggerMixin.html" class="internal-link" title="core.loggers.ModelLoggerMixin">loggers.ModelLoggerMixin</a>, models.Model):</code></p>
           <p><a href="classIndex.html#patients.models.Tumor">View In Hierarchy</a></p>
         </div>
 
@@ -461,7 +504,7 @@ via a <tt class="rst-docutils literal">django.db.models.ForeignKey</tt> relation
         </div>
 
         <div id="splitTables">
-          <table class="children sortable" id="id33">
+          <table class="children sortable" id="id37">
   
   
   <tr class="class">
@@ -628,12 +671,12 @@ to, to the correct T-stage.</p>
     
     <div><p class="undocumented">Undocumented</p></div>
     <table class="valueTable"><tr class="fieldStart"><td class="fieldName">Value</td></tr><tr><td><pre class="constant-value"><code>{<wbr></wbr><span class="rst-variable-quote">'</span><span class="rst-variable-string">base</span><span class="rst-variable-quote">'</span>: [<wbr></wbr><span class="rst-variable-quote">'</span><span class="rst-variable-string">C01</span><span class="rst-variable-quote">'</span>, <wbr></wbr><span class="rst-variable-quote">'</span><span class="rst-variable-string">C01.9</span><span class="rst-variable-quote">'</span>],
- <wbr></wbr><span class="rst-variable-quote">'</span><span class="rst-variable-string">tonsil</span><span class="rst-variable-quote">'</span>: [<wbr></wbr><span class="rst-variable-quote">'</span><span class="rst-variable-string">C09.0</span><span class="rst-variable-quote">'</span>, <wbr></wbr><span class="rst-variable-quote">'</span><span class="rst-variable-string">C09.1</span><span class="rst-variable-quote">'</span>, <wbr></wbr><span class="rst-variable-quote">'</span><span class="rst-variable-string">C09.8</span><span class="rst-variable-quote">'</span>, <wbr></wbr><span class="rst-variable-quote">'</span><span class="rst-variable-string">C09.9</span><span class="rst-variable-quote">'</span>],
- <wbr></wbr><span class="rst-variable-quote">'</span><span class="rst-variable-string">rest_oro</span><span class="rst-variable-quote">'</span>: [<wbr></wbr><span class="rst-variable-quote">'</span><span class="rst-variable-string">C10.0</span><span class="rst-variable-quote">'</span>, <wbr></wbr><span class="rst-variable-quote">'</span><span class="rst-variable-string">C10.1</span><span class="rst-variable-quote">'</span>, <wbr></wbr><span class="rst-variable-quote">'</span><span class="rst-variable-string">C10.2</span><span class="rst-variable-quote">'</span>, <wbr></wbr><span class="rst-variable-quote">'</span><span class="rst-variable-string">C10.3</span><span class="rst-variable-quote">'</span>, <wbr></wbr><span class="rst-variable-quote">'</span><span class="rst-variable-string">C10.4</span><span class="rst-variable-quote">'</span>, <wbr></wbr><span class="rst-variable-quote">'</span><span class="rst-variable-string">C10.8</span><span class="rst-variable-quote">'</span>, <wbr></wbr><span class="rst-variable-quote">'</span><span class="rst-variable-string">C10.9</span><span class="rst-variable-quote">'</span>],
- <wbr></wbr><span class="rst-variable-quote">'</span><span class="rst-variable-string">rest_hypo</span><span class="rst-variable-quote">'</span>: [<wbr></wbr><span class="rst-variable-quote">'</span><span class="rst-variable-string">C12</span><span class="rst-variable-quote">'</span>, <wbr></wbr><span class="rst-variable-quote">'</span><span class="rst-variable-string">C12.9</span><span class="rst-variable-quote">'</span>, <wbr></wbr><span class="rst-variable-quote">'</span><span class="rst-variable-string">C13.0</span><span class="rst-variable-quote">'</span>, <wbr></wbr><span class="rst-variable-quote">'</span><span class="rst-variable-string">C13.1</span><span class="rst-variable-quote">'</span>, <wbr></wbr><span class="rst-variable-quote">'</span><span class="rst-variable-string">C13.2</span><span class="rst-variable-quote">'</span>, <wbr></wbr><span class="rst-variable-quote">'</span><span class="rst-variable-string">C13.8</span><span class="rst-variable-quote">'</span>, <wbr></wbr><span class="rst-variable-quote">'</span><span class="rst-variable-string">C13.9</span><span class="rst-variable-quote">'</span>],
- <wbr></wbr><span class="rst-variable-quote">'</span><span class="rst-variable-string">glottis</span><span class="rst-variable-quote">'</span>: [<wbr></wbr><span class="rst-variable-quote">'</span><span class="rst-variable-string">C32.0</span><span class="rst-variable-quote">'</span>],
- <wbr></wbr><span class="rst-variable-quote">'</span><span class="rst-variable-string">rest_larynx</span><span class="rst-variable-quote">'</span>: [<wbr></wbr><span class="rst-variable-quote">'</span><span class="rst-variable-string">C32.1</span><span class="rst-variable-quote">'</span>, <wbr></wbr><span class="rst-variable-quote">'</span><span class="rst-variable-string">C32.2</span><span class="rst-variable-quote">'</span>, <wbr></wbr><span class="rst-variable-quote">'</span><span class="rst-variable-string">C32.3</span><span class="rst-variable-quote">'</span>, <wbr></wbr><span class="rst-variable-quote">'</span><span class="rst-variable-string">C32.8</span><span class="rst-variable-quote">'</span>, <wbr></wbr><span class="rst-variable-quote">'</span><span class="rst-variable-string">C32.9</span><span class="rst-variable-quote">'</span>],
- <wbr></wbr><span class="rst-variable-quote">'</span><span class="rst-variable-string">tongue</span><span class="rst-variable-quote">'</span>: [<wbr></wbr><span class="rst-variable-quote">'</span><span class="rst-variable-string">C02.0</span><span class="rst-variable-quote">'</span>, <wbr></wbr><span class="rst-variable-quote">'</span><span class="rst-variable-string">C02.1</span><span class="rst-variable-quote">'</span>, <wbr></wbr><span class="rst-variable-quote">'</span><span class="rst-variable-string">C02.2</span><span class="rst-variable-quote">'</span>, <wbr></wbr><span class="rst-variable-quote">'</span><span class="rst-variable-string">C02.3</span><span class="rst-variable-quote">'</span>, <wbr></wbr><span class="rst-variable-quote">'</span><span class="rst-variable-string">C02.4</span><span class="rst-variable-quote">'</span>, <wbr></wbr><span class="rst-variable-quote">'</span><span class="rst-variable-string">C02.8</span><span class="rst-variable-quote">'</span>, <wbr></wbr><span class="rst-variable-quote">'</span><span class="rst-variable-string">C02.9</span><span class="rst-variable-quote">'</span>],
+ <wbr></wbr><span class="rst-variable-quote">'</span><span class="rst-variable-string">tonsil</span><span class="rst-variable-quote">'</span>: [<wbr></wbr><span class="rst-variable-quote">'</span><span class="rst-variable-string">C09</span><span class="rst-variable-quote">'</span>, <wbr></wbr><span class="rst-variable-quote">'</span><span class="rst-variable-string">C09.0</span><span class="rst-variable-quote">'</span>, <wbr></wbr><span class="rst-variable-quote">'</span><span class="rst-variable-string">C09.1</span><span class="rst-variable-quote">'</span>, <wbr></wbr><span class="rst-variable-quote">'</span><span class="rst-variable-string">C09.8</span><span class="rst-variable-quote">'</span>, <wbr></wbr><span class="rst-variable-quote">'</span><span class="rst-variable-string">C09.9</span><span class="rst-variable-quote">'</span>],
+ <wbr></wbr><span class="rst-variable-quote">'</span><span class="rst-variable-string">rest_oro</span><span class="rst-variable-quote">'</span>: [<wbr></wbr><span class="rst-variable-quote">'</span><span class="rst-variable-string">C10</span><span class="rst-variable-quote">'</span>,
+              <wbr></wbr><span class="rst-variable-quote">'</span><span class="rst-variable-string">C10.0</span><span class="rst-variable-quote">'</span>,
+              <wbr></wbr><span class="rst-variable-quote">'</span><span class="rst-variable-string">C10.1</span><span class="rst-variable-quote">'</span>,
+              <wbr></wbr><span class="rst-variable-quote">'</span><span class="rst-variable-string">C10.2</span><span class="rst-variable-quote">'</span>,
+              <wbr></wbr><span class="rst-variable-quote">'</span><span class="rst-variable-string">C10.3</span><span class="rst-variable-quote">'</span>,
 <span class="rst-variable-ellipsis">...</span></code></pre></td></tr></table>
   </div>
 </div><div class="baseconstant">
@@ -677,12 +720,12 @@ to, to the correct T-stage.</p>
 grouped by location.</p>
 </div>
     <table class="valueTable"><tr class="fieldStart"><td class="fieldName">Value</td></tr><tr><td><pre class="constant-value"><code>[<wbr></wbr>(<wbr></wbr><span class="rst-variable-quote">'</span><span class="rst-variable-string">oral cavity</span><span class="rst-variable-quote">'</span>,
-  <wbr></wbr>(<wbr></wbr>(<wbr></wbr><span class="rst-variable-quote">'</span><span class="rst-variable-string">C02.0</span><span class="rst-variable-quote">'</span>, <wbr></wbr><span class="rst-variable-quote">'</span><span class="rst-variable-string">dorsal surface of tongue</span><span class="rst-variable-quote">'</span>),
+  <wbr></wbr>(<wbr></wbr>(<wbr></wbr><span class="rst-variable-quote">'</span><span class="rst-variable-string">C02</span><span class="rst-variable-quote">'</span>, <wbr></wbr><span class="rst-variable-quote">'</span><span class="rst-variable-string">other parts of tongue</span><span class="rst-variable-quote">'</span>),
+   <wbr></wbr>(<wbr></wbr><span class="rst-variable-quote">'</span><span class="rst-variable-string">C02.0</span><span class="rst-variable-quote">'</span>, <wbr></wbr><span class="rst-variable-quote">'</span><span class="rst-variable-string">dorsal surface of tongue</span><span class="rst-variable-quote">'</span>),
    <wbr></wbr>(<wbr></wbr><span class="rst-variable-quote">'</span><span class="rst-variable-string">C02.1</span><span class="rst-variable-quote">'</span>, <wbr></wbr><span class="rst-variable-quote">'</span><span class="rst-variable-string">border of tongue</span><span class="rst-variable-quote">'</span>),
    <wbr></wbr>(<wbr></wbr><span class="rst-variable-quote">'</span><span class="rst-variable-string">C02.2</span><span class="rst-variable-quote">'</span>, <wbr></wbr><span class="rst-variable-quote">'</span><span class="rst-variable-string">ventral surface of tongue</span><span class="rst-variable-quote">'</span>),
    <wbr></wbr>(<wbr></wbr><span class="rst-variable-quote">'</span><span class="rst-variable-string">C02.3</span><span class="rst-variable-quote">'</span>, <wbr></wbr><span class="rst-variable-quote">'</span><span class="rst-variable-string">anterior two thirds of tongue</span><span class="rst-variable-quote">'</span>),
    <wbr></wbr>(<wbr></wbr><span class="rst-variable-quote">'</span><span class="rst-variable-string">C02.4</span><span class="rst-variable-quote">'</span>, <wbr></wbr><span class="rst-variable-quote">'</span><span class="rst-variable-string">lingual tonsil</span><span class="rst-variable-quote">'</span>),
-   <wbr></wbr>(<wbr></wbr><span class="rst-variable-quote">'</span><span class="rst-variable-string">C02.8</span><span class="rst-variable-quote">'</span>, <wbr></wbr><span class="rst-variable-quote">'</span><span class="rst-variable-string">overlapping sites of tongue</span><span class="rst-variable-quote">'</span>),
 <span class="rst-variable-ellipsis">...</span></code></pre></td></tr></table>
   </div>
 </div><div class="baseclassvariable">
@@ -868,7 +911,7 @@ infiltration of tissue types.</p>
   <div class="container">
     <a href="index.html">API Documentation</a> for LyProX,
   generated by <a href="https://github.com/twisted/pydoctor/">pydoctor</a>
-    22.5.1 at 2022-06-02 14:40:24.
+    22.5.1 at 2022-07-05 15:00:23.
   </div>
 
   <!-- Search related scripts needs to be loaded at the end of HTML 

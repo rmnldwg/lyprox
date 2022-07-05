@@ -167,6 +167,16 @@
         
 
         
+            <div class="itemName"><code><a href="patients.fields.html" class="internal-link" title="patients.fields">fields</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
             <div class="itemName"><code><a href="patients.filters.html" class="internal-link" title="patients.filters">filters</a></code>
             </div>
         
@@ -208,6 +218,26 @@
 
         
             <div class="itemName"><code><a href="patients.models.html" class="internal-link" title="patients.models">models</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="patients.urls.html" class="internal-link" title="patients.urls">urls</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="patients.validators.html" class="internal-link" title="patients.validators">validators</a></code>
             </div>
         
 
@@ -277,9 +307,16 @@
           <div><p>The <code><a href="patients.html" class="internal-link">patients</a></code> app manages the database and its access. It allows the user
 to create, edit and delete new entries in the database and ensures that it is
 always consistent.</p>
-<p>In short, there are three django models that make up the patient-related part
+<p>In short, there are four django models that make up the patient-related part
 of the database:</p>
 <ol class="rst-arabic simple">
+<li>A dataset (<code><a href="patients.models.Dataset.html" class="internal-link">patients.models.Dataset</a></code>) of patients (no. 2 below). This model
+interfaces with the CSV table format of LyProX, decides which user can see
+which patients in the list and dashboard as well as ensures the integrity of
+the database. The latter means it e.g. notices if a CSV file that was used to
+batch-import a number of patients into the database has been changed after
+that import. Something like this would compromise the trustworthiness of the
+interface.</li>
 <li>The patient itself (<code><a href="patients.models.Patient.html" class="internal-link">patients.models.Patient</a></code>), storing basic and
 demographic data about a patient with a squamous cell carcinoma in the head
 and neck region</li>
@@ -298,10 +335,15 @@ lymphatic progression patterns in.</p>
         </div>
 
         <div id="splitTables">
-          <table class="children sortable" id="id4">
+          <table class="children sortable" id="id5">
   
   
   <tr class="module">
+    
+    <td>Module</td>
+    <td><code><a href="patients.fields.html" class="internal-link" title="patients.fields">fields</a></code></td>
+    <td>Here we define custom model fields that add some functionality to the existing Django model fields.</td>
+  </tr><tr class="module">
     
     <td>Module</td>
     <td><code><a href="patients.filters.html" class="internal-link" title="patients.filters">filters</a></code></td>
@@ -325,12 +367,22 @@ lymphatic progression patterns in.</p>
     
     <td>Module</td>
     <td><code><a href="patients.mixins.html" class="internal-link" title="patients.mixins">mixins</a></code></td>
-    <td>Mixins that ensure safety with respect to who can edit which patients.</td>
+    <td>Here we define some mixins that add functionality to the patient-related objects. So far, this consists only of a mixin that blocks saving or deleting a <code><a href="patients.models.Patient.html" class="internal-link" title="patients.models.Patient">Patient</a></code>, <code><a href="patients.models.Tumor.html" class="internal-link" title="patients.models.Tumor">Tumor</a></code> or <code><a href="patients.models.Diagnose.html" class="internal-link" title="patients.models.Diagnose">Diagnose</a></code> if the associated <code><a href="patients.models.Dataset.html" class="internal-link" title="patients.models.Dataset">Dataset</a></code>...</td>
   </tr><tr class="module">
     
     <td>Module</td>
     <td><code><a href="patients.models.html" class="internal-link" title="patients.models">models</a></code></td>
-    <td>This module defines how patient related models are defined and how they interact with each other. Currently, three models are implemented: The <code><a href="patients.models.Patient.html" class="internal-link" title="patients.models.Patient">Patient</a></code>, <code><a href="patients.models.Tumor.html" class="internal-link" title="patients.models.Tumor">Tumor</a></code> and the <code><a href="patients.models.Diagnose.html" class="internal-link" title="patients.models.Diagnose">Diagnose</a></code>. Each <code><a href="patients.models.Patient.html" class="internal-link" title="patients.models.Patient">Patient</a></code> can have multiple ...</td>
+    <td>This module defines how patient related models work and how they interact with each other. Currently, four models are implemented: The <code><a href="patients.models.Dataset.html" class="internal-link" title="patients.models.Dataset">Dataset</a></code>, <code><a href="patients.models.Patient.html" class="internal-link" title="patients.models.Patient">Patient</a></code>, <code><a href="patients.models.Tumor.html" class="internal-link" title="patients.models.Tumor">Tumor</a></code> and the <code><a href="patients.models.Diagnose.html" class="internal-link" title="patients.models.Diagnose">Diagnose</a></code>. A <code><a href="patients.models.Dataset.html" class="internal-link" title="patients.models.Dataset">Dataset</a></code> groups <code><a href="patients.models.Patient.html" class="internal-link" title="patients.models.Patient">Patient</a></code>...</td>
+  </tr><tr class="module">
+    
+    <td>Module</td>
+    <td><code><a href="patients.urls.html" class="internal-link" title="patients.urls">urls</a></code></td>
+    <td>Define the URLs that are available under <tt class="rst-docutils literal"><span class="pre">https://lyprox.org/patients</span></tt> and which of the <code><a href="patients.views.html" class="internal-link">patients.views</a></code> should be called when they are requested.</td>
+  </tr><tr class="module">
+    
+    <td>Module</td>
+    <td><code><a href="patients.validators.html" class="internal-link" title="patients.validators">validators</a></code></td>
+    <td>This module contains validators for model and form fields. Most imprtantly, the <code><a href="patients.validators.FileTypeValidator.html" class="internal-link" title="patients.validators.FileTypeValidator">FileTypeValidator</a></code> for checking the actual file type of an uploaded file is defined here.</td>
   </tr><tr class="module">
     
     <td>Module</td>
@@ -356,7 +408,7 @@ lymphatic progression patterns in.</p>
   <div class="container">
     <a href="index.html">API Documentation</a> for LyProX,
   generated by <a href="https://github.com/twisted/pydoctor/">pydoctor</a>
-    22.5.1 at 2022-06-02 14:40:24.
+    22.5.1 at 2022-07-05 15:00:23.
   </div>
 
   <!-- Search related scripts needs to be loaded at the end of HTML 

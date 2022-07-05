@@ -186,37 +186,7 @@
         
 
         
-            <div class="itemName"><code><a href="#clean" class="internal-link" title="patients.forms.PatientForm.clean">clean</a></code>
-            </div>
-        
-
-    </li><li class="">
-        
-        
-        
-
-        
-            <div class="itemName"><code><a href="#save" class="internal-link" title="patients.forms.PatientForm.save">save</a></code>
-            </div>
-        
-
-    </li><li class="private">
-        
-        
-        
-
-        
-            <div class="itemName"><code><a href="#_compute_age" class="internal-link" title="patients.forms.PatientForm._compute_age">_compute<wbr></wbr>_age</a></code>
-            </div>
-        
-
-    </li><li class="private">
-        
-        
-        
-
-        
-            <div class="itemName"><code><a href="#_get_identifier" class="internal-link" title="patients.forms.PatientForm._get_identifier">_get<wbr></wbr>_identifier</a></code>
+            <div class="itemName"><code><a href="#clean_dataset" class="internal-link" title="patients.forms.PatientForm.clean_dataset">clean<wbr></wbr>_dataset</a></code>
             </div>
         
 
@@ -235,37 +205,7 @@
         
 
         
-            <div class="itemName"><code><a href="#birthday" class="internal-link" title="patients.forms.PatientForm.birthday">birthday</a></code>
-            </div>
-        
-
-    </li><li class="">
-        
-        
-        
-
-        
-            <div class="itemName"><code><a href="#check_for_duplicate" class="internal-link" title="patients.forms.PatientForm.check_for_duplicate">check<wbr></wbr>_for<wbr></wbr>_duplicate</a></code>
-            </div>
-        
-
-    </li><li class="">
-        
-        
-        
-
-        
-            <div class="itemName"><code><a href="#first_name" class="internal-link" title="patients.forms.PatientForm.first_name">first<wbr></wbr>_name</a></code>
-            </div>
-        
-
-    </li><li class="">
-        
-        
-        
-
-        
-            <div class="itemName"><code><a href="#last_name" class="internal-link" title="patients.forms.PatientForm.last_name">last<wbr></wbr>_name</a></code>
+            <div class="itemName"><code><a href="#dataset" class="internal-link" title="patients.forms.PatientForm.dataset">dataset</a></code>
             </div>
         
 
@@ -318,7 +258,7 @@
         
 
         
-            <div class="itemName"><code><a href="patients.forms.DiagnoseForm.html" class="internal-link" title="patients.forms.DiagnoseForm"><wbr></wbr>Diagnose<wbr></wbr>Form</a></code>
+            <div class="itemName"><code><a href="patients.forms.DatasetForm.html" class="internal-link" title="patients.forms.DatasetForm"><wbr></wbr>Dataset<wbr></wbr>Form</a></code>
             </div>
         
 
@@ -328,7 +268,7 @@
         
 
         
-            <div class="itemName"><code><a href="patients.forms.InsitutionForm.html" class="internal-link" title="patients.forms.InsitutionForm"><wbr></wbr>Insitution<wbr></wbr>Form</a></code>
+            <div class="itemName"><code><a href="patients.forms.DiagnoseForm.html" class="internal-link" title="patients.forms.DiagnoseForm"><wbr></wbr>Diagnose<wbr></wbr>Form</a></code>
             </div>
         
 
@@ -415,7 +355,7 @@ the private methods of this class.</p>
         </div>
 
         <div id="splitTables">
-          <table class="children sortable" id="id9">
+          <table class="children sortable" id="id15">
   
   
   <tr class="class">
@@ -427,52 +367,22 @@ the private methods of this class.</p>
     
     <td>Method</td>
     <td><code><a href="#__init__" class="internal-link" title="patients.forms.PatientForm.__init__">__init__</a></code></td>
-    <td><span class="undocumented">Undocumented</span></td>
+    <td>Extract user to only allow adding patients to datasets from same institution as user.</td>
   </tr><tr class="method">
     
     <td>Method</td>
-    <td><code><a href="#clean" class="internal-link" title="patients.forms.PatientForm.clean">clean</a></code></td>
-    <td>Override superclass clean method to raise a <tt class="rst-docutils literal">ValidationError</tt> when a duplicate identifier is found.</td>
-  </tr><tr class="method">
-    
-    <td>Method</td>
-    <td><code><a href="#save" class="internal-link" title="patients.forms.PatientForm.save">save</a></code></td>
-    <td>Compute hashed ID and age from name, birthday and diagnose date.</td>
+    <td><code><a href="#clean_dataset" class="internal-link" title="patients.forms.PatientForm.clean_dataset">clean<wbr></wbr>_dataset</a></code></td>
+    <td>Make sure that the user is allowed to add patients to the dataset.</td>
   </tr><tr class="classvariable">
     
     <td>Class Variable</td>
-    <td><code><a href="#birthday" class="internal-link" title="patients.forms.PatientForm.birthday">birthday</a></code></td>
-    <td><span class="undocumented">Undocumented</span></td>
-  </tr><tr class="classvariable">
-    
-    <td>Class Variable</td>
-    <td><code><a href="#check_for_duplicate" class="internal-link" title="patients.forms.PatientForm.check_for_duplicate">check<wbr></wbr>_for<wbr></wbr>_duplicate</a></code></td>
-    <td><span class="undocumented">Undocumented</span></td>
-  </tr><tr class="classvariable">
-    
-    <td>Class Variable</td>
-    <td><code><a href="#first_name" class="internal-link" title="patients.forms.PatientForm.first_name">first<wbr></wbr>_name</a></code></td>
-    <td><span class="undocumented">Undocumented</span></td>
-  </tr><tr class="classvariable">
-    
-    <td>Class Variable</td>
-    <td><code><a href="#last_name" class="internal-link" title="patients.forms.PatientForm.last_name">last<wbr></wbr>_name</a></code></td>
+    <td><code><a href="#dataset" class="internal-link" title="patients.forms.PatientForm.dataset">dataset</a></code></td>
     <td><span class="undocumented">Undocumented</span></td>
   </tr><tr class="instancevariable">
     
     <td>Instance Variable</td>
     <td><code><a href="#user" class="internal-link" title="patients.forms.PatientForm.user">user</a></code></td>
     <td><span class="undocumented">Undocumented</span></td>
-  </tr><tr class="method private">
-    
-    <td>Method</td>
-    <td><code><a href="#_compute_age" class="internal-link" title="patients.forms.PatientForm._compute_age">_compute<wbr></wbr>_age</a></code></td>
-    <td>Compute age of patient at diagnose/admission.</td>
-  </tr><tr class="method private">
-    
-    <td>Method</td>
-    <td><code><a href="#_get_identifier" class="internal-link" title="patients.forms.PatientForm._get_identifier">_get<wbr></wbr>_identifier</a></code></td>
-    <td>Compute the hashed undique identifier from fields that are of provacy concern.</td>
   </tr>
 </table>
           
@@ -498,121 +408,42 @@ the private methods of this class.</p>
   <div class="docstring functionBody">
     
     
-    <div><p class="undocumented">Undocumented</p></div>
-  </div>
-</div><div class="basemethod">
-  
-  
-  <a name="patients.forms.PatientForm.clean">
-    
-  </a>
-  <a name="clean">
-    
-  </a>
-  <div class="functionHeader">
-    
-    <span class="py-keyword">def</span> <span class="py-defname">clean</span>(self):
-    
-  </div>
-  <div class="docstring functionBody">
-    
-    
-    <div><p>Override superclass clean method to raise a <tt class="rst-docutils literal">ValidationError</tt> when
-a duplicate identifier is found.</p>
+    <div><p>Extract user to only allow adding patients to datasets from same
+institution as user.</p>
 </div>
   </div>
 </div><div class="basemethod">
   
   
-  <a name="patients.forms.PatientForm.save">
+  <a name="patients.forms.PatientForm.clean_dataset">
     
   </a>
-  <a name="save">
+  <a name="clean_dataset">
     
   </a>
   <div class="functionHeader">
     
-    <span class="py-keyword">def</span> <span class="py-defname">save</span>(self, commit=True):
+    <span class="py-keyword">def</span> <span class="py-defname">clean_dataset</span>(self):
     
   </div>
   <div class="docstring functionBody">
     
     
-    <div><p>Compute hashed ID and age from name, birthday and diagnose date.</p>
-</div>
+    <div><p>Make sure that the user is allowed to add patients to the dataset.</p>
+<table class="fieldTable"><tr class="fieldStart"><td class="fieldName" colspan="2">Returns</td></tr><tr><td class="fieldArgContainer"><code>Optional[<wbr></wbr>Dict[<wbr></wbr>str, <wbr></wbr>Any]]</code></td><td class="fieldArgDesc"><span class="undocumented">Undocumented</span></td></tr></table></div>
   </div>
 </div><div class="baseclassvariable">
   
   
-  <a name="patients.forms.PatientForm.birthday">
+  <a name="patients.forms.PatientForm.dataset">
     
   </a>
-  <a name="birthday">
-    
-  </a>
-  <div class="functionHeader">
-    
-    <span class="py-defname">birthday</span> =
-    
-  </div>
-  <div class="functionBody">
-    
-    
-    <div><p class="undocumented">Undocumented</p></div>
-    
-  </div>
-</div><div class="baseclassvariable">
-  
-  
-  <a name="patients.forms.PatientForm.check_for_duplicate">
-    
-  </a>
-  <a name="check_for_duplicate">
+  <a name="dataset">
     
   </a>
   <div class="functionHeader">
     
-    <span class="py-defname">check_for_duplicate</span> =
-    
-  </div>
-  <div class="functionBody">
-    
-    
-    <div><p class="undocumented">Undocumented</p></div>
-    
-  </div>
-</div><div class="baseclassvariable">
-  
-  
-  <a name="patients.forms.PatientForm.first_name">
-    
-  </a>
-  <a name="first_name">
-    
-  </a>
-  <div class="functionHeader">
-    
-    <span class="py-defname">first_name</span> =
-    
-  </div>
-  <div class="functionBody">
-    
-    
-    <div><p class="undocumented">Undocumented</p></div>
-    
-  </div>
-</div><div class="baseclassvariable">
-  
-  
-  <a name="patients.forms.PatientForm.last_name">
-    
-  </a>
-  <a name="last_name">
-    
-  </a>
-  <div class="functionHeader">
-    
-    <span class="py-defname">last_name</span> =
+    <span class="py-defname">dataset</span> =
     
   </div>
   <div class="functionBody">
@@ -641,47 +472,6 @@ a duplicate identifier is found.</p>
     <div><p class="undocumented">Undocumented</p></div>
     
   </div>
-</div><div class="basemethod private">
-  
-  
-  <a name="patients.forms.PatientForm._compute_age">
-    
-  </a>
-  <a name="_compute_age">
-    
-  </a>
-  <div class="functionHeader">
-    
-    <span class="py-keyword">def</span> <span class="py-defname">_compute_age</span>(self):
-    
-  </div>
-  <div class="docstring functionBody">
-    
-    
-    <div><p>Compute age of patient at diagnose/admission.</p>
-</div>
-  </div>
-</div><div class="basemethod private">
-  
-  
-  <a name="patients.forms.PatientForm._get_identifier">
-    
-  </a>
-  <a name="_get_identifier">
-    
-  </a>
-  <div class="functionHeader">
-    
-    <span class="py-keyword">def</span> <span class="py-defname">_get_identifier</span>(self, cleaned_data):
-    
-  </div>
-  <div class="docstring functionBody">
-    
-    
-    <div><p>Compute the hashed undique identifier from fields that are of
-provacy concern.</p>
-</div>
-  </div>
 </div>
         </div>
       
@@ -694,7 +484,7 @@ provacy concern.</p>
   <div class="container">
     <a href="index.html">API Documentation</a> for LyProX,
   generated by <a href="https://github.com/twisted/pydoctor/">pydoctor</a>
-    22.5.1 at 2022-06-02 14:40:24.
+    22.5.1 at 2022-07-05 15:00:23.
   </div>
 
   <!-- Search related scripts needs to be loaded at the end of HTML 

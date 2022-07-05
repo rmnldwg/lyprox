@@ -305,6 +305,16 @@
         
 
         
+            <div class="itemName"><code><a href="patients.fields.html" class="internal-link" title="patients.fields">fields</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
             <div class="itemName"><code><a href="patients.filters.html" class="internal-link" title="patients.filters">filters</a></code>
             </div>
         
@@ -346,6 +356,26 @@
 
         
             <div class="itemName"><code><a href="patients.models.html" class="internal-link" title="patients.models">models</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="patients.urls.html" class="internal-link" title="patients.urls">urls</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="patients.validators.html" class="internal-link" title="patients.validators">validators</a></code>
             </div>
         
 
@@ -418,7 +448,7 @@ patterns of progression into and from the Django database.</p>
         </div>
 
         <div id="splitTables">
-          <table class="children sortable" id="id17">
+          <table class="children sortable" id="id22">
   
   
   <tr class="class">
@@ -460,7 +490,7 @@ patterns of progression into and from the Django database.</p>
     
     <td>Function</td>
     <td><code><a href="#row2patient" class="internal-link" title="patients.ioports.row2patient">row2patient</a></code></td>
-    <td>Create a <code><a href="patients.models.Patient.html" class="internal-link" title="patients.models.Patient">Patient</a></code> instance from a row of a <tt class="rst-docutils literal">DataFrame</tt> containing the appropriate information, as well as the user that uploaded the information.</td>
+    <td>Create a <code><a href="patients.models.Patient.html" class="internal-link" title="patients.models.Patient">Patient</a></code> instance from a row of a <tt class="rst-docutils literal">DataFrame</tt> containing the appropriate information, as well as the dataset in which the information was uploaded.</td>
   </tr><tr class="function">
     
     <td>Function</td>
@@ -553,14 +583,14 @@ format as it is needed for importing.</p>
   </a>
   <div class="functionHeader">
     
-    <span class="py-keyword">def</span> <span class="py-defname">import_from_pandas</span>(data_frame, user, anonymize=None):
+    <span class="py-keyword">def</span> <span class="py-defname">import_from_pandas</span>(data_frame, dataset, anonymize=None):
     
   </div>
   <div class="docstring functionBody">
     
     
     <div><p>Import patients from pandas <tt class="rst-docutils literal">DataFrame</tt>.</p>
-<table class="fieldTable"><tr class="fieldStart"><td class="fieldName" colspan="2">Parameters</td></tr><tr><td class="fieldArgContainer"><span class="fieldArg">data<wbr></wbr>_frame:</span><code>pd.DataFrame</code></td><td class="fieldArgDesc"><span class="undocumented">Undocumented</span></td></tr><tr><td class="fieldArgContainer"><span class="fieldArg">user</span></td><td class="fieldArgDesc"><span class="undocumented">Undocumented</span></td></tr><tr><td class="fieldArgContainer"><span class="fieldArg">anonymize:</span><code>List[<wbr></wbr>str]</code></td><td class="fieldArgDesc"><span class="undocumented">Undocumented</span></td></tr><tr class="fieldStart"><td class="fieldName" colspan="2">Returns</td></tr><tr><td class="fieldArgContainer"><code>Tuple[<wbr></wbr>int]</code></td><td class="fieldArgDesc"><span class="undocumented">Undocumented</span></td></tr></table></div>
+<table class="fieldTable"><tr class="fieldStart"><td class="fieldName" colspan="2">Parameters</td></tr><tr><td class="fieldArgContainer"><span class="fieldArg">data<wbr></wbr>_frame:</span><code>pd.DataFrame</code></td><td class="fieldArgDesc"><span class="undocumented">Undocumented</span></td></tr><tr><td class="fieldArgContainer"><span class="fieldArg">dataset:</span><code><a href="patients.models.Dataset.html" class="internal-link" title="patients.models.Dataset">models.Dataset</a></code></td><td class="fieldArgDesc"><span class="undocumented">Undocumented</span></td></tr><tr><td class="fieldArgContainer"><span class="fieldArg">anonymize:</span><code>List[<wbr></wbr>str]</code></td><td class="fieldArgDesc"><span class="undocumented">Undocumented</span></td></tr><tr class="fieldStart"><td class="fieldName" colspan="2">Returns</td></tr><tr><td class="fieldArgContainer"><code>Tuple[<wbr></wbr>int]</code></td><td class="fieldArgDesc"><span class="undocumented">Undocumented</span></td></tr></table></div>
   </div>
 </div><div class="basefunction">
   
@@ -614,15 +644,16 @@ existing <code><a href="patients.models.Patient.html" class="internal-link" titl
   </a>
   <div class="functionHeader">
     
-    <span class="py-keyword">def</span> <span class="py-defname">row2patient</span>(row, user, anonymize):
+    <span class="py-keyword">def</span> <span class="py-defname">row2patient</span>(row, dataset):
     
   </div>
   <div class="docstring functionBody">
     
     
     <div><p>Create a <code><a href="patients.models.Patient.html" class="internal-link" title="patients.models.Patient">Patient</a></code> instance from a row of a <tt class="rst-docutils literal">DataFrame</tt> containing the
-appropriate information, as well as the user that uploaded the information.</p>
-<table class="fieldTable"><tr class="fieldStart"><td class="fieldName" colspan="2">Parameters</td></tr><tr><td class="fieldArgContainer"><span class="fieldArg">row</span></td><td class="fieldArgDesc"><span class="undocumented">Undocumented</span></td></tr><tr><td class="fieldArgContainer"><span class="fieldArg">user</span></td><td class="fieldArgDesc"><span class="undocumented">Undocumented</span></td></tr><tr><td class="fieldArgContainer"><span class="fieldArg">anonymize:</span><code>List[<wbr></wbr>str]</code></td><td class="fieldArgDesc"><span class="undocumented">Undocumented</span></td></tr></table></div>
+appropriate information, as well as the dataset in which the information was
+uploaded.</p>
+</div>
   </div>
 </div><div class="basefunction">
   
@@ -677,7 +708,7 @@ existing <code><a href="patients.models.Patient.html" class="internal-link" titl
   <div class="container">
     <a href="index.html">API Documentation</a> for LyProX,
   generated by <a href="https://github.com/twisted/pydoctor/">pydoctor</a>
-    22.5.1 at 2022-06-02 14:40:24.
+    22.5.1 at 2022-07-05 15:00:23.
   </div>
 
   <!-- Search related scripts needs to be loaded at the end of HTML 

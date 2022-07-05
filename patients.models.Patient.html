@@ -275,6 +275,16 @@
         
 
         
+            <div class="itemName"><code><a href="#dataset" class="internal-link" title="patients.models.Patient.dataset">dataset</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
             <div class="itemName"><code><a href="#diagnose_date" class="internal-link" title="patients.models.Patient.diagnose_date">diagnose<wbr></wbr>_date</a></code>
             </div>
         
@@ -285,27 +295,7 @@
         
 
         
-            <div class="itemName"><code><a href="#hash_value" class="internal-link" title="patients.models.Patient.hash_value">hash<wbr></wbr>_value</a></code>
-            </div>
-        
-
-    </li><li class="">
-        
-        
-        
-
-        
             <div class="itemName"><code><a href="#hpv_status" class="internal-link" title="patients.models.Patient.hpv_status">hpv<wbr></wbr>_status</a></code>
-            </div>
-        
-
-    </li><li class="">
-        
-        
-        
-
-        
-            <div class="itemName"><code><a href="#institution" class="internal-link" title="patients.models.Patient.institution">institution</a></code>
             </div>
         
 
@@ -428,7 +418,27 @@
         
 
         
+            <div class="itemName"><code><a href="patients.models.Dataset.html" class="internal-link" title="patients.models.Dataset"><wbr></wbr>Dataset</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
             <div class="itemName"><code><a href="patients.models.Diagnose.html" class="internal-link" title="patients.models.Diagnose"><wbr></wbr>Diagnose</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="patients.models.LockedDatasetError.html" class="internal-link" title="patients.models.LockedDatasetError"><wbr></wbr>Locked<wbr></wbr>Dataset<wbr></wbr>Error</a></code>
             </div>
         
 
@@ -448,7 +458,23 @@
         
 
         
-            <div class="itemName"><code><a href="patients.models.RobustDateField.html" class="internal-link" title="patients.models.RobustDateField"><wbr></wbr>Robust<wbr></wbr>Date<wbr></wbr>Field</a></code>
+            <div class="itemName"><code><a href="patients.models.Tumor.html" class="internal-link" title="patients.models.Tumor"><wbr></wbr>Tumor</a></code>
+            </div>
+        
+
+    </li>
+</ul>
+
+        <div class="childrenKindTitle">Functions</div>
+        <ul>
+    
+    <li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="patients.models.html#directory_" class="internal-link" title="patients.models.directory_">directory_</a></code>
             </div>
         
 
@@ -458,15 +484,22 @@
         
 
         
-            <div class="itemName"><code><a href="patients.models.Tumor.html" class="internal-link" title="patients.models.Tumor"><wbr></wbr>Tumor</a></code>
+            <div class="itemName"><code><a href="patients.models.html#directory_for_exports" class="internal-link" title="patients.models.directory_for_exports">directory<wbr></wbr>_for<wbr></wbr>_exports</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="patients.models.html#directory_for_uploads" class="internal-link" title="patients.models.directory_for_uploads">directory<wbr></wbr>_for<wbr></wbr>_uploads</a></code>
             </div>
         
 
     </li>
-</ul>
-
-        
-         
+</ul> 
 
         
          
@@ -520,7 +553,7 @@
         </div>
 
         <div class="extrasDocstring">
-          <p><code><span class="py-keyword">class</span> <span class="py-defname">Patient</span>(<a href="core.loggers.ModelLoggerMixin.html" class="internal-link" title="core.loggers.ModelLoggerMixin">ModelLoggerMixin</a>, models.Model):</code></p>
+          <p><code><span class="py-keyword">class</span> <span class="py-defname">Patient</span>(<a href="patients.mixins.LockedDatasetMixin.html" class="internal-link" title="patients.mixins.LockedDatasetMixin">mixins.LockedDatasetMixin</a>, <a href="core.loggers.ModelLoggerMixin.html" class="internal-link" title="core.loggers.ModelLoggerMixin">loggers.ModelLoggerMixin</a>, models.Model):</code></p>
           <p><a href="classIndex.html#patients.models.Patient">View In Hierarchy</a></p>
         </div>
 
@@ -535,7 +568,7 @@ and the lymphatic progression pattern of that patient in the form of a
         </div>
 
         <div id="splitTables">
-          <table class="children sortable" id="id29">
+          <table class="children sortable" id="id33">
   
   
   <tr class="class">
@@ -591,23 +624,18 @@ and the lymphatic progression pattern of that patient in the form of a
   </tr><tr class="classvariable">
     
     <td>Class Variable</td>
+    <td><code><a href="#dataset" class="internal-link" title="patients.models.Patient.dataset">dataset</a></code></td>
+    <td>Every patient must belong to a dataset entry that manages importing, exporting as well as preventing edits that compromise the integrity of the dataset.</td>
+  </tr><tr class="classvariable">
+    
+    <td>Class Variable</td>
     <td><code><a href="#diagnose_date" class="internal-link" title="patients.models.Patient.diagnose_date">diagnose<wbr></wbr>_date</a></code></td>
     <td>Date of histological confirmation with a squamous cell carcinoma.</td>
   </tr><tr class="classvariable">
     
     <td>Class Variable</td>
-    <td><code><a href="#hash_value" class="internal-link" title="patients.models.Patient.hash_value">hash<wbr></wbr>_value</a></code></td>
-    <td>Unique ID computed from sensitive info upon patient creation.</td>
-  </tr><tr class="classvariable">
-    
-    <td>Class Variable</td>
     <td><code><a href="#hpv_status" class="internal-link" title="patients.models.Patient.hpv_status">hpv<wbr></wbr>_status</a></code></td>
     <td>Was the patient HPV positive (<tt class="rst-docutils literal">True</tt>) or negative (<tt class="rst-docutils literal">False</tt>)?</td>
-  </tr><tr class="classvariable">
-    
-    <td>Class Variable</td>
-    <td><code><a href="#institution" class="internal-link" title="patients.models.Patient.institution">institution</a></code></td>
-    <td>A newly created patient is assigned to the institution of the user that entered the patient into the database.</td>
   </tr><tr class="classvariable">
     
     <td>Class Variable</td>
@@ -802,6 +830,28 @@ stage prefix to that of the tumor with the highest T-category.</p>
 </div><div class="baseclassvariable">
   
   
+  <a name="patients.models.Patient.dataset">
+    
+  </a>
+  <a name="dataset">
+    
+  </a>
+  <div class="functionHeader">
+    
+    <span class="py-defname">dataset</span> =
+    
+  </div>
+  <div class="functionBody">
+    
+    
+    <div><p>Every patient must belong to a dataset entry that manages importing, exporting
+as well as preventing edits that compromise the integrity of the dataset.</p>
+</div>
+    
+  </div>
+</div><div class="baseclassvariable">
+  
+  
   <a name="patients.models.Patient.diagnose_date">
     
   </a>
@@ -823,27 +873,6 @@ stage prefix to that of the tumor with the highest T-category.</p>
 </div><div class="baseclassvariable">
   
   
-  <a name="patients.models.Patient.hash_value">
-    
-  </a>
-  <a name="hash_value">
-    
-  </a>
-  <div class="functionHeader">
-    
-    <span class="py-defname">hash_value</span> =
-    
-  </div>
-  <div class="functionBody">
-    
-    
-    <div><p>Unique ID computed from sensitive info upon patient creation.</p>
-</div>
-    
-  </div>
-</div><div class="baseclassvariable">
-  
-  
   <a name="patients.models.Patient.hpv_status">
     
   </a>
@@ -859,28 +888,6 @@ stage prefix to that of the tumor with the highest T-category.</p>
     
     
     <div><p>Was the patient HPV positive (<tt class="rst-docutils literal">True</tt>) or negative (<tt class="rst-docutils literal">False</tt>)?</p>
-</div>
-    
-  </div>
-</div><div class="baseclassvariable">
-  
-  
-  <a name="patients.models.Patient.institution">
-    
-  </a>
-  <a name="institution">
-    
-  </a>
-  <div class="functionHeader">
-    
-    <span class="py-defname">institution</span> =
-    
-  </div>
-  <div class="functionBody">
-    
-    
-    <div><p>A newly created patient is assigned to the institution of the user that
-entered the patient into the database.</p>
 </div>
     
   </div>
@@ -1064,7 +1071,7 @@ infiltration of tissue types.</p>
   <div class="container">
     <a href="index.html">API Documentation</a> for LyProX,
   generated by <a href="https://github.com/twisted/pydoctor/">pydoctor</a>
-    22.5.1 at 2022-06-02 14:40:24.
+    22.5.1 at 2022-07-05 15:00:23.
   </div>
 
   <!-- Search related scripts needs to be loaded at the end of HTML 

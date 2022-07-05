@@ -148,6 +148,14 @@
             <div class="kind">Module</div>
             <div class="privacy">PUBLIC</div>
             <div class="summary">Default Django settings for the LyProX web interfaces.</div>
+          </li><li id="core.urls">
+            
+            <div class="fullName">core<wbr></wbr>.urls</div>
+            <div class="url">core.urls.html</div>
+            <div class="type">ZopeInterfaceModule</div>
+            <div class="kind">Module</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">LyProX' URL configuration. This defines the view for the landing page, the URLs for downloads and media and the maintenance page. Otherwise it basically calls the URL configuration from the other apps, ...</div>
           </li><li id="core.views">
             
             <div class="fullName">core<wbr></wbr>.views</div>
@@ -164,6 +172,14 @@
             <div class="kind">Package</div>
             <div class="privacy">PUBLIC</div>
             <div class="summary">The <code><a href="patients.html" class="internal-link">patients</a></code> app manages the database and its access. It allows the user to create, edit and delete new entries in the database and ensures that it is always consistent.</div>
+          </li><li id="patients.fields">
+            
+            <div class="fullName">patients<wbr></wbr>.fields</div>
+            <div class="url">patients.fields.html</div>
+            <div class="type">ZopeInterfaceModule</div>
+            <div class="kind">Module</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">Here we define custom model fields that add some functionality to the existing Django model fields.</div>
           </li><li id="patients.filters">
             
             <div class="fullName">patients<wbr></wbr>.filters</div>
@@ -227,7 +243,7 @@
             <div class="type">ZopeInterfaceModule</div>
             <div class="kind">Module</div>
             <div class="privacy">PUBLIC</div>
-            <div class="summary">Mixins that ensure safety with respect to who can edit which patients.</div>
+            <div class="summary">Here we define some mixins that add functionality to the patient-related objects. So far, this consists only of a mixin that blocks saving or deleting a <code><a href="patients.models.Patient.html" class="internal-link" title="patients.models.Patient">Patient</a></code>, <code><a href="patients.models.Tumor.html" class="internal-link" title="patients.models.Tumor">Tumor</a></code> or <code><a href="patients.models.Diagnose.html" class="internal-link" title="patients.models.Diagnose">Diagnose</a></code> if the associated <code><a href="patients.models.Dataset.html" class="internal-link" title="patients.models.Dataset">Dataset</a></code>...</div>
           </li><li id="patients.models">
             
             <div class="fullName">patients<wbr></wbr>.models</div>
@@ -235,7 +251,23 @@
             <div class="type">ZopeInterfaceModule</div>
             <div class="kind">Module</div>
             <div class="privacy">PUBLIC</div>
-            <div class="summary">This module defines how patient related models are defined and how they interact with each other. Currently, three models are implemented: The <code><a href="patients.models.Patient.html" class="internal-link" title="patients.models.Patient">Patient</a></code>, <code><a href="patients.models.Tumor.html" class="internal-link" title="patients.models.Tumor">Tumor</a></code> and the <code><a href="patients.models.Diagnose.html" class="internal-link" title="patients.models.Diagnose">Diagnose</a></code>. Each <code><a href="patients.models.Patient.html" class="internal-link" title="patients.models.Patient">Patient</a></code> can have multiple ...</div>
+            <div class="summary">This module defines how patient related models work and how they interact with each other. Currently, four models are implemented: The <code><a href="patients.models.Dataset.html" class="internal-link" title="patients.models.Dataset">Dataset</a></code>, <code><a href="patients.models.Patient.html" class="internal-link" title="patients.models.Patient">Patient</a></code>, <code><a href="patients.models.Tumor.html" class="internal-link" title="patients.models.Tumor">Tumor</a></code> and the <code><a href="patients.models.Diagnose.html" class="internal-link" title="patients.models.Diagnose">Diagnose</a></code>. A <code><a href="patients.models.Dataset.html" class="internal-link" title="patients.models.Dataset">Dataset</a></code> groups <code><a href="patients.models.Patient.html" class="internal-link" title="patients.models.Patient">Patient</a></code>...</div>
+          </li><li id="patients.urls">
+            
+            <div class="fullName">patients<wbr></wbr>.urls</div>
+            <div class="url">patients.urls.html</div>
+            <div class="type">ZopeInterfaceModule</div>
+            <div class="kind">Module</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">Define the URLs that are available under <tt class="rst-docutils literal"><span class="pre">https://lyprox.org/patients</span></tt> and which of the <code><a href="patients.views.html" class="internal-link">patients.views</a></code> should be called when they are requested.</div>
+          </li><li id="patients.validators">
+            
+            <div class="fullName">patients<wbr></wbr>.validators</div>
+            <div class="url">patients.validators.html</div>
+            <div class="type">ZopeInterfaceModule</div>
+            <div class="kind">Module</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">This module contains validators for model and form fields. Most imprtantly, the <code><a href="patients.validators.FileTypeValidator.html" class="internal-link" title="patients.validators.FileTypeValidator">FileTypeValidator</a></code> for checking the actual file type of an uploaded file is defined here.</div>
           </li><li id="patients.views">
             
             <div class="fullName">patients<wbr></wbr>.views</div>
@@ -268,6 +300,14 @@
             <div class="kind">Module</div>
             <div class="privacy">PUBLIC</div>
             <div class="summary">The <code><a href="dashboard.query.html" class="internal-link" title="dashboard.query">query</a></code> module takes the cleaned data from the <code><a href="dashboard.forms.html" class="internal-link" title="dashboard.forms">forms</a></code>, retrieves information from the database efficiently and puts everything into a dictionary with which the HTML response is then populated.</div>
+          </li><li id="dashboard.urls">
+            
+            <div class="fullName">dashboard<wbr></wbr>.urls</div>
+            <div class="url">dashboard.urls.html</div>
+            <div class="type">ZopeInterfaceModule</div>
+            <div class="kind">Module</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">Define the two URLs within the dashboard app (reachable via <tt class="rst-docutils literal"><span class="pre">https://lyprox.org/dashboard</span></tt>). Those are the dashboard itself of course, but also the help menu explaining how to use the former.</div>
           </li><li id="dashboard.views">
             
             <div class="fullName">dashboard<wbr></wbr>.views</div>
@@ -588,22 +628,358 @@
             <div class="kind">Function</div>
             <div class="privacy">PUBLIC</div>
             <div class="summary"><span class="undocumented">Undocumented</span></div>
-          </li><li id="patients.models.RobustDateField">
+          </li><li id="core.urls.urlpatterns">
             
-            <div class="fullName">patients<wbr></wbr>.models<wbr></wbr>.<wbr></wbr>Robust<wbr></wbr>Date<wbr></wbr>Field</div>
-            <div class="url">patients.models.RobustDateField.html</div>
+            <div class="fullName">core<wbr></wbr>.urls<wbr></wbr>.urlpatterns</div>
+            <div class="url">core.urls.html#urlpatterns</div>
+            <div class="type">ZopeInterfaceAttribute</div>
+            <div class="kind">Variable</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary"><span class="undocumented">Undocumented</span></div>
+          </li><li id="patients.fields.logger">
+            
+            <div class="fullName">patients<wbr></wbr>.fields<wbr></wbr>.logger</div>
+            <div class="url">patients.fields.html#logger</div>
+            <div class="type">ZopeInterfaceAttribute</div>
+            <div class="kind">Variable</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary"><span class="undocumented">Undocumented</span></div>
+          </li><li id="patients.fields.CorruptedFileError">
+            
+            <div class="fullName">patients<wbr></wbr>.fields<wbr></wbr>.<wbr></wbr>Corrupted<wbr></wbr>File<wbr></wbr>Error</div>
+            <div class="url">patients.fields.CorruptedFileError.html</div>
+            <div class="type">ZopeInterfaceClass</div>
+            <div class="kind">Class</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">Raised when <code><a href="patients.fields.FieldFileWithHash.html" class="internal-link" title="patients.fields.FieldFileWithHash">FieldFileWithHash</a></code> notices a file has been changed after its hash has been computed and fixed.</div>
+          </li><li id="patients.fields.DuplicateFileError">
+            
+            <div class="fullName">patients<wbr></wbr>.fields<wbr></wbr>.<wbr></wbr>Duplicate<wbr></wbr>File<wbr></wbr>Error</div>
+            <div class="url">patients.fields.DuplicateFileError.html</div>
+            <div class="type">ZopeInterfaceClass</div>
+            <div class="kind">Class</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">Exception raised when e.g. during uploading or saving the <code><a href="patients.models.Dataset.html" class="internal-link" title="patients.models.Dataset">Dataset</a></code> model notices a new file is already stored in one of the other datasets.</div>
+          </li><li id="patients.fields.RobustDateField">
+            
+            <div class="fullName">patients<wbr></wbr>.fields<wbr></wbr>.<wbr></wbr>Robust<wbr></wbr>Date<wbr></wbr>Field</div>
+            <div class="url">patients.fields.RobustDateField.html</div>
             <div class="type">ZopeInterfaceClass</div>
             <div class="kind">Class</div>
             <div class="privacy">PUBLIC</div>
             <div class="summary">DateField that doesn't raise a ValidationError when the date string isn't formated according to ISO (YYYY-MM-DD)</div>
-          </li><li id="patients.models.RobustDateField.to_python">
+          </li><li id="patients.fields.RobustDateField.to_python">
             
-            <div class="fullName">patients<wbr></wbr>.models<wbr></wbr>.<wbr></wbr>Robust<wbr></wbr>Date<wbr></wbr>Field<wbr></wbr>.to<wbr></wbr>_python</div>
-            <div class="url">patients.models.RobustDateField.html#to_python</div>
+            <div class="fullName">patients<wbr></wbr>.fields<wbr></wbr>.<wbr></wbr>Robust<wbr></wbr>Date<wbr></wbr>Field<wbr></wbr>.to<wbr></wbr>_python</div>
+            <div class="url">patients.fields.RobustDateField.html#to_python</div>
             <div class="type">ZopeInterfaceFunction</div>
             <div class="kind">Method</div>
             <div class="privacy">PUBLIC</div>
             <div class="summary"><span class="undocumented">Undocumented</span></div>
+          </li><li id="patients.fields.FieldFileWithHash">
+            
+            <div class="fullName">patients<wbr></wbr>.fields<wbr></wbr>.<wbr></wbr>Field<wbr></wbr>File<wbr></wbr>With<wbr></wbr>Hash</div>
+            <div class="url">patients.fields.FieldFileWithHash.html</div>
+            <div class="type">ZopeInterfaceClass</div>
+            <div class="kind">Class</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary"><tt class="rst-docutils literal">FieldFile</tt> that adds an MD5 hash value as the property <code><a href="patients.fields.FieldFileWithHash.html#md5_hash" class="internal-link" title="patients.fields.FieldFileWithHash.md5_hash">md5_hash</a></code> to its defintion which in turn allows me to detect and block changes to the file and/or the dataset using that hash value.</div>
+          </li><li id="patients.fields.FieldFileWithHash.__init__">
+            
+            <div class="fullName">patients<wbr></wbr>.fields<wbr></wbr>.<wbr></wbr>Field<wbr></wbr>File<wbr></wbr>With<wbr></wbr>Hash<wbr></wbr>.__init__</div>
+            <div class="url">patients.fields.FieldFileWithHash.html#__init__</div>
+            <div class="type">ZopeInterfaceFunction</div>
+            <div class="kind">Method</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary"><span class="undocumented">Undocumented</span></div>
+          </li><li id="patients.fields.FieldFileWithHash._md5_hash">
+            
+            <div class="fullName">patients<wbr></wbr>.fields<wbr></wbr>.<wbr></wbr>Field<wbr></wbr>File<wbr></wbr>With<wbr></wbr>Hash<wbr></wbr>._md5<wbr></wbr>_hash</div>
+            <div class="url">patients.fields.FieldFileWithHash.html#_md5_hash</div>
+            <div class="type">ZopeInterfaceAttribute</div>
+            <div class="kind">Instance Variable</div>
+            <div class="privacy">PRIVATE</div>
+            <div class="summary"><span class="undocumented">Undocumented</span></div>
+          </li><li id="patients.fields.FieldFileWithHash.md5_hash">
+            
+            <div class="fullName">patients<wbr></wbr>.fields<wbr></wbr>.<wbr></wbr>Field<wbr></wbr>File<wbr></wbr>With<wbr></wbr>Hash<wbr></wbr>.md5<wbr></wbr>_hash</div>
+            <div class="url">patients.fields.FieldFileWithHash.html#md5_hash</div>
+            <div class="type">ZopeInterfaceAttribute</div>
+            <div class="kind">Property</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">Return the MD5 hash of the associated file. This method also checks if the file was changed and raises an error if that is the case.</div>
+          </li><li id="patients.fields.FileFieldWithHash">
+            
+            <div class="fullName">patients<wbr></wbr>.fields<wbr></wbr>.<wbr></wbr>File<wbr></wbr>Field<wbr></wbr>With<wbr></wbr>Hash</div>
+            <div class="url">patients.fields.FileFieldWithHash.html</div>
+            <div class="type">ZopeInterfaceClass</div>
+            <div class="kind">Class</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">A normal <tt class="rst-docutils literal">FileField</tt> that uses my custom <code><a href="patients.fields.FieldFileWithHash.html" class="internal-link" title="patients.fields.FieldFileWithHash">FieldFileWithHash</a></code> instead of Django's built-in <tt class="rst-docutils literal">FieldFile</tt>.</div>
+          </li><li id="patients.validators.FileTypeValidator">
+            
+            <div class="fullName">patients<wbr></wbr>.validators<wbr></wbr>.<wbr></wbr>File<wbr></wbr>Type<wbr></wbr>Validator</div>
+            <div class="url">patients.validators.FileTypeValidator.html</div>
+            <div class="type">ZopeInterfaceClass</div>
+            <div class="kind">Class</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">Validator that checks the size and content of a file using the <tt class="rst-docutils literal">magic</tt> library.</div>
+          </li><li id="patients.validators.FileTypeValidator.error_messages">
+            
+            <div class="fullName">patients<wbr></wbr>.validators<wbr></wbr>.<wbr></wbr>File<wbr></wbr>Type<wbr></wbr>Validator<wbr></wbr>.error<wbr></wbr>_messages</div>
+            <div class="url">patients.validators.FileTypeValidator.html#error_messages</div>
+            <div class="type">ZopeInterfaceAttribute</div>
+            <div class="kind">Class Variable</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary"><span class="undocumented">Undocumented</span></div>
+          </li><li id="patients.validators.FileTypeValidator.__init__">
+            
+            <div class="fullName">patients<wbr></wbr>.validators<wbr></wbr>.<wbr></wbr>File<wbr></wbr>Type<wbr></wbr>Validator<wbr></wbr>.__init__</div>
+            <div class="url">patients.validators.FileTypeValidator.html#__init__</div>
+            <div class="type">ZopeInterfaceFunction</div>
+            <div class="kind">Method</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary"><span class="undocumented">Undocumented</span></div>
+          </li><li id="patients.validators.FileTypeValidator.max_size">
+            
+            <div class="fullName">patients<wbr></wbr>.validators<wbr></wbr>.<wbr></wbr>File<wbr></wbr>Type<wbr></wbr>Validator<wbr></wbr>.max<wbr></wbr>_size</div>
+            <div class="url">patients.validators.FileTypeValidator.html#max_size</div>
+            <div class="type">ZopeInterfaceAttribute</div>
+            <div class="kind">Instance Variable</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary"><span class="undocumented">Undocumented</span></div>
+          </li><li id="patients.validators.FileTypeValidator.file_types">
+            
+            <div class="fullName">patients<wbr></wbr>.validators<wbr></wbr>.<wbr></wbr>File<wbr></wbr>Type<wbr></wbr>Validator<wbr></wbr>.file<wbr></wbr>_types</div>
+            <div class="url">patients.validators.FileTypeValidator.html#file_types</div>
+            <div class="type">ZopeInterfaceAttribute</div>
+            <div class="kind">Instance Variable</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary"><span class="undocumented">Undocumented</span></div>
+          </li><li id="patients.validators.FileTypeValidator.__call__">
+            
+            <div class="fullName">patients<wbr></wbr>.validators<wbr></wbr>.<wbr></wbr>File<wbr></wbr>Type<wbr></wbr>Validator<wbr></wbr>.__call__</div>
+            <div class="url">patients.validators.FileTypeValidator.html#__call__</div>
+            <div class="type">ZopeInterfaceFunction</div>
+            <div class="kind">Method</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary"><span class="undocumented">Undocumented</span></div>
+          </li><li id="patients.validators.FileTypeValidator.__eq__">
+            
+            <div class="fullName">patients<wbr></wbr>.validators<wbr></wbr>.<wbr></wbr>File<wbr></wbr>Type<wbr></wbr>Validator<wbr></wbr>.__eq__</div>
+            <div class="url">patients.validators.FileTypeValidator.html#__eq__</div>
+            <div class="type">ZopeInterfaceFunction</div>
+            <div class="kind">Method</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary"><span class="undocumented">Undocumented</span></div>
+          </li><li id="patients.models.directory_">
+            
+            <div class="fullName">patients<wbr></wbr>.models<wbr></wbr>.directory_</div>
+            <div class="url">patients.models.html#directory_</div>
+            <div class="type">ZopeInterfaceFunction</div>
+            <div class="kind">Function</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">Function that compiles and returns the path to where uploaded or exported CSV files will be stored. It also creates the respective folder and deletes any existing iles with the same name if necessary.</div>
+          </li><li id="patients.models.directory_for_uploads">
+            
+            <div class="fullName">patients<wbr></wbr>.models<wbr></wbr>.directory<wbr></wbr>_for<wbr></wbr>_uploads</div>
+            <div class="url">patients.models.html#directory_for_uploads</div>
+            <div class="type">ZopeInterfaceFunction</div>
+            <div class="kind">Function</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">Calls <code><a href="patients.models.html#directory_" class="internal-link" title="patients.models.directory_">directory_</a></code> for 'uploads'.</div>
+          </li><li id="patients.models.directory_for_exports">
+            
+            <div class="fullName">patients<wbr></wbr>.models<wbr></wbr>.directory<wbr></wbr>_for<wbr></wbr>_exports</div>
+            <div class="url">patients.models.html#directory_for_exports</div>
+            <div class="type">ZopeInterfaceFunction</div>
+            <div class="kind">Function</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">Calls <code><a href="patients.models.html#directory_" class="internal-link" title="patients.models.directory_">directory_</a></code> for 'exports'.</div>
+          </li><li id="patients.models.LockedDatasetError">
+            
+            <div class="fullName">patients<wbr></wbr>.models<wbr></wbr>.<wbr></wbr>Locked<wbr></wbr>Dataset<wbr></wbr>Error</div>
+            <div class="url">patients.models.LockedDatasetError.html</div>
+            <div class="type">ZopeInterfaceClass</div>
+            <div class="kind">Class</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">Raised when a <code><a href="patients.models.Dataset.html" class="internal-link" title="patients.models.Dataset">Dataset</a></code> or an associated entry was tried to be edited.</div>
+          </li><li id="patients.models.Dataset">
+            
+            <div class="fullName">patients<wbr></wbr>.models<wbr></wbr>.<wbr></wbr>Dataset</div>
+            <div class="url">patients.models.Dataset.html</div>
+            <div class="type">ZopeInterfaceClass</div>
+            <div class="kind">Class</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">This model represents a collection of patients that have been added to the database together. E.g., via uploading a CSV file where each row represents a patient. But also patients added via the interface one by one should be associated to a dataset.</div>
+          </li><li id="patients.models.Dataset.name">
+            
+            <div class="fullName">patients<wbr></wbr>.models<wbr></wbr>.<wbr></wbr>Dataset<wbr></wbr>.name</div>
+            <div class="url">patients.models.Dataset.html#name</div>
+            <div class="type">ZopeInterfaceAttribute</div>
+            <div class="kind">Class Variable</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">The name of the dataset. Should not include any dates or the institution.</div>
+          </li><li id="patients.models.Dataset.description">
+            
+            <div class="fullName">patients<wbr></wbr>.models<wbr></wbr>.<wbr></wbr>Dataset<wbr></wbr>.description</div>
+            <div class="url">patients.models.Dataset.html#description</div>
+            <div class="type">ZopeInterfaceAttribute</div>
+            <div class="kind">Class Variable</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">A brief description of the dataset.</div>
+          </li><li id="patients.models.Dataset.create_date">
+            
+            <div class="fullName">patients<wbr></wbr>.models<wbr></wbr>.<wbr></wbr>Dataset<wbr></wbr>.create<wbr></wbr>_date</div>
+            <div class="url">patients.models.Dataset.html#create_date</div>
+            <div class="type">ZopeInterfaceAttribute</div>
+            <div class="kind">Class Variable</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">Date when the dataset was uploaded.</div>
+          </li><li id="patients.models.Dataset.institution">
+            
+            <div class="fullName">patients<wbr></wbr>.models<wbr></wbr>.<wbr></wbr>Dataset<wbr></wbr>.institution</div>
+            <div class="url">patients.models.Dataset.html#institution</div>
+            <div class="type">ZopeInterfaceAttribute</div>
+            <div class="kind">Class Variable</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">The clinic or research institute that collected and uploaded the patients.</div>
+          </li><li id="patients.models.Dataset.is_public">
+            
+            <div class="fullName">patients<wbr></wbr>.models<wbr></wbr>.<wbr></wbr>Dataset<wbr></wbr>.is<wbr></wbr>_public</div>
+            <div class="url">patients.models.Dataset.html#is_public</div>
+            <div class="type">ZopeInterfaceAttribute</div>
+            <div class="kind">Class Variable</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">Should this dataset be visible to non-authenticated users?</div>
+          </li><li id="patients.models.Dataset.is_locked">
+            
+            <div class="fullName">patients<wbr></wbr>.models<wbr></wbr>.<wbr></wbr>Dataset<wbr></wbr>.is<wbr></wbr>_locked</div>
+            <div class="url">patients.models.Dataset.html#is_locked</div>
+            <div class="type">ZopeInterfaceAttribute</div>
+            <div class="kind">Instance Variable</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">This indicates that one is done adding patients to this dataset and it should be prohibited to change the dataset or any of its associated entries when this is set to <tt class="rst-docutils literal">True</tt>.</div>
+          </li><li id="patients.models.Dataset.repo_provider">
+            
+            <div class="fullName">patients<wbr></wbr>.models<wbr></wbr>.<wbr></wbr>Dataset<wbr></wbr>.repo<wbr></wbr>_provider</div>
+            <div class="url">patients.models.Dataset.html#repo_provider</div>
+            <div class="type">ZopeInterfaceAttribute</div>
+            <div class="kind">Class Variable</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">(Optional) name of the repository provider from where the data for the upload came from. This could e.g. be 'GitHub' or 'Zenodo'.</div>
+          </li><li id="patients.models.Dataset.repo_data_url">
+            
+            <div class="fullName">patients<wbr></wbr>.models<wbr></wbr>.<wbr></wbr>Dataset<wbr></wbr>.repo<wbr></wbr>_data<wbr></wbr>_url</div>
+            <div class="url">patients.models.Dataset.html#repo_data_url</div>
+            <div class="type">ZopeInterfaceAttribute</div>
+            <div class="kind">Class Variable</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">(Optional) link to the repository's downloads page for the uploaded data. Note that it is not checked whether the data behind this URL actually matches the uploaded data or not.</div>
+          </li><li id="patients.models.Dataset.upload_csv">
+            
+            <div class="fullName">patients<wbr></wbr>.models<wbr></wbr>.<wbr></wbr>Dataset<wbr></wbr>.upload<wbr></wbr>_csv</div>
+            <div class="url">patients.models.Dataset.html#upload_csv</div>
+            <div class="type">ZopeInterfaceAttribute</div>
+            <div class="kind">Class Variable</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">The custom <tt class="rst-docutils literal">FileField</tt> that holds the uploaded CSV file.</div>
+          </li><li id="patients.models.Dataset.export_csv">
+            
+            <div class="fullName">patients<wbr></wbr>.models<wbr></wbr>.<wbr></wbr>Dataset<wbr></wbr>.export<wbr></wbr>_csv</div>
+            <div class="url">patients.models.Dataset.html#export_csv</div>
+            <div class="type">ZopeInterfaceAttribute</div>
+            <div class="kind">Class Variable</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">The custom <tt class="rst-docutils literal">FileField</tt> that holds the exported CSV file.</div>
+          </li><li id="patients.models.Dataset.__str__">
+            
+            <div class="fullName">patients<wbr></wbr>.models<wbr></wbr>.<wbr></wbr>Dataset<wbr></wbr>.__str__</div>
+            <div class="url">patients.models.Dataset.html#__str__</div>
+            <div class="type">ZopeInterfaceFunction</div>
+            <div class="kind">Method</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary"><span class="undocumented">Undocumented</span></div>
+          </li><li id="patients.models.Dataset._validate_unique">
+            
+            <div class="fullName">patients<wbr></wbr>.models<wbr></wbr>.<wbr></wbr>Dataset<wbr></wbr>._validate<wbr></wbr>_unique</div>
+            <div class="url">patients.models.Dataset.html#_validate_unique</div>
+            <div class="type">ZopeInterfaceFunction</div>
+            <div class="kind">Method</div>
+            <div class="privacy">PRIVATE</div>
+            <div class="summary">Make sure no other <code><a href="patients.models.Dataset.html" class="internal-link" title="patients.models.Dataset">Dataset</a></code> holds the same file in one of their <tt class="rst-docutils literal">FileFields</tt> or the uploaded file is already stored on disk.</div>
+          </li><li id="patients.models.Dataset.validate_unique">
+            
+            <div class="fullName">patients<wbr></wbr>.models<wbr></wbr>.<wbr></wbr>Dataset<wbr></wbr>.validate<wbr></wbr>_unique</div>
+            <div class="url">patients.models.Dataset.html#validate_unique</div>
+            <div class="type">ZopeInterfaceFunction</div>
+            <div class="kind">Method</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">Validate uniqueness of the uploaded CSV file.</div>
+          </li><li id="patients.models.Dataset.lock">
+            
+            <div class="fullName">patients<wbr></wbr>.models<wbr></wbr>.<wbr></wbr>Dataset<wbr></wbr>.lock</div>
+            <div class="url">patients.models.Dataset.html#lock</div>
+            <div class="type">ZopeInterfaceFunction</div>
+            <div class="kind">Method</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">Set the field <code><a href="patients.models.Dataset.html#is_locked" class="internal-link" title="patients.models.Dataset.is_locked">is_locked</a></code> to <tt class="rst-docutils literal">True</tt></div>
+          </li><li id="patients.models.Dataset.unlock">
+            
+            <div class="fullName">patients<wbr></wbr>.models<wbr></wbr>.<wbr></wbr>Dataset<wbr></wbr>.unlock</div>
+            <div class="url">patients.models.Dataset.html#unlock</div>
+            <div class="type">ZopeInterfaceFunction</div>
+            <div class="kind">Method</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">Set <code><a href="patients.models.Dataset.html#is_locked" class="internal-link" title="patients.models.Dataset.is_locked">is_locked</a></code> to <tt class="rst-docutils literal">False</tt>, allowing the dataset and its patients to be edited again.</div>
+          </li><li id="patients.models.Dataset.save">
+            
+            <div class="fullName">patients<wbr></wbr>.models<wbr></wbr>.<wbr></wbr>Dataset<wbr></wbr>.save</div>
+            <div class="url">patients.models.Dataset.html#save</div>
+            <div class="type">ZopeInterfaceFunction</div>
+            <div class="kind">Method</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">Add uniqueness checks to save method, as well as blocking any changes when the dataset is locked (and <code>override</code> is not set to <tt class="rst-docutils literal">True</tt>).</div>
+          </li><li id="patients.models.Dataset.delete">
+            
+            <div class="fullName">patients<wbr></wbr>.models<wbr></wbr>.<wbr></wbr>Dataset<wbr></wbr>.delete</div>
+            <div class="url">patients.models.Dataset.html#delete</div>
+            <div class="type">ZopeInterfaceFunction</div>
+            <div class="kind">Method</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">Block deletion if dataset is locked. Unless the red override is pushed.</div>
+          </li><li id="patients.models.Dataset.get_pandas_from_db">
+            
+            <div class="fullName">patients<wbr></wbr>.models<wbr></wbr>.<wbr></wbr>Dataset<wbr></wbr>.get<wbr></wbr>_pandas<wbr></wbr>_from<wbr></wbr>_db</div>
+            <div class="url">patients.models.Dataset.html#get_pandas_from_db</div>
+            <div class="type">ZopeInterfaceFunction</div>
+            <div class="kind">Method</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">Generate a <code>pandas.DataFrame</code> for all patients associated with this dataset using the <code><a href="patients.ioports.html" class="internal-link" title="patients.ioports">ioports</a></code> module and then return that.</div>
+          </li><li id="patients.models.Dataset.get_pandas_from_csv">
+            
+            <div class="fullName">patients<wbr></wbr>.models<wbr></wbr>.<wbr></wbr>Dataset<wbr></wbr>.get<wbr></wbr>_pandas<wbr></wbr>_from<wbr></wbr>_csv</div>
+            <div class="url">patients.models.Dataset.html#get_pandas_from_csv</div>
+            <div class="type">ZopeInterfaceFunction</div>
+            <div class="kind">Method</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">Simply extract a <code>pandas.DataFrame</code> from an uploaded CSV.</div>
+          </li><li id="patients.models.Dataset.export_db_to_csv">
+            
+            <div class="fullName">patients<wbr></wbr>.models<wbr></wbr>.<wbr></wbr>Dataset<wbr></wbr>.export<wbr></wbr>_db<wbr></wbr>_to<wbr></wbr>_csv</div>
+            <div class="url">patients.models.Dataset.html#export_db_to_csv</div>
+            <div class="type">ZopeInterfaceFunction</div>
+            <div class="kind">Method</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">First, call the <code><a href="patients.models.Dataset.html#get_pandas_from_db" class="internal-link" title="patients.models.Dataset.get_pandas_from_db">get_pandas_from_db</a></code> method to get a <code>pandas.DataFrame</code> of patients from the database. Then, save that table in the form of a CSV file to disk and associate it with the <code><a href="patients.fields.FileFieldWithHash.html" class="internal-link" title="patients.fields.FileFieldWithHash">fields.FileFieldWithHash</a></code>...</div>
+          </li><li id="patients.models.Dataset.import_upload_csv_to_db">
+            
+            <div class="fullName">patients<wbr></wbr>.models<wbr></wbr>.<wbr></wbr>Dataset<wbr></wbr>.import<wbr></wbr>_upload<wbr></wbr>_csv<wbr></wbr>_to<wbr></wbr>_db</div>
+            <div class="url">patients.models.Dataset.html#import_upload_csv_to_db</div>
+            <div class="type">ZopeInterfaceFunction</div>
+            <div class="kind">Method</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">Import an uploaded CSV into the database using the <code><a href="patients.ioports.html" class="internal-link" title="patients.ioports">ioports</a></code> module. Lock the dataset right afterwards to prevent editing the uploaded patients.</div>
           </li><li id="patients.models.Patient">
             
             <div class="fullName">patients<wbr></wbr>.models<wbr></wbr>.<wbr></wbr>Patient</div>
@@ -612,14 +988,6 @@
             <div class="kind">Class</div>
             <div class="privacy">PUBLIC</div>
             <div class="summary">The representation of a patient in the database. It contains some demographic information, as well as patient-specific characteristics that are important in the context of cancer, e.g. HPV status.</div>
-          </li><li id="patients.models.Patient.hash_value">
-            
-            <div class="fullName">patients<wbr></wbr>.models<wbr></wbr>.<wbr></wbr>Patient<wbr></wbr>.hash<wbr></wbr>_value</div>
-            <div class="url">patients.models.Patient.html#hash_value</div>
-            <div class="type">ZopeInterfaceAttribute</div>
-            <div class="kind">Class Variable</div>
-            <div class="privacy">PUBLIC</div>
-            <div class="summary">Unique ID computed from sensitive info upon patient creation.</div>
           </li><li id="patients.models.Patient.sex">
             
             <div class="fullName">patients<wbr></wbr>.models<wbr></wbr>.<wbr></wbr>Patient<wbr></wbr>.sex</div>
@@ -828,14 +1196,14 @@
             <div class="kind">Class Variable</div>
             <div class="privacy">PUBLIC</div>
             <div class="summary">Indicates whether or not there are distant metastases.</div>
-          </li><li id="patients.models.Patient.institution">
+          </li><li id="patients.models.Patient.dataset">
             
-            <div class="fullName">patients<wbr></wbr>.models<wbr></wbr>.<wbr></wbr>Patient<wbr></wbr>.institution</div>
-            <div class="url">patients.models.Patient.html#institution</div>
+            <div class="fullName">patients<wbr></wbr>.models<wbr></wbr>.<wbr></wbr>Patient<wbr></wbr>.dataset</div>
+            <div class="url">patients.models.Patient.html#dataset</div>
             <div class="type">ZopeInterfaceAttribute</div>
             <div class="kind">Class Variable</div>
             <div class="privacy">PUBLIC</div>
-            <div class="summary">A newly created patient is assigned to the institution of the user that entered the patient into the database.</div>
+            <div class="summary">Every patient must belong to a dataset entry that manages importing, exporting as well as preventing edits that compromise the integrity of the dataset.</div>
           </li><li id="patients.models.Patient.__str__">
             
             <div class="fullName">patients<wbr></wbr>.models<wbr></wbr>.<wbr></wbr>Patient<wbr></wbr>.__str__</div>
@@ -1340,6 +1708,22 @@
             <div class="kind">Method</div>
             <div class="privacy">PUBLIC</div>
             <div class="summary">Report some information for easier management.</div>
+          </li><li id="patients.filters.logger">
+            
+            <div class="fullName">patients<wbr></wbr>.filters<wbr></wbr>.logger</div>
+            <div class="url">patients.filters.html#logger</div>
+            <div class="type">ZopeInterfaceAttribute</div>
+            <div class="kind">Variable</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary"><span class="undocumented">Undocumented</span></div>
+          </li><li id="patients.filters.public_or_logged_in">
+            
+            <div class="fullName">patients<wbr></wbr>.filters<wbr></wbr>.public<wbr></wbr>_or<wbr></wbr>_logged<wbr></wbr>_in</div>
+            <div class="url">patients.filters.html#public_or_logged_in</div>
+            <div class="type">ZopeInterfaceFunction</div>
+            <div class="kind">Function</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">Return a queryset of datasets, depending on whether a user is logged in or not.</div>
           </li><li id="patients.filters.PatientFilter">
             
             <div class="fullName">patients<wbr></wbr>.filters<wbr></wbr>.<wbr></wbr>Patient<wbr></wbr>Filter</div>
@@ -1348,6 +1732,22 @@
             <div class="kind">Class</div>
             <div class="privacy">PUBLIC</div>
             <div class="summary">A <tt class="rst-docutils literal">django_filters.FilterSet</tt> which allows for easy filtering of a patient queryset for any fields defined here.</div>
+          </li><li id="patients.filters.PatientFilter.Meta">
+            
+            <div class="fullName">patients<wbr></wbr>.filters<wbr></wbr>.<wbr></wbr>Patient<wbr></wbr>Filter<wbr></wbr>.<wbr></wbr>Meta</div>
+            <div class="url">patients.filters.PatientFilter.Meta.html</div>
+            <div class="type">ZopeInterfaceClass</div>
+            <div class="kind">Class</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">Define which django model this should act on.</div>
+          </li><li id="patients.filters.PatientFilter.Meta.fields">
+            
+            <div class="fullName">patients<wbr></wbr>.filters<wbr></wbr>.<wbr></wbr>Patient<wbr></wbr>Filter<wbr></wbr>.<wbr></wbr>Meta<wbr></wbr>.fields</div>
+            <div class="url">patients.filters.PatientFilter.Meta.html#fields</div>
+            <div class="type">ZopeInterfaceAttribute</div>
+            <div class="kind">Class Variable</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary"><span class="undocumented">Undocumented</span></div>
           </li><li id="patients.filters.PatientFilter.diagnose_date">
             
             <div class="fullName">patients<wbr></wbr>.filters<wbr></wbr>.<wbr></wbr>Patient<wbr></wbr>Filter<wbr></wbr>.diagnose<wbr></wbr>_date</div>
@@ -1396,10 +1796,10 @@
             <div class="kind">Class Variable</div>
             <div class="privacy">PUBLIC</div>
             <div class="summary"><span class="undocumented">Undocumented</span></div>
-          </li><li id="patients.filters.PatientFilter.institution">
+          </li><li id="patients.filters.PatientFilter.dataset">
             
-            <div class="fullName">patients<wbr></wbr>.filters<wbr></wbr>.<wbr></wbr>Patient<wbr></wbr>Filter<wbr></wbr>.institution</div>
-            <div class="url">patients.filters.PatientFilter.html#institution</div>
+            <div class="fullName">patients<wbr></wbr>.filters<wbr></wbr>.<wbr></wbr>Patient<wbr></wbr>Filter<wbr></wbr>.dataset</div>
+            <div class="url">patients.filters.PatientFilter.html#dataset</div>
             <div class="type">ZopeInterfaceAttribute</div>
             <div class="kind">Class Variable</div>
             <div class="privacy">PUBLIC</div>
@@ -1412,102 +1812,78 @@
             <div class="kind">Class Variable</div>
             <div class="privacy">PUBLIC</div>
             <div class="summary"><span class="undocumented">Undocumented</span></div>
-          </li><li id="patients.filters.PatientFilter.Meta">
+          </li><li id="patients.forms.DatasetForm">
             
-            <div class="fullName">patients<wbr></wbr>.filters<wbr></wbr>.<wbr></wbr>Patient<wbr></wbr>Filter<wbr></wbr>.<wbr></wbr>Meta</div>
-            <div class="url">patients.filters.PatientFilter.Meta.html</div>
+            <div class="fullName">patients<wbr></wbr>.forms<wbr></wbr>.<wbr></wbr>Dataset<wbr></wbr>Form</div>
+            <div class="url">patients.forms.DatasetForm.html</div>
             <div class="type">ZopeInterfaceClass</div>
             <div class="kind">Class</div>
             <div class="privacy">PUBLIC</div>
-            <div class="summary">Define which django model this should act on.</div>
-          </li><li id="patients.filters.PatientFilter.Meta.fields">
+            <div class="summary">Form to create and edit datasets, based on their model definition.</div>
+          </li><li id="patients.forms.DatasetForm.initial">
             
-            <div class="fullName">patients<wbr></wbr>.filters<wbr></wbr>.<wbr></wbr>Patient<wbr></wbr>Filter<wbr></wbr>.<wbr></wbr>Meta<wbr></wbr>.fields</div>
-            <div class="url">patients.filters.PatientFilter.Meta.html#fields</div>
+            <div class="fullName">patients<wbr></wbr>.forms<wbr></wbr>.<wbr></wbr>Dataset<wbr></wbr>Form<wbr></wbr>.initial</div>
+            <div class="url">patients.forms.DatasetForm.html#initial</div>
             <div class="type">ZopeInterfaceAttribute</div>
             <div class="kind">Class Variable</div>
             <div class="privacy">PUBLIC</div>
             <div class="summary"><span class="undocumented">Undocumented</span></div>
-          </li><li id="patients.ioports.logger">
+          </li><li id="patients.forms.DatasetForm.Meta">
             
-            <div class="fullName">patients<wbr></wbr>.ioports<wbr></wbr>.logger</div>
-            <div class="url">patients.ioports.html#logger</div>
-            <div class="type">ZopeInterfaceAttribute</div>
-            <div class="kind">Variable</div>
-            <div class="privacy">PUBLIC</div>
-            <div class="summary"><span class="undocumented">Undocumented</span></div>
-          </li><li id="patients.ioports.ParsingError">
-            
-            <div class="fullName">patients<wbr></wbr>.ioports<wbr></wbr>.<wbr></wbr>Parsing<wbr></wbr>Error</div>
-            <div class="url">patients.ioports.ParsingError.html</div>
+            <div class="fullName">patients<wbr></wbr>.forms<wbr></wbr>.<wbr></wbr>Dataset<wbr></wbr>Form<wbr></wbr>.<wbr></wbr>Meta</div>
+            <div class="url">patients.forms.DatasetForm.Meta.html</div>
             <div class="type">ZopeInterfaceClass</div>
             <div class="kind">Class</div>
             <div class="privacy">PUBLIC</div>
-            <div class="summary">Exception raised when the parsing of an uploaded CSV fails due to missing data columns.</div>
-          </li><li id="patients.ioports.compute_hash">
+            <div class="summary">The underlying model.</div>
+          </li><li id="patients.forms.DatasetForm.Meta.fields">
             
-            <div class="fullName">patients<wbr></wbr>.ioports<wbr></wbr>.compute<wbr></wbr>_hash</div>
-            <div class="url">patients.ioports.html#compute_hash</div>
-            <div class="type">ZopeInterfaceFunction</div>
-            <div class="kind">Function</div>
+            <div class="fullName">patients<wbr></wbr>.forms<wbr></wbr>.<wbr></wbr>Dataset<wbr></wbr>Form<wbr></wbr>.<wbr></wbr>Meta<wbr></wbr>.fields</div>
+            <div class="url">patients.forms.DatasetForm.Meta.html#fields</div>
+            <div class="type">ZopeInterfaceAttribute</div>
+            <div class="kind">Class Variable</div>
             <div class="privacy">PUBLIC</div>
-            <div class="summary">Compute a hash vlaue from three patient-specific fields that must be removed due for respecting the patient's privacy.</div>
-          </li><li id="patients.ioports.nan_to_none">
+            <div class="summary"><span class="undocumented">Undocumented</span></div>
+          </li><li id="patients.forms.DatasetForm.Meta.widgets">
             
-            <div class="fullName">patients<wbr></wbr>.ioports<wbr></wbr>.nan<wbr></wbr>_to<wbr></wbr>_none</div>
-            <div class="url">patients.ioports.html#nan_to_none</div>
-            <div class="type">ZopeInterfaceFunction</div>
-            <div class="kind">Function</div>
+            <div class="fullName">patients<wbr></wbr>.forms<wbr></wbr>.<wbr></wbr>Dataset<wbr></wbr>Form<wbr></wbr>.<wbr></wbr>Meta<wbr></wbr>.widgets</div>
+            <div class="url">patients.forms.DatasetForm.Meta.html#widgets</div>
+            <div class="type">ZopeInterfaceAttribute</div>
+            <div class="kind">Class Variable</div>
             <div class="privacy">PUBLIC</div>
-            <div class="summary">Transform NaNs to <tt class="rst-docutils literal">None</tt>.</div>
-          </li><li id="patients.ioports.get_model_fields">
+            <div class="summary"><span class="undocumented">Undocumented</span></div>
+          </li><li id="patients.forms.DatasetForm.upload_csv">
             
-            <div class="fullName">patients<wbr></wbr>.ioports<wbr></wbr>.get<wbr></wbr>_model<wbr></wbr>_fields</div>
-            <div class="url">patients.ioports.html#get_model_fields</div>
-            <div class="type">ZopeInterfaceFunction</div>
-            <div class="kind">Function</div>
+            <div class="fullName">patients<wbr></wbr>.forms<wbr></wbr>.<wbr></wbr>Dataset<wbr></wbr>Form<wbr></wbr>.upload<wbr></wbr>_csv</div>
+            <div class="url">patients.forms.DatasetForm.html#upload_csv</div>
+            <div class="type">ZopeInterfaceAttribute</div>
+            <div class="kind">Class Variable</div>
             <div class="privacy">PUBLIC</div>
-            <div class="summary">Get list of names of model fields and remove the ones provided via the <tt class="rst-docutils literal">remove</tt> argument.</div>
-          </li><li id="patients.ioports.row2patient">
+            <div class="summary"><span class="undocumented">Undocumented</span></div>
+          </li><li id="patients.forms.DatasetForm.__init__">
             
-            <div class="fullName">patients<wbr></wbr>.ioports<wbr></wbr>.row2patient</div>
-            <div class="url">patients.ioports.html#row2patient</div>
+            <div class="fullName">patients<wbr></wbr>.forms<wbr></wbr>.<wbr></wbr>Dataset<wbr></wbr>Form<wbr></wbr>.__init__</div>
+            <div class="url">patients.forms.DatasetForm.html#__init__</div>
             <div class="type">ZopeInterfaceFunction</div>
-            <div class="kind">Function</div>
+            <div class="kind">Method</div>
             <div class="privacy">PUBLIC</div>
-            <div class="summary">Create a <code><a href="patients.models.Patient.html" class="internal-link" title="patients.models.Patient">Patient</a></code> instance from a row of a <tt class="rst-docutils literal">DataFrame</tt> containing the appropriate information, as well as the user that uploaded the information.</div>
-          </li><li id="patients.ioports.row2tumors">
+            <div class="summary"><span class="undocumented">Undocumented</span></div>
+          </li><li id="patients.forms.DatasetForm.user">
             
-            <div class="fullName">patients<wbr></wbr>.ioports<wbr></wbr>.row2tumors</div>
-            <div class="url">patients.ioports.html#row2tumors</div>
-            <div class="type">ZopeInterfaceFunction</div>
-            <div class="kind">Function</div>
+            <div class="fullName">patients<wbr></wbr>.forms<wbr></wbr>.<wbr></wbr>Dataset<wbr></wbr>Form<wbr></wbr>.user</div>
+            <div class="url">patients.forms.DatasetForm.html#user</div>
+            <div class="type">ZopeInterfaceAttribute</div>
+            <div class="kind">Instance Variable</div>
             <div class="privacy">PUBLIC</div>
-            <div class="summary">Create <code><a href="patients.models.Tumor.html" class="internal-link" title="patients.models.Tumor">Tumor</a></code> instances from row of a <tt class="rst-docutils literal">DataFrame</tt> and add them to an existing <code><a href="patients.models.Patient.html" class="internal-link" title="patients.models.Patient">Patient</a></code> instance.</div>
-          </li><li id="patients.ioports.row2diagnoses">
+            <div class="summary"><span class="undocumented">Undocumented</span></div>
+          </li><li id="patients.forms.DatasetForm.save">
             
-            <div class="fullName">patients<wbr></wbr>.ioports<wbr></wbr>.row2diagnoses</div>
-            <div class="url">patients.ioports.html#row2diagnoses</div>
+            <div class="fullName">patients<wbr></wbr>.forms<wbr></wbr>.<wbr></wbr>Dataset<wbr></wbr>Form<wbr></wbr>.save</div>
+            <div class="url">patients.forms.DatasetForm.html#save</div>
             <div class="type">ZopeInterfaceFunction</div>
-            <div class="kind">Function</div>
+            <div class="kind">Method</div>
             <div class="privacy">PUBLIC</div>
-            <div class="summary">Create <code><a href="patients.models.Diagnose.html" class="internal-link" title="patients.models.Diagnose">Diagnose</a></code> instances from row of <tt class="rst-docutils literal">DataFrame</tt> and add them to an existing <code><a href="patients.models.Patient.html" class="internal-link" title="patients.models.Patient">Patient</a></code> instance.</div>
-          </li><li id="patients.ioports.import_from_pandas">
-            
-            <div class="fullName">patients<wbr></wbr>.ioports<wbr></wbr>.import<wbr></wbr>_from<wbr></wbr>_pandas</div>
-            <div class="url">patients.ioports.html#import_from_pandas</div>
-            <div class="type">ZopeInterfaceFunction</div>
-            <div class="kind">Function</div>
-            <div class="privacy">PUBLIC</div>
-            <div class="summary">Import patients from pandas <tt class="rst-docutils literal">DataFrame</tt>.</div>
-          </li><li id="patients.ioports.export_to_pandas">
-            
-            <div class="fullName">patients<wbr></wbr>.ioports<wbr></wbr>.export<wbr></wbr>_to<wbr></wbr>_pandas</div>
-            <div class="url">patients.ioports.html#export_to_pandas</div>
-            <div class="type">ZopeInterfaceFunction</div>
-            <div class="kind">Function</div>
-            <div class="privacy">PUBLIC</div>
-            <div class="summary">Export <tt class="rst-docutils literal">QuerySet</tt> of patients into a pandas <tt class="rst-docutils literal">DataFrame</tt> of the same format as it is needed for importing.</div>
+            <div class="summary">Get the institution from the user and import the uploaded CSV file into the database. Also, export that to populate the <tt class="rst-docutils literal">export_csv</tt> field. Finally, lock the dataset.</div>
           </li><li id="patients.forms.PatientForm">
             
             <div class="fullName">patients<wbr></wbr>.forms<wbr></wbr>.<wbr></wbr>Patient<wbr></wbr>Form</div>
@@ -1540,6 +1916,14 @@
             <div class="kind">Class Variable</div>
             <div class="privacy">PUBLIC</div>
             <div class="summary"><span class="undocumented">Undocumented</span></div>
+          </li><li id="patients.forms.PatientForm.dataset">
+            
+            <div class="fullName">patients<wbr></wbr>.forms<wbr></wbr>.<wbr></wbr>Patient<wbr></wbr>Form<wbr></wbr>.dataset</div>
+            <div class="url">patients.forms.PatientForm.html#dataset</div>
+            <div class="type">ZopeInterfaceAttribute</div>
+            <div class="kind">Class Variable</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary"><span class="undocumented">Undocumented</span></div>
           </li><li id="patients.forms.PatientForm.__init__">
             
             <div class="fullName">patients<wbr></wbr>.forms<wbr></wbr>.<wbr></wbr>Patient<wbr></wbr>Form<wbr></wbr>.__init__</div>
@@ -1547,7 +1931,7 @@
             <div class="type">ZopeInterfaceFunction</div>
             <div class="kind">Method</div>
             <div class="privacy">PUBLIC</div>
-            <div class="summary"><span class="undocumented">Undocumented</span></div>
+            <div class="summary">Extract user to only allow adding patients to datasets from same institution as user.</div>
           </li><li id="patients.forms.PatientForm.user">
             
             <div class="fullName">patients<wbr></wbr>.forms<wbr></wbr>.<wbr></wbr>Patient<wbr></wbr>Form<wbr></wbr>.user</div>
@@ -1556,70 +1940,14 @@
             <div class="kind">Instance Variable</div>
             <div class="privacy">PUBLIC</div>
             <div class="summary"><span class="undocumented">Undocumented</span></div>
-          </li><li id="patients.forms.PatientForm.first_name">
+          </li><li id="patients.forms.PatientForm.clean_dataset">
             
-            <div class="fullName">patients<wbr></wbr>.forms<wbr></wbr>.<wbr></wbr>Patient<wbr></wbr>Form<wbr></wbr>.first<wbr></wbr>_name</div>
-            <div class="url">patients.forms.PatientForm.html#first_name</div>
-            <div class="type">ZopeInterfaceAttribute</div>
-            <div class="kind">Class Variable</div>
-            <div class="privacy">PUBLIC</div>
-            <div class="summary"><span class="undocumented">Undocumented</span></div>
-          </li><li id="patients.forms.PatientForm.last_name">
-            
-            <div class="fullName">patients<wbr></wbr>.forms<wbr></wbr>.<wbr></wbr>Patient<wbr></wbr>Form<wbr></wbr>.last<wbr></wbr>_name</div>
-            <div class="url">patients.forms.PatientForm.html#last_name</div>
-            <div class="type">ZopeInterfaceAttribute</div>
-            <div class="kind">Class Variable</div>
-            <div class="privacy">PUBLIC</div>
-            <div class="summary"><span class="undocumented">Undocumented</span></div>
-          </li><li id="patients.forms.PatientForm.birthday">
-            
-            <div class="fullName">patients<wbr></wbr>.forms<wbr></wbr>.<wbr></wbr>Patient<wbr></wbr>Form<wbr></wbr>.birthday</div>
-            <div class="url">patients.forms.PatientForm.html#birthday</div>
-            <div class="type">ZopeInterfaceAttribute</div>
-            <div class="kind">Class Variable</div>
-            <div class="privacy">PUBLIC</div>
-            <div class="summary"><span class="undocumented">Undocumented</span></div>
-          </li><li id="patients.forms.PatientForm.check_for_duplicate">
-            
-            <div class="fullName">patients<wbr></wbr>.forms<wbr></wbr>.<wbr></wbr>Patient<wbr></wbr>Form<wbr></wbr>.check<wbr></wbr>_for<wbr></wbr>_duplicate</div>
-            <div class="url">patients.forms.PatientForm.html#check_for_duplicate</div>
-            <div class="type">ZopeInterfaceAttribute</div>
-            <div class="kind">Class Variable</div>
-            <div class="privacy">PUBLIC</div>
-            <div class="summary"><span class="undocumented">Undocumented</span></div>
-          </li><li id="patients.forms.PatientForm.save">
-            
-            <div class="fullName">patients<wbr></wbr>.forms<wbr></wbr>.<wbr></wbr>Patient<wbr></wbr>Form<wbr></wbr>.save</div>
-            <div class="url">patients.forms.PatientForm.html#save</div>
+            <div class="fullName">patients<wbr></wbr>.forms<wbr></wbr>.<wbr></wbr>Patient<wbr></wbr>Form<wbr></wbr>.clean<wbr></wbr>_dataset</div>
+            <div class="url">patients.forms.PatientForm.html#clean_dataset</div>
             <div class="type">ZopeInterfaceFunction</div>
             <div class="kind">Method</div>
             <div class="privacy">PUBLIC</div>
-            <div class="summary">Compute hashed ID and age from name, birthday and diagnose date.</div>
-          </li><li id="patients.forms.PatientForm.clean">
-            
-            <div class="fullName">patients<wbr></wbr>.forms<wbr></wbr>.<wbr></wbr>Patient<wbr></wbr>Form<wbr></wbr>.clean</div>
-            <div class="url">patients.forms.PatientForm.html#clean</div>
-            <div class="type">ZopeInterfaceFunction</div>
-            <div class="kind">Method</div>
-            <div class="privacy">PUBLIC</div>
-            <div class="summary">Override superclass clean method to raise a <tt class="rst-docutils literal">ValidationError</tt> when a duplicate identifier is found.</div>
-          </li><li id="patients.forms.PatientForm._compute_age">
-            
-            <div class="fullName">patients<wbr></wbr>.forms<wbr></wbr>.<wbr></wbr>Patient<wbr></wbr>Form<wbr></wbr>._compute<wbr></wbr>_age</div>
-            <div class="url">patients.forms.PatientForm.html#_compute_age</div>
-            <div class="type">ZopeInterfaceFunction</div>
-            <div class="kind">Method</div>
-            <div class="privacy">PRIVATE</div>
-            <div class="summary">Compute age of patient at diagnose/admission.</div>
-          </li><li id="patients.forms.PatientForm._get_identifier">
-            
-            <div class="fullName">patients<wbr></wbr>.forms<wbr></wbr>.<wbr></wbr>Patient<wbr></wbr>Form<wbr></wbr>._get<wbr></wbr>_identifier</div>
-            <div class="url">patients.forms.PatientForm.html#_get_identifier</div>
-            <div class="type">ZopeInterfaceFunction</div>
-            <div class="kind">Method</div>
-            <div class="privacy">PRIVATE</div>
-            <div class="summary">Compute the hashed undique identifier from fields that are of provacy concern.</div>
+            <div class="summary">Make sure that the user is allowed to add patients to the dataset.</div>
           </li><li id="patients.forms.TumorForm">
             
             <div class="fullName">patients<wbr></wbr>.forms<wbr></wbr>.<wbr></wbr>Tumor<wbr></wbr>Form</div>
@@ -1732,22 +2060,86 @@
             <div class="kind">Method</div>
             <div class="privacy">PUBLIC</div>
             <div class="summary">Cleaning method that makes sure the uploaded data is in fact a CSV file and can be parsed by <tt class="rst-docutils literal">pandas</tt> into a <tt class="rst-docutils literal">DataFrame</tt>.</div>
-          </li><li id="patients.forms.InsitutionForm">
+          </li><li id="patients.ioports.logger">
             
-            <div class="fullName">patients<wbr></wbr>.forms<wbr></wbr>.<wbr></wbr>Insitution<wbr></wbr>Form</div>
-            <div class="url">patients.forms.InsitutionForm.html</div>
-            <div class="type">ZopeInterfaceClass</div>
-            <div class="kind">Class</div>
-            <div class="privacy">PUBLIC</div>
-            <div class="summary">Form for creating an institution. This is not yet in use or even functional.</div>
-          </li><li id="patients.forms.InsitutionForm.Meta">
-            
-            <div class="fullName">patients<wbr></wbr>.forms<wbr></wbr>.<wbr></wbr>Insitution<wbr></wbr>Form<wbr></wbr>.<wbr></wbr>Meta</div>
-            <div class="url">patients.forms.InsitutionForm.Meta.html</div>
-            <div class="type">ZopeInterfaceClass</div>
-            <div class="kind">Class</div>
+            <div class="fullName">patients<wbr></wbr>.ioports<wbr></wbr>.logger</div>
+            <div class="url">patients.ioports.html#logger</div>
+            <div class="type">ZopeInterfaceAttribute</div>
+            <div class="kind">Variable</div>
             <div class="privacy">PUBLIC</div>
             <div class="summary"><span class="undocumented">Undocumented</span></div>
+          </li><li id="patients.ioports.ParsingError">
+            
+            <div class="fullName">patients<wbr></wbr>.ioports<wbr></wbr>.<wbr></wbr>Parsing<wbr></wbr>Error</div>
+            <div class="url">patients.ioports.ParsingError.html</div>
+            <div class="type">ZopeInterfaceClass</div>
+            <div class="kind">Class</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">Exception raised when the parsing of an uploaded CSV fails due to missing data columns.</div>
+          </li><li id="patients.ioports.compute_hash">
+            
+            <div class="fullName">patients<wbr></wbr>.ioports<wbr></wbr>.compute<wbr></wbr>_hash</div>
+            <div class="url">patients.ioports.html#compute_hash</div>
+            <div class="type">ZopeInterfaceFunction</div>
+            <div class="kind">Function</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">Compute a hash vlaue from three patient-specific fields that must be removed due for respecting the patient's privacy.</div>
+          </li><li id="patients.ioports.nan_to_none">
+            
+            <div class="fullName">patients<wbr></wbr>.ioports<wbr></wbr>.nan<wbr></wbr>_to<wbr></wbr>_none</div>
+            <div class="url">patients.ioports.html#nan_to_none</div>
+            <div class="type">ZopeInterfaceFunction</div>
+            <div class="kind">Function</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">Transform NaNs to <tt class="rst-docutils literal">None</tt>.</div>
+          </li><li id="patients.ioports.get_model_fields">
+            
+            <div class="fullName">patients<wbr></wbr>.ioports<wbr></wbr>.get<wbr></wbr>_model<wbr></wbr>_fields</div>
+            <div class="url">patients.ioports.html#get_model_fields</div>
+            <div class="type">ZopeInterfaceFunction</div>
+            <div class="kind">Function</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">Get list of names of model fields and remove the ones provided via the <tt class="rst-docutils literal">remove</tt> argument.</div>
+          </li><li id="patients.ioports.row2patient">
+            
+            <div class="fullName">patients<wbr></wbr>.ioports<wbr></wbr>.row2patient</div>
+            <div class="url">patients.ioports.html#row2patient</div>
+            <div class="type">ZopeInterfaceFunction</div>
+            <div class="kind">Function</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">Create a <code><a href="patients.models.Patient.html" class="internal-link" title="patients.models.Patient">Patient</a></code> instance from a row of a <tt class="rst-docutils literal">DataFrame</tt> containing the appropriate information, as well as the dataset in which the information was uploaded.</div>
+          </li><li id="patients.ioports.row2tumors">
+            
+            <div class="fullName">patients<wbr></wbr>.ioports<wbr></wbr>.row2tumors</div>
+            <div class="url">patients.ioports.html#row2tumors</div>
+            <div class="type">ZopeInterfaceFunction</div>
+            <div class="kind">Function</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">Create <code><a href="patients.models.Tumor.html" class="internal-link" title="patients.models.Tumor">Tumor</a></code> instances from row of a <tt class="rst-docutils literal">DataFrame</tt> and add them to an existing <code><a href="patients.models.Patient.html" class="internal-link" title="patients.models.Patient">Patient</a></code> instance.</div>
+          </li><li id="patients.ioports.row2diagnoses">
+            
+            <div class="fullName">patients<wbr></wbr>.ioports<wbr></wbr>.row2diagnoses</div>
+            <div class="url">patients.ioports.html#row2diagnoses</div>
+            <div class="type">ZopeInterfaceFunction</div>
+            <div class="kind">Function</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">Create <code><a href="patients.models.Diagnose.html" class="internal-link" title="patients.models.Diagnose">Diagnose</a></code> instances from row of <tt class="rst-docutils literal">DataFrame</tt> and add them to an existing <code><a href="patients.models.Patient.html" class="internal-link" title="patients.models.Patient">Patient</a></code> instance.</div>
+          </li><li id="patients.ioports.import_from_pandas">
+            
+            <div class="fullName">patients<wbr></wbr>.ioports<wbr></wbr>.import<wbr></wbr>_from<wbr></wbr>_pandas</div>
+            <div class="url">patients.ioports.html#import_from_pandas</div>
+            <div class="type">ZopeInterfaceFunction</div>
+            <div class="kind">Function</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">Import patients from pandas <tt class="rst-docutils literal">DataFrame</tt>.</div>
+          </li><li id="patients.ioports.export_to_pandas">
+            
+            <div class="fullName">patients<wbr></wbr>.ioports<wbr></wbr>.export<wbr></wbr>_to<wbr></wbr>_pandas</div>
+            <div class="url">patients.ioports.html#export_to_pandas</div>
+            <div class="type">ZopeInterfaceFunction</div>
+            <div class="kind">Function</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">Export <tt class="rst-docutils literal">QuerySet</tt> of patients into a pandas <tt class="rst-docutils literal">DataFrame</tt> of the same format as it is needed for importing.</div>
           </li><li id="patients.management.commands.import.Command">
             
             <div class="fullName">patients<wbr></wbr>.management<wbr></wbr>.commands<wbr></wbr>.import<wbr></wbr>.<wbr></wbr>Command</div>
@@ -1796,46 +2188,38 @@
             <div class="kind">Method</div>
             <div class="privacy">PUBLIC</div>
             <div class="summary">Execute the CSV table generation.</div>
-          </li><li id="patients.mixins.logger">
+          </li><li id="patients.mixins.LockedDatasetMixin">
             
-            <div class="fullName">patients<wbr></wbr>.mixins<wbr></wbr>.logger</div>
-            <div class="url">patients.mixins.html#logger</div>
+            <div class="fullName">patients<wbr></wbr>.mixins<wbr></wbr>.<wbr></wbr>Locked<wbr></wbr>Dataset<wbr></wbr>Mixin</div>
+            <div class="url">patients.mixins.LockedDatasetMixin.html</div>
+            <div class="type">ZopeInterfaceClass</div>
+            <div class="kind">Class</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">Mixin for the <code><a href="patients.models.Patient.html" class="internal-link" title="patients.models.Patient">Patient</a></code>, <code><a href="patients.models.Tumor.html" class="internal-link" title="patients.models.Tumor">Tumor</a></code> and <code><a href="patients.models.Diagnose.html" class="internal-link" title="patients.models.Diagnose">Diagnose</a></code> classes to block any editing or deletion attempts when the <code><a href="patients.models.Dataset.html" class="internal-link" title="patients.models.Dataset">Dataset</a></code> they belong to is locked.</div>
+          </li><li id="patients.mixins.LockedDatasetMixin._must_raise">
+            
+            <div class="fullName">patients<wbr></wbr>.mixins<wbr></wbr>.<wbr></wbr>Locked<wbr></wbr>Dataset<wbr></wbr>Mixin<wbr></wbr>._must<wbr></wbr>_raise</div>
+            <div class="url">patients.mixins.LockedDatasetMixin.html#_must_raise</div>
             <div class="type">ZopeInterfaceAttribute</div>
-            <div class="kind">Variable</div>
-            <div class="privacy">PUBLIC</div>
-            <div class="summary"><span class="undocumented">Undocumented</span></div>
-          </li><li id="patients.mixins.InstitutionCheckPatientMixin">
+            <div class="kind">Property</div>
+            <div class="privacy">PRIVATE</div>
+            <div class="summary">Infer from class if an error should be raised on save/delete.</div>
+          </li><li id="patients.mixins.LockedDatasetMixin.save">
             
-            <div class="fullName">patients<wbr></wbr>.mixins<wbr></wbr>.<wbr></wbr>Institution<wbr></wbr>Check<wbr></wbr>Patient<wbr></wbr>Mixin</div>
-            <div class="url">patients.mixins.InstitutionCheckPatientMixin.html</div>
-            <div class="type">ZopeInterfaceClass</div>
-            <div class="kind">Class</div>
-            <div class="privacy">PUBLIC</div>
-            <div class="summary">Mixin that makes sure only users from the institution that created the patient can edit it.</div>
-          </li><li id="patients.mixins.InstitutionCheckPatientMixin.test_func">
-            
-            <div class="fullName">patients<wbr></wbr>.mixins<wbr></wbr>.<wbr></wbr>Institution<wbr></wbr>Check<wbr></wbr>Patient<wbr></wbr>Mixin<wbr></wbr>.test<wbr></wbr>_func</div>
-            <div class="url">patients.mixins.InstitutionCheckPatientMixin.html#test_func</div>
+            <div class="fullName">patients<wbr></wbr>.mixins<wbr></wbr>.<wbr></wbr>Locked<wbr></wbr>Dataset<wbr></wbr>Mixin<wbr></wbr>.save</div>
+            <div class="url">patients.mixins.LockedDatasetMixin.html#save</div>
             <div class="type">ZopeInterfaceFunction</div>
             <div class="kind">Method</div>
             <div class="privacy">PUBLIC</div>
-            <div class="summary"><span class="undocumented">Undocumented</span></div>
-          </li><li id="patients.mixins.InstitutionCheckObjectMixin">
+            <div class="summary">Raise <code><a href="patients.models.LockedDatasetError.html" class="internal-link" title="patients.models.LockedDatasetError">LockedDatasetError</a></code> before saving if associated dataset is locked.</div>
+          </li><li id="patients.mixins.LockedDatasetMixin.delete">
             
-            <div class="fullName">patients<wbr></wbr>.mixins<wbr></wbr>.<wbr></wbr>Institution<wbr></wbr>Check<wbr></wbr>Object<wbr></wbr>Mixin</div>
-            <div class="url">patients.mixins.InstitutionCheckObjectMixin.html</div>
-            <div class="type">ZopeInterfaceClass</div>
-            <div class="kind">Class</div>
-            <div class="privacy">PUBLIC</div>
-            <div class="summary">Mixin that makes sure only users from the institution that created the patient can edit that patient's diagnose and tumor.</div>
-          </li><li id="patients.mixins.InstitutionCheckObjectMixin.test_func">
-            
-            <div class="fullName">patients<wbr></wbr>.mixins<wbr></wbr>.<wbr></wbr>Institution<wbr></wbr>Check<wbr></wbr>Object<wbr></wbr>Mixin<wbr></wbr>.test<wbr></wbr>_func</div>
-            <div class="url">patients.mixins.InstitutionCheckObjectMixin.html#test_func</div>
+            <div class="fullName">patients<wbr></wbr>.mixins<wbr></wbr>.<wbr></wbr>Locked<wbr></wbr>Dataset<wbr></wbr>Mixin<wbr></wbr>.delete</div>
+            <div class="url">patients.mixins.LockedDatasetMixin.html#delete</div>
             <div class="type">ZopeInterfaceFunction</div>
             <div class="kind">Method</div>
             <div class="privacy">PUBLIC</div>
-            <div class="summary"><span class="undocumented">Undocumented</span></div>
+            <div class="summary">Raise <code><a href="patients.models.LockedDatasetError.html" class="internal-link" title="patients.models.LockedDatasetError">LockedDatasetError</a></code> befor deleting if associated dataset is locked.</div>
           </li><li id="dashboard.query.logger">
             
             <div class="fullName">dashboard<wbr></wbr>.query<wbr></wbr>.logger</div>
@@ -2028,82 +2412,82 @@
             <div class="kind">Method</div>
             <div class="privacy">PUBLIC</div>
             <div class="summary">Cast the string to an integer.</div>
-          </li><li id="dashboard.forms.InstitutionModelChoiceIndexer">
+          </li><li id="dashboard.forms.DatasetModelChoiceIndexer">
             
-            <div class="fullName">dashboard<wbr></wbr>.forms<wbr></wbr>.<wbr></wbr>Institution<wbr></wbr>Model<wbr></wbr>Choice<wbr></wbr>Indexer</div>
-            <div class="url">dashboard.forms.InstitutionModelChoiceIndexer.html</div>
+            <div class="fullName">dashboard<wbr></wbr>.forms<wbr></wbr>.<wbr></wbr>Dataset<wbr></wbr>Model<wbr></wbr>Choice<wbr></wbr>Indexer</div>
+            <div class="url">dashboard.forms.DatasetModelChoiceIndexer.html</div>
             <div class="type">ZopeInterfaceClass</div>
             <div class="kind">Class</div>
             <div class="privacy">PUBLIC</div>
-            <div class="summary">Custom class with which one can access additional information from the model that is chosen by the <code><a href="dashboard.forms.InstitutionMultipleChoiceField.html" class="internal-link" title="dashboard.forms.InstitutionMultipleChoiceField">InstitutionMultipleChoiceField</a></code>.</div>
-          </li><li id="dashboard.forms.InstitutionModelChoiceIndexer.__init__">
+            <div class="summary">Custom class with which one can access additional information from the model that is chosen by the <code><a href="dashboard.forms.DatasetMultipleChoiceField.html" class="internal-link" title="dashboard.forms.DatasetMultipleChoiceField">DatasetMultipleChoiceField</a></code>.</div>
+          </li><li id="dashboard.forms.DatasetModelChoiceIndexer.__init__">
             
-            <div class="fullName">dashboard<wbr></wbr>.forms<wbr></wbr>.<wbr></wbr>Institution<wbr></wbr>Model<wbr></wbr>Choice<wbr></wbr>Indexer<wbr></wbr>.__init__</div>
-            <div class="url">dashboard.forms.InstitutionModelChoiceIndexer.html#__init__</div>
+            <div class="fullName">dashboard<wbr></wbr>.forms<wbr></wbr>.<wbr></wbr>Dataset<wbr></wbr>Model<wbr></wbr>Choice<wbr></wbr>Indexer<wbr></wbr>.__init__</div>
+            <div class="url">dashboard.forms.DatasetModelChoiceIndexer.html#__init__</div>
             <div class="type">ZopeInterfaceFunction</div>
             <div class="kind">Method</div>
             <div class="privacy">PUBLIC</div>
             <div class="summary"><span class="undocumented">Undocumented</span></div>
-          </li><li id="dashboard.forms.InstitutionModelChoiceIndexer.field">
+          </li><li id="dashboard.forms.DatasetModelChoiceIndexer.field">
             
-            <div class="fullName">dashboard<wbr></wbr>.forms<wbr></wbr>.<wbr></wbr>Institution<wbr></wbr>Model<wbr></wbr>Choice<wbr></wbr>Indexer<wbr></wbr>.field</div>
-            <div class="url">dashboard.forms.InstitutionModelChoiceIndexer.html#field</div>
+            <div class="fullName">dashboard<wbr></wbr>.forms<wbr></wbr>.<wbr></wbr>Dataset<wbr></wbr>Model<wbr></wbr>Choice<wbr></wbr>Indexer<wbr></wbr>.field</div>
+            <div class="url">dashboard.forms.DatasetModelChoiceIndexer.html#field</div>
             <div class="type">ZopeInterfaceAttribute</div>
             <div class="kind">Instance Variable</div>
             <div class="privacy">PUBLIC</div>
             <div class="summary"><span class="undocumented">Undocumented</span></div>
-          </li><li id="dashboard.forms.InstitutionModelChoiceIndexer.queryset">
+          </li><li id="dashboard.forms.DatasetModelChoiceIndexer.queryset">
             
-            <div class="fullName">dashboard<wbr></wbr>.forms<wbr></wbr>.<wbr></wbr>Institution<wbr></wbr>Model<wbr></wbr>Choice<wbr></wbr>Indexer<wbr></wbr>.queryset</div>
-            <div class="url">dashboard.forms.InstitutionModelChoiceIndexer.html#queryset</div>
+            <div class="fullName">dashboard<wbr></wbr>.forms<wbr></wbr>.<wbr></wbr>Dataset<wbr></wbr>Model<wbr></wbr>Choice<wbr></wbr>Indexer<wbr></wbr>.queryset</div>
+            <div class="url">dashboard.forms.DatasetModelChoiceIndexer.html#queryset</div>
             <div class="type">ZopeInterfaceAttribute</div>
             <div class="kind">Instance Variable</div>
             <div class="privacy">PUBLIC</div>
             <div class="summary"><span class="undocumented">Undocumented</span></div>
-          </li><li id="dashboard.forms.InstitutionModelChoiceIndexer.__getitem__">
+          </li><li id="dashboard.forms.DatasetModelChoiceIndexer.__getitem__">
             
-            <div class="fullName">dashboard<wbr></wbr>.forms<wbr></wbr>.<wbr></wbr>Institution<wbr></wbr>Model<wbr></wbr>Choice<wbr></wbr>Indexer<wbr></wbr>.__getitem__</div>
-            <div class="url">dashboard.forms.InstitutionModelChoiceIndexer.html#__getitem__</div>
+            <div class="fullName">dashboard<wbr></wbr>.forms<wbr></wbr>.<wbr></wbr>Dataset<wbr></wbr>Model<wbr></wbr>Choice<wbr></wbr>Indexer<wbr></wbr>.__getitem__</div>
+            <div class="url">dashboard.forms.DatasetModelChoiceIndexer.html#__getitem__</div>
             <div class="type">ZopeInterfaceFunction</div>
             <div class="kind">Method</div>
             <div class="privacy">PUBLIC</div>
             <div class="summary"><span class="undocumented">Undocumented</span></div>
-          </li><li id="dashboard.forms.InstitutionModelChoiceIndexer.info">
+          </li><li id="dashboard.forms.DatasetModelChoiceIndexer.info">
             
-            <div class="fullName">dashboard<wbr></wbr>.forms<wbr></wbr>.<wbr></wbr>Institution<wbr></wbr>Model<wbr></wbr>Choice<wbr></wbr>Indexer<wbr></wbr>.info</div>
-            <div class="url">dashboard.forms.InstitutionModelChoiceIndexer.html#info</div>
+            <div class="fullName">dashboard<wbr></wbr>.forms<wbr></wbr>.<wbr></wbr>Dataset<wbr></wbr>Model<wbr></wbr>Choice<wbr></wbr>Indexer<wbr></wbr>.info</div>
+            <div class="url">dashboard.forms.DatasetModelChoiceIndexer.html#info</div>
             <div class="type">ZopeInterfaceFunction</div>
             <div class="kind">Method</div>
             <div class="privacy">PUBLIC</div>
-            <div class="summary">Return the label and logo URL for the institution.</div>
-          </li><li id="dashboard.forms.InstitutionMultipleChoiceField">
+            <div class="summary">Return the label and logo URL for the Dataset.</div>
+          </li><li id="dashboard.forms.DatasetMultipleChoiceField">
             
-            <div class="fullName">dashboard<wbr></wbr>.forms<wbr></wbr>.<wbr></wbr>Institution<wbr></wbr>Multiple<wbr></wbr>Choice<wbr></wbr>Field</div>
-            <div class="url">dashboard.forms.InstitutionMultipleChoiceField.html</div>
+            <div class="fullName">dashboard<wbr></wbr>.forms<wbr></wbr>.<wbr></wbr>Dataset<wbr></wbr>Multiple<wbr></wbr>Choice<wbr></wbr>Field</div>
+            <div class="url">dashboard.forms.DatasetMultipleChoiceField.html</div>
             <div class="type">ZopeInterfaceClass</div>
             <div class="kind">Class</div>
             <div class="privacy">PUBLIC</div>
-            <div class="summary">Customize label description and add method that returns the logo URL for institutions. The implementation is inspired by how the <tt class="rst-docutils literal">choices</tt> are implemented. But since some other functionality depends on how those choices are implemented, it cannot be changed easily.</div>
-          </li><li id="dashboard.forms.InstitutionMultipleChoiceField.label_from_instance">
+            <div class="summary">Customize label description and add method that returns the logo URL for Datasets. The implementation is inspired by how the <tt class="rst-docutils literal">choices</tt> are implemented. But since some other functionality depends on how those choices are implemented, it cannot be changed easily.</div>
+          </li><li id="dashboard.forms.DatasetMultipleChoiceField.label_from_instance">
             
-            <div class="fullName">dashboard<wbr></wbr>.forms<wbr></wbr>.<wbr></wbr>Institution<wbr></wbr>Multiple<wbr></wbr>Choice<wbr></wbr>Field<wbr></wbr>.label<wbr></wbr>_from<wbr></wbr>_instance</div>
-            <div class="url">dashboard.forms.InstitutionMultipleChoiceField.html#label_from_instance</div>
+            <div class="fullName">dashboard<wbr></wbr>.forms<wbr></wbr>.<wbr></wbr>Dataset<wbr></wbr>Multiple<wbr></wbr>Choice<wbr></wbr>Field<wbr></wbr>.label<wbr></wbr>_from<wbr></wbr>_instance</div>
+            <div class="url">dashboard.forms.DatasetMultipleChoiceField.html#label_from_instance</div>
             <div class="type">ZopeInterfaceFunction</div>
             <div class="kind">Method</div>
             <div class="privacy">PUBLIC</div>
-            <div class="summary">Institution name as label.</div>
-          </li><li id="dashboard.forms.InstitutionMultipleChoiceField.logo_url_from_instance">
+            <div class="summary">Dataset name as label.</div>
+          </li><li id="dashboard.forms.DatasetMultipleChoiceField.logo_url_from_instance">
             
-            <div class="fullName">dashboard<wbr></wbr>.forms<wbr></wbr>.<wbr></wbr>Institution<wbr></wbr>Multiple<wbr></wbr>Choice<wbr></wbr>Field<wbr></wbr>.logo<wbr></wbr>_url<wbr></wbr>_from<wbr></wbr>_instance</div>
-            <div class="url">dashboard.forms.InstitutionMultipleChoiceField.html#logo_url_from_instance</div>
+            <div class="fullName">dashboard<wbr></wbr>.forms<wbr></wbr>.<wbr></wbr>Dataset<wbr></wbr>Multiple<wbr></wbr>Choice<wbr></wbr>Field<wbr></wbr>.logo<wbr></wbr>_url<wbr></wbr>_from<wbr></wbr>_instance</div>
+            <div class="url">dashboard.forms.DatasetMultipleChoiceField.html#logo_url_from_instance</div>
             <div class="type">ZopeInterfaceFunction</div>
             <div class="kind">Method</div>
             <div class="privacy">PUBLIC</div>
-            <div class="summary">Return URL of Institution's logo.</div>
-          </li><li id="dashboard.forms.InstitutionMultipleChoiceField.names_and_urls">
+            <div class="summary">Return URL of Dataset's logo.</div>
+          </li><li id="dashboard.forms.DatasetMultipleChoiceField.names_and_urls">
             
-            <div class="fullName">dashboard<wbr></wbr>.forms<wbr></wbr>.<wbr></wbr>Institution<wbr></wbr>Multiple<wbr></wbr>Choice<wbr></wbr>Field<wbr></wbr>.names<wbr></wbr>_and<wbr></wbr>_urls</div>
-            <div class="url">dashboard.forms.InstitutionMultipleChoiceField.html#names_and_urls</div>
+            <div class="fullName">dashboard<wbr></wbr>.forms<wbr></wbr>.<wbr></wbr>Dataset<wbr></wbr>Multiple<wbr></wbr>Choice<wbr></wbr>Field<wbr></wbr>.names<wbr></wbr>_and<wbr></wbr>_urls</div>
+            <div class="url">dashboard.forms.DatasetMultipleChoiceField.html#names_and_urls</div>
             <div class="type">ZopeInterfaceAttribute</div>
             <div class="kind">Property</div>
             <div class="privacy">PUBLIC</div>
@@ -2164,10 +2548,10 @@
             <div class="kind">Class Variable</div>
             <div class="privacy">PUBLIC</div>
             <div class="summary"><span class="undocumented">Undocumented</span></div>
-          </li><li id="dashboard.forms.DashboardForm.institution__in">
+          </li><li id="dashboard.forms.DashboardForm.dataset__in">
             
-            <div class="fullName">dashboard<wbr></wbr>.forms<wbr></wbr>.<wbr></wbr>Dashboard<wbr></wbr>Form<wbr></wbr>.institution<wbr></wbr>_<wbr></wbr>_in</div>
-            <div class="url">dashboard.forms.DashboardForm.html#institution__in</div>
+            <div class="fullName">dashboard<wbr></wbr>.forms<wbr></wbr>.<wbr></wbr>Dashboard<wbr></wbr>Form<wbr></wbr>.dataset<wbr></wbr>_<wbr></wbr>_in</div>
+            <div class="url">dashboard.forms.DashboardForm.html#dataset__in</div>
             <div class="type">ZopeInterfaceAttribute</div>
             <div class="kind">Class Variable</div>
             <div class="privacy">PUBLIC</div>
@@ -2268,6 +2652,78 @@
             <div class="kind">Variable</div>
             <div class="privacy">PUBLIC</div>
             <div class="summary"><span class="undocumented">Undocumented</span></div>
+          </li><li id="patients.views.CreateDatasetView">
+            
+            <div class="fullName">patients<wbr></wbr>.views<wbr></wbr>.<wbr></wbr>Create<wbr></wbr>Dataset<wbr></wbr>View</div>
+            <div class="url">patients.views.CreateDatasetView.html</div>
+            <div class="type">ZopeInterfaceClass</div>
+            <div class="kind">Class</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">Create a dataset from a form.</div>
+          </li><li id="patients.views.CreateDatasetView.template_name">
+            
+            <div class="fullName">patients<wbr></wbr>.views<wbr></wbr>.<wbr></wbr>Create<wbr></wbr>Dataset<wbr></wbr>View<wbr></wbr>.template<wbr></wbr>_name</div>
+            <div class="url">patients.views.CreateDatasetView.html#template_name</div>
+            <div class="type">ZopeInterfaceAttribute</div>
+            <div class="kind">Class Variable</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary"><span class="undocumented">Undocumented</span></div>
+          </li><li id="patients.views.CreateDatasetView.success_url">
+            
+            <div class="fullName">patients<wbr></wbr>.views<wbr></wbr>.<wbr></wbr>Create<wbr></wbr>Dataset<wbr></wbr>View<wbr></wbr>.success<wbr></wbr>_url</div>
+            <div class="url">patients.views.CreateDatasetView.html#success_url</div>
+            <div class="type">ZopeInterfaceAttribute</div>
+            <div class="kind">Class Variable</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary"><span class="undocumented">Undocumented</span></div>
+          </li><li id="patients.views.CreateDatasetView.get_form_kwargs">
+            
+            <div class="fullName">patients<wbr></wbr>.views<wbr></wbr>.<wbr></wbr>Create<wbr></wbr>Dataset<wbr></wbr>View<wbr></wbr>.get<wbr></wbr>_form<wbr></wbr>_kwargs</div>
+            <div class="url">patients.views.CreateDatasetView.html#get_form_kwargs</div>
+            <div class="type">ZopeInterfaceFunction</div>
+            <div class="kind">Method</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary"><span class="undocumented">Undocumented</span></div>
+          </li><li id="patients.views.DatasetListView">
+            
+            <div class="fullName">patients<wbr></wbr>.views<wbr></wbr>.<wbr></wbr>Dataset<wbr></wbr>List<wbr></wbr>View</div>
+            <div class="url">patients.views.DatasetListView.html</div>
+            <div class="type">ZopeInterfaceClass</div>
+            <div class="kind">Class</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">View that displays all datasets in a list.</div>
+          </li><li id="patients.views.DatasetListView.template_name">
+            
+            <div class="fullName">patients<wbr></wbr>.views<wbr></wbr>.<wbr></wbr>Dataset<wbr></wbr>List<wbr></wbr>View<wbr></wbr>.template<wbr></wbr>_name</div>
+            <div class="url">patients.views.DatasetListView.html#template_name</div>
+            <div class="type">ZopeInterfaceAttribute</div>
+            <div class="kind">Class Variable</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary"><span class="undocumented">Undocumented</span></div>
+          </li><li id="patients.views.DatasetListView.get_queryset">
+            
+            <div class="fullName">patients<wbr></wbr>.views<wbr></wbr>.<wbr></wbr>Dataset<wbr></wbr>List<wbr></wbr>View<wbr></wbr>.get<wbr></wbr>_queryset</div>
+            <div class="url">patients.views.DatasetListView.html#get_queryset</div>
+            <div class="type">ZopeInterfaceFunction</div>
+            <div class="kind">Method</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">Return the tables available for download, based on the (logged in) user.</div>
+          </li><li id="patients.views.DatasetView">
+            
+            <div class="fullName">patients<wbr></wbr>.views<wbr></wbr>.<wbr></wbr>Dataset<wbr></wbr>View</div>
+            <div class="url">patients.views.DatasetView.html</div>
+            <div class="type">ZopeInterfaceClass</div>
+            <div class="kind">Class</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">View that serves the respective <code><a href="patients.models.Dataset.html" class="internal-link" title="patients.models.Dataset">Dataset</a></code> CSV file.</div>
+          </li><li id="patients.views.DatasetView.get">
+            
+            <div class="fullName">patients<wbr></wbr>.views<wbr></wbr>.<wbr></wbr>Dataset<wbr></wbr>View<wbr></wbr>.get</div>
+            <div class="url">patients.views.DatasetView.html#get</div>
+            <div class="type">ZopeInterfaceFunction</div>
+            <div class="kind">Method</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">Get correct table and render download response.</div>
           </li><li id="patients.views.PatientListView">
             
             <div class="fullName">patients<wbr></wbr>.views<wbr></wbr>.<wbr></wbr>Patient<wbr></wbr>List<wbr></wbr>View</div>
@@ -2540,6 +2996,30 @@
             <div class="kind">Method</div>
             <div class="privacy">PUBLIC</div>
             <div class="summary">Get correct table and render download response.</div>
+          </li><li id="patients.views.DownloadTableView.queryset">
+            
+            <div class="fullName">patients<wbr></wbr>.views<wbr></wbr>.<wbr></wbr>Download<wbr></wbr>Table<wbr></wbr>View<wbr></wbr>.queryset</div>
+            <div class="url">patients.views.DownloadTableView.html#queryset</div>
+            <div class="type">ZopeInterfaceAttribute</div>
+            <div class="kind">Class Variable</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary"><span class="undocumented">Undocumented</span></div>
+          </li><li id="patients.views.DownloadTableView.patient_df">
+            
+            <div class="fullName">patients<wbr></wbr>.views<wbr></wbr>.<wbr></wbr>Download<wbr></wbr>Table<wbr></wbr>View<wbr></wbr>.patient<wbr></wbr>_df</div>
+            <div class="url">patients.views.DownloadTableView.html#patient_df</div>
+            <div class="type">ZopeInterfaceAttribute</div>
+            <div class="kind">Class Variable</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary"><span class="undocumented">Undocumented</span></div>
+          </li><li id="patients.views.DownloadTableView.msg">
+            
+            <div class="fullName">patients<wbr></wbr>.views<wbr></wbr>.<wbr></wbr>Download<wbr></wbr>Table<wbr></wbr>View<wbr></wbr>.msg</div>
+            <div class="url">patients.views.DownloadTableView.html#msg</div>
+            <div class="type">ZopeInterfaceAttribute</div>
+            <div class="kind">Class Variable</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary"><span class="undocumented">Undocumented</span></div>
           </li><li id="patients.views.CreateTumorView">
             
             <div class="fullName">patients<wbr></wbr>.views<wbr></wbr>.<wbr></wbr>Create<wbr></wbr>Tumor<wbr></wbr>View</div>
@@ -2828,6 +3308,22 @@
             <div class="kind">Method</div>
             <div class="privacy">PUBLIC</div>
             <div class="summary">Add this diagnose's patient, the patient's tumor and diagnoses, as well as the currently performed action to the context dictionary.</div>
+          </li><li id="patients.urls.app_name">
+            
+            <div class="fullName">patients<wbr></wbr>.urls<wbr></wbr>.app<wbr></wbr>_name</div>
+            <div class="url">patients.urls.html#app_name</div>
+            <div class="type">ZopeInterfaceAttribute</div>
+            <div class="kind">Variable</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary"><span class="undocumented">Undocumented</span></div>
+          </li><li id="patients.urls.urlpatterns">
+            
+            <div class="fullName">patients<wbr></wbr>.urls<wbr></wbr>.urlpatterns</div>
+            <div class="url">patients.urls.html#urlpatterns</div>
+            <div class="type">ZopeInterfaceAttribute</div>
+            <div class="kind">Variable</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary"><span class="undocumented">Undocumented</span></div>
           </li><li id="dashboard.views.help_view">
             
             <div class="fullName">dashboard<wbr></wbr>.views<wbr></wbr>.help<wbr></wbr>_view</div>
@@ -2892,6 +3388,22 @@
             <div class="kind">Method</div>
             <div class="privacy">PUBLIC</div>
             <div class="summary">Pass form and stats to the context. No need to have the list of patients in there too.</div>
+          </li><li id="dashboard.urls.app_name">
+            
+            <div class="fullName">dashboard<wbr></wbr>.urls<wbr></wbr>.app<wbr></wbr>_name</div>
+            <div class="url">dashboard.urls.html#app_name</div>
+            <div class="type">ZopeInterfaceAttribute</div>
+            <div class="kind">Variable</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary"><span class="undocumented">Undocumented</span></div>
+          </li><li id="dashboard.urls.urlpatterns">
+            
+            <div class="fullName">dashboard<wbr></wbr>.urls<wbr></wbr>.urlpatterns</div>
+            <div class="url">dashboard.urls.html#urlpatterns</div>
+            <div class="type">ZopeInterfaceAttribute</div>
+            <div class="kind">Variable</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary"><span class="undocumented">Undocumented</span></div>
           </li>
        </ul>
     </div>

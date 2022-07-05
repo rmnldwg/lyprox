@@ -322,6 +322,16 @@
         
 
         
+            <div class="itemName"><code><a href="dashboard.urls.html" class="internal-link" title="dashboard.urls">urls</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
             <div class="itemName"><code><a href="dashboard.views.html" class="internal-link" title="dashboard.views">views</a></code>
             </div>
         
@@ -386,7 +396,7 @@ with which the HTML response is then populated.</p>
         </div>
 
         <div id="splitTables">
-          <table class="children sortable" id="id68">
+          <table class="children sortable" id="id70">
   
   
   <tr class="function">
@@ -556,7 +566,7 @@ patients and <tt class="rst-docutils literal">False</tt> when we only want to se
   </a>
   <div class="functionHeader">
     
-    <span class="py-keyword">def</span> <span class="py-defname">patient_specific</span>(patient_queryset=None, nicotine_abuse=None, hpv_status=None, neck_dissection=None, institution__in=None, **rest):
+    <span class="py-keyword">def</span> <span class="py-defname">patient_specific</span>(patient_queryset=None, nicotine_abuse=None, hpv_status=None, neck_dissection=None, dataset__in=None, **rest):
     
   </div>
   <div class="docstring functionBody">
@@ -567,8 +577,7 @@ patients and <tt class="rst-docutils literal">False</tt> when we only want to se
 argument to its definition without actually changing the logic inside it
 and it will the be able to filter for that added argument (given that it
 is also a field in the model <code><a href="patients.models.Patient.html" class="internal-link">patients.models.Patient</a></code>).</p>
-<table class="fieldTable"><tr class="fieldStart"><td class="fieldName" colspan="2">Parameters</td></tr><tr><td class="fieldArgContainer"><span class="fieldArg">patient<wbr></wbr>_queryset:</span><code>Optional[<wbr></wbr>QuerySet]</code></td><td class="fieldArgDesc">The <tt class="rst-docutils literal">QuerySet</tt> of patients to begin with.</td></tr><tr><td class="fieldArgContainer"><span class="fieldArg">nicotine<wbr></wbr>_abuse:</span><code>Optional[<wbr></wbr>bool]</code></td><td class="fieldArgDesc">Filter smokers or non-smokers?</td></tr><tr><td class="fieldArgContainer"><span class="fieldArg">hpv<wbr></wbr>_status:</span><code>Optional[<wbr></wbr>bool]</code></td><td class="fieldArgDesc">Select based on HPV status.</td></tr><tr><td class="fieldArgContainer"><span class="fieldArg">neck<wbr></wbr>_dissection:</span><code>Optional[<wbr></wbr>bool]</code></td><td class="fieldArgDesc">Filter thos that did or didn't undergo neck dissection.</td></tr><tr><td class="fieldArgContainer"><span class="fieldArg">institution<wbr></wbr>_<wbr></wbr>_in:</span><code>Optional[<wbr></wbr>Institution]</code></td><td class="fieldArgDesc">Select based on the institution that extracted the
-respective patient.</td></tr><tr><td class="fieldArgContainer"><span class="fieldArg">**rest</span></td><td class="fieldArgDesc"><span class="undocumented">Undocumented</span></td></tr><tr class="fieldStart"><td class="fieldName" colspan="2">Returns</td></tr><tr><td class="fieldArgContainer"><code>QuerySet</code></td><td class="fieldArgDesc">The filtered <tt class="rst-docutils literal">QuerySet</tt>.</td></tr></table></div>
+<table class="fieldTable"><tr class="fieldStart"><td class="fieldName" colspan="2">Parameters</td></tr><tr><td class="fieldArgContainer"><span class="fieldArg">patient<wbr></wbr>_queryset:</span><code>Optional[<wbr></wbr>QuerySet]</code></td><td class="fieldArgDesc">The <tt class="rst-docutils literal">QuerySet</tt> of patients to begin with.</td></tr><tr><td class="fieldArgContainer"><span class="fieldArg">nicotine<wbr></wbr>_abuse:</span><code>Optional[<wbr></wbr>bool]</code></td><td class="fieldArgDesc">Filter smokers or non-smokers?</td></tr><tr><td class="fieldArgContainer"><span class="fieldArg">hpv<wbr></wbr>_status:</span><code>Optional[<wbr></wbr>bool]</code></td><td class="fieldArgDesc">Select based on HPV status.</td></tr><tr><td class="fieldArgContainer"><span class="fieldArg">neck<wbr></wbr>_dissection:</span><code>Optional[<wbr></wbr>bool]</code></td><td class="fieldArgDesc">Filter thos that did or didn't undergo neck dissection.</td></tr><tr><td class="fieldArgContainer"><span class="fieldArg">dataset<wbr></wbr>_<wbr></wbr>_in:</span><code>Optional[<wbr></wbr>Institution]</code></td><td class="fieldArgDesc">Select based on the dataset that describes the respective patient.</td></tr><tr><td class="fieldArgContainer"><span class="fieldArg">**rest</span></td><td class="fieldArgDesc"><span class="undocumented">Undocumented</span></td></tr><tr class="fieldStart"><td class="fieldName" colspan="2">Returns</td></tr><tr><td class="fieldArgContainer"><code>QuerySet</code></td><td class="fieldArgDesc">The filtered <tt class="rst-docutils literal">QuerySet</tt>.</td></tr></table></div>
   </div>
 </div><div class="basefunction">
   
@@ -713,7 +722,7 @@ is the <tt class="rst-docutils literal">QuerySet</tt> returned by the <code><a h
   <div class="container">
     <a href="index.html">API Documentation</a> for LyProX,
   generated by <a href="https://github.com/twisted/pydoctor/">pydoctor</a>
-    22.5.1 at 2022-06-02 14:40:24.
+    22.5.1 at 2022-07-05 15:00:23.
   </div>
 
   <!-- Search related scripts needs to be loaded at the end of HTML 

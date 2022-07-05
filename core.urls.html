@@ -6,7 +6,7 @@
 
   <head>
     
-    <title>patients.management.commands.makedownloadfiles</title>
+    <title>core.urls</title>
     <meta name="generator" content="pydoctor 22.5.1"> 
         
     </meta>
@@ -142,7 +142,7 @@
 
       <div class="thingTitle">
         <span>Module</span>
-        <code class="thisobject"><a href="patients.management.commands.makedownloadfiles.html" class="internal-link" title="This module">makedownloadfiles</a></code> 
+        <code class="thisobject"><a href="core.urls.html" class="internal-link" title="This module">urls</a></code> 
       </div>
       
       <div>
@@ -151,21 +151,8 @@
         
          
 
-        <div class="childrenKindTitle">Classes</div>
-        <ul>
-    
-    <li class="">
         
         
-        
-
-        
-            <div class="itemName"><code><a href="patients.management.commands.makedownloadfiles.Command.html" class="internal-link" title="patients.management.commands.makedownloadfiles.Command"><wbr></wbr>Command</a></code>
-            </div>
-        
-
-    </li>
-</ul>
 
         
          
@@ -182,7 +169,7 @@
         
 
         
-            <div class="itemName"><code><a href="#logger" class="internal-link" title="patients.management.commands.makedownloadfiles.logger">logger</a></code>
+            <div class="itemName"><code><a href="#urlpatterns" class="internal-link" title="core.urls.urlpatterns">urlpatterns</a></code>
             </div>
         
 
@@ -197,7 +184,7 @@
 
       <div class="thingTitle">
         <span>Package</span>
-        <code><a href="patients.management.commands.html" class="internal-link" title="The parent of this module">commands</a></code> 
+        <code><a href="core.html" class="internal-link" title="The parent of this module">core</a></code> 
       </div>
       
       <div>
@@ -212,7 +199,7 @@
         
 
         
-            <div class="itemName"><code><a href="patients.management.commands.import.html" class="internal-link" title="patients.management.commands.import">import</a></code>
+            <div class="itemName"><code><a href="core.defaults.html" class="internal-link" title="core.defaults">defaults</a></code>
             </div>
         
 
@@ -222,7 +209,17 @@
         
 
         
-            <div class="itemName"><code><a href="patients.management.commands.makedownloadfiles.html" class="internal-link" title="patients.management.commands.makedownloadfiles">makedownloadfiles</a></code>
+            <div class="itemName"><code><a href="core.urls.html" class="internal-link" title="core.urls">urls</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="core.views.html" class="internal-link" title="core.views">views</a></code>
             </div>
         
 
@@ -263,7 +260,7 @@
         
 
         <div class="page-header">
-          <h1 class="module"><code><code><a href="patients.html" class="internal-link">patients</a></code><wbr></wbr>.<code><a href="patients.management.html" class="internal-link" title="patients.management">management</a></code><wbr></wbr>.<code><a href="patients.management.commands.html" class="internal-link" title="patients.management.commands">commands</a></code><wbr></wbr>.<code><a href="patients.management.commands.makedownloadfiles.html" class="internal-link" title="patients.management.commands.makedownloadfiles">makedownloadfiles</a></code></code></h1>
+          <h1 class="module"><code><code><a href="core.html" class="internal-link">core</a></code><wbr></wbr>.<code><a href="core.urls.html" class="internal-link" title="core.urls">urls</a></code></code></h1>
           <div id="showPrivate">
             <button class="btn btn-link" onclick="togglePrivate()">Toggle Private API</button>
           </div>
@@ -279,29 +276,21 @@
         </div>
 
         <div class="moduleDocstring">
-          <div><p>This python script defines the <tt class="rst-docutils literal">makedownloadfiles</tt> command, which can be used
-to generate CSV tables for each institution's cohort of patients that is in the
-database.</p>
-<pre class="rst-code rst-bash rst-literal-block">
-python manage.py makedownloadfiles
-</pre>
-<p>No other arguments needed.</p>
+          <div><p>LyProX' URL configuration. This defines the view for the landing page, the URLs for
+downloads and media and the maintenance page. Otherwise it basically calls the URL
+configuration from the other apps, <code><a href="patients.urls.html" class="internal-link">patients.urls</a></code>, <code><a href="dashboard.urls.html" class="internal-link">dashboard.urls</a></code> and
+<code>accounts.urls</code>.</p>
 </div>
         </div>
 
         <div id="splitTables">
-          <table class="children sortable" id="id27">
+          <table class="children sortable" id="id3">
   
   
-  <tr class="class">
-    
-    <td>Class</td>
-    <td><code><a href="patients.management.commands.makedownloadfiles.Command.html" class="internal-link" title="patients.management.commands.makedownloadfiles.Command"><wbr></wbr>Command</a></code></td>
-    <td>Export one CSV table per institution in the database and store them in a <tt class="rst-docutils literal">FileField</tt> of a model for later download.</td>
-  </tr><tr class="variable">
+  <tr class="variable">
     
     <td>Variable</td>
-    <td><code><a href="#logger" class="internal-link" title="patients.management.commands.makedownloadfiles.logger">logger</a></code></td>
+    <td><code><a href="#urlpatterns" class="internal-link" title="core.urls.urlpatterns">urlpatterns</a></code></td>
     <td><span class="undocumented">Undocumented</span></td>
   </tr>
 </table>
@@ -314,15 +303,15 @@ python manage.py makedownloadfiles
           <div class="basevariable">
   
   
-  <a name="patients.management.commands.makedownloadfiles.logger">
+  <a name="core.urls.urlpatterns">
     
   </a>
-  <a name="logger">
+  <a name="urlpatterns">
     
   </a>
   <div class="functionHeader">
     
-    <span class="py-defname">logger</span> =
+    <span class="py-defname">urlpatterns</span> =
     
   </div>
   <div class="functionBody">

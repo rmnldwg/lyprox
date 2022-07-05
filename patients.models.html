@@ -170,7 +170,27 @@
         
 
         
+            <div class="itemName"><code><a href="patients.models.Dataset.html" class="internal-link" title="patients.models.Dataset"><wbr></wbr>Dataset</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
             <div class="itemName"><code><a href="patients.models.Diagnose.html" class="internal-link" title="patients.models.Diagnose"><wbr></wbr>Diagnose</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="patients.models.LockedDatasetError.html" class="internal-link" title="patients.models.LockedDatasetError"><wbr></wbr>Locked<wbr></wbr>Dataset<wbr></wbr>Error</a></code>
             </div>
         
 
@@ -190,7 +210,23 @@
         
 
         
-            <div class="itemName"><code><a href="patients.models.RobustDateField.html" class="internal-link" title="patients.models.RobustDateField"><wbr></wbr>Robust<wbr></wbr>Date<wbr></wbr>Field</a></code>
+            <div class="itemName"><code><a href="patients.models.Tumor.html" class="internal-link" title="patients.models.Tumor"><wbr></wbr>Tumor</a></code>
+            </div>
+        
+
+    </li>
+</ul>
+
+        <div class="childrenKindTitle">Functions</div>
+        <ul>
+    
+    <li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="#directory_" class="internal-link" title="patients.models.directory_">directory_</a></code>
             </div>
         
 
@@ -200,15 +236,22 @@
         
 
         
-            <div class="itemName"><code><a href="patients.models.Tumor.html" class="internal-link" title="patients.models.Tumor"><wbr></wbr>Tumor</a></code>
+            <div class="itemName"><code><a href="#directory_for_exports" class="internal-link" title="patients.models.directory_for_exports">directory<wbr></wbr>_for<wbr></wbr>_exports</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="#directory_for_uploads" class="internal-link" title="patients.models.directory_for_uploads">directory<wbr></wbr>_for<wbr></wbr>_uploads</a></code>
             </div>
         
 
     </li>
-</ul>
-
-        
-         
+</ul> 
 
         
          
@@ -262,6 +305,16 @@
         
 
         
+            <div class="itemName"><code><a href="patients.fields.html" class="internal-link" title="patients.fields">fields</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
             <div class="itemName"><code><a href="patients.filters.html" class="internal-link" title="patients.filters">filters</a></code>
             </div>
         
@@ -303,6 +356,26 @@
 
         
             <div class="itemName"><code><a href="patients.models.html" class="internal-link" title="patients.models">models</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="patients.urls.html" class="internal-link" title="patients.urls">urls</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="patients.validators.html" class="internal-link" title="patients.validators">validators</a></code>
             </div>
         
 
@@ -369,11 +442,15 @@
         </div>
 
         <div class="moduleDocstring">
-          <div><p>This module defines how patient related models are defined and how they
-interact with each other. Currently, three models are implemented: The
-<code><a href="patients.models.Patient.html" class="internal-link" title="patients.models.Patient">Patient</a></code>, <code><a href="patients.models.Tumor.html" class="internal-link" title="patients.models.Tumor">Tumor</a></code> and the <code><a href="patients.models.Diagnose.html" class="internal-link" title="patients.models.Diagnose">Diagnose</a></code>. Each <code><a href="patients.models.Patient.html" class="internal-link" title="patients.models.Patient">Patient</a></code> can have multiple <code><a href="patients.models.Tumor.html" class="internal-link" title="patients.models.Tumor">Tumor</a></code>
-and <code><a href="patients.models.Diagnose.html" class="internal-link" title="patients.models.Diagnose">Diagnose</a></code> entries associated with it, which is defined by the
-<tt class="rst-docutils literal">django.db.models.ForeignKey</tt> attribute in the <code><a href="patients.models.Tumor.html" class="internal-link" title="patients.models.Tumor">Tumor</a></code> and <code><a href="patients.models.Diagnose.html" class="internal-link" title="patients.models.Diagnose">Diagnose</a></code> class.</p>
+          <div><p>This module defines how patient related models work and how they interact with each
+other. Currently, four models are implemented: The <code><a href="patients.models.Dataset.html" class="internal-link" title="patients.models.Dataset">Dataset</a></code>, <code><a href="patients.models.Patient.html" class="internal-link" title="patients.models.Patient">Patient</a></code>, <code><a href="patients.models.Tumor.html" class="internal-link" title="patients.models.Tumor">Tumor</a></code>
+and the <code><a href="patients.models.Diagnose.html" class="internal-link" title="patients.models.Diagnose">Diagnose</a></code>. A <code><a href="patients.models.Dataset.html" class="internal-link" title="patients.models.Dataset">Dataset</a></code> groups <code><a href="patients.models.Patient.html" class="internal-link" title="patients.models.Patient">Patient</a></code> entries and associates them with an
+<code>Institution</code>, while also providing methods for importing and exporting from and to CSV
+file.</p>
+<p>A <code><a href="patients.models.Patient.html" class="internal-link" title="patients.models.Patient">Patient</a></code> holds demographic and relational information about each recorded patient.
+The respective entry can have multiple <code><a href="patients.models.Tumor.html" class="internal-link" title="patients.models.Tumor">Tumor</a></code> and <code><a href="patients.models.Diagnose.html" class="internal-link" title="patients.models.Diagnose">Diagnose</a></code> entries associated with
+it, which is defined by the <tt class="rst-docutils literal">django.db.models.ForeignKey</tt> attribute in the <code><a href="patients.models.Tumor.html" class="internal-link" title="patients.models.Tumor">Tumor</a></code>
+and <code><a href="patients.models.Diagnose.html" class="internal-link" title="patients.models.Diagnose">Diagnose</a></code> class.</p>
 <p>There are also custom methods implemented, making sure that e.g. the diagnosis
 of a sublevel (lets say <tt class="rst-docutils literal">Ia</tt>) is consistent with the diagnosis of the
 respective superlevel (in that case <tt class="rst-docutils literal">I</tt>).</p>
@@ -383,7 +460,7 @@ download CSV tables with patient of a particular institution's cohort.</p>
         </div>
 
         <div id="splitTables">
-          <table class="children sortable" id="id27">
+          <table class="children sortable" id="id31">
   
   
   <tr class="class">
@@ -394,8 +471,18 @@ download CSV tables with patient of a particular institution's cohort.</p>
   </tr><tr class="class">
     
     <td>Class</td>
+    <td><code><a href="patients.models.Dataset.html" class="internal-link" title="patients.models.Dataset"><wbr></wbr>Dataset</a></code></td>
+    <td>This model represents a collection of patients that have been added to the database together. E.g., via uploading a CSV file where each row represents a patient. But also patients added via the interface one by one should be associated to a dataset.</td>
+  </tr><tr class="class">
+    
+    <td>Class</td>
     <td><code><a href="patients.models.Diagnose.html" class="internal-link" title="patients.models.Diagnose"><wbr></wbr>Diagnose</a></code></td>
     <td>Model describing the diagnosis of one side of a patient's neck with regard to their lymphaitc metastatic involvement.</td>
+  </tr><tr class="class">
+    
+    <td>Class</td>
+    <td><code><a href="patients.models.LockedDatasetError.html" class="internal-link" title="patients.models.LockedDatasetError"><wbr></wbr>Locked<wbr></wbr>Dataset<wbr></wbr>Error</a></code></td>
+    <td>Raised when a <code><a href="patients.models.Dataset.html" class="internal-link" title="patients.models.Dataset">Dataset</a></code> or an associated entry was tried to be edited.</td>
   </tr><tr class="class">
     
     <td>Class</td>
@@ -404,13 +491,23 @@ download CSV tables with patient of a particular institution's cohort.</p>
   </tr><tr class="class">
     
     <td>Class</td>
-    <td><code><a href="patients.models.RobustDateField.html" class="internal-link" title="patients.models.RobustDateField"><wbr></wbr>Robust<wbr></wbr>Date<wbr></wbr>Field</a></code></td>
-    <td>DateField that doesn't raise a ValidationError when the date string isn't formated according to ISO (YYYY-MM-DD)</td>
-  </tr><tr class="class">
-    
-    <td>Class</td>
     <td><code><a href="patients.models.Tumor.html" class="internal-link" title="patients.models.Tumor"><wbr></wbr>Tumor</a></code></td>
     <td>Model to describe a patient's tumor in detail. It is connected to a patient via a <tt class="rst-docutils literal">django.db.models.ForeignKey</tt> relation.</td>
+  </tr><tr class="function">
+    
+    <td>Function</td>
+    <td><code><a href="#directory_" class="internal-link" title="patients.models.directory_">directory_</a></code></td>
+    <td>Function that compiles and returns the path to where uploaded or exported CSV files will be stored. It also creates the respective folder and deletes any existing iles with the same name if necessary.</td>
+  </tr><tr class="function">
+    
+    <td>Function</td>
+    <td><code><a href="#directory_for_exports" class="internal-link" title="patients.models.directory_for_exports">directory<wbr></wbr>_for<wbr></wbr>_exports</a></code></td>
+    <td>Calls <code><a href="patients.models.html#directory_" class="internal-link" title="patients.models.directory_">directory_</a></code> for 'exports'.</td>
+  </tr><tr class="function">
+    
+    <td>Function</td>
+    <td><code><a href="#directory_for_uploads" class="internal-link" title="patients.models.directory_for_uploads">directory<wbr></wbr>_for<wbr></wbr>_uploads</a></code></td>
+    <td>Calls <code><a href="patients.models.html#directory_" class="internal-link" title="patients.models.directory_">directory_</a></code> for 'uploads'.</td>
   </tr><tr class="variable">
     
     <td>Variable</td>
@@ -424,7 +521,69 @@ download CSV tables with patient of a particular institution's cohort.</p>
         </div>
 
         <div id="childList">
-          <div class="basevariable">
+          <div class="basefunction">
+  
+  
+  <a name="patients.models.directory_">
+    
+  </a>
+  <a name="directory_">
+    
+  </a>
+  <div class="functionHeader">
+    
+    <span class="py-keyword">def</span> <span class="py-defname">directory_</span>(used_for, instance):
+    
+  </div>
+  <div class="docstring functionBody">
+    
+    
+    <div><p>Function that compiles and returns the path to where uploaded or exported CSV
+files will be stored. It also creates the respective folder and deletes any
+existing iles with the same name if necessary.</p>
+<table class="fieldTable"><tr class="fieldStart"><td class="fieldName" colspan="2">Parameters</td></tr><tr><td class="fieldArgContainer"><span class="fieldArg">used<wbr></wbr>_for:</span><code>str</code></td><td class="fieldArgDesc"><span class="undocumented">Undocumented</span></td></tr><tr><td class="fieldArgContainer"><span class="fieldArg">instance</span></td><td class="fieldArgDesc"><span class="undocumented">Undocumented</span></td></tr></table></div>
+  </div>
+</div><div class="basefunction">
+  
+  
+  <a name="patients.models.directory_for_exports">
+    
+  </a>
+  <a name="directory_for_exports">
+    
+  </a>
+  <div class="functionHeader">
+    
+    <span class="py-keyword">def</span> <span class="py-defname">directory_for_exports</span>(instance, _filename):
+    
+  </div>
+  <div class="docstring functionBody">
+    
+    
+    <div><p>Calls <code><a href="#directory_" class="internal-link" title="patients.models.directory_">directory_</a></code> for 'exports'.</p>
+<table class="fieldTable"><tr class="fieldStart"><td class="fieldName" colspan="2">Returns</td></tr><tr><td class="fieldArgContainer"><code>str</code></td><td class="fieldArgDesc"><span class="undocumented">Undocumented</span></td></tr></table></div>
+  </div>
+</div><div class="basefunction">
+  
+  
+  <a name="patients.models.directory_for_uploads">
+    
+  </a>
+  <a name="directory_for_uploads">
+    
+  </a>
+  <div class="functionHeader">
+    
+    <span class="py-keyword">def</span> <span class="py-defname">directory_for_uploads</span>(instance, _filename):
+    
+  </div>
+  <div class="docstring functionBody">
+    
+    
+    <div><p>Calls <code><a href="#directory_" class="internal-link" title="patients.models.directory_">directory_</a></code> for 'uploads'.</p>
+<table class="fieldTable"><tr class="fieldStart"><td class="fieldName" colspan="2">Returns</td></tr><tr><td class="fieldArgContainer"><code>str</code></td><td class="fieldArgDesc"><span class="undocumented">Undocumented</span></td></tr></table></div>
+  </div>
+</div><div class="basevariable">
   
   
   <a name="patients.models.Mod">
@@ -456,7 +615,7 @@ download CSV tables with patient of a particular institution's cohort.</p>
   <div class="container">
     <a href="index.html">API Documentation</a> for LyProX,
   generated by <a href="https://github.com/twisted/pydoctor/">pydoctor</a>
-    22.5.1 at 2022-06-02 14:40:24.
+    22.5.1 at 2022-07-05 15:00:23.
   </div>
 
   <!-- Search related scripts needs to be loaded at the end of HTML 
