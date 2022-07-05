@@ -8,31 +8,102 @@ filled with what the python backend computes/generates.
 It includes views for creating, editing, deleting and
 listing the models in the ``patients`` app.
 """
+# pylint: disable=no-member
+# pylint: disable=logging-fstring-interpolation
 
 import logging
 import time
 from typing import Any, Dict
-from django.conf import settings
 
+from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models.query import QuerySet
 from django.http import FileResponse, HttpResponse, HttpResponseForbidden
 from django.shortcuts import get_object_or_404, render
 from django.urls.base import reverse
-from django.views import generic, View
+from django.views import View, generic
 
+from accounts.mixins import (
+    InstitutionCheckObjectMixin,
+    InstitutionCheckPatientMixin,
+)
 from core.loggers import ViewLoggerMixin
 from dashboard import query
 from dashboard.forms import DashboardForm
 
 from .filters import PatientFilter
-from .forms import DataFileForm, DiagnoseForm, PatientForm, TumorForm
+from .forms import (
+    DataFileForm,
+    DatasetForm,
+    DiagnoseForm,
+    PatientForm,
+    TumorForm,
+)
 from .ioports import ParsingError, export_to_pandas, import_from_pandas
-from .mixins import InstitutionCheckObjectMixin, InstitutionCheckPatientMixin
-from .models import Diagnose, Patient, Tumor, CSVTable
+from .models import Dataset, Diagnose, Patient, Tumor
 
 logger = logging.getLogger(__name__)
+
+
+# DATASET related views
+class CreateDatasetView(
+    ViewLoggerMixin,
+    LoginRequiredMixin,
+    generic.CreateView
+):
+    """Create a dataset from a form."""
+    model = Dataset
+    form_class = DatasetForm
+    template_name = "patients/dataset_form.html"
+    success_url = "/patients/dataset"
+
+    def get_form_kwargs(self) -> Dict[str, Any]:
+        kwargs = super().get_form_kwargs()
+        kwargs["user"] = self.request.user
+        return kwargs
+
+class DatasetListView(ViewLoggerMixin, generic.ListView):
+    """
+    View that displays all datasets in a list.
+    """
+    model = Dataset
+    template_name: str = "patients/dataset_patient_list.html"
+
+    def get_queryset(self):
+        """
+        Return the tables available for download, based on the (logged in) user.
+        """
+        queryset = Dataset.objects.all()
+        user = self.request.user
+
+        if not user.is_authenticated:
+            queryset = queryset.filter(is_public=True)
+
+        return queryset
+
+class DatasetView(ViewLoggerMixin, View):
+    """
+    View that serves the respective `Dataset` CSV file.
+    """
+    def get(self, request, relative_path):
+        """
+        Get correct table and render download response.
+        """
+        kwargs = {}
+        if "uploads" in relative_path:
+            kwargs["upload_csv"] = relative_path
+        elif "exports" in relative_path:
+            kwargs["export_csv"] = relative_path
+
+        dataset = get_object_or_404(Dataset, **kwargs)
+        if not dataset.is_public and not request.user.is_authenticated:
+            return HttpResponseForbidden()
+
+        absolute_path = Path(f"{settings.MEDIA_ROOT}/{relative_path}")
+        csv_file = open(absolute_path, 'rb')
+        response = FileResponse(csv_file, as_attachment=True)
+        return response
 
 
 # PATIENT related views
@@ -45,7 +116,7 @@ class PatientListView(ViewLoggerMixin, generic.ListView):
     model = Patient
     form_class = DashboardForm
     filterset_class = PatientFilter
-    template_name = "patients/list.html"
+    template_name = "patients/patient_list.html"
     context_object_name = "patient_list"
     action = "show_patient_list"
     is_filterable = True
@@ -57,13 +128,13 @@ class PatientListView(ViewLoggerMixin, generic.ListView):
         start_querying = time.perf_counter()
 
         if not self.request.user.is_authenticated:
-            queryset = queryset.filter(institution__is_hidden=False)
+            queryset = queryset.filter(dataset__is_public=True)
 
         self.filterset = self.filterset_class(
-            self.request.GET or None, queryset
+            self.request.GET or None, queryset, request=self.request,
         )
         self.form = self.form_class(
-            self.request.GET or None, user=self.request.user
+            self.request.GET or None, user=self.request.user,
         )
 
         if self.filterset.is_valid():
@@ -200,14 +271,14 @@ def upload_patients(request):
                     "form": form,
                     "error": parse_err
                 }
-                return render(request, "patients/upload.html", context)
+                return render(request, "patients/dataset_upload.html", context)
 
             context = {
                 "upload_success": True,
                 "num_new": num_new,
                 "num_skipped": num_skipped
             }
-            return render(request, "patients/upload.html", context)
+            return render(request, "patients/dataset_upload.html", context)
 
     else:
         form = DataFileForm()
@@ -216,7 +287,7 @@ def upload_patients(request):
         "upload_succes": False,
         "form": form
     }
-    return render(request, "patients/upload.html", context)
+    return render(request, "patients/dataset_upload.html", context)
 
 
 class DownloadTablesListView(ViewLoggerMixin, generic.ListView):
@@ -254,9 +325,36 @@ class DownloadTableView(ViewLoggerMixin, View):
 
         absolute_path = f"{settings.MEDIA_ROOT}/{relative_path}"
 
-        csv_file = open(absolute_path, 'rb')
-        response = FileResponse(csv_file, as_attachment=True)
-        return response
+    if request.method == "POST":
+        if user.is_authenticated:
+            queryset = Patient.objects.all()
+        else:
+            queryset = Patient.objects.all().filter(institution__is_hidden=False)
+
+        if len(queryset) == 0:
+            context["generate_success"] = False
+            context["error"] = "List of exportable patients is empty"
+            return render(request, "patients/dataset_patient_list.html", context)
+
+        try:
+            patient_df = export_to_pandas(queryset)
+            patient_df.to_csv(download_file_path, index=False)
+            logger.info("Successfully generated and saved database as CSV.")
+            context["generate_success"] = True
+
+        except FileNotFoundError:
+            msg = ("Download folder is missing or can't be accessed.")
+            logger.error(msg)
+            context["generate_success"] = False
+            context["error"] = msg
+
+        except Exception as err:
+            logger.error(err)
+            context["generate_success"] = False
+            context["error"] = err
+
+    context["download_available"] = Path(download_file_path).is_file()
+    return render(request, "patients/dataset_patient_list.html", context)
 
 
 # TUMOR related views

@@ -19,7 +19,6 @@
                 <div class="level-item">
                     <div>
                         <p class="title">Patient {{ patient.pk }}</p>
-                        <p class="is-size-5">Hash-ID: <code>{{ patient.hash_value | hashdisplay }}</code></p>
                     </div>
                 </div>
             </div>
@@ -47,9 +46,9 @@
             <div class="field is-grouped is-grouped-multiline">
                 <div class="control">
                     <span class="tag is-info is-medium">
-                        <span class="icon" data-tooltip="{{ patient.institution.name }}">
-                            {% if patient.institution.logo %}
-                            <img src="{{ patient.institution.logo.url }}" alt="{{ patient.institution.shortname }}">
+                        <span class="icon" data-tooltip="{{ patient.dataset.institution.name }}">
+                            {% if patient.dataset.institution.logo %}
+                            <img src="{{ patient.dataset.institution.logo.url }}" alt="{{ patient.dataset.institution.shortname }}">
                             {% else %}
                             <i class="fas fa-university"></i>
                             {% endif %}
