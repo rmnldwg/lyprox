@@ -25,7 +25,7 @@
 
                     {% endif %}
 
-                        {% if form.errors %}
+                        {% if form.non_field_errors %}
                         <div class="notification is-danger is-light">
                             {{ form.non_field_errors }}
                         </div>
@@ -35,16 +35,16 @@
 
                         <div class="field is-grouped">
                             <div class="control is-expanded">
-                                <label for="{{ form.first_name.id_for_label }}" class="label">
-                                    {{ form.first_name.label }}
+                                <label for="{{ form.diagnose_date.id_for_label }}" class="label">
+                                    {{ form.diagnose_date.label }} (histological)
                                 </label>
-                                {{ form.first_name }}
+                                {{ form.diagnose_date }}
                             </div>
                             <div class="control is-expanded">
-                                <label for="{{ form.last_name.id_for_label }}" class="label">
-                                    {{ form.last_name.label }}
+                                <label for="{{ form.age.id_for_label }}" class="label">
+                                    {{ form.age.label }}
                                 </label>
-                                {{ form.last_name }}
+                                {{ form.age }}
                             </div>
                             <div class="control">
                                 <label for="{{ form.sex.id_for_label }}" class="label">
@@ -53,21 +53,6 @@
                                 <div class="select">
                                     {{ form.sex }}
                                 </div>
-                            </div>
-                        </div>
-
-                        <div class="field is-grouped">
-                            <div class="control is-expanded">
-                                <label for="{{ form.birthday.id_for_label }}" class="label">
-                                    {{ form.birthday.label }}
-                                </label>
-                                {{ form.birthday }}
-                            </div>
-                            <div class="control is-expanded">
-                                <label for="{{ form.diagnose_date.id_for_label }}" class="label">
-                                    {{ form.diagnose_date.label }} (histological)
-                                </label>
-                                {{ form.diagnose_date }}
                             </div>
                         </div>
 
@@ -107,7 +92,7 @@
                         </div>
 
                         <div class="field is-grouped">
-                            <div class="control">
+                            <div class="control is-expanded">
                                 <label for="{{ form.tnm_edition.id_for_label }}" class="label">
                                     TNM Edition
                                 </label>
@@ -136,6 +121,9 @@
                                 <div class="select">
                                     {{ form.dataset }}
                                 </div>
+                                {% if form.errors.dataset %}
+                                <small class="help is-danger">{{ form.errors.dataset }}</small>
+                                {% endif %}
                             </div>
                         </div>
 

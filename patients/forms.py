@@ -9,7 +9,7 @@ also used to implement custom logic to check that all the inputs are valid or
 that the data is properly cleaned before its being passed on to the next step.
 """
 
-from typing import Any, Dict
+from typing import Any, Dict, Optional
 
 import pandas
 from django import forms
@@ -18,7 +18,6 @@ from django.forms import widgets
 
 from core.loggers import FormLoggerMixin
 
-from .ioports import compute_hash
 from .models import Dataset, Diagnose, Patient, Tumor
 
 
@@ -119,6 +118,7 @@ class PatientForm(FormLoggerMixin, forms.ModelForm):
         model = Patient
         fields = [
             "sex",
+            "age",
             "diagnose_date",
             "alcohol_abuse",
             "nicotine_abuse",
@@ -131,6 +131,7 @@ class PatientForm(FormLoggerMixin, forms.ModelForm):
         ]
         widgets = {
             "sex": widgets.Select(attrs={"class": "select"}),
+            "age": widgets.NumberInput(attrs={"class": "input"}),
             "diagnose_date": widgets.NumberInput(
                 attrs={"class": "input",
                        "type": "date"}
@@ -164,79 +165,31 @@ class PatientForm(FormLoggerMixin, forms.ModelForm):
             "m_stage": widgets.Select(attrs={"class": "select"})
         }
 
+    dataset = forms.ModelChoiceField(
+        required=True,
+        widget=widgets.Select(attrs={"class": "select"}),
+        queryset=Dataset.objects.all().filter(is_locked=False),
+        initial=Dataset.objects.all().filter(is_locked=False),
+        empty_label="no matching dataset",
+    )
+
     def __init__(self, *args, **kwargs):
+        """
+        Extract user to only allow adding patients to datasets from same
+        institution as user.
+        """
         user = kwargs.pop("user")
-        super().__init__(*args, **kwargs)
         self.user = user
+        super().__init__(*args, **kwargs)
 
-    first_name = forms.CharField(
-        widget=widgets.TextInput(attrs={"class": "input",
-                                        "placeholder": "First name"}))  #:
-    last_name = forms.CharField(
-        widget=widgets.TextInput(attrs={"class": "input",
-                                        "placeholder": "Last name"}))    #:
-    birthday = forms.DateField(
-        widget=widgets.NumberInput(attrs={"class": "input",
-                                          "type": "date"}))  #:
-    check_for_duplicate = forms.BooleanField(
-        widget=widgets.HiddenInput(),
-        required=False)
-
-    def save(self, commit=True):
-        """Compute hashed ID and age from name, birthday and diagnose date."""
-        patient = super(PatientForm, self).save(commit=False)
-
-        patient.hash_value = self.cleaned_data["hash_value"]
-        patient.age = self._compute_age()
-        patient.institution = self.user.institution
-
-        if commit:
-            patient.save()
-
-        return patient
-
-    def clean(self):
-        """Override superclass clean method to raise a ``ValidationError`` when
-        a duplicate identifier is found."""
-        cleaned_data = super(PatientForm, self).clean()
-        unique_hash, cleaned_data = self._get_identifier(cleaned_data)
-
-        if cleaned_data["check_for_duplicate"]:
-            try:
-                prev_patient_hash = Patient.objects.get(hash_value=unique_hash)
-                msg = ("Hash value already in database. Entered patient might "
-                       "be duplicate.")
-                self.logger.warning(msg)
-                raise forms.ValidationError(msg)
-
-            # iff the above does not throw an exception, one can proceed
-            except Patient.DoesNotExist:
-                pass
-
-        cleaned_data["hash_value"] = unique_hash
-        return cleaned_data
-
-    def _compute_age(self):
-        """Compute age of patient at diagnose/admission."""
-        bd = self.cleaned_data["birthday"]
-        dd = self.cleaned_data["diagnose_date"]
-        age = dd.year - bd.year
-
-        if (dd.month < bd.month) or (dd.month == bd.month and dd.day < bd.day):
-            age -= 1
-
-        self.cleaned_data.pop("birthday")
-        return age
-
-    def _get_identifier(self, cleaned_data):
-        """Compute the hashed undique identifier from fields that are of
-        provacy concern."""
-        hash_value = compute_hash(cleaned_data["first_name"],
-                                  cleaned_data["last_name"],
-                                  cleaned_data["birthday"])
-        cleaned_data.pop("first_name")
-        cleaned_data.pop("last_name")
-        return hash_value, cleaned_data
+    def clean_dataset(self) -> Optional[Dict[str, Any]]:
+        """Make sure that the user is allowed to add patients to the dataset."""
+        dataset = self.cleaned_data["dataset"]
+        if not self.user.is_superuser and dataset.institution != self.user.institution:
+            raise ValidationError(
+                f"Only {dataset.institution.shortname} users can add to this dataset"
+            )
+        return dataset
 
 
 class TumorForm(FormLoggerMixin, forms.ModelForm):

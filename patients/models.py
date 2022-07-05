@@ -310,9 +310,6 @@ class Patient(mixins.LockedDatasetMixin, loggers.ModelLoggerMixin, models.Model)
     `Diagnose` model.
     """
     # pylint: disable=invalid-name
-    hash_value = models.CharField(max_length=200, unique=True)
-    """Unique ID computed from sensitive info upon patient creation."""
-
     sex = models.CharField(max_length=10, choices=[("female", "female"),
                                                    ("male"  , "male"  )])
     age = models.IntegerField()
@@ -437,68 +434,84 @@ class Tumor(mixins.LockedDatasetMixin, loggers.ModelLoggerMixin, models.Model):
     """The tumor location."""
 
     SUBSITES = [
-        ("oral cavity", (("C02.0", "dorsal surface of tongue"),
-                         ("C02.1", "border of tongue"),
-                         ("C02.2", "ventral surface of tongue"),
-                         ("C02.3", "anterior two thirds of tongue"),
-                         ("C02.4", "lingual tonsil"),
-                         ("C02.8", "overlapping sites of tongue"),
-                         ("C02.9", "tongue, nos"),
+        ("oral cavity", (
+            ("C02"  , "other parts of tongue"),
+            ("C02.0", "dorsal surface of tongue"),
+            ("C02.1", "border of tongue"),
+            ("C02.2", "ventral surface of tongue"),
+            ("C02.3", "anterior two thirds of tongue"),
+            ("C02.4", "lingual tonsil"),
+            ("C02.8", "overlapping sites of tongue"),
+            ("C02.9", "tongue, nos"),
 
-                         ("C03.0", "upper gum"),
-                         ("C03.1", "lower gum"),
-                         ("C03.9", "gum, nos"),
+            ("C03"  , "gum"),
+            ("C03.0", "upper gum"),
+            ("C03.1", "lower gum"),
+            ("C03.9", "gum, nos"),
 
-                         ("C04.0", "anterior floor of mouth"),
-                         ("C04.1", "lateral floor of mouth"),
-                         ("C04.8", "overlapping lesion of floor of mouth"),
-                         ("C04.9", "floor of mouth, nos"),
+            ("C04"  , "floor of mouth"),
+            ("C04.0", "anterior floor of mouth"),
+            ("C04.1", "lateral floor of mouth"),
+            ("C04.8", "overlapping lesion of floor of mouth"),
+            ("C04.9", "floor of mouth, nos"),
 
-                         ("C05.0", "hard palate"),
-                         ("C05.1", "soft palate, nos"),
-                         ("C05.2", "uvula"),
-                         ("C05.8", "overlapping lesion of palate"),
-                         ("C05.9", "palate, nos"),
+            ("C05"  , "palate"),
+            ("C05.0", "hard palate"),
+            ("C05.1", "soft palate, nos"),
+            ("C05.2", "uvula"),
+            ("C05.8", "overlapping lesion of palate"),
+            ("C05.9", "palate, nos"),
 
-                         ("C06.0", "cheeck mucosa"),
-                         ("C06.1", "vestibule of mouth"),
-                         ("C06.2", "retromolar area"),
-                         ("C06.8", "overlapping lesion(s) of NOS parts of mouth"),
-                         ("C06.9", "mouth, nos"),
+            ("C06"  , "other parts of mouth"),
+            ("C06.0", "cheeck mucosa"),
+            ("C06.1", "vestibule of mouth"),
+            ("C06.2", "retromolar area"),
+            ("C06.8", "overlapping lesion(s) of NOS parts of mouth"),
+            ("C06.9", "mouth, nos"),
 
-                         ("C08.0", "submandibular gland"),
-                         ("C08.1", "sublingual gland"),
-                         ("C08.9", "salivary gland, nos"))
+            ("C07"  , "parotid gland"),
+
+            ("C08"  , "other major salivary glands"),
+            ("C08.0", "submandibular gland"),
+            ("C08.1", "sublingual gland"),
+            ("C08.9", "salivary gland, nos"))
         ),
-        ("oropharynx",  (("C01"  , "base of tongue, nos"),
+        ("oropharynx",  (
+            ("C01"  , "base of tongue, nos"),
 
-                         ("C09.0", "tonsillar fossa"),
-                         ("C09.1", "tonsillar pillar"),
-                         ("C09.8", "overlapping lesion of tonsil"),
-                         ("C09.9", "tonsil, nos"),
+            ("C09"  , "tonsil"),
+            ("C09.0", "tonsillar fossa"),
+            ("C09.1", "tonsillar pillar"),
+            ("C09.8", "overlapping lesion of tonsil"),
+            ("C09.9", "tonsil, nos"),
 
-                         ("C10.0", "vallecula"),
-                         ("C10.1", "anterior surface of epiglottis"),
-                         ("C10.2", "lateral wall of oropharynx"),
-                         ("C10.3", "posterior wall of oropharynx"),
-                         ("C10.4", "branchial cleft"),
-                         ("C10.8", "overlapping lesions of oropharynx"),
-                         ("C10.9", "oropharynx, nos"),)
+            ("C10"  , "oropharynx"),
+            ("C10.0", "vallecula"),
+            ("C10.1", "anterior surface of epiglottis"),
+            ("C10.2", "lateral wall of oropharynx"),
+            ("C10.3", "posterior wall of oropharynx"),
+            ("C10.4", "branchial cleft"),
+            ("C10.8", "overlapping lesions of oropharynx"),
+            ("C10.9", "oropharynx, nos"),)
         ),
-        ("hypopharynx", (("C12"  , "pyriform sinus"),
+        ("hypopharynx", (
+            ("C12"  , "pyriform sinus"),
 
-                         ("C13.0", "postcricoid region"),
-                         ("C13.1", "hypopharyngeal aspect of aryepiglottic fold"),
-                         ("C13.2", "posterior wall of hypopharynx"),
-                         ("C13.8", "overlapping lesion of hypopharynx"),
-                         ("C13.9", "hypopharynx, nos"),)
+            ("C13"  , "hypopharynx"),
+            ("C13.0", "postcricoid region"),
+            ("C13.1", "hypopharyngeal aspect of aryepiglottic fold"),
+            ("C13.2", "posterior wall of hypopharynx"),
+            ("C13.8", "overlapping lesion of hypopharynx"),
+            ("C13.9", "hypopharynx, nos"),)
         ),
-        ("larynx",      (("C32.0", "glottis"),
-                         ("C32.1", "supraglottis"),
-                         ("C32.2", "subglottis"),
-                         ("C32.3", "laryngeal cartilage"),
-                         ("C32.8", "overlapping lesion of larynx"),
-                         ("C32.9", "larynx, nos"),)
+        ("larynx",      (
+            ("C32"  , "larynx"),
+            ("C32.0", "glottis"),
+            ("C32.1", "supraglottis"),
+            ("C32.2", "subglottis"),
+            ("C32.3", "laryngeal cartilage"),
+            ("C32.8", "overlapping lesion of larynx"),
+            ("C32.9", "larynx, nos"),)
         )
     ]
     """List of subsites with their ICD-10 code and respective description,
@@ -509,20 +522,20 @@ class Tumor(mixins.LockedDatasetMixin, loggers.ModelLoggerMixin, models.Model):
     # my own ICD interface.
     SUBSITE_DICT = {
         "base":        ["C01"  , "C01.9"],
-        "tonsil":      ["C09.0", "C09.1", "C09.8", "C09.9"],
-        "rest_oro":    ["C10.0", "C10.1", "C10.2", "C10.3",
+        "tonsil":      ["C09"  , "C09.0", "C09.1", "C09.8", "C09.9"],
+        "rest_oro":    ["C10"  , "C10.0", "C10.1", "C10.2", "C10.3",
                         "C10.4", "C10.8", "C10.9"],
         "rest_hypo":   ["C12"  , "C12.9",
-                        "C13.0", "C13.1", "C13.2", "C13.8", "C13.9"],
-        "glottis":     ["C32.0"],
+                        "C13"  , "C13.0", "C13.1", "C13.2", "C13.8", "C13.9"],
+        "glottis":     ["C32"  , "C32.0"],
         "rest_larynx": ["C32.1", "C32.2", "C32.3", "C32.8", "C32.9"],
-        "tongue":      ["C02.0", "C02.1", "C02.2", "C02.3", "C02.4", "C02.8",
+        "tongue":      ["C02"  , "C02.0", "C02.1", "C02.2", "C02.3", "C02.4", "C02.8",
                         "C02.9",],
-        "gum_cheek":   ["C03.0", "C03.1", "C03.9", "C06.0", "C06.1", "C06.2",
-                        "C06.8", "C06.9",],
-        "mouth_floor": ["C04.0", "C04.1", "C04.8", "C04.9",],
-        "palate":      ["C05.0", "C05.1", "C05.2", "C05.8", "C05.9",],
-        "glands":      ["C08.0", "C08.1", "C08.9",],
+        "gum_cheek":   ["C03"  , "C03.0", "C03.1", "C03.9",
+                        "C06"  , "C06.0", "C06.1", "C06.2", "C06.8", "C06.9",],
+        "mouth_floor": ["C04"  , "C04.0", "C04.1", "C04.8", "C04.9",],
+        "palate":      ["C05"  , "C05.0", "C05.1", "C05.2", "C05.8", "C05.9",],
+        "glands":      ["C08"  , "C08.0", "C08.1", "C08.9",],
     }
     SUBSITE_LIST = [icd for icd_list in SUBSITE_DICT.values() for icd in icd_list]
 
@@ -564,10 +577,13 @@ class Tumor(mixins.LockedDatasetMixin, loggers.ModelLoggerMixin, models.Model):
 
         found_location = False
         for loc in location_list:
-            loc_subsites = [tpl[1] for tpl in subsite_dict[loc]]
-            if self.get_subsite_display() in loc_subsites:
+            icd_codes = [tpl[0] for tpl in subsite_dict[loc]]
+            found_location = any(
+                self.subsite in code or code in self.subsite for code in icd_codes
+            )
+            if found_location:
                 self.location = loc
-                found_location = True
+                break
 
         if not found_location:
             self.logger.warning(

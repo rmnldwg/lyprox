@@ -12,7 +12,6 @@ from typing import List, Tuple
 
 import numpy as np
 import pandas as pd
-from django.db import IntegrityError
 from django.db.models import QuerySet
 
 import patients.models as models
@@ -63,7 +62,7 @@ def get_model_fields(model, remove: List[str] = None):
     return field_names
 
 
-def row2patient(row, dataset, anonymize: List[str]):
+def row2patient(row, dataset):
     """
     Create a `Patient` instance from a row of a ``DataFrame`` containing the
     appropriate information, as well as the dataset in which the information was
@@ -72,15 +71,9 @@ def row2patient(row, dataset, anonymize: List[str]):
     patient_dict = row.to_dict()
     _ = nan_to_none
 
-    if len(anonymize) != 0:
-        to_hash = [patient_dict.pop(a) for a in anonymize]
-        hash_value = compute_hash(*to_hash)
-    else:
-        hash_value = compute_hash(*patient_dict)
-
     patient_fields = get_model_fields(
         models.Patient, remove=[
-            "id", "hash_value", "tumor", "t_stage", "stage_prefix",
+            "id", "tumor", "t_stage", "stage_prefix",
             "diagnose", "dataset"
         ]
     )
@@ -89,23 +82,14 @@ def row2patient(row, dataset, anonymize: List[str]):
     for field in patient_fields:
         try:
             valid_patient_dict[field] = _(patient_dict[field])
-        except KeyError as key_err:
-            raise ParsingError(f"Column {field} is missing") from key_err
+        except KeyError:
+            logger.warning(f"Missing column {field} in table for importing patient.")
 
-    try:
-        new_patient = models.Patient(
-            hash_value=hash_value,
-            dataset=dataset,
-            **valid_patient_dict
-        )
-        new_patient.save()
-    except IntegrityError as int_err:
-        logger.warning(
-            "Hash value already in database. "
-            "Patient might have been added before"
-        )
-        raise int_err
-
+    new_patient = models.Patient(
+        dataset=dataset,
+        **valid_patient_dict
+    )
+    new_patient.save()
     return new_patient
 
 
@@ -130,8 +114,8 @@ def row2tumors(row, patient):
         for field in tumor_fields:
             try:
                 valid_tumor_dict[field] = _(tumor_dict[field])
-            except KeyError as key_err:
-                raise ParsingError(f"Columns {field} is missing.") from key_err
+            except KeyError:
+                logger.warning(f"Missing column {field} in table for importing tumor.")
 
         new_tumor = models.Tumor(
             patient=patient,
@@ -208,15 +192,7 @@ def import_from_pandas(
                 "must be '#'."
             ) from key_err
 
-        # skip row if patient is already in database
-        try:
-            new_patient = row2patient(
-                patient_row, dataset=dataset, anonymize=anonymize
-            )
-        except IntegrityError:
-            logger.warning("Skipping row")
-            num_skipped += 1
-            continue
+        new_patient = row2patient(patient_row, dataset=dataset)
 
         # make sure first level is correct for tumor
         try:

@@ -13,7 +13,7 @@ import numpy as np
 from django.db.models import Q, QuerySet
 
 from accounts.models import Institution
-from patients.models import Diagnose, Patient, Tumor, Dataset
+from patients.models import Dataset, Diagnose, Patient, Tumor
 
 logger = logging.getLogger(__name__)
 
@@ -151,7 +151,7 @@ def maxllh_consensus(column: Tuple[np.ndarray]) -> Optional[bool]:
         The most likely true state according to the consensus from the
         diagnoses provided.
     """
-    if all([obs is None for obs in column]):
+    if all(obs is None for obs in column):
         return None
 
     healthy_llh = 1.
@@ -274,9 +274,9 @@ def diagnose_specific(
                 combine = any
             elif kwargs['modality_combine'] == 'AND':
                 # same as `all`, but handles `None` correctly by ignoring it
-                combine = lambda col: not(any(
-                    [not(e) if e is not None else None for e in col]
-                ))
+                combine = lambda col: not(
+                    any(not(e) if e is not None else None for e in col)
+                )
             elif kwargs['modality_combine'] == 'maxLLH':
                 combine = lambda column: maxllh_consensus(tuple(column))
             elif kwargs['modality_combine'] == "RANK":
@@ -369,13 +369,10 @@ def count_patients(
         "dataset__id",
     )
 
-    # get a QuerySet of all datasets
-    num_datasets = Dataset.objects.count()
-
     counts = {   # initialize counts of patient- & tumor-related fields
         'total': len(patients),
 
-        'datasets': np.zeros(shape=num_datasets, dtype=int),
+        'datasets': {ds.id: 0 for ds in Dataset.objects.all()},
 
         'sex': np.zeros(shape=(3,), dtype=int),
         'nicotine_abuse': np.zeros(shape=(3,), dtype=int),
@@ -394,7 +391,7 @@ def count_patients(
 
     # loop through patients to populate the counts dictionary
     for patient in patients:
-        counts['datasets'][patient["dataset__id"]-1] += 1
+        counts['datasets'][patient["dataset__id"]] += 1
 
         # PATIENT specific counts
         counts['nicotine_abuse'] += tf2arr(patient["nicotine_abuse"])
@@ -433,6 +430,7 @@ def count_patients(
                 for lnl in Diagnose.LNLs:
                     counts[f'{side}_{lnl}'] += tf2arr(None)
 
+    counts["datasets"] = [num for num in counts["datasets"].values()]
     end_time = time.perf_counter()
     logger.info(f"Generating stats done after {end_time - start_time:.3f} s")
     return patient_queryset, counts

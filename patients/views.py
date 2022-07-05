@@ -57,7 +57,7 @@ class CreateDatasetView(
     model = Dataset
     form_class = DatasetForm
     template_name = "patients/dataset_form.html"
-    success_url = "/patients/download"
+    success_url = "/patients/dataset"
 
     def get_form_kwargs(self) -> Dict[str, Any]:
         kwargs = super().get_form_kwargs()
@@ -132,10 +132,10 @@ class PatientListView(ViewLoggerMixin, generic.ListView):
             queryset = queryset.filter(dataset__is_public=True)
 
         self.filterset = self.filterset_class(
-            self.request.GET or None, queryset
+            self.request.GET or None, queryset, request=self.request,
         )
         self.form = self.form_class(
-            self.request.GET or None, user=self.request.user
+            self.request.GET or None, user=self.request.user,
         )
 
         if self.filterset.is_valid():
