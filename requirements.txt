@@ -3,7 +3,7 @@ django-filter==2.4
 django-phonenumber-field[phonenumbers]==6.1
 django-auth-logger==2.1
 Markdown==3.3
-numpy==1.21
+numpy==1.22
 pandas==1.2
 fontawesomefree==5.15.4
 https://github.com/jazzband/django-dbbackup/tarball/4.0.0rc1
