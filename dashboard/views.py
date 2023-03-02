@@ -23,7 +23,7 @@ from.forms import DashboardForm
 
 def help_view(request) -> HttpResponse:
     """Simply display the dashboard help text."""
-    template_name = "dashboard/help.html"
+    template_name = "dashboard/help/index.html"
     context = {"modalities": list(Diagnose.Modalities)}
     return render(request, template_name, context)
 

@@ -30,7 +30,7 @@
                                             <span class="icon">
                                                 <i class="fas fa-question"></i>
                                             </span>
-                                            {% include 'dashboard/help_tooltip.html' with side="right" position="bottom" image='dashboard/toggle.gif' html='dashboard/help_patient.html' %}
+                                            {% include 'dashboard/help/tooltip.html' with side="right" position="bottom" image='dashboard/toggle.gif' html='dashboard/help/patient.html' %}
                                         </div>
                                     </div>
                                 </div>
@@ -69,7 +69,7 @@
                                             <span class="icon">
                                                 <i class="fas fa-question"></i>
                                             </span>
-                                            {% include 'dashboard/help_tooltip.html' with side="right" position="bottom" image='dashboard/subsite_t-stage.gif' markdown='dashboard/help_tumor.md' %}
+                                            {% include 'dashboard/help/tooltip.html' with side="right" position="bottom" image='dashboard/subsite_t-stage.gif' markdown='dashboard/help/tumor.md' %}
                                         </div>
                                     </div>
                                 </div>
@@ -256,7 +256,7 @@
                                             <span class="icon">
                                                 <i class="fas fa-question"></i>
                                             </span>
-                                            {% include 'dashboard/help_tooltip.html' with side="left" position="bottom" image='dashboard/institutions.gif' markdown='dashboard/help_institutions.md' %}
+                                            {% include 'dashboard/help/tooltip.html' with side="left" position="bottom" image='dashboard/institutions.gif' markdown='dashboard/help/institutions.md' %}
                                         </div>
                                     </div>
                                 </div>
@@ -291,7 +291,7 @@
                                             <span class="icon ml-2">
                                                 <i class="fas fa-question"></i>
                                             </span>
-                                            {% include 'dashboard/help_tooltip.html' with side="left" position="bottom" image='dashboard/modalities.gif' markdown='dashboard/help_modalities.md' %}
+                                            {% include 'dashboard/help/tooltip.html' with side="left" position="bottom" image='dashboard/modalities.gif' markdown='dashboard/help/modalities.md' %}
                                         </div>
                                     </div>
                                 </div>
@@ -313,7 +313,7 @@
                                                     <span class="icon">
                                                         <i class="fas fa-question"></i>
                                                     </span>
-                                                    {% include 'dashboard/help_tooltip.html' with side="left" position="bottom" image='dashboard/involvement.gif' markdown='dashboard/help_involvement.md' %}
+                                                    {% include 'dashboard/help/tooltip.html' with side="left" position="bottom" image='dashboard/involvement.gif' markdown='dashboard/help/involvement.md' %}
                                                 </div>
                                             </div>
                                         </div>
@@ -408,7 +408,7 @@
                                                     <span class="icon">
                                                         <i class="fas fa-question"></i>
                                                     </span>
-                                                    {% include 'dashboard/help_tooltip.html' with side="left" position="bottom" image='dashboard/involvement.gif' markdown='dashboard/help_involvement.md' %}
+                                                    {% include 'dashboard/help/tooltip.html' with side="left" position="bottom" image='dashboard/involvement.gif' markdown='dashboard/help/involvement.md' %}
                                                 </div>
                                             </div>
                                         </div>
@@ -529,7 +529,7 @@
                                                         </span>
                                                         <span>Help</span>
                                                     </a>
-                                                    {% include 'dashboard/help_tooltip.html' with side="left" position="top" image='dashboard/buttons.gif' markdown='dashboard/help_buttons.md' %}
+                                                    {% include 'dashboard/help/tooltip.html' with side="left" position="top" image='dashboard/buttons.gif' markdown='dashboard/help/buttons.md' %}
                                                 </div>
                                                 <button class="button is-medium is-warning is-light is-outlined" type="submit" formaction="{% url 'patients:list' %}"
                                                     data-tooltip="Display selected subset in list">
