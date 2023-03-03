@@ -71,3 +71,131 @@ document.onkeyup = function (e) {
         $("[name=dashboardform]").submit();
     };
 };
+
+$(document).ready(function() {
+  $.ajaxSetup({
+    headers: { "X-CSRFToken": $('input[name="csrfmiddlewaretoken"]').attr("value") }
+  });
+});
+
+/**
+ * Check if the `element` is a radio box.
+ * 
+ * @param {*} index 
+ * @param {*} element 
+ * @returns `true` if `element` is a radio box and `false` otherwise.
+ */
+function isRadio(index, element) {
+  return $(element).is("input[type=radio]");
+};
+
+/**
+ * Check if the `element` is a checkbox box.
+ * 
+ * @param {*} index 
+ * @param {*} element 
+ * @returns `true` if `element` is a checkbox box and `false` otherwise.
+ */
+function isCheckbox(index, element) {
+  return $(element).is("input[type=checkbox]");
+};
+
+/**
+ * Check if the `element` is checked.
+ * 
+ * @param {*} index 
+ * @param {*} element 
+ * @returns `true` if `element` is checked and `false` otherwise.
+ */
+function isChecked(index, element) {
+  return $(element).is(":checked");
+};
+
+function castString(input) {
+  if (/^\d+$/.test(input)) {
+    return Number(input);
+  }
+
+  if (input === "True" || input === "False") {
+    return Boolean(input);
+  }
+
+  return input;
+}
+
+/**
+ * Iterate through all checked input elements in the form and collect their values in
+ * a dictionary.
+ */
+function collectDataFromFields() {
+  var data = {};
+
+  // Get all the radio boxes' values
+  $("#dashboard-form *")
+    .filter(isRadio)
+    .filter(isChecked)
+    .each(function () {
+      let fieldName = $(this).attr("name");
+      let rawValue = $(this).attr("value");
+
+      data[fieldName] = castString(rawValue);
+    });
+
+  // Get the list of values for the checkbox options
+  $("#dashboard-form *")
+    .filter(isCheckbox)
+    .filter(isChecked)
+    .each(function () {
+      let fieldName = $(this).attr("name");
+      let rawValue = $(this).attr("value");
+
+      if (fieldName in data) {
+        data[fieldName].push(castString(rawValue));
+      } else {
+        data[fieldName] = [castString(rawValue)];
+      };
+    });
+  
+  // Get the selected values from dropdown menus (there's only one right now)
+  $("#dashboard-form *")
+    .filter(function () {
+      return $(this).is("select");
+    })
+    .each(function() {
+      let fieldName = $(this).attr("name");
+      let rawValue = $(this).find("option:selected").attr("value");
+
+      data[fieldName] = castString(rawValue);
+    });
+
+  jsonData = JSON.stringify(data)
+  console.log(jsonData);
+  return jsonData;
+};
+
+function populateFieldsWithResponse() {
+  console.log("This should not happen yet.")
+};
+
+function createGET() {
+  console.log("Creating POST request...");
+
+  $.ajax({
+    url: "ajax/",
+    type: "POST",
+    data: collectDataFromFields(),
+    dataType: "json",
+    contentType: "application/json",
+    success: function(response) {
+      console.log("SUCCESS");
+    }
+  });
+};
+
+function handleSubmit(event) {
+  event.preventDefault();
+  console.log("Form submission button clicked.");
+  createGET();
+};
+
+$("#dashboard-form").on("submit", handleSubmit);

@@ -8,8 +8,10 @@ the context variable that is rendered into the HTML response.
 
 import time
 from typing import Any, Dict
+import json
+import logging
 
-from django.http.response import HttpResponse
+from django.http.response import HttpResponse, JsonResponse
 from django.shortcuts import render
 from django.views import generic
 
@@ -20,12 +22,29 @@ from . import query
 
 from.forms import DashboardForm
 
+logger = logging.getLogger(__name__)
+
 
 def help_view(request) -> HttpResponse:
     """Simply display the dashboard help text."""
     template_name = "dashboard/help/index.html"
     context = {"modalities": list(Diagnose.Modalities)}
     return render(request, template_name, context)
+
+
+def dashboard_AJAX_view(request):
+    """
+    View that receives JSON data from the AJAX request and cleans it using the
+    ``forms.DashboardForm``.
+    """
+    logger.info("AJAX view called...")
+    data = json.loads(request.body.decode("utf-8"))
+    logger.info(data)
+    form = DashboardForm(data, user=request.user)
+
+    if form.is_valid():
+        logger.info("Form is valid")
+        return JsonResponse(data={"success": True})
 
 
 class DashboardView(ViewLoggerMixin, generic.ListView):

@@ -10,7 +10,9 @@
     <body>
         {% include 'navbar.html' %}
 
-        <form method="GET" action="{% url 'dashboard:dashboard' %}" name="dashboardform">
+        <form method="GET" action="{% url 'dashboard:dashboard' %}" id="dashboard-form" name="dashboardform">
+            <!-- The CSRF token is not necessary for the GET request by this form, but for the AJAX request. -->
+            {% csrf_token %}
             <section class="section">
 
                 <div class="tile is-ancestor">
