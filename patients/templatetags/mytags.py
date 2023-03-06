@@ -44,3 +44,13 @@ def include_md(context, template_name):
 
     html_string = md.markdown(template)
     return format_html(html_string)
+
+@register.filter(name="addstr")
+def addstr(this, other):
+    """Concatenate `this` & `other`."""
+    return str(this) + str(other)
+
+@register.filter(name="get")
+def get(object, key):
+    """Get an item from `object` using `key`."""
+    return object[key]

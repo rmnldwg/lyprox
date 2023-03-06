@@ -1,0 +1,45 @@
+style: github
+template: CHANGELOG.tpl.md
+info:
+  title: CHANGELOG
+  repository_url: https://github.com/rmnldwg/lyprox
+options:
+  commits:
+    filters:
+      Type:
+        - feat
+        - fix
+        - perf
+        - refac
+        - docs
+        - chore
+        - test
+  issues:
+    prefix:
+    - #
+  refs:
+    actions:
+    - closes
+    - fixes
+  merges:
+    pattern: "^merge:"
+  reverts:
+    pattern: "^revert:"
+  commit_groups:
+    title_maps:
+      feat: Features
+      fix: Bug Fixes
+      perf: Performance Improvements
+      refac: Code Refactoring
+      docs: Documentation
+      chore: Maintenance
+      test: Testing
+  header:
+    pattern: "^(\\w*)(?:\\(([\\w\\$\\.\\-\\*\\s]*)\\))?\\:\\s(.*)$"
+    pattern_maps:
+      - Type
+      - Scope
+      - Subject
+  notes:
+    keywords:
+      - BREAKING CHANGE
