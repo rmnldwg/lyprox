@@ -20,18 +20,18 @@
     <div class="columns">
         <div class="column">
             {{ form.nicotine_abuse }}
-            {% include 'dashboard/three_way_toggle_stats.html' with stat=stats.nicotine_abuse show_percent=show_percent %}
+            {% include 'dashboard/three_way_toggle_stats.html' with stats=stats field='nicotine_abuse' show_percent=show_percent %}
 
             {{ form.hpv_status }}
-            {% include 'dashboard/three_way_toggle_stats.html' with stat=stats.hpv_status show_percent=show_percent %}
+            {% include 'dashboard/three_way_toggle_stats.html' with stats=stats field='hpv_status' show_percent=show_percent %}
         </div>
 
         <div class="column">
             {{ form.neck_dissection }}
-            {% include 'dashboard/three_way_toggle_stats.html' with stat=stats.neck_dissection show_percent=show_percent %}
+            {% include 'dashboard/three_way_toggle_stats.html' with stats=stats field='neck_dissection' show_percent=show_percent %}
 
             {{ form.n_status }}
-            {% include 'dashboard/three_way_toggle_stats.html' with stat=stats.n_status show_percent=show_percent %}
+            {% include 'dashboard/three_way_toggle_stats.html' with stats=stats field='n_status' show_percent=show_percent %}
         </div>
     </div>
 </div>

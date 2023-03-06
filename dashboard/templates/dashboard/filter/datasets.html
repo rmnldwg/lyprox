@@ -20,11 +20,7 @@
                             </span>
                         </label>
                         <div class="button is-info is-static">
-                            {% if show_percent %}
-                            <span>{{ stats.datasets|percent:idx }}%</span>
-                            {% else %}
-                            <span>{{ stats.datasets|index:idx }}</span>
-                            {% endif %}
+                            <span class="stats" data-statfield="datasets" data-index="{{ forloop.counter0 }}">{% if show_percent %}{{ stats.datasets|percent:idx }}%{% else %}{{ stats.datasets|index:idx }}{% endif %}</span>
                         </div>
                     </div>
                 </div>

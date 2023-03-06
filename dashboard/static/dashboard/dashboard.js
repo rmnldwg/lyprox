@@ -1,3 +1,9 @@
+/**
+ * Handle the case when the user select a super-level involvement. E.g., when the '-'
+ * is clicked, all the sub-levels also need to switch to '-'.
+ * 
+ * @param {*} radio_both Radio button element that selects involvement status of super-level
+ */
 function bothClickHandler(radio_both) {
 	both_name = radio_both.name;
 	sub_a_name = both_name + "a";
@@ -34,6 +40,12 @@ function bothClickHandler(radio_both) {
 	};
 };
 
+/**
+ * Define what happens when a sub-level's involvement is changed. E.g., when sub-level
+ * 'a' is set to '+', the super-level also needs to be set to '+'.
+ * 
+ * @param {*} radio_sub Radiobutton element of a lymph node sub-level
+ */
 function subClickHandler(radio_sub) {
 	sub_name = radio_sub.name;
 	both_name = sub_name.slice(0, sub_name.length - 1)
@@ -54,6 +66,9 @@ function subClickHandler(radio_sub) {
 	};
 };
 
+/**
+ * Allow recomputation after the dashboard's status has been changed through an input.
+ */
 function changeHandler() {
 	$("#compute").removeAttr("disabled");
 }
@@ -74,6 +89,7 @@ $(document).keydown(function(event) {
 	};
 });
 
+// Insert CSRF token into POST header before sending the request
 $(document).ready(function () {
 	let csrftoken = $('input[name="csrfmiddlewaretoken"]').attr("value")
 	$.ajaxSetup({
@@ -176,16 +192,55 @@ function collectDataFromFields() {
 			data[fieldName] = castString(rawValue);
 		});
 
-	jsonData = JSON.stringify(data)
-	console.log(jsonData);
+	jsonData = JSON.stringify(data);
 	return jsonData;
 };
 
+/**
+ * Take the server response in JSON form and populate all `.stats` fields in the
+ * dashboard with the values from the JSON response.
+ * 
+ * @param {object} response JSON response from the server
+ */
 function populateFields(response) {
 	console.log(response);
+	let totalNum = response.total;
+
+	$(".stats").each(function() {
+		let field = $(this).data("statfield");
+		let index = $(this).data("index");
+		let showPercent = $('input[name="show_percent"]:checked').val();
+		let isBarplot = $(this).hasClass("barplot");
+		let isTotal = $(this).data("statfield") == "total";
+		let newValue;
+
+		if (index === undefined) {
+			newValue = response[field];
+		} else {
+			newValue = response[field][index];
+		};
+
+		if (isBarplot) {
+			let involved = 100 * response[field][1] / totalNum;
+			let unknown = 100 * response[field][0] / totalNum;
+			let newStyle = "";
+			newStyle += "background-size: " + involved + "% 100%, ";
+			newStyle += involved + unknown + "% 100%, 100% 100%;";
+			$(this).attr("style", newStyle);
+		};
+
+		if (showPercent == "True" && !isTotal) {
+			$(this).html(parseInt(100 * newValue / totalNum) + "%");
+		} else {
+			$(this).html(newValue);
+		};
+	});
 };
 
-function createGET() {
+/**
+ * Assemble AJAX request.
+ */
+function createAJAXrequest() {
 	console.log("Creating POST request...");
 
 	$.ajax({
@@ -197,14 +252,22 @@ function createGET() {
 		success: function (response) {
 			console.log("Success! Processing response.");
 			populateFields(response);
-		}
+		},
+		error: function(response) {
+			console.log(response.responseJSON.error);
+		},
 	});
 };
 
+/**
+ * Use AJAX instead of normal form action to send request to server.
+ * 
+ * @param {*} event 
+ */
 function handleSubmit(event) {
 	event.preventDefault();
 	console.log("Form submission button clicked.");
-	createGET();
+	createAJAXrequest();
 };
 
 $("#compute").click(handleSubmit);

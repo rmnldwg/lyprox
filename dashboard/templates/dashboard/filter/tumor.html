@@ -22,12 +22,12 @@
     <div class="columns is-multiline">
         <div class="column">
             {{ form.central }}
-            {% include 'dashboard/three_way_toggle_stats.html' with stat=stats.central show_percent=show_percent %}
+            {% include 'dashboard/three_way_toggle_stats.html' with stats=stats field='central' show_percent=show_percent %}
         </div>
 
         <div class="column">
             {{ form.extension }}
-            {% include 'dashboard/three_way_toggle_stats.html' with stat=stats.extension show_percent=show_percent %}
+            {% include 'dashboard/three_way_toggle_stats.html' with stats=stats field='extension' show_percent=show_percent %}
         </div>
     </div>
 
@@ -44,11 +44,7 @@
                     </label>
                     <p class="tag button is-static">
                         {% with counter=forloop.counter0|add:0 %}
-                        {% if show_percent %}
-                        <span>{{ stats.subsites|percent:counter }}%</span>
-                        {% else %}
-                        <span>{{ stats.subsites|index:counter }}</span>
-                        {% endif %}
+                        <span class="stats" data-statfield="subsites" data-index="{{ counter }}">{% if show_percent %}{{ stats.subsites|percent:counter }}%{% else %}{{ stats.subsites|index:counter }}{% endif %}</span>
                         {% endwith %}
                     </p>
                 </div>
@@ -68,11 +64,7 @@
                     </label>
                     <p class="tag button is-static">
                         {% with counter=forloop.counter0|add:3 %}
-                        {% if show_percent %}
-                        <span>{{ stats.subsites|percent:counter }}%</span>
-                        {% else %}
-                        <span>{{ stats.subsites|index:counter }}</span>
-                        {% endif %}
+                        <span class="stats" data-statfield="subsites" data-index="{{ counter }}">{% if show_percent %}{{ stats.subsites|percent:counter }}%{% else %}{{ stats.subsites|index:counter }}{% endif %}</span>
                         {% endwith %}
                     </p>
                 </div>
@@ -92,11 +84,7 @@
                     </label>
                     <p class="tag button is-static">
                         {% with counter=forloop.counter0|add:4 %}
-                        {% if show_percent %}
-                        <span>{{ stats.subsites|percent:counter }}%</span>
-                        {% else %}
-                        <span>{{ stats.subsites|index:counter }}</span>
-                        {% endif %}
+                        <span class="stats" data-statfield="subsites" data-index="{{ counter }}">{% if show_percent %}{{ stats.subsites|percent:counter }}%{% else %}{{ stats.subsites|index:counter }}{% endif %}</span>
                         {% endwith %}
                     </p>
                 </div>
@@ -116,11 +104,7 @@
                     </label>
                     <p class="tag button is-static">
                         {% with counter=forloop.counter0|add:6 %}
-                        {% if show_percent %}
-                        <span>{{ stats.subsites|percent:counter }}%</span>
-                        {% else %}
-                        <span>{{ stats.subsites|index:counter }}</span>
-                        {% endif %}
+                        <span class="stats" data-statfield="subsites" data-index="{{ counter }}">{% if show_percent %}{{ stats.subsites|percent:counter }}%{% else %}{{ stats.subsites|index:counter }}{% endif %}</span>
                         {% endwith %}
                     </p>
                 </div>
@@ -139,11 +123,7 @@
                     <span>{{ checkbox.choice_label }}</span>
                 </label>
                 <div class="button is-info is-static">
-                    {% if show_percent %}
-                    <span>{{ stats.t_stages|percent:forloop.counter0 }}%</span>
-                    {% else %}
-                    <span>{{ stats.t_stages|index:forloop.counter0 }}</span>
-                    {% endif %}
+                    <span class="stats" data-statfield="t_stages" data-index="{{ forloop.counter0 }}">{% if show_percent %}{{ stats.t_stages|percent:forloop.counter0 }}%{% else %}{{ stats.t_stages|index:forloop.counter0 }}{% endif %}</span>
                 </div>
             </div>
         </div>

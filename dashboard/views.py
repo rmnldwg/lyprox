@@ -146,4 +146,9 @@ def dashboard_AJAX_view(request):
 
     if form.is_valid():
         logger.info("AJAX form valid, returning success and stats.")
-        return JsonResponse(data={"success": True, "stats": stats})
+        return JsonResponse(data=stats)
+    
+    return JsonResponse(
+        data={"error": "Something went wrong."},
+        status=400,
+    )
