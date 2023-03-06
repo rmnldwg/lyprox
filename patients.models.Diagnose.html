@@ -7,7 +7,7 @@
   <head>
     
     <title>patients.models.Diagnose</title>
-    <meta name="generator" content="pydoctor 22.5.1"> 
+    <meta name="generator" content="pydoctor 22.9.1"> 
         
     </meta>
     <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
@@ -203,8 +203,21 @@
     </li>
 </ul> 
 
+        <div class="childrenKindTitle">Inherited Methods</div>
+        <ul>
+    
+    <li class="">
         
-         
+        
+        
+
+        
+            <div class="itemName"><code><a href="patients.mixins.LockedDatasetMixin.html#delete" class="internal-link" title="patients.mixins.LockedDatasetMixin.delete">delete</a></code>
+            </div>
+        
+
+    </li>
+</ul> 
 
         <div class="childrenKindTitle">Attributes</div>
         <ul>
@@ -292,8 +305,21 @@
     </li>
 </ul> 
 
+        <div class="childrenKindTitle">Inherited Attributes</div>
+        <ul>
+    
+    <li class="private">
         
-         
+        
+        
+
+        
+            <div class="itemName"><code><a href="patients.mixins.LockedDatasetMixin.html#_must_raise" class="internal-link" title="patients.mixins.LockedDatasetMixin._must_raise">_must<wbr></wbr>_raise</a></code>
+            </div>
+        
+
+    </li>
+</ul> 
         
       </div>
   </div><div>
@@ -338,16 +364,6 @@
         
 
         
-            <div class="itemName"><code><a href="patients.models.LockedDatasetError.html" class="internal-link" title="patients.models.LockedDatasetError"><wbr></wbr>Locked<wbr></wbr>Dataset<wbr></wbr>Error</a></code>
-            </div>
-        
-
-    </li><li class="">
-        
-        
-        
-
-        
             <div class="itemName"><code><a href="patients.models.Patient.html" class="internal-link" title="patients.models.Patient"><wbr></wbr>Patient</a></code>
             </div>
         
@@ -359,6 +375,16 @@
 
         
             <div class="itemName"><code><a href="patients.models.Tumor.html" class="internal-link" title="patients.models.Tumor"><wbr></wbr>Tumor</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="patients.models.LockedDatasetError.html" class="internal-link" title="patients.models.LockedDatasetError"><wbr></wbr>Locked<wbr></wbr>Dataset<wbr></wbr>Error</a></code>
             </div>
         
 
@@ -464,7 +490,7 @@ regard to their lymphaitc metastatic involvement.</p>
         </div>
 
         <div id="splitTables">
-          <table class="children sortable" id="id34">
+          <table class="children sortable" id="id36">
   
   
   <tr class="class">
@@ -530,6 +556,25 @@ regard to their lymphaitc metastatic involvement.</p>
   </tr>
 </table>
           
+            <p class="inheritedFrom">
+              Inherited from <code><a href="patients.mixins.LockedDatasetMixin.html" class="internal-link" title="patients.mixins.LockedDatasetMixin">LockedDatasetMixin</a></code>:
+            </p>
+            <table class="children sortable" id="id37">
+  
+  
+  <tr class="basemethod">
+    
+    <td>Method</td>
+    <td><code><a href="patients.mixins.LockedDatasetMixin.html#delete" class="internal-link" title="patients.mixins.LockedDatasetMixin.delete">delete</a></code></td>
+    <td>Raise <code><a href="patients.models.LockedDatasetError.html" class="internal-link" title="patients.models.LockedDatasetError">LockedDatasetError</a></code> befor deleting if associated dataset is locked.</td>
+  </tr><tr class="baseproperty private">
+    
+    <td>Property</td>
+    <td><code><a href="patients.mixins.LockedDatasetMixin.html#_must_raise" class="internal-link" title="patients.mixins.LockedDatasetMixin._must_raise">_must<wbr></wbr>_raise</a></code></td>
+    <td>Infer from class if an error should be raised on save/delete.</td>
+  </tr>
+</table>
+            
 
             
         </div>
@@ -548,9 +593,13 @@ regard to their lymphaitc metastatic involvement.</p>
     
     <span class="py-keyword">def</span> <span class="py-defname">__str__</span>(self):
     
+    <a class="headerLink" href="#__str__" title="patients.models.Diagnose.__str__">
+      
+      
+      ¶
+    </a>
   </div>
   <div class="docstring functionBody">
-    
     
     <div><p>Report some info for admin view.</p>
 </div>
@@ -568,10 +617,14 @@ regard to their lymphaitc metastatic involvement.</p>
     
     <span class="py-keyword">def</span> <span class="py-defname">save</span>(self, *args, **kwargs):
     
+    <a class="headerLink" href="#save" title="patients.models.Diagnose.save">
+      
+      
+      ¶
+    </a>
   </div>
   <div class="docstring functionBody">
-    <div class="interfaceinfo">overrides <code><a href="core.loggers.ModelLoggerMixin.html#save" class="internal-link">core.loggers.ModelLoggerMixin.save</a></code></div>
-    
+    <div class="interfaceinfo">overrides <code><a href="patients.mixins.LockedDatasetMixin.html#save" class="internal-link">patients.mixins.LockedDatasetMixin.save</a></code></div>
     <div><p>Make sure LNLs and their sublevels (e.g. 'a' and 'b') are treated
 consistelntly. E.g. when sublevel <tt class="rst-docutils literal">Ia</tt> is reported to be involved,
 the involvement status of level <tt class="rst-docutils literal">I</tt> cannot be reported as healthy.</p>
@@ -591,9 +644,13 @@ the involvement status of level <tt class="rst-docutils literal">I</tt> cannot b
     
     <span class="py-defname">diagnose_date</span> =
     
+    <a class="headerLink" href="#diagnose_date" title="patients.models.Diagnose.diagnose_date">
+      
+      
+      ¶
+    </a>
   </div>
   <div class="functionBody">
-    
     
     <div><p class="undocumented">Undocumented</p></div>
     
@@ -611,9 +668,13 @@ the involvement status of level <tt class="rst-docutils literal">I</tt> cannot b
     
     <span class="py-defname">LNLs</span>: <code>list[<wbr></wbr>str]</code> =
     
+    <a class="headerLink" href="#LNLs" title="patients.models.Diagnose.LNLs">
+      
+      
+      ¶
+    </a>
   </div>
   <div class="functionBody">
-    
     
     <div><p>List of implemented lymph node levels. When the <code><a href="patients.models.html" class="internal-link" title="patients.models">models</a></code> module is
 imported, a simple for-loop creates additional fields for the <code><a href="patients.models.Diagnose.html" class="internal-link" title="patients.models.Diagnose">Diagnose</a></code>
@@ -634,9 +695,13 @@ class for each of the elements in this list.</p>
     
     <span class="py-defname">modality</span> =
     
+    <a class="headerLink" href="#modality" title="patients.models.Diagnose.modality">
+      
+      
+      ¶
+    </a>
   </div>
   <div class="functionBody">
-    
     
     <div><p>The diagnostic modality that was used to reach the diagnosis.</p>
 </div>
@@ -655,9 +720,13 @@ class for each of the elements in this list.</p>
     
     <span class="py-defname">patient</span> =
     
+    <a class="headerLink" href="#patient" title="patients.models.Diagnose.patient">
+      
+      
+      ¶
+    </a>
   </div>
   <div class="functionBody">
-    
     
     <div><p>This defines the connection to the <code><a href="patients.models.Patient.html" class="internal-link" title="patients.models.Patient">Patient</a></code> model.</p>
 </div>
@@ -676,9 +745,13 @@ class for each of the elements in this list.</p>
     
     <span class="py-defname">side</span> =
     
+    <a class="headerLink" href="#side" title="patients.models.Diagnose.side">
+      
+      
+      ¶
+    </a>
   </div>
   <div class="functionBody">
-    
     
     <div><p class="undocumented">Undocumented</p></div>
     
@@ -696,9 +769,13 @@ class for each of the elements in this list.</p>
     
     <span class="py-defname">I</span>: <code>bool</code> =
     
+    <a class="headerLink" href="#I" title="patients.models.Diagnose.I">
+      
+      
+      ¶
+    </a>
   </div>
   <div class="functionBody">
-    
     
     <div><p class="undocumented">Undocumented</p></div>
     
@@ -716,9 +793,13 @@ class for each of the elements in this list.</p>
     
     <span class="py-defname">II</span>: <code>bool</code> =
     
+    <a class="headerLink" href="#II" title="patients.models.Diagnose.II">
+      
+      
+      ¶
+    </a>
   </div>
   <div class="functionBody">
-    
     
     <div><p class="undocumented">Undocumented</p></div>
     
@@ -736,9 +817,13 @@ class for each of the elements in this list.</p>
     
     <span class="py-defname">V</span>: <code>bool</code> =
     
+    <a class="headerLink" href="#V" title="patients.models.Diagnose.V">
+      
+      
+      ¶
+    </a>
   </div>
   <div class="functionBody">
-    
     
     <div><p class="undocumented">Undocumented</p></div>
     
@@ -755,7 +840,7 @@ class for each of the elements in this list.</p>
   <div class="container">
     <a href="index.html">API Documentation</a> for LyProX,
   generated by <a href="https://github.com/twisted/pydoctor/">pydoctor</a>
-    22.5.1 at 2022-07-05 15:36:34.
+    22.9.1 at 2023-03-06 14:29:13.
   </div>
 
   <!-- Search related scripts needs to be loaded at the end of HTML 

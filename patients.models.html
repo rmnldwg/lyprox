@@ -7,7 +7,7 @@
   <head>
     
     <title>patients.models</title>
-    <meta name="generator" content="pydoctor 22.5.1"> 
+    <meta name="generator" content="pydoctor 22.9.1"> 
         
     </meta>
     <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
@@ -180,16 +180,6 @@
         
 
         
-            <div class="itemName"><code><a href="patients.models.LockedDatasetError.html" class="internal-link" title="patients.models.LockedDatasetError"><wbr></wbr>Locked<wbr></wbr>Dataset<wbr></wbr>Error</a></code>
-            </div>
-        
-
-    </li><li class="">
-        
-        
-        
-
-        
             <div class="itemName"><code><a href="patients.models.Patient.html" class="internal-link" title="patients.models.Patient"><wbr></wbr>Patient</a></code>
             </div>
         
@@ -201,6 +191,16 @@
 
         
             <div class="itemName"><code><a href="patients.models.Tumor.html" class="internal-link" title="patients.models.Tumor"><wbr></wbr>Tumor</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="patients.models.LockedDatasetError.html" class="internal-link" title="patients.models.LockedDatasetError"><wbr></wbr>Locked<wbr></wbr>Dataset<wbr></wbr>Error</a></code>
             </div>
         
 
@@ -464,11 +464,6 @@ respective superlevel (in that case <tt class="rst-docutils literal">I</tt>).</p
   </tr><tr class="class">
     
     <td>Class</td>
-    <td><code><a href="patients.models.LockedDatasetError.html" class="internal-link" title="patients.models.LockedDatasetError"><wbr></wbr>Locked<wbr></wbr>Dataset<wbr></wbr>Error</a></code></td>
-    <td>Raised when a <code><a href="patients.models.Dataset.html" class="internal-link" title="patients.models.Dataset">Dataset</a></code> or an associated entry was tried to be edited.</td>
-  </tr><tr class="class">
-    
-    <td>Class</td>
     <td><code><a href="patients.models.Patient.html" class="internal-link" title="patients.models.Patient"><wbr></wbr>Patient</a></code></td>
     <td>The representation of a patient in the database. It contains some demographic information, as well as patient-specific characteristics that are important in the context of cancer, e.g. HPV status.</td>
   </tr><tr class="class">
@@ -476,6 +471,11 @@ respective superlevel (in that case <tt class="rst-docutils literal">I</tt>).</p
     <td>Class</td>
     <td><code><a href="patients.models.Tumor.html" class="internal-link" title="patients.models.Tumor"><wbr></wbr>Tumor</a></code></td>
     <td>Model to describe a patient's tumor in detail. It is connected to a patient via a <tt class="rst-docutils literal">django.db.models.ForeignKey</tt> relation.</td>
+  </tr><tr class="exception">
+    
+    <td>Exception</td>
+    <td><code><a href="patients.models.LockedDatasetError.html" class="internal-link" title="patients.models.LockedDatasetError"><wbr></wbr>Locked<wbr></wbr>Dataset<wbr></wbr>Error</a></code></td>
+    <td>Raised when a <code><a href="patients.models.Dataset.html" class="internal-link" title="patients.models.Dataset">Dataset</a></code> or an associated entry was tried to be edited.</td>
   </tr><tr class="function">
     
     <td>Function</td>
@@ -517,9 +517,13 @@ respective superlevel (in that case <tt class="rst-docutils literal">I</tt>).</p
     
     <span class="py-keyword">def</span> <span class="py-defname">directory_</span>(used_for, instance):
     
+    <a class="headerLink" href="#directory_" title="patients.models.directory_">
+      
+      
+      ¶
+    </a>
   </div>
   <div class="docstring functionBody">
-    
     
     <div><p>Function that compiles and returns the path to where uploaded or exported CSV
 files will be stored. It also creates the respective folder and deletes any
@@ -539,9 +543,13 @@ existing iles with the same name if necessary.</p>
     
     <span class="py-keyword">def</span> <span class="py-defname">directory_for_exports</span>(instance, _filename):
     
+    <a class="headerLink" href="#directory_for_exports" title="patients.models.directory_for_exports">
+      
+      
+      ¶
+    </a>
   </div>
   <div class="docstring functionBody">
-    
     
     <div><p>Calls <code><a href="#directory_" class="internal-link" title="patients.models.directory_">directory_</a></code> for 'exports'.</p>
 <table class="fieldTable"><tr class="fieldStart"><td class="fieldName" colspan="2">Returns</td></tr><tr><td class="fieldArgContainer"><code>str</code></td><td class="fieldArgDesc"><span class="undocumented">Undocumented</span></td></tr></table></div>
@@ -559,9 +567,13 @@ existing iles with the same name if necessary.</p>
     
     <span class="py-keyword">def</span> <span class="py-defname">directory_for_uploads</span>(instance, _filename):
     
+    <a class="headerLink" href="#directory_for_uploads" title="patients.models.directory_for_uploads">
+      
+      
+      ¶
+    </a>
   </div>
   <div class="docstring functionBody">
-    
     
     <div><p>Calls <code><a href="#directory_" class="internal-link" title="patients.models.directory_">directory_</a></code> for 'uploads'.</p>
 <table class="fieldTable"><tr class="fieldStart"><td class="fieldName" colspan="2">Returns</td></tr><tr><td class="fieldArgContainer"><code>str</code></td><td class="fieldArgDesc"><span class="undocumented">Undocumented</span></td></tr></table></div>
@@ -579,9 +591,13 @@ existing iles with the same name if necessary.</p>
     
     <span class="py-defname">Mod</span> =
     
+    <a class="headerLink" href="#Mod" title="patients.models.Mod">
+      
+      
+      ¶
+    </a>
   </div>
   <div class="functionBody">
-    
     
     <div><p class="undocumented">Undocumented</p></div>
     
@@ -598,7 +614,7 @@ existing iles with the same name if necessary.</p>
   <div class="container">
     <a href="index.html">API Documentation</a> for LyProX,
   generated by <a href="https://github.com/twisted/pydoctor/">pydoctor</a>
-    22.5.1 at 2022-07-05 15:36:34.
+    22.9.1 at 2023-03-06 14:29:13.
   </div>
 
   <!-- Search related scripts needs to be loaded at the end of HTML 

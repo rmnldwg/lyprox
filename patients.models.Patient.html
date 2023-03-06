@@ -7,7 +7,7 @@
   <head>
     
     <title>patients.models.Patient</title>
-    <meta name="generator" content="pydoctor 22.5.1"> 
+    <meta name="generator" content="pydoctor 22.9.1"> 
         
     </meta>
     <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
@@ -243,8 +243,31 @@
     </li>
 </ul> 
 
+        <div class="childrenKindTitle">Inherited Methods</div>
+        <ul>
+    
+    <li class="">
         
-         
+        
+        
+
+        
+            <div class="itemName"><code><a href="patients.mixins.LockedDatasetMixin.html#delete" class="internal-link" title="patients.mixins.LockedDatasetMixin.delete">delete</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="patients.mixins.LockedDatasetMixin.html#save" class="internal-link" title="patients.mixins.LockedDatasetMixin.save">save</a></code>
+            </div>
+        
+
+    </li>
+</ul> 
 
         <div class="childrenKindTitle">Attributes</div>
         <ul>
@@ -382,8 +405,21 @@
     </li>
 </ul> 
 
+        <div class="childrenKindTitle">Inherited Attributes</div>
+        <ul>
+    
+    <li class="private">
         
-         
+        
+        
+
+        
+            <div class="itemName"><code><a href="patients.mixins.LockedDatasetMixin.html#_must_raise" class="internal-link" title="patients.mixins.LockedDatasetMixin._must_raise">_must<wbr></wbr>_raise</a></code>
+            </div>
+        
+
+    </li>
+</ul> 
         
       </div>
   </div><div>
@@ -422,16 +458,6 @@
             </div>
         
 
-    </li><li class="">
-        
-        
-        
-
-        
-            <div class="itemName"><code><a href="patients.models.LockedDatasetError.html" class="internal-link" title="patients.models.LockedDatasetError"><wbr></wbr>Locked<wbr></wbr>Dataset<wbr></wbr>Error</a></code>
-            </div>
-        
-
     </li><li class=" thisobject">
         
         
@@ -449,6 +475,16 @@
 
         
             <div class="itemName"><code><a href="patients.models.Tumor.html" class="internal-link" title="patients.models.Tumor"><wbr></wbr>Tumor</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="patients.models.LockedDatasetError.html" class="internal-link" title="patients.models.LockedDatasetError"><wbr></wbr>Locked<wbr></wbr>Dataset<wbr></wbr>Error</a></code>
             </div>
         
 
@@ -669,6 +705,30 @@ and the lymphatic progression pattern of that patient in the form of a
   </tr>
 </table>
           
+            <p class="inheritedFrom">
+              Inherited from <code><a href="patients.mixins.LockedDatasetMixin.html" class="internal-link" title="patients.mixins.LockedDatasetMixin">LockedDatasetMixin</a></code>:
+            </p>
+            <table class="children sortable" id="id29">
+  
+  
+  <tr class="basemethod">
+    
+    <td>Method</td>
+    <td><code><a href="patients.mixins.LockedDatasetMixin.html#delete" class="internal-link" title="patients.mixins.LockedDatasetMixin.delete">delete</a></code></td>
+    <td>Raise <code><a href="patients.models.LockedDatasetError.html" class="internal-link" title="patients.models.LockedDatasetError">LockedDatasetError</a></code> befor deleting if associated dataset is locked.</td>
+  </tr><tr class="basemethod">
+    
+    <td>Method</td>
+    <td><code><a href="patients.mixins.LockedDatasetMixin.html#save" class="internal-link" title="patients.mixins.LockedDatasetMixin.save">save</a></code></td>
+    <td>Raise <code><a href="patients.models.LockedDatasetError.html" class="internal-link" title="patients.models.LockedDatasetError">LockedDatasetError</a></code> before saving if associated dataset is locked.</td>
+  </tr><tr class="baseproperty private">
+    
+    <td>Property</td>
+    <td><code><a href="patients.mixins.LockedDatasetMixin.html#_must_raise" class="internal-link" title="patients.mixins.LockedDatasetMixin._must_raise">_must<wbr></wbr>_raise</a></code></td>
+    <td>Infer from class if an error should be raised on save/delete.</td>
+  </tr>
+</table>
+            
 
             
         </div>
@@ -687,9 +747,13 @@ and the lymphatic progression pattern of that patient in the form of a
     
     <span class="py-keyword">def</span> <span class="py-defname">__str__</span>(self):
     
+    <a class="headerLink" href="#__str__" title="patients.models.Patient.__str__">
+      
+      
+      ¶
+    </a>
   </div>
   <div class="docstring functionBody">
-    
     
     <div><p>Report some patient specifics.</p>
 </div>
@@ -707,9 +771,13 @@ and the lymphatic progression pattern of that patient in the form of a
     
     <span class="py-keyword">def</span> <span class="py-defname">get_absolute_url</span>(self):
     
+    <a class="headerLink" href="#get_absolute_url" title="patients.models.Patient.get_absolute_url">
+      
+      
+      ¶
+    </a>
   </div>
   <div class="docstring functionBody">
-    
     
     <div><p>Return the absolute URL for a particular patient.</p>
 </div>
@@ -727,9 +795,13 @@ and the lymphatic progression pattern of that patient in the form of a
     
     <span class="py-keyword">def</span> <span class="py-defname">get_diagnoses</span>(self):
     
+    <a class="headerLink" href="#get_diagnoses" title="patients.models.Patient.get_diagnoses">
+      
+      
+      ¶
+    </a>
   </div>
   <div class="docstring functionBody">
-    
     
     <div><p>Return the LNL diagnose(s) of the patient.</p>
 </div>
@@ -747,9 +819,13 @@ and the lymphatic progression pattern of that patient in the form of a
     
     <span class="py-keyword">def</span> <span class="py-defname">get_tumors</span>(self):
     
+    <a class="headerLink" href="#get_tumors" title="patients.models.Patient.get_tumors">
+      
+      
+      ¶
+    </a>
   </div>
   <div class="docstring functionBody">
-    
     
     <div><p>Return the primary tumor(s) of that patient.</p>
 </div>
@@ -767,9 +843,13 @@ and the lymphatic progression pattern of that patient in the form of a
     
     <span class="py-keyword">def</span> <span class="py-defname">update_t_stage</span>(self):
     
+    <a class="headerLink" href="#update_t_stage" title="patients.models.Patient.update_t_stage">
+      
+      
+      ¶
+    </a>
   </div>
   <div class="docstring functionBody">
-    
     
     <div><p>Update T-stage after new <code><a href="patients.models.Tumor.html" class="internal-link" title="patients.models.Tumor">Tumor</a></code> is added to <code><a href="patients.models.Patient.html" class="internal-link" title="patients.models.Patient">Patient</a></code>
 (gets called in <code><a href="patients.models.Tumor.html#save" class="internal-link" title="patients.models.Tumor.save">Tumor.save</a></code> method). Also updates the patient's
@@ -789,9 +869,13 @@ stage prefix to that of the tumor with the highest T-category.</p>
     
     <span class="py-defname">age</span> =
     
+    <a class="headerLink" href="#age" title="patients.models.Patient.age">
+      
+      
+      ¶
+    </a>
   </div>
   <div class="functionBody">
-    
     
     <div><p class="undocumented">Undocumented</p></div>
     
@@ -809,9 +893,13 @@ stage prefix to that of the tumor with the highest T-category.</p>
     
     <span class="py-defname">alcohol_abuse</span> =
     
+    <a class="headerLink" href="#alcohol_abuse" title="patients.models.Patient.alcohol_abuse">
+      
+      
+      ¶
+    </a>
   </div>
   <div class="functionBody">
-    
     
     <div><p>Was the patient a drinker?</p>
 </div>
@@ -830,9 +918,13 @@ stage prefix to that of the tumor with the highest T-category.</p>
     
     <span class="py-defname">dataset</span> =
     
+    <a class="headerLink" href="#dataset" title="patients.models.Patient.dataset">
+      
+      
+      ¶
+    </a>
   </div>
   <div class="functionBody">
-    
     
     <div><p>Every patient must belong to a dataset entry that manages importing, exporting
 as well as preventing edits that compromise the integrity of the dataset.</p>
@@ -852,9 +944,13 @@ as well as preventing edits that compromise the integrity of the dataset.</p>
     
     <span class="py-defname">diagnose_date</span> =
     
+    <a class="headerLink" href="#diagnose_date" title="patients.models.Patient.diagnose_date">
+      
+      
+      ¶
+    </a>
   </div>
   <div class="functionBody">
-    
     
     <div><p>Date of histological confirmation with a squamous cell carcinoma.</p>
 </div>
@@ -873,9 +969,13 @@ as well as preventing edits that compromise the integrity of the dataset.</p>
     
     <span class="py-defname">hpv_status</span> =
     
+    <a class="headerLink" href="#hpv_status" title="patients.models.Patient.hpv_status">
+      
+      
+      ¶
+    </a>
   </div>
   <div class="functionBody">
-    
     
     <div><p>Was the patient HPV positive (<tt class="rst-docutils literal">True</tt>) or negative (<tt class="rst-docutils literal">False</tt>)?</p>
 </div>
@@ -894,9 +994,13 @@ as well as preventing edits that compromise the integrity of the dataset.</p>
     
     <span class="py-defname">m_stage</span> =
     
+    <a class="headerLink" href="#m_stage" title="patients.models.Patient.m_stage">
+      
+      
+      ¶
+    </a>
   </div>
   <div class="functionBody">
-    
     
     <div><p>Indicates whether or not there are distant metastases.</p>
 </div>
@@ -915,9 +1019,13 @@ as well as preventing edits that compromise the integrity of the dataset.</p>
     
     <span class="py-defname">n_stage</span> =
     
+    <a class="headerLink" href="#n_stage" title="patients.models.Patient.n_stage">
+      
+      
+      ¶
+    </a>
   </div>
   <div class="functionBody">
-    
     
     <div><p>Categorizes the extend of regional metastases.</p>
 </div>
@@ -936,9 +1044,13 @@ as well as preventing edits that compromise the integrity of the dataset.</p>
     
     <span class="py-defname">neck_dissection</span> =
     
+    <a class="headerLink" href="#neck_dissection" title="patients.models.Patient.neck_dissection">
+      
+      
+      ¶
+    </a>
   </div>
   <div class="functionBody">
-    
     
     <div><p>Did the patient undergo (radical) neck dissection?</p>
 </div>
@@ -957,9 +1069,13 @@ as well as preventing edits that compromise the integrity of the dataset.</p>
     
     <span class="py-defname">nicotine_abuse</span> =
     
+    <a class="headerLink" href="#nicotine_abuse" title="patients.models.Patient.nicotine_abuse">
+      
+      
+      ¶
+    </a>
   </div>
   <div class="functionBody">
-    
     
     <div><p>Was the patient a smoker</p>
 </div>
@@ -978,9 +1094,13 @@ as well as preventing edits that compromise the integrity of the dataset.</p>
     
     <span class="py-defname">sex</span> =
     
+    <a class="headerLink" href="#sex" title="patients.models.Patient.sex">
+      
+      
+      ¶
+    </a>
   </div>
   <div class="functionBody">
-    
     
     <div><p class="undocumented">Undocumented</p></div>
     
@@ -998,9 +1118,13 @@ as well as preventing edits that compromise the integrity of the dataset.</p>
     
     <span class="py-defname">tnm_edition</span> =
     
+    <a class="headerLink" href="#tnm_edition" title="patients.models.Patient.tnm_edition">
+      
+      
+      ¶
+    </a>
   </div>
   <div class="functionBody">
-    
     
     <div><p>The edition of the TNM staging system that was used.</p>
 </div>
@@ -1019,9 +1143,13 @@ as well as preventing edits that compromise the integrity of the dataset.</p>
     
     <span class="py-defname">stage_prefix</span> =
     
+    <a class="headerLink" href="#stage_prefix" title="patients.models.Patient.stage_prefix">
+      
+      
+      ¶
+    </a>
   </div>
   <div class="functionBody">
-    
     
     <div><p>'c' for 'clinical' and 'p' for 'pathological'.</p>
 </div>
@@ -1040,9 +1168,13 @@ as well as preventing edits that compromise the integrity of the dataset.</p>
     
     <span class="py-defname">t_stage</span> =
     
+    <a class="headerLink" href="#t_stage" title="patients.models.Patient.t_stage">
+      
+      
+      ¶
+    </a>
   </div>
   <div class="functionBody">
-    
     
     <div><p>Stage of the primary tumor. Categorized the tumor by size and
 infiltration of tissue types.</p>
@@ -1061,7 +1193,7 @@ infiltration of tissue types.</p>
   <div class="container">
     <a href="index.html">API Documentation</a> for LyProX,
   generated by <a href="https://github.com/twisted/pydoctor/">pydoctor</a>
-    22.5.1 at 2022-07-05 15:36:34.
+    22.9.1 at 2023-03-06 14:29:13.
   </div>
 
   <!-- Search related scripts needs to be loaded at the end of HTML 

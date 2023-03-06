@@ -7,7 +7,7 @@
   <head>
     
     <title>dashboard.views</title>
-    <meta name="generator" content="pydoctor 22.5.1"> 
+    <meta name="generator" content="pydoctor 22.9.1"> 
         
     </meta>
     <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
@@ -176,7 +176,27 @@
         
 
         
+            <div class="itemName"><code><a href="#dashboard_AJAX_view" class="internal-link" title="dashboard.views.dashboard_AJAX_view">dashboard_<wbr></wbr>AJAX_view</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
             <div class="itemName"><code><a href="#help_view" class="internal-link" title="dashboard.views.help_view">help<wbr></wbr>_view</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="#transform_np_to_lists" class="internal-link" title="dashboard.views.transform_np_to_lists">transform<wbr></wbr>_np<wbr></wbr>_to<wbr></wbr>_lists</a></code>
             </div>
         
 
@@ -186,8 +206,21 @@
         
          
 
+        <div class="childrenKindTitle">Variables</div>
+        <ul>
+    
+    <li class="">
         
-         
+        
+        
+
+        
+            <div class="itemName"><code><a href="#logger" class="internal-link" title="dashboard.views.logger">logger</a></code>
+            </div>
+        
+
+    </li>
+</ul> 
 
         
          
@@ -308,7 +341,7 @@ the context variable that is rendered into the HTML response.</p>
         </div>
 
         <div id="splitTables">
-          <table class="children sortable" id="id64">
+          <table class="children sortable" id="id67">
   
   
   <tr class="class">
@@ -319,8 +352,23 @@ the context variable that is rendered into the HTML response.</p>
   </tr><tr class="function">
     
     <td>Function</td>
+    <td><code><a href="#dashboard_AJAX_view" class="internal-link" title="dashboard.views.dashboard_AJAX_view">dashboard_<wbr></wbr>AJAX_view</a></code></td>
+    <td>View that receives JSON data from the AJAX request and cleans it using the same method as the class-based <tt class="rst-docutils literal">DashboardView</tt>.</td>
+  </tr><tr class="function">
+    
+    <td>Function</td>
     <td><code><a href="#help_view" class="internal-link" title="dashboard.views.help_view">help<wbr></wbr>_view</a></code></td>
     <td>Simply display the dashboard help text.</td>
+  </tr><tr class="function">
+    
+    <td>Function</td>
+    <td><code><a href="#transform_np_to_lists" class="internal-link" title="dashboard.views.transform_np_to_lists">transform<wbr></wbr>_np<wbr></wbr>_to<wbr></wbr>_lists</a></code></td>
+    <td>If <tt class="rst-docutils literal">stats</tt> contains any values that are of type <tt class="rst-docutils literal">np.ndarray</tt>, then they are converted to normal lists.</td>
+  </tr><tr class="variable">
+    
+    <td>Variable</td>
+    <td><code><a href="#logger" class="internal-link" title="dashboard.views.logger">logger</a></code></td>
+    <td><span class="undocumented">Undocumented</span></td>
   </tr>
 </table>
           
@@ -330,6 +378,31 @@ the context variable that is rendered into the HTML response.</p>
 
         <div id="childList">
           <div class="basefunction">
+  
+  
+  <a name="dashboard.views.dashboard_AJAX_view">
+    
+  </a>
+  <a name="dashboard_AJAX_view">
+    
+  </a>
+  <div class="functionHeader">
+    
+    <span class="py-keyword">def</span> <span class="py-defname">dashboard_AJAX_view</span>(request):
+    
+    <a class="headerLink" href="#dashboard_AJAX_view" title="dashboard.views.dashboard_AJAX_view">
+      
+      
+      ¶
+    </a>
+  </div>
+  <div class="docstring functionBody">
+    
+    <div><p>View that receives JSON data from the AJAX request and cleans it using the
+same method as the class-based <tt class="rst-docutils literal">DashboardView</tt>.</p>
+</div>
+  </div>
+</div><div class="basefunction">
   
   
   <a name="dashboard.views.help_view">
@@ -342,12 +415,65 @@ the context variable that is rendered into the HTML response.</p>
     
     <span class="py-keyword">def</span> <span class="py-defname">help_view</span>(request):
     
+    <a class="headerLink" href="#help_view" title="dashboard.views.help_view">
+      
+      
+      ¶
+    </a>
   </div>
   <div class="docstring functionBody">
     
-    
     <div><p>Simply display the dashboard help text.</p>
 <table class="fieldTable"><tr class="fieldStart"><td class="fieldName" colspan="2">Returns</td></tr><tr><td class="fieldArgContainer"><code>HttpResponse</code></td><td class="fieldArgDesc"><span class="undocumented">Undocumented</span></td></tr></table></div>
+  </div>
+</div><div class="basefunction">
+  
+  
+  <a name="dashboard.views.transform_np_to_lists">
+    
+  </a>
+  <a name="transform_np_to_lists">
+    
+  </a>
+  <div class="functionHeader">
+    
+    <span class="py-keyword">def</span> <span class="py-defname">transform_np_to_lists</span>(stats):
+    
+    <a class="headerLink" href="#transform_np_to_lists" title="dashboard.views.transform_np_to_lists">
+      
+      
+      ¶
+    </a>
+  </div>
+  <div class="docstring functionBody">
+    
+    <div><p>If <tt class="rst-docutils literal">stats</tt> contains any values that are of type <tt class="rst-docutils literal">np.ndarray</tt>, then they are
+converted to normal lists.</p>
+<table class="fieldTable"><tr class="fieldStart"><td class="fieldName" colspan="2">Parameters</td></tr><tr><td class="fieldArgContainer"><span class="fieldArg">stats:</span><code>Dict[<wbr></wbr>str, <wbr></wbr>Any]</code></td><td class="fieldArgDesc"><span class="undocumented">Undocumented</span></td></tr><tr class="fieldStart"><td class="fieldName" colspan="2">Returns</td></tr><tr><td class="fieldArgContainer"><code>Dict[<wbr></wbr>str, <wbr></wbr>Any]</code></td><td class="fieldArgDesc"><span class="undocumented">Undocumented</span></td></tr></table></div>
+  </div>
+</div><div class="basevariable">
+  
+  
+  <a name="dashboard.views.logger">
+    
+  </a>
+  <a name="logger">
+    
+  </a>
+  <div class="functionHeader">
+    
+    <span class="py-defname">logger</span> =
+    
+    <a class="headerLink" href="#logger" title="dashboard.views.logger">
+      
+      
+      ¶
+    </a>
+  </div>
+  <div class="functionBody">
+    
+    <div><p class="undocumented">Undocumented</p></div>
+    
   </div>
 </div>
         </div>
@@ -361,7 +487,7 @@ the context variable that is rendered into the HTML response.</p>
   <div class="container">
     <a href="index.html">API Documentation</a> for LyProX,
   generated by <a href="https://github.com/twisted/pydoctor/">pydoctor</a>
-    22.5.1 at 2022-07-05 15:36:34.
+    22.9.1 at 2023-03-06 14:29:13.
   </div>
 
   <!-- Search related scripts needs to be loaded at the end of HTML 

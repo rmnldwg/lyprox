@@ -7,7 +7,7 @@
   <head>
     
     <title>patients.fields</title>
-    <meta name="generator" content="pydoctor 22.5.1"> 
+    <meta name="generator" content="pydoctor 22.9.1"> 
         
     </meta>
     <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
@@ -160,26 +160,6 @@
         
 
         
-            <div class="itemName"><code><a href="patients.fields.CorruptedFileError.html" class="internal-link" title="patients.fields.CorruptedFileError"><wbr></wbr>Corrupted<wbr></wbr>File<wbr></wbr>Error</a></code>
-            </div>
-        
-
-    </li><li class="">
-        
-        
-        
-
-        
-            <div class="itemName"><code><a href="patients.fields.DuplicateFileError.html" class="internal-link" title="patients.fields.DuplicateFileError"><wbr></wbr>Duplicate<wbr></wbr>File<wbr></wbr>Error</a></code>
-            </div>
-        
-
-    </li><li class="">
-        
-        
-        
-
-        
             <div class="itemName"><code><a href="patients.fields.FieldFileWithHash.html" class="internal-link" title="patients.fields.FieldFileWithHash"><wbr></wbr>Field<wbr></wbr>File<wbr></wbr>With<wbr></wbr>Hash</a></code>
             </div>
         
@@ -201,6 +181,26 @@
 
         
             <div class="itemName"><code><a href="patients.fields.RobustDateField.html" class="internal-link" title="patients.fields.RobustDateField"><wbr></wbr>Robust<wbr></wbr>Date<wbr></wbr>Field</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="patients.fields.CorruptedFileError.html" class="internal-link" title="patients.fields.CorruptedFileError"><wbr></wbr>Corrupted<wbr></wbr>File<wbr></wbr>Error</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="patients.fields.DuplicateFileError.html" class="internal-link" title="patients.fields.DuplicateFileError"><wbr></wbr>Duplicate<wbr></wbr>File<wbr></wbr>Error</a></code>
             </div>
         
 
@@ -411,16 +411,6 @@ model fields.</p>
   <tr class="class">
     
     <td>Class</td>
-    <td><code><a href="patients.fields.CorruptedFileError.html" class="internal-link" title="patients.fields.CorruptedFileError"><wbr></wbr>Corrupted<wbr></wbr>File<wbr></wbr>Error</a></code></td>
-    <td>Raised when <code><a href="patients.fields.FieldFileWithHash.html" class="internal-link" title="patients.fields.FieldFileWithHash">FieldFileWithHash</a></code> notices a file has been changed after its hash has been computed and fixed.</td>
-  </tr><tr class="class">
-    
-    <td>Class</td>
-    <td><code><a href="patients.fields.DuplicateFileError.html" class="internal-link" title="patients.fields.DuplicateFileError"><wbr></wbr>Duplicate<wbr></wbr>File<wbr></wbr>Error</a></code></td>
-    <td>Exception raised when e.g. during uploading or saving the <code><a href="patients.models.Dataset.html" class="internal-link" title="patients.models.Dataset">Dataset</a></code> model notices a new file is already stored in one of the other datasets.</td>
-  </tr><tr class="class">
-    
-    <td>Class</td>
     <td><code><a href="patients.fields.FieldFileWithHash.html" class="internal-link" title="patients.fields.FieldFileWithHash"><wbr></wbr>Field<wbr></wbr>File<wbr></wbr>With<wbr></wbr>Hash</a></code></td>
     <td><tt class="rst-docutils literal">FieldFile</tt> that adds an MD5 hash value as the property <code><a href="patients.fields.FieldFileWithHash.html#md5_hash" class="internal-link" title="patients.fields.FieldFileWithHash.md5_hash">md5_hash</a></code> to its defintion which in turn allows me to detect and block changes to the file and/or the dataset using that hash value.</td>
   </tr><tr class="class">
@@ -433,6 +423,16 @@ model fields.</p>
     <td>Class</td>
     <td><code><a href="patients.fields.RobustDateField.html" class="internal-link" title="patients.fields.RobustDateField"><wbr></wbr>Robust<wbr></wbr>Date<wbr></wbr>Field</a></code></td>
     <td>DateField that doesn't raise a ValidationError when the date string isn't formated according to ISO (YYYY-MM-DD)</td>
+  </tr><tr class="exception">
+    
+    <td>Exception</td>
+    <td><code><a href="patients.fields.CorruptedFileError.html" class="internal-link" title="patients.fields.CorruptedFileError"><wbr></wbr>Corrupted<wbr></wbr>File<wbr></wbr>Error</a></code></td>
+    <td>Raised when <code><a href="patients.fields.FieldFileWithHash.html" class="internal-link" title="patients.fields.FieldFileWithHash">FieldFileWithHash</a></code> notices a file has been changed after its hash has been computed and fixed.</td>
+  </tr><tr class="exception">
+    
+    <td>Exception</td>
+    <td><code><a href="patients.fields.DuplicateFileError.html" class="internal-link" title="patients.fields.DuplicateFileError"><wbr></wbr>Duplicate<wbr></wbr>File<wbr></wbr>Error</a></code></td>
+    <td>Exception raised when e.g. during uploading or saving the <code><a href="patients.models.Dataset.html" class="internal-link" title="patients.models.Dataset">Dataset</a></code> model notices a new file is already stored in one of the other datasets.</td>
   </tr><tr class="variable">
     
     <td>Variable</td>
@@ -459,9 +459,13 @@ model fields.</p>
     
     <span class="py-defname">logger</span> =
     
+    <a class="headerLink" href="#logger" title="patients.fields.logger">
+      
+      
+      ¶
+    </a>
   </div>
   <div class="functionBody">
-    
     
     <div><p class="undocumented">Undocumented</p></div>
     
@@ -478,7 +482,7 @@ model fields.</p>
   <div class="container">
     <a href="index.html">API Documentation</a> for LyProX,
   generated by <a href="https://github.com/twisted/pydoctor/">pydoctor</a>
-    22.5.1 at 2022-07-05 15:36:34.
+    22.9.1 at 2023-03-06 14:29:13.
   </div>
 
   <!-- Search related scripts needs to be loaded at the end of HTML 

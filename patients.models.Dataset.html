@@ -7,7 +7,7 @@
   <head>
     
     <title>patients.models.Dataset</title>
-    <meta name="generator" content="pydoctor 22.5.1"> 
+    <meta name="generator" content="pydoctor 22.9.1"> 
         
     </meta>
     <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
@@ -425,16 +425,6 @@
         
 
         
-            <div class="itemName"><code><a href="patients.models.LockedDatasetError.html" class="internal-link" title="patients.models.LockedDatasetError"><wbr></wbr>Locked<wbr></wbr>Dataset<wbr></wbr>Error</a></code>
-            </div>
-        
-
-    </li><li class="">
-        
-        
-        
-
-        
             <div class="itemName"><code><a href="patients.models.Patient.html" class="internal-link" title="patients.models.Patient"><wbr></wbr>Patient</a></code>
             </div>
         
@@ -446,6 +436,16 @@
 
         
             <div class="itemName"><code><a href="patients.models.Tumor.html" class="internal-link" title="patients.models.Tumor"><wbr></wbr>Tumor</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="patients.models.LockedDatasetError.html" class="internal-link" title="patients.models.LockedDatasetError"><wbr></wbr>Locked<wbr></wbr>Dataset<wbr></wbr>Error</a></code>
             </div>
         
 
@@ -686,9 +686,13 @@ patients of a dataset to a CSV file.</p>
     
     <span class="py-keyword">def</span> <span class="py-defname">__str__</span>(self):
     
+    <a class="headerLink" href="#__str__" title="patients.models.Dataset.__str__">
+      
+      
+      ¶
+    </a>
   </div>
   <div class="docstring functionBody">
-    
     
     <div><p class="undocumented">Undocumented</p><table class="fieldTable"><tr class="fieldStart"><td class="fieldName" colspan="2">Returns</td></tr><tr><td class="fieldArgContainer"><code>str</code></td><td class="fieldArgDesc"><span class="undocumented">Undocumented</span></td></tr></table></div>
   </div>
@@ -705,10 +709,14 @@ patients of a dataset to a CSV file.</p>
     
     <span class="py-keyword">def</span> <span class="py-defname">delete</span>(self, *args, override=False, **kwargs):
     
+    <a class="headerLink" href="#delete" title="patients.models.Dataset.delete">
+      
+      
+      ¶
+    </a>
   </div>
   <div class="docstring functionBody">
     <div class="interfaceinfo">overrides <code><a href="core.loggers.ModelLoggerMixin.html#delete" class="internal-link">core.loggers.ModelLoggerMixin.delete</a></code></div>
-    
     <div><p>Block deletion if dataset is locked. Unless the red override is pushed.</p>
 </div>
   </div>
@@ -725,9 +733,13 @@ patients of a dataset to a CSV file.</p>
     
     <span class="py-keyword">def</span> <span class="py-defname">export_db_to_csv</span>(self, is_locked_ok=True):
     
+    <a class="headerLink" href="#export_db_to_csv" title="patients.models.Dataset.export_db_to_csv">
+      
+      
+      ¶
+    </a>
   </div>
   <div class="docstring functionBody">
-    
     
     <div><p>First, call the <code><a href="#get_pandas_from_db" class="internal-link" title="patients.models.Dataset.get_pandas_from_db">get_pandas_from_db</a></code> method to get a <code>pandas.DataFrame</code> of
 patients from the database. Then, save that table in the form of a CSV file
@@ -751,9 +763,13 @@ unless <code>is_locked_ok</code> is set to <tt class="rst-docutils literal">True
     
     <span class="py-keyword">def</span> <span class="py-defname">get_pandas_from_csv</span>(self):
     
+    <a class="headerLink" href="#get_pandas_from_csv" title="patients.models.Dataset.get_pandas_from_csv">
+      
+      
+      ¶
+    </a>
   </div>
   <div class="docstring functionBody">
-    
     
     <div><p>Simply extract a <code>pandas.DataFrame</code> from an uploaded CSV.</p>
 </div>
@@ -771,9 +787,13 @@ unless <code>is_locked_ok</code> is set to <tt class="rst-docutils literal">True
     
     <span class="py-keyword">def</span> <span class="py-defname">get_pandas_from_db</span>(self):
     
+    <a class="headerLink" href="#get_pandas_from_db" title="patients.models.Dataset.get_pandas_from_db">
+      
+      
+      ¶
+    </a>
   </div>
   <div class="docstring functionBody">
-    
     
     <div><p>Generate a <code>pandas.DataFrame</code> for all patients associated with this dataset
 using the <code><a href="patients.ioports.html" class="internal-link" title="patients.ioports">ioports</a></code> module and then return that.</p>
@@ -792,9 +812,13 @@ using the <code><a href="patients.ioports.html" class="internal-link" title="pat
     
     <span class="py-keyword">def</span> <span class="py-defname">import_upload_csv_to_db</span>(self):
     
+    <a class="headerLink" href="#import_upload_csv_to_db" title="patients.models.Dataset.import_upload_csv_to_db">
+      
+      
+      ¶
+    </a>
   </div>
   <div class="docstring functionBody">
-    
     
     <div><p>Import an uploaded CSV into the database using the <code><a href="patients.ioports.html" class="internal-link" title="patients.ioports">ioports</a></code> module. Lock the
 dataset right afterwards to prevent editing the uploaded patients.</p>
@@ -813,9 +837,13 @@ dataset right afterwards to prevent editing the uploaded patients.</p>
     
     <span class="py-keyword">def</span> <span class="py-defname">lock</span>(self):
     
+    <a class="headerLink" href="#lock" title="patients.models.Dataset.lock">
+      
+      
+      ¶
+    </a>
   </div>
   <div class="docstring functionBody">
-    
     
     <div><p>Set the field <code><a href="#is_locked" class="internal-link" title="patients.models.Dataset.is_locked">is_locked</a></code> to <tt class="rst-docutils literal">True</tt></p>
 </div>
@@ -833,10 +861,14 @@ dataset right afterwards to prevent editing the uploaded patients.</p>
     
     <span class="py-keyword">def</span> <span class="py-defname">save</span>(self, *args, override=False, **kwargs):
     
+    <a class="headerLink" href="#save" title="patients.models.Dataset.save">
+      
+      
+      ¶
+    </a>
   </div>
   <div class="docstring functionBody">
     <div class="interfaceinfo">overrides <code><a href="core.loggers.ModelLoggerMixin.html#save" class="internal-link">core.loggers.ModelLoggerMixin.save</a></code></div>
-    
     <div><p>Add uniqueness checks to save method, as well as blocking any changes when
 the dataset is locked (and <code>override</code> is not set to <tt class="rst-docutils literal">True</tt>).</p>
 </div>
@@ -854,9 +886,13 @@ the dataset is locked (and <code>override</code> is not set to <tt class="rst-do
     
     <span class="py-keyword">def</span> <span class="py-defname">unlock</span>(self):
     
+    <a class="headerLink" href="#unlock" title="patients.models.Dataset.unlock">
+      
+      
+      ¶
+    </a>
   </div>
   <div class="docstring functionBody">
-    
     
     <div><p>Set <code><a href="#is_locked" class="internal-link" title="patients.models.Dataset.is_locked">is_locked</a></code> to <tt class="rst-docutils literal">False</tt>, allowing the dataset and its patients to be
 edited again.</p>
@@ -875,9 +911,13 @@ edited again.</p>
     
     <span class="py-keyword">def</span> <span class="py-defname">validate_unique</span>(self, exclude=None):
     
+    <a class="headerLink" href="#validate_unique" title="patients.models.Dataset.validate_unique">
+      
+      
+      ¶
+    </a>
   </div>
   <div class="docstring functionBody">
-    
     
     <div><p>Validate uniqueness of the uploaded CSV file.</p>
 </div>
@@ -895,9 +935,13 @@ edited again.</p>
     
     <span class="py-defname">create_date</span> =
     
+    <a class="headerLink" href="#create_date" title="patients.models.Dataset.create_date">
+      
+      
+      ¶
+    </a>
   </div>
   <div class="functionBody">
-    
     
     <div><p>Date when the dataset was uploaded.</p>
 </div>
@@ -916,9 +960,13 @@ edited again.</p>
     
     <span class="py-defname">description</span> =
     
+    <a class="headerLink" href="#description" title="patients.models.Dataset.description">
+      
+      
+      ¶
+    </a>
   </div>
   <div class="functionBody">
-    
     
     <div><p>A brief description of the dataset.</p>
 </div>
@@ -937,9 +985,13 @@ edited again.</p>
     
     <span class="py-defname">export_csv</span> =
     
+    <a class="headerLink" href="#export_csv" title="patients.models.Dataset.export_csv">
+      
+      
+      ¶
+    </a>
   </div>
   <div class="functionBody">
-    
     
     <div><p>The custom <tt class="rst-docutils literal">FileField</tt> that holds the exported CSV file.</p>
 </div>
@@ -958,9 +1010,13 @@ edited again.</p>
     
     <span class="py-defname">institution</span> =
     
+    <a class="headerLink" href="#institution" title="patients.models.Dataset.institution">
+      
+      
+      ¶
+    </a>
   </div>
   <div class="functionBody">
-    
     
     <div><p>The clinic or research institute that collected and uploaded the patients.</p>
 </div>
@@ -979,9 +1035,13 @@ edited again.</p>
     
     <span class="py-defname">is_public</span> =
     
+    <a class="headerLink" href="#is_public" title="patients.models.Dataset.is_public">
+      
+      
+      ¶
+    </a>
   </div>
   <div class="functionBody">
-    
     
     <div><p>Should this dataset be visible to non-authenticated users?</p>
 </div>
@@ -1000,9 +1060,13 @@ edited again.</p>
     
     <span class="py-defname">name</span> =
     
+    <a class="headerLink" href="#name" title="patients.models.Dataset.name">
+      
+      
+      ¶
+    </a>
   </div>
   <div class="functionBody">
-    
     
     <div><p>The name of the dataset. Should not include any dates or the institution.</p>
 </div>
@@ -1021,9 +1085,13 @@ edited again.</p>
     
     <span class="py-defname">repo_data_url</span> =
     
+    <a class="headerLink" href="#repo_data_url" title="patients.models.Dataset.repo_data_url">
+      
+      
+      ¶
+    </a>
   </div>
   <div class="functionBody">
-    
     
     <div><p>(Optional) link to the repository's downloads page for the uploaded data. Note
 that it is not checked whether the data behind this URL actually matches the
@@ -1044,9 +1112,13 @@ uploaded data or not.</p>
     
     <span class="py-defname">repo_provider</span> =
     
+    <a class="headerLink" href="#repo_provider" title="patients.models.Dataset.repo_provider">
+      
+      
+      ¶
+    </a>
   </div>
   <div class="functionBody">
-    
     
     <div><p>(Optional) name of the repository provider from where the data for the upload
 came from. This could e.g. be 'GitHub' or 'Zenodo'.</p>
@@ -1066,9 +1138,13 @@ came from. This could e.g. be 'GitHub' or 'Zenodo'.</p>
     
     <span class="py-defname">upload_csv</span> =
     
+    <a class="headerLink" href="#upload_csv" title="patients.models.Dataset.upload_csv">
+      
+      
+      ¶
+    </a>
   </div>
   <div class="functionBody">
-    
     
     <div><p>The custom <tt class="rst-docutils literal">FileField</tt> that holds the uploaded CSV file.</p>
 </div>
@@ -1087,9 +1163,13 @@ came from. This could e.g. be 'GitHub' or 'Zenodo'.</p>
     
     <span class="py-defname">is_locked</span>: <code>bool</code> =
     
+    <a class="headerLink" href="#is_locked" title="patients.models.Dataset.is_locked">
+      
+      
+      ¶
+    </a>
   </div>
   <div class="functionBody">
-    
     
     <div><p>This indicates that one is done adding patients to this dataset and it should
 be prohibited to change the dataset or any of its associated entries when this is
@@ -1110,9 +1190,13 @@ set to <tt class="rst-docutils literal">True</tt>.</p>
     
     <span class="py-keyword">def</span> <span class="py-defname">_validate_unique</span>(self, fieldname, do_delete=False, do_warn=True, do_raise=True):
     
+    <a class="headerLink" href="#_validate_unique" title="patients.models.Dataset._validate_unique">
+      
+      
+      ¶
+    </a>
   </div>
   <div class="docstring functionBody">
-    
     
     <div><p>Make sure no other <code><a href="patients.models.Dataset.html" class="internal-link" title="patients.models.Dataset">Dataset</a></code> holds the same file in one of their <tt class="rst-docutils literal">FileFields</tt>
 or the uploaded file is already stored on disk.</p>
@@ -1134,7 +1218,7 @@ logger) when a duplicate was found and with <code>do_raise</code> whether a
   <div class="container">
     <a href="index.html">API Documentation</a> for LyProX,
   generated by <a href="https://github.com/twisted/pydoctor/">pydoctor</a>
-    22.5.1 at 2022-07-05 15:36:34.
+    22.9.1 at 2023-03-06 14:29:13.
   </div>
 
   <!-- Search related scripts needs to be loaded at the end of HTML 

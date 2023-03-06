@@ -7,7 +7,7 @@
   <head>
     
     <title>patients.ioports</title>
-    <meta name="generator" content="pydoctor 22.5.1"> 
+    <meta name="generator" content="pydoctor 22.9.1"> 
         
     </meta>
     <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
@@ -451,9 +451,9 @@ patterns of progression into and from the Django database.</p>
           <table class="children sortable" id="id22">
   
   
-  <tr class="class">
+  <tr class="exception">
     
-    <td>Class</td>
+    <td>Exception</td>
     <td><code><a href="patients.ioports.ParsingError.html" class="internal-link" title="patients.ioports.ParsingError"><wbr></wbr>Parsing<wbr></wbr>Error</a></code></td>
     <td>Exception raised when the parsing of an uploaded CSV fails due to missing data columns.</td>
   </tr><tr class="function">
@@ -522,9 +522,13 @@ patterns of progression into and from the Django database.</p>
     
     <span class="py-keyword">def</span> <span class="py-defname">compute_hash</span>(*args):
     
+    <a class="headerLink" href="#compute_hash" title="patients.ioports.compute_hash">
+      
+      
+      ¶
+    </a>
   </div>
   <div class="docstring functionBody">
-    
     
     <div><p>Compute a hash vlaue from three patient-specific fields that must be
 removed due for respecting the patient's privacy.</p>
@@ -543,9 +547,13 @@ removed due for respecting the patient's privacy.</p>
     
     <span class="py-keyword">def</span> <span class="py-defname">export_to_pandas</span>(patients):
     
+    <a class="headerLink" href="#export_to_pandas" title="patients.ioports.export_to_pandas">
+      
+      
+      ¶
+    </a>
   </div>
   <div class="docstring functionBody">
-    
     
     <div><p>Export <tt class="rst-docutils literal">QuerySet</tt> of patients into a pandas <tt class="rst-docutils literal">DataFrame</tt> of the same
 format as it is needed for importing.</p>
@@ -564,9 +572,13 @@ format as it is needed for importing.</p>
     
     <span class="py-keyword">def</span> <span class="py-defname">get_model_fields</span>(model, remove=None):
     
+    <a class="headerLink" href="#get_model_fields" title="patients.ioports.get_model_fields">
+      
+      
+      ¶
+    </a>
   </div>
   <div class="docstring functionBody">
-    
     
     <div><p>Get list of names of model fields and remove the ones provided via the
 <tt class="rst-docutils literal">remove</tt> argument.</p>
@@ -585,9 +597,13 @@ format as it is needed for importing.</p>
     
     <span class="py-keyword">def</span> <span class="py-defname">import_from_pandas</span>(data_frame, dataset, anonymize=None):
     
+    <a class="headerLink" href="#import_from_pandas" title="patients.ioports.import_from_pandas">
+      
+      
+      ¶
+    </a>
   </div>
   <div class="docstring functionBody">
-    
     
     <div><p>Import patients from pandas <tt class="rst-docutils literal">DataFrame</tt>.</p>
 <table class="fieldTable"><tr class="fieldStart"><td class="fieldName" colspan="2">Parameters</td></tr><tr><td class="fieldArgContainer"><span class="fieldArg">data<wbr></wbr>_frame:</span><code>pd.DataFrame</code></td><td class="fieldArgDesc"><span class="undocumented">Undocumented</span></td></tr><tr><td class="fieldArgContainer"><span class="fieldArg">dataset:</span><code><a href="patients.models.Dataset.html" class="internal-link" title="patients.models.Dataset">models.Dataset</a></code></td><td class="fieldArgDesc"><span class="undocumented">Undocumented</span></td></tr><tr><td class="fieldArgContainer"><span class="fieldArg">anonymize:</span><code>List[<wbr></wbr>str]</code></td><td class="fieldArgDesc"><span class="undocumented">Undocumented</span></td></tr><tr class="fieldStart"><td class="fieldName" colspan="2">Returns</td></tr><tr><td class="fieldArgContainer"><code>Tuple[<wbr></wbr>int]</code></td><td class="fieldArgDesc"><span class="undocumented">Undocumented</span></td></tr></table></div>
@@ -605,9 +621,13 @@ format as it is needed for importing.</p>
     
     <span class="py-keyword">def</span> <span class="py-defname">nan_to_none</span>(sth):
     
+    <a class="headerLink" href="#nan_to_none" title="patients.ioports.nan_to_none">
+      
+      
+      ¶
+    </a>
   </div>
   <div class="docstring functionBody">
-    
     
     <div><p>Transform NaNs to <tt class="rst-docutils literal">None</tt>.</p>
 </div>
@@ -625,9 +645,13 @@ format as it is needed for importing.</p>
     
     <span class="py-keyword">def</span> <span class="py-defname">row2diagnoses</span>(row, patient):
     
+    <a class="headerLink" href="#row2diagnoses" title="patients.ioports.row2diagnoses">
+      
+      
+      ¶
+    </a>
   </div>
   <div class="docstring functionBody">
-    
     
     <div><p>Create <code><a href="patients.models.Diagnose.html" class="internal-link" title="patients.models.Diagnose">Diagnose</a></code> instances from row of <tt class="rst-docutils literal">DataFrame</tt> and add them to an
 existing <code><a href="patients.models.Patient.html" class="internal-link" title="patients.models.Patient">Patient</a></code> instance.</p>
@@ -646,9 +670,13 @@ existing <code><a href="patients.models.Patient.html" class="internal-link" titl
     
     <span class="py-keyword">def</span> <span class="py-defname">row2patient</span>(row, dataset):
     
+    <a class="headerLink" href="#row2patient" title="patients.ioports.row2patient">
+      
+      
+      ¶
+    </a>
   </div>
   <div class="docstring functionBody">
-    
     
     <div><p>Create a <code><a href="patients.models.Patient.html" class="internal-link" title="patients.models.Patient">Patient</a></code> instance from a row of a <tt class="rst-docutils literal">DataFrame</tt> containing the
 appropriate information, as well as the dataset in which the information was
@@ -668,9 +696,13 @@ uploaded.</p>
     
     <span class="py-keyword">def</span> <span class="py-defname">row2tumors</span>(row, patient):
     
+    <a class="headerLink" href="#row2tumors" title="patients.ioports.row2tumors">
+      
+      
+      ¶
+    </a>
   </div>
   <div class="docstring functionBody">
-    
     
     <div><p>Create <code><a href="patients.models.Tumor.html" class="internal-link" title="patients.models.Tumor">Tumor</a></code> instances from row of a <tt class="rst-docutils literal">DataFrame</tt> and add them to an
 existing <code><a href="patients.models.Patient.html" class="internal-link" title="patients.models.Patient">Patient</a></code> instance.</p>
@@ -689,9 +721,13 @@ existing <code><a href="patients.models.Patient.html" class="internal-link" titl
     
     <span class="py-defname">logger</span> =
     
+    <a class="headerLink" href="#logger" title="patients.ioports.logger">
+      
+      
+      ¶
+    </a>
   </div>
   <div class="functionBody">
-    
     
     <div><p class="undocumented">Undocumented</p></div>
     
@@ -708,7 +744,7 @@ existing <code><a href="patients.models.Patient.html" class="internal-link" titl
   <div class="container">
     <a href="index.html">API Documentation</a> for LyProX,
   generated by <a href="https://github.com/twisted/pydoctor/">pydoctor</a>
-    22.5.1 at 2022-07-05 15:36:34.
+    22.9.1 at 2023-03-06 14:29:13.
   </div>
 
   <!-- Search related scripts needs to be loaded at the end of HTML 

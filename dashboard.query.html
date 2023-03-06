@@ -7,7 +7,7 @@
   <head>
     
     <title>dashboard.query</title>
-    <meta name="generator" content="pydoctor 22.5.1"> 
+    <meta name="generator" content="pydoctor 22.9.1"> 
         
     </meta>
     <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
@@ -396,7 +396,7 @@ with which the HTML response is then populated.</p>
         </div>
 
         <div id="splitTables">
-          <table class="children sortable" id="id62">
+          <table class="children sortable" id="id65">
   
   
   <tr class="function">
@@ -475,9 +475,13 @@ with which the HTML response is then populated.</p>
     
     <span class="py-keyword">def</span> <span class="py-defname">count_patients</span>(patient_queryset, combined_involvement):
     
+    <a class="headerLink" href="#count_patients" title="dashboard.query.count_patients">
+      
+      
+      ¶
+    </a>
   </div>
   <div class="docstring functionBody">
-    
     
     <div><p>Count how often patients have various characteristics like HPV status,
 certain lymph node level involvement, and so on.</p>
@@ -496,9 +500,13 @@ certain lymph node level involvement, and so on.</p>
     
     <span class="py-keyword">def</span> <span class="py-defname">diagnose_specific</span>(patient_queryset=None, **kwargs):
     
+    <a class="headerLink" href="#diagnose_specific" title="dashboard.query.diagnose_specific">
+      
+      
+      ¶
+    </a>
   </div>
   <div class="docstring functionBody">
-    
     
     <div><p>Filter <tt class="rst-docutils literal">QuerySet</tt> of patients by their involvement according to the
 diagnoses.</p>
@@ -524,9 +532,13 @@ modalities - for the filtered patient <tt class="rst-docutils literal">QuerySet<
     @lru_cache<br />
     <span class="py-keyword">def</span> <span class="py-defname">maxllh_consensus</span>(column):
     
+    <a class="headerLink" href="#maxllh_consensus" title="dashboard.query.maxllh_consensus">
+      
+      
+      ¶
+    </a>
   </div>
   <div class="docstring functionBody">
-    
     
     <div><p>Compute the consensus of different diagnostic modalities using their
 respective specificity &amp; sensitivity.</p>
@@ -547,9 +559,13 @@ diagnoses provided.</td></tr></table></div>
     
     <span class="py-keyword">def</span> <span class="py-defname">n_zero_specific</span>(patient_queryset, combined_involvement, n_status=None):
     
+    <a class="headerLink" href="#n_zero_specific" title="dashboard.query.n_zero_specific">
+      
+      
+      ¶
+    </a>
   </div>
   <div class="docstring functionBody">
-    
     
     <div><p>Filter for N+ or N0. <tt class="rst-docutils literal">n_status</tt> is <tt class="rst-docutils literal">True</tt> when we only want to see N+
 patients and <tt class="rst-docutils literal">False</tt> when we only want to see N0 patients.</p>
@@ -568,9 +584,13 @@ patients and <tt class="rst-docutils literal">False</tt> when we only want to se
     
     <span class="py-keyword">def</span> <span class="py-defname">patient_specific</span>(patient_queryset=None, nicotine_abuse=None, hpv_status=None, neck_dissection=None, dataset__in=None, **rest):
     
+    <a class="headerLink" href="#patient_specific" title="dashboard.query.patient_specific">
+      
+      
+      ¶
+    </a>
   </div>
   <div class="docstring functionBody">
-    
     
     <div><p>Filter <tt class="rst-docutils literal">QuerySet</tt> of patients based on patient-specific properties.</p>
 <p>This function is designed in such a way that one can simply add another
@@ -592,9 +612,13 @@ is also a field in the model <code><a href="patients.models.Patient.html" class=
     @lru_cache<br />
     <span class="py-keyword">def</span> <span class="py-defname">rank_consensus</span>(column):
     
+    <a class="headerLink" href="#rank_consensus" title="dashboard.query.rank_consensus">
+      
+      
+      ¶
+    </a>
   </div>
   <div class="docstring functionBody">
-    
     
     <div><p>Compute the consensus of different diagnostic modalities using a ranking
 based on sensitivity &amp; specificity.</p>
@@ -614,9 +638,13 @@ defined in the <code><a href="patients.models.Diagnose.Modalities.html" class="i
     
     <span class="py-keyword">def</span> <span class="py-defname">subsite2arr</span>(subsite):
     
+    <a class="headerLink" href="#subsite2arr" title="dashboard.query.subsite2arr">
+      
+      
+      ¶
+    </a>
   </div>
   <div class="docstring functionBody">
-    
     
     <div><p>Map different subsites to an one-hot-array of subsite groups. E.g., a
 one in the first place means "base of tongue", at the second place is
@@ -636,9 +664,13 @@ one in the first place means "base of tongue", at the second place is
     
     <span class="py-keyword">def</span> <span class="py-defname">tf2arr</span>(value):
     
+    <a class="headerLink" href="#tf2arr" title="dashboard.query.tf2arr">
+      
+      
+      ¶
+    </a>
   </div>
   <div class="docstring functionBody">
-    
     
     <div><p>Map <tt class="rst-docutils literal">True</tt>, <tt class="rst-docutils literal">False</tt> &amp; <tt class="rst-docutils literal">None</tt> to one-hot-arrays of length 3. This
 particular mapping comes from the fact that in the form <tt class="rst-docutils literal">True</tt>, <tt class="rst-docutils literal">None</tt>,
@@ -660,9 +692,13 @@ where -1 is the last item.</p>
     
     <span class="py-keyword">def</span> <span class="py-defname">tumor_specific</span>(patient_queryset=None, subsite__in=None, t_stage__in=None, central=None, extension=None, **rest):
     
+    <a class="headerLink" href="#tumor_specific" title="dashboard.query.tumor_specific">
+      
+      
+      ¶
+    </a>
   </div>
   <div class="docstring functionBody">
-    
     
     <div><p>Filter <tt class="rst-docutils literal">QuerySet</tt> of patients based on tumor-specific properties.</p>
 <p>It works almost exactly like the patient-specific querying function
@@ -683,9 +719,13 @@ is the <tt class="rst-docutils literal">QuerySet</tt> returned by the <code><a h
     
     <span class="py-defname">MODALITIES_SPSN</span> =
     
+    <a class="headerLink" href="#MODALITIES_SPSN" title="dashboard.query.MODALITIES_SPSN">
+      
+      
+      ¶
+    </a>
   </div>
   <div class="functionBody">
-    
     
     <div><p class="undocumented">Undocumented</p></div>
     <table class="valueTable"><tr class="fieldStart"><td class="fieldName">Value</td></tr><tr><td><pre class="constant-value"><code>np.array(<wbr></wbr>Diagnose.Modalities.spsn)</code></pre></td></tr></table>
@@ -703,9 +743,13 @@ is the <tt class="rst-docutils literal">QuerySet</tt> returned by the <code><a h
     
     <span class="py-defname">logger</span> =
     
+    <a class="headerLink" href="#logger" title="dashboard.query.logger">
+      
+      
+      ¶
+    </a>
   </div>
   <div class="functionBody">
-    
     
     <div><p class="undocumented">Undocumented</p></div>
     
@@ -722,7 +766,7 @@ is the <tt class="rst-docutils literal">QuerySet</tt> returned by the <code><a h
   <div class="container">
     <a href="index.html">API Documentation</a> for LyProX,
   generated by <a href="https://github.com/twisted/pydoctor/">pydoctor</a>
-    22.5.1 at 2022-07-05 15:36:34.
+    22.9.1 at 2023-03-06 14:29:13.
   </div>
 
   <!-- Search related scripts needs to be loaded at the end of HTML 

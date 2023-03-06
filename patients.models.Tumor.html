@@ -7,7 +7,7 @@
   <head>
     
     <title>patients.models.Tumor</title>
-    <meta name="generator" content="pydoctor 22.5.1"> 
+    <meta name="generator" content="pydoctor 22.9.1"> 
         
     </meta>
     <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
@@ -322,8 +322,21 @@
     </li>
 </ul> 
 
+        <div class="childrenKindTitle">Inherited Attributes</div>
+        <ul>
+    
+    <li class="private">
         
-         
+        
+        
+
+        
+            <div class="itemName"><code><a href="patients.mixins.LockedDatasetMixin.html#_must_raise" class="internal-link" title="patients.mixins.LockedDatasetMixin._must_raise">_must<wbr></wbr>_raise</a></code>
+            </div>
+        
+
+    </li>
+</ul> 
         
       </div>
   </div><div>
@@ -368,16 +381,6 @@
         
 
         
-            <div class="itemName"><code><a href="patients.models.LockedDatasetError.html" class="internal-link" title="patients.models.LockedDatasetError"><wbr></wbr>Locked<wbr></wbr>Dataset<wbr></wbr>Error</a></code>
-            </div>
-        
-
-    </li><li class="">
-        
-        
-        
-
-        
             <div class="itemName"><code><a href="patients.models.Patient.html" class="internal-link" title="patients.models.Patient"><wbr></wbr>Patient</a></code>
             </div>
         
@@ -389,6 +392,16 @@
 
         
             <div class="itemName"><code><a href="patients.models.Tumor.html" class="internal-link" title="patients.models.Tumor"><wbr></wbr>Tumor</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="patients.models.LockedDatasetError.html" class="internal-link" title="patients.models.LockedDatasetError"><wbr></wbr>Locked<wbr></wbr>Dataset<wbr></wbr>Error</a></code>
             </div>
         
 
@@ -494,7 +507,7 @@ via a <tt class="rst-docutils literal">django.db.models.ForeignKey</tt> relation
         </div>
 
         <div id="splitTables">
-          <table class="children sortable" id="id32">
+          <table class="children sortable" id="id33">
   
   
   <tr class="class">
@@ -575,6 +588,20 @@ via a <tt class="rst-docutils literal">django.db.models.ForeignKey</tt> relation
   </tr>
 </table>
           
+            <p class="inheritedFrom">
+              Inherited from <code><a href="patients.mixins.LockedDatasetMixin.html" class="internal-link" title="patients.mixins.LockedDatasetMixin">LockedDatasetMixin</a></code>:
+            </p>
+            <table class="children sortable" id="id34">
+  
+  
+  <tr class="baseproperty private">
+    
+    <td>Property</td>
+    <td><code><a href="patients.mixins.LockedDatasetMixin.html#_must_raise" class="internal-link" title="patients.mixins.LockedDatasetMixin._must_raise">_must<wbr></wbr>_raise</a></code></td>
+    <td>Infer from class if an error should be raised on save/delete.</td>
+  </tr>
+</table>
+            
 
             
         </div>
@@ -593,9 +620,13 @@ via a <tt class="rst-docutils literal">django.db.models.ForeignKey</tt> relation
     
     <span class="py-keyword">def</span> <span class="py-defname">__str__</span>(self):
     
+    <a class="headerLink" href="#__str__" title="patients.models.Tumor.__str__">
+      
+      
+      ¶
+    </a>
   </div>
   <div class="docstring functionBody">
-    
     
     <div><p>Report some main characteristics.</p>
 </div>
@@ -613,10 +644,14 @@ via a <tt class="rst-docutils literal">django.db.models.ForeignKey</tt> relation
     
     <span class="py-keyword">def</span> <span class="py-defname">delete</span>(self, *args, **kwargs):
     
+    <a class="headerLink" href="#delete" title="patients.models.Tumor.delete">
+      
+      
+      ¶
+    </a>
   </div>
   <div class="docstring functionBody">
-    <div class="interfaceinfo">overrides <code><a href="core.loggers.ModelLoggerMixin.html#delete" class="internal-link">core.loggers.ModelLoggerMixin.delete</a></code></div>
-    
+    <div class="interfaceinfo">overrides <code><a href="patients.mixins.LockedDatasetMixin.html#delete" class="internal-link">patients.mixins.LockedDatasetMixin.delete</a></code></div>
     <div><p>Upon deletion, update the patient's T-stage.</p>
 </div>
   </div>
@@ -633,10 +668,14 @@ via a <tt class="rst-docutils literal">django.db.models.ForeignKey</tt> relation
     
     <span class="py-keyword">def</span> <span class="py-defname">save</span>(self, *args, **kwargs):
     
+    <a class="headerLink" href="#save" title="patients.models.Tumor.save">
+      
+      
+      ¶
+    </a>
   </div>
   <div class="docstring functionBody">
-    <div class="interfaceinfo">overrides <code><a href="core.loggers.ModelLoggerMixin.html#save" class="internal-link">core.loggers.ModelLoggerMixin.save</a></code></div>
-    
+    <div class="interfaceinfo">overrides <code><a href="patients.mixins.LockedDatasetMixin.html#save" class="internal-link">patients.mixins.LockedDatasetMixin.save</a></code></div>
     <div><p>Before creating the database entry, determine the location of the
 tumor from the specified subsite and update the patient it is assigned
 to, to the correct T-stage.</p>
@@ -655,9 +694,13 @@ to, to the correct T-stage.</p>
     
     <span class="py-defname">SUBSITE_DICT</span>: <code>dict</code> =
     
+    <a class="headerLink" href="#SUBSITE_DICT" title="patients.models.Tumor.SUBSITE_DICT">
+      
+      
+      ¶
+    </a>
   </div>
   <div class="functionBody">
-    
     
     <div><p class="undocumented">Undocumented</p></div>
     <table class="valueTable"><tr class="fieldStart"><td class="fieldName">Value</td></tr><tr><td><pre class="constant-value"><code>{<wbr></wbr><span class="rst-variable-quote">'</span><span class="rst-variable-string">base</span><span class="rst-variable-quote">'</span>: [<wbr></wbr><span class="rst-variable-quote">'</span><span class="rst-variable-string">C01</span><span class="rst-variable-quote">'</span>, <wbr></wbr><span class="rst-variable-quote">'</span><span class="rst-variable-string">C01.9</span><span class="rst-variable-quote">'</span>],
@@ -682,9 +725,13 @@ to, to the correct T-stage.</p>
     
     <span class="py-defname">SUBSITE_LIST</span> =
     
+    <a class="headerLink" href="#SUBSITE_LIST" title="patients.models.Tumor.SUBSITE_LIST">
+      
+      
+      ¶
+    </a>
   </div>
   <div class="functionBody">
-    
     
     <div><p class="undocumented">Undocumented</p></div>
     <table class="valueTable"><tr class="fieldStart"><td class="fieldName">Value</td></tr><tr><td><pre class="constant-value"><code>[icd for icd_list in SUBSITE_DICT.values() for icd in icd_list]</code></pre></td></tr></table>
@@ -702,9 +749,13 @@ to, to the correct T-stage.</p>
     
     <span class="py-defname">SUBSITES</span>: <code>list[<wbr></wbr>tuple]</code> =
     
+    <a class="headerLink" href="#SUBSITES" title="patients.models.Tumor.SUBSITES">
+      
+      
+      ¶
+    </a>
   </div>
   <div class="functionBody">
-    
     
     <div><p>List of subsites with their ICD-10 code and respective description,
 grouped by location.</p>
@@ -731,9 +782,13 @@ grouped by location.</p>
     
     <span class="py-defname">central</span> =
     
+    <a class="headerLink" href="#central" title="patients.models.Tumor.central">
+      
+      
+      ¶
+    </a>
   </div>
   <div class="functionBody">
-    
     
     <div><p>Is the tumor symmetric w.r.t. the patients mid-sagittal line?</p>
 </div>
@@ -752,9 +807,13 @@ grouped by location.</p>
     
     <span class="py-defname">extension</span> =
     
+    <a class="headerLink" href="#extension" title="patients.models.Tumor.extension">
+      
+      
+      ¶
+    </a>
   </div>
   <div class="functionBody">
-    
     
     <div><p>Does the tumor cross the mid-sagittal line of the patient?</p>
 </div>
@@ -773,9 +832,13 @@ grouped by location.</p>
     
     <span class="py-defname">patient</span> =
     
+    <a class="headerLink" href="#patient" title="patients.models.Tumor.patient">
+      
+      
+      ¶
+    </a>
   </div>
   <div class="functionBody">
-    
     
     <div><p>This defines the connection to the <code><a href="patients.models.Patient.html" class="internal-link" title="patients.models.Patient">Patient</a></code> model.</p>
 </div>
@@ -794,9 +857,13 @@ grouped by location.</p>
     
     <span class="py-defname">stage_prefix</span> =
     
+    <a class="headerLink" href="#stage_prefix" title="patients.models.Tumor.stage_prefix">
+      
+      
+      ¶
+    </a>
   </div>
   <div class="functionBody">
-    
     
     <div><p>'c' for 'clinical' and 'p' for 'pathological'.</p>
 </div>
@@ -815,9 +882,13 @@ grouped by location.</p>
     
     <span class="py-defname">subsite</span> =
     
+    <a class="headerLink" href="#subsite" title="patients.models.Tumor.subsite">
+      
+      
+      ¶
+    </a>
   </div>
   <div class="functionBody">
-    
     
     <div><p>The subsite is a more granular categorization by the anatomical region
 of the head and neck where the primary tumor occurs in. It is usually
@@ -838,9 +909,13 @@ encoded using the ICD-10 codes.</p>
     
     <span class="py-defname">t_stage</span> =
     
+    <a class="headerLink" href="#t_stage" title="patients.models.Tumor.t_stage">
+      
+      
+      ¶
+    </a>
   </div>
   <div class="functionBody">
-    
     
     <div><p>Stage of the primary tumor. Categorized the tumor by size and
 infiltration of tissue types.</p>
@@ -860,9 +935,13 @@ infiltration of tissue types.</p>
     
     <span class="py-defname">volume</span> =
     
+    <a class="headerLink" href="#volume" title="patients.models.Tumor.volume">
+      
+      
+      ¶
+    </a>
   </div>
   <div class="functionBody">
-    
     
     <div><p>Volume of the patient's tumor.</p>
 </div>
@@ -881,9 +960,13 @@ infiltration of tissue types.</p>
     
     <span class="py-defname">location</span> =
     
+    <a class="headerLink" href="#location" title="patients.models.Tumor.location">
+      
+      
+      ¶
+    </a>
   </div>
   <div class="functionBody">
-    
     
     <div><p>The tumor location.</p>
 </div>
@@ -901,7 +984,7 @@ infiltration of tissue types.</p>
   <div class="container">
     <a href="index.html">API Documentation</a> for LyProX,
   generated by <a href="https://github.com/twisted/pydoctor/">pydoctor</a>
-    22.5.1 at 2022-07-05 15:36:34.
+    22.9.1 at 2023-03-06 14:29:13.
   </div>
 
   <!-- Search related scripts needs to be loaded at the end of HTML 
