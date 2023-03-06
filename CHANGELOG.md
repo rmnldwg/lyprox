@@ -1,7 +1,21 @@
 <a name="unreleased"></a>
 ## [Unreleased]
 
-## Before 2023-03-02
+<a name="0.3.1"></a>
+## [0.3.1] - 2023-03-06
+
+### Code Refactoring
+- make `DashboardView` methods more reusable
+- modularize dashboard HTML layout
+- put dashboard help templates in separate folder
+
+### Features
+- dashboard uses AJAX now (fixes [#94])
+
+### Maintenance
+- use conventional commits & start changelog
+
+## Before [0.3.0] - 2023-03-02
 
 Commits before the 2nd of March 2023 did not use conventional commits and no changelog was maintained. For completeness, we give the links to the respective diffs of previous releases below.
 
@@ -32,7 +46,8 @@ Commits before the 2nd of March 2023 did not use conventional commits and no cha
 - [0.0.2] - 2021-10-04
 - 0.0.1 - 2021-10-04
 
-[Unreleased]: https://github.com/rmnldwg/lyprox/compare/0.3.0...HEAD
+[Unreleased]: https://github.com/rmnldwg/lyprox/compare/0.3.1...HEAD
+[0.3.1]: https://github.com/rmnldwg/lyprox/compare/0.3.0...0.3.1
 [0.3.0]: https://github.com/rmnldwg/lyprox/compare/0.2.17...0.3.0
 [0.2.17]: https://github.com/rmnldwg/lyprox/compare/0.2.16...0.2.17
 [0.2.16]: https://github.com/rmnldwg/lyprox/compare/0.2.15...0.2.16
@@ -58,3 +73,5 @@ Commits before the 2nd of March 2023 did not use conventional commits and no cha
 [0.1.1]: https://github.com/rmnldwg/lyprox/compare/0.1.0...0.1.1
 [0.1.0]: https://github.com/rmnldwg/lyprox/compare/0.0.2...0.1.0
 [0.0.2]: https://github.com/rmnldwg/lyprox/compare/0.0.1...0.0.2
+
+[#94]: https://github.com/rmnldwg/lyprox/issues/94
