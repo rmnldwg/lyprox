@@ -219,7 +219,6 @@ def diagnose_specific(
     if patient_queryset is None:
         patient_queryset = Patient.objects.all()
 
-    logger.debug(kwargs["modalities"])
     start_time = time.perf_counter()
 
     # get diagnoses for all patients and the selected modalities
@@ -240,10 +239,7 @@ def diagnose_specific(
     ).distinct()
 
     mod_to_idx = {mod: i for i,mod in enumerate(Diagnose.Modalities.values)}
-    selected_diagnose = {
-        'ipsi'  : np.array([None] * len(Diagnose.LNLs)),
-        'contra': np.array([None] * len(Diagnose.LNLs))
-    }
+
     diagnose_tables = {       # this will hold a table with rows for each
         'ipsi'  : {},         # modality and columns for each LNL for each
         'contra': {}          # patient, holding the involvement information.
@@ -253,9 +249,7 @@ def diagnose_specific(
         'contra': {}          # be stored in these dictionaries per patient.
     }
     for side in ['ipsi', 'contra']:
-        for i,lnl in enumerate(Diagnose.LNLs):
-            if (selected_inv := kwargs[f'{side}_{lnl}']) is not None:
-                selected_diagnose[side][i] = selected_inv
+        selected_diagnose = format_selected_diagnose(kwargs, side)
 
         for diagnose in diagnose_querysets[side]:
             patient_id = diagnose['patient_id']
@@ -316,14 +310,33 @@ def diagnose_specific(
     logger.debug(f"Diagnose-specific querying done in {end_time - start_time:.3f} s")
     return patient_queryset, combined_involvement
 
+def format_selected_diagnose(kwargs, side):
+    """
+    Reformat the selected diagnosis patterns. This comes in as the ``kwargs`` in the
+    form of a flat dictionary with keys like ``ipsi_IIa``. The output is a nested
+    dictionary with keys of LNLs underneath a dictionary with keys for the ipsi- and
+    contralateral side.
+    """
+    selected_diagnose = {
+        "ipsi"  : np.array([None] * len(Diagnose.LNLs)),
+        "contra": np.array([None] * len(Diagnose.LNLs)),
+    }
+
+    for i,lnl in enumerate(Diagnose.LNLs):
+        if (selected_inv := kwargs[f'{side}_{lnl}']) is not None:
+            selected_diagnose[side][i] = selected_inv
+
+    return selected_diagnose
+
 
 def n_zero_specific(
     patient_queryset: QuerySet,
     combined_involvement: Dict[str, Dict[str, np.ndarray]],
     n_status: Optional[bool] = None
 ):
-    """Filter for N+ or N0. ``n_status`` is ``True`` when we only want to see N+
-    patients and ``False`` when we only want to see N0 patients.
+    """
+    Filter for N+ or N0. ``n_status`` is ``True`` when we only want to see N+ patients
+    and ``False`` when we only want to see N0 patients.
 
     Args:
         patient_queryset: ``QuerySet`` of patients to be filtered.
@@ -358,8 +371,9 @@ def count_patients(
     patient_queryset: QuerySet,
     combined_involvement: Dict[str, Dict[str, np.ndarray]]
 ):
-    """Count how often patients have various characteristics like HPV status,
-    certain lymph node level involvement, and so on.
+    """
+    Count how often patients have various characteristics like HPV status, certain
+    lymph node level involvement, and so on.
     """
     start_time = time.perf_counter()
     # prefetch relevant patient and tumor fields for performance
