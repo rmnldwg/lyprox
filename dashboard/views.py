@@ -11,6 +11,8 @@ from typing import Any, Dict
 import json
 import logging
 
+import numpy as np
+
 from django.http.response import HttpResponse, JsonResponse
 from django.shortcuts import render
 from django.views import generic
@@ -120,6 +122,18 @@ class DashboardView(ViewLoggerMixin, generic.ListView):
         return context
 
 
+def transform_np_to_lists(stats: Dict[str, Any]) -> Dict[str, Any]:
+    """
+    If ``stats`` contains any values that are of type ``np.ndarray``, then they are
+    converted to normal lists.
+    """
+    for key, value in stats.items():
+        if isinstance(value, np.ndarray):
+            stats[key] = value.tolist()
+
+    return stats
+
+
 def dashboard_AJAX_view(request):
     """
     View that receives JSON data from the AJAX request and cleans it using the
@@ -127,10 +141,9 @@ def dashboard_AJAX_view(request):
     """
     data = json.loads(request.body.decode("utf-8"))
     user = request.user
-    form, queryset, stats = DashboardView._get_queryset(data, user, logger)
+    form, _, stats = DashboardView._get_queryset(data, user, logger)
+    stats = transform_np_to_lists(stats)
 
     if form.is_valid():
         logger.info("AJAX form valid, returning success and stats.")
-        return JsonResponse(
-            data={"success": True, "queryset": queryset, "stats": stats}
-        )
+        return JsonResponse(data={"success": True, "stats": stats})

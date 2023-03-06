@@ -181,8 +181,8 @@ function collectDataFromFields() {
 	return jsonData;
 };
 
-function populateFieldsWithResponse() {
-	console.log("This should not happen yet.")
+function populateFields(response) {
+	console.log(response);
 };
 
 function createGET() {
@@ -195,7 +195,8 @@ function createGET() {
 		dataType: "json",
 		contentType: "application/json",
 		success: function (response) {
-			console.log("SUCCESS");
+			console.log("Success! Processing response.");
+			populateFields(response);
 		}
 	});
 };
