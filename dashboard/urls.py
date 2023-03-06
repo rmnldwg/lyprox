@@ -12,5 +12,6 @@ from . import views
 app_name = "dashboard"
 urlpatterns = [
     path("", views.DashboardView.as_view(), name="dashboard"),
-    path("help", views.help_view, name="help")
+    path("ajax/", views.dashboard_AJAX_view, name="ajax"),
+    path("help/", views.help_view, name="help")
 ]

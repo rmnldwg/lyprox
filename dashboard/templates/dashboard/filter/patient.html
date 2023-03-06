@@ -1,0 +1,37 @@
+<div class="tile is-child box">
+    <div class="level">
+        <div class="level-left">
+            <div class="level-item">
+                <p class="title is-4">Patient details</p>
+            </div>
+        </div>
+        <div class="level-right">
+            <div class="level-item">
+                <div class="tooltip">
+                    <span class="icon">
+                        <i class="fas fa-question"></i>
+                    </span>
+                    {% include 'dashboard/help/tooltip.html' with side="right" position="bottom" image='dashboard/toggle.gif' html='dashboard/help/patient.html' %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="columns">
+        <div class="column">
+            {{ form.nicotine_abuse }}
+            {% include 'dashboard/three_way_toggle_stats.html' with stats=stats field='nicotine_abuse' show_percent=show_percent %}
+
+            {{ form.hpv_status }}
+            {% include 'dashboard/three_way_toggle_stats.html' with stats=stats field='hpv_status' show_percent=show_percent %}
+        </div>
+
+        <div class="column">
+            {{ form.neck_dissection }}
+            {% include 'dashboard/three_way_toggle_stats.html' with stats=stats field='neck_dissection' show_percent=show_percent %}
+
+            {{ form.n_status }}
+            {% include 'dashboard/three_way_toggle_stats.html' with stats=stats field='n_status' show_percent=show_percent %}
+        </div>
+    </div>
+</div>

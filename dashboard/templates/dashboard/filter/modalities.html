@@ -1,0 +1,33 @@
+<div class="tile is-child box">
+    <div class="columns">
+        <div class="column is-2 is-flex is-flex-direction-row is-justify-content-left is-align-items-center">
+            <p id="modalities-title" class="title is-4">Modalities</p>
+        </div>
+
+        <div class="column is-8">
+            <div class="field is-grouped is-grouped-multiline">
+                {% for checkbox in form.modalities %}
+                <div class="control is-expanded">
+                {{ checkbox.tag }}
+                    <label for="{{ checkbox.id_for_label }}" class="button is-primary is-light is-fullwidth">
+                        {{ checkbox.choice_label }}
+                    </label>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <div class="column is-2 is-flex is-flex-direction-row is-justify-content-right is-align-items-center">
+            <div class="select">
+                {{ form.modality_combine }}
+            </div>
+
+            <div class="tooltip">
+                <span class="icon ml-2">
+                    <i class="fas fa-question"></i>
+                </span>
+                {% include 'dashboard/help/tooltip.html' with side="left" position="bottom" image='dashboard/modalities.gif' markdown='dashboard/help/modalities.md' %}
+            </div>
+        </div>
+    </div>
+</div>

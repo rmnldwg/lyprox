@@ -4,3 +4,4 @@ pytest-factoryboy==2.1
 pytest-django==4.2
 django-extensions
 pre-commit
+conventional-pre-commit
