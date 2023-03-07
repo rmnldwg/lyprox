@@ -6,13 +6,12 @@ functions in the `query` module to finally pass the queried information to
 the context variable that is rendered into the HTML response.
 """
 
-import time
-from typing import Any, Dict
 import json
 import logging
+import time
+from typing import Any, Dict
 
 import numpy as np
-
 from django.http.response import HttpResponse, JsonResponse
 from django.shortcuts import render
 from django.views import generic
@@ -20,7 +19,7 @@ from django.views import generic
 from core.loggers import ViewLoggerMixin
 from patients.models import Diagnose, Patient
 
-from . import query
+from . import new_query, query
 
 from.forms import DashboardForm
 
@@ -70,6 +69,9 @@ class DashboardView(ViewLoggerMixin, generic.ListView):
                 f"{form.errors.as_data()}"
             )
             queryset = Patient.objects.none()
+
+        # test the new query methods
+        new_queryset = new_query.run_query(queryset, form.cleaned_data)
 
         # perform the actual querying
         queryset = query.patient_specific(
@@ -147,7 +149,7 @@ def dashboard_AJAX_view(request):
     if form.is_valid():
         logger.info("AJAX form valid, returning success and stats.")
         return JsonResponse(data=stats)
-    
+
     return JsonResponse(
         data={"error": "Something went wrong."},
         status=400,
