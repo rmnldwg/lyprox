@@ -3,12 +3,13 @@ Module for translating the user input into a database query. It retrieves the
 information of interest and returns it in a format that can then be put into the
 response of the server.
 """
+# pylint: disable=no-member, unused-argument
 
 import logging
 import re
 import time
 from functools import lru_cache
-from typing import Callable, Dict, List, Optional, Tuple
+from typing import Any, Callable, Dict, List, Optional, Tuple
 
 import numpy as np
 from django.db.models import QuerySet
@@ -17,6 +18,49 @@ from accounts.models import Institution
 from patients.models import Diagnose, Patient, Tumor
 
 logger = logging.getLogger(__name__)
+
+
+def run_query(
+    patients: QuerySet | None,
+    cleaned_form_data: Dict[str, Any],
+) -> Dict[int, Any]:
+    """
+    Run a database query using the cleaned form data from the
+    `forms.DashboardForm`.
+
+    It first filters all patients in the database by patient-specific
+    characteristics. Then all tumors by tumor features. Afterwards, it only
+    keeps those patients that have tumors which were not yet filtered out.
+    It continues to remove patients based on the selected involvement
+    patterns.
+    """
+    if patients is None:
+        patients = Patient.objects.all()
+
+    start_time = time.perf_counter()
+
+    patients = patient_specific(patients, **cleaned_form_data)
+    tumors = tumor_specific(Tumor.objects.all(), **cleaned_form_data)
+    patients = patients.filter(tumor__in=tumors)
+    diagnoses = Diagnose.objects.all().filter(patient__in=patients)
+
+    # This is now a dictionary with exactly those patient's IDs who are
+    # still not filtered out (after patient-, tumor- and diagnose-specific
+    # filtering).
+    combined_diagnoses_by_id = diagnose_specific(
+        diagnoses, **cleaned_form_data
+    )
+    filtered_patient_ids = combined_diagnoses_by_id.keys()
+    patients = patients.filter(id__in=filtered_patient_ids).values()
+    tumors = tumors.filter(patient__in=patients).values()
+
+    end_time = time.perf_counter()
+    logger.info(
+        "Entire query took %(time).3f s, returns %(count)d patients",
+        {"time": end_time - start_time, "count": patients.count()},
+    )
+
+    return patients
 
 
 def patient_specific(
@@ -60,7 +104,11 @@ def patient_specific(
             patients = patients.filter(**{key: value})
 
     end_time = time.perf_counter()
-    logger.debug("Patient-specific querying done in %.3f s", end_time - start_time)
+    logger.info(
+        "Patient query took %(time).3f s",
+        {"time": end_time - start_time},
+    )
+
     return patients
 
 
@@ -101,7 +149,11 @@ def tumor_specific(
             tumors = tumors.filter(**{key: value})
 
     end_time = time.perf_counter()
-    logger.debug("Tumor-specific querying done in %.3f s", end_time - start_time)
+    logger.info(
+        "Tumor query took %(time).3f s",
+        {"time": end_time - start_time},
+    )
+
     return tumors
 
 
@@ -127,7 +179,9 @@ def diagnose_specific(
 
     Returns:
         A nested dictionary with patient IDs as top-level keys. Under each patient,
-        there are the keys ``"ipsi"`` and ``"contra"``.
+        there are the keys ``"ipsi"`` and ``"contra"``. And under that, finally, a
+        dictionary stores the combined involvement (can be ``True`` for metastatic,
+        ``False`` for healthy, or ``None`` for unknown) per LNL.
     """
     if diagnoses is None:
         diagnoses = Diagnose.objects.all()
@@ -148,7 +202,11 @@ def diagnose_specific(
         combined_diagnoses.pop(patient_id, None)
 
     end_time = time.perf_counter()
-    logger.debug("Diagnose-specific querying done in %.3f s", end_time - start_time)
+    logger.info(
+        "Diagnose query took %(time).3f s",
+        {"time": end_time - start_time},
+    )
+
     return combined_diagnoses
 
 
@@ -164,7 +222,7 @@ def extract_filter_pattern(
     filter_pattern = {"ipsi": {}, "contra": {}}
     for key, value in kwargs.items():
         pattern = r"(ipsi|contra)_([IVX]{1,3}[ab]?)"
-        if match := re.match(pattern, key) is not None:
+        if (match := re.match(pattern, key)) is not None:
             filter_pattern[match[1]][match[2]] = value
 
     return filter_pattern
@@ -192,7 +250,7 @@ def does_patient_match(
     """
     for side, side_diagnose in patient_diagnose.items():
         for lnl, lnl_diagnose in side_diagnose.items():
-            if lnl_pattern := filter_pattern[side][lnl] is None:
+            if (lnl_pattern := filter_pattern[side][lnl]) is None:
                 continue
             if lnl_pattern != lnl_diagnose:
                 return False
@@ -244,27 +302,13 @@ class ModalityCombinor:
         """
         Initialize the helper class with the name of the method to combine modalities.
         """
-        self._method = method
-        self.specificities = (mod.spec for mod in Diagnose.Modalities)
-        self.sensitivities = (mod.sens for mod in Diagnose.Modalities)
+        # pylint: disable=not-an-iterable
+        self.method = method
+        self.specificities = tuple(mod.spec for mod in Diagnose.Modalities)
+        self.sensitivities = tuple(mod.sens for mod in Diagnose.Modalities)
 
-    @property
-    def method(self) -> Callable:
-        """Return the method for combining diagnoses."""
-        method_dict = {
-            "OR": self.logical_OR,
-            "AND": self.logical_AND,
-            "rank": self.rank,
-            "maxLLh": self.max_llh,
-        }
-        return method_dict[self._method]
-
-    @method.setter
-    def method(self, new_method: str):
-        self._method = new_method
-
-    @lru_cache
     @staticmethod
+    @lru_cache
     def logical_OR(
         values: Tuple[bool | None],
         specificities: Tuple[float],
@@ -273,8 +317,8 @@ class ModalityCombinor:
         """Use the logical OR to determine combined involvement."""
         return any(values)
 
-    @lru_cache
     @staticmethod
+    @lru_cache
     def logical_AND(
         values: Tuple[bool | None],
         specificities: Tuple[float],
@@ -283,8 +327,8 @@ class ModalityCombinor:
         """Logical AND combination method."""
         return any(not(v) if v is not None else None for v in values)
 
-    @lru_cache
     @staticmethod
+    @lru_cache
     def rank(
         values: Tuple[bool | None],
         specificities: Tuple[float],
@@ -301,8 +345,8 @@ class ModalityCombinor:
         ]
         return np.max([*healthy_sens, 0.]) < np.max([*involved_spec, 0.])
 
-    @lru_cache
     @staticmethod
+    @lru_cache
     def max_llh(
         values: Tuple[bool | None],
         specificities: Tuple[float],
@@ -335,7 +379,16 @@ class ModalityCombinor:
         if all(value is None for value in values):
             return None
 
-        return self.method(values, self.specificities, self.sensitivities)
+        method_dict = {
+            "OR": self.logical_OR,
+            "AND": self.logical_AND,
+            "rank": self.rank,
+            "maxLLH": self.max_llh,
+        }
+
+        return method_dict[self.method](
+            values, self.specificities, self.sensitivities
+        )
 
 
 def sort_by_patient(diagnoses: QuerySet) -> Dict[int, Dict[str, np.ndarray]]:
@@ -364,12 +417,12 @@ def sort_by_patient(diagnoses: QuerySet) -> Dict[int, Dict[str, np.ndarray]]:
     modality_to_idx = {mod: i for i,mod in enumerate(Diagnose.Modalities.values)}
 
     for diagnose in diagnoses:
-        if patient_id := diagnose["patient_id"] not in sorted_diagnoses:
+        if (patient_id := diagnose["patient_id"]) not in sorted_diagnoses:
             patient_diagnose = {}
         else:
             patient_diagnose = sorted_diagnoses[patient_id]
 
-        if side := diagnose["side"] not in patient_diagnose:
+        if (side := diagnose["side"]) not in patient_diagnose:
             side_diagnose = empty_diagnose_matrix.copy()
         else:
             side_diagnose = patient_diagnose[side]
