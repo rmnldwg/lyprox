@@ -3,6 +3,7 @@ The `query` module takes the cleaned data from the `forms`, retrieves
 information from the database efficiently and puts everything into a dictionary
 with which the HTML response is then populated.
 """
+# pylint: disable=no-member, unused-argument
 
 import logging
 import time
@@ -47,9 +48,7 @@ def subsite2arr(subsite):
             res[i] = 1
 
     if np.sum(res) > 1:
-        logger.warn(
-            f"A tumor has been associated with multiple subsites: {subsite}"
-        )
+        logger.warning("Tumor associated with multiple subsites: %s", subsite)
 
     return res
 
@@ -94,7 +93,7 @@ def patient_specific(
             patient_queryset = patient_queryset.filter(**{key: value})
 
     end_time = time.perf_counter()
-    logger.debug(f"Patient-specific querying done in {end_time - start_time:.3f} s.")
+    logger.debug("Patient-specific querying done in %.3f s", end_time - start_time)
     return patient_queryset
 
 
@@ -134,7 +133,7 @@ def tumor_specific(
             patient_queryset = patient_queryset.filter(**{f'tumor__{key}': value})
 
     end_time = time.perf_counter()
-    logger.debug(f"Tumor-specific querying done in {end_time - start_time:.3f} s.")
+    logger.debug("Tumor-specific querying done in %.3f s", end_time - start_time)
     return patient_queryset
 
 
@@ -307,7 +306,7 @@ def diagnose_specific(
                 patient_queryset = patient_queryset.exclude(id=patient_id)
 
     end_time = time.perf_counter()
-    logger.debug(f"Diagnose-specific querying done in {end_time - start_time:.3f} s")
+    logger.debug("Diagnose-specific querying done in %.3f s", end_time - start_time)
     return patient_queryset, combined_involvement
 
 def format_selected_diagnose(kwargs, side):
@@ -446,5 +445,5 @@ def count_patients(
 
     counts["datasets"] = [num for num in counts["datasets"].values()]
     end_time = time.perf_counter()
-    logger.info(f"Generating stats done after {end_time - start_time:.3f} s")
+    logger.info("Generating stats done after %.3f", end_time - start_time)
     return patient_queryset, counts
