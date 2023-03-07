@@ -3,11 +3,17 @@ Unit test for the `query` module.
 """
 from django.test import TestCase
 
+from patients.models import Tumor
+
 from . import new_query
 
 
 class QueryTests(TestCase):
     """Run unit test for the `new_query` module."""
+    def setUp(self) -> None:
+        Tumor.objects.create()
+        return super().setUp()
+
     def test_extract_filter_pattern(self):
         """Make sure all LNLs are extracted and correctly placed in dictionary."""
         kwargs = {
@@ -40,3 +46,7 @@ class QueryTests(TestCase):
             self.assertIsNone(none_combined)
             self.assertTrue(true_combined)
             self.assertTrue(path_combined)
+
+    # def test_sort_tumors_by_patient(self):
+    #     """Check the tumor sorting by patient ID."""
+    #     t4_tumors = Tumor.objects.all().filter(t_stage=4).values()
