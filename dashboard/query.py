@@ -2,6 +2,10 @@
 Module for translating the user input into a database query. It retrieves the
 information of interest and returns it in a format that can then be put into the
 response of the server.
+
+The main interaction point is the `run_query` function. It takes an initial ``QuerySet``
+of `patients.models.Patient` objects and filters it down according to the cleaned data
+from a `form.DashboardForm`.
 """
 # pylint: disable=no-member, unused-argument
 
@@ -34,6 +38,14 @@ def run_query(
     keeps those patients that have tumors which were not yet filtered out.
     It continues to remove patients based on their diagnosed lymph node
     involvement and the selected involvement patterns.
+
+    The filtering parameters are provided by the cleaned data of a `form.DashboardForm`.
+    The default initial QuerySet of patients is simply all patients in the database,
+    unless ``patients`` is specified. In that case, the provided ``QuerySet`` is the
+    starting point of the filtering query.
+
+    The computation of statistics can be skipped using the ``do_compute_statistics``
+    parameter (default is ``True``).
     """
     if patients is None:
         patients = Patient.objects.all()
@@ -112,6 +124,17 @@ def compute_statistics(patients: Dict[int, Any]) -> Dict[str, Any]:
     """
     Use the collected information as returned by `collect_info` and generate
     statistics for them.
+
+    Many of these statistics come in the form of a list of length 3. They indicate for
+    how many patients the correpsonding field was ``True`` (index ``1``), ``False``
+    (index ``-1``, meaning the last entry), or ``None`` (index ``0``).
+
+    So, for example, ``"hpv_status": [23, 82, 72]`` means that 82 patients are HPV
+    positive, 72 HPV negative and for 23 we do not have any information.
+
+    In the beginning, this kind of encoding seemed smart, because I could give semantic
+    meaning to an index (positive being +1, negative -1). But in Django's HTML
+    templates that doesn't work and I have to use 0, 1, and 2 there...
     """
     start_time = time.perf_counter()
 
@@ -183,6 +206,9 @@ def tf2arr(value):
     ``False`` are represented by integers 1, 0, -1. So, the one-hot encoding uses an
     array of length 3 that is one only at these respective indices, where -1 is the
     last item.
+
+    See also the documentation of the `compute_statistics` function for an explanation
+    of this encoding.
     """
     if value is None:
         return np.array([1, 0, 0], dtype=int)
