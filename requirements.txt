@@ -6,6 +6,6 @@ Markdown==3.3
 numpy==1.22
 pandas==1.5
 fontawesomefree==5.15.4
-https://github.com/jazzband/django-dbbackup/tarball/4.0.0rc1
+django-dbbackup>=4.0.2
 icd10-cm==0.0.4
 python-magic
