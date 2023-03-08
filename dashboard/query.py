@@ -23,6 +23,7 @@ logger = logging.getLogger(__name__)
 def run_query(
     patients: QuerySet | None,
     cleaned_form_data: Dict[str, Any],
+    do_compute_statistics: bool = True,
 ) -> Dict[int, Any]:
     """
     Run a database query using the cleaned form data from the
@@ -51,11 +52,14 @@ def run_query(
         diagnoses, **cleaned_form_data
     )
     filtered_patient_ids = combined_diagnoses_by_id.keys()
-    patients = patients.filter(id__in=filtered_patient_ids).values()
-    tumors = tumors.filter(patient__id__in=filtered_patient_ids).values()
+    patients = patients.filter(id__in=filtered_patient_ids)
+    tumors = tumors.filter(patient__id__in=filtered_patient_ids)
 
-    patients_by_id = sort_patients_by_id(patients)
-    tumors_by_patient_id = sort_tumors_by_patient(tumors)
+    if not do_compute_statistics:
+        return patients, {}
+
+    patients_by_id = sort_patients_by_id(patients.values())
+    tumors_by_patient_id = sort_tumors_by_patient(tumors.values())
 
     try:
         info_by_id = collect_info(

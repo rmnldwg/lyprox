@@ -117,47 +117,37 @@ class PatientListView(ViewLoggerMixin, generic.ListView):
 
     def get_queryset(self) -> QuerySet[Patient]:
         """Add ability to filter queryset via FilterSets to generic ListView."""
-        queryset = super().get_queryset()
+        patients = super().get_queryset()
         start_querying = time.perf_counter()
 
         if not self.request.user.is_authenticated:
-            queryset = queryset.filter(dataset__is_public=True)
+            patients = patients.filter(dataset__is_public=True)
 
         self.filterset = self.filterset_class(
-            self.request.GET or None, queryset, request=self.request,
+            self.request.GET or None, patients, request=self.request,
         )
         self.form = self.form_class(
             self.request.GET or None, user=self.request.user,
         )
 
         if self.filterset.is_valid():
-            queryset = self.filterset.qs.distinct()
+            patients = self.filterset.qs.distinct()
 
         if self.form.is_valid():
             self.is_filterable = False
-            queryset = query.patient_specific(
-                patient_queryset=queryset, **self.form.cleaned_data
-            )
-            queryset = query.tumor_specific(
-                patient_queryset=queryset, **self.form.cleaned_data
-            )
-            queryset, combined_involvement = query.diagnose_specific(
-                patient_queryset=queryset, **self.form.cleaned_data
-            )
-            queryset, _ = query.n_zero_specific(
-                patient_queryset=queryset,
-                combined_involvement=combined_involvement,
-                n_status=self.form.cleaned_data['n_status']
+            patients, _ = query.run_query(
+                patients=patients,
+                cleaned_form_data=self.form.cleaned_data,
+                do_compute_statistics=False,
             )
 
-        self.queryset_pk_list = list(queryset.values_list("pk", flat=True))
-        self.logger.debug(",".join(str(pk) for pk in self.queryset_pk_list))
+        self.queryset_pk_list = list(patients.values_list("pk", flat=True))
 
         end_querying = time.perf_counter()
         self.logger.info(
             f'Querying finished in {end_querying - start_querying:.3f} seconds'
         )
-        return queryset
+        return patients
 
 
     def get_context_data(self, **kwargs: Any) -> Dict[str, Any]:
