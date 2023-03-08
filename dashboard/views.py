@@ -6,13 +6,11 @@ functions in the `query` module to finally pass the queried information to
 the context variable that is rendered into the HTML response.
 """
 
-import time
-from typing import Any, Dict
 import json
 import logging
+from typing import Any, Dict
 
 import numpy as np
-
 from django.http.response import HttpResponse, JsonResponse
 from django.shortcuts import render
 from django.views import generic
@@ -49,8 +47,7 @@ class DashboardView(ViewLoggerMixin, generic.ListView):
     @classmethod
     def _get_queryset(cls, data, user, logger):
         form = cls.form_class(data, user=user)
-        queryset = Patient.objects.all()
-        start_querying = time.perf_counter()
+        patients = Patient.objects.all()
 
         if not form.is_valid():
             # fill form with initial values from respective form fields when
@@ -62,40 +59,18 @@ class DashboardView(ViewLoggerMixin, generic.ListView):
                 )
             form = cls.form_class(initial_data, user=user)
 
-        if not form.is_valid():
-            # return empy queryset when something goes wrong with the validation of
-            # the inital queryset
-            logger.warn(
-                "Initial form is invalid, errors are: "
-                f"{form.errors.as_data()}"
-            )
-            queryset = Patient.objects.none()
+            if not form.is_valid():
+                # return empy queryset when something goes wrong with the validation of
+                # the inital queryset
+                logger.warn(
+                    "Initial form is invalid, errors are: "
+                    f"{form.errors.as_data()}"
+                )
+                patients = Patient.objects.none()
 
-        # perform the actual querying
-        queryset = query.patient_specific(
-            patient_queryset=queryset, **form.cleaned_data
-        )
-        queryset = query.tumor_specific(
-            patient_queryset=queryset, **form.cleaned_data
-        )
-        queryset, combined_involvement = query.diagnose_specific(
-            patient_queryset=queryset, **form.cleaned_data
-        )
-        queryset, combined_involvement = query.n_zero_specific(
-            patient_queryset=queryset,
-            combined_involvement=combined_involvement,
-            n_status=form.cleaned_data['n_status']
-        )
-        queryset, stats = query.count_patients(
-            patient_queryset=queryset,
-            combined_involvement=combined_involvement
-        )
+        patients, statistics = query.run_query(patients, form.cleaned_data)
 
-        end_querying = time.perf_counter()
-        logger.info(
-            f'Querying finished in {end_querying - start_querying:.3f} seconds'
-        )
-        return form, queryset, stats
+        return form, patients, statistics
 
     def get_queryset(self):
         data = self.request.GET
@@ -147,7 +122,7 @@ def dashboard_AJAX_view(request):
     if form.is_valid():
         logger.info("AJAX form valid, returning success and stats.")
         return JsonResponse(data=stats)
-    
+
     return JsonResponse(
         data={"error": "Something went wrong."},
         status=400,
