@@ -5,7 +5,7 @@ from django.test import TestCase
 
 from patients.models import Tumor
 
-from . import new_query
+from . import query
 
 
 class QueryTests(TestCase):
@@ -21,7 +21,7 @@ class QueryTests(TestCase):
             "contra_VII": False,
             "ipsi_Va": None,
         }
-        filter_pattern = new_query.extract_filter_pattern(kwargs)
+        filter_pattern = query.extract_filter_pattern(kwargs)
         self.assertDictEqual(
             d1 = filter_pattern,
             d2 = {
@@ -33,7 +33,7 @@ class QueryTests(TestCase):
     def test_ModalityCombinor(self):
         """Test the helper class `new_query.ModalityCombinor`."""
         for method in ["maxLLH", "rank"]:
-            combinor = new_query.ModalityCombinor(method)
+            combinor = query.ModalityCombinor(method)
 
             none_tuple = (None , None , None , None , None , None , None )
             true_tuple = (True , True , True , None , None , None , None )
