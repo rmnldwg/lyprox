@@ -283,7 +283,15 @@
             <div class="type">Module</div>
             <div class="kind">Module</div>
             <div class="privacy">PUBLIC</div>
-            <div class="summary">The <code><a href="dashboard.query.html" class="internal-link" title="dashboard.query">query</a></code> module takes the cleaned data from the <code><a href="dashboard.forms.html" class="internal-link" title="dashboard.forms">forms</a></code>, retrieves information from the database efficiently and puts everything into a dictionary with which the HTML response is then populated.</div>
+            <div class="summary">Module for translating the user input into a database query. It retrieves the information of interest and returns it in a format that can then be put into the response of the server.</div>
+          </li><li id="dashboard.tests">
+            
+            <div class="fullName">dashboard<wbr></wbr>.tests</div>
+            <div class="url">dashboard.tests.html</div>
+            <div class="type">Module</div>
+            <div class="kind">Module</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">Unit test for the <code><a href="dashboard.query.html" class="internal-link" title="dashboard.query">query</a></code> module.</div>
           </li><li id="dashboard.urls">
             
             <div class="fullName">dashboard<wbr></wbr>.urls</div>
@@ -2092,14 +2100,30 @@
             <div class="kind">Variable</div>
             <div class="privacy">PUBLIC</div>
             <div class="summary"><span class="undocumented">Undocumented</span></div>
-          </li><li id="dashboard.query.MODALITIES_SPSN">
+          </li><li id="dashboard.query.run_query">
             
-            <div class="fullName">dashboard<wbr></wbr>.query<wbr></wbr>.MODALITIES<wbr></wbr>_SPSN</div>
-            <div class="url">dashboard.query.html#MODALITIES_SPSN</div>
-            <div class="type">Attribute</div>
-            <div class="kind">Constant</div>
+            <div class="fullName">dashboard<wbr></wbr>.query<wbr></wbr>.run<wbr></wbr>_query</div>
+            <div class="url">dashboard.query.html#run_query</div>
+            <div class="type">Function</div>
+            <div class="kind">Function</div>
             <div class="privacy">PUBLIC</div>
-            <div class="summary"><span class="undocumented">Undocumented</span></div>
+            <div class="summary">Run a database query using the cleaned form data from the <code><a href="dashboard.forms.DashboardForm.html" class="internal-link" title="dashboard.forms.DashboardForm">forms.DashboardForm</a></code>.</div>
+          </li><li id="dashboard.query.collect_info">
+            
+            <div class="fullName">dashboard<wbr></wbr>.query<wbr></wbr>.collect<wbr></wbr>_info</div>
+            <div class="url">dashboard.query.html#collect_info</div>
+            <div class="type">Function</div>
+            <div class="kind">Function</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">Collect the patient-, tumor-, and diagonse-information in one dictionary.</div>
+          </li><li id="dashboard.query.compute_statistics">
+            
+            <div class="fullName">dashboard<wbr></wbr>.query<wbr></wbr>.compute<wbr></wbr>_statistics</div>
+            <div class="url">dashboard.query.html#compute_statistics</div>
+            <div class="type">Function</div>
+            <div class="kind">Function</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">Use the collected information as returned by <code><a href="dashboard.query.html#collect_info" class="internal-link" title="dashboard.query.collect_info">collect_info</a></code> and generate statistics for them.</div>
           </li><li id="dashboard.query.tf2arr">
             
             <div class="fullName">dashboard<wbr></wbr>.query<wbr></wbr>.tf2arr</div>
@@ -2107,7 +2131,7 @@
             <div class="type">Function</div>
             <div class="kind">Function</div>
             <div class="privacy">PUBLIC</div>
-            <div class="summary">Map <tt class="rst-docutils literal">True</tt>, <tt class="rst-docutils literal">False</tt> &amp; <tt class="rst-docutils literal">None</tt> to one-hot-arrays of length 3. This particular mapping comes from the fact that in the form <tt class="rst-docutils literal">True</tt>, <tt class="rst-docutils literal">None</tt>, <tt class="rst-docutils literal">False</tt> are represented by integers 1, 0, -1. So, the one-hot encoding uses an array of length 3 that is one only at these respective indices, where -1 is the last item.</div>
+            <div class="summary">Map <tt class="rst-docutils literal">True</tt>, <tt class="rst-docutils literal">False</tt> &amp; <tt class="rst-docutils literal">None</tt> to one-hot-arrays of length 3.</div>
           </li><li id="dashboard.query.subsite2arr">
             
             <div class="fullName">dashboard<wbr></wbr>.query<wbr></wbr>.subsite2arr</div>
@@ -2115,7 +2139,7 @@
             <div class="type">Function</div>
             <div class="kind">Function</div>
             <div class="privacy">PUBLIC</div>
-            <div class="summary">Map different subsites to an one-hot-array of subsite groups. E.g., a one in the first place means "base of tongue", at the second place is "tonsil" and so on.</div>
+            <div class="summary">Map different subsites to an one-hot-array of subsite groups.</div>
           </li><li id="dashboard.query.patient_specific">
             
             <div class="fullName">dashboard<wbr></wbr>.query<wbr></wbr>.patient<wbr></wbr>_specific</div>
@@ -2124,6 +2148,14 @@
             <div class="kind">Function</div>
             <div class="privacy">PUBLIC</div>
             <div class="summary">Filter <tt class="rst-docutils literal">QuerySet</tt> of patients based on patient-specific properties.</div>
+          </li><li id="dashboard.query.sort_patients_by_id">
+            
+            <div class="fullName">dashboard<wbr></wbr>.query<wbr></wbr>.sort<wbr></wbr>_patients<wbr></wbr>_by<wbr></wbr>_id</div>
+            <div class="url">dashboard.query.html#sort_patients_by_id</div>
+            <div class="type">Function</div>
+            <div class="kind">Function</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">Collect patient information by patient ID in a dictionary.</div>
           </li><li id="dashboard.query.tumor_specific">
             
             <div class="fullName">dashboard<wbr></wbr>.query<wbr></wbr>.tumor<wbr></wbr>_specific</div>
@@ -2131,23 +2163,15 @@
             <div class="type">Function</div>
             <div class="kind">Function</div>
             <div class="privacy">PUBLIC</div>
-            <div class="summary">Filter <tt class="rst-docutils literal">QuerySet</tt> of patients based on tumor-specific properties.</div>
-          </li><li id="dashboard.query.maxllh_consensus">
+            <div class="summary">Filter <tt class="rst-docutils literal">QuerySet</tt> of tumors based on tumor-specific properties.</div>
+          </li><li id="dashboard.query.sort_tumors_by_patient">
             
-            <div class="fullName">dashboard<wbr></wbr>.query<wbr></wbr>.maxllh<wbr></wbr>_consensus</div>
-            <div class="url">dashboard.query.html#maxllh_consensus</div>
+            <div class="fullName">dashboard<wbr></wbr>.query<wbr></wbr>.sort<wbr></wbr>_tumors<wbr></wbr>_by<wbr></wbr>_patient</div>
+            <div class="url">dashboard.query.html#sort_tumors_by_patient</div>
             <div class="type">Function</div>
             <div class="kind">Function</div>
             <div class="privacy">PUBLIC</div>
-            <div class="summary">Compute the consensus of different diagnostic modalities using their respective specificity &amp; sensitivity.</div>
-          </li><li id="dashboard.query.rank_consensus">
-            
-            <div class="fullName">dashboard<wbr></wbr>.query<wbr></wbr>.rank<wbr></wbr>_consensus</div>
-            <div class="url">dashboard.query.html#rank_consensus</div>
-            <div class="type">Function</div>
-            <div class="kind">Function</div>
-            <div class="privacy">PUBLIC</div>
-            <div class="summary">Compute the consensus of different diagnostic modalities using a ranking based on sensitivity &amp; specificity.</div>
+            <div class="summary">Collect tumor information by patient ID in a dictionary.</div>
           </li><li id="dashboard.query.diagnose_specific">
             
             <div class="fullName">dashboard<wbr></wbr>.query<wbr></wbr>.diagnose<wbr></wbr>_specific</div>
@@ -2155,23 +2179,119 @@
             <div class="type">Function</div>
             <div class="kind">Function</div>
             <div class="privacy">PUBLIC</div>
-            <div class="summary">Filter <tt class="rst-docutils literal">QuerySet</tt> of patients by their involvement according to the diagnoses.</div>
-          </li><li id="dashboard.query.n_zero_specific">
+            <div class="summary">Filter the diagnoses based on selected involvement patterns.</div>
+          </li><li id="dashboard.query.sort_diagnoses_by_patient">
             
-            <div class="fullName">dashboard<wbr></wbr>.query<wbr></wbr>.n<wbr></wbr>_zero<wbr></wbr>_specific</div>
-            <div class="url">dashboard.query.html#n_zero_specific</div>
+            <div class="fullName">dashboard<wbr></wbr>.query<wbr></wbr>.sort<wbr></wbr>_diagnoses<wbr></wbr>_by<wbr></wbr>_patient</div>
+            <div class="url">dashboard.query.html#sort_diagnoses_by_patient</div>
             <div class="type">Function</div>
             <div class="kind">Function</div>
             <div class="privacy">PUBLIC</div>
-            <div class="summary">Filter for N+ or N0. <tt class="rst-docutils literal">n_status</tt> is <tt class="rst-docutils literal">True</tt> when we only want to see N+ patients and <tt class="rst-docutils literal">False</tt> when we only want to see N0 patients.</div>
-          </li><li id="dashboard.query.count_patients">
+            <div class="summary">Use a <tt class="rst-docutils literal">QuerySet</tt> of <code>patient.models.Diagnose</code> and sort its entries into a nested dictionary.</div>
+          </li><li id="dashboard.query.ModalityCombinor">
             
-            <div class="fullName">dashboard<wbr></wbr>.query<wbr></wbr>.count<wbr></wbr>_patients</div>
-            <div class="url">dashboard.query.html#count_patients</div>
+            <div class="fullName">dashboard<wbr></wbr>.query<wbr></wbr>.<wbr></wbr>Modality<wbr></wbr>Combinor</div>
+            <div class="url">dashboard.query.ModalityCombinor.html</div>
+            <div class="type">Class</div>
+            <div class="kind">Class</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">Utility class that defines and helps to select the various methods for combining diagnoses from different modalities.</div>
+          </li><li id="dashboard.query.ModalityCombinor.__init__">
+            
+            <div class="fullName">dashboard<wbr></wbr>.query<wbr></wbr>.<wbr></wbr>Modality<wbr></wbr>Combinor<wbr></wbr>.__init__</div>
+            <div class="url">dashboard.query.ModalityCombinor.html#__init__</div>
+            <div class="type">Function</div>
+            <div class="kind">Method</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">Initialize the helper class with the name of the method to combine modalities.</div>
+          </li><li id="dashboard.query.ModalityCombinor.method">
+            
+            <div class="fullName">dashboard<wbr></wbr>.query<wbr></wbr>.<wbr></wbr>Modality<wbr></wbr>Combinor<wbr></wbr>.method</div>
+            <div class="url">dashboard.query.ModalityCombinor.html#method</div>
+            <div class="type">Attribute</div>
+            <div class="kind">Instance Variable</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary"><span class="undocumented">Undocumented</span></div>
+          </li><li id="dashboard.query.ModalityCombinor.specificities">
+            
+            <div class="fullName">dashboard<wbr></wbr>.query<wbr></wbr>.<wbr></wbr>Modality<wbr></wbr>Combinor<wbr></wbr>.specificities</div>
+            <div class="url">dashboard.query.ModalityCombinor.html#specificities</div>
+            <div class="type">Attribute</div>
+            <div class="kind">Instance Variable</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary"><span class="undocumented">Undocumented</span></div>
+          </li><li id="dashboard.query.ModalityCombinor.sensitivities">
+            
+            <div class="fullName">dashboard<wbr></wbr>.query<wbr></wbr>.<wbr></wbr>Modality<wbr></wbr>Combinor<wbr></wbr>.sensitivities</div>
+            <div class="url">dashboard.query.ModalityCombinor.html#sensitivities</div>
+            <div class="type">Attribute</div>
+            <div class="kind">Instance Variable</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary"><span class="undocumented">Undocumented</span></div>
+          </li><li id="dashboard.query.ModalityCombinor.logical_OR">
+            
+            <div class="fullName">dashboard<wbr></wbr>.query<wbr></wbr>.<wbr></wbr>Modality<wbr></wbr>Combinor<wbr></wbr>.logical_<wbr></wbr>OR</div>
+            <div class="url">dashboard.query.ModalityCombinor.html#logical_OR</div>
+            <div class="type">Function</div>
+            <div class="kind">Static Method</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">Use the logical OR to determine combined involvement.</div>
+          </li><li id="dashboard.query.ModalityCombinor.logical_AND">
+            
+            <div class="fullName">dashboard<wbr></wbr>.query<wbr></wbr>.<wbr></wbr>Modality<wbr></wbr>Combinor<wbr></wbr>.logical_<wbr></wbr>AND</div>
+            <div class="url">dashboard.query.ModalityCombinor.html#logical_AND</div>
+            <div class="type">Function</div>
+            <div class="kind">Static Method</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">Logical AND combination method.</div>
+          </li><li id="dashboard.query.ModalityCombinor.rank">
+            
+            <div class="fullName">dashboard<wbr></wbr>.query<wbr></wbr>.<wbr></wbr>Modality<wbr></wbr>Combinor<wbr></wbr>.rank</div>
+            <div class="url">dashboard.query.ModalityCombinor.html#rank</div>
+            <div class="type">Function</div>
+            <div class="kind">Static Method</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">Combine diagnoses by trusting the one with the highest spcificity/sensitivity.</div>
+          </li><li id="dashboard.query.ModalityCombinor.max_llh">
+            
+            <div class="fullName">dashboard<wbr></wbr>.query<wbr></wbr>.<wbr></wbr>Modality<wbr></wbr>Combinor<wbr></wbr>.max<wbr></wbr>_llh</div>
+            <div class="url">dashboard.query.ModalityCombinor.html#max_llh</div>
+            <div class="type">Function</div>
+            <div class="kind">Static Method</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">Combine diagnoses by computing true involvement is the most likely, given the provided set of observations.</div>
+          </li><li id="dashboard.query.ModalityCombinor.combine">
+            
+            <div class="fullName">dashboard<wbr></wbr>.query<wbr></wbr>.<wbr></wbr>Modality<wbr></wbr>Combinor<wbr></wbr>.combine</div>
+            <div class="url">dashboard.query.ModalityCombinor.html#combine</div>
+            <div class="type">Function</div>
+            <div class="kind">Method</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">Choose the method to combine the diagnoses and perform the combination using the stored values for sensitivity and specificity.</div>
+          </li><li id="dashboard.query.combine_diagnoses">
+            
+            <div class="fullName">dashboard<wbr></wbr>.query<wbr></wbr>.combine<wbr></wbr>_diagnoses</div>
+            <div class="url">dashboard.query.html#combine_diagnoses</div>
             <div class="type">Function</div>
             <div class="kind">Function</div>
             <div class="privacy">PUBLIC</div>
-            <div class="summary">Count how often patients have various characteristics like HPV status, certain lymph node level involvement, and so on.</div>
+            <div class="summary">Combine the potentially conflicting diagnoses for each patient and each side according to the chosen combination method.</div>
+          </li><li id="dashboard.query.extract_filter_pattern">
+            
+            <div class="fullName">dashboard<wbr></wbr>.query<wbr></wbr>.extract<wbr></wbr>_filter<wbr></wbr>_pattern</div>
+            <div class="url">dashboard.query.html#extract_filter_pattern</div>
+            <div class="type">Function</div>
+            <div class="kind">Function</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">Sort the <tt class="rst-docutils literal">kwargs</tt> from the request.</div>
+          </li><li id="dashboard.query.does_patient_match">
+            
+            <div class="fullName">dashboard<wbr></wbr>.query<wbr></wbr>.does<wbr></wbr>_patient<wbr></wbr>_match</div>
+            <div class="url">dashboard.query.html#does_patient_match</div>
+            <div class="type">Function</div>
+            <div class="kind">Function</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">Compare the diagnose of a patient with the involvement pattern to filter for.</div>
           </li><li id="dashboard.forms.logger">
             
             <div class="fullName">dashboard<wbr></wbr>.forms<wbr></wbr>.logger</div>
@@ -3116,6 +3236,38 @@
             <div class="kind">Variable</div>
             <div class="privacy">PUBLIC</div>
             <div class="summary"><span class="undocumented">Undocumented</span></div>
+          </li><li id="dashboard.tests.QueryTests">
+            
+            <div class="fullName">dashboard<wbr></wbr>.tests<wbr></wbr>.<wbr></wbr>Query<wbr></wbr>Tests</div>
+            <div class="url">dashboard.tests.QueryTests.html</div>
+            <div class="type">Class</div>
+            <div class="kind">Class</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">Run unit test for the <code>new_query</code> module.</div>
+          </li><li id="dashboard.tests.QueryTests.setUp">
+            
+            <div class="fullName">dashboard<wbr></wbr>.tests<wbr></wbr>.<wbr></wbr>Query<wbr></wbr>Tests<wbr></wbr>.set<wbr></wbr>Up</div>
+            <div class="url">dashboard.tests.QueryTests.html#setUp</div>
+            <div class="type">Function</div>
+            <div class="kind">Method</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary"><span class="undocumented">Undocumented</span></div>
+          </li><li id="dashboard.tests.QueryTests.test_extract_filter_pattern">
+            
+            <div class="fullName">dashboard<wbr></wbr>.tests<wbr></wbr>.<wbr></wbr>Query<wbr></wbr>Tests<wbr></wbr>.test<wbr></wbr>_extract<wbr></wbr>_filter<wbr></wbr>_pattern</div>
+            <div class="url">dashboard.tests.QueryTests.html#test_extract_filter_pattern</div>
+            <div class="type">Function</div>
+            <div class="kind">Method</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">Make sure all LNLs are extracted and correctly placed in dictionary.</div>
+          </li><li id="dashboard.tests.QueryTests.test_ModalityCombinor">
+            
+            <div class="fullName">dashboard<wbr></wbr>.tests<wbr></wbr>.<wbr></wbr>Query<wbr></wbr>Tests<wbr></wbr>.test_<wbr></wbr>Modality<wbr></wbr>Combinor</div>
+            <div class="url">dashboard.tests.QueryTests.html#test_ModalityCombinor</div>
+            <div class="type">Function</div>
+            <div class="kind">Method</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">Test the helper class <code>new_query.ModalityCombinor</code>.</div>
           </li><li id="dashboard.views.logger">
             
             <div class="fullName">dashboard<wbr></wbr>.views<wbr></wbr>.logger</div>
