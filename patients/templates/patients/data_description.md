@@ -26,12 +26,12 @@ The data is provided as a CSV-table containing one row for each of the patients 
         1. **`volume`**: Volume of the tumor in cm3
         1. **`stage_prefix`**: Prefix modifier of the T-category. Can be `“c”` or `“p”`
         1. **`t_stage`**: T-category of the tumor, according to TNM staging
-3. **`<diagnostic modality>`**: Each recorded diagnostic modality is indicated by its own top-level header. In this file FNA, CT, MRI, PET, path (pathology) and pCT (planning CT) are provided
+3. **`<diagnostic modality>`**: Each recorded diagnostic modality is indicated by its own top-level header. Currently, `FNA`, `CT`, `MRI`, `PET`, `pathology`, `diagnostic_consensus`, and `pCT` (planning CT) are possible values for the diagnostic modality.
     1. **`info`**:
         1. **`date`**: Day on which a diagnose with the respective modality was performed
-    1. **`right`**: All findings of involved lymph nodes on the right side of the patient’s neck
-        1. **`<LNL>`**: One column is provided for each recorded lymph node level. For each level `true` indicates at least one finding diagnosed as malignant lymph node in the respective LNL, `false` means no malignant lymph node has been found and an empty field indicates that no diagnosis is available for this LNL according to the respective diagnostic modality. `<LNL>` can be: I, Ia, Ib, II, IIa, IIb, III, IV, V, VI, VII, VIII, IX, X.
-    1. **`left`**: Same as 3.2 but for the left side of the patient’s neck
+    2. **`ipsi`**: All findings of involved lymph nodes on the ipsilateral side of the patient’s neck
+        1. **`<LNL>`**: One column is provided for each recorded lymph node level. For each level `true` indicates at least one finding diagnosed as malignant lymph node in the respective LNL, `false` means no malignant lymph node has been found and an empty field indicates that no diagnosis is available for this LNL according to the respective diagnostic modality. `<LNL>` can be: I, Ia, Ib, II, IIa, IIb, III, IV, V, Va, Vb, VI, VII, VIII, IX, X.
+    3. **`contra`**: Same as 3.2 but for the left side of the patient’s neck
         1. **`<LNL>`**: same as under 3.2.1
 
 
