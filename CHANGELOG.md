@@ -1,6 +1,23 @@
 <a name="unreleased"></a>
 ## [Unreleased]
 
+<a name="0.3.2"></a>
+## [0.3.2] - 2023-03-08
+
+### Bug Fixes
+- new query produces fewer SQL lines, thereby fixing [#89]
+- patient list working again after new query broke it
+
+### Documentation
+- switch to markdown for `README.md`
+- improve `README.md`
+- correct two small errors in static texts
+- improve query function's docstrings
+
+### Testing
+- Implement some unit tests for new querying
+
+
 <a name="0.3.1"></a>
 ## [0.3.1] - 2023-03-06
 
@@ -46,7 +63,8 @@ Commits before the 2nd of March 2023 did not use conventional commits and no cha
 - [0.0.2] - 2021-10-04
 - 0.0.1 - 2021-10-04
 
-[Unreleased]: https://github.com/rmnldwg/lyprox/compare/0.3.1...HEAD
+[Unreleased]: https://github.com/rmnldwg/lyprox/compare/0.3.2...HEAD
+[0.3.2]: https://github.com/rmnldwg/lyprox/compare/0.3.1...0.3.2
 [0.3.1]: https://github.com/rmnldwg/lyprox/compare/0.3.0...0.3.1
 [0.3.0]: https://github.com/rmnldwg/lyprox/compare/0.2.17...0.3.0
 [0.2.17]: https://github.com/rmnldwg/lyprox/compare/0.2.16...0.2.17
@@ -74,4 +92,5 @@ Commits before the 2nd of March 2023 did not use conventional commits and no cha
 [0.1.0]: https://github.com/rmnldwg/lyprox/compare/0.0.2...0.1.0
 [0.0.2]: https://github.com/rmnldwg/lyprox/compare/0.0.1...0.0.2
 
+[#89]: https://github.com/rmnldwg/lyprox/issues/89
 [#94]: https://github.com/rmnldwg/lyprox/issues/94

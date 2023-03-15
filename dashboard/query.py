@@ -25,7 +25,7 @@ logger = logging.getLogger(__name__)
 
 
 def run_query(
-    patients: QuerySet | None,
+    patients: Optional[QuerySet],
     cleaned_form_data: Dict[str, Any],
     do_compute_statistics: bool = True,
 ) -> Dict[int, Any]:
@@ -355,12 +355,12 @@ def sort_tumors_by_patient(tumors: QuerySet) -> Dict[int, Any]:
 
 
 def diagnose_specific(
-    diagnoses: QuerySet | None,
-    modalities: List[int] | None,
+    diagnoses: Optional[QuerySet],
+    modalities: Optional[List[int]],
     modality_combine: str = "maxLLH",
-    n_status: bool | None = None,
+    n_status: Optional[bool] = None,
     **kwargs,
-) -> Dict[int, Dict[str, Dict[str, bool | None]]]:
+) -> Dict[int, Dict[str, Dict[str, Optional[bool]]]]:
     """
     Filter the diagnoses based on selected involvement patterns.
 
@@ -474,7 +474,7 @@ class ModalityCombinor:
     @staticmethod
     @lru_cache
     def logical_OR(
-        values: Tuple[bool | None],
+        values: Tuple[Optional[bool]],
         specificities: Tuple[float],
         sensitivities: Tuple[float],
     ) -> bool:
@@ -484,7 +484,7 @@ class ModalityCombinor:
     @staticmethod
     @lru_cache
     def logical_AND(
-        values: Tuple[bool | None],
+        values: Tuple[Optional[bool]],
         specificities: Tuple[float],
         sensitivities: Tuple[float],
     ) -> bool:
@@ -494,7 +494,7 @@ class ModalityCombinor:
     @staticmethod
     @lru_cache
     def rank(
-        values: Tuple[bool | None],
+        values: Tuple[Optional[bool]],
         specificities: Tuple[float],
         sensitivities: Tuple[float],
     ) -> bool:
@@ -512,7 +512,7 @@ class ModalityCombinor:
     @staticmethod
     @lru_cache
     def max_llh(
-        values: Tuple[bool | None],
+        values: Tuple[Optional[bool]],
         specificities: Tuple[float],
         sensitivities: Tuple[float],
     ) -> bool:
@@ -535,7 +535,7 @@ class ModalityCombinor:
 
         return healthy_llh < involved_llh
 
-    def combine(self, values: Tuple[bool | None]) -> bool | None:
+    def combine(self, values: Tuple[Optional[bool]]) -> Optional[bool]:
         """
         Choose the method to combine the diagnoses and perform the combination using
         the stored values for sensitivity and specificity.
@@ -558,7 +558,7 @@ class ModalityCombinor:
 def combine_diagnoses(
     method: Callable,
     diagnoses: Dict[int, Dict[str, np.ndarray]]
-) -> Dict[int, Dict[str, Dict[str, bool | None]]]:
+) -> Dict[int, Dict[str, Dict[str, Optional[bool]]]]:
     """
     Combine the potentially conflicting diagnoses for each patient and each side
     according to the chosen combination method.
@@ -598,8 +598,8 @@ def combine_diagnoses(
 
 
 def extract_filter_pattern(
-    kwargs: Dict[str, bool | None],
-) -> Dict[str, Dict[str, bool | None]]:
+    kwargs: Dict[str, Optional[bool]],
+) -> Dict[str, Dict[str, Optional[bool]]]:
     """
     Sort the ``kwargs`` from the request.
 
@@ -616,9 +616,9 @@ def extract_filter_pattern(
 
 
 def does_patient_match(
-    patient_diagnose: Dict[str, Dict[str, bool | None]],
-    filter_pattern: Dict[str, Dict[str, bool | None]],
-    n_status: bool | None,
+    patient_diagnose: Dict[str, Dict[str, Optional[bool]]],
+    filter_pattern: Dict[str, Dict[str, Optional[bool]]],
+    n_status: Optional[bool],
 ) -> bool:
     """
     Compare the diagnose of a patient with the involvement pattern to filter for.
