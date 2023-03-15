@@ -19,12 +19,11 @@ jobs:
         script: |
           cd ${{ secrets.REPO_NAME }}
           git pull --tags origin main
-          source .venv/bin/activate
-          pip install --upgrade pip setuptools wheel
-          pip install -r requirements.txt
-          python manage.py dbbackup --noinput
-          python manage.py migrate --noinput
-          python manage.py collectstatic --noinput
+          .venv/bin/python -m pip install --upgrade pip setuptools setuptools_scm wheel
+          .venv/bin/python -m pip install .
+          .venv/bin/python manage.py dbbackup --noinput
+          .venv/bin/python manage.py migrate --noinput
+          .venv/bin/python manage.py collectstatic --noinput
           sudo chown rmnldwg:www-data db.sqlite3
           chmod 664 db.sqlite3
           sudo chown -R rmnldwg:www-data media
