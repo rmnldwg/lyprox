@@ -81,7 +81,7 @@ python_files = "test_*.py"
 
 [tool.pydoctor]
 project-name = "LyProX"
-add-package = ["core", "patient", "dashboard"]
+add-package = ["core", "patients", "dashboard"]
 docformat = "google"
 make-html = true
 html-output = "./docs"
