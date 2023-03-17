@@ -62,47 +62,52 @@ def set_LOGGING(LOG_LEVEL):
     can be called again to overwrite the logging settings easily.
     """
     LOGGING = {
-        'version': 1,
-        'disanle_existing_loggers': False,
+        "version": 1,
+        "disanle_existing_loggers": False,
 
-        'formatters': {
-            'default': {
-                'format': "[%(asctime)s] %(levelname)-10s %(name)-40s %(message)s"
+        "formatters": {
+            "default": {
+                "format": "[%(asctime)s] %(levelname)-10s %(name)-40s %(message)s"
             }
         },
 
-        'handlers': {
-            'console': {
-                'class': 'logging.StreamHandler',
-                'formatter': 'default',
+        "handlers": {
+            "console": {
+                "class": "logging.StreamHandler",
+                "formatter": "default",
             },
-            'file': {
-                'class': 'logging.FileHandler',
-                'filename': BASE_DIR / 'debug.log',
-                'formatter': 'default'
-            }
         },
 
-        'loggers': {
-            'django': {
-                'level': LOG_LEVEL,
-                'handlers': ['console', 'file']
+        "root": {
+            "handlers": ["console"],
+            "level": LOG_LEVEL,
+        },
+
+        "loggers": {
+            "django": {
+                "level": LOG_LEVEL,
+                "handlers": ["console"],
+                "propagate": False,
             },
-            'patients': {
-                'level': LOG_LEVEL,
-                'handlers': ['console', 'file']
+            "patients": {
+                "level": LOG_LEVEL,
+                "handlers": ["console"],
+                "propagate": False,
             },
-            'accounts': {
-                'level': LOG_LEVEL,
-                'handlers': ['console', 'file']
+            "accounts": {
+                "level": LOG_LEVEL,
+                "handlers": ["console"],
+                "propagate": False,
             },
-            'auth_logger': {
-                'level': LOG_LEVEL,
-                'handlers': ['console', 'file']
+            "auth_logger": {
+                "level": LOG_LEVEL,
+                "handlers": ["console"],
+                "propagate": False,
             },
-            'dashboard': {
-                'level': LOG_LEVEL,
-                'handlers': ['console', 'file']
+            "dashboard": {
+                "level": LOG_LEVEL,
+                "handlers": ["console"],
+                "propagate": False,
             }
         }
     }
