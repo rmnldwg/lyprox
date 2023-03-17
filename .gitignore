@@ -68,8 +68,8 @@ db.sqlite3-journal
 /media/
 /uploads/
 /downloads/
-*/wsgi.py
 */asgi.py
+*/_version.py
 
 # Flask stuff:
 instance/

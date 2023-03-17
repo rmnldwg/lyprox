@@ -2,32 +2,35 @@
 Django settings. The most important settings - but also as few as possible - should be
 fetched from environment variables.
 
-In production, only three env vars should need to be changed:
-- `DJANGO_ENV` should be set to `"production"`
-- `DJANGO_SECRET_KEY` should contain the secret key for Django's security stuff
+The settings are written such that errors are thrown when the required env vars are
+not present. This is by design, to ensure the host environment is configured for the
+application.
+
+Only three env vars should need to be changed:
+- `DJANGO_ENV` can take on the values `"debug"`, `"maintenance"`, or `"production"`
+- `DJANGO_SECRET_KEY` must contain the secret key for Django's security stuff
 - `DJANGO_ALLOWED_HOSTS` needs to contain the allowed host names separated by spaces
 """
 import os
 import subprocess
 from pathlib import Path
 
+# old secret key: "k_&(m5ymps%p=4&qjnwkv-avxb@@ez1tewc8g_eg4k#jx59ukx"
 
-DEBUG = os.getenv("DJANGO_ENV", default="develop") == "develop"
-MAINTENANCE = os.getenv("DJANGO_ENV", default="develop") == "maintenance"
-PRODUCTION = os.getenv("DJANGO_ENV", default="develop") == "production"
-LOG_LEVEL = "DEBUG" if DEBUG else "WARNING"
-SECRET_KEY = os.getenv(
-    "DJANGO_SECRET_KEY",
-    default='k_&(m5ymps%p=4&qjnwkv-avxb@@ez1tewc8g_eg4k#jx59ukx',
-)
-ALLOWED_HOSTS = os.getenv("DJANGO_ALLOWED_HOSTS", default="").split(" ")
+
+DEBUG = os.environ["DJANGO_ENV"] == "debug"
+MAINTENANCE = os.environ["DJANGO_ENV"] == "maintenance"
+PRODUCTION = os.environ["DJANGO_ENV"] == "production"
+LOG_LEVEL = os.environ["DJANGO_LOG_LEVEL"] if DEBUG else "WARNING"
+SECRET_KEY = os.environ["DJANGO_SECRET_KEY"]
+ALLOWED_HOSTS = os.environ["DJANGO_ALLOWED_HOSTS"].split(" ")
+
 
 CSRF_COOKIE_SECURE = False
 SESSION_COOKIE_SECURE = False
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-FILE_UPLOAD_TEMP_DIR = BASE_DIR / "tmp"
 LOGIN_REDIRECT_URL = "/"
 
 # GitHub repository URL
@@ -124,23 +127,24 @@ INSTALLED_APPS = [
     "fontawesomefree",
     "dbbackup",
 
-    'django.contrib.admin',
-    'django.contrib.auth',
-    'django.contrib.contenttypes',
-    'django.contrib.sessions',
-    'django.contrib.messages',
-    'django.contrib.staticfiles',
+    # django contrib apps
+    "django.contrib.admin",
+    "django.contrib.auth",
+    "django.contrib.contenttypes",
+    "django.contrib.sessions",
+    "django.contrib.messages",
+    "django.contrib.staticfiles",
 ]
 
 MIDDLEWARE = [
-    'core.middleware.MaintenanceMiddleware',
-    'django.middleware.security.SecurityMiddleware',
-    'django.contrib.sessions.middleware.SessionMiddleware',
-    'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
-    'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'django.contrib.messages.middleware.MessageMiddleware',
-    'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    "core.middleware.MaintenanceMiddleware",
+    "django.middleware.security.SecurityMiddleware",
+    "django.contrib.sessions.middleware.SessionMiddleware",
+    "django.middleware.common.CommonMiddleware",
+    "django.middleware.csrf.CsrfViewMiddleware",
+    "django.contrib.auth.middleware.AuthenticationMiddleware",
+    "django.contrib.messages.middleware.MessageMiddleware",
+    "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
 
 ROOT_URLCONF = 'core.urls'
@@ -200,15 +204,14 @@ USE_L10N = True
 USE_TZ = True
 
 
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/3.1/howto/static-files/
-STATICFILES_DIRS = [
-    BASE_DIR / "core" / "static"
-]
-
+# Static files (CSS, JavaScript, Images) and media (up- & download)
 STATIC_ROOT = BASE_DIR / "static"
 STATIC_URL = "/static/"
 
 # upload files
 MEDIA_ROOT = BASE_DIR / "media"
 MEDIA_URL = "/media/"
+
+STATICFILES_DIRS = [
+    BASE_DIR / "core" / "static"
+]
