@@ -1,31 +1,27 @@
-"""Default Django settings for the LyProX web interfaces.
-
-This should not directly be used by e.g. WSGI, but rather another Python module
-`settings` should be used for the respective subdomain of the interface that
-overwrites the defaults with appropriate values.
-
-.. note::
-    You should not edit *this* file, but rather the `settings` module.
 """
+Django settings. The most important settings - but also as few as possible - should be
+fetched from environment variables.
+
+In production, only three env vars should need to be changed:
+- `DJANGO_ENV` should be set to `"production"`
+- `DJANGO_SECRET_KEY` should contain the secret key for Django's security stuff
+- `DJANGO_ALLOWED_HOSTS` needs to contain the allowed host names separated by spaces
+"""
+import os
 import subprocess
 from pathlib import Path
 
-# security
-DEBUG = True
-"""Set to ``False`` in production"""
-MAINTENANCE = False
-"""Set to ``True`` during maintenance. This will redirect all incoming requests
-to a maintenance page.
-"""
-SECRET_KEY = 'k_&(m5ymps%p=4&qjnwkv-avxb@@ez1tewc8g_eg4k#jx59ukx'
-"""The secret key for security related functions like salt & pepper of password
-hashes.
 
-.. warning::
-    The secret key MUST be changed by the `settings` module!!!
-"""
-ALLOWED_HOSTS = []
-"""List the URLs and IP addresses via which the site can be reached."""
+DEBUG = os.getenv("DJANGO_ENV", default="develop") == "develop"
+MAINTENANCE = os.getenv("DJANGO_ENV", default="develop") == "maintenance"
+PRODUCTION = os.getenv("DJANGO_ENV", default="develop") == "production"
+LOG_LEVEL = "DEBUG" if DEBUG else "WARNING"
+SECRET_KEY = os.getenv(
+    "DJANGO_SECRET_KEY",
+    default='k_&(m5ymps%p=4&qjnwkv-avxb@@ez1tewc8g_eg4k#jx59ukx',
+)
+ALLOWED_HOSTS = os.getenv("DJANGO_ALLOWED_HOSTS", default="").split(" ")
+
 CSRF_COOKIE_SECURE = False
 SESSION_COOKIE_SECURE = False
 
@@ -113,7 +109,6 @@ def set_LOGGING(LOG_LEVEL):
     }
     return LOGGING
 
-LOG_LEVEL = "INFO"
 LOGGING = set_LOGGING(LOG_LEVEL)
 
 
