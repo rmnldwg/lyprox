@@ -12,8 +12,9 @@ Only three env vars should need to be changed:
 - `DJANGO_ALLOWED_HOSTS` needs to contain the allowed host names separated by spaces
 """
 import os
-import subprocess
 from pathlib import Path
+
+from ._version import version
 
 # old secret key: "k_&(m5ymps%p=4&qjnwkv-avxb@@ez1tewc8g_eg4k#jx59ukx"
 
@@ -39,9 +40,7 @@ GITHUB_REPO_NAME = "lyprox"
 
 # versioning
 try:
-    VERSION = subprocess.check_output(
-        "git describe --tags --abbrev=0", cwd=BASE_DIR, shell=True
-    ).decode("utf-8").strip()
+    VERSION = version
 except Exception as e:
     VERSION = e
 

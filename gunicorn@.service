@@ -1,0 +1,21 @@
+[Unit]
+Description = A Gunicorn Webserver for %i.
+After = network.target
+
+[Service]
+PermissionsStartOnly = true
+User = www-data
+Group = www-data
+WorkingDirectory = /srv/www/%i
+EnvironmentFile = /srv/www/%i/.env
+ExecStartPre = /bin/mkdir -p /var/log/gunicorn
+ExecStartPre = /bin/chown -R www-data:www-data /srv/www/%i
+ExecStartPre = /bin/chown -R www-data:www-data /var/log/gunicorn
+ExecStart = /srv/www/%i/.venv/bin/python -m gunicorn -c /srv/www/%i/gunicorn.conf.py
+ExecReload = /bin/kill -s HUP $MAINPID
+ExecStop = /bin/kill -s TERM $MAINPID
+StandardOutput = append:/var/log/gunicorn/%i.log
+PrivateTmp = true
+
+[Install]
+WantedBy = multi-user.target
