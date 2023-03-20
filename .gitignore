@@ -66,8 +66,7 @@ db.sqlite3
 db.sqlite3-journal
 /static/
 /media/
-/uploads/
-/downloads/
+/backups/
 */asgi.py
 */_version.py
 
