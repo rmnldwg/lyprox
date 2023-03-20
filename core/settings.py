@@ -30,6 +30,7 @@ ALLOWED_HOSTS = os.environ["DJANGO_ALLOWED_HOSTS"].split(" ")
 CSRF_COOKIE_SECURE = not DEBUG
 CRSF_TRUSTED_ORIGINS = [f"https://{host}" for host in ALLOWED_HOSTS]
 SESSION_COOKIE_SECURE = False
+SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
