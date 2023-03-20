@@ -68,10 +68,8 @@ db.sqlite3-journal
 /media/
 /uploads/
 /downloads/
-*/migrations
-core/settings.py
-*/wsgi.py
 */asgi.py
+*/_version.py
 
 # Flask stuff:
 instance/
@@ -80,8 +78,8 @@ instance/
 # Scrapy stuff:
 .scrapy
 
-# Sphinx documentation
-docs/_build/
+# Documentation
+docs/
 
 # PyBuilder
 target/
