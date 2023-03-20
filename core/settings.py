@@ -15,8 +15,6 @@ import os
 import subprocess
 from pathlib import Path
 
-from ._version import version
-
 # old secret key: "k_&(m5ymps%p=4&qjnwkv-avxb@@ez1tewc8g_eg4k#jx59ukx"
 
 
@@ -126,8 +124,7 @@ INSTALLED_APPS = [
 
     # third party apps
     "django_filters",
-    "fontawesomefree",
-    "dbbackup",
+    "phonenumber_field",
 
     # django contrib apps
     "django.contrib.admin",
@@ -139,7 +136,6 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
-    "core.middleware.MaintenanceMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
@@ -213,6 +209,10 @@ STATIC_URL = "/static/"
 # upload files
 MEDIA_ROOT = BASE_DIR / "media"
 MEDIA_URL = "/media/"
+
+# Download files
+DOWNLOADS_ROOT = BASE_DIR / "downloads"
+DOWNLOADS_URL = "/downloads/"
 
 STATICFILES_DIRS = [
     BASE_DIR / "core" / "static"

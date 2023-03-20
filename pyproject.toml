@@ -30,6 +30,12 @@ keywords = ["web app", "head and neck", "cancer", "radiation oncology", "lymph n
 license = { text = "MIT"}
 dynamic = ["version"]
 
+[project.optional-dependencies]
+dev = [
+    "pre-commit ~= 3.1",
+    "conventional-pre-commit ~= 2.1",
+]
+
 [project.urls]
 source = "https://github.com/rmnldwg/lyprox"
 documentation = "https://rmnldwg.github.io/lyprox"
