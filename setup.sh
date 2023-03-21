@@ -66,10 +66,10 @@ prep_dir /var/log/gunicorn write
 
 info "clone LyProX repo into correct location:"
 if [ ! -d /srv/www/$1/.git ]; then
-    git clone --depth=1 --branch $branch https://github.com/rmnldwg/lyprox /srv/www/$1
+    git clone --branch $branch https://github.com/rmnldwg/lyprox /srv/www/$1
 fi
 git --git-dir=/srv/www/$1/.git --work-tree=/srv/www/$1 checkout --force $branch
-git --git-dir=/srv/www/$1/.git --work-tree=/srv/www/$1 pull --depth=1 --force
+git --git-dir=/srv/www/$1/.git --work-tree=/srv/www/$1 pull --force
 
 info "create srv directory and assign correct permissions:"
 prep_dir /srv/www/$1 read
