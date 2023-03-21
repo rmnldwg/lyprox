@@ -18,9 +18,9 @@ help() {
     help_print "Prepare the directoy /srv/www/HOSTNAME for deployment of LyProX"
     help_print
     help_print "Options:"
-    help_print "  -h      Display this help text"
-    help_print "  -r REV  Git revision of the LyProX repo to check out (default: main)"
-    help_print "  -p VER  Python version to use for .venv (default: 3.8)"
+    help_print "  -h          Display this help text"
+    help_print "  -b BRANCH   Git revision of the LyProX repo to check out (default: main)"
+    help_print "  -p VERSION  Python version to use for .venv (default: 3.8)"
 }
 
 prep_dir() {
@@ -35,13 +35,13 @@ prep_dir() {
     find $1 -type f -exec chmod $permissions {} \;
 }
 
-while getopts ":hr:p:" option; do
+while getopts ":hb:p:" option; do
     case $option in
         h)
             help
             exit;;
-        r)
-            revision=$OPTARG
+        b)
+            branch=$OPTARG
             ;;
         :)
             info "Missing argument for option -r"
@@ -58,16 +58,18 @@ while getopts ":hr:p:" option; do
     esac
 done
 shift $((OPTIND - 1))
-revision=${revision:-main}
+branch=${branch:-main}
 py_version=${py_version:-3.8}
 
 info "create log directories and assign correct permissions:"
 prep_dir /var/log/gunicorn write
 
 info "clone LyProX repo into correct location:"
-git clone https://github.com/rmnldwg/lyprox /srv/www/$1
-git --git-dir=/srv/www/$1/.git --work-tree=/srv/www/$1 fetch --all --tags
-git --git-dir=/srv/www/$1/.git --work-tree=/srv/www/$1 checkout $revision
+if [ ! -d /srv/www/$1/.git ]; then
+    git clone --depth=1 --branch $branch https://github.com/rmnldwg/lyprox /srv/www/$1
+fi
+git --git-dir=/srv/www/$1/.git --work-tree=/srv/www/$1 fetch origin --depth=1
+git --git-dir=/srv/www/$1/.git --work-tree=/srv/www/$1 reset --hard $branch
 
 info "create srv directory and assign correct permissions:"
 prep_dir /srv/www/$1 read
