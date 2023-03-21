@@ -9,27 +9,12 @@ Group = www-data
 WorkingDirectory = /srv/www/%i
 EnvironmentFile = /srv/www/%i/.env
 
-# create log directory and file
-ExecStartPre = /bin/mkdir -p /var/log/gunicorn
-ExecStartPre = /bin/chown -R rmnldwg:www-data /var/log/gunicorn
-ExecStartPre = /bin/chmod 775 /var/log/gunicorn
-
-# Set up directories and give www-data user minimal rights
-ExecStartPre = /bin/mkdir -p /srv/www/%i/static
-ExecStartPre = /bin/mkdir -p /srv/www/%i/media
-ExecStartPre = /bin/chown -R rmnldwg:www-data /srv/www/%i
-ExecStartPre = /bin/find /srv/www/%i -type d -exec /bin/chmod 755 {} \;
-ExecStartPre = /bin/find /srv/www/%i -type f -exec /bin/chmod 644 {} \;
-ExecStartPre = /bin/chmod 664 /srv/www/%i/db.sqlite3
-ExecStartPre = /bin/find /srv/www/%i/media -type d -exec /bin/chmod 775 {} \;
-ExecStartPre = /bin/find /srv/www/%i/media -type f -exec /bin/chmod 664 {} \;
-
-# Collect static data and run gunicorn
-ExecStartPre = /srv/www/%i/venv/bin/python /srv/www/%i/manage.py collectstatic --noinput
+ExecStartPre = /srv/www/%i/.venv/bin/python /srv/www/%i/manage.py migrate --noinput
+ExecStartPre = /srv/www/%i/.venv/bin/python /srv/www/%i/manage.py collectstatic --noinput
 ExecStart = /srv/www/%i/.venv/bin/python -m gunicorn -c /srv/www/%i/gunicorn.conf.py
 
-ExecReload = /bin/kill -s HUP $MAINPID
-ExecStop = /bin/kill -s TERM $MAINPID
+ExecReload = kill -s HUP $MAINPID
+ExecStop = kill -s TERM $MAINPID
 StandardOutput = append:/var/log/gunicorn/%i.log
 PrivateTmp = true
 
