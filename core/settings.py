@@ -1,16 +1,20 @@
 """
-Django settings. The most important settings - but also as few as possible - should be
-fetched from environment variables.
+Django settings module that defines important configurations. For an explanation of
+all the listed values, see the official `Django documentation`_.
 
-The settings are written such that errors are thrown when the required env vars are
-not present. This is by design, to ensure the host environment is configured for the
-application.
+Generally, the most important settings - but also as few as possible - should be
+fetched from environment variables. The settings are written such that errors are
+thrown when the required env vars are not present. This is by design, to ensure the
+host environment is configured for the application.
 
 Only four env vars should need to be changed:
+
 - `DJANGO_ENV` can take on the values `"debug"`, `"maintenance"`, or `"production"`.
 - `DJANGO_SECRET_KEY` must contain the secret key for Django's security stuff.
 - `DJANGO_ALLOWED_HOSTS` needs to contain the allowed host names separated by spaces.
 - `DJANGO_LOG_LEVEL` for the log level. This only has an effect in debug mode.
+
+.. _Django documentation: https://docs.djangoproject.com/en/4.1/ref/settings/
 """
 import os
 from pathlib import Path
@@ -21,11 +25,35 @@ from ._version import version
 
 
 DEBUG = os.environ["DJANGO_ENV"] == "debug"
+"""``True``, when in debug mode, meaning ``DJANGO_ENV`` is set to ``"debug"``."""
+
 MAINTENANCE = os.environ["DJANGO_ENV"] == "maintenance"
+"""
+If ``True``, all requests to are redirected to a maintenance page. ``DJANGO_ENV`` must
+be set to ``"maintenance"`` for this to work. Also see `core.views.maintenance`.
+"""
+
 PRODUCTION = os.environ["DJANGO_ENV"] == "production"
+"""Set ``DJANGO_ENV`` to ``"production"`` to disable `DEBUG` and `MAINTENANCE` modes."""
+
 LOG_LEVEL = os.environ["DJANGO_LOG_LEVEL"] if DEBUG else "WARNING"
+"""
+Set the threshold for logging event when in `DEBUG` mode. During ``"maintenance"``
+and ``"production"`` this is fixed to ``"WARNING"``. Set via the environment variable
+``DJANGO_LOG_LEVEL``.
+"""
+
 SECRET_KEY = os.environ["DJANGO_SECRET_KEY"]
+"""
+Secret key for cryptographic functions. This is the most sensitive information about
+the application. It is set via the environment variable ``DJANGO_SECRET_KEY``.
+"""
+
 ALLOWED_HOSTS = os.environ["DJANGO_ALLOWED_HOSTS"].split(" ")
+"""
+Space-separated list of hostnames for which django will accept requests. Can be set
+with the env var ``DJANGO_ALLOWED_HOSTS``.
+"""
 
 
 CSRF_COOKIE_SECURE = not DEBUG
