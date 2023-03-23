@@ -17,16 +17,9 @@ jobs:
         key: ${{ secrets.REMOTE_KEY }}
         port: 22
         script: |
-          cd ${{ secrets.REPO_NAME }}
-          git pull --tags origin main
-          source .venv/bin/activate
-          pip install --upgrade pip setuptools wheel
-          pip install -r requirements.txt
-          python manage.py dbbackup --noinput
-          python manage.py migrate --noinput
-          python manage.py collectstatic --noinput
-          sudo chown rmnldwg:www-data db.sqlite3
-          chmod 664 db.sqlite3
-          sudo chown -R rmnldwg:www-data media
-          find media/* -type f -exec chmod 664 {} \;
-          sudo service apache2 restart
+          TMPFILE=$(mktemp)
+          wget https://raw.githubusercontent.com/rmnldwg/lyprox/main/setup.sh -O $TMPFILE
+          sudo bash $TMPFILE -p 3.8 lyprox.org
+          sudo cp /srv/www/lyprox.org/gunicorn@.service /etc/systemd/system/gunicorn@.service
+          sudo systemctl daemon-reload
+          sudo systemctl restart gunicorn@lyprox.org.service

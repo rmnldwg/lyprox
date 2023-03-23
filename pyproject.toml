@@ -1,3 +1,70 @@
+[build-system]
+requires = [
+    "setuptools >= 61.0.0",
+    "setuptools_scm >= 7.0.0",
+    "wheel",
+]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "lyprox"
+description = "Web app for exploring patterns and correlations in the lymph node level involvements of head & neck cancer patients."
+authors = [
+    {name = "Roman Ludwig", email = "roman.ludwig@usz.ch"}
+]
+readme = "README.md"
+requires-python = "~=3.8"
+dependencies = [
+    "Django ~= 4.1",
+    "django-filter ~= 2.4",
+    "django-phonenumber-field[phonenumbers] ~= 6.1",
+    "django-auth-logger ~= 2.1",
+    "Markdown ~= 3.3",
+    "numpy ~= 1.24",
+    "pandas ~= 1.5",
+    "fontawesomefree ~= 5.15",
+    "django-dbbackup ~= 4.0",
+    "icd10-cm == 0.0.4",
+    "python-magic ~= 0.4",
+    "gunicorn ~= 20.1",
+]
+keywords = ["web app", "head and neck", "cancer", "radiation oncology", "lymph nodes", "metastases"]
+license = { text = "MIT"}
+dynamic = ["version"]
+
+[project.optional-dependencies]
+docs = [
+    "docutils ~= 0.19",
+    "pydoctor ~= 22.9",
+]
+test = [
+    "pytest-factoryboy ~= 2.1",
+    "pytest-django ~= 4.2",
+]
+dev = [
+    "django-extensions ~= 3.2",
+    "pre-commit ~= 3.1",
+    "conventional-pre-commit ~= 2.1",
+]
+
+[project.urls]
+source = "https://github.com/rmnldwg/lyprox"
+documentation = "https://rmnldwg.github.io/lyprox"
+
+[tool.setuptools_scm]
+write_to = "core/_version.py"
+local_scheme = "no-local-version"
+
+[tool.setuptools.package-dir]
+"lyprox.core" = "core"
+"lyprox.accounts" = "accounts"
+"lyprox.patients" = "patients"
+"lyprox.dashboard" = "dashboard"
+"lyprox.analysis" = "analysis"
+
+[tool.setuptools.dynamic]
+version = {attr = "core._version.version"}
+
 [tool.isort]
 line_length = 79
 multi_line_output = 3
@@ -8,3 +75,30 @@ ensure_newline_before_comments = true
 
 [tool.pycln]
 all = true
+
+[tool.pytest.ini_options]
+DJANGO_SETTINGS_MODULE = "core.settings"
+python_files = "test_*.py"
+
+[tool.pydoctor]
+project-name = "LyProX"
+add-package = ["core", "patients", "dashboard"]
+docformat = "google"
+make-html = true
+html-output = "./docs"
+verbose = 1
+privacy = [
+    "HIDDEN:core.context_processors",
+    "HIDDEN:core.middleware",
+    "HIDDEN:core.loggers",
+    "HIDDEN:patients.migrations",
+    "HIDDEN:patients.static",
+    "HIDDEN:patients.templates",
+    "HIDDEN:patients.templatetags",
+    "HIDDEN:patients.admin",
+    "HIDDEN:patients.apps",
+    "HIDDEN:patients.tests",
+    "HIDDEN:dashboard.admin",
+    "HIDDEN:dashboard.apps",
+    "HIDDEN:dashboard.models",
+]
