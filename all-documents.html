@@ -139,7 +139,7 @@
             <div class="type">Package</div>
             <div class="kind">Package</div>
             <div class="privacy">PUBLIC</div>
-            <div class="summary">This is the module at the heat of <a class="rst-reference external" href="https://lyprox.org" target="_top">LyProX</a></div>
+            <div class="summary">This is the module at the heart of <a class="rst-reference external" href="https://lyprox.org" target="_top">LyProX</a>.</div>
           </li><li id="core._version">
             
             <div class="fullName">core<wbr></wbr>._version</div>
@@ -148,14 +148,14 @@
             <div class="kind">Module</div>
             <div class="privacy">PRIVATE</div>
             <div class="summary"><span class="undocumented">Undocumented</span></div>
-          </li><li id="core.defaults">
+          </li><li id="core.settings">
             
-            <div class="fullName">core<wbr></wbr>.defaults</div>
-            <div class="url">core.defaults.html</div>
+            <div class="fullName">core<wbr></wbr>.settings</div>
+            <div class="url">core.settings.html</div>
             <div class="type">Module</div>
             <div class="kind">Module</div>
             <div class="privacy">PUBLIC</div>
-            <div class="summary">Default Django settings for the LyProX web interfaces.</div>
+            <div class="summary">Django settings module that defines important configurations. For an explanation of all the listed values, see the official <a class="rst-reference external" href="https://docs.djangoproject.com/en/4.1/ref/settings/" target="_top">Django documentation</a>.</div>
           </li><li id="core.urls">
             
             <div class="fullName">core<wbr></wbr>.urls</div>
@@ -172,6 +172,14 @@
             <div class="kind">Module</div>
             <div class="privacy">PUBLIC</div>
             <div class="summary">Define the home view and a maintenance view.</div>
+          </li><li id="core.wsgi">
+            
+            <div class="fullName">core<wbr></wbr>.wsgi</div>
+            <div class="url">core.wsgi.html</div>
+            <div class="type">Module</div>
+            <div class="kind">Module</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary"><span class="undocumented">Undocumented</span></div>
           </li><li id="patients">
             
             <div class="fullName">patients</div>
@@ -348,298 +356,330 @@
             <div class="kind">Variable</div>
             <div class="privacy">PUBLIC</div>
             <div class="summary"><span class="undocumented">Undocumented</span></div>
-          </li><li id="core.defaults.DEBUG">
+          </li><li id="core.settings.DEBUG">
             
-            <div class="fullName">core<wbr></wbr>.defaults<wbr></wbr>.DEBUG</div>
-            <div class="url">core.defaults.html#DEBUG</div>
+            <div class="fullName">core<wbr></wbr>.settings<wbr></wbr>.DEBUG</div>
+            <div class="url">core.settings.html#DEBUG</div>
             <div class="type">Attribute</div>
             <div class="kind">Constant</div>
             <div class="privacy">PUBLIC</div>
-            <div class="summary">Set to <tt class="rst-docutils literal">False</tt> in production</div>
-          </li><li id="core.defaults.MAINTENANCE">
+            <div class="summary"><tt class="rst-docutils literal">True</tt>, when in debug mode, meaning <tt class="rst-docutils literal">DJANGO_ENV</tt> is set to <tt class="rst-docutils literal">"debug"</tt>.</div>
+          </li><li id="core.settings.MAINTENANCE">
             
-            <div class="fullName">core<wbr></wbr>.defaults<wbr></wbr>.MAINTENANCE</div>
-            <div class="url">core.defaults.html#MAINTENANCE</div>
+            <div class="fullName">core<wbr></wbr>.settings<wbr></wbr>.MAINTENANCE</div>
+            <div class="url">core.settings.html#MAINTENANCE</div>
             <div class="type">Attribute</div>
             <div class="kind">Constant</div>
             <div class="privacy">PUBLIC</div>
-            <div class="summary">Set to <tt class="rst-docutils literal">True</tt> during maintenance. This will redirect all incoming requests to a maintenance page.</div>
-          </li><li id="core.defaults.SECRET_KEY">
+            <div class="summary">If <tt class="rst-docutils literal">True</tt>, all requests to are redirected to a maintenance page. <tt class="rst-docutils literal">DJANGO_ENV</tt> must be set to <tt class="rst-docutils literal">"maintenance"</tt> for this to work. Also see <code><a href="core.views.html#maintenance" class="internal-link">core.views.maintenance</a></code>.</div>
+          </li><li id="core.settings.PRODUCTION">
             
-            <div class="fullName">core<wbr></wbr>.defaults<wbr></wbr>.SECRET<wbr></wbr>_KEY</div>
-            <div class="url">core.defaults.html#SECRET_KEY</div>
+            <div class="fullName">core<wbr></wbr>.settings<wbr></wbr>.PRODUCTION</div>
+            <div class="url">core.settings.html#PRODUCTION</div>
             <div class="type">Attribute</div>
             <div class="kind">Constant</div>
             <div class="privacy">PUBLIC</div>
-            <div class="summary">The secret key for security related functions like salt &amp; pepper of password hashes.</div>
-          </li><li id="core.defaults.ALLOWED_HOSTS">
+            <div class="summary">Set <tt class="rst-docutils literal">DJANGO_ENV</tt> to <tt class="rst-docutils literal">"production"</tt> to disable <code><a href="core.settings.html#DEBUG" class="internal-link" title="core.settings.DEBUG">DEBUG</a></code> and <code><a href="core.settings.html#MAINTENANCE" class="internal-link" title="core.settings.MAINTENANCE">MAINTENANCE</a></code> modes.</div>
+          </li><li id="core.settings.LOG_LEVEL">
             
-            <div class="fullName">core<wbr></wbr>.defaults<wbr></wbr>.ALLOWED<wbr></wbr>_HOSTS</div>
-            <div class="url">core.defaults.html#ALLOWED_HOSTS</div>
+            <div class="fullName">core<wbr></wbr>.settings<wbr></wbr>.LOG<wbr></wbr>_LEVEL</div>
+            <div class="url">core.settings.html#LOG_LEVEL</div>
             <div class="type">Attribute</div>
             <div class="kind">Constant</div>
             <div class="privacy">PUBLIC</div>
-            <div class="summary">List the URLs and IP addresses via which the site can be reached.</div>
-          </li><li id="core.defaults.CSRF_COOKIE_SECURE">
+            <div class="summary">Set the threshold for logging event when in <code><a href="core.settings.html#DEBUG" class="internal-link" title="core.settings.DEBUG">DEBUG</a></code> mode. During <tt class="rst-docutils literal">"maintenance"</tt> and <tt class="rst-docutils literal">"production"</tt> this is fixed to <tt class="rst-docutils literal">"WARNING"</tt>. Set via the environment variable <tt class="rst-docutils literal">DJANGO_LOG_LEVEL</tt>.</div>
+          </li><li id="core.settings.SECRET_KEY">
             
-            <div class="fullName">core<wbr></wbr>.defaults<wbr></wbr>.CSRF<wbr></wbr>_COOKIE<wbr></wbr>_SECURE</div>
-            <div class="url">core.defaults.html#CSRF_COOKIE_SECURE</div>
+            <div class="fullName">core<wbr></wbr>.settings<wbr></wbr>.SECRET<wbr></wbr>_KEY</div>
+            <div class="url">core.settings.html#SECRET_KEY</div>
             <div class="type">Attribute</div>
             <div class="kind">Constant</div>
             <div class="privacy">PUBLIC</div>
-            <div class="summary"><span class="undocumented">Undocumented</span></div>
-          </li><li id="core.defaults.SESSION_COOKIE_SECURE">
+            <div class="summary">Secret key for cryptographic functions. This is the most sensitive information about the application. It is set via the environment variable <tt class="rst-docutils literal">DJANGO_SECRET_KEY</tt>.</div>
+          </li><li id="core.settings.ALLOWED_HOSTS">
             
-            <div class="fullName">core<wbr></wbr>.defaults<wbr></wbr>.SESSION<wbr></wbr>_COOKIE<wbr></wbr>_SECURE</div>
-            <div class="url">core.defaults.html#SESSION_COOKIE_SECURE</div>
+            <div class="fullName">core<wbr></wbr>.settings<wbr></wbr>.ALLOWED<wbr></wbr>_HOSTS</div>
+            <div class="url">core.settings.html#ALLOWED_HOSTS</div>
             <div class="type">Attribute</div>
             <div class="kind">Constant</div>
             <div class="privacy">PUBLIC</div>
-            <div class="summary"><span class="undocumented">Undocumented</span></div>
-          </li><li id="core.defaults.BASE_DIR">
+            <div class="summary">Space-separated list of hostnames for which django will accept requests. Can be set with the env var <tt class="rst-docutils literal">DJANGO_ALLOWED_HOSTS</tt>.</div>
+          </li><li id="core.settings.CSRF_COOKIE_SECURE">
             
-            <div class="fullName">core<wbr></wbr>.defaults<wbr></wbr>.BASE<wbr></wbr>_DIR</div>
-            <div class="url">core.defaults.html#BASE_DIR</div>
-            <div class="type">Attribute</div>
-            <div class="kind">Constant</div>
-            <div class="privacy">PUBLIC</div>
-            <div class="summary"><span class="undocumented">Undocumented</span></div>
-          </li><li id="core.defaults.FILE_UPLOAD_TEMP_DIR">
-            
-            <div class="fullName">core<wbr></wbr>.defaults<wbr></wbr>.FILE<wbr></wbr>_UPLOAD<wbr></wbr>_TEMP<wbr></wbr>_DIR</div>
-            <div class="url">core.defaults.html#FILE_UPLOAD_TEMP_DIR</div>
+            <div class="fullName">core<wbr></wbr>.settings<wbr></wbr>.CSRF<wbr></wbr>_COOKIE<wbr></wbr>_SECURE</div>
+            <div class="url">core.settings.html#CSRF_COOKIE_SECURE</div>
             <div class="type">Attribute</div>
             <div class="kind">Constant</div>
             <div class="privacy">PUBLIC</div>
             <div class="summary"><span class="undocumented">Undocumented</span></div>
-          </li><li id="core.defaults.LOGIN_REDIRECT_URL">
+          </li><li id="core.settings.CRSF_TRUSTED_ORIGINS">
             
-            <div class="fullName">core<wbr></wbr>.defaults<wbr></wbr>.LOGIN<wbr></wbr>_REDIRECT<wbr></wbr>_URL</div>
-            <div class="url">core.defaults.html#LOGIN_REDIRECT_URL</div>
+            <div class="fullName">core<wbr></wbr>.settings<wbr></wbr>.CRSF<wbr></wbr>_TRUSTED<wbr></wbr>_ORIGINS</div>
+            <div class="url">core.settings.html#CRSF_TRUSTED_ORIGINS</div>
             <div class="type">Attribute</div>
             <div class="kind">Constant</div>
             <div class="privacy">PUBLIC</div>
             <div class="summary"><span class="undocumented">Undocumented</span></div>
-          </li><li id="core.defaults.GITHUB_REPO_OWNER">
+          </li><li id="core.settings.SESSION_COOKIE_SECURE">
             
-            <div class="fullName">core<wbr></wbr>.defaults<wbr></wbr>.GITHUB<wbr></wbr>_REPO<wbr></wbr>_OWNER</div>
-            <div class="url">core.defaults.html#GITHUB_REPO_OWNER</div>
+            <div class="fullName">core<wbr></wbr>.settings<wbr></wbr>.SESSION<wbr></wbr>_COOKIE<wbr></wbr>_SECURE</div>
+            <div class="url">core.settings.html#SESSION_COOKIE_SECURE</div>
             <div class="type">Attribute</div>
             <div class="kind">Constant</div>
             <div class="privacy">PUBLIC</div>
             <div class="summary"><span class="undocumented">Undocumented</span></div>
-          </li><li id="core.defaults.GITHUB_REPO_NAME">
+          </li><li id="core.settings.SECURE_HSTS_SECONDS">
             
-            <div class="fullName">core<wbr></wbr>.defaults<wbr></wbr>.GITHUB<wbr></wbr>_REPO<wbr></wbr>_NAME</div>
-            <div class="url">core.defaults.html#GITHUB_REPO_NAME</div>
+            <div class="fullName">core<wbr></wbr>.settings<wbr></wbr>.SECURE<wbr></wbr>_HSTS<wbr></wbr>_SECONDS</div>
+            <div class="url">core.settings.html#SECURE_HSTS_SECONDS</div>
             <div class="type">Attribute</div>
             <div class="kind">Constant</div>
             <div class="privacy">PUBLIC</div>
             <div class="summary"><span class="undocumented">Undocumented</span></div>
-          </li><li id="core.defaults.VERSION">
+          </li><li id="core.settings.SECURE_HSTS_PRELOAD">
             
-            <div class="fullName">core<wbr></wbr>.defaults<wbr></wbr>.VERSION</div>
-            <div class="url">core.defaults.html#VERSION</div>
+            <div class="fullName">core<wbr></wbr>.settings<wbr></wbr>.SECURE<wbr></wbr>_HSTS<wbr></wbr>_PRELOAD</div>
+            <div class="url">core.settings.html#SECURE_HSTS_PRELOAD</div>
             <div class="type">Attribute</div>
             <div class="kind">Constant</div>
             <div class="privacy">PUBLIC</div>
             <div class="summary"><span class="undocumented">Undocumented</span></div>
-          </li><li id="core.defaults.IS_FROZEN">
+          </li><li id="core.settings.SECURE_HSTS_INCLUDE_SUBDOMAINS">
             
-            <div class="fullName">core<wbr></wbr>.defaults<wbr></wbr>.IS<wbr></wbr>_FROZEN</div>
-            <div class="url">core.defaults.html#IS_FROZEN</div>
+            <div class="fullName">core<wbr></wbr>.settings<wbr></wbr>.SECURE<wbr></wbr>_HSTS<wbr></wbr>_INCLUDE<wbr></wbr>_SUBDOMAINS</div>
+            <div class="url">core.settings.html#SECURE_HSTS_INCLUDE_SUBDOMAINS</div>
             <div class="type">Attribute</div>
             <div class="kind">Constant</div>
             <div class="privacy">PUBLIC</div>
             <div class="summary"><span class="undocumented">Undocumented</span></div>
-          </li><li id="core.defaults.FROZEN_VERSIONS">
+          </li><li id="core.settings.SECURE_PROXY_SSL_HEADER">
             
-            <div class="fullName">core<wbr></wbr>.defaults<wbr></wbr>.FROZEN<wbr></wbr>_VERSIONS</div>
-            <div class="url">core.defaults.html#FROZEN_VERSIONS</div>
+            <div class="fullName">core<wbr></wbr>.settings<wbr></wbr>.SECURE<wbr></wbr>_PROXY<wbr></wbr>_SSL<wbr></wbr>_HEADER</div>
+            <div class="url">core.settings.html#SECURE_PROXY_SSL_HEADER</div>
             <div class="type">Attribute</div>
             <div class="kind">Constant</div>
             <div class="privacy">PUBLIC</div>
             <div class="summary"><span class="undocumented">Undocumented</span></div>
-          </li><li id="core.defaults.set_LOGGING">
+          </li><li id="core.settings.BASE_DIR">
             
-            <div class="fullName">core<wbr></wbr>.defaults<wbr></wbr>.set_<wbr></wbr>LOGGING</div>
-            <div class="url">core.defaults.html#set_LOGGING</div>
+            <div class="fullName">core<wbr></wbr>.settings<wbr></wbr>.BASE<wbr></wbr>_DIR</div>
+            <div class="url">core.settings.html#BASE_DIR</div>
+            <div class="type">Attribute</div>
+            <div class="kind">Constant</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary"><span class="undocumented">Undocumented</span></div>
+          </li><li id="core.settings.LOGIN_REDIRECT_URL">
+            
+            <div class="fullName">core<wbr></wbr>.settings<wbr></wbr>.LOGIN<wbr></wbr>_REDIRECT<wbr></wbr>_URL</div>
+            <div class="url">core.settings.html#LOGIN_REDIRECT_URL</div>
+            <div class="type">Attribute</div>
+            <div class="kind">Constant</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary"><span class="undocumented">Undocumented</span></div>
+          </li><li id="core.settings.GITHUB_REPO_OWNER">
+            
+            <div class="fullName">core<wbr></wbr>.settings<wbr></wbr>.GITHUB<wbr></wbr>_REPO<wbr></wbr>_OWNER</div>
+            <div class="url">core.settings.html#GITHUB_REPO_OWNER</div>
+            <div class="type">Attribute</div>
+            <div class="kind">Constant</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary"><span class="undocumented">Undocumented</span></div>
+          </li><li id="core.settings.GITHUB_REPO_NAME">
+            
+            <div class="fullName">core<wbr></wbr>.settings<wbr></wbr>.GITHUB<wbr></wbr>_REPO<wbr></wbr>_NAME</div>
+            <div class="url">core.settings.html#GITHUB_REPO_NAME</div>
+            <div class="type">Attribute</div>
+            <div class="kind">Constant</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary"><span class="undocumented">Undocumented</span></div>
+          </li><li id="core.settings.IS_FROZEN">
+            
+            <div class="fullName">core<wbr></wbr>.settings<wbr></wbr>.IS<wbr></wbr>_FROZEN</div>
+            <div class="url">core.settings.html#IS_FROZEN</div>
+            <div class="type">Attribute</div>
+            <div class="kind">Constant</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary"><span class="undocumented">Undocumented</span></div>
+          </li><li id="core.settings.FROZEN_VERSIONS">
+            
+            <div class="fullName">core<wbr></wbr>.settings<wbr></wbr>.FROZEN<wbr></wbr>_VERSIONS</div>
+            <div class="url">core.settings.html#FROZEN_VERSIONS</div>
+            <div class="type">Attribute</div>
+            <div class="kind">Constant</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary"><span class="undocumented">Undocumented</span></div>
+          </li><li id="core.settings.set_LOGGING">
+            
+            <div class="fullName">core<wbr></wbr>.settings<wbr></wbr>.set_<wbr></wbr>LOGGING</div>
+            <div class="url">core.settings.html#set_LOGGING</div>
             <div class="type">Function</div>
             <div class="kind">Function</div>
             <div class="privacy">PUBLIC</div>
             <div class="summary">Return logging settings in the form of a dictionary as function of the log-level. This is used so that in a subdomain settings file the function can be called again to overwrite the logging settings easily.</div>
-          </li><li id="core.defaults.LOG_LEVEL">
+          </li><li id="core.settings.LOGGING">
             
-            <div class="fullName">core<wbr></wbr>.defaults<wbr></wbr>.LOG<wbr></wbr>_LEVEL</div>
-            <div class="url">core.defaults.html#LOG_LEVEL</div>
+            <div class="fullName">core<wbr></wbr>.settings<wbr></wbr>.LOGGING</div>
+            <div class="url">core.settings.html#LOGGING</div>
             <div class="type">Attribute</div>
             <div class="kind">Constant</div>
             <div class="privacy">PUBLIC</div>
             <div class="summary"><span class="undocumented">Undocumented</span></div>
-          </li><li id="core.defaults.LOGGING">
+          </li><li id="core.settings.INSTALLED_APPS">
             
-            <div class="fullName">core<wbr></wbr>.defaults<wbr></wbr>.LOGGING</div>
-            <div class="url">core.defaults.html#LOGGING</div>
+            <div class="fullName">core<wbr></wbr>.settings<wbr></wbr>.INSTALLED<wbr></wbr>_APPS</div>
+            <div class="url">core.settings.html#INSTALLED_APPS</div>
             <div class="type">Attribute</div>
             <div class="kind">Constant</div>
             <div class="privacy">PUBLIC</div>
             <div class="summary"><span class="undocumented">Undocumented</span></div>
-          </li><li id="core.defaults.INSTALLED_APPS">
+          </li><li id="core.settings.MIDDLEWARE">
             
-            <div class="fullName">core<wbr></wbr>.defaults<wbr></wbr>.INSTALLED<wbr></wbr>_APPS</div>
-            <div class="url">core.defaults.html#INSTALLED_APPS</div>
+            <div class="fullName">core<wbr></wbr>.settings<wbr></wbr>.MIDDLEWARE</div>
+            <div class="url">core.settings.html#MIDDLEWARE</div>
             <div class="type">Attribute</div>
             <div class="kind">Constant</div>
             <div class="privacy">PUBLIC</div>
             <div class="summary"><span class="undocumented">Undocumented</span></div>
-          </li><li id="core.defaults.MIDDLEWARE">
+          </li><li id="core.settings.ROOT_URLCONF">
             
-            <div class="fullName">core<wbr></wbr>.defaults<wbr></wbr>.MIDDLEWARE</div>
-            <div class="url">core.defaults.html#MIDDLEWARE</div>
+            <div class="fullName">core<wbr></wbr>.settings<wbr></wbr>.ROOT<wbr></wbr>_URLCONF</div>
+            <div class="url">core.settings.html#ROOT_URLCONF</div>
             <div class="type">Attribute</div>
             <div class="kind">Constant</div>
             <div class="privacy">PUBLIC</div>
             <div class="summary"><span class="undocumented">Undocumented</span></div>
-          </li><li id="core.defaults.ROOT_URLCONF">
+          </li><li id="core.settings.TEMPLATES">
             
-            <div class="fullName">core<wbr></wbr>.defaults<wbr></wbr>.ROOT<wbr></wbr>_URLCONF</div>
-            <div class="url">core.defaults.html#ROOT_URLCONF</div>
+            <div class="fullName">core<wbr></wbr>.settings<wbr></wbr>.TEMPLATES</div>
+            <div class="url">core.settings.html#TEMPLATES</div>
             <div class="type">Attribute</div>
             <div class="kind">Constant</div>
             <div class="privacy">PUBLIC</div>
             <div class="summary"><span class="undocumented">Undocumented</span></div>
-          </li><li id="core.defaults.TEMPLATES">
+          </li><li id="core.settings.DATABASES">
             
-            <div class="fullName">core<wbr></wbr>.defaults<wbr></wbr>.TEMPLATES</div>
-            <div class="url">core.defaults.html#TEMPLATES</div>
+            <div class="fullName">core<wbr></wbr>.settings<wbr></wbr>.DATABASES</div>
+            <div class="url">core.settings.html#DATABASES</div>
             <div class="type">Attribute</div>
             <div class="kind">Constant</div>
             <div class="privacy">PUBLIC</div>
             <div class="summary"><span class="undocumented">Undocumented</span></div>
-          </li><li id="core.defaults.DATABASES">
+          </li><li id="core.settings.DEFAULT_AUTO_FIELD">
             
-            <div class="fullName">core<wbr></wbr>.defaults<wbr></wbr>.DATABASES</div>
-            <div class="url">core.defaults.html#DATABASES</div>
+            <div class="fullName">core<wbr></wbr>.settings<wbr></wbr>.DEFAULT<wbr></wbr>_AUTO<wbr></wbr>_FIELD</div>
+            <div class="url">core.settings.html#DEFAULT_AUTO_FIELD</div>
             <div class="type">Attribute</div>
             <div class="kind">Constant</div>
             <div class="privacy">PUBLIC</div>
             <div class="summary"><span class="undocumented">Undocumented</span></div>
-          </li><li id="core.defaults.DEFAULT_AUTO_FIELD">
+          </li><li id="core.settings.DBBACKUP_STORAGE">
             
-            <div class="fullName">core<wbr></wbr>.defaults<wbr></wbr>.DEFAULT<wbr></wbr>_AUTO<wbr></wbr>_FIELD</div>
-            <div class="url">core.defaults.html#DEFAULT_AUTO_FIELD</div>
+            <div class="fullName">core<wbr></wbr>.settings<wbr></wbr>.DBBACKUP<wbr></wbr>_STORAGE</div>
+            <div class="url">core.settings.html#DBBACKUP_STORAGE</div>
             <div class="type">Attribute</div>
             <div class="kind">Constant</div>
             <div class="privacy">PUBLIC</div>
             <div class="summary"><span class="undocumented">Undocumented</span></div>
-          </li><li id="core.defaults.DBBACKUP_STORAGE">
+          </li><li id="core.settings.DBBACKUP_STORAGE_OPTIONS">
             
-            <div class="fullName">core<wbr></wbr>.defaults<wbr></wbr>.DBBACKUP<wbr></wbr>_STORAGE</div>
-            <div class="url">core.defaults.html#DBBACKUP_STORAGE</div>
+            <div class="fullName">core<wbr></wbr>.settings<wbr></wbr>.DBBACKUP<wbr></wbr>_STORAGE<wbr></wbr>_OPTIONS</div>
+            <div class="url">core.settings.html#DBBACKUP_STORAGE_OPTIONS</div>
             <div class="type">Attribute</div>
             <div class="kind">Constant</div>
             <div class="privacy">PUBLIC</div>
             <div class="summary"><span class="undocumented">Undocumented</span></div>
-          </li><li id="core.defaults.DBBACKUP_STORAGE_OPTIONS">
+          </li><li id="core.settings.AUTH_PASSWORD_VALIDATORS">
             
-            <div class="fullName">core<wbr></wbr>.defaults<wbr></wbr>.DBBACKUP<wbr></wbr>_STORAGE<wbr></wbr>_OPTIONS</div>
-            <div class="url">core.defaults.html#DBBACKUP_STORAGE_OPTIONS</div>
+            <div class="fullName">core<wbr></wbr>.settings<wbr></wbr>.AUTH<wbr></wbr>_PASSWORD<wbr></wbr>_VALIDATORS</div>
+            <div class="url">core.settings.html#AUTH_PASSWORD_VALIDATORS</div>
             <div class="type">Attribute</div>
             <div class="kind">Constant</div>
             <div class="privacy">PUBLIC</div>
             <div class="summary"><span class="undocumented">Undocumented</span></div>
-          </li><li id="core.defaults.AUTH_PASSWORD_VALIDATORS">
+          </li><li id="core.settings.AUTH_USER_MODEL">
             
-            <div class="fullName">core<wbr></wbr>.defaults<wbr></wbr>.AUTH<wbr></wbr>_PASSWORD<wbr></wbr>_VALIDATORS</div>
-            <div class="url">core.defaults.html#AUTH_PASSWORD_VALIDATORS</div>
+            <div class="fullName">core<wbr></wbr>.settings<wbr></wbr>.AUTH<wbr></wbr>_USER<wbr></wbr>_MODEL</div>
+            <div class="url">core.settings.html#AUTH_USER_MODEL</div>
             <div class="type">Attribute</div>
             <div class="kind">Constant</div>
             <div class="privacy">PUBLIC</div>
             <div class="summary"><span class="undocumented">Undocumented</span></div>
-          </li><li id="core.defaults.AUTH_USER_MODEL">
+          </li><li id="core.settings.LANGUAGE_CODE">
             
-            <div class="fullName">core<wbr></wbr>.defaults<wbr></wbr>.AUTH<wbr></wbr>_USER<wbr></wbr>_MODEL</div>
-            <div class="url">core.defaults.html#AUTH_USER_MODEL</div>
+            <div class="fullName">core<wbr></wbr>.settings<wbr></wbr>.LANGUAGE<wbr></wbr>_CODE</div>
+            <div class="url">core.settings.html#LANGUAGE_CODE</div>
             <div class="type">Attribute</div>
             <div class="kind">Constant</div>
             <div class="privacy">PUBLIC</div>
             <div class="summary"><span class="undocumented">Undocumented</span></div>
-          </li><li id="core.defaults.LANGUAGE_CODE">
+          </li><li id="core.settings.TIME_ZONE">
             
-            <div class="fullName">core<wbr></wbr>.defaults<wbr></wbr>.LANGUAGE<wbr></wbr>_CODE</div>
-            <div class="url">core.defaults.html#LANGUAGE_CODE</div>
+            <div class="fullName">core<wbr></wbr>.settings<wbr></wbr>.TIME<wbr></wbr>_ZONE</div>
+            <div class="url">core.settings.html#TIME_ZONE</div>
             <div class="type">Attribute</div>
             <div class="kind">Constant</div>
             <div class="privacy">PUBLIC</div>
             <div class="summary"><span class="undocumented">Undocumented</span></div>
-          </li><li id="core.defaults.TIME_ZONE">
+          </li><li id="core.settings.USE_I18N">
             
-            <div class="fullName">core<wbr></wbr>.defaults<wbr></wbr>.TIME<wbr></wbr>_ZONE</div>
-            <div class="url">core.defaults.html#TIME_ZONE</div>
+            <div class="fullName">core<wbr></wbr>.settings<wbr></wbr>.USE<wbr></wbr>_I18N</div>
+            <div class="url">core.settings.html#USE_I18N</div>
             <div class="type">Attribute</div>
             <div class="kind">Constant</div>
             <div class="privacy">PUBLIC</div>
             <div class="summary"><span class="undocumented">Undocumented</span></div>
-          </li><li id="core.defaults.USE_I18N">
+          </li><li id="core.settings.USE_L10N">
             
-            <div class="fullName">core<wbr></wbr>.defaults<wbr></wbr>.USE<wbr></wbr>_I18N</div>
-            <div class="url">core.defaults.html#USE_I18N</div>
+            <div class="fullName">core<wbr></wbr>.settings<wbr></wbr>.USE<wbr></wbr>_L10N</div>
+            <div class="url">core.settings.html#USE_L10N</div>
             <div class="type">Attribute</div>
             <div class="kind">Constant</div>
             <div class="privacy">PUBLIC</div>
             <div class="summary"><span class="undocumented">Undocumented</span></div>
-          </li><li id="core.defaults.USE_L10N">
+          </li><li id="core.settings.USE_TZ">
             
-            <div class="fullName">core<wbr></wbr>.defaults<wbr></wbr>.USE<wbr></wbr>_L10N</div>
-            <div class="url">core.defaults.html#USE_L10N</div>
+            <div class="fullName">core<wbr></wbr>.settings<wbr></wbr>.USE<wbr></wbr>_TZ</div>
+            <div class="url">core.settings.html#USE_TZ</div>
             <div class="type">Attribute</div>
             <div class="kind">Constant</div>
             <div class="privacy">PUBLIC</div>
             <div class="summary"><span class="undocumented">Undocumented</span></div>
-          </li><li id="core.defaults.USE_TZ">
+          </li><li id="core.settings.STATIC_ROOT">
             
-            <div class="fullName">core<wbr></wbr>.defaults<wbr></wbr>.USE<wbr></wbr>_TZ</div>
-            <div class="url">core.defaults.html#USE_TZ</div>
+            <div class="fullName">core<wbr></wbr>.settings<wbr></wbr>.STATIC<wbr></wbr>_ROOT</div>
+            <div class="url">core.settings.html#STATIC_ROOT</div>
             <div class="type">Attribute</div>
             <div class="kind">Constant</div>
             <div class="privacy">PUBLIC</div>
             <div class="summary"><span class="undocumented">Undocumented</span></div>
-          </li><li id="core.defaults.STATICFILES_DIRS">
+          </li><li id="core.settings.STATIC_URL">
             
-            <div class="fullName">core<wbr></wbr>.defaults<wbr></wbr>.STATICFILES<wbr></wbr>_DIRS</div>
-            <div class="url">core.defaults.html#STATICFILES_DIRS</div>
+            <div class="fullName">core<wbr></wbr>.settings<wbr></wbr>.STATIC<wbr></wbr>_URL</div>
+            <div class="url">core.settings.html#STATIC_URL</div>
             <div class="type">Attribute</div>
             <div class="kind">Constant</div>
             <div class="privacy">PUBLIC</div>
             <div class="summary"><span class="undocumented">Undocumented</span></div>
-          </li><li id="core.defaults.STATIC_ROOT">
+          </li><li id="core.settings.MEDIA_ROOT">
             
-            <div class="fullName">core<wbr></wbr>.defaults<wbr></wbr>.STATIC<wbr></wbr>_ROOT</div>
-            <div class="url">core.defaults.html#STATIC_ROOT</div>
+            <div class="fullName">core<wbr></wbr>.settings<wbr></wbr>.MEDIA<wbr></wbr>_ROOT</div>
+            <div class="url">core.settings.html#MEDIA_ROOT</div>
             <div class="type">Attribute</div>
             <div class="kind">Constant</div>
             <div class="privacy">PUBLIC</div>
             <div class="summary"><span class="undocumented">Undocumented</span></div>
-          </li><li id="core.defaults.STATIC_URL">
+          </li><li id="core.settings.MEDIA_URL">
             
-            <div class="fullName">core<wbr></wbr>.defaults<wbr></wbr>.STATIC<wbr></wbr>_URL</div>
-            <div class="url">core.defaults.html#STATIC_URL</div>
+            <div class="fullName">core<wbr></wbr>.settings<wbr></wbr>.MEDIA<wbr></wbr>_URL</div>
+            <div class="url">core.settings.html#MEDIA_URL</div>
             <div class="type">Attribute</div>
             <div class="kind">Constant</div>
             <div class="privacy">PUBLIC</div>
             <div class="summary"><span class="undocumented">Undocumented</span></div>
-          </li><li id="core.defaults.MEDIA_ROOT">
+          </li><li id="core.settings.STATICFILES_DIRS">
             
-            <div class="fullName">core<wbr></wbr>.defaults<wbr></wbr>.MEDIA<wbr></wbr>_ROOT</div>
-            <div class="url">core.defaults.html#MEDIA_ROOT</div>
-            <div class="type">Attribute</div>
-            <div class="kind">Constant</div>
-            <div class="privacy">PUBLIC</div>
-            <div class="summary"><span class="undocumented">Undocumented</span></div>
-          </li><li id="core.defaults.MEDIA_URL">
-            
-            <div class="fullName">core<wbr></wbr>.defaults<wbr></wbr>.MEDIA<wbr></wbr>_URL</div>
-            <div class="url">core.defaults.html#MEDIA_URL</div>
+            <div class="fullName">core<wbr></wbr>.settings<wbr></wbr>.STATICFILES<wbr></wbr>_DIRS</div>
+            <div class="url">core.settings.html#STATICFILES_DIRS</div>
             <div class="type">Attribute</div>
             <div class="kind">Constant</div>
             <div class="privacy">PUBLIC</div>
@@ -651,7 +691,7 @@
             <div class="type">Function</div>
             <div class="kind">Function</div>
             <div class="privacy">PUBLIC</div>
-            <div class="summary"><span class="undocumented">Undocumented</span></div>
+            <div class="summary">Return the landing page HTML.</div>
           </li><li id="core.views.maintenance">
             
             <div class="fullName">core<wbr></wbr>.views<wbr></wbr>.maintenance</div>
@@ -659,11 +699,19 @@
             <div class="type">Function</div>
             <div class="kind">Function</div>
             <div class="privacy">PUBLIC</div>
-            <div class="summary"><span class="undocumented">Undocumented</span></div>
+            <div class="summary">Redirect to maintenance page when <code><a href="core.settings.html#MAINTENANCE" class="internal-link">core.settings.MAINTENANCE</a></code> is <tt class="rst-docutils literal">True</tt>.</div>
           </li><li id="core.urls.urlpatterns">
             
             <div class="fullName">core<wbr></wbr>.urls<wbr></wbr>.urlpatterns</div>
             <div class="url">core.urls.html#urlpatterns</div>
+            <div class="type">Attribute</div>
+            <div class="kind">Variable</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary"><span class="undocumented">Undocumented</span></div>
+          </li><li id="core.wsgi.application">
+            
+            <div class="fullName">core<wbr></wbr>.wsgi<wbr></wbr>.application</div>
+            <div class="url">core.wsgi.html#application</div>
             <div class="type">Attribute</div>
             <div class="kind">Variable</div>
             <div class="privacy">PUBLIC</div>
