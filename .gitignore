@@ -66,11 +66,9 @@ db.sqlite3
 db.sqlite3-journal
 /static/
 /media/
-/uploads/
-/downloads/
-core/settings.py
-*/wsgi.py
+/backups/
 */asgi.py
+*/_version.py
 
 # Flask stuff:
 instance/

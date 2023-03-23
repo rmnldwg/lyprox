@@ -13,15 +13,10 @@ from django.urls import include, path
 from . import views
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('accounts/', include('accounts.urls')),
+    path("admin/", admin.site.urls),
+    path("accounts/", include("accounts.urls")),
     path("patients/", include("patients.urls")),
     path("dashboard/", include("dashboard.urls")),
     path("", views.index, name="index"),
     path("maintenance/", views.maintenance, name="maintenance"),
 ]
-
-urlpatterns += static(
-    settings.MEDIA_URL + "institution_logos/",
-    document_root=settings.MEDIA_ROOT / "institution_logos",
-)
