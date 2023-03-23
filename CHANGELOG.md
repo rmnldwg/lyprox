@@ -1,6 +1,37 @@
 <a name="unreleased"></a>
 ## [Unreleased]
 
+
+<a name="0.3.4"></a>
+## [0.3.4] - 2023-03-23
+
+### Documentation
+- add info to important settings
+- update run-local instructions
+
+### Maintenance
+- use a minimalistic deploy bash script and change GitHub actions CI
+- write a simple bash script for backing up the [SQLite3] database
+- add `systemd` config for [gunicorn] service, making start-up faster and more seamless
+- switch from [Apache 2] and [`mod_wsgi`] to [gunicorn] & [nginx]
+- get config from environment variables (fixes [#97])
+- send all logs only to stdout (fixes [#96])
+- move config into `pyproject.toml`, making dependency installation more effortless (relates to [#95])
+
+[SQLite3]: https://www.sqlite.org/index.html
+[Apache 2]: https://httpd.apache.org/
+[`mod_wsgi`]: https://modwsgi.readthedocs.io/en/master/
+[gunicorn]: https://gunicorn.org/
+[nginx]: https://nginx.org/en/
+
+
+<a name="0.3.3"></a>
+## [0.3.3] - 2023-03-08
+
+### Bug Fixes
+- revert syntax to python 3.8
+
+
 <a name="0.3.2"></a>
 ## [0.3.2] - 2023-03-08
 
@@ -63,7 +94,9 @@ Commits before the 2nd of March 2023 did not use conventional commits and no cha
 - [0.0.2] - 2021-10-04
 - 0.0.1 - 2021-10-04
 
-[Unreleased]: https://github.com/rmnldwg/lyprox/compare/0.3.2...HEAD
+[Unreleased]: https://github.com/rmnldwg/lyprox/compare/0.3.4...HEAD
+[0.3.4]: https://github.com/rmnldwg/lyprox/compare/0.3.3...0.3.4
+[0.3.3]: https://github.com/rmnldwg/lyprox/compare/0.3.2...0.3.3
 [0.3.2]: https://github.com/rmnldwg/lyprox/compare/0.3.1...0.3.2
 [0.3.1]: https://github.com/rmnldwg/lyprox/compare/0.3.0...0.3.1
 [0.3.0]: https://github.com/rmnldwg/lyprox/compare/0.2.17...0.3.0
@@ -94,3 +127,6 @@ Commits before the 2nd of March 2023 did not use conventional commits and no cha
 
 [#89]: https://github.com/rmnldwg/lyprox/issues/89
 [#94]: https://github.com/rmnldwg/lyprox/issues/94
+[#95]: https://github.com/rmnldwg/lyprox/issues/95
+[#96]: https://github.com/rmnldwg/lyprox/issues/96
+[#97]: https://github.com/rmnldwg/lyprox/issues/97
