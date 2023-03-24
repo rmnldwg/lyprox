@@ -312,7 +312,11 @@ class Patient(mixins.LockedDatasetMixin, loggers.ModelLoggerMixin, models.Model)
     # pylint: disable=invalid-name
     sex = models.CharField(max_length=10, choices=[("female", "female"),
                                                    ("male"  , "male"  )])
+    """Biological sex of the patient."""
+
     age = models.IntegerField()
+    """Age in years at the time of diagnosis."""
+
     diagnose_date = RobustDateField()
     """Date of histological confirmation with a squamous cell carcinoma."""
 
@@ -320,7 +324,7 @@ class Patient(mixins.LockedDatasetMixin, loggers.ModelLoggerMixin, models.Model)
     """Was the patient a drinker?"""
 
     nicotine_abuse = models.BooleanField(blank=True, null=True)
-    """Was the patient a smoker"""
+    """Was the patient a smoker?"""
 
     hpv_status = models.BooleanField(blank=True, null=True)
     """Was the patient HPV positive (``True``) or negative (``False``)?"""
@@ -343,9 +347,7 @@ class Patient(mixins.LockedDatasetMixin, loggers.ModelLoggerMixin, models.Model)
         T3 = 3, "T3"
         T4 = 4, "T4"
 
-    t_stage = models.PositiveSmallIntegerField(
-        choices=T_stages.choices, default=0
-    )
+    t_stage = models.PositiveSmallIntegerField(choices=T_stages.choices, default=0)
     """Stage of the primary tumor. Categorized the tumor by size and
     infiltration of tissue types."""
 
@@ -356,7 +358,7 @@ class Patient(mixins.LockedDatasetMixin, loggers.ModelLoggerMixin, models.Model)
         N2 = 2, "N2"
         N3 = 3, "N3"
 
-    n_stage = models.PositiveSmallIntegerField(choices=N_stages.choices)
+    n_stage = models.PositiveSmallIntegerField(choices=N_stages.choices, default=0)
     """Categorizes the extend of regional metastases."""
 
     class M_stages(models.IntegerChoices):
@@ -365,7 +367,7 @@ class Patient(mixins.LockedDatasetMixin, loggers.ModelLoggerMixin, models.Model)
         M1 = 1, "M1"
         MX = 2, "MX"
 
-    m_stage = models.PositiveSmallIntegerField(choices=M_stages.choices)
+    m_stage = models.PositiveSmallIntegerField(choices=M_stages.choices, default=0)
     """Indicates whether or not there are distant metastases."""
 
     dataset = models.ForeignKey(to=Dataset, on_delete=models.CASCADE)
@@ -391,10 +393,10 @@ class Patient(mixins.LockedDatasetMixin, loggers.ModelLoggerMixin, models.Model)
         return diagnoses
 
     def update_t_stage(self):
-        """
-        Update T-stage after new `Tumor` is added to `Patient`
-        (gets called in `Tumor.save` method). Also updates the patient's
-        stage prefix to that of the tumor with the highest T-category.
+        """Update T-stage after new `Tumor` is added to `Patient`.
+
+        This `Patient` method gets called in `Tumor.save` method. It also updates the
+        patient's stage prefix to that of the tumor with the highest T-category.
         """
         tumors = Tumor.objects.all().filter(patient=self)
 
@@ -412,6 +414,23 @@ class Patient(mixins.LockedDatasetMixin, loggers.ModelLoggerMixin, models.Model)
             f"T-stage of patient {self} updated to "
             f"{self.get_stage_prefix_display()}{self.get_t_stage_display()}."
         )
+
+    def validate_unique(self, exclude=None) -> None:
+        """Make sure the patient has not already been added.
+
+        Uniqueness is checked by ensuring this patient's combination of sex, age, date
+        of diagnosis, alcohol, nicotine, and HPV status, as well as TNM stage is
+        unique in the dataset.
+        """
+        unique_fields = [field.name for field in self.__class__._meta.fields]
+        duplicate_does_exist = self.__class__.objects.filter(
+            **{field: getattr(self, field) for field in unique_fields}
+        ).exists()
+
+        if duplicate_does_exist:
+            raise ValidationError("Patient already exists in this dataset.")
+
+        super().validate_unique(exclude)
 
 
 class Tumor(mixins.LockedDatasetMixin, loggers.ModelLoggerMixin, models.Model):

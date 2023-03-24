@@ -159,6 +159,7 @@ INSTALLED_APPS = [
     # third party apps
     "django_filters",
     "fontawesomefree",
+    "phonenumber_field",
 
     # django contrib apps
     "django.contrib.admin",
