@@ -154,11 +154,11 @@ INSTALLED_APPS = [
     "accounts.apps.AccountsConfig",
     "patients.apps.PatientsConfig",
     "dashboard.apps.DashboardConfig",
+    "risk.apps.RiskConfig",
 
     # third party apps
     "django_filters",
     "fontawesomefree",
-    "dbbackup",
 
     # django contrib apps
     "django.contrib.admin",

@@ -23,7 +23,6 @@ dependencies = [
     "numpy ~= 1.24",
     "pandas ~= 1.5",
     "fontawesomefree ~= 5.15",
-    "django-dbbackup ~= 4.0",
     "icd10-cm == 0.0.4",
     "python-magic ~= 0.4",
     "gunicorn ~= 20.1",
@@ -60,7 +59,7 @@ local_scheme = "no-local-version"
 "lyprox.accounts" = "accounts"
 "lyprox.patients" = "patients"
 "lyprox.dashboard" = "dashboard"
-"lyprox.analysis" = "analysis"
+"lyprox.risk" = "risk"
 
 [tool.setuptools.dynamic]
 version = {attr = "core._version.version"}
@@ -82,7 +81,7 @@ python_files = "test_*.py"
 
 [tool.pydoctor]
 project-name = "LyProX"
-add-package = ["core", "patients", "dashboard"]
+add-package = ["core", "patients", "dashboard", "risk"]
 docformat = "google"
 make-html = true
 html-output = "./docs"
