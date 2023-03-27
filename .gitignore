@@ -64,11 +64,13 @@ coverage.xml
 local_settings.py
 db.sqlite3
 db.sqlite3-journal
-/static/
-/media/
+static/
+media/
+!media/institution_logos/*
 /backups/
 */asgi.py
 */_version.py
+*.bak
 
 # Flask stuff:
 instance/

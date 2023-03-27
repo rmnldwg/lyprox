@@ -17,14 +17,16 @@ respective superlevel (in that case ``I``).
 # pylint: disable=no-member
 # pylint: disable=logging-fstring-interpolation
 
+import hashlib
+import logging
 from collections import namedtuple
 from io import BytesIO
 from pathlib import Path
 
 import pandas as pd
-from django.conf import settings
 from django.core.files import File
 from django.db import models
+from django.db.models.fields.files import FileField
 from django.forms import ValidationError
 from django.urls import reverse
 from django.utils import timezone
@@ -33,35 +35,65 @@ import core.loggers as loggers
 import patients.ioports as ioports
 import patients.mixins as mixins
 from accounts.models import Institution
+from core.settings import MEDIA_ROOT
 
-from .fields import DuplicateFileError, FileFieldWithHash, RobustDateField
+from .fields import RobustDateField
 from .validators import FileTypeValidator
 
+logger = logging.getLogger(name=__name__)
 
-def directory_(used_for: str, instance):
+
+class DuplicateFileError(Exception):
     """
-    Function that compiles and returns the path to where uploaded or exported CSV
-    files will be stored. It also creates the respective folder and deletes any
-    existing iles with the same name if necessary.
+    Exception raised when e.g. during uploading or saving the `Dataset` model notices
+    a new file is already stored in one of the other datasets.
     """
-    media_root = Path(settings.MEDIA_ROOT)
-    folder_path = media_root.joinpath(used_for)
-    folder_path.mkdir(parents=True, exist_ok=True)
-    file_path = folder_path.joinpath(f"{instance}.csv")
-    file_path.unlink(missing_ok=True)
-    return f"{used_for}/{instance}.csv"
 
-def directory_for_uploads(instance, _filename) -> str:
-    """Calls `directory_` for 'uploads'."""
-    return directory_(used_for="uploads", instance=instance)
-
-def directory_for_exports(instance, _filename) -> str:
-    """Calls `directory_` for 'exports'."""
-    return directory_(used_for="exports", instance=instance)
-
+class CorruptedFileError(Exception):
+    """Raised when an uploaded file has been changed since being written to disk."""
 
 class LockedDatasetError(Exception):
     """Raised when a `Dataset` or an associated entry was tried to be edited."""
+
+
+def get_md5_hash(file):
+    """Compute the hexadecimal MD5 file hash of ``file``."""
+    file_hash = hashlib.md5()
+
+    for chunk in file.chunks():
+        file_hash.update(chunk)
+
+    return file_hash.hexdigest()
+
+
+def does_file_match_path(file, path):
+    """Check if the MD5 hash matches the ``path`` of ``file``."""
+    file_hash = get_md5_hash(file)
+    path = Path(path).with_suffix("").name
+    return file_hash == path
+
+
+def get_path_from_file(file, directory="source_csv", suffix=".csv"):
+    """Compute MD5 hash of ``file`` and use return filepath based on that.
+
+    The resulting filepath will be contructed from the `core.settings.MEDIA_ROOT`, the
+    ``directory`` parameter and the MD5 hash of the ``file`` together with the
+    parameter ``suffix``. If there is already a file at the exact path, an error is
+    thrown.
+    """
+    md5_hash = get_md5_hash(file)
+    filename = Path(md5_hash).with_suffix(suffix)
+    directory = Path(MEDIA_ROOT) / directory
+    if (directory / filename).exists():
+        raise DuplicateFileError(
+            "This file has already been uploaded. A dataset cannot exist twice."
+        )
+    return str(directory / filename)
+
+
+def get_path_for_source_csv(instance, _filename):
+    """Compile path for the ``upload_to`` argument of the `Dataset.source_csv` field."""
+    return get_path_from_file(instance.source_csv)
 
 
 class Dataset(loggers.ModelLoggerMixin, models.Model):
@@ -105,79 +137,19 @@ class Dataset(loggers.ModelLoggerMixin, models.Model):
     that it is not checked whether the data behind this URL actually matches the
     uploaded data or not."""
 
-    upload_csv = FileFieldWithHash(
-        upload_to=directory_for_uploads,
-        validators=[
-            FileTypeValidator(max_size=1024 * 1000 * 10,
-            file_types=("CSV text", "application/csv")),
-        ],
+    source_csv = FileField(
+        upload_to=get_path_for_source_csv,
+        validators=[FileTypeValidator(
+            max_size=1024 * 1000 * 10,
+            file_types=("CSV text", "text/csv", "application/csv")
+        )],
         null=True, blank=True,
     )
-    """The custom ``FileField`` that holds the uploaded CSV file."""
-    export_csv = FileFieldWithHash(
-        upload_to=directory_for_exports,
-        validators=[
-            FileTypeValidator(max_size=1024 * 1000 * 10,
-            file_types=("CSV text", "application/csv")),
-        ],
-        null=True, blank=True,
-    )
-    """The custom ``FileField`` that holds the exported CSV file."""
+    """A ``FileField`` that holds the uploaded CSV source file."""
 
     def __str__(self) -> str:
         year = self.create_date.strftime("%Y")
         return f"{year}-{self.institution.shortname}-{self.name}"
-
-    def _validate_unique(
-        self,
-        fieldname: str,
-        do_delete: bool = False,
-        do_warn: bool = True,
-        do_raise: bool = True,
-    ):
-        """
-        Make sure no other `Dataset` holds the same file in one of their ``FileFields``
-        or the uploaded file is already stored on disk.
-
-        With the argument `do_delete` one can control if the file should be deleted
-        (and with `do_warn` if that deletion should trigger a warning through the
-        logger) when a duplicate was found and with `do_raise` whether a
-        `DuplicateFileError` should ultimately be raised.
-        """
-        all_except_self = Dataset.objects.all().exclude(pk=self.pk)
-        for dataset in all_except_self:
-            self_filefield = getattr(self, fieldname)
-            ds_filefield = getattr(dataset, fieldname)
-            try:
-                if self_filefield.md5_hash == ds_filefield.md5_hash:
-                    if do_delete:
-                        getattr(self, fieldname).delete(save=False)
-                        if do_warn:
-                            self.logger.warning(
-                                f"The {fieldname} of {self} was deleted because "
-                                f"it is a duplicate of {dataset}"
-                            )
-                    if do_raise:
-                        raise DuplicateFileError(
-                            f"This file is already associated with dataset {dataset}"
-                        )
-            except ValueError:
-                # This is necessary because if no file has been assigned to the
-                # respective FileField, the ``_require_file`` method of the FieldFile
-                # will raise a ValueError, in which case we can just skip that one.
-                continue
-
-    def validate_unique(self, exclude=None) -> None:
-        """Validate uniqueness of the uploaded CSV file."""
-        try:
-            self._validate_unique(
-                fieldname="upload_csv", do_delete=False, do_raise=True
-            )
-        except DuplicateFileError as df_err:
-            raise ValidationError({
-                "upload_csv": "File has already been uploaded."
-            }) from df_err
-        super().validate_unique(exclude)
 
     def lock(self):
         """Set the field `is_locked` to ``True``"""
@@ -202,14 +174,13 @@ class Dataset(loggers.ModelLoggerMixin, models.Model):
         the dataset is locked (and `override` is not set to ``True``).
         """
         if self.is_locked and not override:
+            self.logger.warning(f"Attemptet change to locked dataset {self}")
             raise LockedDatasetError("Cannot edit/save a locked dataset.")
 
-        self._validate_unique(
-            fieldname="upload_csv", do_delete=True, do_warn=True, do_raise=False
-        )
-        self._validate_unique(
-            fieldname="export_csv", do_delete=True, do_warn=True, do_raise=False
-        )
+        if not does_file_match_path(self.source_csv, self.source_csv.path):
+            self.logger.error(f"Source CSV file of dataset {self} is corrupted.")
+            raise CorruptedFileError("Content and filename of %s do not match", self)
+
         return super().save(*args, **kwargs)
 
     def delete(self, *args, override=False, **kwargs):
@@ -217,19 +188,16 @@ class Dataset(loggers.ModelLoggerMixin, models.Model):
         Block deletion if dataset is locked. Unless the red override is pushed.
         """
         if self.is_locked and not override:
+            self.logger.warning(f"Attemptet change to locked dataset {self}")
             raise LockedDatasetError("Cannot delete a locked dataset.")
 
         # Making sure that the files associated with the dataset get deleted. The
         # `delete` method of the `FieldFiles` should already take care of that, but I
         # noticed that this doesn't seem to always happen, so I made sure with `pathlib`
 
-        upload_path = Path(self.upload_csv.path)
-        self.upload_csv.delete(save=False)
+        upload_path = Path(self.source_csv.path)
+        self.source_csv.delete(save=False)
         upload_path.unlink(missing_ok=True)
-
-        export_path = Path(self.export_csv.path)
-        self.export_csv.delete(save=False)
-        export_path.unlink(missing_ok=True)
 
         return super().delete(*args, **kwargs)
 
@@ -245,18 +213,19 @@ class Dataset(loggers.ModelLoggerMixin, models.Model):
         """
         Simply extract a `pandas.DataFrame` from an uploaded CSV.
         """
-        if not self.upload_csv.readable() or self.upload_csv.mode != "rb":
-            self.upload_csv.open(mode="rb")
+        if not self.source_csv.readable() or self.source_csv.mode != "rb":
+            self.source_csv.open(mode="rb")
 
-        file_content = self.upload_csv.read()
+        file_content = self.source_csv.read()
         binary_buffer = BytesIO(file_content)
-        self.upload_csv.close()
+        self.source_csv.close()
 
         table = pd.read_csv(binary_buffer, header=[0,1,2])
         return table
 
     def export_db_to_csv(self, is_locked_ok=True):
-        """
+        """Export database entries beloning to this `Dataset` to CSV.
+
         First, call the `get_pandas_from_db` method to get a `pandas.DataFrame` of
         patients from the database. Then, save that table in the form of a CSV file
         to disk and associate it with the `fields.FileFieldWithHash` called
@@ -285,10 +254,11 @@ class Dataset(loggers.ModelLoggerMixin, models.Model):
         )
         self.lock()
 
-    def import_upload_csv_to_db(self):
-        """
-        Import an uploaded CSV into the database using the `ioports` module. Lock the
-        dataset right afterwards to prevent editing the uploaded patients.
+    def import_source_csv_to_db(self):
+        """Import uploaded CSV into the database using `ioports` module.
+
+        This method lock the dataset right afterwards to prevent editing the uploaded
+        patients.
         """
         table = self.get_pandas_from_csv()
         num_new, num_skipped = ioports.import_from_pandas(table, self)
@@ -301,9 +271,10 @@ class Dataset(loggers.ModelLoggerMixin, models.Model):
 
 class Patient(mixins.LockedDatasetMixin, loggers.ModelLoggerMixin, models.Model):
     """
-    The representation of a patient in the database. It contains some
-    demographic information, as well as patient-specific characteristics that
-    are important in the context of cancer, e.g. HPV status.
+    The representation of a patient in the database.
+
+    Contains some demographic information, as well as patient-specific characteristics
+    that are important in the context of cancer, e.g. HPV status.
 
     This model also ties together the information about the patient's tumor(s)
     and the lymphatic progression pattern of that patient in the form of a

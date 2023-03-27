@@ -78,8 +78,8 @@
                                     <div class="level-left">
                                         <div class="level-item">
                                             <div class="tags">
-                                                {% if dataset.upload_csv %}
-                                                <a href="{% url 'patients:dataset_download' relative_path=dataset.upload_csv.name %}" class="button tag is-primary has-addons tooltip" data-tooltip="The originally uploaded CSV file&#10;MD5: {{ dataset.upload_csv.md5_hash }}">
+                                                {% if dataset.source_csv %}
+                                                <a href="{% url 'patients:dataset_download' relative_path=dataset.source_csv.name %}" class="button tag is-primary has-addons tooltip" data-tooltip="The originally uploaded CSV file&#10;MD5: {{ dataset.source_csv.md5_hash }}">
                                                     Uploaded CSV
                                                 </a>
                                                 {% endif %}

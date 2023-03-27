@@ -18,7 +18,14 @@ from django.forms import widgets
 
 from core.loggers import FormLoggerMixin
 
-from .models import Dataset, Diagnose, Patient, Tumor
+from .models import (
+    Dataset,
+    Diagnose,
+    DuplicateFileError,
+    Patient,
+    Tumor,
+    get_path_from_file,
+)
 
 
 class DatasetForm(FormLoggerMixin, forms.ModelForm):
@@ -37,7 +44,7 @@ class DatasetForm(FormLoggerMixin, forms.ModelForm):
             "is_public",
             "repo_provider",
             "repo_data_url",
-            "upload_csv",
+            "source_csv",
         ]
         widgets = {
             "name": widgets.TextInput(
@@ -70,7 +77,7 @@ class DatasetForm(FormLoggerMixin, forms.ModelForm):
             ),
         }
 
-    upload_csv = forms.FileField(
+    source_csv = forms.FileField(
         required=True,
         widget=widgets.FileInput(
             attrs={
@@ -85,19 +92,24 @@ class DatasetForm(FormLoggerMixin, forms.ModelForm):
         self.user = user
         super().__init__(*args, **kwargs)
 
+    def clean_source_csv(self):
+        """Raise a `ValidationError`, when the file already exists."""
+        try:
+            _path = get_path_from_file(self.cleaned_data["source_csv"])
+        except DuplicateFileError as df_err:
+            raise ValidationError(str(df_err))
+
     def save(self, commit=True):
         """
-        Get the institution from the user and import the uploaded CSV file into the
-        database. Also, export that to populate the ``export_csv`` field. Finally, lock
-        the dataset.
+        Get institution from user and import uploaded CSV file into database. Then
+        lock the dataset.
         """
         dataset = super(DatasetForm, self).save(commit=False)
         dataset.institution = self.user.institution
 
         if commit:
             dataset.save()
-            dataset.import_upload_csv_to_db()
-            dataset.export_db_to_csv()
+            dataset.import_source_csv_to_db()
 
         return dataset
 

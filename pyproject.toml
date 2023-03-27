@@ -37,8 +37,7 @@ docs = [
     "pydoctor ~= 22.9",
 ]
 test = [
-    "pytest-factoryboy ~= 2.1",
-    "pytest-django ~= 4.2",
+    "factory_boy ~= 3.2",
 ]
 dev = [
     "django-extensions ~= 3.2",

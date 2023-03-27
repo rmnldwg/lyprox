@@ -85,7 +85,7 @@ class DatasetView(ViewLoggerMixin, View):
         """
         kwargs = {}
         if "uploads" in relative_path:
-            kwargs["upload_csv"] = relative_path
+            kwargs["source_csv"] = relative_path
         elif "exports" in relative_path:
             kwargs["export_csv"] = relative_path
 
