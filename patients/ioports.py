@@ -8,6 +8,7 @@ patterns of progression into and from the Django database.
 from __future__ import annotations
 
 import logging
+import warnings
 from typing import List, Tuple
 
 import numpy as np
@@ -17,6 +18,7 @@ from django.db.models import QuerySet
 import patients.models as models
 
 logger = logging.getLogger(__name__)
+warnings.simplefilter(action="ignore", category=pd.errors.PerformanceWarning)
 
 
 class ParsingError(Exception):
@@ -252,12 +254,12 @@ def export_to_pandas(patients: QuerySet):
               *tumor_column_tuples,
               *diagnose_column_tuples]
     columns = pd.MultiIndex.from_tuples(tuples)
-    df = pd.DataFrame(columns=columns)
 
     # prefetch fields for performance
     patients = patients.prefetch_related("tumor_set", "diagnose_set")
 
     # loop through patients
+    list_of_rows = []
     for patient in patients:
         new_row = {}
 
@@ -275,6 +277,6 @@ def export_to_pandas(patients: QuerySet):
             for field in diagnose_fields:
                 new_row[(mod, side, field)] = getattr(diagnose, field)
 
-        df = df.append(new_row, ignore_index=True)
+        list_of_rows.append(new_row)
 
-    return df
+    return pd.DataFrame(list_of_rows, columns=columns)
