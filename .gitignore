@@ -65,8 +65,8 @@ local_settings.py
 db.sqlite3
 db.sqlite3-journal
 static/
-media/
-!media/institution_logos/*
+media/*
+!media/logos/
 /backups/
 */asgi.py
 */_version.py

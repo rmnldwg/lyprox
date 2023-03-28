@@ -16,7 +16,6 @@ import time
 from pathlib import Path
 from typing import Any, Dict
 
-from django.conf import settings
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models.query import QuerySet
 from django.http import FileResponse, HttpResponse, HttpResponseForbidden
@@ -76,27 +75,20 @@ class DatasetListView(ViewLoggerMixin, generic.ListView):
         return queryset
 
 class DatasetView(ViewLoggerMixin, View):
-    """
-    View that serves the respective `Dataset` CSV file.
-    """
-    def get(self, request, relative_path):
-        """
-        Get correct table and render download response.
-        """
-        kwargs = {}
-        if "uploads" in relative_path:
-            kwargs["source_csv"] = relative_path
-        elif "exports" in relative_path:
-            kwargs["export_csv"] = relative_path
+    """View that serves the respective `Dataset` CSV file."""
+    def get(self, request, pk, which):
+        """Get correct table and render download response."""
+        dataset = get_object_or_404(Dataset, pk=pk)
 
-        dataset = get_object_or_404(Dataset, **kwargs)
         if not dataset.is_public and not request.user.is_authenticated:
             return HttpResponseForbidden()
 
-        absolute_path = Path(f"{settings.MEDIA_ROOT}/{relative_path}")
-        csv_file = open(absolute_path, 'rb')
-        response = FileResponse(csv_file, as_attachment=True)
-        return response
+        if which == "source":
+            csv_file_path = Path(dataset.source_csv.path)
+        elif which == "export":
+            csv_file_path = dataset.export_db_to_csv().name
+
+        return FileResponse(open(csv_file_path, "rb"))
 
 
 # PATIENT related views

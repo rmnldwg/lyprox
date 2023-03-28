@@ -84,4 +84,4 @@ python=/srv/www/$1/.venv/bin/python
 eval "$python -m pip install -U pip setuptools setuptools_scm wheel"
 eval "$python -m pip install /srv/www/$1"
 
-info "all done, don't forget to set env vars:"
+info "all done, don't forget to set env vars"

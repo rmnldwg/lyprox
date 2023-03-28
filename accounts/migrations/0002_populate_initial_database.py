@@ -17,8 +17,8 @@ def create_initial_institutions(apps, schema_editor):
         street="Rämistrasse 100",
         city="Zürich",
         country="CH",
-        phone="+41767248042",
-        logo="institution_logos/usz.png",
+        phone="+41442553566",
+        logo="logos/usz.png",
     )
     Institution.objects.create(
         name="Centre Léon Bérard",
@@ -27,7 +27,7 @@ def create_initial_institutions(apps, schema_editor):
         city="Lyon",
         country="FR",
         phone="+33478782828",
-        logo="institution_logos/clb.png",
+        logo="logos/clb.png",
     )
     Institution.objects.create(
         name="Inselspital Bern",
@@ -36,7 +36,7 @@ def create_initial_institutions(apps, schema_editor):
         city="Bern",
         country="CH",
         phone="+41316322111",
-        logo="institution_logos/isb.png",
+        logo="logos/isb.png",
     )
 
 

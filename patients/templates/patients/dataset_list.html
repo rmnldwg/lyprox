@@ -79,15 +79,15 @@
                                         <div class="level-item">
                                             <div class="tags">
                                                 {% if dataset.source_csv %}
-                                                <a href="{% url 'patients:dataset_download' relative_path=dataset.source_csv.name %}" class="button tag is-primary has-addons tooltip" data-tooltip="The originally uploaded CSV file&#10;MD5: {{ dataset.source_csv.md5_hash }}">
-                                                    Uploaded CSV
+                                                <a href="{% url 'patients:dataset_download' pk=dataset.pk which='source' %}" class="button tag is-primary has-addons tooltip" data-tooltip="The originally uploaded CSV file">
+                                                    <span class="icon is-small"><i class="fas fa-download"></i></span>
+                                                    <span>Source</span>
                                                 </a>
                                                 {% endif %}
-                                                {% if dataset.export_csv %}
-                                                <a href="{% url 'patients:dataset_download' relative_path=dataset.export_csv.name %}" class="button tag is-success has-addons tooltip" data-tooltip="CSV fileexported from database&#10;MD5: {{ dataset.export_csv.md5_hash }}">
-                                                    Exported CSV
+                                                <a href="{% url 'patients:dataset_download' pk=dataset.pk which='export' %}" class="button tag is-success has-addons tooltip" data-tooltip="Export dataset from database to CSV">
+                                                    <span class="icon is-small"><i class="fas fa-file-export"></i></span>
+                                                    <span>Export</span>
                                                 </a>
-                                                {% endif %}
                                                 {% if dataset.repo_data_url %}
                                                 <a href="{{ dataset.repo_data_url }}" class="button tag is-black has-addons tooltip" data-tooltip="Link to online repository">
                                                     {{ dataset.repo_provider }}

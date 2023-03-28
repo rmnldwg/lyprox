@@ -8,7 +8,6 @@ import core.loggers
 import patients.fields
 import patients.mixins
 import patients.models
-import patients.validators
 
 
 class Migration(migrations.Migration):
@@ -31,7 +30,7 @@ class Migration(migrations.Migration):
                 ('is_locked', models.BooleanField(default=False)),
                 ('repo_provider', models.CharField(blank=True, max_length=100, null=True, verbose_name='Repository Provider')),
                 ('repo_data_url', models.URLField(blank=True, null=True, verbose_name='Link to Data Download')),
-                ('source_csv', models.FileField(blank=True, null=True, upload_to=patients.models.get_path_for_source_csv, validators=[patients.validators.FileTypeValidator(file_types=('CSV text', 'text/csv', 'application/csv'), max_size=10240000)])),
+                ('source_csv', models.FileField(blank=True, null=True, upload_to=patients.models.get_path_for_source_csv)),
                 ('institution', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='accounts.institution')),
             ],
             bases=(core.loggers.ModelLoggerMixin, models.Model),

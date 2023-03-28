@@ -22,9 +22,9 @@ import logging
 from collections import namedtuple
 from io import BytesIO
 from pathlib import Path
+from tempfile import NamedTemporaryFile
 
 import pandas as pd
-from django.core.files import File
 from django.db import models
 from django.db.models.fields.files import FileField
 from django.forms import ValidationError
@@ -38,7 +38,6 @@ from accounts.models import Institution
 from core.settings import MEDIA_ROOT
 
 from .fields import RobustDateField
-from .validators import FileTypeValidator
 
 logger = logging.getLogger(name=__name__)
 
@@ -73,7 +72,7 @@ def does_file_match_path(file, path):
     return file_hash == path
 
 
-def get_path_from_file(file, directory="source_csv", suffix=".csv"):
+def get_path_from_file(file, directory="source", suffix=".csv"):
     """Compute MD5 hash of ``file`` and use return filepath based on that.
 
     The resulting filepath will be contructed from the `core.settings.MEDIA_ROOT`, the
@@ -83,12 +82,12 @@ def get_path_from_file(file, directory="source_csv", suffix=".csv"):
     """
     md5_hash = get_md5_hash(file)
     filename = Path(md5_hash).with_suffix(suffix)
-    directory = Path(MEDIA_ROOT) / directory
-    if (directory / filename).exists():
-        raise DuplicateFileError(
-            "This file has already been uploaded. A dataset cannot exist twice."
-        )
-    return str(directory / filename)
+    absolute_directory = Path(MEDIA_ROOT) / directory
+
+    if (absolute_directory / filename).exists():
+        raise DuplicateFileError("File already exists.")
+
+    return f"{directory}/{filename}"
 
 
 def get_path_for_source_csv(instance, _filename):
@@ -139,10 +138,6 @@ class Dataset(loggers.ModelLoggerMixin, models.Model):
 
     source_csv = FileField(
         upload_to=get_path_for_source_csv,
-        validators=[FileTypeValidator(
-            max_size=1024 * 1000 * 10,
-            file_types=("CSV text", "text/csv", "application/csv")
-        )],
         null=True, blank=True,
     )
     """A ``FileField`` that holds the uploaded CSV source file."""
@@ -177,9 +172,9 @@ class Dataset(loggers.ModelLoggerMixin, models.Model):
             self.logger.warning(f"Attemptet change to locked dataset {self}")
             raise LockedDatasetError("Cannot edit/save a locked dataset.")
 
-        if not does_file_match_path(self.source_csv, self.source_csv.path):
-            self.logger.error(f"Source CSV file of dataset {self} is corrupted.")
-            raise CorruptedFileError("Content and filename of %s do not match", self)
+        # if self.source_csv.readable() and not does_file_match_path(self.source_csv, self.source_csv.path):
+        #     self.logger.error(f"Source CSV file of dataset {self} is corrupted.")
+        #     raise CorruptedFileError(f"Content and filename of {self} do not match")
 
         return super().save(*args, **kwargs)
 
@@ -223,36 +218,20 @@ class Dataset(loggers.ModelLoggerMixin, models.Model):
         table = pd.read_csv(binary_buffer, header=[0,1,2])
         return table
 
-    def export_db_to_csv(self, is_locked_ok=True):
+    def export_db_to_csv(self) -> NamedTemporaryFile:
         """Export database entries beloning to this `Dataset` to CSV.
 
         First, call the `get_pandas_from_db` method to get a `pandas.DataFrame` of
         patients from the database. Then, save that table in the form of a CSV file
-        to disk and associate it with the `fields.FileFieldWithHash` called
-        `export_csv`.
-
-        Calling this method will lock the dataset in the end. If it is already locked,
-        the assignment of the generated file to the field `export_csv` will be blocked
-        unless `is_locked_ok` is set to ``True``.
+        to a ``NamedTemporaryFile`` and return that file.
         """
         table = self.get_pandas_from_db()
-        write_buffer = BytesIO()
-        table.to_csv(write_buffer, index=None)
-        file = File(write_buffer)
 
-        if not self.is_locked:
-            self.export_csv.save("this-has-no-effect", file, save=True)
-        elif is_locked_ok:
-            self.export_csv.save("this-has-no-effect", file, save=False)
-            self.save(override=True)
-        else:
-            self.logger.warning(f"Exporting of dataset {self} was blocked. Aborting.")
-            return
+        temp_file = NamedTemporaryFile(suffix=".csv", delete=False)
+        table.to_csv(temp_file, index=None)
 
-        self.logger.info(
-            f"Exported patients of dataset {self} to CSV ({self.export_csv.path})"
-        )
-        self.lock()
+        return temp_file
+
 
     def import_source_csv_to_db(self):
         """Import uploaded CSV into the database using `ioports` module.

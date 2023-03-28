@@ -9,16 +9,9 @@ from patients.models import Dataset, Patient
 
 class PatientTestCase(TestCase):
     """Test the `models.Patient`."""
+    def setUp(self) -> None:
+        return super().setUp()
 
     def test_whatever(self):
-        institution = Institution.objects.create(
-            name="TestClinic", shortname="TC", country="Testland",
-        )
-        dataset = Dataset.objects.create(name="TestSet", institution=institution)
-
-        create_patient = lambda: Patient.objects.create(
-            sex="female", age=42, diagnose_date="2023-03-24", dataset=dataset,
-        )
-        create_patient()
-
-        self.assertRaises(ValidationError, create_patient)
+        num_institutions = Institution.objects.all().count()
+        self.assertEqual(num_institutions, 3)

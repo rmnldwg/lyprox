@@ -12,6 +12,7 @@ that the data is properly cleaned before its being passed on to the next step.
 from typing import Any, Dict, Optional
 
 import pandas
+import magic
 from django import forms
 from django.core.exceptions import ValidationError
 from django.forms import widgets
@@ -94,10 +95,16 @@ class DatasetForm(FormLoggerMixin, forms.ModelForm):
 
     def clean_source_csv(self):
         """Raise a `ValidationError`, when the file already exists."""
+        source_csv = self.cleaned_data["source_csv"]
+
+        self.logger.info(magic.from_buffer(source_csv.read(), mime=True))
+
         try:
-            _path = get_path_from_file(self.cleaned_data["source_csv"])
+            _path = get_path_from_file(source_csv)
         except DuplicateFileError as df_err:
-            raise ValidationError(str(df_err))
+            raise ValidationError("File has already been uploaded.") from df_err
+
+        return source_csv
 
     def save(self, commit=True):
         """
