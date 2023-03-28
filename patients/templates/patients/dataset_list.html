@@ -84,7 +84,7 @@
                                                     <span>Source</span>
                                                 </a>
                                                 {% endif %}
-                                                <a href="{% url 'patients:dataset_download' pk=dataset.pk which='export' %}" class="button tag is-success has-addons tooltip" data-tooltip="Export dataset from database to CSV">
+                                                <a href="{% url 'patients:dataset_download' pk=dataset.pk which='export' %}" class="button tag is-success has-addons tooltip" id="export" data-tooltip="Export dataset from database to CSV">
                                                     <span class="icon is-small"><i class="fas fa-file-export"></i></span>
                                                     <span>Export</span>
                                                 </a>
@@ -160,10 +160,6 @@
     </div>
 </section>
 
-<script>
-    $("#generate").click(function() {
-        $("#generate").addClass("is-loading");
-    });
-</script>
+<script src="{% static 'patients/dataset_list.js' %}"></script>
 
 {% endblock content %}

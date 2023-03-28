@@ -592,6 +592,7 @@ class Diagnose(mixins.LockedDatasetMixin, loggers.ModelLoggerMixin, models.Model
         `Modalities` class similar to what Django's enum types have.
         """
         def __init__(cls, classname, bases, classdict, *args, **kwargs):
+            cls._start = 0
             cls._mods = []
             for key, val in classdict.items():
                 if (
@@ -607,16 +608,10 @@ class Diagnose(mixins.LockedDatasetMixin, loggers.ModelLoggerMixin, models.Model
             return len(cls._mods)
 
         def __iter__(cls):
-            cls._i = 0
-            return cls
-
-        def __next__(cls):
-            if cls._i < len(cls):
-                mod = cls._mods[cls._i]
-                cls._i += 1
-                return mod
-            else:
-                raise StopIteration
+            current = cls._start
+            while current < len(cls):
+                yield cls._mods[current]
+                current += 1
 
         @property
         def choices(cls):

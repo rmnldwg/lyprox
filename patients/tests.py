@@ -22,6 +22,7 @@ class DatasetTestCase(TestCase):
         self.dset = self.create_dataset()
         return super().setUp()
 
+
     def create_dataset(self):
         with open(self.test_file_path, mode="rb") as file:
             file = File(file)
@@ -36,9 +37,11 @@ class DatasetTestCase(TestCase):
 
         return dset
 
+
     def test_unique_file_constraint(self):
         """Make sure a file cannot be uploaded twice."""
         self.assertRaises(DuplicateFileError, self.create_dataset)
+
 
     def test_dataset_lock(self):
         """Check that a locked dataset cannot be modified."""
@@ -52,9 +55,11 @@ class DatasetTestCase(TestCase):
         rand_diagnose = random.choice(diagnoses)
 
         self.assertTrue(self.dset.is_locked)
+        self.assertRaises(LockedDatasetError, self.dset.delete)
         self.assertRaises(LockedDatasetError, rand_patient.delete)
         self.assertRaises(LockedDatasetError, rand_tumor.delete)
         self.assertRaises(LockedDatasetError, rand_diagnose.delete)
+
 
     def test_ioports(self):
         """Test if im- and export preserve data."""
@@ -67,6 +72,7 @@ class DatasetTestCase(TestCase):
         export_table = export_table["patient", "#"][compare_cols]
 
         pd.testing.assert_frame_equal(test_table, export_table, check_dtype=False)
+
 
     def tearDown(self) -> None:
         self.source_file_path.unlink()
