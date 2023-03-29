@@ -50,18 +50,18 @@ source = "https://github.com/rmnldwg/lyprox"
 documentation = "https://rmnldwg.github.io/lyprox"
 
 [tool.setuptools_scm]
-write_to = "core/_version.py"
+write_to = "lyprox/_version.py"
 local_scheme = "no-local-version"
 
 [tool.setuptools.package-dir]
-"lyprox.core" = "core"
+"lyprox" = "lyprox"
 "lyprox.accounts" = "accounts"
 "lyprox.patients" = "patients"
 "lyprox.dataexplorer" = "dataexplorer"
 "lyprox.riskpredictor" = "riskpredictor"
 
 [tool.setuptools.dynamic]
-version = {attr = "core._version.version"}
+version = {attr = "lyprox._version.version"}
 
 [tool.isort]
 line_length = 79
@@ -80,15 +80,15 @@ python_files = "test_*.py"
 
 [tool.pydoctor]
 project-name = "LyProX"
-add-package = ["core", "patients", "dataexplorer", "riskpredictor"]
+add-package = ["lyprox", "patients", "dataexplorer", "riskpredictor"]
 docformat = "google"
 make-html = true
 html-output = "./docs"
 verbose = 1
 privacy = [
-    "HIDDEN:core.context_processors",
-    "HIDDEN:core.middleware",
-    "HIDDEN:core.loggers",
+    "HIDDEN:lyprox.context_processors",
+    "HIDDEN:lyprox.middleware",
+    "HIDDEN:lyprox.loggers",
     "HIDDEN:patients.migrations",
     "HIDDEN:patients.static",
     "HIDDEN:patients.templates",

@@ -4,7 +4,7 @@ import django.db.models.deletion
 import django.utils.timezone
 from django.db import migrations, models
 
-import core.loggers
+import lyprox.loggers
 import patients.fields
 import patients.mixins
 import patients.models
@@ -33,7 +33,7 @@ class Migration(migrations.Migration):
                 ('source_csv', models.FileField(blank=True, null=True, upload_to=patients.models.get_path_for_source_csv)),
                 ('institution', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='accounts.institution')),
             ],
-            bases=(core.loggers.ModelLoggerMixin, models.Model),
+            bases=(lyprox.loggers.ModelLoggerMixin, models.Model),
         ),
         migrations.CreateModel(
             name='Patient',
@@ -53,7 +53,7 @@ class Migration(migrations.Migration):
                 ('m_stage', models.PositiveSmallIntegerField(choices=[(0, 'M0'), (1, 'M1'), (2, 'MX')], default=0)),
                 ('dataset', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='patients.dataset')),
             ],
-            bases=(patients.mixins.LockedDatasetMixin, core.loggers.ModelLoggerMixin, models.Model),
+            bases=(patients.mixins.LockedDatasetMixin, lyprox.loggers.ModelLoggerMixin, models.Model),
         ),
         migrations.CreateModel(
             name='Tumor',
@@ -68,7 +68,7 @@ class Migration(migrations.Migration):
                 ('stage_prefix', models.CharField(choices=[('c', 'c'), ('p', 'p')], max_length=1)),
                 ('patient', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='patients.patient')),
             ],
-            bases=(patients.mixins.LockedDatasetMixin, core.loggers.ModelLoggerMixin, models.Model),
+            bases=(patients.mixins.LockedDatasetMixin, lyprox.loggers.ModelLoggerMixin, models.Model),
         ),
         migrations.CreateModel(
             name='Diagnose',
@@ -91,6 +91,6 @@ class Migration(migrations.Migration):
                 ('VII', models.BooleanField(blank=True, null=True)),
                 ('patient', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='patients.patient')),
             ],
-            bases=(patients.mixins.LockedDatasetMixin, core.loggers.ModelLoggerMixin, models.Model),
+            bases=(patients.mixins.LockedDatasetMixin, lyprox.loggers.ModelLoggerMixin, models.Model),
         ),
     ]

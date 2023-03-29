@@ -1,18 +1,23 @@
 """Testing the core models' functionality."""
 # pylint: disable=no-member
 
-from pathlib import Path
 import random
+from pathlib import Path
 
 import pandas as pd
-from pandas import testing
-
 from django.core.files import File
 from django.test import TestCase
 
-from core.settings import BASE_DIR
 from accounts.models import Institution
-from patients.models import Dataset, Diagnose, Patient, Tumor, DuplicateFileError, LockedDatasetError
+from lyprox.settings import BASE_DIR
+from patients.models import (
+    Dataset,
+    Diagnose,
+    DuplicateFileError,
+    LockedDatasetError,
+    Patient,
+    Tumor,
+)
 
 
 class DatasetTestCase(TestCase):

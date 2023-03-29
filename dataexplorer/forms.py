@@ -18,7 +18,7 @@ from typing import Tuple
 from django import forms
 from django.core.exceptions import ValidationError
 
-from core.loggers import FormLoggerMixin
+from lyprox.loggers import FormLoggerMixin
 from patients.models import Dataset, Diagnose, Patient, Tumor
 
 logger = logging.getLogger(__name__)

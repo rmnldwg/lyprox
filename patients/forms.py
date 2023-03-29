@@ -11,13 +11,13 @@ that the data is properly cleaned before its being passed on to the next step.
 
 from typing import Any, Dict, Optional
 
-import pandas
 import magic
+import pandas
 from django import forms
 from django.core.exceptions import ValidationError
 from django.forms import widgets
 
-from core.loggers import FormLoggerMixin
+from lyprox.loggers import FormLoggerMixin
 
 from .models import (
     Dataset,

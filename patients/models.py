@@ -31,11 +31,11 @@ from django.forms import ValidationError
 from django.urls import reverse
 from django.utils import timezone
 
-import core.loggers as loggers
+import lyprox.loggers as loggers
 import patients.ioports as ioports
 import patients.mixins as mixins
 from accounts.models import Institution
-from core.settings import MEDIA_ROOT
+from lyprox.settings import MEDIA_ROOT
 
 from .fields import RobustDateField
 

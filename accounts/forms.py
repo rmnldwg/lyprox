@@ -2,7 +2,7 @@ from django import forms
 from django.contrib.auth.forms import AuthenticationForm, UsernameField
 from django.forms import widgets
 
-from core.loggers import FormLoggerMixin
+from lyprox.loggers import FormLoggerMixin
 
 from .models import Institution, User
 

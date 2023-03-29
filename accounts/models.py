@@ -10,7 +10,7 @@ from django.utils import timezone
 from django.utils.translation import gettext as _
 from phonenumber_field.modelfields import PhoneNumberField
 
-from core.loggers import ModelLoggerMixin
+from lyprox.loggers import ModelLoggerMixin
 
 # ISO 3166-1 country names and codes adapted from http://opencountrycodes.appspot.com/python/
 COUNTRIES = (

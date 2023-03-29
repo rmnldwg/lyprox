@@ -6,7 +6,7 @@ import phonenumber_field.modelfields
 from django.db import migrations, models
 
 import accounts.models
-import core.loggers
+import lyprox.loggers
 
 
 class Migration(migrations.Migration):
@@ -30,7 +30,7 @@ class Migration(migrations.Migration):
                 ('phone', phonenumber_field.modelfields.PhoneNumberField(max_length=128, region=None)),
                 ('logo', models.FileField(blank=True, null=True, upload_to='logos/')),
             ],
-            bases=(core.loggers.ModelLoggerMixin, models.Model),
+            bases=(lyprox.loggers.ModelLoggerMixin, models.Model),
         ),
         migrations.CreateModel(
             name='User',
@@ -53,6 +53,6 @@ class Migration(migrations.Migration):
             options={
                 'abstract': False,
             },
-            bases=(core.loggers.ModelLoggerMixin, models.Model),
+            bases=(lyprox.loggers.ModelLoggerMixin, models.Model),
         ),
     ]

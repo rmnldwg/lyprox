@@ -27,9 +27,9 @@ from accounts.mixins import (
     InstitutionCheckObjectMixin,
     InstitutionCheckPatientMixin,
 )
-from core.loggers import ViewLoggerMixin
 from dataexplorer import query
 from dataexplorer.forms import DashboardForm
+from lyprox.loggers import ViewLoggerMixin
 
 from .filters import PatientFilter
 from .forms import DatasetForm, DiagnoseForm, PatientForm, TumorForm

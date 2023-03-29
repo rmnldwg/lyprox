@@ -1,6 +1,6 @@
 from django.shortcuts import redirect, reverse
 
-from core import settings
+from lyprox import settings
 
 
 class MaintenanceMiddleware:
