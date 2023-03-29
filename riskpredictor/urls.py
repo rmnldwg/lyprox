@@ -1,5 +1,5 @@
 """
-URLs related to the risk prediction app under ``https://lyprox.org/risk``. Like the
+URLs related to the riskpredictor prediction app under ``https://lyprox.org/riskpredictor``. Like the
 `dashboard`, this includes a dashboard and a help page.
 """
 # pylint: disable=invalid-name
@@ -8,7 +8,7 @@ from django.urls import path
 
 from . import views
 
-app_name = "risk"
+app_name = "riskpredictor"
 urlpatterns = [
     # path("", views.PredictionView.as_view(), name="prediction"),
     # path("ajax/", views.prediction_AJAX_view, name="ajax"),

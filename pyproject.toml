@@ -58,7 +58,7 @@ local_scheme = "no-local-version"
 "lyprox.accounts" = "accounts"
 "lyprox.patients" = "patients"
 "lyprox.dataexplorer" = "dataexplorer"
-"lyprox.risk" = "risk"
+"lyprox.riskpredictor" = "riskpredictor"
 
 [tool.setuptools.dynamic]
 version = {attr = "core._version.version"}
@@ -80,7 +80,7 @@ python_files = "test_*.py"
 
 [tool.pydoctor]
 project-name = "LyProX"
-add-package = ["core", "patients", "dataexplorer", "risk"]
+add-package = ["core", "patients", "dataexplorer", "riskpredictor"]
 docformat = "google"
 make-html = true
 html-output = "./docs"

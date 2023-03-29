@@ -154,7 +154,7 @@ INSTALLED_APPS = [
     "accounts.apps.AccountsConfig",
     "patients.apps.PatientsConfig",
     "dataexplorer.apps.DataExplorerConfig",
-    "risk.apps.RiskConfig",
+    "riskpredictor.apps.RiskConfig",
 
     # third party apps
     "django_filters",

@@ -17,7 +17,7 @@ urlpatterns = [
     path("accounts/", include("accounts.urls")),
     path("patients/", include("patients.urls")),
     path("dataexplorer/", include("dataexplorer.urls")),
-    path("risk/", include("risk.urls")),
+    path("riskpredictor/", include("riskpredictor.urls")),
     path("", views.index, name="index"),
     path("maintenance/", views.maintenance, name="maintenance"),
 ]
