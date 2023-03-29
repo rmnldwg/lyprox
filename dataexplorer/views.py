@@ -1,5 +1,5 @@
 """
-The `views` module in the `dashboard` app mostly handles the
+The `views` module in the `dataexplorer` app mostly handles the
 `DashboardView`, which takes care of initializing the complex
 `forms.DashboardForm`, passing the cleaned values to all the filtering
 functions in the `query` module to finally pass the queried information to
@@ -27,7 +27,7 @@ logger = logging.getLogger(__name__)
 
 def help_view(request) -> HttpResponse:
     """Simply display the dashboard help text."""
-    template_name = "dashboard/help/index.html"
+    template_name = "dataexplorer/help/index.html"
     context = {"modalities": list(Diagnose.Modalities)}
     return render(request, template_name, context)
 
@@ -41,8 +41,7 @@ class DashboardView(ViewLoggerMixin, generic.ListView):
     """
     model = Patient
     form_class = DashboardForm
-    template_name = "dashboard/layout.html"
-    action = "display_dashboard_stats"
+    template_name = "dataexplorer/layout.html"
 
     @classmethod
     def _get_queryset(cls, data, user, logger):

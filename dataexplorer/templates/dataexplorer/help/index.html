@@ -5,12 +5,12 @@
 
 
 {% block head %}
-{% include 'head.html' with title="LyProX · Dashboard help" %}
+{% include 'head.html' with title="LyProX · Data Explorer help" %}
 {% endblock head %}
 
 
 {% block content %}
-<link rel="stylesheet" href="{% static 'dashboard/help.css' %}">
+<link rel="stylesheet" href="{% static 'dataexplorer/help.css' %}">
 
 <section class="section">
     <div class="container">
@@ -19,7 +19,7 @@
                 <aside class="menu is-fixed">
                     <p class="menu-label">General</p>
                     <ul class="menu-list">
-                        <li><a href="">The Dashboard</a></li>
+                        <li><a href="">The Data Explorer</a></li>
                     </ul>
 
                     <p class="menu-label">Videos</p>
@@ -53,7 +53,7 @@
             </div>
             <div class="column">
                 <div class="content">
-                    <h1 id="The Dashboard">The Dashboard</h1>
+                    <h1 id="The Data Explorer">The Data Explorer</h1>
                     <p>
                         Here, one can visualize patterns of lymph node involvement
                         for the patients in the database. The aim is to make it
@@ -99,22 +99,22 @@
                     <h2 id="Components" class="pt-6">Components</h2>
 
                     <h3 id="Patient details" class="pb-4">Patient details (top left)</h3>
-                    {% include 'dashboard/help/media.html' with image='dashboard/toggle.gif' size='large' html='dashboard/help/patient.html' %}
+                    {% include 'dataexplorer/help/media.html' with image='dataexplorer/toggle.gif' size='large' html='dataexplorer/help/patient.html' %}
 
                     <h3 id="Primary tumor" class="pt-6 pb-4">Primary tumor (bottom left)</h3>
-                    {% include 'dashboard/help/media.html' with image='dashboard/subsite_t-stage.gif' size='large' markdown='dashboard/help/tumor.md' %}
+                    {% include 'dataexplorer/help/media.html' with image='dataexplorer/subsite_t-stage.gif' size='large' markdown='dataexplorer/help/tumor.md' %}
 
                     <h3 id="Institutions" class="pt-6 pb-4">Institutions (center top)</h3>
-                    {% include 'dashboard/help/media.html' with image='dashboard/institutions.gif' size='large' markdown='dashboard/help/institutions.md' %}
+                    {% include 'dataexplorer/help/media.html' with image='dataexplorer/institutions.gif' size='large' markdown='dataexplorer/help/institutions.md' %}
 
                     <h3 id="Modalities" class="pt-6 pb-4">Modalities (center, below Institutions)</h3>
-                    {% include 'dashboard/help/media.html' with image='dashboard/modalities.gif' size='large' markdown='dashboard/help/modalities.md' %}
+                    {% include 'dataexplorer/help/media.html' with image='dataexplorer/modalities.gif' size='large' markdown='dataexplorer/help/modalities.md' %}
 
                     <h3 id="Involvement" class="pt-6 pb-4">contra- (center left) & ipsilateral (center right)</h3>
-                    {% include 'dashboard/help/media.html' with image='dashboard/involvement.gif' size='large' markdown='dashboard/help/involvement.md' %}
+                    {% include 'dataexplorer/help/media.html' with image='dataexplorer/involvement.gif' size='large' markdown='dataexplorer/help/involvement.md' %}
 
                     <h3 id="Buttons" class="pt-6 pb-4">Buttons (bottom right)</h3>
-                    {% include 'dashboard/help/media.html' with image='dashboard/buttons.gif' size='large' markdown='dashboard/help/buttons.md' %}
+                    {% include 'dataexplorer/help/media.html' with image='dataexplorer/buttons.gif' size='large' markdown='dataexplorer/help/buttons.md' %}
 
                     <h2 id="Examples" class="pt-6">Examples</h2>
 
@@ -124,7 +124,7 @@
                         for how to use the dasboard.
                     </p>
                     <figure class="image">
-                        <img src="{% static 'dashboard/example_usage.png' %}" alt="annotated screenshot">
+                        <img src="{% static 'dataexplorer/example_usage.png' %}" alt="annotated screenshot">
                     </figure>
 
                     <h3 id="The bar plots">The bar plots</h3>
@@ -137,7 +137,7 @@
                         percentages.
                     </p>
                     <figure class="image">
-                        <img src="{% static 'dashboard/annotated_bar.png' %}" alt="annotated bar plot">
+                        <img src="{% static 'dataexplorer/annotated_bar.png' %}" alt="annotated bar plot">
                     </figure>
 
                     <h2 class="pt-6" id="Contribute">Contribute</h2>

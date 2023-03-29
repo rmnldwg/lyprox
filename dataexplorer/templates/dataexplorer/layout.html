@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="en" class="has-navbar-fixed-top">
-    {% include 'head.html' with title="LyProX · Dashboard" %}
+    {% include 'head.html' with title="LyProX · Data Explorer" %}
 
     {% load mytags %}
     {% load static %}
-    <link rel="stylesheet" href="{% static 'dashboard/dashboard.css' %}">
+    <link rel="stylesheet" href="{% static 'dataexplorer/dashboard.css' %}">
 
 
     <body>
@@ -15,40 +15,40 @@
             Also, it is outside the form such that it doesn't get sent via the keyboard shortcut GET request.
         -->
         {% csrf_token %}
-        <form method="GET" action="{% url 'dashboard:dashboard' %}" id="dashboard-form" name="dashboardform">
+        <form method="GET" action="{% url 'dataexplorer:dashboard' %}" id="dashboard-form" name="dashboardform">
             <section class="section">
 
                 <div class="tile is-ancestor">
                     <div class="tile is-3 is-vertical is-parent">
 
                         <!-- Patient details -->
-                        {% include 'dashboard/filter/patient.html' with form=form %}
+                        {% include 'dataexplorer/filter/patient.html' with form=form %}
 
                         <!-- Primary tumor -->
-                        {% include 'dashboard/filter/tumor.html' with form=form %}
+                        {% include 'dataexplorer/filter/tumor.html' with form=form %}
                     </div>
 
                     <div class="tile is-9 is-vertical">
                         <div class="tile is-parent is-vertical">
 
                             <!-- Datasets -->
-                            {% include 'dashboard/filter/datasets.html' with form=form %}
+                            {% include 'dataexplorer/filter/datasets.html' with form=form %}
 
                             <!-- Modalities -->
-                            {% include 'dashboard/filter/modalities.html' with form=form %}
+                            {% include 'dataexplorer/filter/modalities.html' with form=form %}
                         </div>
 
                         <!-- Involvement prevalence -->
                         <div class="tile">
                             <!-- contralateral -->
-                            {% include 'dashboard/involvement.html' with form=form side='contra' %}
+                            {% include 'dataexplorer/involvement.html' with form=form side='contra' %}
 
                             <!-- ipsilateral -->
-                            {% include 'dashboard/involvement.html' with form=form side='ipsi' %}
+                            {% include 'dataexplorer/involvement.html' with form=form side='ipsi' %}
                         </div>
 
                         <!-- Controls -->
-                        {% include 'dashboard/controls.html' with form=form %}
+                        {% include 'dataexplorer/controls.html' with form=form %}
                     </div>
                 </div>
             </section>
@@ -57,5 +57,5 @@
         {% include 'footer.html' %}
     </body>
 
-    <script src="{% static 'dashboard/dashboard.js' %}"></script>
+    <script src="{% static 'dataexplorer/dashboard.js' %}"></script>
 </html>

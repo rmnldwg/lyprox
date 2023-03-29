@@ -1,5 +1,5 @@
 """
-The `dashboard.forms` module defines the relatively complex form that is
+The `dataexplorer.forms` module defines the relatively complex form that is
 used for querying the database later.
 
 It also implements some custom form elements, like `ThreeWayToggle` and

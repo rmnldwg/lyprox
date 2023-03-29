@@ -9,7 +9,7 @@ from django.urls import path
 
 from . import views
 
-app_name = "dashboard"
+app_name = "dataexplorer"
 urlpatterns = [
     path("", views.DashboardView.as_view(), name="dashboard"),
     path("ajax/", views.dashboard_AJAX_view, name="ajax"),

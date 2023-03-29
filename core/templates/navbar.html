@@ -10,7 +10,7 @@
                 <span aria-hidden="true"></span>
                 <span aria-hidden="true"></span>
                 <span aria-hidden="true"></span>
-              </a>
+            </a>
         </div>
         <div class="navbar-menu" id="navMenu">
             <div class="navbar-start">
@@ -41,22 +41,24 @@
                         <a href="{% url 'patients:dataset_upload' %}" class="navbar-item" title="upload new datasets">
                             Upload
                         </a>
+                        <!--
                         <a href="" class="navbar-item" title="create empty datasets">
                             Create
                         </a>
+                        -->
                     </div>
                 </div>
 
                 <div class="navbar-item has-dropdown is-hoverable">
-                    <a href="{% url 'dashboard:dashboard' %}" class="navbar-link" title="explore patterns of progression in datasets">
-                        Data Viewer
+                    <a href="{% url 'dataexplorer:dashboard' %}" class="navbar-link" title="explore patterns of progression in datasets">
+                        Data Explorer
                     </a>
 
                     <div class="navbar-dropdown">
-                        <a href="{% url 'dashboard:dashboard' %}" class="navbar-item" title="explore patterns of progression in datasets">
+                        <a href="{% url 'dataexplorer:dashboard' %}" class="navbar-item" title="explore patterns of progression in datasets">
                             Dashboard
                         </a>
-                        <a href="{% url 'dashboard:help' %}" class="navbar-item" title="videos and descriptions on how to use the dashboard">
+                        <a href="{% url 'dataexplorer:help' %}" class="navbar-item" title="videos and descriptions on how to use the dashboard">
                             Help
                         </a>
                     </div>

@@ -57,7 +57,7 @@ local_scheme = "no-local-version"
 "lyprox.core" = "core"
 "lyprox.accounts" = "accounts"
 "lyprox.patients" = "patients"
-"lyprox.dashboard" = "dashboard"
+"lyprox.dataexplorer" = "dataexplorer"
 "lyprox.risk" = "risk"
 
 [tool.setuptools.dynamic]
@@ -80,7 +80,7 @@ python_files = "test_*.py"
 
 [tool.pydoctor]
 project-name = "LyProX"
-add-package = ["core", "patients", "dashboard", "risk"]
+add-package = ["core", "patients", "dataexplorer", "risk"]
 docformat = "google"
 make-html = true
 html-output = "./docs"
@@ -96,7 +96,7 @@ privacy = [
     "HIDDEN:patients.admin",
     "HIDDEN:patients.apps",
     "HIDDEN:patients.tests",
-    "HIDDEN:dashboard.admin",
-    "HIDDEN:dashboard.apps",
-    "HIDDEN:dashboard.models",
+    "HIDDEN:dataexplorer.admin",
+    "HIDDEN:dataexplorer.apps",
+    "HIDDEN:dataexplorer.models",
 ]

@@ -1,7 +1,7 @@
 """
 LyProX' URL configuration. This defines the view for the landing page, the URLs for
 downloads and media and the maintenance page. Otherwise it basically calls the URL
-configuration from the other apps, `patients.urls`, `dashboard.urls` and
+configuration from the other apps, `patients.urls`, `dataexplorer.urls` and
 `accounts.urls`.
 """
 
@@ -16,7 +16,8 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path("accounts/", include("accounts.urls")),
     path("patients/", include("patients.urls")),
-    path("dashboard/", include("dashboard.urls")),
+    path("dataexplorer/", include("dataexplorer.urls")),
+    path("risk/", include("risk.urls")),
     path("", views.index, name="index"),
     path("maintenance/", views.maintenance, name="maintenance"),
 ]

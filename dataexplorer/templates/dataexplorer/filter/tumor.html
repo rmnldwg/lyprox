@@ -13,7 +13,7 @@
                     <span class="icon">
                         <i class="fas fa-question"></i>
                     </span>
-                    {% include 'dashboard/help/tooltip.html' with side="right" position="bottom" image='dashboard/subsite_t-stage.gif' markdown='dashboard/help/tumor.md' %}
+                    {% include 'dataexplorer/help/tooltip.html' with side="right" position="bottom" image='dataexplorer/subsite_t-stage.gif' markdown='dataexplorer/help/tumor.md' %}
                 </div>
             </div>
         </div>
@@ -22,12 +22,12 @@
     <div class="columns is-multiline">
         <div class="column">
             {{ form.central }}
-            {% include 'dashboard/three_way_toggle_stats.html' with stats=stats field='central' show_percent=show_percent %}
+            {% include 'dataexplorer/three_way_toggle_stats.html' with stats=stats field='central' show_percent=show_percent %}
         </div>
 
         <div class="column">
             {{ form.extension }}
-            {% include 'dashboard/three_way_toggle_stats.html' with stats=stats field='extension' show_percent=show_percent %}
+            {% include 'dataexplorer/three_way_toggle_stats.html' with stats=stats field='extension' show_percent=show_percent %}
         </div>
     </div>
 

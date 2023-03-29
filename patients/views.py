@@ -28,8 +28,8 @@ from accounts.mixins import (
     InstitutionCheckPatientMixin,
 )
 from core.loggers import ViewLoggerMixin
-from dashboard import query
-from dashboard.forms import DashboardForm
+from dataexplorer import query
+from dataexplorer.forms import DashboardForm
 
 from .filters import PatientFilter
 from .forms import DatasetForm, DiagnoseForm, PatientForm, TumorForm

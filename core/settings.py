@@ -136,7 +136,7 @@ def set_LOGGING(LOG_LEVEL):
                 "handlers": ["console"],
                 "propagate": False,
             },
-            "dashboard": {
+            "dataexplorer": {
                 "level": LOG_LEVEL,
                 "handlers": ["console"],
                 "propagate": False,
@@ -153,7 +153,7 @@ INSTALLED_APPS = [
     # my apps
     "accounts.apps.AccountsConfig",
     "patients.apps.PatientsConfig",
-    "dashboard.apps.DashboardConfig",
+    "dataexplorer.apps.DataExplorerConfig",
     "risk.apps.RiskConfig",
 
     # third party apps
