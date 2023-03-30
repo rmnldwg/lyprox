@@ -48,8 +48,11 @@ dev = [
     "conventional-pre-commit ~= 2.1",
 ]
 
-[tool.setuptools.package-dir]
-_lyprox = "lyprox"
+[project.scripts]
+"manage.py" = "lyprox.manage:main"
+
+[tool.setuptools]
+packages = ["lyprox"]
 
 [tool.setuptools.dynamic]
 version = {attr = "lyprox._version.version"}

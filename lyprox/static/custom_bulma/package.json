@@ -5,7 +5,7 @@
   "main": "sass/usz.scss",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "css-build": "node-sass --omit-source-map-url sass/usz.scss ../static/usz.css",
+    "css-build": "node-sass --omit-source-map-url sass/usz.scss ../usz.css",
     "css-watch": "npm run css-build -- --watch",
     "start": "npm run css-watch"
   },
