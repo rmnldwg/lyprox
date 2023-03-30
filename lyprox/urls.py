@@ -14,10 +14,10 @@ from . import views
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-    path("accounts/", include("accounts.urls")),
-    path("patients/", include("patients.urls")),
-    path("dataexplorer/", include("dataexplorer.urls")),
-    path("riskpredictor/", include("riskpredictor.urls")),
+    path("accounts/", include("lyprox.accounts.urls")),
+    path("patients/", include("lyprox.patients.urls")),
+    path("dataexplorer/", include("lyprox.dataexplorer.urls")),
+    path("riskpredictor/", include("lyprox.riskpredictor.urls")),
     path("", views.index, name="index"),
     path("maintenance/", views.maintenance, name="maintenance"),
 ]

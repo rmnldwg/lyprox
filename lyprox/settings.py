@@ -151,10 +151,10 @@ LOGGING = set_LOGGING(LOG_LEVEL)
 # Application definition
 INSTALLED_APPS = [
     # my apps
-    "accounts.apps.AccountsConfig",
-    "patients.apps.PatientsConfig",
-    "dataexplorer.apps.DataExplorerConfig",
-    "riskpredictor.apps.RiskConfig",
+    "lyprox.accounts.apps.AccountsConfig",
+    "lyprox.patients.apps.PatientsConfig",
+    "lyprox.dataexplorer.apps.DataExplorerConfig",
+    "lyprox.riskpredictor.apps.RiskConfig",
 
     # third party apps
     "django_filters",
