@@ -194,7 +194,8 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-                'lyprox.context_processors.selected_settings'
+                'lyprox.context_processors.selected_settings',
+                'lyprox.context_processors.navbar_apps',
             ],
             'libraries': {
                 'customtags': 'lyprox.templatetags.customtags',
