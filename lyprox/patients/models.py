@@ -41,10 +41,7 @@ logger = logging.getLogger(name=__name__)
 
 
 class DuplicateFileError(Exception):
-    """
-    Exception raised when e.g. during uploading or saving the `Dataset` model notices
-    a new file is already stored in one of the other datasets.
-    """
+    """Raised when a file to be saved already exists on disk."""
 
 class CorruptedFileError(Exception):
     """Raised when an uploaded file has been changed since being written to disk."""
@@ -71,12 +68,13 @@ def does_file_match_path(file, path):
 
 
 def get_path_from_file(file, directory="source", suffix=".csv"):
-    """Compute MD5 hash of ``file`` and use return filepath based on that.
+    """Compute MD5 hash of ``file`` and return filepath based on that.
 
-    The resulting filepath will be contructed from the `core.settings.MEDIA_ROOT`, the
+    The resulting filepath will be contructed from the `lyprox.settings.MEDIA_ROOT`, the
     ``directory`` parameter and the MD5 hash of the ``file`` together with the
-    parameter ``suffix``. If there is already a file at the exact path, an error is
-    thrown.
+    parameter ``suffix``. If there is already a file at the computed path, an error is
+    thrown, because the exact same file already exists on disk. We know that because
+    the path always contains the file's hash.
     """
     md5_hash = get_md5_hash(file)
     filename = Path(md5_hash).with_suffix(suffix)

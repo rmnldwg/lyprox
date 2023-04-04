@@ -95,6 +95,16 @@ def create_initial_users(apps, schema_editor):
         is_staff=False,
         is_superuser=False,
     )
+    User.objects.create(
+        email="esmee.looman@usz.ch",
+        first_name="Esmee",
+        last_name="Looman",
+        institution=Institution.objects.get(shortname="USZ"),
+        password=make_password(os.environ["DJANGO_ESMEELOOMAN_PASSWORD"]),
+        is_active=True,
+        is_staff=False,
+        is_superuser=False,
+    )
 
 
 class Migration(migrations.Migration):

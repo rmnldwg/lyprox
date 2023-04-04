@@ -1,4 +1,4 @@
-![GitHub Social Card](./core/static/github-social-card.png)
+![GitHub Social Card](./lyprox/static/github-social-card.png)
 
 
 ## What is LyProX?
