@@ -196,6 +196,9 @@ TEMPLATES = [
                 'django.contrib.messages.context_processors.messages',
                 'lyprox.context_processors.selected_settings'
             ],
+            'libraries': {
+                'customtags': 'lyprox.templatetags.customtags',
+            }
         },
     },
 ]

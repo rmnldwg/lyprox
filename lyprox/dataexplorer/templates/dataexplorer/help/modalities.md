@@ -1,4 +1,4 @@
-{% load mytags %}
+{% load customtags %}
 
 Choose which of the available modalities to include in the visualization. Only patients
 are considered that have at least one of the selected diagnoses available. One may
