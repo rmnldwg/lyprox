@@ -64,7 +64,7 @@ coverage.xml
 local_settings.py
 db.sqlite3
 db.sqlite3-journal
-static/
+/static/
 media/*
 !media/logos/
 /backups/
@@ -141,6 +141,3 @@ dmypy.json
 
 # Bulma
 **/custom_bulma/node_modules/
-
-# screenshots from Bertrand's interface
-bertrands_interface/

@@ -2,7 +2,6 @@
 requires = [
     "setuptools >= 61.0.0",
     "setuptools_scm >= 7.0.0",
-    "wheel",
 ]
 build-backend = "setuptools.build_meta"
 
@@ -13,6 +12,9 @@ authors = [
     {name = "Roman Ludwig", email = "roman.ludwig@usz.ch"}
 ]
 readme = "README.md"
+keywords = ["web app", "head and neck", "cancer", "radiation oncology", "lymph nodes", "metastases"]
+license = { text = "MIT"}
+dynamic = ["version"]
 requires-python = "~=3.8"
 dependencies = [
     "Django ~= 4.1",
@@ -27,9 +29,10 @@ dependencies = [
     "python-magic ~= 0.4",
     "gunicorn ~= 20.1",
 ]
-keywords = ["web app", "head and neck", "cancer", "radiation oncology", "lymph nodes", "metastases"]
-license = { text = "MIT"}
-dynamic = ["version"]
+
+[project.urls]
+source = "https://github.com/rmnldwg/lyprox"
+documentation = "https://rmnldwg.github.io/lyprox"
 
 [project.optional-dependencies]
 docs = [
@@ -45,23 +48,19 @@ dev = [
     "conventional-pre-commit ~= 2.1",
 ]
 
-[project.urls]
-source = "https://github.com/rmnldwg/lyprox"
-documentation = "https://rmnldwg.github.io/lyprox"
+[project.scripts]
+"manage.py" = "lyprox.manage:main"
 
-[tool.setuptools_scm]
-write_to = "core/_version.py"
-local_scheme = "no-local-version"
-
-[tool.setuptools.package-dir]
-"lyprox.core" = "core"
-"lyprox.accounts" = "accounts"
-"lyprox.patients" = "patients"
-"lyprox.dataexplorer" = "dataexplorer"
-"lyprox.riskpredictor" = "riskpredictor"
+[tool.setuptools]
+packages = ["lyprox"]
 
 [tool.setuptools.dynamic]
-version = {attr = "core._version.version"}
+version = {attr = "lyprox._version.version"}
+
+[tool.setuptools_scm]
+write_to = "lyprox/_version.py"
+local_scheme = "no-local-version"
+
 
 [tool.isort]
 line_length = 79
@@ -75,28 +74,28 @@ ensure_newline_before_comments = true
 all = true
 
 [tool.pytest.ini_options]
-DJANGO_SETTINGS_MODULE = "core.settings"
+DJANGO_SETTINGS_MODULE = "lyprox.settings"
 python_files = "test_*.py"
 
 [tool.pydoctor]
 project-name = "LyProX"
-add-package = ["core", "patients", "dataexplorer", "riskpredictor"]
+add-package = ["lyprox"]
 docformat = "google"
 make-html = true
 html-output = "./docs"
 verbose = 1
 privacy = [
-    "HIDDEN:core.context_processors",
-    "HIDDEN:core.middleware",
-    "HIDDEN:core.loggers",
-    "HIDDEN:patients.migrations",
-    "HIDDEN:patients.static",
-    "HIDDEN:patients.templates",
-    "HIDDEN:patients.templatetags",
-    "HIDDEN:patients.admin",
-    "HIDDEN:patients.apps",
-    "HIDDEN:patients.tests",
-    "HIDDEN:dataexplorer.admin",
-    "HIDDEN:dataexplorer.apps",
-    "HIDDEN:dataexplorer.models",
+    "HIDDEN:lyprox.context_processors",
+    "HIDDEN:lyprox.middleware",
+    "HIDDEN:lyprox.loggers",
+    "HIDDEN:lyprox.patients.migrations",
+    "HIDDEN:lyprox.patients.static",
+    "HIDDEN:lyprox.patients.templates",
+    "HIDDEN:lyprox.patients.templatetags",
+    "HIDDEN:lyprox.patients.admin",
+    "HIDDEN:lyprox.patients.apps",
+    "HIDDEN:lyprox.patients.tests",
+    "HIDDEN:lyprox.dataexplorer.admin",
+    "HIDDEN:lyprox.dataexplorer.apps",
+    "HIDDEN:lyprox.dataexplorer.models",
 ]

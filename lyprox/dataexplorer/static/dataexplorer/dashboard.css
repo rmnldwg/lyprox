@@ -1,0 +1,146 @@
+body {
+    background-color: #dbe6eb;
+}
+
+input[type="checkbox"].checkbox:checked + label {
+    background-color: #005EA8;
+    color: white;
+}
+input[type="checkbox"].checkbox:checked:hover + label {
+    background-color: #005392;
+    color: white;
+}
+
+input[type="checkbox"].checkbox:checked + .buttons:not(.for-datasets) label,
+input[type="checkbox"].checkbox:checked + .tags label
+{
+    background-color: #005EA8;
+    color: white;
+}
+input[type="checkbox"].checkbox:checked:hover + .buttons:not(.for-datasets) label,
+input[type="checkbox"].checkbox:checked:hover + .tags label
+{
+    background-color: #005392;
+    color: white;
+}
+
+input[type="checkbox"].checkbox:checked + .buttons.for-datasets > * {
+    box-shadow: 0 0 0 0.125em #005EA8;
+    z-index: 2;
+}
+input[type="checkbox"].checkbox:checked:hover + .buttons.for-datasets > * {
+    box-shadow: 0 0 0 0.125em #005392;
+    z-index: 2;
+}
+
+input[type="radio"].radio:checked + label {
+    background-color: #005EA8;
+    color: white;
+}
+
+.tumor.button {
+    min-width: 200px;
+}
+
+input[type="radio"].radio:checked + label.tumor {
+    background-color: #005EA8;
+    color: white;
+}
+input[type="radio"].radio:checked:hover + label.tumor {
+    background-color: #005392;
+    color: white;
+}
+
+div.tag.pos {
+    min-width: none;
+    padding: 0;
+    background-color: #AE0060;
+}
+div.tag.neg {
+    min-width: none;
+    padding: 0;
+    background-color: #00AFA5;
+}
+div.tag.unk {
+    min-width: none;
+    padding: 0;
+    background-color: #C5D5DB;
+}
+
+div.stats.tag {
+    width: 29px;
+}
+
+.barplot {
+    background-image:
+        linear-gradient(#AE0060,#AE0060),
+        linear-gradient(#BDCFD6,#BDCFD6),
+        linear-gradient(#00AFA5,#00AFA5);
+    background-repeat:no-repeat;
+}
+
+.barplot-legend-left {
+    text-align: left;
+}
+.barplot-legend-center {
+    text-align: center;
+}
+.barplot-legend-right {
+    text-align: right;
+}
+
+.barplot-legend {
+    width: 40px;
+}
+
+.barplot-tablecell {
+    width: 100%;
+}
+
+span[data-tooltip] {
+    border-bottom: none;
+}
+
+.table td {
+    padding: 0.3em;
+}
+
+.tooltip {
+  position: relative;
+}
+
+.tooltip .box {
+  display: none;
+}
+
+.tooltip:hover .box {
+  display: inherit;
+  position: absolute;
+  z-index: 1000;
+  width: 700px;
+}
+
+.tooltip:hover .box.right {
+  left: 0;
+  margin-left: 32px;
+}
+
+.tooltip:hover .box.left {
+  right: 0;
+  margin-right: 32px;
+}
+
+.tooltip:hover .box.top {
+    bottom: 0;
+    margin-bottom: 60px;
+}
+
+.tooltip:hover .box.bottom {
+    top: 0;
+    margin-top: 32px;
+}
+
+.mydiv {
+    display: flex;
+    flex-direction: row;
+}
