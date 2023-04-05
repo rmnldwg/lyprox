@@ -198,7 +198,7 @@ function collectDataFromFields() {
 
 /**
  * Take the server response in JSON form and populate all `.stats` fields in the
- * dashboard with the values from the JSON response.
+ * dashboard with the values from the JSON response. Also, populate the tooltips.
  *
  * @param {object} response JSON response from the server
  */
@@ -211,6 +211,7 @@ function populateFields(response) {
 		let index = $(this).data("index");
 		let showPercent = $('input[name="show_percent"]:checked').val();
 		let isBarplot = $(this).hasClass("barplot");
+        let isBarplotLegend = $(this).hasClass("barplot-legend");
 		let isTotal = $(this).data("statfield") == "total";
 		let newValue;
 
@@ -221,13 +222,45 @@ function populateFields(response) {
 		};
 
 		if (isBarplot) {
-			let involved = 100 * response[field][1] / totalNum;
-			let unknown = 100 * response[field][0] / totalNum;
+            let involved = response[field][1];
+            let unknown = response[field][0];
+			let involvedPercent = 100 * involved / totalNum;
+			let unknownPercent = 100 * unknown / totalNum;
+            let side = field.split("_")[0] + "lateral";
+            let lnl = field.split("_")[1];
+
 			let newStyle = "";
-			newStyle += "background-size: " + involved + "% 100%, ";
-			newStyle += involved + unknown + "% 100%, 100% 100%;";
+			newStyle += "background-size: " + involvedPercent + "% 100%, ";
+			newStyle += involvedPercent + unknownPercent + "% 100%, 100% 100%;";
 			$(this).attr("style", newStyle);
+
+            let newTooltip = (
+                `${unknown} of ${totalNum} (${unknownPercent.toFixed(0)}%) `
+                + `patients have unknown involvement in LNL ${lnl} ${side}.`
+            );
+            $(this).attr("data-tooltip", newTooltip);
 		};
+
+        if (isBarplotLegend) {
+            let idx = $(this).data("index");
+            let fieldVal = response[field][idx];
+            let fieldValPercent = 100 * fieldVal / totalNum;
+            let toggle;
+            let side = field.split("_")[0] + "lateral";
+            let lnl = field.split("_")[1];
+
+            if (idx == 1) {
+                toggle = "";
+            } else if (idx == 2) {
+                toggle = "do not ";
+            }
+
+            let newTooltip = (
+                `${fieldVal} of ${totalNum} (${fieldValPercent.toFixed(0)}%) `
+                + `patients ${toggle}have metastases in LNL ${lnl} ${side}.`
+            );
+            $(this).attr("data-tooltip", newTooltip);
+        };
 
 		if (showPercent == "True" && !isTotal) {
 			$(this).html(parseInt(100 * newValue / totalNum) + "%");
@@ -236,6 +269,7 @@ function populateFields(response) {
 		};
 	});
 };
+
 
 /**
  * Assemble AJAX request.
