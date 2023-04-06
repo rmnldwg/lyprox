@@ -1,0 +1,109 @@
+{% extends "base.html" %}
+
+{% block head %}
+{% include 'head.html' with title="LyProX · Add Trained Lymph Model" %}
+{% endblock head %}
+
+{% block content %}
+<section class="section">
+  <div class="container">
+    <div class="block columns is-centered">
+      <div class="column is-6">
+        <div class="box">
+          <p class="title is-3">Add Trained Lymph Model</p>
+          <p class="block">
+            A trained lymph model consists of a git repository, that is also a
+            <a href="http://dvc.org">DVC</a> repository, that contains a file under
+            <code>models/samples.hdf5</code> which is the output of an inference round.
+          </p>
+          <p class="block">
+            The model is identified by the git revision (tag/branch name or commit
+            hash) of the repository, and the path to the <code>params.yaml</code> file
+            in the repo that defines the necessary parameters.
+          </p>
+          <p class="block">
+            An example for such a repository can be found in
+            <a href="http://github.com/rmnldwg/lynference"><code>lynference</code></a>.
+          </p>
+
+          {% if form.non_field_errors %}
+          <div class="notification is-danger is-light">
+            {{ form.non_field_errors }}
+          </div>
+          {% endif %}
+
+          <form action="{% url 'riskpredictor:add_model' %}" method="post" class="block">
+            {% csrf_token %}
+            <div class="field is-grouped">
+              <div class="control is-expanded">
+                <label for="{{ form.git_repo_url.id_for_label }}" class="label">
+                  {{ form.git_repo_url.label }}
+                </label>
+                {{ form.git_repo_url }}
+                {% if form.errors.git_repo_url %}
+                <small class="help is-danger">
+                  {{ form.errors.git_repo_url }}
+                </small>
+                {% endif %}
+              </div>
+              <div class="control">
+                <label for="{{ form.revision.id_for_label }}" class="label">
+                  {{ form.revision.label }}
+                </label>
+                {{ form.revision }}
+                {% if form.errors.revision %}
+                <small class="help is-danger">
+                  {{ form.errors.revision }}
+                </small>
+                {% endif %}
+              </div>
+            </div>
+
+            <div class="field is-grouped">
+              <div class="control is-expanded">
+                <label for="{{ form.samples_path.id_for_label }}" class="label">
+                  {{ form.samples_path.label }}
+                </label>
+                {{ form.samples_path }}
+                {% if form.errors.samples_path %}
+                <small class="help is-danger">
+                  {{ form.errors.samples_path }}
+                </small>
+                {% endif %}
+              </div>
+              <div class="control is-expanded">
+                <label for="{{ form.params_path.id_for_label }}" class="label">
+                  {{ form.params_path.label }}
+                </label>
+                {{ form.params_path }}
+                {% if form.errors.params_path %}
+                <small class="help is-danger">
+                  {{ form.errors.params_path }}
+                </small>
+                {% endif %}
+              </div>
+              <div class="control">
+                <label for="{{ form.num_samples.id_for_label }}" class="label">
+                  {{ form.num_samples.label }}
+                </label>
+                {{ form.num_samples }}
+              </div>
+            </div>
+
+            <div class="field is-grouped is-grouped-right">
+              <div class="control">
+                <button class="button is-primary" type="submit">
+                  <span class="icon">
+                    <i class="fas fa-plus"></i>
+                  </span>
+                  <span>Add</span>
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock content %}

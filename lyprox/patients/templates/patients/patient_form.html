@@ -9,157 +9,159 @@
 {% block content %}
 
 <section class="section">
-    <div class="container">
-        <div class="block columns is-centered">
-            <div class="column is-6">
-                <div class="box">
-                    {% if action == "create_patient" %}
-                    <p class="title is-3">New patient</p>
-                    <form action="{% url 'patients:create' %}" method="post">
-                        <input type="hidden" id="{{ form.check_for_duplicate.auto_id }}" name="{{ form.check_for_duplicate.name }}" value="True">
+  <div class="container">
+    <div class="block columns is-centered">
+      <div class="column is-6">
+        <div class="box">
+          {% if action == "create_patient" %}
+          <p class="title is-3">New patient</p>
+          <form action="{% url 'patients:create' %}" method="post">
+            <input type="hidden" id="{{ form.check_for_duplicate.auto_id }}" name="{{ form.check_for_duplicate.name }}"
+              value="True">
 
-                    {% elif action == "edit_patient" %}
-                    <p class="title is-3">Edit patient {{ patient.pk }}</p>
-                    <form action="{% url 'patients:update' pk=patient.pk %}" method="post">
-                        <input type="hidden" id="{{ form.check_for_duplicate.auto_id }}" name="{{ form.check_for_duplicate.name }}" value="False">
+            {% elif action == "edit_patient" %}
+            <p class="title is-3">Edit patient {{ patient.pk }}</p>
+            <form action="{% url 'patients:update' pk=patient.pk %}" method="post">
+              <input type="hidden" id="{{ form.check_for_duplicate.auto_id }}"
+                name="{{ form.check_for_duplicate.name }}" value="False">
 
-                    {% endif %}
+              {% endif %}
 
-                        {% if form.non_field_errors %}
-                        <div class="notification is-danger is-light">
-                            {{ form.non_field_errors }}
-                        </div>
-                        {% endif %}
+              {% if form.non_field_errors %}
+              <div class="notification is-danger is-light">
+                {{ form.non_field_errors }}
+              </div>
+              {% endif %}
 
-                        {% csrf_token %}
+              {% csrf_token %}
 
-                        <div class="field is-grouped">
-                            <div class="control is-expanded">
-                                <label for="{{ form.diagnose_date.id_for_label }}" class="label">
-                                    {{ form.diagnose_date.label }} (histological)
-                                </label>
-                                {{ form.diagnose_date }}
-                            </div>
-                            <div class="control is-expanded">
-                                <label for="{{ form.age.id_for_label }}" class="label">
-                                    {{ form.age.label }}
-                                </label>
-                                {{ form.age }}
-                            </div>
-                            <div class="control">
-                                <label for="{{ form.sex.id_for_label }}" class="label">
-                                    {{ form.sex.label }}
-                                </label>
-                                <div class="select">
-                                    {{ form.sex }}
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="field is-grouped is-grouped-multiline">
-                            <div class="control">
-                                <label for="{{ form.alcohol_abuse.id_for_label }}" class="label">
-                                    {{ form.alcohol_abuse.label }}
-                                </label>
-                                <div class="select">
-                                    {{ form.alcohol_abuse }}
-                                </div>
-                            </div>
-                            <div class="control">
-                                <label for="{{ form.nicotine_abuse.id_for_label }}" class="label">
-                                    {{ form.nicotine_abuse.label }}
-                                </label>
-                                <div class="select">
-                                    {{ form.nicotine_abuse }}
-                                </div>
-                            </div>
-                            <div class="control">
-                                <label for="{{ form.hpv_status.id_for_label }}" class="label">
-                                    {{ form.hpv_status.label }}
-                                </label>
-                                <div class="select">
-                                    {{ form.hpv_status }}
-                                </div>
-                            </div>
-                            <div class="control">
-                                <label for="{{ form.neck_dissection.id_for_label }}" class="label">
-                                    {{ form.neck_dissection.label }}
-                                </label>
-                                <div class="select">
-                                    {{ form.neck_dissection }}
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="field is-grouped">
-                            <div class="control is-expanded">
-                                <label for="{{ form.tnm_edition.id_for_label }}" class="label">
-                                    TNM Edition
-                                </label>
-                                {{ form.tnm_edition }}
-                            </div>
-                            <div class="control">
-                                <label for="{{ form.n_stage.id_for_label }}" class="label">
-                                    N-category
-                                </label>
-                                <div class="select">
-                                    {{ form.n_stage }}
-                                </div>
-                            </div>
-                            <div class="control">
-                                <label for="{{ form.m_stage.id_for_label }}" class="label">
-                                    M-category
-                                </label>
-                                <div class="select">
-                                    {{ form.m_stage }}
-                                </div>
-                            </div>
-                            <div class="control">
-                                <label for="{{ form.dataset.id_for_label }}" class="label">
-                                    Dataset
-                                </label>
-                                <div class="select">
-                                    {{ form.dataset }}
-                                </div>
-                                {% if form.errors.dataset %}
-                                <small class="help is-danger">{{ form.errors.dataset }}</small>
-                                {% endif %}
-                            </div>
-                        </div>
-
-
-                        <div class="field is-grouped is-grouped-right">
-                            <div class="control">
-                                {% if action == "create_patient" %}
-                                <a href="{% url 'patients:list' %}" class="button is-info">
-                                    <span class="icon">
-                                        <i class="fas fa-arrow-left"></i>
-                                    </span>
-                                    <span>Cancel</span>
-                                </a>
-                                {% elif action == "edit_patient" %}
-                                <a href="{% url 'patients:detail' pk=patient.pk %}" class="button is-info">
-                                    <span class="icon">
-                                        <i class="fas fa-arrow-left"></i>
-                                    </span>
-                                    <span>Cancel</span>
-                                </a>
-                                {% endif %}
-                            </div>
-                            <div class="control">
-                                <button class="button is-primary" type="submit" value="confirm">
-                                    <span class="icon">
-                                        <i class="fas fa-save"></i>
-                                    </span>
-                                    <span>Save</span>
-                                </button>
-                            </div>
-                        </div>
-                    </form>
+              <div class="field is-grouped">
+                <div class="control is-expanded">
+                  <label for="{{ form.diagnose_date.id_for_label }}" class="label">
+                    {{ form.diagnose_date.label }} (histological)
+                  </label>
+                  {{ form.diagnose_date }}
                 </div>
-            </div>
+                <div class="control is-expanded">
+                  <label for="{{ form.age.id_for_label }}" class="label">
+                    {{ form.age.label }}
+                  </label>
+                  {{ form.age }}
+                </div>
+                <div class="control">
+                  <label for="{{ form.sex.id_for_label }}" class="label">
+                    {{ form.sex.label }}
+                  </label>
+                  <div class="select">
+                    {{ form.sex }}
+                  </div>
+                </div>
+              </div>
+
+              <div class="field is-grouped is-grouped-multiline">
+                <div class="control">
+                  <label for="{{ form.alcohol_abuse.id_for_label }}" class="label">
+                    {{ form.alcohol_abuse.label }}
+                  </label>
+                  <div class="select">
+                    {{ form.alcohol_abuse }}
+                  </div>
+                </div>
+                <div class="control">
+                  <label for="{{ form.nicotine_abuse.id_for_label }}" class="label">
+                    {{ form.nicotine_abuse.label }}
+                  </label>
+                  <div class="select">
+                    {{ form.nicotine_abuse }}
+                  </div>
+                </div>
+                <div class="control">
+                  <label for="{{ form.hpv_status.id_for_label }}" class="label">
+                    {{ form.hpv_status.label }}
+                  </label>
+                  <div class="select">
+                    {{ form.hpv_status }}
+                  </div>
+                </div>
+                <div class="control">
+                  <label for="{{ form.neck_dissection.id_for_label }}" class="label">
+                    {{ form.neck_dissection.label }}
+                  </label>
+                  <div class="select">
+                    {{ form.neck_dissection }}
+                  </div>
+                </div>
+              </div>
+
+              <div class="field is-grouped">
+                <div class="control is-expanded">
+                  <label for="{{ form.tnm_edition.id_for_label }}" class="label">
+                    TNM Edition
+                  </label>
+                  {{ form.tnm_edition }}
+                </div>
+                <div class="control">
+                  <label for="{{ form.n_stage.id_for_label }}" class="label">
+                    N-category
+                  </label>
+                  <div class="select">
+                    {{ form.n_stage }}
+                  </div>
+                </div>
+                <div class="control">
+                  <label for="{{ form.m_stage.id_for_label }}" class="label">
+                    M-category
+                  </label>
+                  <div class="select">
+                    {{ form.m_stage }}
+                  </div>
+                </div>
+                <div class="control">
+                  <label for="{{ form.dataset.id_for_label }}" class="label">
+                    Dataset
+                  </label>
+                  <div class="select">
+                    {{ form.dataset }}
+                  </div>
+                  {% if form.errors.dataset %}
+                  <small class="help is-danger">{{ form.errors.dataset }}</small>
+                  {% endif %}
+                </div>
+              </div>
+
+
+              <div class="field is-grouped is-grouped-right">
+                <div class="control">
+                  {% if action == "create_patient" %}
+                  <a href="{% url 'patients:list' %}" class="button is-info">
+                    <span class="icon">
+                      <i class="fas fa-arrow-left"></i>
+                    </span>
+                    <span>Cancel</span>
+                  </a>
+                  {% elif action == "edit_patient" %}
+                  <a href="{% url 'patients:detail' pk=patient.pk %}" class="button is-info">
+                    <span class="icon">
+                      <i class="fas fa-arrow-left"></i>
+                    </span>
+                    <span>Cancel</span>
+                  </a>
+                  {% endif %}
+                </div>
+                <div class="control">
+                  <button class="button is-primary" type="submit" value="confirm">
+                    <span class="icon">
+                      <i class="fas fa-save"></i>
+                    </span>
+                    <span>Save</span>
+                  </button>
+                </div>
+              </div>
+            </form>
         </div>
+      </div>
     </div>
+  </div>
 </section>
 
 
