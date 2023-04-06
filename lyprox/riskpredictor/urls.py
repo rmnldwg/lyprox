@@ -4,10 +4,15 @@ URLs related to the riskpredictor prediction app under ``https://lyprox.org/risk
 """
 from django.urls import path
 
-from .views import AddTrainedLymphModelView
+from .views import (
+    AddTrainedLymphModelView,
+    ChooseTrainedLymphModelView,
+    DashboardView,
+)
 
 app_name = "riskpredictor"
 urlpatterns = [
-    path("add/", AddTrainedLymphModelView.as_view(), name="add_model"),
-    path("dashboard/", AddTrainedLymphModelView.as_view(), name="dashboard"),
+    path("add/", AddTrainedLymphModelView.as_view(), name="add"),
+    path("list/", ChooseTrainedLymphModelView.as_view(), name="list"),
+    path("<int:pk>/", DashboardView.as_view(), name="dashboard"),
 ]

@@ -32,7 +32,7 @@
           </div>
           {% endif %}
 
-          <form action="{% url 'riskpredictor:add_model' %}" method="post" class="block">
+          <form action="{% url 'riskpredictor:add' %}" method="post" class="block">
             {% csrf_token %}
             <div class="field is-grouped">
               <div class="control is-expanded">

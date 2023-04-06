@@ -169,9 +169,11 @@ class PatientDetailView(generic.DetailView):
     action = "show_patient_detail"  #:
 
 
-class CreatePatientView(ViewLoggerMixin,
-                        LoginRequiredMixin,
-                        generic.CreateView):
+class CreatePatientView(
+    ViewLoggerMixin,
+    LoginRequiredMixin,
+    generic.CreateView
+):
     """View used to create a new patient entry in the database."""
     model = Patient
     form_class = PatientForm
@@ -192,10 +194,12 @@ class CreatePatientView(ViewLoggerMixin,
         return kwargs
 
 
-class UpdatePatientView(ViewLoggerMixin,
-                        LoginRequiredMixin,
-                        InstitutionCheckPatientMixin,
-                        generic.UpdateView):
+class UpdatePatientView(
+    ViewLoggerMixin,
+    LoginRequiredMixin,
+    InstitutionCheckPatientMixin,
+    generic.UpdateView
+):
     """Update a given patient's information."""
     model = Patient
     form_class = PatientForm
@@ -220,10 +224,12 @@ class UpdatePatientView(ViewLoggerMixin,
         return kwargs
 
 
-class DeletePatientView(ViewLoggerMixin,
-                        LoginRequiredMixin,
-                        InstitutionCheckPatientMixin,
-                        generic.DeleteView):
+class DeletePatientView(
+    ViewLoggerMixin,
+    LoginRequiredMixin,
+    InstitutionCheckPatientMixin,
+    generic.DeleteView
+):
     """Remove this patient from the database."""
     model = Patient
     template_name = "patients/patient_delete.html"  #:
@@ -232,10 +238,12 @@ class DeletePatientView(ViewLoggerMixin,
 
 
 # TUMOR related views
-class CreateTumorView(ViewLoggerMixin,
-                      LoginRequiredMixin,
-                      InstitutionCheckObjectMixin,
-                      generic.CreateView):
+class CreateTumorView(
+    ViewLoggerMixin,
+    LoginRequiredMixin,
+    InstitutionCheckObjectMixin,
+    generic.CreateView
+):
     """Create a tumor and add it to a given patient."""
     model = Tumor
     form_class = TumorForm
@@ -273,10 +281,12 @@ class CreateTumorView(ViewLoggerMixin,
         return context
 
 
-class UpdateTumorView(ViewLoggerMixin,
-                      LoginRequiredMixin,
-                      InstitutionCheckObjectMixin,
-                      generic.UpdateView):
+class UpdateTumorView(
+    ViewLoggerMixin,
+    LoginRequiredMixin,
+    InstitutionCheckObjectMixin,
+    generic.UpdateView
+):
     """Update specifics of a patient's tumor."""
     model = Tumor
     form_class = TumorForm
@@ -290,8 +300,7 @@ class UpdateTumorView(ViewLoggerMixin,
     def get_success_url(self) -> str:
         """After successfully updating the tumor, redirect to patient's detail
         view."""
-        return reverse("patients:detail",
-                       kwargs={"pk": self.kwargs["pk"]})
+        return reverse("patients:detail", kwargs={"pk": self.kwargs["pk"]})
 
     def get_context_data(self, **kwargs: Any) -> Dict[str, Any]:
         """Add this tumor's patient, the patient's tumor and diagnoses, as well
@@ -315,10 +324,12 @@ class UpdateTumorView(ViewLoggerMixin,
         return context
 
 
-class DeleteTumorView(ViewLoggerMixin,
-                      LoginRequiredMixin,
-                      InstitutionCheckObjectMixin,
-                      generic.DeleteView):
+class DeleteTumorView(
+    ViewLoggerMixin,
+    LoginRequiredMixin,
+    InstitutionCheckObjectMixin,
+    generic.DeleteView
+):
     """Delete a patient's tumor."""
     model = Tumor
     template_name = "patients/patient_detail.html"
@@ -356,10 +367,12 @@ class DeleteTumorView(ViewLoggerMixin,
 
 
 # DIAGNOSE related views
-class CreateDiagnoseView(ViewLoggerMixin,
-                         LoginRequiredMixin,
-                         InstitutionCheckObjectMixin,
-                         generic.CreateView):
+class CreateDiagnoseView(
+    ViewLoggerMixin,
+    LoginRequiredMixin,
+    InstitutionCheckObjectMixin,
+    generic.CreateView
+):
     """Add a diagnose for a patient's lymphatic system."""
     model = Diagnose
     form_class = DiagnoseForm
@@ -396,10 +409,12 @@ class CreateDiagnoseView(ViewLoggerMixin,
         return context
 
 
-class UpdateDiagnoseView(ViewLoggerMixin,
-                         LoginRequiredMixin,
-                         InstitutionCheckObjectMixin,
-                         generic.UpdateView):
+class UpdateDiagnoseView(
+    ViewLoggerMixin,
+    LoginRequiredMixin,
+    InstitutionCheckObjectMixin,
+    generic.UpdateView
+):
     """Change a patient's diagnose."""
     model = Diagnose
     form_class = DiagnoseForm
@@ -413,8 +428,7 @@ class UpdateDiagnoseView(ViewLoggerMixin,
     def get_success_url(self) -> str:
         """After successfully updating the diagnose, redirect to patient's
         detail view."""
-        return reverse("patients:detail",
-                       kwargs={"pk": self.kwargs["pk"]})
+        return reverse("patients:detail", kwargs={"pk": self.kwargs["pk"]})
 
     def get_context_data(self, **kwargs: Any) -> Dict[str, Any]:
         """Add this diagnose's patient, the patient's tumor and diagnoses, as
@@ -438,10 +452,12 @@ class UpdateDiagnoseView(ViewLoggerMixin,
         return context
 
 
-class DeleteDiagnoseView(ViewLoggerMixin,
-                         LoginRequiredMixin,
-                         InstitutionCheckObjectMixin,
-                         generic.DeleteView):
+class DeleteDiagnoseView(
+    ViewLoggerMixin,
+    LoginRequiredMixin,
+    InstitutionCheckObjectMixin,
+    generic.DeleteView
+):
     """Remove a particular diagnose frm a patient's entry."""
     model = Diagnose
     template_name = "patients/patient_detail.html"  #:

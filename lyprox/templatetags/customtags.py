@@ -1,3 +1,5 @@
+from urllib.parse import urlparse
+
 import markdown as md
 from django import template
 from django.template.loader import render_to_string
@@ -54,3 +56,8 @@ def addstr(this, other):
 def get(object, key):
     """Get an item from `object` using `key`."""
     return object[key]
+
+@register.filter(name="remove_host")
+def remove_host(url):
+    """Remove the host from `url`. So, `https://foo.com/bar/baz` becomes `bar/baz`."""
+    return urlparse(url).path[1:]

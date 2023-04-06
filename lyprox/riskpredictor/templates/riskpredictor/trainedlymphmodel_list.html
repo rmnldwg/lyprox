@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+
+{% load customtags %}
+
+
+{% block head %}
+{% include 'head.html' with title="LyProX · Add Trained Lymph Model" %}
+{% endblock head %}
+
+
+{% block content %}
+
+<section class="section">
+  <div class="container">
+    <div class="block columns is-centered">
+      <div class="column is-6">
+        {% for trained_model in trainedlymphmodel_list %}
+        <div class="box">
+          <span class="icon-text">
+            <span class="icon">
+              <i class="fab fa-github"></i>
+            </span>
+            <span><a href="{{ trained_model.git_repo_url }}/tree/{{ trained_model.revision }}">
+              <code>{{ trained_model.git_repo_url|remove_host }}</code>
+            </a></span>
+          </span>
+          <span class="icon-text">
+            <span class="icon">
+              <i class="fas fa-code-branch"></i>
+            </span>
+            <span>{{ trained_model.revision }}</span>
+          </span>
+          <span class="icon-text">
+            <span class="icon">
+              <i class="fas fa-hashtag"></i>
+            </span>
+            <span>{{ trained_model.num_samples }}</span>
+          </span>
+          <a href="{% url 'riskpredictor:dashboard' trained_model.pk %}" class="button is-small is-warning is-pulled-right">
+            <span class="icon">
+              <i class="fas fa-calculator"></i>
+            </span>
+            <span>Use for Risk Prediction</span>
+          </a>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</section>
+
+{% endblock content%}

@@ -53,6 +53,18 @@ class TrainedLymphModelForm(loggers.FormLoggerMixin, forms.ModelForm):
 
         try:
             fs = DVCFileSystem(url=git_repo_url, rev=revision)
+
+            if not fs.isfile(samples_path):
+                self.add_error(
+                    field="samples_path",
+                    error=ValidationError("Not a valid path to the parameter samples."),
+                )
+
+            if not fs.isfile(params_path):
+                self.add_error(
+                    field="params_path",
+                    error=ValidationError("Not a valid path to the model parameters."),
+                )
         except CloneError as e:
             self.add_error(
                 field="git_repo_url",
@@ -64,16 +76,10 @@ class TrainedLymphModelForm(loggers.FormLoggerMixin, forms.ModelForm):
                 error=ValidationError("Not a valid git revision."),
             )
 
-        if not fs.isfile(samples_path):
-            self.add_error(
-                field="samples_path",
-                error=ValidationError("Not a valid path to the parameter samples."),
-            )
-
-        if not fs.isfile(params_path):
-            self.add_error(
-                field="params_path",
-                error=ValidationError("Not a valid path to the model parameters."),
-            )
 
         return self.cleaned_data
+
+
+class DashboardForm(forms.Form):
+    """Form for the dashboard page."""
+    pass
