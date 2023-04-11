@@ -61,6 +61,26 @@ class TrainedLymphModel(loggers.ModelLoggerMixin, models.Model):
     def __str__(self):
         return f"{self.git_repo_url}/tree/{self.revision}"
 
+    @property
+    def lnls(self):
+        """Return list of lymph node levels."""
+        return list(self.params["graph"]["lnl"].keys())
+
+    @property
+    def t_stages(self):
+        """Return list of tumor stages."""
+        return self.params["model"]["t_stages"]
+
+    @property
+    def is_bilateral(self):
+        """Return whether the model is bilateral."""
+        return self.params["model"]["class"] != "Unilateral"
+
+    @property
+    def is_midline(self):
+        """Return whether the model is midline."""
+        return self.params["model"]["class"] == "MidlineBilateral"
+
 
     def _load_params(self, fs: DVCFileSystem) -> Dict[str, Any]:
         """Load the model parameters from the YAML file in the DVC repo."""

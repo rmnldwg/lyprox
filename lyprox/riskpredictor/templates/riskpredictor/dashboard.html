@@ -11,12 +11,184 @@
   {% include 'navbar.html' %}
 
   {% csrf_token %}
-  <form action="{% url 'riskpredictor:dashboard' trainedlymphmodel.pk %}" method="GET" id="dashboard-form" name="dashboardform">
+  <form action="{% url 'riskpredictor:dashboard' trained_lymph_model.pk %}" method="GET" id="dashboard-form"
+    name="dashboardform">
     <section class="section">
-      <div class="content">
-        <code>
-          {{ trainedlymphmodel.params }}
-        </code>
+      <div class="tile is-ancestor">
+        <div class="tile is-3 is-vertical">
+          <!-- T-Category -->
+          <div class="tile is-parent">
+            <div class="tile is-child box">
+              <div class="level">
+                <div class="level-left">
+                  <div class="level-item">
+                    <p class="title is-4">Tumor</p>
+                  </div>
+                </div>
+                <div class="level-right">
+                  <div class="level-item">
+                    <div class="tooltip">
+                      <span class="icon">
+                        <i class="fas fa-question"></i>
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="field">
+                <label for="{{ form.t_stage.id_for_label }}" class="label">T-Category</label>
+                <div class="control">
+                  <div class="select">
+                    {{ form.t_stage }}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Sensitivity and Specificity -->
+          <div class="tile is-parent">
+            <div class="tile is-child box">
+              <div class="level">
+                <div class="level-left">
+                  <div class="level-item">
+                    <p class="title is-4">Diagnostic Modality</p>
+                  </div>
+                </div>
+                <div class="level-right">
+                  <div class="level-item">
+                    <div class="tooltip">
+                      <span class="icon">
+                        <i class="fas fa-question"></i>
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="field">
+                <label for="{{ form.specificity.id_for_label }}" class="label">Specificity</label>
+                <div class="control">
+                  {{ form.specificity }}
+                </div>
+              </div>
+
+              <div class="field">
+                <label for="{{ form.sensitivity.id_for_label }}" class="label">Sensitivity</label>
+                <div class="control">
+                  {{ form.sensitivity }}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Midline Extension -->
+          {% if trained_lymph_model.is_midline %}
+          <div class="tile is-parent">
+            <div class="tile is-child box">
+              <div class="level">
+                <div class="level-left">
+                  <div class="level-item">
+                    <p class="title is-4">Midline Extension</p>
+                  </div>
+                </div>
+                <div class="level-right">
+                  <div class="level-item">
+                    <div class="tooltip">
+                      <span class="icon">
+                        <i class="fas fa-question"></i>
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          {% endif %}
+        </div>
+
+        <div class="tile">
+          {% if trained_lymph_model.is_bilateral %}
+          <div class="tile is-parent">
+            <div class="tile is-child box">
+              <div class="level">
+                <div class="level-item">
+                  <p class="title is-4">contralateral</p>
+                </div>
+                <div class="level-right">
+                  <div class="level-item">
+                    <div class="tooltip">
+                      <span class="icon">
+                        <i class="fas fa-question"></i>
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <table class="table is-fullwidth">
+                <thead>
+                  <tr>
+                    <td colspan="2">LNL</td>
+                    <td class="has-text-centered">select</td>
+                    <td class="has-text-centered">risk</td>
+                  </tr>
+                </thead>
+
+                <tbody>
+                  {% for lnl in trained_lymph_model.lnls %}
+                  {% with "contra_"|addstr:lnl as lnl_key %}
+                  <tr>
+                    <td colspan="2">{{ lnl }}</td>
+                    <td>{{ form|get:lnl_key }}</td>
+                  {% endwith %}
+                  {% endfor %}
+                </tbody>
+              </table>
+            </div>
+          </div>
+          {% endif %}
+
+          <div class="tile is-parent">
+            <div class="tile is-child box">
+              <div class="level">
+                <div class="level-item">
+                  <p class="title is-4">ipsilateral</p>
+                </div>
+                <div class="level-right">
+                  <div class="level-item">
+                    <div class="tooltip">
+                      <span class="icon">
+                        <i class="fas fa-question"></i>
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <table class="table is-fullwidth">
+                <thead>
+                  <tr>
+                    <td colspan="2">LNL</td>
+                    <td class="has-text-centered">select</td>
+                    <td class="has-text-centered">risk</td>
+                  </tr>
+                </thead>
+
+                <tbody>
+                  {% for lnl in trained_lymph_model.lnls %}
+                  {% with "ipsi_"|addstr:lnl as lnl_key %}
+                  <tr>
+                    <td colspan="2">{{ lnl }}</td>
+                    <td>{{ form|get:lnl_key }}</td>
+                  {% endwith %}
+                  {% endfor %}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
       </div>
     </section>
   </form>

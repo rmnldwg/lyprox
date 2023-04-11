@@ -13,7 +13,12 @@ from dvc.api import DVCFileSystem
 from dvc.scm import CloneError, RevError
 
 from .. import loggers
+from ..dataexplorer.forms import ThreeWayToggle
 from .models import TrainedLymphModel
+
+
+class RangeInput(widgets.NumberInput):
+    input_type = "range"
 
 
 class TrainedLymphModelForm(loggers.FormLoggerMixin, forms.ModelForm):
@@ -71,4 +76,45 @@ class TrainedLymphModelForm(loggers.FormLoggerMixin, forms.ModelForm):
 
 class DashboardForm(forms.Form):
     """Form for the dashboard page."""
-    pass
+    def __init__(self, trained_lymph_model: TrainedLymphModel = None, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        if trained_lymph_model is not None:
+            self.add_lnl_fields(trained_lymph_model)
+            self.add_t_stage_field(trained_lymph_model)
+            self.add_sens_spec_fields()
+
+    def add_lnl_fields(self, trained_lymph_model: TrainedLymphModel):
+        """Add the fields for the lymph node levels defined in the trained model."""
+        for lnl in trained_lymph_model.lnls:
+            self.fields[f"ipsi_{lnl}"] = ThreeWayToggle()
+
+            if trained_lymph_model.is_bilateral:
+                self.fields[f"contra_{lnl}"] = ThreeWayToggle()
+
+    def add_t_stage_field(self, trained_lymph_model: TrainedLymphModel):
+        """Add the field for the T stage with the choices being defined in the model."""
+        self.fields["t_stage"] = forms.ChoiceField(
+            choices=[(t, t) for t in trained_lymph_model.t_stages],
+        )
+
+    def add_sens_spec_fields(self):
+        """Add the fields for the sensitivity and specificity."""
+        self.fields["sensitivity"] = forms.FloatField(
+            min_value=0, max_value=1,
+            widget=RangeInput(attrs={
+                "class": "slider is-fullwidth",
+                "min": "0.5",
+                "max": "1",
+                "step": "0.01",
+            }),
+        )
+        self.fields["specificity"] = forms.FloatField(
+            min_value=0, max_value=1,
+            widget=RangeInput(attrs={
+                "class": "slider is-fullwidth",
+                "min": "0.5",
+                "max": "1",
+                "step": "0.01",
+            }),
+        )

@@ -30,6 +30,7 @@ class ChooseTrainedLymphModelView(
     """View for choosing a `TrainedLymphModel` instance."""
     model = TrainedLymphModel
     template_name = "riskpredictor/trainedlymphmodel_list.html"
+    context_object_name = "trained_lymph_models"
 
     def get_context_data(self, **kwargs: Any) -> Dict[str, Any]:
         context = super().get_context_data(**kwargs)
@@ -45,7 +46,11 @@ class RiskPredictionView(
     model = TrainedLymphModel
     form_class = DashboardForm
     template_name = "riskpredictor/dashboard.html"
+    context_object_name = "trained_lymph_model"
 
     def get_context_data(self, **kwargs: Any) -> Dict[str, Any]:
         context = super().get_context_data(**kwargs)
+        context["form"] = self.form_class(
+            trained_lymph_model=context["trained_lymph_model"]
+        )
         return context

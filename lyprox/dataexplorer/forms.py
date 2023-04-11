@@ -78,17 +78,16 @@ class ThreeWayToggle(forms.ChoiceField):
         option_attrs=None,
         label=None,
         tooltip=None,
-        choices=[
-            ( 1, "plus" ),
-            ( 0, "ban"  ),
-            (-1, "minus"),
-        ],
+        choices=None,
         initial=0,
         required=False,
         **kwargs
     ):
         """Pass the arguments, like `label` and `tooltip` to the constructor
         of the custom widget."""
+        if choices is None:
+            choices = [(1, "plus"), (0, "ban"), (-1, "minus")]
+
         if len(choices) != 3:
             raise ValueError("Three-way toggle button must have three choices")
 
@@ -167,20 +166,24 @@ class DashboardForm(FormLoggerMixin, forms.Form):
     modalities = forms.MultipleChoiceField(
         required=False,
         widget=forms.CheckboxSelectMultiple(
-            attrs={"class": "checkbox is-hidden",
-                   "onchange": "changeHandler();"}
+            attrs={
+                "class": "checkbox is-hidden",
+                "onchange": "changeHandler();",
+            },
         ),
         choices=Diagnose.Modalities.choices,
         initial=["CT", "MRI", "PET", "FNA", "diagnostic_consensus", "pathology"]
     )
     modality_combine = forms.ChoiceField(
         widget=forms.Select(attrs={"onchange": "changeHandler();"}),
-        choices=[("AND"   , "AND"   ),
-                 ("OR"    , "OR"    ),
-                 ("maxLLH", "maxLLH"),
-                 ("RANK"  , "RANK"  )],
+        choices=[
+            ("AND"   , "AND"   ),
+            ("OR"    , "OR"    ),
+            ("maxLLH", "maxLLH"),
+            ("RANK"  , "RANK"  ),
+        ],
         label="Combine",
-        initial="maxLLH"
+        initial="maxLLH",
     )
 
     # patient specific fields
@@ -203,9 +206,11 @@ class DashboardForm(FormLoggerMixin, forms.Form):
     dataset__in = DatasetMultipleChoiceField(
         required=False,
         widget=forms.CheckboxSelectMultiple(
-            # doesn't do anythin since it's written by hand
-            attrs={"class": "checkbox is-hidden",
-                   "onchange": "changeHandler();"}
+            # doesn't do anything since it's written by hand
+            attrs={
+                "class": "checkbox is-hidden",
+                "onchange": "changeHandler();",
+            },
         ),
         queryset=Dataset.objects.all().filter(is_public=True),
         initial=Dataset.objects.all().filter(is_public=True)
@@ -215,19 +220,25 @@ class DashboardForm(FormLoggerMixin, forms.Form):
     subsite_oropharynx = forms.MultipleChoiceField(
         required=False,
         widget=forms.CheckboxSelectMultiple(
-            attrs={"class": "checkbox is-hidden",
-                   "onchange": "changeHandler();"},
+            attrs={
+                "class": "checkbox is-hidden",
+                "onchange": "changeHandler();",
+            },
         ),
-        choices=[("base", "base of tongue"),  # choices here must match entries
-                 ("tonsil", "tonsil"),        # in the Tumor.SUBSITE_DICT keys
-                 ("rest_oro" , "other")],
+        choices=[
+            ("base", "base of tongue"),  # choices here must match entries
+            ("tonsil", "tonsil"),        # in the Tumor.SUBSITE_DICT keys
+            ("rest_oro" , "other"),
+        ],
         initial=["base", "tonsil", "rest_oro"]
     )
     subsite_hypopharynx = forms.MultipleChoiceField(
         required=False,
         widget=forms.CheckboxSelectMultiple(
-            attrs={"class": "checkbox is-hidden",
-                   "onchange": "changeHandler();"},
+            attrs={
+                "class": "checkbox is-hidden",
+                "onchange": "changeHandler();",
+            },
         ),
         choices=[("rest_hypo" , "all")],   # choices here must match entries in
         initial=["rest_hypo"]              # the Tumor.SUBSITE_DICT keys
@@ -235,32 +246,42 @@ class DashboardForm(FormLoggerMixin, forms.Form):
     subsite_larynx = forms.MultipleChoiceField(
         required=False,
         widget=forms.CheckboxSelectMultiple(
-            attrs={"class": "checkbox is-hidden",
-                   "onchange": "changeHandler();"},
+            attrs={
+                "class": "checkbox is-hidden",
+                "onchange": "changeHandler();",
+            },
         ),
-        choices=[("glottis", "glottis"),      # choices here must match entries
-                 ("rest_larynx" , "other")],  # in the Tumor.SUBSITE_DICT keys
+        choices=[
+            ("glottis", "glottis"),      # choices here must match entries
+            ("rest_larynx" , "other"),   # in the Tumor.SUBSITE_DICT keys
+        ],
         initial=["glottis", "rest_larynx"]
     )
     subsite_oral_cavity = forms.MultipleChoiceField(
         required=False,
         widget=forms.CheckboxSelectMultiple(
-            attrs={"class": "checkbox is-hidden",
-                   "onchange": "changeHandler();"},
+            attrs={
+                "class": "checkbox is-hidden",
+                "onchange": "changeHandler();",
+            },
         ),
-        choices=[("tongue", "tongue"),         # choices here must match entries
-                 ("gum_cheek", "gums and cheek"), # in the Tumor.SUBSITE_DICT keys
-                 ("mouth_floor", "floor of mouth"),
-                 ("palate", "palate"),
-                 ("glands", "salivary glands")],
+        choices=[
+            ("tongue", "tongue"),         # choices here must match entries
+            ("gum_cheek", "gums and cheek"), # in the Tumor.SUBSITE_DICT keys
+            ("mouth_floor", "floor of mouth"),
+            ("palate", "palate"),
+            ("glands", "salivary glands"),
+        ],
         initial=["tongue", "gum_cheek", "mouth_floor", "palate", "glands"]
     )
 
     t_stage__in = forms.MultipleChoiceField(
         required=False,
         widget=forms.CheckboxSelectMultiple(
-            attrs={"class": "checkbox is-hidden",
-                   "onchange": "changeHandler();"}
+            attrs={
+                "class": "checkbox is-hidden",
+                "onchange": "changeHandler();",
+            },
         ),
         choices=Patient.T_stages.choices,
         initial=[1,2,3,4]
@@ -271,8 +292,10 @@ class DashboardForm(FormLoggerMixin, forms.Form):
     )
     extension = ThreeWayToggle(
         label="midline extension",
-        tooltip=("Investigate patients with tumors that do (or do not) cross "
-                 "the mid-sagittal line")
+        tooltip=(
+            "Investigate patients with tumors that do (or do not) "
+            "cross the mid-sagittal line"
+        )
     )
 
     # checkbutton for switching to percent
