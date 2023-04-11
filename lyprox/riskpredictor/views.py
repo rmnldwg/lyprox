@@ -48,9 +48,30 @@ class RiskPredictionView(
     template_name = "riskpredictor/dashboard.html"
     context_object_name = "trained_lymph_model"
 
+    def compute_risk(
+        self,
+        trained_lymph_model: TrainedLymphModel,
+        data: Dict[str, Any],
+    ):
+        """Compute the risk for a given request."""
+        self.form = self.form_class(data, trained_lymph_model=trained_lymph_model)
+
+        if not self.form.is_valid():
+            initial_data = {}
+            for field_name, field in self.form.fields.items():
+                initial_data[field_name] = self.form.get_initial_for_field(
+                    field, field_name
+                )
+            self.form = self.form_class(initial_data, trained_lymph_model=trained_lymph_model)
+
+
+    def get_object(self, queryset=None) -> TrainedLymphModel:
+        trained_lymph_model = super().get_object(queryset)
+        self.risks = self.compute_risk(trained_lymph_model, data=self.request.GET)
+        return trained_lymph_model
+
     def get_context_data(self, **kwargs: Any) -> Dict[str, Any]:
         context = super().get_context_data(**kwargs)
-        context["form"] = self.form_class(
-            trained_lymph_model=context["trained_lymph_model"]
-        )
+        context["form"] = self.form
+        context["risks"] = self.risks
         return context

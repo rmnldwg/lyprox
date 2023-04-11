@@ -6,6 +6,7 @@
 
 {% load customtags %}
 {% load static %}
+<link rel="stylesheet" href="{% static 'riskpredictor/dashboard.css' %}">
 
 <body>
   {% include 'navbar.html' %}
@@ -36,12 +37,17 @@
                 </div>
               </div>
 
-              <div class="field">
-                <label for="{{ form.t_stage.id_for_label }}" class="label">T-Category</label>
-                <div class="control">
+              <div class="field is-grouped is-grouped-centered">
+                <div class="control is-expanded">
+                  <label for="{{ form.t_stage.id_for_label }}" class="label">T-Category</label>
                   <div class="select">
                     {{ form.t_stage }}
                   </div>
+                </div>
+
+                <div class="control">
+                  <label for="{{ form.midline_extension.id_for_label }}" class="label pb-2">Midline Extension</label>
+                  {{ form.midline_extension }}
                 </div>
               </div>
             </div>
@@ -71,6 +77,7 @@
                 <label for="{{ form.specificity.id_for_label }}" class="label">Specificity</label>
                 <div class="control">
                   {{ form.specificity }}
+                  <output for="{{ form.specificity.id_for_label }}">0.8</output>
                 </div>
               </div>
 
@@ -78,34 +85,11 @@
                 <label for="{{ form.sensitivity.id_for_label }}" class="label">Sensitivity</label>
                 <div class="control">
                   {{ form.sensitivity }}
+                  <output for="{{ form.sensitivity.id_for_label }}">0.8</output>
                 </div>
               </div>
             </div>
           </div>
-
-          <!-- Midline Extension -->
-          {% if trained_lymph_model.is_midline %}
-          <div class="tile is-parent">
-            <div class="tile is-child box">
-              <div class="level">
-                <div class="level-left">
-                  <div class="level-item">
-                    <p class="title is-4">Midline Extension</p>
-                  </div>
-                </div>
-                <div class="level-right">
-                  <div class="level-item">
-                    <div class="tooltip">
-                      <span class="icon">
-                        <i class="fas fa-question"></i>
-                      </span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          {% endif %}
         </div>
 
         <div class="tile">
@@ -195,5 +179,7 @@
 
   {% include "footer.html" %}
 </body>
+
+<script src="{% static 'riskpredictor/dashboard.js' %}"></script>
 
 </html>

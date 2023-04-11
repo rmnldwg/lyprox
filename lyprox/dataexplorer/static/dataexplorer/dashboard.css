@@ -106,28 +106,28 @@ span[data-tooltip] {
 }
 
 .tooltip {
-  position: relative;
+    position: relative;
 }
 
 .tooltip .box {
-  display: none;
+    display: none;
 }
 
 .tooltip:hover .box {
-  display: inherit;
-  position: absolute;
-  z-index: 1000;
-  width: 700px;
+    display: inherit;
+    position: absolute;
+    z-index: 1000;
+    width: 700px;
 }
 
 .tooltip:hover .box.right {
-  left: 0;
-  margin-left: 32px;
+    left: 0;
+    margin-left: 32px;
 }
 
 .tooltip:hover .box.left {
-  right: 0;
-  margin-right: 32px;
+    right: 0;
+    margin-right: 32px;
 }
 
 .tooltip:hover .box.top {

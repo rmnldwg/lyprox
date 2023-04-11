@@ -1,0 +1,4 @@
+input[type="radio"].radio:checked + label {
+    background-color: #005EA8;
+    color: white;
+}

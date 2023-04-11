@@ -76,13 +76,16 @@ class TrainedLymphModelForm(loggers.FormLoggerMixin, forms.ModelForm):
 
 class DashboardForm(forms.Form):
     """Form for the dashboard page."""
-    def __init__(self, trained_lymph_model: TrainedLymphModel = None, *args, **kwargs):
+    def __init__(self, *args, trained_lymph_model: TrainedLymphModel = None, **kwargs):
         super().__init__(*args, **kwargs)
 
         if trained_lymph_model is not None:
             self.add_lnl_fields(trained_lymph_model)
             self.add_t_stage_field(trained_lymph_model)
             self.add_sens_spec_fields()
+
+            if trained_lymph_model.is_midline or True:
+                self.add_midline_field()
 
     def add_lnl_fields(self, trained_lymph_model: TrainedLymphModel):
         """Add the fields for the lymph node levels defined in the trained model."""
@@ -96,25 +99,33 @@ class DashboardForm(forms.Form):
         """Add the field for the T stage with the choices being defined in the model."""
         self.fields["t_stage"] = forms.ChoiceField(
             choices=[(t, t) for t in trained_lymph_model.t_stages],
+            initial=trained_lymph_model.t_stages[0],
         )
 
-    def add_sens_spec_fields(self):
+    def add_sens_spec_fields(self, step: float = 0.05):
         """Add the fields for the sensitivity and specificity."""
         self.fields["sensitivity"] = forms.FloatField(
-            min_value=0, max_value=1,
+            min_value=0, max_value=1, initial=0.8,
             widget=RangeInput(attrs={
-                "class": "slider is-fullwidth",
+                "class": "slider has-output is-fullwidth",
                 "min": "0.5",
                 "max": "1",
-                "step": "0.01",
+                "step": f"{step:.2f}",
             }),
         )
         self.fields["specificity"] = forms.FloatField(
-            min_value=0, max_value=1,
+            min_value=0, max_value=1, initial=0.8,
             widget=RangeInput(attrs={
-                "class": "slider is-fullwidth",
+                "class": "slider has-output is-fullwidth",
                 "min": "0.5",
                 "max": "1",
-                "step": "0.01",
+                "step": f"{step:.2f}",
             }),
+        )
+
+    def add_midline_field(self):
+        """Add the field for the midline status."""
+        self.fields["midline_extension"] = ThreeWayToggle(
+            label=None,
+            tooltip="Does the tumor cross the mid-sagittal line?",
         )

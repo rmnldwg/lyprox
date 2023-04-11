@@ -1,0 +1,1 @@
+bulmaSlider.attach();
