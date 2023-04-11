@@ -20,7 +20,7 @@ class TrainedLymphModelForm(loggers.FormLoggerMixin, forms.ModelForm):
     """Form for creating a new `TrainedLymphModel` instance."""
     class Meta:
         model = TrainedLymphModel
-        fields = ["git_repo_url", "revision", "samples_path", "params_path", "num_samples"]
+        fields = ["git_repo_url", "revision", "params_path", "num_samples"]
         widgets = {
             "git_repo_url": widgets.TextInput(attrs={
                 "class": "input",
@@ -29,10 +29,6 @@ class TrainedLymphModelForm(loggers.FormLoggerMixin, forms.ModelForm):
             "revision": widgets.TextInput(attrs={
                 "class": "input",
                 "placeholder": "e.g. `main` or a tag name",
-            }),
-            "samples_path": widgets.TextInput(attrs={
-                "class": "input",
-                "placeholder": "e.g. `models/samples.hdf5`",
             }),
             "params_path": widgets.TextInput(attrs={
                 "class": "input",
@@ -48,17 +44,10 @@ class TrainedLymphModelForm(loggers.FormLoggerMixin, forms.ModelForm):
         """Check all the fields for validity."""
         git_repo_url = self.cleaned_data["git_repo_url"]
         revision = self.cleaned_data["revision"]
-        samples_path = self.cleaned_data["samples_path"]
         params_path = self.cleaned_data["params_path"]
 
         try:
             fs = DVCFileSystem(url=git_repo_url, rev=revision)
-
-            if not fs.isfile(samples_path):
-                self.add_error(
-                    field="samples_path",
-                    error=ValidationError("Not a valid path to the parameter samples."),
-                )
 
             if not fs.isfile(params_path):
                 self.add_error(

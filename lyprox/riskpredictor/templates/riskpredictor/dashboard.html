@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+
+
+<html lang="en" class="has-navbar-fixed-top">
+{% include 'head.html' with title="LyProX · Compute Personalized Risk" %}
+
+{% load customtags %}
+{% load static %}
+
+<body>
+  {% include 'navbar.html' %}
+
+  {% csrf_token %}
+  <form action="{% url 'riskpredictor:dashboard' trainedlymphmodel.pk %}" method="GET" id="dashboard-form" name="dashboardform">
+    <section class="section">
+      <div class="content">
+        <code>
+          {{ trainedlymphmodel.params }}
+        </code>
+      </div>
+    </section>
+  </form>
+
+  {% include "footer.html" %}
+</body>
+
+</html>

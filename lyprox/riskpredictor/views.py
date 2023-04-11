@@ -37,7 +37,7 @@ class ChooseTrainedLymphModelView(
         return context
 
 
-class DashboardView(
+class RiskPredictionView(
     ViewLoggerMixin,
     DetailView,
 ):
@@ -45,3 +45,7 @@ class DashboardView(
     model = TrainedLymphModel
     form_class = DashboardForm
     template_name = "riskpredictor/dashboard.html"
+
+    def get_context_data(self, **kwargs: Any) -> Dict[str, Any]:
+        context = super().get_context_data(**kwargs)
+        return context

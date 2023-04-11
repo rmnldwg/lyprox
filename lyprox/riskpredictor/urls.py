@@ -7,12 +7,12 @@ from django.urls import path
 from .views import (
     AddTrainedLymphModelView,
     ChooseTrainedLymphModelView,
-    DashboardView,
+    RiskPredictionView,
 )
 
 app_name = "riskpredictor"
 urlpatterns = [
     path("add/", AddTrainedLymphModelView.as_view(), name="add"),
     path("list/", ChooseTrainedLymphModelView.as_view(), name="list"),
-    path("<int:pk>/", DashboardView.as_view(), name="dashboard"),
+    path("<int:pk>/", RiskPredictionView.as_view(), name="dashboard"),
 ]

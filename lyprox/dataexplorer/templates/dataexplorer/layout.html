@@ -11,9 +11,9 @@
   {% include 'navbar.html' %}
 
   <!--
-            The CSRF token is not necessary for the GET request by this form, but for the AJAX request.
-            Also, it is outside the form such that it doesn't get sent via the keyboard shortcut GET request.
-        -->
+    The CSRF token is not necessary for the GET request by this form, but for the AJAX request.
+    Also, it is outside the form such that it doesn't get sent via the keyboard shortcut GET request.
+  -->
   {% csrf_token %}
   <form method="GET" action="{% url 'dataexplorer:dashboard' %}" id="dashboard-form" name="dashboardform">
     <section class="section">

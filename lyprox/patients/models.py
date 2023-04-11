@@ -168,10 +168,6 @@ class Dataset(loggers.ModelLoggerMixin, models.Model):
             self.logger.warning(f"Attemptet change to locked dataset {self}")
             raise LockedDatasetError("Cannot edit/save a locked dataset.")
 
-        # if self.source_csv.readable() and not does_file_match_path(self.source_csv, self.source_csv.path):
-        #     self.logger.error(f"Source CSV file of dataset {self} is corrupted.")
-        #     raise CorruptedFileError(f"Content and filename of {self} do not match")
-
         return super().save(*args, **kwargs)
 
     def delete(self, *args, override=False, **kwargs):
