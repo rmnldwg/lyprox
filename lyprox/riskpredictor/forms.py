@@ -102,12 +102,12 @@ class DashboardForm(forms.Form):
             initial=trained_lymph_model.t_stages[0],
         )
 
-    def add_sens_spec_fields(self, step: float = 0.05):
+    def add_sens_spec_fields(self, step: float = 0.01):
         """Add the fields for the sensitivity and specificity."""
         self.fields["sensitivity"] = forms.FloatField(
             min_value=0, max_value=1, initial=0.8,
             widget=RangeInput(attrs={
-                "class": "slider has-output is-fullwidth",
+                "class": "tag slider is-fullwidth",
                 "min": "0.5",
                 "max": "1",
                 "step": f"{step:.2f}",
@@ -116,7 +116,7 @@ class DashboardForm(forms.Form):
         self.fields["specificity"] = forms.FloatField(
             min_value=0, max_value=1, initial=0.8,
             widget=RangeInput(attrs={
-                "class": "slider has-output is-fullwidth",
+                "class": "tag slider is-fullwidth",
                 "min": "0.5",
                 "max": "1",
                 "step": f"{step:.2f}",

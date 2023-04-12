@@ -73,19 +73,23 @@
                 </div>
               </div>
 
-              <div class="field">
-                <label for="{{ form.specificity.id_for_label }}" class="label">Specificity</label>
-                <div class="control">
+              <label for="{{ form.specificity.id_for_label }}" class="label">Specificity</label>
+              <div class="field has-addons">
+                <div class="control is-expanded">
                   {{ form.specificity }}
-                  <output for="{{ form.specificity.id_for_label }}">0.8</output>
+                </div>
+                <div class="control is-flex is-align-items-center">
+                  <output class="slider tag is-medium is-info" id="specificity-display">0.8</output>
                 </div>
               </div>
 
-              <div class="field">
-                <label for="{{ form.sensitivity.id_for_label }}" class="label">Sensitivity</label>
-                <div class="control">
+              <label for="{{ form.sensitivity.id_for_label }}" class="label">Sensitivity</label>
+              <div class="field has-addons">
+                <div class="control is-expanded">
                   {{ form.sensitivity }}
-                  <output for="{{ form.sensitivity.id_for_label }}">0.8</output>
+                </div>
+                <div class="control is-flex is-align-items-center">
+                  <output class="slider tag is-medium is-info" id="sensitivity-display">0.8</output>
                 </div>
               </div>
             </div>
