@@ -116,31 +116,21 @@ def set_LOGGING(LOG_LEVEL):
         },
 
         "loggers": {
+            "" : {
+                "level": LOG_LEVEL,
+                "handlers": ["console"],
+                "propagate": False,
+            },
             "django": {
                 "level": LOG_LEVEL,
                 "handlers": ["console"],
                 "propagate": False,
             },
-            "patients": {
+            "lyprox": {
                 "level": LOG_LEVEL,
                 "handlers": ["console"],
                 "propagate": False,
             },
-            "accounts": {
-                "level": LOG_LEVEL,
-                "handlers": ["console"],
-                "propagate": False,
-            },
-            "auth_logger": {
-                "level": LOG_LEVEL,
-                "handlers": ["console"],
-                "propagate": False,
-            },
-            "dataexplorer": {
-                "level": LOG_LEVEL,
-                "handlers": ["console"],
-                "propagate": False,
-            }
         }
     }
     return LOGGING

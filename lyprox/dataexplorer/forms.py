@@ -11,7 +11,7 @@ Finally, a custom ``MultipleChoice`` field of somewhat unnecessary complexity
 is implemented here that allows us to select the institutions from which the
 ptients should be included via check boxes with the institution logo on it.
 """
-
+# pylint: disable=no-member
 import logging
 from typing import Tuple
 
@@ -22,6 +22,22 @@ from ..loggers import FormLoggerMixin
 from ..patients.models import Dataset, Diagnose, Patient, Tumor
 
 logger = logging.getLogger(__name__)
+
+
+def trio_to_bool(value: int):
+    """Transform -1, 0, and +1 to False, None and True respectively.
+
+    Any other values are simply passed through unchanged. This is used to map the
+    values of the three-way toggle buttons to its boolean representation.
+    """
+    if value == 1:
+        return True
+    if value == -1:
+        return False
+    if value == 0:
+        return None
+
+    return value
 
 
 class ThreeWayToggleWidget(forms.RadioSelect):
@@ -110,8 +126,8 @@ class ThreeWayToggle(forms.ChoiceField):
             return int(value)
         except ValueError:
             return value
-        except TypeError:
-            raise ValidationError("Expects a number")
+        except TypeError as type_err:
+            raise ValidationError("Expects a number") from type_err
 
 
 class DatasetModelChoiceIndexer:
@@ -307,11 +323,10 @@ class DashboardForm(FormLoggerMixin, forms.Form):
         )
     )
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args, user, **kwargs):
         """Extend default initialization to create lots of fields for the
         LNLs from a list and hide some datasets for unauthenticated users.
         """
-        user = kwargs.pop("user")
         super().__init__(*args, **kwargs)
 
         # dynamically define which datasets should be selectable
@@ -337,17 +352,6 @@ class DashboardForm(FormLoggerMixin, forms.Form):
                 else:
                     self.fields[f"{side}_{lnl}"] = ThreeWayToggle()
 
-    def _to_bool(self, value: int):
-        """Transform values of -1, 0 and 1 to False, None and True respectively.
-        Anything else is just passed through."""
-        if value == 1:
-            return True
-        elif value == -1:
-            return False
-        elif value == 0:
-            return None
-        else:
-            return value
 
     def clean(self):
         """Make sure LNLs I & II have correct values corresponding to their
@@ -360,7 +364,7 @@ class DashboardForm(FormLoggerMixin, forms.Form):
 
         # map all -1,0,1 fields to False,None,True
         cleaned_data = {
-            key: self._to_bool(value) for key,value in cleaned_data.items()
+            key: trio_to_bool(value) for key,value in cleaned_data.items()
         }
 
         # make sure LNLs I & II aren't in conflict with their sublevels

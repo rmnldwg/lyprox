@@ -1,12 +1,14 @@
 """
 Module for the views of the riskpredictor app.
 """
+# pylint: disable=attribute-defined-outside-init
 from typing import Any, Dict
 
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import CreateView, DetailView, ListView
 
 from ..loggers import ViewLoggerMixin
+from . import predict
 from .forms import DashboardForm, TrainedLymphModelForm
 from .models import TrainedLymphModel
 
@@ -48,27 +50,46 @@ class RiskPredictionView(
     template_name = "riskpredictor/dashboard.html"
     context_object_name = "trained_lymph_model"
 
-    def compute_risk(
+
+    def handle_form(
         self,
         trained_lymph_model: TrainedLymphModel,
         data: Dict[str, Any],
-    ):
-        """Compute the risk for a given request."""
+    ) -> Dict[str, Any]:
+        """Populate the form and compute the risks.
+
+        Either fill the form with the request data or with the initial data. Then, call
+        the risk prediction methods and store the results in the `risks` attribute.
+        """
         self.form = self.form_class(data, trained_lymph_model=trained_lymph_model)
 
         if not self.form.is_valid():
-            initial_data = {}
-            for field_name, field in self.form.fields.items():
-                initial_data[field_name] = self.form.get_initial_for_field(
-                    field, field_name
-                )
-            self.form = self.form_class(initial_data, trained_lymph_model=trained_lymph_model)
+            self.initialize_form(trained_lymph_model)
+
+        self.risks = predict.risks(
+            trained_lymph_model=trained_lymph_model,
+            **self.form.cleaned_data,
+        )
+
+
+    def initialize_form(self, trained_lymph_model):
+        """Fill the form with the initial data from the respective form fields."""
+        initial = {}
+        for field_name, field in self.form.fields.items():
+            initial[field_name] = self.form.get_initial_for_field(field, field_name)
+
+        self.form = self.form_class(initial, trained_lymph_model=trained_lymph_model)
+
+        if not self.form.is_valid():
+            errors = self.form.errors.as_data()
+            self.logger.warning("Initial form still invalid, errors are: %s", errors)
 
 
     def get_object(self, queryset=None) -> TrainedLymphModel:
         trained_lymph_model = super().get_object(queryset)
-        self.risks = self.compute_risk(trained_lymph_model, data=self.request.GET)
+        self.handle_form(trained_lymph_model, data=self.request.GET)
         return trained_lymph_model
+
 
     def get_context_data(self, **kwargs: Any) -> Dict[str, Any]:
         context = super().get_context_data(**kwargs)

@@ -8,12 +8,14 @@ and revision.
 from typing import Any, Dict
 
 from django import forms
+from django.core.validators import MaxValueValidator, MinValueValidator
 from django.forms import ValidationError, widgets
 from dvc.api import DVCFileSystem
 from dvc.scm import CloneError, RevError
+from lyscripts.predict.utils import complete_pattern
 
 from .. import loggers
-from ..dataexplorer.forms import ThreeWayToggle
+from ..dataexplorer.forms import ThreeWayToggle, trio_to_bool
 from .models import TrainedLymphModel
 
 
@@ -59,12 +61,12 @@ class TrainedLymphModelForm(loggers.FormLoggerMixin, forms.ModelForm):
                     field="params_path",
                     error=ValidationError("Not a valid path to the model parameters."),
                 )
-        except CloneError as e:
+        except CloneError as _e:
             self.add_error(
                 field="git_repo_url",
                 error=ValidationError("Not a valid git repository."),
             )
-        except RevError as e:
+        except RevError as _e:
             self.add_error(
                 field="revision",
                 error=ValidationError("Not a valid git revision."),
@@ -80,12 +82,14 @@ class DashboardForm(forms.Form):
         super().__init__(*args, **kwargs)
 
         if trained_lymph_model is not None:
-            self.add_lnl_fields(trained_lymph_model)
-            self.add_t_stage_field(trained_lymph_model)
+            self.trained_lymph_model = trained_lymph_model
+            self.add_lnl_fields(self.trained_lymph_model)
+            self.add_t_stage_field(self.trained_lymph_model)
             self.add_sens_spec_fields()
 
-            if trained_lymph_model.is_midline or True:
+            if self.trained_lymph_model.is_midline:
                 self.add_midline_field()
+
 
     def add_lnl_fields(self, trained_lymph_model: TrainedLymphModel):
         """Add the fields for the lymph node levels defined in the trained model."""
@@ -95,12 +99,14 @@ class DashboardForm(forms.Form):
             if trained_lymph_model.is_bilateral:
                 self.fields[f"contra_{lnl}"] = ThreeWayToggle()
 
+
     def add_t_stage_field(self, trained_lymph_model: TrainedLymphModel):
         """Add the field for the T stage with the choices being defined in the model."""
         self.fields["t_stage"] = forms.ChoiceField(
             choices=[(t, t) for t in trained_lymph_model.t_stages],
             initial=trained_lymph_model.t_stages[0],
         )
+
 
     def add_sens_spec_fields(self, step: float = 0.01):
         """Add the fields for the sensitivity and specificity."""
@@ -112,6 +118,10 @@ class DashboardForm(forms.Form):
                 "max": "1",
                 "step": f"{step:.2f}",
             }),
+            validators=[
+                MinValueValidator(0.5, "Sensitivity below 0.5 makes no sense"),
+                MaxValueValidator(1, "Sensitivity above 1 makes no sense"),
+            ],
         )
         self.fields["specificity"] = forms.FloatField(
             min_value=0, max_value=1, initial=0.8,
@@ -121,7 +131,12 @@ class DashboardForm(forms.Form):
                 "max": "1",
                 "step": f"{step:.2f}",
             }),
+            validators=[
+                MinValueValidator(0.5, "Specificty below 0.5 makes no sense"),
+                MaxValueValidator(1, "Specificty above 1 makes no sense"),
+            ]
         )
+
 
     def add_midline_field(self):
         """Add the field for the midline status."""
@@ -129,3 +144,24 @@ class DashboardForm(forms.Form):
             label=None,
             tooltip="Does the tumor cross the mid-sagittal line?",
         )
+
+
+    def clean(self) -> Dict[str, Any]:
+        """Transform three-way toggles to booleans."""
+        cleaned_data = super().clean()
+
+        for field_name, field_value in cleaned_data.items():
+            cleaned_data[field_name] = trio_to_bool(field_value)
+
+        diagnosis = {}
+        for side in ["ipsi", "contra"]:
+            diagnosis[side] = {}
+            for lnl in self.trained_lymph_model.lnls:
+                if (key := f"{side}_{lnl}") not in cleaned_data:
+                    continue
+                diagnosis[side][lnl] = cleaned_data.pop(key)
+
+        cleaned_data["diagnosis"] = complete_pattern(
+            diagnosis, self.trained_lymph_model.lnls
+        )
+        return cleaned_data

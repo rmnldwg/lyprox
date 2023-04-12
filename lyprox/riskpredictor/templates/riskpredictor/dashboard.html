@@ -37,19 +37,30 @@
                 </div>
               </div>
 
-              <div class="field is-grouped is-grouped-centered">
-                <div class="control is-expanded">
-                  <label for="{{ form.t_stage.id_for_label }}" class="label">T-Category</label>
-                  <div class="select">
-                    {{ form.t_stage }}
+              <div class="columns">
+                <div class="column">
+                  <div class="field">
+                    <div class="control is-flex is-flex-direction-column is-align-items-center">
+                      <label for="{{ form.t_stage.id_for_label }}" class="heading">T-Category</label>
+                      <div class="select">
+                        {{ form.t_stage }}
+                      </div>
+                    </div>
                   </div>
                 </div>
 
-                <div class="control">
-                  <label for="{{ form.midline_extension.id_for_label }}" class="label pb-2">Midline Extension</label>
-                  {{ form.midline_extension }}
+                {% if trained_lymph_model.is_midline %}
+                <div class="column">
+                  <div class="field">
+                    <div class="control is-flex is-flex-direction-column is-align-items-center">
+                      <label for="{{ form.midline_extension.id_for_label }}" class="heading pb-2">Midline Extension</label>
+                      {{ form.midline_extension }}
+                    </div>
+                  </div>
                 </div>
+                {% endif %}
               </div>
+
             </div>
           </div>
 
@@ -73,7 +84,7 @@
                 </div>
               </div>
 
-              <label for="{{ form.specificity.id_for_label }}" class="label">Specificity</label>
+              <label for="{{ form.specificity.id_for_label }}" class="heading">Specificity</label>
               <div class="field has-addons">
                 <div class="control is-expanded">
                   {{ form.specificity }}
@@ -83,7 +94,7 @@
                 </div>
               </div>
 
-              <label for="{{ form.sensitivity.id_for_label }}" class="label">Sensitivity</label>
+              <label for="{{ form.sensitivity.id_for_label }}" class="heading">Sensitivity</label>
               <div class="field has-addons">
                 <div class="control is-expanded">
                   {{ form.sensitivity }}
@@ -97,83 +108,116 @@
         </div>
 
         <div class="tile">
-          {% if trained_lymph_model.is_bilateral %}
-          <div class="tile is-parent">
-            <div class="tile is-child box">
-              <div class="level">
-                <div class="level-item">
-                  <p class="title is-4">contralateral</p>
-                </div>
-                <div class="level-right">
+          <div class="tile is-vertical">
+            {% if trained_lymph_model.is_bilateral %}
+            <div class="tile is-parent">
+              <div class="tile is-child box">
+                <div class="level">
                   <div class="level-item">
-                    <div class="tooltip">
-                      <span class="icon">
-                        <i class="fas fa-question"></i>
-                      </span>
+                    <p class="title is-4">contralateral</p>
+                  </div>
+                  <div class="level-right">
+                    <div class="level-item">
+                      <div class="tooltip">
+                        <span class="icon">
+                          <i class="fas fa-question"></i>
+                        </span>
+                      </div>
                     </div>
                   </div>
                 </div>
+
+                <table class="table is-fullwidth">
+                  <thead>
+                    <tr>
+                      <td colspan="2">LNL</td>
+                      <td class="has-text-centered">select</td>
+                      <td class="has-text-centered">risk</td>
+                    </tr>
+                  </thead>
+
+                  <tbody>
+                    {% for lnl in trained_lymph_model.lnls %}
+                    {% with "contra_"|addstr:lnl as lnl_key %}
+                    <tr>
+                      <td colspan="2">{{ lnl }}</td>
+                      <td>{{ form|get:lnl_key }}</td>
+                      {% include 'dataexplorer/barplot.html' with lnl="II "|addstr:"contralateral" stats=risks lnl_key=lnl_key show_percent=True %}
+                    </tr>
+                    {% endwith %}
+                    {% endfor %}
+                  </tbody>
+                </table>
               </div>
-
-              <table class="table is-fullwidth">
-                <thead>
-                  <tr>
-                    <td colspan="2">LNL</td>
-                    <td class="has-text-centered">select</td>
-                    <td class="has-text-centered">risk</td>
-                  </tr>
-                </thead>
-
-                <tbody>
-                  {% for lnl in trained_lymph_model.lnls %}
-                  {% with "contra_"|addstr:lnl as lnl_key %}
-                  <tr>
-                    <td colspan="2">{{ lnl }}</td>
-                    <td>{{ form|get:lnl_key }}</td>
-                  {% endwith %}
-                  {% endfor %}
-                </tbody>
-              </table>
             </div>
-          </div>
-          {% endif %}
+            {% endif %}
 
-          <div class="tile is-parent">
-            <div class="tile is-child box">
-              <div class="level">
-                <div class="level-item">
-                  <p class="title is-4">ipsilateral</p>
-                </div>
-                <div class="level-right">
+            <div class="tile is-parent">
+              <div class="tile is-child box">
+                <div class="level">
                   <div class="level-item">
-                    <div class="tooltip">
-                      <span class="icon">
-                        <i class="fas fa-question"></i>
-                      </span>
+                    <p class="title is-4">ipsilateral</p>
+                  </div>
+                  <div class="level-right">
+                    <div class="level-item">
+                      <div class="tooltip">
+                        <span class="icon">
+                          <i class="fas fa-question"></i>
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <table class="table is-fullwidth">
+                  <thead>
+                    <tr>
+                      <td colspan="2">LNL</td>
+                      <td class="has-text-centered">select</td>
+                      <td class="has-text-centered">risk</td>
+                    </tr>
+                  </thead>
+
+                  <tbody>
+                    {% for lnl in trained_lymph_model.lnls %}
+                    {% with "ipsi_"|addstr:lnl as lnl_key %}
+                    <tr>
+                      <td colspan="2">{{ lnl }}</td>
+                      <td>{{ form|get:lnl_key }}</td>
+                      {% include 'dataexplorer/barplot.html' with lnl="II "|addstr:"ipsilateral" stats=risks lnl_key=lnl_key show_percent=True %}
+                    </tr>
+                    {% endwith %}
+                    {% endfor %}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <div class="tile is-parent">
+              <div class="tile is-child box">
+                <div class="level">
+                  <div class="level-left"></div>
+                  <div class="level-right">
+                    <div class="level-item">
+                      <div class="buttons">
+                        <a href="{#{% url 'riskexplorer:help' %}#}" class="button is-medium is-primary is-outlined">
+                          <span class="icon">
+                            <i class="fas fa-question"></i>
+                          </span>
+                          <span>Help</span>
+                        </a>
+                        <button class="button is-medium is-warning has-tooltip-multiline" type="submit" id="compute"
+                        data-tooltip="Compute risk for selected diagnosis.">
+                        <span class="icon">
+                          <i class="fas fa-cogs"></i>
+                        </span>
+                        <span><strong>Compute</strong></span>
+                      </button>
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
-
-              <table class="table is-fullwidth">
-                <thead>
-                  <tr>
-                    <td colspan="2">LNL</td>
-                    <td class="has-text-centered">select</td>
-                    <td class="has-text-centered">risk</td>
-                  </tr>
-                </thead>
-
-                <tbody>
-                  {% for lnl in trained_lymph_model.lnls %}
-                  {% with "ipsi_"|addstr:lnl as lnl_key %}
-                  <tr>
-                    <td colspan="2">{{ lnl }}</td>
-                    <td>{{ form|get:lnl_key }}</td>
-                  {% endwith %}
-                  {% endfor %}
-                </tbody>
-              </table>
             </div>
           </div>
         </div>
