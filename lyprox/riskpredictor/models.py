@@ -12,7 +12,6 @@ from pathlib import Path
 from typing import Any, Dict, Optional
 
 import h5py
-import lymph
 import lyscripts
 import numpy as np
 import yaml
@@ -129,19 +128,25 @@ class TrainedLymphModel(loggers.ModelLoggerMixin, models.Model):
 
     def _compute_risk_matrices(self, lymph_model, t_stages, samples) -> np.ndarray:
         """Compute the risk matrices for the given model and samples."""
-        risk_shape = lymph_model.risk(
+        per_sample_risk_shape = lymph_model.risk(
             given_params=samples.mean(axis=0),
             t_stage=t_stages[0],
         ).shape
 
-        risk_matrices = {
-            stage: np.empty(shape=(self.num_samples, *risk_shape)) for stage in t_stages
-        }
+        risk_shape = (self.num_samples, *per_sample_risk_shape)
+
+        if self.is_bilateral:
+            risk_matrices = {}
+            for stage in t_stages:
+                risk_matrices[f"{stage}/ext"] = np.empty(shape=risk_shape)
+                risk_matrices[f"{stage}/noext"] = np.empty(shape=risk_shape)
+        else:
+            risk_matrices = {stage: np.empty(shape=risk_shape) for stage in t_stages}
 
         for i, sample in enumerate(samples):
             lymph_model.check_and_assign(sample)
             for stage in t_stages:
-                if isinstance(lymph_model, lymph.MidlineBilateral):
+                if self.is_bilateral:
                     risk_matrices[f"{stage}/ext"][i] = lymph_model.risk(
                         t_stage=stage, midline_extension=True
                     )

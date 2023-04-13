@@ -78,6 +78,11 @@ class TrainedLymphModelForm(loggers.FormLoggerMixin, forms.ModelForm):
 
 class DashboardForm(forms.Form):
     """Form for the dashboard page."""
+    is_submitted = forms.BooleanField(
+        required=True, initial=True, widget=forms.HiddenInput
+    )
+    """Whether the form has been submitted via the button or not."""
+
     def __init__(self, *args, trained_lymph_model: TrainedLymphModel = None, **kwargs):
         super().__init__(*args, **kwargs)
 
@@ -111,7 +116,7 @@ class DashboardForm(forms.Form):
     def add_sens_spec_fields(self, step: float = 0.01):
         """Add the fields for the sensitivity and specificity."""
         self.fields["sensitivity"] = forms.FloatField(
-            min_value=0, max_value=1, initial=0.8,
+            min_value=0.5, max_value=1, initial=0.8,
             widget=RangeInput(attrs={
                 "class": "tag slider is-fullwidth",
                 "min": "0.5",
@@ -124,7 +129,7 @@ class DashboardForm(forms.Form):
             ],
         )
         self.fields["specificity"] = forms.FloatField(
-            min_value=0, max_value=1, initial=0.8,
+            min_value=0.5, max_value=1, initial=0.8,
             widget=RangeInput(attrs={
                 "class": "tag slider is-fullwidth",
                 "min": "0.5",
@@ -143,7 +148,16 @@ class DashboardForm(forms.Form):
         self.fields["midline_extension"] = ThreeWayToggle(
             label=None,
             tooltip="Does the tumor cross the mid-sagittal line?",
+            initial=-1,
         )
+
+
+    def clean_midline_extension(self) -> bool:
+        """For now, the midline extension cannot be unknown (value of 0)."""
+        midline_extension = self.cleaned_data["midline_extension"]
+        if midline_extension == 0:
+            raise ValidationError("Midline extension cannot be unknown.")
+        return midline_extension
 
 
     def clean(self) -> Dict[str, Any]:

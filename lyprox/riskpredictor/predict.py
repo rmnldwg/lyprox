@@ -8,7 +8,6 @@ import logging
 import time
 from typing import Any, Dict, Optional, Tuple, Union
 
-import h5py
 import numpy as np
 import pandas as pd
 from lymph import Bilateral, MidlineBilateral, Unilateral
@@ -42,24 +41,6 @@ def create_patient(
 
     patient_row = flatten(patient_row)
     return pd.DataFrame(patient_row, index=[0])
-
-
-def load_risk_matrices(
-    trained_lymph_model: TrainedLymphModel,
-    t_stage: str,
-) -> np.ndarray:
-    """Load the risk matrices stored in the `models.TrainedLymphModel` object.
-
-    These risk matrices are - depending on whether the model is bilateral or not -
-    matrices of shape (2^V, 2^V), where V is the number of LNLs in the model (bilateral
-    case), or (1, 2^V) (unilateral case). They represent the prior probabilities of
-    any possible hidden state given a specific tumor stage.
-
-    In total, the returned object has the shape (N, 2^V, 2^V) in the bilateral case,
-    where N is the number of parameter samples, or (N, 2^V) in the unilateral case.
-    """
-    with h5py.File(trained_lymph_model.risk_matrices.path, "r") as h5_file:
-        risk_matrices = h5_file[t_stage][:]
 
 
 def compute_diagnose_probs(
@@ -153,13 +134,13 @@ def create_marginalisation(
     a vector that is 1 for all hidden states that match the given pattern and 0 for
     all others.
     """
-    pattern = np.array([pattern.get(lnl.name, None) for lnl in helper_lymph_model.lnls])
-
     if isinstance(helper_lymph_model, MidlineBilateral):
         helper_lymph_model = helper_lymph_model.ext
 
     if isinstance(helper_lymph_model, Bilateral):
         helper_lymph_model = helper_lymph_model.ipsi
+
+    pattern = np.array([pattern.get(lnl.name, None) for lnl in helper_lymph_model.lnls])
 
     marginalisation = np.zeros(shape=len(helper_lymph_model.state_list), dtype=bool)
     for i, state in enumerate(helper_lymph_model.state_list):
@@ -183,7 +164,7 @@ def compute_marginalised_risks(
     marginalizing over all hidden states that do match the given diagnosis (for wich
     the posterior risk over all possible hidden states was already computed).
     """
-    num_lnls = len(helper_lymph_model.lnls)
+    num_lnls = len(trained_lymph_model.lnls)
     marginalisation = np.ones(shape=(num_lnls, 2**num_lnls), dtype=bool)
 
     for i, lnl in enumerate(trained_lymph_model.lnls):
@@ -203,6 +184,28 @@ def compute_marginalised_risks(
         marginalised_risks["ipsi"] = marginalisation @ posterior_risks.T
 
     return marginalised_risks
+
+
+def aggregate_results(
+    trained_lymph_model: TrainedLymphModel,
+    marginalized_risks: Dict[str, np.ndarray],
+) -> Dict[str, Any]:
+    """Aggregate the results of the risk computation into a dictionary.
+
+    This is a helper function that is used to convert the numpy arrays that are
+    returned by the risk computation into a dictionary that can be used as context
+    for the `views.RiskPredictionView` view.
+    """
+    result = {}
+    for side in ["ipsi", "contra"]:
+        if side not in marginalized_risks:
+            continue
+
+        for i, lnl in enumerate(trained_lymph_model.lnls):
+            lnl_risk = 100 * np.mean(marginalized_risks[side][i])
+            result[f"{side}_{lnl}"] = [0, lnl_risk, 100. - lnl_risk]
+
+    return result
 
 
 def risks(
@@ -249,23 +252,11 @@ def risks(
     return result
 
 
-def aggregate_results(
-    trained_lymph_model: TrainedLymphModel,
-    marginalized_risks: Dict[str, np.ndarray],
-) -> Dict[str, Any]:
-    """Aggregate the results of the risk computation into a dictionary.
-
-    This is a helper function that is used to convert the numpy arrays that are
-    returned by the risk computation into a dictionary that can be used as context
-    for the `views.RiskPredictionView` view.
-    """
+def default_risks(trained_lymph_model: TrainedLymphModel, **kwargs) -> Dict[str, Any]:
+    """Return default risks (everything unknown)."""
     result = {}
     for side in ["ipsi", "contra"]:
-        if side not in marginalized_risks:
-            continue
-
-        for i, lnl in enumerate(trained_lymph_model.lnls):
-            lnl_risk = 100 * np.mean(marginalized_risks[side][i])
-            result[f"{side}_{lnl}"] = [0, lnl_risk, 100. - lnl_risk]
+        for lnl in trained_lymph_model.lnls:
+            result[f"{side}_{lnl}"] = [100, 0, 0]
 
     return result

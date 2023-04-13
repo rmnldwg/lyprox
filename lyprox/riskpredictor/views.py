@@ -64,6 +64,12 @@ class RiskPredictionView(
         self.form = self.form_class(data, trained_lymph_model=trained_lymph_model)
 
         if not self.form.is_valid():
+            if self.form.cleaned_data.get("is_submitted", False):
+                errors = self.form.errors.as_data()
+                self.logger.warning("Form is not valid, errors are: %s", errors)
+                self.risks = predict.default_risks(trained_lymph_model)
+                return
+
             self.initialize_form(trained_lymph_model)
 
         self.risks = predict.risks(
