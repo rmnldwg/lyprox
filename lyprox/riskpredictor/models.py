@@ -9,7 +9,7 @@ personalized risk estimates can be computed.
 """
 import io
 from pathlib import Path
-from typing import Any, Dict
+from typing import Any, Dict, Optional
 
 import h5py
 import lymph
@@ -53,7 +53,6 @@ class TrainedLymphModel(loggers.ModelLoggerMixin, models.Model):
     """Number of samples to use for computing the prior risk matrices."""
 
 
-
     class Meta:
         unique_together = ("git_repo_url", "revision")
 
@@ -80,6 +79,29 @@ class TrainedLymphModel(loggers.ModelLoggerMixin, models.Model):
     def is_midline(self):
         """Return whether the model is midline."""
         return self.params["model"]["class"] == "MidlineBilateral"
+
+
+    def load_risk_matrices(
+        self,
+        t_stage: str,
+        midline_extension: Optional[bool] = None,
+    ) -> np.ndarray:
+        """Load the precomputed and stored prior risk matrices for the given tumor
+        stage and lateralization.
+        """
+        if self.is_midline and midline_extension is None:
+            raise ValueError(
+                "For MidlineBilateral models, the lateralization must be specified."
+            )
+
+        with h5py.File(self.risk_matrices.path, "r") as h5_file:
+            if self.is_midline:
+                key = f"{t_stage}/{'ext' if midline_extension else 'noext'}"
+            else:
+                key = t_stage
+
+            return h5_file[key][:]
+
 
 
     def _load_params(self, fs: DVCFileSystem) -> Dict[str, Any]:
