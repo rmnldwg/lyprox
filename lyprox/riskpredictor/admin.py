@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import TrainedLymphModel
+from .models import InferenceResult
 
 # Register your models here.
-admin.site.register(TrainedLymphModel)
+admin.site.register(InferenceResult)

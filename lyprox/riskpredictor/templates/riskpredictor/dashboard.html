@@ -12,7 +12,7 @@
   {% include 'navbar.html' %}
 
   {% csrf_token %}
-  <form action="{% url 'riskpredictor:dashboard' trained_lymph_model.pk %}" method="GET" id="dashboard-form"
+  <form action="{% url 'riskpredictor:dashboard' inference_result.pk %}" method="GET" id="dashboard-form"
     name="dashboardform">
     <section class="section">
       <div class="tile is-ancestor">
@@ -49,7 +49,7 @@
                   </div>
                 </div>
 
-                {% if trained_lymph_model.is_midline %}
+                {% if inference_result.is_midline %}
                 <div class="column">
                   <div class="field">
                     <div class="control is-flex is-flex-direction-column is-align-items-center">
@@ -115,7 +115,7 @@
         <div class="tile">
           <div class="tile is-vertical">
             <div class="tile">
-              {% if trained_lymph_model.is_bilateral %}
+              {% if inference_result.is_bilateral %}
               <div class="tile is-parent">
                 <div class="tile is-child box">
                   <div class="level">
@@ -143,7 +143,7 @@
                     </thead>
 
                     <tbody>
-                      {% for lnl in trained_lymph_model.lnls %}
+                      {% for lnl in inference_result.lnls %}
                       {% with "contra_"|addstr:lnl as lnl_key %}
                       <tr>
                         <td colspan="2">{{ lnl }}</td>
@@ -185,7 +185,7 @@
                     </thead>
 
                     <tbody>
-                      {% for lnl in trained_lymph_model.lnls %}
+                      {% for lnl in inference_result.lnls %}
                       {% with "ipsi_"|addstr:lnl as lnl_key %}
                       <tr>
                         <td colspan="2">{{ lnl }}</td>

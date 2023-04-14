@@ -9,30 +9,30 @@ from django.views.generic import CreateView, DetailView, ListView
 
 from ..loggers import ViewLoggerMixin
 from . import predict
-from .forms import DashboardForm, TrainedLymphModelForm
-from .models import TrainedLymphModel
+from .forms import DashboardForm, InferenceResultForm
+from .models import InferenceResult
 
 
-class AddTrainedLymphModelView(
+class AddInferenceResultView(
     ViewLoggerMixin,
     LoginRequiredMixin,
     CreateView,
 ):
-    """View for adding a new `TrainedLymphModel` instance."""
-    model = TrainedLymphModel
-    form_class = TrainedLymphModelForm
+    """View for adding a new `InferenceResult` instance."""
+    model = InferenceResult
+    form_class = InferenceResultForm
     template_name = "riskpredictor/trainedlymphmodel_form.html"
     success_url = "/riskpredictor/list/"
 
 
-class ChooseTrainedLymphModelView(
+class ChooseInferenceResultView(
     ViewLoggerMixin,
     ListView,
 ):
-    """View for choosing a `TrainedLymphModel` instance."""
-    model = TrainedLymphModel
+    """View for choosing a `InferenceResult` instance."""
+    model = InferenceResult
     template_name = "riskpredictor/trainedlymphmodel_list.html"
-    context_object_name = "trained_lymph_models"
+    context_object_name = "inference_results"
 
     def get_context_data(self, **kwargs: Any) -> Dict[str, Any]:
         context = super().get_context_data(**kwargs)
@@ -45,15 +45,15 @@ class RiskPredictionView(
     DetailView,
 ):
     """View for the dashboard of the riskpredictor app."""
-    model = TrainedLymphModel
+    model = InferenceResult
     form_class = DashboardForm
     template_name = "riskpredictor/dashboard.html"
-    context_object_name = "trained_lymph_model"
+    context_object_name = "inference_result"
 
 
     def handle_form(
         self,
-        trained_lymph_model: TrainedLymphModel,
+        inference_result: InferenceResult,
         data: Dict[str, Any],
     ) -> Dict[str, Any]:
         """Populate the form and compute the risks.
@@ -61,40 +61,40 @@ class RiskPredictionView(
         Either fill the form with the request data or with the initial data. Then, call
         the risk prediction methods and store the results in the `risks` attribute.
         """
-        self.form = self.form_class(data, trained_lymph_model=trained_lymph_model)
+        self.form = self.form_class(data, inference_result=inference_result)
 
         if not self.form.is_valid():
             if self.form.cleaned_data.get("is_submitted", False):
                 errors = self.form.errors.as_data()
                 self.logger.warning("Form is not valid, errors are: %s", errors)
-                self.risks = predict.default_risks(trained_lymph_model)
+                self.risks = predict.default_risks(inference_result)
                 return
 
-            self.initialize_form(trained_lymph_model)
+            self.initialize_form(inference_result)
 
         self.risks = predict.risks(
-            trained_lymph_model=trained_lymph_model,
+            inference_result=inference_result,
             **self.form.cleaned_data,
         )
 
 
-    def initialize_form(self, trained_lymph_model):
+    def initialize_form(self, inference_result):
         """Fill the form with the initial data from the respective form fields."""
         initial = {}
         for field_name, field in self.form.fields.items():
             initial[field_name] = self.form.get_initial_for_field(field, field_name)
 
-        self.form = self.form_class(initial, trained_lymph_model=trained_lymph_model)
+        self.form = self.form_class(initial, inference_result=inference_result)
 
         if not self.form.is_valid():
             errors = self.form.errors.as_data()
             self.logger.warning("Initial form still invalid, errors are: %s", errors)
 
 
-    def get_object(self, queryset=None) -> TrainedLymphModel:
-        trained_lymph_model = super().get_object(queryset)
-        self.handle_form(trained_lymph_model, data=self.request.GET)
-        return trained_lymph_model
+    def get_object(self, queryset=None) -> InferenceResult:
+        inference_result = super().get_object(queryset)
+        self.handle_form(inference_result, data=self.request.GET)
+        return inference_result
 
 
     def get_context_data(self, **kwargs: Any) -> Dict[str, Any]:

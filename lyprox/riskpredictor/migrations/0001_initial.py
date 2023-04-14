@@ -15,7 +15,7 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.CreateModel(
-            name='TrainedLymphModel',
+            name='InferenceResult',
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('git_repo_url', models.URLField(default='https://github.com/rmnldwg/lynference')),

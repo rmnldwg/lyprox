@@ -1,8 +1,8 @@
 """
 This module contains the forms used in the riskpredictor app.
 
-The first form, the `TrainedLymphModelForm`, is used to create a new
-`models.TrainedLymphModel` and makes sure that the user enters a valid git repository
+The first form, the `InferenceResultForm`, is used to create a new
+`models.InferenceResult` and makes sure that the user enters a valid git repository
 and revision.
 """
 from typing import Any, Dict
@@ -16,17 +16,17 @@ from lyscripts.predict.utils import complete_pattern
 
 from .. import loggers
 from ..dataexplorer.forms import ThreeWayToggle, trio_to_bool
-from .models import TrainedLymphModel
+from .models import InferenceResult
 
 
 class RangeInput(widgets.NumberInput):
     input_type = "range"
 
 
-class TrainedLymphModelForm(loggers.FormLoggerMixin, forms.ModelForm):
-    """Form for creating a new `TrainedLymphModel` instance."""
+class InferenceResultForm(loggers.FormLoggerMixin, forms.ModelForm):
+    """Form for creating a new `InferenceResult` instance."""
     class Meta:
-        model = TrainedLymphModel
+        model = InferenceResult
         fields = ["git_repo_url", "revision", "params_path", "num_samples"]
         widgets = {
             "git_repo_url": widgets.TextInput(attrs={
@@ -83,33 +83,33 @@ class DashboardForm(forms.Form):
     )
     """Whether the form has been submitted via the button or not."""
 
-    def __init__(self, *args, trained_lymph_model: TrainedLymphModel = None, **kwargs):
+    def __init__(self, *args, inference_result: InferenceResult = None, **kwargs):
         super().__init__(*args, **kwargs)
 
-        if trained_lymph_model is not None:
-            self.trained_lymph_model = trained_lymph_model
-            self.add_lnl_fields(self.trained_lymph_model)
-            self.add_t_stage_field(self.trained_lymph_model)
+        if inference_result is not None:
+            self.inference_result = inference_result
+            self.add_lnl_fields(self.inference_result)
+            self.add_t_stage_field(self.inference_result)
             self.add_sens_spec_fields()
 
-            if self.trained_lymph_model.is_midline:
+            if self.inference_result.is_midline:
                 self.add_midline_field()
 
 
-    def add_lnl_fields(self, trained_lymph_model: TrainedLymphModel):
+    def add_lnl_fields(self, inference_result: InferenceResult):
         """Add the fields for the lymph node levels defined in the trained model."""
-        for lnl in trained_lymph_model.lnls:
+        for lnl in inference_result.lnls:
             self.fields[f"ipsi_{lnl}"] = ThreeWayToggle()
 
-            if trained_lymph_model.is_bilateral:
+            if inference_result.is_bilateral:
                 self.fields[f"contra_{lnl}"] = ThreeWayToggle()
 
 
-    def add_t_stage_field(self, trained_lymph_model: TrainedLymphModel):
+    def add_t_stage_field(self, inference_result: InferenceResult):
         """Add the field for the T stage with the choices being defined in the model."""
         self.fields["t_stage"] = forms.ChoiceField(
-            choices=[(t, t) for t in trained_lymph_model.t_stages],
-            initial=trained_lymph_model.t_stages[0],
+            choices=[(t, t) for t in inference_result.t_stages],
+            initial=inference_result.t_stages[0],
         )
 
 
@@ -170,12 +170,12 @@ class DashboardForm(forms.Form):
         diagnosis = {}
         for side in ["ipsi", "contra"]:
             diagnosis[side] = {}
-            for lnl in self.trained_lymph_model.lnls:
+            for lnl in self.inference_result.lnls:
                 if (key := f"{side}_{lnl}") not in cleaned_data:
                     continue
                 diagnosis[side][lnl] = cleaned_data.pop(key)
 
         cleaned_data["diagnosis"] = complete_pattern(
-            diagnosis, self.trained_lymph_model.lnls
+            diagnosis, self.inference_result.lnls
         )
         return cleaned_data
