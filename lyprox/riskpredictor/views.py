@@ -2,15 +2,20 @@
 Module for the views of the riskpredictor app.
 """
 # pylint: disable=attribute-defined-outside-init
+import json
+import logging
 from typing import Any, Dict
 
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.http import JsonResponse
 from django.views.generic import CreateView, DetailView, ListView
 
 from ..loggers import ViewLoggerMixin
 from . import predict
 from .forms import DashboardForm, InferenceResultForm
 from .models import InferenceResult
+
+logger = logging.getLogger(__name__)
 
 
 class AddInferenceResultView(
@@ -51,8 +56,9 @@ class RiskPredictionView(
     context_object_name = "inference_result"
 
 
+    @classmethod
     def handle_form(
-        self,
+        cls,
         inference_result: InferenceResult,
         data: Dict[str, Any],
     ) -> Dict[str, Any]:
@@ -61,39 +67,51 @@ class RiskPredictionView(
         Either fill the form with the request data or with the initial data. Then, call
         the risk prediction methods and store the results in the `risks` attribute.
         """
-        self.form = self.form_class(data, inference_result=inference_result)
+        form = cls.form_class(data, inference_result=inference_result)
 
-        if not self.form.is_valid():
-            if self.form.cleaned_data.get("is_submitted", False):
-                errors = self.form.errors.as_data()
-                self.logger.warning("Form is not valid, errors are: %s", errors)
-                self.risks = predict.default_risks(inference_result)
+        if not form.is_valid():
+            logger.info(form.errors.as_data())
+            if form.cleaned_data.get("is_submitted", False):
+                errors = form.errors.as_data()
+                logger.warning("Form is not valid, errors are: %s", errors)
+                risks = predict.default_risks(inference_result)
                 return
 
-            self.initialize_form(inference_result)
+            form = cls.initialize_form(form, inference_result)
 
-        self.risks = predict.risks(
+        risks = predict.risks(
             inference_result=inference_result,
-            **self.form.cleaned_data,
+            **form.cleaned_data,
         )
 
+        return form, risks
 
-    def initialize_form(self, inference_result):
+
+    @classmethod
+    def initialize_form(
+        cls,
+        form: DashboardForm,
+        inference_result: InferenceResult,
+    ) -> DashboardForm:
         """Fill the form with the initial data from the respective form fields."""
         initial = {}
-        for field_name, field in self.form.fields.items():
-            initial[field_name] = self.form.get_initial_for_field(field, field_name)
+        for field_name, field in form.fields.items():
+            initial[field_name] = form.get_initial_for_field(field, field_name)
 
-        self.form = self.form_class(initial, inference_result=inference_result)
+        form = cls.form_class(initial, inference_result=inference_result)
 
-        if not self.form.is_valid():
-            errors = self.form.errors.as_data()
-            self.logger.warning("Initial form still invalid, errors are: %s", errors)
+        if not form.is_valid():
+            errors = form.errors.as_data()
+            logger.warning("Initial form still invalid, errors are: %s", errors)
+
+        return form
 
 
     def get_object(self, queryset=None) -> InferenceResult:
         inference_result = super().get_object(queryset)
-        self.handle_form(inference_result, data=self.request.GET)
+        form, risks = self.handle_form(inference_result, data=self.request.GET)
+        self.form = form
+        self.risks = risks
         return inference_result
 
 
@@ -102,3 +120,24 @@ class RiskPredictionView(
         context["form"] = self.form
         context["risks"] = self.risks
         return context
+
+
+def riskpredictor_AJAX_view(request, pk: int, **kwargs: Any) -> JsonResponse:
+    """View for the AJAX request of the riskpredictor dashboard.
+
+    This view receives the same data as the `RiskPredictionView`, albeit in JSON format.
+    It then computes the risks and returns them in JSON format again to be handled
+    by JavaScript on the client side.
+    """
+    data = json.loads(request.body.decode("utf-8"))
+    inference_result = InferenceResult.objects.get(pk=pk)
+    form, risks = RiskPredictionView.handle_form(inference_result, data)
+    risks["type"] = "risks"   # tells JavaScript how to write the labels
+    risks["total"] = 100.     # necessary for JavaScript barplot updater
+
+    if form.is_valid():
+        logger.info("AJAX form valid, returning success and risks.")
+        return JsonResponse(data=risks)
+
+    logger.warning("AJAX form invalid.")
+    return JsonResponse(data={"error": "Something went wrong."}, status=400)

@@ -12,8 +12,7 @@
   {% include 'navbar.html' %}
 
   {% csrf_token %}
-  <form action="{% url 'riskpredictor:dashboard' inference_result.pk %}" method="GET" id="dashboard-form"
-    name="dashboardform">
+  <form action="{% url 'riskpredictor:dashboard' inference_result.pk %}" method="GET" id="dashboard-form" name="dashboardform">
     <section class="section">
       <div class="tile is-ancestor">
         <div class="tile is-3 is-vertical">
@@ -148,7 +147,7 @@
                       <tr>
                         <td colspan="2">{{ lnl }}</td>
                         <td>{{ form|get:lnl_key }}</td>
-                        {% include 'dataexplorer/barplot.html' with lnl="II "|addstr:"contralateral" stats=risks lnl_key=lnl_key show_percent=True %}
+                        {% include 'dataexplorer/barplot.html' with lnl="II "|addstr:"contralateral" stats=risks lnl_key=lnl_key show_percent=True hide_tooltip=True %}
                       </tr>
                       {% endwith %}
                       {% endfor %}
@@ -190,7 +189,7 @@
                       <tr>
                         <td colspan="2">{{ lnl }}</td>
                         <td>{{ form|get:lnl_key }}</td>
-                        {% include 'dataexplorer/barplot.html' with lnl="II "|addstr:"ipsilateral" stats=risks lnl_key=lnl_key show_percent=True %}
+                        {% include 'dataexplorer/barplot.html' with lnl="II "|addstr:"ipsilateral" stats=risks lnl_key=lnl_key show_percent=True hide_tooltip=True %}
                       </tr>
                       {% endwith %}
                       {% endfor %}
@@ -236,6 +235,6 @@
   {% include "footer.html" %}
 </body>
 
-<script src="{% static 'riskpredictor/dashboard.js' %}"></script>
+<script src="{% static 'dataexplorer/dashboard.js' %}"></script>
 
 </html>

@@ -115,12 +115,11 @@ def dashboard_AJAX_view(request):
     user = request.user
     form, _, stats = DashboardView._get_queryset(data, user, logger)
     stats = transform_np_to_lists(stats)
+    stats["type"] = "stats"
 
     if form.is_valid():
         logger.info("AJAX form valid, returning success and stats.")
         return JsonResponse(data=stats)
 
-    return JsonResponse(
-        data={"error": "Something went wrong."},
-        status=400,
-    )
+    logger.warn("AJAX form invalid.")
+    return JsonResponse(data={"error": "Something went wrong."}, status=400)
