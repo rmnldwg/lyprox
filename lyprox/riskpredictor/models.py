@@ -72,7 +72,7 @@ class InferenceResult(loggers.ModelLoggerMixin, models.Model):
     def is_bilateral(self):
         """Return whether the model is bilateral."""
         lymph_model = self.get_lymph_model()
-        return isinstance(lymph_model, Bilateral)
+        return isinstance(lymph_model, (Bilateral, MidlineBilateral))
 
     @property
     def is_midline(self):

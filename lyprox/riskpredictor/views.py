@@ -75,7 +75,7 @@ class RiskPredictionView(
                 errors = form.errors.as_data()
                 logger.warning("Form is not valid, errors are: %s", errors)
                 risks = predict.default_risks(inference_result)
-                return
+                return form, risks
 
             form = cls.initialize_form(form, inference_result)
 

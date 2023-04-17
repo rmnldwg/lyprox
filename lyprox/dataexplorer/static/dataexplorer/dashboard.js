@@ -289,16 +289,15 @@ function populateFields(response) {
 		};
 
         if (isBarplotLegend) {
-            let idx = $(this).data("index");
-            let fieldVal = response[field][idx];
+            let fieldVal = response[field][index];
             let fieldValPercent = 100 * fieldVal / totalNum;
             let toggle;
             let side = field.split("_")[0] + "lateral";
             let lnl = field.split("_")[1];
 
-            if (idx == 1) {
+            if (index == 1) {
                 toggle = "";
-            } else if (idx == 2) {
+            } else if (index == 2) {
                 toggle = "do not ";
             }
 
@@ -317,7 +316,7 @@ function populateFields(response) {
             } else {
                 $(this).html(newValue.toFixed(0));
             };
-        } else if (newValue > 0) {
+        } else if (index != 0) {
             $(this).html(newValue.toFixed(0) + "%");
         }
 	});
