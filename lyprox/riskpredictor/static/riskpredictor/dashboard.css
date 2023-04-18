@@ -36,3 +36,38 @@ output.slider {
 span[data-tooltip] {
     border-bottom: none;
 }
+
+.tooltip {
+    position: relative;
+}
+
+.tooltip .box {
+    display: none;
+}
+
+.tooltip:hover .box {
+    display: inherit;
+    position: absolute;
+    z-index: 1000;
+    width: 700px;
+}
+
+.tooltip:hover .box.right {
+    left: 0;
+    margin-left: 32px;
+}
+
+.tooltip:hover .box.left {
+    right: 0;
+    margin-right: 32px;
+}
+
+.tooltip:hover .box.top {
+    bottom: 0;
+    margin-bottom: 60px;
+}
+
+.tooltip:hover .box.bottom {
+    top: 0;
+    margin-top: 32px;
+}

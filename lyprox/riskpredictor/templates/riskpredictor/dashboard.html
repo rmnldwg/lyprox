@@ -31,6 +31,7 @@
                       <span class="icon">
                         <i class="fas fa-question"></i>
                       </span>
+                      {% include 'dataexplorer/help/tooltip.html' with side="right" position="bottom" html='riskpredictor/help/tumor.html' %}
                     </div>
                   </div>
                 </div>
@@ -83,6 +84,7 @@
                       <span class="icon">
                         <i class="fas fa-question"></i>
                       </span>
+                      {% include 'dataexplorer/help/tooltip.html' with side="right" position="bottom" html='riskpredictor/help/modality.html' %}
                     </div>
                   </div>
                 </div>
@@ -127,6 +129,7 @@
                           <span class="icon">
                             <i class="fas fa-question"></i>
                           </span>
+                          {% include 'dataexplorer/help/tooltip.html' with side="right" position="bottom" html='riskpredictor/help/risks.html' %}
                         </div>
                       </div>
                     </div>
@@ -169,6 +172,7 @@
                           <span class="icon">
                             <i class="fas fa-question"></i>
                           </span>
+                          {% include 'dataexplorer/help/tooltip.html' with side="left" position="bottom" html='riskpredictor/help/risks.html' %}
                         </div>
                       </div>
                     </div>
@@ -206,7 +210,7 @@
                   <div class="level-right">
                     <div class="level-item">
                       <div class="buttons">
-                        <a href="{#{% url 'riskexplorer:help' %}#}" class="button is-medium is-primary is-outlined">
+                        <a href="{% url 'riskpredictor:help' %}" class="button is-medium is-primary is-outlined">
                           <span class="icon">
                             <i class="fas fa-question"></i>
                           </span>

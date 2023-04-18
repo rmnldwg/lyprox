@@ -4,17 +4,13 @@ URLs related to the riskpredictor prediction app under ``https://lyprox.org/risk
 """
 from django.urls import path
 
-from .views import (
-    AddInferenceResultView,
-    ChooseInferenceResultView,
-    RiskPredictionView,
-    riskpredictor_AJAX_view,
-)
+from . import views
 
 app_name = "riskpredictor"
 urlpatterns = [
-    path("add/", AddInferenceResultView.as_view(), name="add"),
-    path("list/", ChooseInferenceResultView.as_view(), name="list"),
-    path("<int:pk>/", RiskPredictionView.as_view(), name="dashboard"),
-    path("<int:pk>/ajax/", riskpredictor_AJAX_view, name="ajax"),
+    path("add/", views.AddInferenceResultView.as_view(), name="add"),
+    path("list/", views.ChooseInferenceResultView.as_view(), name="list"),
+    path("<int:pk>/", views.RiskPredictionView.as_view(), name="dashboard"),
+    path("<int:pk>/ajax/", views.riskpredictor_AJAX_view, name="ajax"),
+    path("help/", views.help_view, name="help"),
 ]

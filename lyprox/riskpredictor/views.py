@@ -7,7 +7,8 @@ import logging
 from typing import Any, Dict
 
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.http import JsonResponse
+from django.http import HttpResponse, JsonResponse
+from django.shortcuts import render
 from django.views.generic import CreateView, DetailView, ListView
 
 from ..loggers import ViewLoggerMixin
@@ -141,3 +142,10 @@ def riskpredictor_AJAX_view(request, pk: int, **kwargs: Any) -> JsonResponse:
 
     logger.warning("AJAX form invalid.")
     return JsonResponse(data={"error": "Something went wrong."}, status=400)
+
+
+def help_view(request) -> HttpResponse:
+    """View for the help page of the riskpredictor app."""
+    template_name = "riskpredictor/help/index.html"
+    context = {}
+    return render(request, template_name, context)
