@@ -1,0 +1,61 @@
+{% load static %}
+
+<div class="box">
+  <p class="block is-size-5">
+    Our publications on statistical models of lymphatic progression for estimating
+    the probability of occult metastases in lymph node levels. These models can be
+    trained using data like the one we present here.
+  </p>
+  <div class="media">
+    <div class="media-left">
+      <figure class="image is-64x64">
+        <img class="is-rounded" src="{% static 'hmm-paper.png' %}" alt="paper icon">
+      </figure>
+    </div>
+    <div class="media-content">
+      <p>
+        Roman Ludwig, Bertrand Pouymayou, Panagiotis Balermpas, Jan Unkelbach;
+        <br>
+        <strong class="has-text-secondary">A hidden Markov model for lymphatic
+        tumor progression in the head and neck,</strong>
+        <br>
+        <em>Sci Rep</em> <strong>11,</strong> 12261 (2021)
+        <a href="https://doi.org/10.1038/s41598-021-91544-1" target="_blank">10.1038/s41598-021-91544-1</a>
+      </p>
+    </div>
+  </div>
+
+  <div class="media">
+    <div class="media-left">
+      <figure class="image is-64x64">
+        <img class="is-rounded" src="{% static 'bn-paper.png' %}" alt="paper icon">
+      </figure>
+    </div>
+    <div class="media-content">
+      <p>
+        Bertrand Pouymayou, Panagiotis Balermpas, Oliver Riesterer, Matthias
+        Guckenberger, Jan Unkelbach;
+        <br>
+        <strong class="has-text-secondary">A Bayesian network model of lymphatic
+        tumor progression for personalized elective CTV definition in head and
+        neck cancers,</strong>
+        <br>
+        <em>Phys. Med. Biol.</em> <strong>64,</strong> 165003 (2019)
+        <a href="https://doi.org/10.1088/1361-6560/ab2a18" target="_blank">https://doi.org/10.1088/1361-6560/ab2a18</a>
+      </p>
+    </div>
+  </div>
+
+  <div class="media notification is-primary is-light mt-5">
+    <div class="media-left">
+      <figure class="icon">
+        <i class="fab fa-lg fa-github"></i>
+      </figure>
+    </div>
+    <div class="media-content">
+      You can find the underlying python code for these models in another GitHub
+      repository named <a href="https://github.com/rmnldwg/lymph"><code>lymph</code></a>.
+      The documentation is provided on <a href="https://lymph-model.readthedocs.io">readthedocs</a>.
+    </div>
+  </div>
+</div>

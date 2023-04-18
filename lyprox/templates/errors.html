@@ -10,7 +10,6 @@
 
 {% addtoblock "js" %}
 <script src="{% static 'fontawesomefree/js/all.min.js' %}"></script>
-<script src="https://code.jquery.com/jquery-3.6.3.min.js" integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU=" crossorigin="anonymous"></script>
 {% endaddtoblock %}
 
 <head>
@@ -22,12 +21,16 @@
 </head>
 
 <body>
-  {% include 'navbar.html' %}
-
-  {% block content %}
-  {% endblock content %}
-
-  {% include 'footer.html' %}
+  <section class="section">
+    <div class="container">
+      <div class="columns is-centered">
+        <div class="colum is-5">
+          {% block content %}
+          {% endblock content %}
+        </div>
+      </div>
+    </div>
+  </section>
 
   <!-- Javascript -->
   {% render_block "js" %}
