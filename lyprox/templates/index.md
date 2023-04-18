@@ -25,13 +25,12 @@ Currently, the functions that have been implemented in this web-based applicatio
 - view the details of every patient in the two public datasets in the "[Patients]({% url 'patients:list' %})" tab
 - export and download the two public datasets as CSV files via the "[Datasets]({% url 'patients:dataset_list' %})" tab
 - visualize the correlations in the patterns of lymphatic progression in an interactive dashboard under the "[Data Explorer]({% url 'dataexplorer:dashboard' %})" tab
+- choose a model and get predictions for the risk of microscopic involvement, given a personalized diagnosis in the "[Risk Predictor]({% url 'riskpredictor:list' %})" tab.
 
 
 # Roadmap
 
-In the near future, we plan to release the prototype of a risk prediction utility that can compute the risk of occult disease, given a personalized diagnosis. It will be based on out modelling efforts around the lymphatic spread or head and neck cancer (see the [publications below]({% url 'index' %}#publications) for more information).
-
-Also, as hinted at earlier, more data is planned to be released. We have received another two additional datasets of detailed lymphatic progression patterns that we will publish in the coming months. We will also collect more data at our own institution, the University Hospital Zurich, that we will share on LyProX. And we have signed data sharing agreements or are in discussions with yet another two research groups. The goal is to have a multi-centric, multinational dataset of several thousand patients, each with detailed information on their lymphatic involvement patterns.
+As hinted at earlier, more data is planned to be released. We have received another two additional datasets of detailed lymphatic progression patterns that we will publish in the coming months. We will also collect more data at our own institution, the University Hospital Zurich, that we will share on LyProX. And we have signed data sharing agreements or are in discussions with yet another two research groups. The goal is to have a multi-centric, multinational dataset of several thousand patients, each with detailed information on their lymphatic involvement patterns.
 
 In the long term, we would also like to extend the functionality of the interface to allow our collaborators and us to directly enter patient data into LyProX. That way, multiple institutions and researchers could collectively add data in a seamless manner.
 
