@@ -346,8 +346,10 @@ class User(ModelLoggerMixin, AbstractBaseUser, PermissionsMixin):
     )
     is_active = models.BooleanField(
         "active", default=False,
-        help_text=("Indicates account status. Should be deactivated instead of "
-                   "deleting the account.")
+        help_text=(
+            "Indicates account status. Should be deactivated instead of "
+            "deleting the account."
+        ),
     )
 
     date_joined = models.DateField("date joined", default=timezone.now)
