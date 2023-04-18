@@ -62,41 +62,9 @@
   <div class="container">
     <h1 class="title" id="publications">Publications</h1>
 
-    <!-- Data-related papers USZ -->
-    {% include 'publications/datasets.html' %}
-
-    <!-- CLB paper -->
-    {% include 'publications/clb.html' %}
-
-    <!-- Modelling papers -->
-    {% include 'publications/modelling.html' %}
-
-    <div class="box">
-      <p class="block is-size-5">
-        A review paper summarizing how models of tumor progression may support CTV definition:
-      </p>
-      <div class="media">
-        <div class="media-left">
-          <figure class="image is-64x64">
-            <img class="is-rounded is-outlined" src="{% static 'budapest-paper.png' %}" alt="paper icon">
-          </figure>
-        </div>
-        <div class="media-content">
-          <p>
-            Jan Unkelbach, Thomas Bortfeld, Carlos E. Cardenas, Vincent Gregoire, Wille
-            Hager, Ben Heijmen, Robert Jeraj, Stine S. Korreman, Roman Ludwig, Bertrand
-            Pouymayou, Nadya Shusharina, Jonas Söderberg, Iuliana Toma-Dasu, Esther G.C.
-            Troost, Eliana Vasquez Osorio;
-            <br>
-            <strong class="has-text-secondary">The role of computational methods for
-            automating and improving clinical target volume definition,</strong>
-            <br>
-            <em>Radiotherapy and Oncology</em> <strong>153,</strong> 15-25 (2020)
-            <a href="https://doi.org/10.1016/j.radonc.2020.10.002" target="_blank">https://doi.org/10.1016/j.radonc.2020.10.002</a>
-          </p>
-        </div>
-      </div>
-    </div>
+    {% for pub in publications %}
+    {% include 'publication.html' with pub=pub %}
+    {% endfor %}
   </div>
 </section>
 

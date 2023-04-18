@@ -1,4 +1,5 @@
 {% load static %}
+{% load customtags %}
 
 <div class="box">
   <div class="media">
@@ -9,15 +10,15 @@
     </div>
     <div class="media-content">
       <p>
-        {% for author in pub.authors %}
-        {{ author }}{% if not forloop.last %}, {% endif %}
+        {% for author in pub.author %}
+        {{ author.given }} {{ author.family }}{% if not forloop.last %}, {% endif %}
         {% endfor %}
         <br>
         <strong class="has-text-secondary">
           {{ pub.title }},
         </strong>
         <br>
-        <em>{{ pub.journal }}</em> <strong>{{ pub.issue }},</strong> {{ pub.page }} ({{ pub.year }})
+        <em>{{ pub.container-title }}</em> <strong>{{ pub.volume }},</strong> {{ pub.page }} ({{ pub.issued.0.year }})
         <a href="https://doi.org/{{ pub.doi }}" target="_blank">{{ pub.doi }}</a>
       </p>
     </div>
