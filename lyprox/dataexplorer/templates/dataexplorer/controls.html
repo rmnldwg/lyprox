@@ -1,0 +1,58 @@
+<div class="tile is-parent">
+  <div class="tile is-child box">
+    <div class="level">
+      <div class="level-left">
+        <div class="level-item">
+          <div class="field has-addons">
+            {% for radio in form.show_percent %}
+            <div class="control">
+              {{ radio.tag }}
+              <label for="{{ radio.id_for_label }}" class="tag button is-medium is-info"
+                data-tooltip="Switch between displaying absolute numbers and percentages">
+                {% if radio.choice_label == 'percent' %}
+                <span class="icon">
+                  <i class="fas fa-percentage"></i>
+                </span>
+                <span>percent</span>
+                {% elif radio.choice_label == 'absolute' %}
+                <span>absolute</span>
+                <span class="icon">
+                  <i class="fab fa-slack-hash"></i>
+                </span>
+                {% endif %}
+              </label>
+            </div>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+      <div class="level-right">
+        <div class="level-item">
+          <div class="buttons">
+            <div class="tooltip">
+              <a href="{% url 'dataexplorer:help' %}" class="button is-medium is-primary is-outlined">
+                <span class="icon">
+                  <i class="fas fa-question"></i>
+                </span>
+                <span>Help</span>
+              </a>
+              {% include 'dataexplorer/help/tooltip.html' with side="left" position="top" image='dataexplorer/buttons.gif' markdown='dataexplorer/help/buttons.md' %}
+            </div>
+            <button class="button is-medium is-warning is-light is-outlined" type="submit"
+              formaction="{% url 'patients:list' %}" data-tooltip="Display selected subset in list">
+              <span>Patients in selection: <span class="stats" data-statfield="total">{{ stats.total }}</span></span>
+            </button>
+
+            <button class="button is-medium is-warning has-tooltip-multiline" type="submit" id="compute" disabled
+              data-tooltip="Display statistic of selected subset. Change selection to activate button">
+              <span class="icon">
+                <i class="fas fa-cogs"></i>
+              </span>
+              <span><strong>Compute</strong></span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

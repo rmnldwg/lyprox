@@ -67,7 +67,7 @@ def test_restricted_views(
     "url_name, required_kwargs",
     [("index", None),
      ("patients:list", None),
-     ("dashboard:dashboard", None),
+     ("dataexplorer:dashboard", None),
      ("accounts:login", None),
      ("accounts:signup_request", None),
      ("patients:detail", ["pk"])]

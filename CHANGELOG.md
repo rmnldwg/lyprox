@@ -1,7 +1,3 @@
-<a name="unreleased"></a>
-## [Unreleased]
-
-
 <a name="0.3.4"></a>
 ## [0.3.4] - 2023-03-23
 

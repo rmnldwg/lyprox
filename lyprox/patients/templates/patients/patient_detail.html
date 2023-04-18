@@ -1,0 +1,227 @@
+{% extends "base.html" %}
+{% load static %}
+{% load customtags %}
+
+
+{% block head %}
+{% include 'head.html' with title="LyProX · Patient detail" %}
+{% endblock head %}
+
+
+{% block content %}
+
+<link rel="stylesheet" type="text/css" href="{% static 'patients/detail.css' %}">
+
+<section class="section">
+  <div class="container">
+    <div class="level">
+      <div class="level-left">
+        <div class="level-item">
+          <div>
+            <p class="title">Patient {{ patient.pk }}</p>
+          </div>
+        </div>
+      </div>
+      <div class="level-right">
+        <div class="level-item">
+          <div class="buttons">
+            <a href="{% url 'patients:update' patient.pk %}" class="button is-info">
+              <span class="icon">
+                <i class="fas fa-pen"></i>
+              </span>
+              <span>Edit</span>
+            </a>
+            <a href="{% url 'patients:delete' patient.pk %}" class="button is-danger">
+              <span>Delete</span>
+              <span class="icon">
+                <i class="fas fa-trash"></i>
+              </span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="block">
+      <div class="field is-grouped is-grouped-multiline">
+        <div class="control">
+          <span class="tag is-info is-medium">
+            <span class="icon" data-tooltip="{{ patient.dataset.institution.name }}">
+              {% if patient.dataset.institution.logo %}
+              <img src="{{ patient.dataset.institution.logo.url }}" alt="{{ patient.dataset.institution.shortname }}">
+              {% else %}
+              <i class="fas fa-university"></i>
+              {% endif %}
+            </span>
+          </span>
+        </div>
+        <div class="control">
+          <div class="tags has-addons are-medium">
+            <span class="tag is-info">histological diagnosis</span>
+            <span class="tag is-primary">{{ patient.diagnose_date }}</span>
+          </div>
+        </div>
+        <div class="control">
+          <div class="tags has-addons are-medium">
+            <span class="tag is-info">age</span>
+            <span class="tag is-primary">{{ patient.age }}</span>
+          </div>
+        </div>
+        <div class="control">
+          <div class="tags has-addons are-medium">
+            <span class="tag is-info">sex</span>
+            <span class="tag is-primary">{{ patient.sex }}</span>
+          </div>
+        </div>
+        <div class="control">
+          <div class="tags has-addons are-medium tooltip"
+            data-tooltip="According to {{ patient.tnm_edition }}th TNM edition">
+            <span class="tag is-info">stage</span>
+            <span class="tag is-primary">{{ patient.get_stage_prefix_display }} {{ patient.get_t_stage_display }} {{ patient.get_n_stage_display }} {{ patient.get_m_stage_display }}</span>
+            <span class="tag is-primary is-light tnm">{{ patient.tnm_edition }}th</span>
+          </div>
+        </div>
+      </div>
+      <div class="field is-grouped is-grouped-multiline">
+        <div class="control">
+          <div class="tags has-addons are-medium">
+            <span class="tag is-info">alcohol abuse</span>
+            <span class="tag is-primary">{{ patient.alcohol_abuse }}</span>
+          </div>
+        </div>
+        <div class="control">
+          <div class="tags has-addons are-medium">
+            <span class="tag is-info">nicotine abuse</span>
+            <span class="tag is-primary">{{ patient.nicotine_abuse }}</span>
+          </div>
+        </div>
+        <div class="control">
+          <div class="tags has-addons are-medium">
+            <span class="tag is-info">HPV status</span>
+            <span class="tag is-primary">{{ patient.hpv_status }}</span>
+          </div>
+        </div>
+        <div class="control">
+          <div class="tags has-addons are-medium">
+            <span class="tag is-info">Neck dissection</span>
+            <span class="tag is-primary">{{ patient.neck_dissection }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <section class="columns is-multiline">
+      {% for tumor in patient.get_tumors %}
+      {% include 'patients/tumor_detail.html' %}
+      {% endfor %}
+
+      {% if action == "create_tumor" or action == "update_tumor" %}
+      {% include 'patients/tumor_form.html' %}
+      {% elif action == "delete_tumor" %}
+      {% include 'patients/tumor_delete.html' %}
+      {% else %}
+
+      <div class="column is-4">
+        <div class="box is-flex is-flex-direction-row is-justify-content-center is-align-content-center">
+          <div class="field is-grouped is-grouped-centered is-align-self-center">
+            <div class="control">
+              <a class="button is-info" href="{% url 'patients:tumor_create' pk=patient.pk %}">
+                <span class="icon">
+                  <i class="fa fa-plus"></i>
+                </span>
+                <span>Add tumor</span>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+      {% endif %}
+
+    </section>
+
+    <section class="section">
+      <table class="table is-fullwidth is-hoverable">
+        <caption class="title is-4">lymph node level involvement</caption>
+
+        <col style="width: 12%;">
+        <col style="width: 12%;">
+        <col style="width: 5%;">
+        <col style="width: 12%;">
+        <col style="width: 12%;">
+        <col style="width: 5%;">
+        <col style="width: 5%;">
+        <col style="width: 12%;">
+        <col style="width: 5%;">
+        <col style="width: 20%;">
+
+        <thead>
+          <tr>
+            <th>diagnose date</th>
+            <th>modality</th>
+            <th>side</th>
+            <th class="tooltip has-tooltip-multiline"
+              data-tooltip="The color of the outline refers to the overall involvement of the level. E.g., some diagnoses might not have reported the sublevel (a or b), so those are indicated by None and only the outline tells the state of this LNL.">
+              <span class="icon-text">
+                <span>I (a / b)</span>
+                <span class="icon">
+                  <i class="fas fa-question"></i>
+                </span>
+              </span>
+            </th>
+            <th class="tooltip has-tooltip-multiline"
+              data-tooltip="The color of the outline refers to the overall involvement of the level. E.g., some diagnoses might not have reported the sublevel (a or b), so those are indicated by None and only the outline tells the state of this LNL.">
+              <span class="icon-text">
+                <span>II (a / b)</span>
+                <span class="icon">
+                  <i class="fas fa-question"></i>
+                </span>
+              </span>
+            </th>
+            <th>III</th>
+            <th>IV</th>
+            <th class="tooltip has-tooltip-multiline"
+              data-tooltip="The color of the outline refers to the overall involvement of the level. E.g., some diagnoses might not have reported the sublevel (a or b), so those are indicated by None and only the outline tells the state of this LNL.">
+              <span class="icon-text">
+                <span>V (a / b)</span>
+                <span class="icon">
+                  <i class="fas fa-question"></i>
+                </span>
+              </span>
+            </th>
+            <th>VII</th>
+            <th></th>
+          </tr>
+        </thead>
+
+        <tbody>
+          {% for diagnose in patient.get_diagnoses %}
+          {% include 'patients/diagnose_detail.html' %}
+          {% endfor %}
+
+          {% if action == "create_diagnose" or action == "update_diagnose" %}
+          {% include 'patients/diagnose_form.html' %}
+          {% elif action == "delete_diagnose" %}
+          {% include 'patients/diagnose_delete.html' %}
+          {% endif %}
+
+          <tr>
+            <td colspan="12">
+              <div class="field is-grouped is-grouped-centered">
+                <div class="control">
+                  <a class="button is-info" href="{% url 'patients:diagnose_create' patient.pk %}">
+                    <span class="icon">
+                      <i class="fa fa-plus"></i>
+                    </span>
+                    <span>Add diagnose</span>
+                  </a>
+                </div>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+  </div>
+</section>
+
+{% endblock content %}

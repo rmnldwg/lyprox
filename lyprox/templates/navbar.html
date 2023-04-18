@@ -1,0 +1,107 @@
+{% load static %}
+
+<nav class="navbar is-fixed-top is-primary" role="navigation">
+  <div class="container">
+    <div class="navbar-brand">
+      <a class="navbar-item" href="{% url 'index' %}" title="home">
+        <img src="{% static 'logo-white.svg' %}" alt="LyProX Logo">
+      </a>
+      <a role="button" class="navbar-burger" data-target="navMenu" aria-label="menu" aria-expanded="false">
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+      </a>
+    </div>
+    <div class="navbar-menu" id="navMenu">
+      <div class="navbar-start">
+        <!--
+          Iterate through all `navbar_apps` in the context and get their respective
+          `navbar.html` template. This allows for easy customization of the navbar.
+        -->
+        {% for app in navbar_apps %}
+        {% with template_name=app|add:'/navbar.html' %}
+        {% include template_name %}
+        {% endwith %}
+        {% endfor %}
+      </div>
+
+      <div class="navbar-end">
+        <div class="navbar-item">
+          <div class="field is-grouped">
+            <div class="control">
+              {% if user.is_authenticated %}
+              <div class="buttons has-addons">
+                <div class="button is-primary is-inverted">
+                  <span class="icon-text">
+                    <span class="icon mr-2">
+                      <img src="{{ user.institution.logo.url }}" alt="{{ user.institution.shortname }} logo">
+                    </span>
+                    <span>{{ user }}</span>
+                  </span>
+                </div>
+                <a href="{% url 'accounts:logout' %}" class="button is-primary is-inverted is-outlined" title="logout">
+                  <span>Log out</span>
+                  <span class="icon">
+                    <i class="fas fa-sign-out-alt"></i>
+                  </span>
+                </a>
+              </div>
+              {% else %}
+              <a href="{% url 'accounts:login' %}" class="button is-primary is-inverted is-outlined" title="login">
+                <span class="icon">
+                  <i class="fas fa-sign-in-alt"></i>
+                </span>
+                <span>Log in</span>
+              </a>
+              {% endif %}
+            </div>
+            <div class="control">
+              <div class="dropdown is-hoverable is-right">
+                <div class="dropdown-trigger">
+                  <div class="buttons has-addons">
+                    <a href="https://github.com/rmnldwg/lymph-interface" target="_blank" title="Source code on GitHub"
+                      class="button is-primary is-inverted has-tooltip-bottom">
+                      <span class="icon">
+                        <i class="fab fa-lg fa-github"></i>
+                      </span>
+                    </a>
+                    <button class="button is-primary is-inverted is-outlined" title="View other/older versions">
+                      <span>v{{ VERSION }}</span>
+                      {% if IS_FROZEN %}
+                      <span class="icon" title="frozen version">
+                        <i class="far fa-snowflake"></i>
+                      </span>
+                      {% endif %}
+                    </button>
+                  </div>
+                </div>
+                <div class="dropdown-menu">
+                  <div class="dropdown-content">
+                    <a href="https://lyprox.org" class="dropdown-item icon-text">
+                      <span class="icon">
+                        <i class="fas fa-arrow-alt-circle-up"></i>
+                      </span>
+                      <span>Latest version</span>
+                    </a>
+                    {% if not IS_FROZEN %}
+                    {% for version in FROZEN_VERSIONS %}
+                    <a href="{{ version.url }}" class="dropdown-item icon-text" title="frozen version">
+                      <span class="icon">
+                        <i class="far fa-snowflake"></i>
+                      </span>
+                      <span>{{ version.name }}</span>
+                    </a>
+                    {% endfor %}
+                    {% endif %}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<script src="{% static 'navbar.js' %}"></script>

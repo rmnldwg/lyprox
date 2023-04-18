@@ -51,10 +51,23 @@ If everything went according to plan, your terminal should now prefix everything
 In order to start the interface's server, you need to have [django](https://www.djangoproject.com/) along with several other prerequisites installed. The repository is configured such that pip can install all necessary dependencies as if LyProX were a python package:
 
 ```
-pip install -U pip setuptools setuptools_scm
+pip install --upgrade pip setuptools setuptools_scm
 pip install .
 ```
 
+If you want to work on the web app, then you should install it with the `--editable` flag:
+
+```
+pip install --editable .
+```
+
+And if you want to run tests, or compile the docs, there are three optional dependencies `dev`, `docs`, and `test` that can be installed by listing them in square brackets behind the dot:
+
+```
+pip install .[dev,docs,test]
+```
+
+This can be combined with the `--editable` install.
 
 ## Configuring environment variables
 
@@ -71,9 +84,9 @@ The four variables that need to be set are:
 
     ```python
     >>> from django.core.management.utils import get_random_secret_key
-    >>> print(get_random_secret_key()) 
+    >>> print(get_random_secret_key())
     ```
-    
+
     This will output something like `6-y$g=ek4x!f3kq+=c+f%5@(f1efpdl!(sp&so(bgdli_&_8+n`. Leave the REPL again with `CTRL` + `D`
 
 - `DJANGO_ALLOWED_HOSTS`: space-separated list of hostnames. Set to `"localhost 127.0.0.1"` for local use

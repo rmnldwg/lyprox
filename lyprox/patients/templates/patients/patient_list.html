@@ -1,0 +1,239 @@
+{% extends "base.html" %}
+{% load static %}
+{% load customtags %}
+
+{% block head %}
+{% include 'head.html' with title="LyProX · Patient list" %}
+{% endblock head %}
+
+
+{% block content %}
+
+<link rel="stylesheet" href="{% static 'patients/list.css' %}">
+
+<section class="section">
+    <div class="container">
+        <div class="block">
+            {% if not is_filterable %}
+            <p class="title">Subset <span class="has-text-info">(not filterable)</span></p>
+            <p class="subtitle">{{ stats.total }} patients selected via the dataexplorer</p>
+            {% else %}
+            <p class="title">List <span class="has-text-info">(filterable)</span></p>
+            <p class="subtitle">All patients currently in the database</p>
+            {% endif %}
+        </div>
+
+        {% if is_filterable %}
+        <input type="checkbox" name="expand-select" id="filter-container">
+        <div class="filter-container notification is-primary is-light">
+            <label class="filter-label icon-text" for="filter-container">
+                <span class="icon">
+                    <i class="fas fa-chevron-down"></i>
+                </span>
+                <span class="title is-4">Filter patients</span>
+            </label>
+
+            <div class="filter-body block">
+                <form method="get">
+                    <div class="columns">
+                        <div class="column">
+                            <div class="field">
+                                <div class="control">
+                                    <label for="{{ filterset.form.diagnose_date.id_for_label }}" class="label has-text-primary">
+                                        {{ filterset.form.diagnose_date.label }}, From - To
+                                    </label>
+                                    <div class="is-flex is-justify-content-flex-row">
+                                        {{ filterset.form.diagnose_date }}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="field is-grouped">
+                                <div class="control is-expanded">
+                                    <label for="{{ filterset.form.age.id_for_label }}" class="label has-text-primary">
+                                        {{ filterset.form.age.label }}, From - To
+                                    </label>
+                                    <div class="is-flex is-justify-content-flex-row">
+                                        {{ filterset.form.age }}
+                                    </div>
+                                </div>
+                                <div class="control">
+                                    <label for="{{ filterset.form.sex.id_for_label }}" class="label has-text-primary">
+                                        {{ filterset.form.sex.label }}
+                                    </label>
+                                    <div class="select">
+                                        {{ filterset.form.sex }}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="field">
+                                <div class="control">
+                                    <label for="{{ filterset.form.ordering.id_for_label }}" class="label has-text-primary">
+                                        {{ filterset.form.ordering.label }}
+                                    </label>
+                                    <div class="select">
+                                        {{ filterset.form.ordering }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="column">
+                            <div class="field is-grouped">
+                                <div class="control">
+                                    <label for="{{ filterset.form.tumor__t_stage.id_for_label }}" class="label has-text-primary">
+                                        T-category
+                                    </label>
+                                    <div class="select is-multiple">
+                                        {{ filterset.form.tumor__t_stage }}
+                                    </div>
+                                </div>
+                                <div class="control">
+                                    <label for="{{ filterset.form.n_stage.id_for_label }}" class="label has-text-primary">
+                                        N-category
+                                    </label>
+                                    <div class="select is-multiple">
+                                        {{ filterset.form.n_stage }}
+                                    </div>
+                                </div>
+                                <div class="control">
+                                    <label for="{{ filterset.form.m_stage.id_for_label }}" class="label has-text-primary">
+                                        M-category
+                                    </label>
+                                    <div class="select is-multiple">
+                                        {{ filterset.form.m_stage }}
+                                    </div>
+                                </div>
+                                <div class="control">
+                                    <label for="{{ filterset.form.dataset.id_for_label }}" class="label has-text-primary">
+                                        {{ filterset.form.dataset.label }}
+                                    </label>
+                                    <div class="select is-multiple">
+                                        {{ filterset.form.dataset }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="buttons is-grouped is-right">
+                        <button class="button is-warning" type="submit">
+                            <span class="icon">
+                                <i class="fas fa-filter"></i>
+                            </span>
+                            <span>Filter</span>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        {% endif %}
+
+        <table class="block table is-fullwidth is-hoverable">
+            <thead>
+                <tr class="is-size-6">
+                    <th>
+                        <span class="icon-text">
+                            <span class="icon">
+                                <i class="fas fa-user"></i>
+                            </span>
+                        </span>
+                        <span>Patient</span>
+                    </th>
+                    <th>
+                        <span class="icon-text">
+                            <span class="icon">
+                                <i class="far fa-calendar-alt"></i>
+                            </span>
+                        </span>
+                        <span>Histological diagnose</span>
+                    </th>
+                    <th>
+                        <span class="icon-text">
+                            <span class="icon">
+                                <i class="fas fa-venus-mars"></i>
+                            </span>
+                        </span>
+                        <span>sex</span>
+                    </th>
+                    <th>Age</th>
+                    <th>TNM stage</th>
+                    <th>
+                        <span class="icon-text">
+                            <span class="icon">
+                                <i class="fas fa-university"></i>
+                            </span>
+                        </span>
+                        <span>Institution</span>
+                    </th>
+                    <th></th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for patient in patient_list %}
+                <tr>
+                    <td>
+                        <span>{{ patient.pk }}</span>
+                    </td>
+                    <td>{{ patient.diagnose_date | date:"Y-m-d" }} </td>
+                    <td>
+                        <span class="icon-text">
+                            <span class="icon">
+                                {% if patient.sex == "male" %}
+                                <i class="fas fa-mars"></i>
+                                {% else %}
+                                <i class="fas fa-venus"></i>
+                                {% endif %}
+                            </span>
+                            <span>{{ patient.sex }}</span>
+                        </span>
+                    </td>
+                    <td>{{ patient.age }} </td>
+                    <td>{{ patient.get_stage_prefix_display }} {{ patient.get_t_stage_display }} {{ patient.get_n_stage_display }} {{ patient.get_m_stage_display }} </td>
+                    <td>
+                        <span class="icon-text">
+                            <span class="icon mr-2">
+                                <img src="{{ patient.dataset.institution.logo.url }}" alt="{{ patient.dataset.institution.shortname }} logo" title="{{ patient.dataset.institution.shortname }}">
+                            </span>
+                            <span class="is-hidden-touch is-hidden-desktop-only">
+                                {{ patient.dataset.institution.name }}
+                            </span>
+                        </span>
+                    </td>
+                    <td>
+                        <div class="buttons is-grouped is-right">
+                            <a href="{% url 'patients:detail' patient.pk %}" class="tag button is-info is-small" >
+                                <span class="icon">
+                                    <i class="fas fa-address-card"></i>
+                                </span>
+                                <span>details</span>
+                            </a>
+                            <a href="{% url 'patients:delete' patient.pk %}" class="tag button is-danger is-small">
+                                <span>delete</span>
+                                <span class="icon">
+                                    <i class="fas fa-trash"></i>
+                                </span>
+                            </a>
+                        </div>
+                    </td>
+                </tr>
+                {% endfor %}
+
+                <tr>
+                    <td colspan="7">
+                        <div class="field is-grouped is-grouped-centered">
+                            <div class="control">
+                                <a class="button is-info" href="{% url 'patients:create' %}">
+                                    <span class="icon">
+                                        <i class="fas fa-plus"></i>
+                                    </span>
+                                    <span>Add patient</span>
+                                </a>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</section>
+
+{% endblock content %}

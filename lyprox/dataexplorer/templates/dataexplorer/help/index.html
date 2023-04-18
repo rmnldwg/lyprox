@@ -1,0 +1,193 @@
+{% extends 'base.html' %}
+
+{% load customtags %}
+{% load static %}
+
+
+{% block head %}
+{% include 'head.html' with title="LyProX · Data Explorer Help" %}
+{% endblock head %}
+
+
+{% block content %}
+<link rel="stylesheet" href="{% static 'dataexplorer/help.css' %}">
+
+<section class="section">
+  <div class="container">
+    <div class="columns">
+      <div class="column is-3 is-hidden-touch">
+        <aside class="menu is-fixed">
+          <p class="menu-label">General</p>
+          <ul class="menu-list">
+            <li><a href="">The Data Explorer</a></li>
+          </ul>
+
+          <p class="menu-label">Videos</p>
+          <ul class="menu-list">
+            <li><a href="#Get started">Get started</a></li>
+            <li><a href="#Exploring hypotheses">Exploring hypotheses</a></li>
+          </ul>
+
+          <p class="menu-label">Components</p>
+          <ul class="menu-list">
+            <li><a href="#Components">Patient details</a></li>
+            <li><a href="#Primary tumor">Primary tumor</a></li>
+            <li><a href="#Institutions">Institutions</a></li>
+            <li><a href="#Modalities">Modalities</a></li>
+            <li><a href="#Involvement">Involvement</a></li>
+            <li><a href="#Buttons">Buttons</a></li>
+          </ul>
+
+          <p class="menu-label">Examples</p>
+          <ul class="menu-list">
+            <li><a href="#Full example">Full example</a></li>
+            <li><a href="#The bar plots">The bar plots</a></li>
+          </ul>
+
+          <p class="menu-label">Contribute</p>
+          <ul class="menu-list">
+            <li><a href="#data">Data</a></li>
+            <li><a href="#features">Features</a></li>
+          </ul>
+        </aside>
+      </div>
+      <div class="column">
+        <div class="content">
+          <h1 id="The Data Explorer">The Data Explorer</h1>
+          <p>
+            Here, one can visualize patterns of lymph node involvement
+            for the patients in the database. The aim is to make it
+            easy to explore the complex dataset and understand correlations
+            between lymph node involvement in different levels and primary
+            tumor characteristics. The basic concept is that buttons
+            on the dashboard act as filters. They allow the user to
+            select subsets of patients from the database. The GUI will
+            then show the number (or percentage) of patients that show
+            involvement in each lymph node level. As such, the dashboard
+            may be used for generating hypotheses, meaning that you,
+            the user, becomes curious and asks questions about correlations
+            or whether lymph node involvement differs between certain
+            patient groups. Most patient characteristics will be explorable
+            using this interface, while others maybe not. In the latter
+            case we encourage you to <a href="{% url 'patients:dataset_list' %}">download</a>
+            the database and test your ideas and hypotheses with your
+            own tools.
+          </p>
+          <p class="notification is-warning is-light">
+            <strong>Warning:</strong> dashboard is NOT for predicting the risk of occult
+            metastases in individual patients. All we do here is visualize
+            data of previously seen patients. For actual risk predictions
+            for individual and newly diagnosed patients, check out our
+            <a href="https://www.nature.com/articles/s41598-021-91544-1">
+              paper on modelling tumor progression
+            </a> or wait a bit, since
+            we are thinking about implementing it also here.
+          </p>
+
+          <h2 class="pt-6" id="Videos">Videos</h2>
+
+          <h3 id="Get started">Get started</h3>
+          <figure class="image is-16by9">
+            <iframe class="has-ratio" width="640" height="360" src="https://tube.switch.ch/embed/7YQe6f6FMr"
+              frameborder="0" allow="fullscreen" allowfullscreen></iframe>
+          </figure>
+
+          <h3 id="Exploring hypotheses">Exploring hypotheses</h3>
+          <figure class="image is-16by9">
+            <iframe class="has-ratio" width="640" height="360" src="https://tube.switch.ch/embed/W3vBTy8XU2"
+              frameborder="0" allow="fullscreen" allowfullscreen></iframe>
+          </figure>
+
+          <h2 id="Components" class="pt-6">Components</h2>
+
+          <h3 id="Patient details" class="pb-4">Patient details (top left)</h3>
+          {% include 'dataexplorer/help/media.html' with image='dataexplorer/toggle.gif' size='large' html='dataexplorer/help/patient.html' %}
+
+          <h3 id="Primary tumor" class="pt-6 pb-4">Primary tumor (bottom left)</h3>
+          {% include 'dataexplorer/help/media.html' with image='dataexplorer/subsite_t-stage.gif' size='large' markdown='dataexplorer/help/tumor.md' %}
+
+          <h3 id="Institutions" class="pt-6 pb-4">Institutions (center top)</h3>
+          {% include 'dataexplorer/help/media.html' with image='dataexplorer/institutions.gif' size='large' markdown='dataexplorer/help/institutions.md' %}
+
+          <h3 id="Modalities" class="pt-6 pb-4">Modalities (center, below Institutions)</h3>
+          {% include 'dataexplorer/help/media.html' with image='dataexplorer/modalities.gif' size='large' markdown='dataexplorer/help/modalities.md' %}
+
+          <h3 id="Involvement" class="pt-6 pb-4">contra- (center left) & ipsilateral (center right)</h3>
+          {% include 'dataexplorer/help/media.html' with image='dataexplorer/involvement.gif' size='large' markdown='dataexplorer/help/involvement.md' %}
+
+          <h3 id="Buttons" class="pt-6 pb-4">Buttons (bottom right)</h3>
+          {% include 'dataexplorer/help/media.html' with image='dataexplorer/buttons.gif' size='large' markdown='dataexplorer/help/buttons.md' %}
+
+          <h2 id="Examples" class="pt-6">Examples</h2>
+
+          <h3 id="Full example">Full example</h3>
+          <p>
+            Below is an annotated screenshot of a concrete example
+            for how to use the dasboard.
+          </p>
+          <figure class="image">
+            <img src="{% static 'dataexplorer/example_usage.png' %}" alt="annotated screenshot">
+          </figure>
+
+          <h3 id="The bar plots">The bar plots</h3>
+          <p>
+            Here we have annotated the bar plots showing the actual
+            involvement numbers and statistics. In this case we're
+            looking at a concrete example for the ipsilateral levels
+            III and IV. Note that the absolute numbers are displayed.
+            If one switches views, all the number here become
+            percentages.
+          </p>
+          <figure class="image">
+            <img src="{% static 'dataexplorer/annotated_bar.png' %}" alt="annotated bar plot">
+          </figure>
+
+          <h2 class="pt-6" id="Contribute">Contribute</h2>
+          <h3 id="data">Data</h3>
+          <p>
+            The most straightforward way to support our goal of improving
+            CTV-N definition by better quantifying the patterns of lymphatic
+            progression is to share data from your institution. We would
+            recommend that - if you have data with a sufficient amount
+            of detail - you submit that dataset e.g. to a journal like
+            <a href="https://www.sciencedirect.com/journal/data-in-brief">Data in Brief</a>.
+          </p>
+          <p>
+            Doing so has a number of benefits:
+          </p>
+          <ul>
+            <li>You'll get citations for your work</li>
+            <li>We can use your data and attribute you properly</li>
+            <li>It's actually pretty simple and quick to prepare the <em>Data in Brief</em> submission</li>
+          </ul>
+          <p>
+            In case you are unsure in which format to publish the data
+            or in which repository to store it, feel free to <a href="mailto:roman.ludwig@usz.ch">contact</a>
+            us and we willl gladly help you with it!
+          </p>
+
+          <h3 id="features">Features</h3>
+          <p>
+            If you think our dashboard (or other parts of the interface)
+            are missing some critical features, we would love to learn
+            about it, so that we can expand and adapt the functionalities
+            according to what you need.
+          </p>
+          <p>
+            The best way for us to tell us what features and functionalities
+            you'd like to see is if you could <a href="https://github.com/rmnldwg/lyprox/issues" target="_blank">open an
+              issue</a>
+            on the GitHub page of the project by simply clicking on the
+            <em>New Issue</em> button and then describing what you have
+            in mind.
+          </p>
+          <p>
+            Otherwise just email us at <a href="mailto:roman.ludwig@usz.ch">roman.ludwig@usz.ch</a>
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% endblock content %}

@@ -1,0 +1,165 @@
+{% extends "base.html" %}
+{% load static %}
+{% load customtags %}
+
+{% block head %}
+{% include 'head.html' with title="LyProX · Download CSV" %}
+{% endblock head %}
+
+{% block content %}
+
+<section class="section">
+    <div class="container">
+        <div class="columns is-centered">
+            <div class="column is-6">
+                <div class="box">
+                    <div class="block content">
+                        <h1 class="title">Datasets</h1>
+                        <ul>
+                            <li>
+                                Download CSV tables of the cohorts that have been added to
+                                the database of LyProX with their associated info.
+                            </li>
+                            <li>
+                                For each cohort you can download the
+                                <span class="tag is-success p-1">exported CSV</span>, which was
+                                created by exporting the database entries to a CSV file
+                                (hover to see MD5 hash of file).
+                            </li>
+                            <li>
+                                If the dataset was created via an upload, this
+                                <span class="tag is-primary p-1">uploaded CSV</span>
+                                can be downloaded as well (hover to see MD5 hash of
+                                file).
+                            </li>
+                            <li>
+                                Lastly, if there exists an online repository that hosted
+                                the originally uploaded file, that is linked as well
+                                (<span class="tag is-black p-1">black button</span>).
+                                Note that it is not automatically checked whether the
+                                uploaded file matches the one in the repository. Use the
+                                MD5 hash to check for yourself.
+                            </li>
+                        </ul>
+                    </div>
+
+                    {% for dataset in dataset_list %}
+                    <div class="notification">
+                        <div class="media">
+                            <div class="media-left">
+                                <figure class="block image is-48x48 is-flex is-align-items-center">
+                                    <img src="{{ dataset.institution.logo.url }}" alt="institution logo">
+                                </figure>
+                            </div>
+                            <div class="media-content">
+                                <div class="content">
+                                    <p>
+                                        <small>
+                                            <strong>{{ dataset.name | upper }}</strong>
+                                            <span class="icon-text">
+                                                <span class="icon mr-0">
+                                                    <i class="fas fa-map-marker-alt"></i>
+                                                </span>
+                                                <span>{{ dataset.institution.shortname }}, {{ dataset.institution.city }}, {{ dataset.institution.country }}</span>
+                                            </span>
+                                            <span class="icon-text">
+                                                <span class="icon mr-0">
+                                                    <i class="fas fa-calendar-alt"></i>
+                                                </span>
+                                                <span>{{ dataset.create_date }}</span>
+                                            </span>
+                                        </small>
+                                        <br>
+                                        {{ dataset.description }}
+                                        <br>
+                                    </p>
+                                </div>
+                                <div class="level">
+                                    <div class="level-left">
+                                        <div class="level-item">
+                                            <div class="tags">
+                                                {% if dataset.source_csv %}
+                                                <a href="{% url 'patients:dataset_download' pk=dataset.pk which='source' %}" class="button tag is-primary has-addons tooltip" data-tooltip="The originally uploaded CSV file">
+                                                    <span class="icon is-small"><i class="fas fa-download"></i></span>
+                                                    <span>Source</span>
+                                                </a>
+                                                {% endif %}
+                                                <a href="{% url 'patients:dataset_download' pk=dataset.pk which='export' %}" class="button tag is-success has-addons tooltip" id="export" data-tooltip="Export dataset from database to CSV">
+                                                    <span class="icon is-small"><i class="fas fa-file-export"></i></span>
+                                                    <span>Export</span>
+                                                </a>
+                                                {% if dataset.repo_data_url %}
+                                                <a href="{{ dataset.repo_data_url }}" class="button tag is-black has-addons tooltip" data-tooltip="Link to online repository">
+                                                    {{ dataset.repo_provider }}
+                                                </a>
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="level-right">
+                                        <div class="level-item">
+                                            <div class="tags">
+                                                {% if dataset.is_locked %}
+                                                <span class="button tag is-light icon tooltip mr-0" data-tooltip="Dataset is locked">
+                                                    <i class="fas fa-lg fa-lock"></i>
+                                                </span>
+                                                {% else %}
+                                                <span class="button tag is-light icon tooltip mr-0" data-tooltip="Dataset is not locked (editable)">
+                                                    <i class="fas fa-lg fa-lock-open"></i>
+                                                </span>
+                                                {% endif %}
+                                                {% if dataset.is_public %}
+                                                <span class="button tag is-light icon tooltip mr-0" data-tooltip="Dataset is publicly available">
+                                                    <i class="fas fa-lg fa-eye"></i>
+                                                </span>
+                                                {% else %}
+                                                <span class="button tag is-light icon tooltip mr-0" data-tooltip="Dataset is only visible to authenticated users">
+                                                    <i class="fas fa-lg fa-eye-slash"></i>
+                                                </span>
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+
+                    <div class="block">
+                        <p class="title is-5 mb-2">Upload new dataset</p>
+                        <p>
+                            Create a new dataset by uploading a cohort of patients as a
+                            CSV file. You can download one of the existing datasets'
+                            CSV files as a template or read the data description below
+                            to understand the required format.
+                        </p>
+                        <div class="level mt-3">
+                            <div class="level-left"></div>
+                            <div class="level-right">
+                                <div class="level-item">
+                                    <a href="{% url 'patients:dataset_upload' %}" class="button is-warning">
+                                        <span class="icon-text">
+                                            <span class="icon">
+                                                <i class="fas fa-plus"></i>
+                                            </span>
+                                            <span>Upload new</span>
+                                        </span>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="content">
+            {% include_md 'patients/data_description.md' %}
+        </div>
+    </div>
+</section>
+
+<script src="{% static 'patients/dataset_list.js' %}"></script>
+
+{% endblock content %}

@@ -1,0 +1,21 @@
+{% load static %}
+{% load customtags %}
+
+<div class="media">
+    {% if image %}
+    <div class="media-left">
+        <figure class="image is-128x128">
+            <img src="{% static image %}" alt="help image">
+        </figure>
+    </div>
+    {% endif %}
+    <div class="media-content">
+        {% if markdown %}
+        <div class="content">
+            {% include_md markdown %}
+        </div>
+        {% elif html %}
+            {% include html %}
+        {% endif %}
+    </div>
+</div>

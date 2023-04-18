@@ -1,0 +1,121 @@
+{% load customtags %}
+{% load static %}
+
+<div class="tile is-parent">
+  <div class="tile is-child box">
+    <div class="level">
+      <div class="level-item">
+        <p class="title is-4 has-text-centered">{{ side }}lateral</p>
+      </div>
+      <div class="level-right">
+        <div class="level-item">
+          <div class="tooltip">
+            <span class="icon">
+              <i class="fas fa-question"></i>
+            </span>
+            {% include 'dataexplorer/help/tooltip.html' with side="left" position="bottom" image='dataexplorer/involvement.gif' markdown='dataexplorer/help/involvement.md' %}
+          </div>
+        </div>
+      </div>
+    </div>
+    <table class="table is-fullwidth">
+      <thead>
+        <tr>
+          <td colspan="2">LNL</td>
+          <td class="has-text-centered">select</td>
+          <td class="has-text-centered">involvement (<span class="has-text-danger">metastatic</span>,
+            <span class="has-text-info">unknown</span>, <span class="has-text-success">healthy</span>)</td>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td rowspan="3">I</td>
+          <td>both</td>
+          {% with side|addstr:'_I' as lnl_key %}
+          <td>{{ form|get:lnl_key }}</td>
+          {% include 'dataexplorer/barplot.html' with lnl="I "|addstr:side|addstr:"lateral" stats=stats lnl_key=lnl_key show_percent=show_percent %}
+          {% endwith %}
+        </tr>
+        <tr>
+          <td>a</td>
+          {% with side|addstr:'_Ia' as lnl_key %}
+          <td>{{ form|get:lnl_key }}</td>
+          {% include 'dataexplorer/barplot.html' with lnl="Ia "|addstr:side|addstr:"lateral" stats=stats lnl_key=lnl_key show_percent=show_percent %}
+          {% endwith %}
+        </tr>
+        <tr>
+          <td>b</td>
+          {% with side|addstr:'_Ib' as lnl_key %}
+          <td>{{ form|get:lnl_key }}</td>
+          {% include 'dataexplorer/barplot.html' with lnl="Ib "|addstr:side|addstr:"lateral" stats=stats lnl_key=lnl_key show_percent=show_percent %}
+          {% endwith %}
+        </tr>
+        <tr>
+          <td rowspan="3">II</td>
+          <td>both</td>
+          {% with side|addstr:'_II' as lnl_key %}
+          <td>{{ form|get:lnl_key }}</td>
+          {% include 'dataexplorer/barplot.html' with lnl="II "|addstr:side|addstr:"lateral" stats=stats lnl_key=lnl_key show_percent=show_percent %}
+          {% endwith %}
+        </tr>
+        <tr>
+          <td>a</td>
+          {% with side|addstr:'_IIa' as lnl_key %}
+          <td>{{ form|get:lnl_key }}</td>
+          {% include 'dataexplorer/barplot.html' with lnl="IIa "|addstr:side|addstr:"lateral" stats=stats lnl_key=lnl_key show_percent=show_percent %}
+          {% endwith %}
+        </tr>
+        <tr>
+          <td>b</td>
+          {% with side|addstr:'_IIb' as lnl_key %}
+          <td>{{ form|get:lnl_key }}</td>
+          {% include 'dataexplorer/barplot.html' with lnl="IIb "|addstr:side|addstr:"lateral" stats=stats lnl_key=lnl_key show_percent=show_percent %}
+          {% endwith %}
+        </tr>
+        <tr>
+          <td colspan="2">III</td>
+          {% with side|addstr:'_III' as lnl_key %}
+          <td>{{ form|get:lnl_key }}</td>
+          {% include 'dataexplorer/barplot.html' with lnl="III "|addstr:side|addstr:"lateral" stats=stats lnl_key=lnl_key show_percent=show_percent %}
+          {% endwith %}
+        </tr>
+        <tr>
+          <td colspan="2">IV</td>
+          {% with side|addstr:'_IV' as lnl_key %}
+          <td>{{ form|get:lnl_key }}</td>
+          {% include 'dataexplorer/barplot.html' with lnl="IV "|addstr:side|addstr:"lateral" stats=stats lnl_key=lnl_key show_percent=show_percent %}
+          {% endwith %}
+        </tr>
+        <tr>
+          <td rowspan="3">V</td>
+          <td>both</td>
+          {% with side|addstr:'_V' as lnl_key %}
+          <td>{{ form|get:lnl_key }}</td>
+          {% include 'dataexplorer/barplot.html' with lnl="V "|addstr:side|addstr:"lateral" stats=stats lnl_key=lnl_key show_percent=show_percent %}
+          {% endwith %}
+        </tr>
+        <tr>
+          <td>a</td>
+          {% with side|addstr:'_Va' as lnl_key %}
+          <td>{{ form|get:lnl_key }}</td>
+          {% include 'dataexplorer/barplot.html' with lnl="Va "|addstr:side|addstr:"lateral" stats=stats lnl_key=lnl_key show_percent=show_percent %}
+          {% endwith %}
+        </tr>
+        <tr>
+          <td>b</td>
+          {% with side|addstr:'_Vb' as lnl_key %}
+          <td>{{ form|get:lnl_key }}</td>
+          {% include 'dataexplorer/barplot.html' with lnl="Vb "|addstr:side|addstr:"lateral" stats=stats lnl_key=lnl_key show_percent=show_percent %}
+          {% endwith %}
+        </tr>
+        <tr>
+          <td colspan="2">VII</td>
+          {% with side|addstr:'_VII' as lnl_key %}
+          <td>{{ form|get:lnl_key }}</td>
+          {% include 'dataexplorer/barplot.html' with lnl="VII "|addstr:side|addstr:"lateral" stats=stats lnl_key=lnl_key show_percent=show_percent %}
+          {% endwith %}
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
