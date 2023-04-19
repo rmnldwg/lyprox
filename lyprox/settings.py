@@ -55,6 +55,12 @@ Space-separated list of hostnames for which django will accept requests. Can be 
 with the env var ``DJANGO_ALLOWED_HOSTS``.
 """
 
+GITHUB_TOKEN = os.environ["GITHUB_TOKEN"]
+"""
+Read-only GitHub access token for fetching information about
+`lyprox.riskpredictor.models.InferenceResult`.
+"""
+
 
 CSRF_COOKIE_SECURE = not DEBUG
 CRSF_TRUSTED_ORIGINS = [f"https://{host}" for host in ALLOWED_HOSTS]

@@ -32,6 +32,7 @@ dependencies = [
     "dvc ~= 2.53",
     "lymph-model ~= 0.4.3",
     "lyscripts ~= 0.6.6",
+    "PyGithub ~= 1.58",
 ]
 
 [project.urls]

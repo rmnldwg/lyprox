@@ -17,7 +17,10 @@ import numpy as np
 import yaml
 from django.db import models
 from dvc.api import DVCFileSystem
+from github import Github
 from lymph import Bilateral, MidlineBilateral, Unilateral
+
+from lyprox import settings
 
 from .. import loggers
 
@@ -37,14 +40,18 @@ class InferenceResult(loggers.ModelLoggerMixin, models.Model):
     It fetches the HDF5 parameter samples from the DVC remote storage and uses them to
     compute the prior risk matrices and stores them in an HDF5 file, too.
     """
-    git_repo_url = models.URLField(default="https://github.com/rmnldwg/lynference")
-    """URL of the git repository that contains the trained model."""
+    git_repo_owner = models.CharField(max_length=50, default="rmnldwg")
+    """Owner of the GitHub repository that contains the trained model."""
+    git_repo_name = models.CharField(max_length=50, default="lynference")
+    """Name of the GitHub repository that contains the trained model."""
     revision = models.CharField(max_length=40, default="main")
     """Git revision of the trained model. E.g., a commit hash, tag, or branch name."""
     params_path = models.CharField(max_length=100, default="params.yaml")
     """Path to the YAML file containing the model parameters inside the git repo."""
     params = models.JSONField(default=dict)
     """Parameters to recreate lymph model for risk prediction."""
+    description = models.TextField(default="")
+    """GitHub release description of the inference run."""
     risk_matrices = models.FileField(upload_to=get_path_for_risk_matrices)
     """HDF5 file containing the computed prior risk matrices."""
     num_samples = models.PositiveIntegerField(default=100)
@@ -52,11 +59,16 @@ class InferenceResult(loggers.ModelLoggerMixin, models.Model):
 
 
     class Meta:
-        unique_together = ("git_repo_url", "revision")
+        unique_together = ("git_repo_owner", "git_repo_name", "revision")
 
 
     def __str__(self):
         return f"{self.git_repo_url}/tree/{self.revision}"
+
+    @property
+    def git_repo_url(self):
+        """Return the URL of the GitHub repository."""
+        return f"https://github.com/{self.git_repo_owner}/{self.git_repo_name}"
 
     @property
     def lnls(self):
@@ -81,26 +93,34 @@ class InferenceResult(loggers.ModelLoggerMixin, models.Model):
         return isinstance(lymph_model, MidlineBilateral)
 
 
-    def fetch_params(self, fs: DVCFileSystem) -> Dict[str, Any]:
+    @staticmethod
+    def fetch_params(
+        dvc_file_system: DVCFileSystem,
+        params_path: Union[Path, str],
+    ) -> Dict[str, Any]:
         """Load the model parameters from the YAML file in the DVC repo."""
-        with fs.open(self.params_path) as params_file:
+        with dvc_file_system.open(params_path) as params_file:
             params = yaml.safe_load(params_file)
         return params
 
 
-    def fetch_samples(self, fs: DVCFileSystem, samples_path: str) -> np.ndarray:
+    @staticmethod
+    def fetch_samples(
+        dvc_file_system: DVCFileSystem,
+        samples_path: str,
+        num_samples: int = 100,
+    ) -> np.ndarray:
         """Load the model samples from the HDF5 file in the DVC repo."""
-        with fs.open(samples_path) as samples_file:
+        with dvc_file_system.open(samples_path) as samples_file:
             with h5py.File(samples_file, "r") as samples_h5:
                 raw_chain = samples_h5["mcmc/chain"][:]
                 num_dims = raw_chain.shape[-1]
                 samples = raw_chain.reshape((-1, num_dims))
                 rand_idx = np.random.choice(
-                    samples.shape[0], size=self.num_samples, replace=False
+                    samples.shape[0], size=num_samples, replace=False
                 )
                 samples = samples[rand_idx]
 
-        self.logger.info("Loaded samples with dimensions %s", samples.shape)
         return samples
 
 
@@ -185,12 +205,17 @@ class InferenceResult(loggers.ModelLoggerMixin, models.Model):
 
     def save(self, *args, **kwargs) -> None:
         """Compute the risk matrices and store them in the HDF5 file."""
-        fs = DVCFileSystem(url=self.git_repo_url, rev=self.revision)
+        dvc_file_system = DVCFileSystem(url=self.git_repo_url, rev=self.revision)
+        gh = Github(login_or_token=settings.GITHUB_TOKEN)
+        repo = gh.get_repo(f"{self.git_repo_owner}/{self.git_repo_name}")
+        release = repo.get_release(id=self.revision)
+        self.description = release.body
 
-        self.params = self.fetch_params(fs)
+        self.params = self.fetch_params(dvc_file_system, self.params_path)
         t_stages = self.params.get("models", {}).get("t_stages", ["early", "late"])
         samples_path = self.params.get("general", {}).get("samples", "models/samples.hdf5")
-        samples = self.fetch_samples(fs, samples_path)
+        samples = self.fetch_samples(dvc_file_system, samples_path, self.num_samples)
+        self.logger.info("Loaded samples with dimensions %s", samples.shape)
 
         lymph_model = self.get_lymph_model()
         self.logger.info("Created trained lymph model %s", lymph_model)

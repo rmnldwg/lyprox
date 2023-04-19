@@ -25,14 +25,24 @@ class RangeInput(widgets.NumberInput):
 
 class InferenceResultForm(loggers.FormLoggerMixin, forms.ModelForm):
     """Form for creating a new `InferenceResult` instance."""
+    git_repo_url = forms.URLField(
+        label="GitHub repository URL",
+        help_text="The URL of the GitHub repository that contains the trained model.",
+        initial="https://github.com/rmnldwg/lynference",
+        widget=widgets.TextInput(attrs={
+            "class": "input",
+            "placeholder": "e.g. https://github.com/my/repo",
+        }),
+    )
+
     class Meta:
         model = InferenceResult
-        fields = ["git_repo_url", "revision", "params_path", "num_samples"]
+        fields = ["revision", "params_path", "num_samples"]
         widgets = {
-            "git_repo_url": widgets.TextInput(attrs={
-                "class": "input",
-                "placeholder": "e.g. https://github.com/my/repo",
-            }),
+            # "git_repo_url": widgets.TextInput(attrs={
+            #     "class": "input",
+            #     "placeholder": "e.g. https://github.com/my/repo",
+            # }),
             "revision": widgets.TextInput(attrs={
                 "class": "input",
                 "placeholder": "e.g. `main` or a tag name",
@@ -53,6 +63,10 @@ class InferenceResultForm(loggers.FormLoggerMixin, forms.ModelForm):
         revision = self.cleaned_data["revision"]
         params_path = self.cleaned_data["params_path"]
 
+        repo_id = git_repo_url.split("github.com/")[-1]
+        self.cleaned_data["git_repo_owner"] = repo_id.split("/")[0]
+        self.cleaned_data["git_repo_name"] = repo_id.split("/")[1]
+
         try:
             fs = DVCFileSystem(url=git_repo_url, rev=revision)
 
@@ -71,7 +85,6 @@ class InferenceResultForm(loggers.FormLoggerMixin, forms.ModelForm):
                 field="revision",
                 error=ValidationError("Not a valid git revision."),
             )
-
 
         return self.cleaned_data
 
