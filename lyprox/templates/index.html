@@ -38,7 +38,7 @@
 <section class="section">
   <div class="container">
     <div class="content">
-      {% include_md 'index.md' %}
+      {% include_md 'description.md' %}
     </div>
     {% if IS_FROZEN %}
     <div class="notification is-warning is-light">
@@ -60,7 +60,7 @@
 <!-- Publications -->
 <section class="section">
   <div class="container">
-    <h1 class="title" id="publications">Publications</h1>
+    <h1 class="title" id="publications">Our Publications</h1>
 
     {% for pub in publications %}
     {% include 'publication.html' with pub=pub %}

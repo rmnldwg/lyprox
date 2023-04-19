@@ -5,21 +5,19 @@
   <div class="media">
     <div class="media-left">
       <figure class="image is-64x64">
-        <img class="is-rounded" src="{% static pub.key|addstr:'.png' %}" alt="repo icon">
+        <img class="is-rounded" src="{% static 'publications/'|addstr:pub.id|addstr:'.png' %}" alt="publication icon">
       </figure>
     </div>
     <div class="media-content">
       <p>
         {% for author in pub.author %}
-        {{ author.given }} {{ author.family }}{% if not forloop.last %}, {% endif %}
+        {{ author.given }}&nbsp;{{ author.family }}{% if not forloop.last %}, {% endif %}
         {% endfor %}
         <br>
-        <strong class="has-text-secondary">
-          {{ pub.title }},
-        </strong>
+        <strong class="has-text-secondary">{{ pub.title }}</strong>
         <br>
-        <em>{{ pub.container-title }}</em> <strong>{{ pub.volume }},</strong> {{ pub.page }} ({{ pub.issued.0.year }})
-        <a href="https://doi.org/{{ pub.doi }}" target="_blank">{{ pub.doi }}</a>
+        <em>{{ pub|get:'container-title-short' }}</em> <strong>{{ pub.volume }},</strong> {{ pub.page }} ({{ pub.issued.0.year }})
+        <a href="https://doi.org/{{ pub.DOI }}" target="_blank">{{ pub.DOI }}</a>
       </p>
     </div>
   </div>

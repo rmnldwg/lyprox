@@ -1,122 +1,5 @@
 ---
 references:
-- id: bauwens_prevalence_2021
-  abstract: "OBJECTIVE: In oropharyngeal squamous cell carcinoma (OP-SCC), the prevalence and distribution of clinical and pathological lymph node metastasis in the neck have been extensively reported. It served as the basis for consensus recommendations on the selection of the lymph node levels in the neck requiring a treatment. The objective of the study is to compare the prevalence and distribution of neck node metastases in HPV+ and HPV- OP-SCC from a large series of patients with OP-SCC who underwent a cervical lymph-node dissection (LND) as part of their treatment.\nMETHODS: The study concentrated on OP-SCC patients treated by various neck node dissection (LND) procedures from January 2014 to December 2018 in 3 French institutions. Patients with prior head and neck cancer, prior neck surgery, the use of induction chemotherapy, or patients with carcinoma of unknown primary were excluded. HPV-status was assessed by p16 immunohistochemistry. For each patient, the clinical and the pathological nodal status, as well as the distribution of the positive nodes in each neck level (from Ia to V) were reported.\nRESULTS: Two-hundred and sixty-three patients were included (126 p16-negative (p16-), and 137 p16-positive (p16+). The rate of clinical positive node (cN+) reached 54% and 88.3% in the p16- and p16+ groups, respectively (p\_<\_0.001); the corresponding rate of pathological positive node (pN+) reached 61.9% and 91.2%, respectively (p\_<\_0.001). Regarding the clinical lymph node distribution, in p16+ patients, more positive nodes were observed in the ipsilateral level IV (p\_=\_0.003), and less positive nodes were observed in the contralateral levels III and IV (p\_=\_0.003 and p\_=\_0.045, respectively). Regarding the pathologic lymph node distribution in the ipsilateral neck, in the cN0 patients, no significant difference was observed between p16- and p16+ patients (p\_=\_0.33 to 1); in the cN+ patients, the nodes were distributed in levels Ib, II, III, IV and V without differences between the p16- and the p16+ patients. In the contralateral neck of p16- patients, nodes metastases were mainly observed in levels II, III and IV, whereas for the p16+ patients, positive nodes were only observed in level II (p\_=\_0.03).\nCONCLUSION: This study demonstrated the higher prevalence of cN+ and pN+ in p16+ OP-SCC patients, but without meaningful difference in the distribution of the lymph node drainage between p16- and p16+ OP-SCC. It indicates that no difference should be made between p16- and p16+ patients regarding the extend of neck treatment."
-  author:
-    - family: Bauwens
-      given: Laurence
-    - family: Baltres
-      given: Aline
-    - family: Fiani
-      given: Danny-Joe
-    - family: Zrounba
-      given: Philippe
-    - family: Buiret
-      given: Guillaume
-    - family: Fleury
-      given: Bertrand
-    - family: Benzerdjeb
-      given: Nazim
-    - family: Grégoire
-      given: Vincent
-  citation-key: bauwens_prevalence_2021
-  container-title: >-
-    Radiotherapy and Oncology: Journal of the European Society for Therapeutic
-    Radiology and Oncology
-  container-title-short: Radiother Oncol
-  DOI: 10.1016/j.radonc.2021.01.028
-  ISSN: 1879-0887
-  issued:
-    - year: 2021
-      month: 4
-  language: eng
-  page: 122-129
-  PMID: '33545255'
-  source: PubMed
-  title: >-
-    Prevalence and distribution of cervical lymph node metastases in
-    HPV-positive and HPV-negative oropharyngeal squamous cell carcinoma
-  type: article-journal
-  volume: '157'
-
-- id: ludwig_dataset_2022
-  abstract: >-
-    Dataset
-
-    We provide a dataset on lymph node level (LNL) involvement in 287 patients
-    with newly diagnosed oropharyngeal squamous cell carcinoma (OPSCC). For each
-    patient, ipsilateral and contralateral LNL involvement for levels I to VII
-    is reported together with clinicopathological factors including TNM-stage,
-    primary tumor subsite, tumor lateralization, HPV status, sex, age, smoking
-    status, and primary treatment. LNL involvement was assessed individually
-    based on available diagnostic modalities (PET, MRI, CT, fine needle
-    aspiration) by reviewing pathology and radiology reports together with the
-    radiological images. The data is shared as a CSV-table with rows of patients
-    and columns of patient/tumor-specific information and the involvement of
-    individual LNL based on the respective diagnostic modalities.
-
-    Reuse potential
-
-    Patterns of lymphatic progression have never been reported on a
-    patient-individual basis in as much detail as provided in this dataset. The
-    data can be used to build quantitative models for lymphatic tumor
-    progression to estimate the probability of occult metastases in LNLs. This
-    may in turn allow for further personalization of the elective clinical
-    target volume definition in radiotherapy and the extent of neck dissection
-    for surgically treated patients. The data can be pooled with other data to
-    build large multi-institutional datasets on lymphatic metastatic progression
-    in the future.
-
-    Co-submission
-
-    This paper supports the original scientific article by Roman Ludwig,
-    Jean-Marc Hoffmann, Bertrand Pouymayou, Grégoire Morand, Martina Broglie
-    Däppen, Matthias Guckenberger, Vincent Grégoire, Panagiotis Balermpas, Jan
-    Unkelbach, “Detailed patient-individual reporting of lymph node involvement
-    in oropharyngeal squamous cell carcinoma with an online interface”,
-    Radiotherapy & Oncology [1]
-  accessed:
-    - year: 2022
-      month: 10
-      day: 25
-  author:
-    - family: Ludwig
-      given: Roman
-    - family: Hoffmann
-      given: Jean-Marc
-    - family: Pouymayou
-      given: Bertrand
-    - family: Morand
-      given: Grégoire
-    - family: Däppen
-      given: Martina Broglie
-    - family: Guckenberger
-      given: Matthias
-    - family: Grégoire
-      given: Vincent
-    - family: Balermpas
-      given: Panagiotis
-    - family: Unkelbach
-      given: Jan
-  citation-key: ludwig_dataset_2022
-  container-title: Data in Brief
-  container-title-short: Data in Brief
-  DOI: 10.1016/j.dib.2022.108345
-  ISSN: 2352-3409
-  issued:
-    - year: 2022
-      month: 8
-      day: 1
-  language: en
-  page: '108345'
-  source: ScienceDirect
-  title: >-
-    A dataset on patient-individual lymph node involvement in oropharyngeal
-    squamous cell carcinoma
-  type: article-journal
-  URL: https://www.sciencedirect.com/science/article/pii/S2352340922005479
-  volume: '43'
-
 - id: ludwig_detailed_2022
   abstract: >-
     Purpose/Objective
@@ -199,6 +82,123 @@ references:
   type: article-journal
   URL: https://www.sciencedirect.com/science/article/pii/S0167814022000615
   volume: '169'
+
+- id: ludwig_dataset_2022
+  abstract: >-
+    Dataset
+
+    We provide a dataset on lymph node level (LNL) involvement in 287 patients
+    with newly diagnosed oropharyngeal squamous cell carcinoma (OPSCC). For each
+    patient, ipsilateral and contralateral LNL involvement for levels I to VII
+    is reported together with clinicopathological factors including TNM-stage,
+    primary tumor subsite, tumor lateralization, HPV status, sex, age, smoking
+    status, and primary treatment. LNL involvement was assessed individually
+    based on available diagnostic modalities (PET, MRI, CT, fine needle
+    aspiration) by reviewing pathology and radiology reports together with the
+    radiological images. The data is shared as a CSV-table with rows of patients
+    and columns of patient/tumor-specific information and the involvement of
+    individual LNL based on the respective diagnostic modalities.
+
+    Reuse potential
+
+    Patterns of lymphatic progression have never been reported on a
+    patient-individual basis in as much detail as provided in this dataset. The
+    data can be used to build quantitative models for lymphatic tumor
+    progression to estimate the probability of occult metastases in LNLs. This
+    may in turn allow for further personalization of the elective clinical
+    target volume definition in radiotherapy and the extent of neck dissection
+    for surgically treated patients. The data can be pooled with other data to
+    build large multi-institutional datasets on lymphatic metastatic progression
+    in the future.
+
+    Co-submission
+
+    This paper supports the original scientific article by Roman Ludwig,
+    Jean-Marc Hoffmann, Bertrand Pouymayou, Grégoire Morand, Martina Broglie
+    Däppen, Matthias Guckenberger, Vincent Grégoire, Panagiotis Balermpas, Jan
+    Unkelbach, “Detailed patient-individual reporting of lymph node involvement
+    in oropharyngeal squamous cell carcinoma with an online interface”,
+    Radiotherapy & Oncology [1]
+  accessed:
+    - year: 2022
+      month: 10
+      day: 25
+  author:
+    - family: Ludwig
+      given: Roman
+    - family: Hoffmann
+      given: Jean-Marc
+    - family: Pouymayou
+      given: Bertrand
+    - family: Morand
+      given: Grégoire
+    - family: Däppen
+      given: Martina Broglie
+    - family: Guckenberger
+      given: Matthias
+    - family: Grégoire
+      given: Vincent
+    - family: Balermpas
+      given: Panagiotis
+    - family: Unkelbach
+      given: Jan
+  citation-key: ludwig_dataset_2022
+  container-title: Data in Brief
+  container-title-short: Data in Brief
+  DOI: 10.1016/j.dib.2022.108345
+  ISSN: 2352-3409
+  issued:
+    - year: 2022
+      month: 8
+      day: 1
+  language: en
+  page: '108345'
+  source: ScienceDirect
+  title: >-
+    A dataset on patient-individual lymph node involvement in oropharyngeal
+    squamous cell carcinoma
+  type: article-journal
+  URL: https://www.sciencedirect.com/science/article/pii/S2352340922005479
+  volume: '43'
+
+- id: bauwens_prevalence_2021
+  abstract: "OBJECTIVE: In oropharyngeal squamous cell carcinoma (OP-SCC), the prevalence and distribution of clinical and pathological lymph node metastasis in the neck have been extensively reported. It served as the basis for consensus recommendations on the selection of the lymph node levels in the neck requiring a treatment. The objective of the study is to compare the prevalence and distribution of neck node metastases in HPV+ and HPV- OP-SCC from a large series of patients with OP-SCC who underwent a cervical lymph-node dissection (LND) as part of their treatment.\nMETHODS: The study concentrated on OP-SCC patients treated by various neck node dissection (LND) procedures from January 2014 to December 2018 in 3 French institutions. Patients with prior head and neck cancer, prior neck surgery, the use of induction chemotherapy, or patients with carcinoma of unknown primary were excluded. HPV-status was assessed by p16 immunohistochemistry. For each patient, the clinical and the pathological nodal status, as well as the distribution of the positive nodes in each neck level (from Ia to V) were reported.\nRESULTS: Two-hundred and sixty-three patients were included (126 p16-negative (p16-), and 137 p16-positive (p16+). The rate of clinical positive node (cN+) reached 54% and 88.3% in the p16- and p16+ groups, respectively (p\_<\_0.001); the corresponding rate of pathological positive node (pN+) reached 61.9% and 91.2%, respectively (p\_<\_0.001). Regarding the clinical lymph node distribution, in p16+ patients, more positive nodes were observed in the ipsilateral level IV (p\_=\_0.003), and less positive nodes were observed in the contralateral levels III and IV (p\_=\_0.003 and p\_=\_0.045, respectively). Regarding the pathologic lymph node distribution in the ipsilateral neck, in the cN0 patients, no significant difference was observed between p16- and p16+ patients (p\_=\_0.33 to 1); in the cN+ patients, the nodes were distributed in levels Ib, II, III, IV and V without differences between the p16- and the p16+ patients. In the contralateral neck of p16- patients, nodes metastases were mainly observed in levels II, III and IV, whereas for the p16+ patients, positive nodes were only observed in level II (p\_=\_0.03).\nCONCLUSION: This study demonstrated the higher prevalence of cN+ and pN+ in p16+ OP-SCC patients, but without meaningful difference in the distribution of the lymph node drainage between p16- and p16+ OP-SCC. It indicates that no difference should be made between p16- and p16+ patients regarding the extend of neck treatment."
+  author:
+    - family: Bauwens
+      given: Laurence
+    - family: Baltres
+      given: Aline
+    - family: Fiani
+      given: Danny-Joe
+    - family: Zrounba
+      given: Philippe
+    - family: Buiret
+      given: Guillaume
+    - family: Fleury
+      given: Bertrand
+    - family: Benzerdjeb
+      given: Nazim
+    - family: Grégoire
+      given: Vincent
+  citation-key: bauwens_prevalence_2021
+  container-title: >-
+    Radiotherapy and Oncology: Journal of the European Society for Therapeutic
+    Radiology and Oncology
+  container-title-short: Radiother Oncol
+  DOI: 10.1016/j.radonc.2021.01.028
+  ISSN: 1879-0887
+  issued:
+    - year: 2021
+      month: 4
+  language: eng
+  page: 122-129
+  PMID: '33545255'
+  source: PubMed
+  title: >-
+    Prevalence and distribution of cervical lymph node metastases in
+    HPV-positive and HPV-negative oropharyngeal squamous cell carcinoma
+  type: article-journal
+  volume: '157'
 
 - id: ludwig_hidden_2021
   abstract: >-

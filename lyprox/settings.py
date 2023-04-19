@@ -246,4 +246,4 @@ STATICFILES_DIRS = [
     BASE_DIR / "lyprox" / "static"
 ]
 
-PUBLICATIONS_PATH = STATIC_ROOT / "publications.yaml"
+PUBLICATIONS_PATH = STATIC_ROOT / "publications" / "data.yaml"
