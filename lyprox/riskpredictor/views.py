@@ -27,7 +27,7 @@ class AddInferenceResultView(
     """View for adding a new `InferenceResult` instance."""
     model = InferenceResult
     form_class = InferenceResultForm
-    template_name = "riskpredictor/trainedlymphmodel_form.html"
+    template_name = "riskpredictor/inference_result_form.html"
     success_url = "/riskpredictor/list/"
 
 
@@ -37,7 +37,7 @@ class ChooseInferenceResultView(
 ):
     """View for choosing a `InferenceResult` instance."""
     model = InferenceResult
-    template_name = "riskpredictor/trainedlymphmodel_list.html"
+    template_name = "riskpredictor/inference_result_list.html"
     context_object_name = "inference_results"
 
     def get_context_data(self, **kwargs: Any) -> Dict[str, Any]:
