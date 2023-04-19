@@ -21,6 +21,7 @@ dependencies = [
     "django-filter ~= 2.4",
     "django-phonenumber-field[phonenumbers] ~= 6.1",
     "django-auth-logger ~= 2.1",
+    "django-sekizai ~= 4.0",
     "Markdown ~= 3.3",
     "numpy ~= 1.24",
     "pandas ~= 1.5",

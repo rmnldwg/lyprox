@@ -1,62 +1,63 @@
-<!DOCTYPE html>
-<html lang="en" class="has-navbar-fixed-top">
-{% include 'head.html' with title="LyProX · Data Explorer" %}
+{% extends 'base.html' %}
 
+{% load sekizai_tags %}
 {% load customtags %}
 {% load static %}
+
+{% block head %}
+{% include 'head_content.html' with title='LyProX · Data Explorer' %}
+{% endblock head %}
+
+{% block "css" %}
 <link rel="stylesheet" href="{% static 'dataexplorer/dashboard.css' %}">
+{% endblock %}
 
+{% block "js" %}
+<script src="{% static 'dataexplorer/dashboard.js' %}"></script>
+{% endblock %}
 
-<body>
-  {% include 'navbar.html' %}
-
-  <!--
+{% block content %}
+<!--
     The CSRF token is not necessary for the GET request by this form, but for the AJAX request.
     Also, it is outside the form such that it doesn't get sent via the keyboard shortcut GET request.
   -->
-  {% csrf_token %}
-  <form method="GET" action="{% url 'dataexplorer:dashboard' %}" id="dashboard-form" name="dashboardform">
-    <section class="section">
+{% csrf_token %}
+<form method="GET" action="{% url 'dataexplorer:dashboard' %}" id="dashboard-form" name="dashboardform">
+  <section class="section">
 
-      <div class="tile is-ancestor">
-        <div class="tile is-3 is-vertical is-parent">
+    <div class="tile is-ancestor">
+      <div class="tile is-3 is-vertical is-parent">
 
-          <!-- Patient details -->
-          {% include 'dataexplorer/filter/patient.html' with form=form %}
+        <!-- Patient details -->
+        {% include 'dataexplorer/filter/patient.html' with form=form %}
 
-          <!-- Primary tumor -->
-          {% include 'dataexplorer/filter/tumor.html' with form=form %}
-        </div>
-
-        <div class="tile is-9 is-vertical">
-          <div class="tile is-parent is-vertical">
-
-            <!-- Datasets -->
-            {% include 'dataexplorer/filter/datasets.html' with form=form %}
-
-            <!-- Modalities -->
-            {% include 'dataexplorer/filter/modalities.html' with form=form %}
-          </div>
-
-          <!-- Involvement prevalence -->
-          <div class="tile">
-            <!-- contralateral -->
-            {% include 'dataexplorer/involvement.html' with form=form side='contra' %}
-
-            <!-- ipsilateral -->
-            {% include 'dataexplorer/involvement.html' with form=form side='ipsi' %}
-          </div>
-
-          <!-- Controls -->
-          {% include 'dataexplorer/controls.html' with form=form %}
-        </div>
+        <!-- Primary tumor -->
+        {% include 'dataexplorer/filter/tumor.html' with form=form %}
       </div>
-    </section>
-  </form>
 
-  {% include 'footer.html' %}
-</body>
+      <div class="tile is-9 is-vertical">
+        <div class="tile is-parent is-vertical">
 
-<script src="{% static 'dataexplorer/dashboard.js' %}"></script>
+          <!-- Datasets -->
+          {% include 'dataexplorer/filter/datasets.html' with form=form %}
 
-</html>
+          <!-- Modalities -->
+          {% include 'dataexplorer/filter/modalities.html' with form=form %}
+        </div>
+
+        <!-- Involvement prevalence -->
+        <div class="tile">
+          <!-- contralateral -->
+          {% include 'dataexplorer/involvement.html' with form=form side='contra' %}
+
+          <!-- ipsilateral -->
+          {% include 'dataexplorer/involvement.html' with form=form side='ipsi' %}
+        </div>
+
+        <!-- Controls -->
+        {% include 'dataexplorer/controls.html' with form=form %}
+      </div>
+    </div>
+  </section>
+</form>
+{% endblock %}

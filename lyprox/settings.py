@@ -150,6 +150,7 @@ INSTALLED_APPS = [
     "django_filters",
     "fontawesomefree",
     "phonenumber_field",
+    "sekizai",
 
     # django contrib apps
     "django.contrib.admin",
@@ -186,6 +187,7 @@ TEMPLATES = [
                 'django.contrib.messages.context_processors.messages',
                 'lyprox.context_processors.selected_settings',
                 'lyprox.context_processors.navbar_apps',
+                'sekizai.context_processors.sekizai',
             ],
             'libraries': {
                 'customtags': 'lyprox.templatetags.customtags',
@@ -243,3 +245,5 @@ MEDIA_URL = "/media/"
 STATICFILES_DIRS = [
     BASE_DIR / "lyprox" / "static"
 ]
+
+PUBLICATIONS_PATH = STATIC_ROOT / "publications" / "data.yaml"

@@ -1,25 +1,19 @@
-<!DOCTYPE html>
-<html lang="en">
-    {% include 'head.html' with title="Under Maintenance" %}
+{% extends 'errors.html' %}
 
-    <body>
-        <section class="section">
-            <div class="container">
-                <div class="columns is-centered">
-                    <div class="column is-5">
-                        <div class="notification is-primary">
-                            <p class="title is-1">
-                                <i class="fas fa-hammer"></i>
-                                Maintenance
-                            </p>
-                            <p class="subtitle is-3">Updates, improvements & fixes</p>
-                            <p>
-                                Sorry for the inconvenience but we're performing some maintenance at the moment. If you need to you can always <a href="mailto:roman.ludwig@usz.ch">contact us</a>, otherwise we'll be back online shortly!
-                            </p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-    </body>
-</html>
+{% block head %}
+{% include 'head_content.html' with title="LyProX · Maintenance" %}
+{% endblock %}
+
+{% block content %}
+<div class="notification is-primary">
+  <p class="title is-1">
+    <i class="fas fa-hammer"></i>
+    Maintenance
+  </p>
+  <p class="subtitle is-3">Updates, improvements & fixes</p>
+  <p>
+    Sorry for the inconvenience but we're performing some maintenance at the moment. If you need to you can always <a
+      href="mailto:roman.ludwig@usz.ch">contact us</a>, otherwise we'll be back online shortly!
+  </p>
+</div>
+{% endblock %}

@@ -54,7 +54,7 @@ def addstr(this, other):
 
 @register.filter(name="get")
 def get(object, key):
-    """Get an item from `object` using `key`."""
+    """Get an item from dict-like `object` using `key`."""
     return object[key]
 
 @register.filter(name="remove_host")
