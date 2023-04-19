@@ -1,4 +1,9 @@
+{% load sekizai_tags %}
 {% load static %}
+
+{% addtoblock "js" %}
+<script src="{% static 'navbar.js' %}"></script>
+{% endaddtoblock %}
 
 <nav class="navbar is-fixed-top is-primary" role="navigation">
   <div class="container">
@@ -103,5 +108,3 @@
     </div>
   </div>
 </nav>
-
-<script src="{% static 'navbar.js' %}"></script>

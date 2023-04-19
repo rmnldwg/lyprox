@@ -1,0 +1,9 @@
+input[type="checkbox"].checkbox:checked + .buttons.for-datasets > * {
+    box-shadow: 0 0 0 0.125em #005EA8;
+    z-index: 2;
+}
+
+input[type="checkbox"].checkbox:checked:hover + .buttons.for-datasets > * {
+    box-shadow: 0 0 0 0.125em #005392;
+    z-index: 2;
+}

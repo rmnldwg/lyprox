@@ -7,36 +7,6 @@ output.slider {
     width: 60px;
 }
 
-.barplot {
-    background-image:
-        linear-gradient(#AE0060,#AE0060),
-        linear-gradient(#BDCFD6,#BDCFD6),
-        linear-gradient(#00AFA5,#00AFA5);
-    background-repeat:no-repeat;
-}
-
-.barplot-legend-left {
-    text-align: left;
-}
-.barplot-legend-center {
-    text-align: center;
-}
-.barplot-legend-right {
-    text-align: right;
-}
-
-.barplot-legend {
-    width: 40px;
-}
-
-.barplot-tablecell {
-    width: 100%;
-}
-
-span[data-tooltip] {
-    border-bottom: none;
-}
-
 .tooltip {
     position: relative;
 }
@@ -50,24 +20,4 @@ span[data-tooltip] {
     position: absolute;
     z-index: 1000;
     width: 700px;
-}
-
-.tooltip:hover .box.right {
-    left: 0;
-    margin-left: 32px;
-}
-
-.tooltip:hover .box.left {
-    right: 0;
-    margin-right: 32px;
-}
-
-.tooltip:hover .box.top {
-    bottom: 0;
-    margin-bottom: 60px;
-}
-
-.tooltip:hover .box.bottom {
-    top: 0;
-    margin-top: 32px;
 }

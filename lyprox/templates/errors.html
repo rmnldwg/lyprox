@@ -1,0 +1,38 @@
+{% load sekizai_tags %}
+{% load static %}
+<!DOCTYPE html>
+<html lang="en" class="has-navbar-fixed-top">
+
+{% addtoblock "css" %}
+<link rel="stylesheet" type="text/css" href="{% static 'usz.css' %}">
+<link href="{% static 'fontawesomefree/css/all.min.css' %}" rel="stylesheet" type="text/css">
+{% endaddtoblock %}
+
+{% addtoblock "js" %}
+<script src="{% static 'fontawesomefree/js/all.min.js' %}"></script>
+{% endaddtoblock %}
+
+<head>
+  <meta charset="UTF-8">
+  {% block head %}{% endblock %}
+
+  <!-- Stylesheets -->
+  {% render_block "css" %}
+</head>
+
+<body>
+  <section class="section">
+    <div class="container">
+      <div class="columns is-centered">
+        <div class="colum is-5">
+          {% block content %}
+          {% endblock content %}
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Javascript -->
+  {% render_block "js" %}
+</body>
+</html>
