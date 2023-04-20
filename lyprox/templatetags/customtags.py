@@ -1,11 +1,15 @@
+import json
+import logging
 from urllib.parse import urlparse
 
 import markdown as md
+import yaml
 from django import template
 from django.template.loader import render_to_string
 from django.utils.html import format_html
 
 register = template.Library()
+logger = logging.getLogger(__name__)
 
 
 @register.filter(name="index")
@@ -37,6 +41,9 @@ def percent(indexable, i):
     else:
         return f"{100 * indexable[i] / total:.0f}"
 
+def custom_markdown(text):
+    return md.markdown(text, extensions=["footnotes", "tables"])
+
 @register.simple_tag(name="include_md", takes_context=True)
 def include_md(context, template_name):
     # 'context' here isn't a dictionary, but an instance of RequestContext
@@ -44,13 +51,22 @@ def include_md(context, template_name):
     # parse the template and fill the tags with context variables
     template = render_to_string(template_name, context=context_dict)
 
-    html_string = md.markdown(template, extensions=["footnotes", "tables"])
+    html_string = custom_markdown(template)
     return format_html(html_string)
 
 @register.simple_tag(name="render_md")
-def render_md(template):
-    html_string = md.markdown(template, extensions=["footnotes", "tables"])
-    return format_html(html_string)
+def render_md(raw):
+    return format_html(custom_markdown(raw))
+
+@register.simple_tag(name="render_json")
+def render_json(raw):
+    json_string = json.dumps(raw, indent=4)
+    return json_string
+
+@register.simple_tag(name="render_yaml")
+def render_yaml(raw):
+    yaml_string = yaml.safe_dump(raw, sort_keys=False, default_flow_style=False)
+    return yaml_string
 
 @register.filter(name="addstr")
 def addstr(this, other):
