@@ -44,7 +44,12 @@ def include_md(context, template_name):
     # parse the template and fill the tags with context variables
     template = render_to_string(template_name, context=context_dict)
 
-    html_string = md.markdown(template, extensions=["footnotes"])
+    html_string = md.markdown(template, extensions=["footnotes", "tables"])
+    return format_html(html_string)
+
+@register.simple_tag(name="render_md")
+def render_md(template):
+    html_string = md.markdown(template, extensions=["footnotes", "tables"])
     return format_html(html_string)
 
 @register.filter(name="addstr")

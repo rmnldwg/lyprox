@@ -17,7 +17,7 @@ import numpy as np
 import yaml
 from django.db import models
 from dvc.api import DVCFileSystem
-from github import Github
+from github import Github, GithubException
 from lymph import Bilateral, MidlineBilateral, Unilateral
 
 from lyprox import settings
@@ -92,6 +92,11 @@ class InferenceResult(loggers.ModelLoggerMixin, models.Model):
         lymph_model = self.get_lymph_model()
         return isinstance(lymph_model, MidlineBilateral)
 
+    @property
+    def lnls(self):
+        """Return a list with the names of the included LNLs."""
+        return list(self.params["graph"]["lnl"].keys())
+
 
     @staticmethod
     def fetch_params(
@@ -122,6 +127,18 @@ class InferenceResult(loggers.ModelLoggerMixin, models.Model):
                 samples = samples[rand_idx]
 
         return samples
+
+
+    def fetch_description(self) -> str:
+        """Fetch the release description from the GitHub API."""
+        try:
+            gh = Github(login_or_token=settings.GITHUB_TOKEN)
+            repo = gh.get_repo(f"{self.git_repo_owner}/{self.git_repo_name}")
+            release = repo.get_release(id=self.revision)
+            return release.body
+
+        except GithubException:
+            return "This revision has no release description."
 
 
     def compute_risk_matrices(self, lymph_model, t_stages, samples) -> np.ndarray:
@@ -195,7 +212,7 @@ class InferenceResult(loggers.ModelLoggerMixin, models.Model):
 
 
     def get_lymph_model(self) -> Union[Unilateral, Bilateral, MidlineBilateral]:
-        """Create a lymph model instance from the stored parameters."""
+        """Get (create if necessary) lymph model instance from the stored params."""
         if hasattr(self, "_lymph_model"):
             return self._lymph_model
 
@@ -205,13 +222,11 @@ class InferenceResult(loggers.ModelLoggerMixin, models.Model):
 
     def save(self, *args, **kwargs) -> None:
         """Compute the risk matrices and store them in the HDF5 file."""
-        dvc_file_system = DVCFileSystem(url=self.git_repo_url, rev=self.revision)
-        gh = Github(login_or_token=settings.GITHUB_TOKEN)
-        repo = gh.get_repo(f"{self.git_repo_owner}/{self.git_repo_name}")
-        release = repo.get_release(id=self.revision)
-        self.description = release.body
+        self.description = self.fetch_description()
 
+        dvc_file_system = DVCFileSystem(url=self.git_repo_url, rev=self.revision)
         self.params = self.fetch_params(dvc_file_system, self.params_path)
+
         t_stages = self.params.get("models", {}).get("t_stages", ["early", "late"])
         samples_path = self.params.get("general", {}).get("samples", "models/samples.hdf5")
         samples = self.fetch_samples(dvc_file_system, samples_path, self.num_samples)
