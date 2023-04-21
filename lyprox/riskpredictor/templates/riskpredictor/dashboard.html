@@ -10,7 +10,6 @@
 
 {% block "css" %}
 <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/default.min.css">
-<link rel="stylesheet" href="{% static 'riskpredictor/dashboard.css' %}">
 {% endblock "css" %}
 
 {% block "js" %}
@@ -19,6 +18,7 @@
 <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
 <script src="{% static 'dataexplorer/dashboard.js' %}"></script>
 <script src="{% static 'riskpredictor/yaml_formatter.js' %}"></script>
+<link rel="stylesheet" href="{% static 'riskpredictor/dashboard.css' %}">
 {% endblock "js" %}
 
 {% block content %}
@@ -154,7 +154,7 @@
                       <tr>
                         <td colspan="2">LNL</td>
                         <td class="has-text-centered">select</td>
-                        <td class="has-text-centered">risk</td>
+                        <td class="has-text-centered">marginalized risk (<span class="has-text-danger">involved</span>, <span class="has-text-info">error</span>, <span class="has-text-success">healthy</span>)</td>
                       </tr>
                     </thead>
 
@@ -197,7 +197,7 @@
                       <tr>
                         <td colspan="2">LNL</td>
                         <td class="has-text-centered">select</td>
-                        <td class="has-text-centered">risk</td>
+                        <td class="has-text-centered">marginalized risk (<span class="has-text-danger">involved</span>, <span class="has-text-info">error</span>, <span class="has-text-success">healthy</span>)</td>
                       </tr>
                     </thead>
 

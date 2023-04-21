@@ -1,12 +1,12 @@
 {% load sekizai_tags %}
 {% load static %}
 {% load customtags %}
-{% with stat=stats|get:lnl_key %}
 
 {% addtoblock "css" %}
 <link rel="stylesheet" href="{% static 'dataexplorer/barplot.css' %}">
 {% endaddtoblock %}
 
+{% with stat=stats|get:lnl_key %}
 <td class="barplot-tablecell">
   <div class="tags has-addons">
     <span class="stats tag barplot-legend is-danger is-light" data-statfield="{{ lnl_key }}" data-index="1"
