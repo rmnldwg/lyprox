@@ -71,17 +71,18 @@ fi
 git --git-dir=/srv/www/$1/.git --work-tree=/srv/www/$1 checkout --force $branch
 git --git-dir=/srv/www/$1/.git --work-tree=/srv/www/$1 pull --force
 
-info "create srv directory and assign correct permissions:"
-prep_dir /srv/www/$1 read
-sudo chmod 775 /srv/www/$1
-prep_dir /srv/www/$1/static read
-prep_dir /srv/www/$1/media write
-sudo chmod 664 /srv/www/$1/db.sqlite3
-
 info "create .venv and install dependencies:"
 eval "python$py_version -m venv /srv/www/$1/.venv"
 python=/srv/www/$1/.venv/bin/python
 eval "$python -m pip install -U pip setuptools setuptools_scm wheel"
 eval "$python -m pip install /srv/www/$1"
+
+info "ensure all directories have correct ownership and permissions:"
+prep_dir /srv/www/$1 read
+sudo chmod 775 /srv/www/$1
+prep_dir /srv/www/$1/static read
+prep_dir /srv/www/$1/media write
+touch /srv/www/$1/db.sqlite3
+sudo chmod 664 /srv/www/$1/db.sqlite3
 
 info "all done, don't forget to set env vars"

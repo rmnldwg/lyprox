@@ -71,7 +71,12 @@ SECURE_HSTS_INCLUDE_SUBDOMAINS = not DEBUG
 SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
-BASE_DIR = Path(__file__).resolve().parent.parent
+BASE_DIR = Path(os.environ["DJANGO_BASE_DIR"])
+"""
+Setting the base dir manually is necessary, because otherwise everything might be
+set up relative to venv's site-packages.
+"""
+
 LOGIN_REDIRECT_URL = "/"
 
 # GitHub repository URL
