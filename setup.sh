@@ -29,10 +29,10 @@ prep_dir() {
     else
         permissions=644
     fi
-    mkdir -p $1
-    chown -R $user:www-data $1
-    find $1 -type d -exec chmod $(($permissions + 111)) {} \;
-    find $1 -type f -exec chmod $permissions {} \;
+    sudo mkdir -p $1
+    sudo chown -R $user:www-data $1
+    sudo find $1 -type d -exec chmod $(($permissions + 111)) {} \;
+    sudo find $1 -type f -exec chmod $permissions {} \;
 }
 
 while getopts ":hb:p:" option; do
@@ -73,10 +73,10 @@ git --git-dir=/srv/www/$1/.git --work-tree=/srv/www/$1 pull --force
 
 info "create srv directory and assign correct permissions:"
 prep_dir /srv/www/$1 read
-chmod 775 /srv/www/$1
+sudo chmod 775 /srv/www/$1
 prep_dir /srv/www/$1/static read
 prep_dir /srv/www/$1/media write
-chmod 664 /srv/www/$1/db.sqlite3
+sudo chmod 664 /srv/www/$1/db.sqlite3
 
 info "create .venv and install dependencies:"
 eval "python$py_version -m venv /srv/www/$1/.venv"
