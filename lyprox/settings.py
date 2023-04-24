@@ -32,7 +32,7 @@ DEBUG = os.environ["DJANGO_ENV"] == "debug"
 MAINTENANCE = os.environ["DJANGO_ENV"] == "maintenance"
 """
 If ``True``, all requests to are redirected to a maintenance page. ``DJANGO_ENV`` must
-be set to ``"maintenance"`` for this to work. Also see `core.views.maintenance`.
+be set to ``"maintenance"`` for this to work. Also see `lyprox.views.maintenance`.
 """
 
 PRODUCTION = os.environ["DJANGO_ENV"] == "production"
