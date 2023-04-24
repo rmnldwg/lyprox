@@ -1,12 +1,11 @@
 """
 gunicorn configuration settings.
 """
-import os
 import multiprocessing
-
+import os
 
 # Django WSGI application path in pattern MODULE_NAME:VARIABLE_NAME
-wsgi_app = "core.wsgi:application"
+wsgi_app = "lyprox.wsgi:application"
 
 # The number of worker processes for handling requests
 workers = multiprocessing.cpu_count()
