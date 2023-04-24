@@ -14,7 +14,7 @@ help_print() {
 }
 
 help() {
-    help_print "Usage: deploy [OPTION] HOSTNAME"
+    help_print "Usage: setup.sh [OPTION] HOSTNAME"
     help_print "Prepare the directoy /srv/www/HOSTNAME for deployment of LyProX"
     help_print
     help_print "Options:"
@@ -74,12 +74,12 @@ eval "$python -m pip install -U pip setuptools setuptools_scm wheel"
 eval "$python -m pip install /srv/www/$1"
 
 info "ensure all directories have correct ownership and permissions:"
-touch /srv/www/$1/db.sqlite3            # create db file
+touch /srv/www/$1/db.sqlite3            # create db.sqlite3 file
 prep_dir /srv/www/$1                    # change group ownership to www-data
 prep_dir /srv/www/$1/static             # initialize static directory
+prep_dir /srv/www/$1/media add_write    # init media dir and allow write access
+sudo chmod 664 /srv/www/$1/db.sqlite3   # allow www-data to write to db.sqlite3
+prep_dir /srv/www/$1/.venv              # change group owner to allow www-data to execute .venv
 prep_dir /var/log/gunicorn add_write    # allow www-data to write to log dir
-prep_dir /srv/www/$1/media add_write    # allow www-data to write to media dir
-sudo chmod 664 /srv/www/$1/db.sqlite3   # allow www-data to write to db
-prep_dir /srv/www/$1/.venv              # allow www-data to execute .venv
 
 info "all done, don't forget to set env vars"
