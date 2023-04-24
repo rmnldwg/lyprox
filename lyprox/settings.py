@@ -19,6 +19,8 @@ Only four env vars should need to be changed:
 import os
 from pathlib import Path
 
+from django import urls
+
 from ._version import version
 
 # old secret key: "k_&(m5ymps%p=4&qjnwkv-avxb@@ez1tewc8g_eg4k#jx59ukx"
@@ -77,7 +79,30 @@ Setting the base dir manually is necessary, because otherwise everything might b
 set up relative to venv's site-packages.
 """
 
+LOGIN_URL = urls.reverse_lazy("accounts:login")
+"""URL to redirect to when login is required."""
+
 LOGIN_REDIRECT_URL = "/"
+"""Redirect to this URL after successful login."""
+
+LOGIN_REQUIRED_URLS = []
+"""List of regexes for urls that require login.
+
+Note that this may simply be left empty, since the critical views are protected by
+default. But if you want to protect e.g. the entire website, you can add ``"(.*)$"``
+to the list.
+"""
+_login_required_urls_env = os.getenv("DJANGO_LOGIN_REQUIRED_URLS")
+if _login_required_urls_env is not None:
+    LOGIN_REQUIRED_URLS = _login_required_urls_env.split(" ")
+
+LOGIN_NOT_REQUIRED_URLS = [
+    r"/accounts/login/(.*)$",
+    r"/accounts/logout/(.*)$",
+    r"/admin/(.*)$",
+    r"/maintenance/(.*)$",
+]
+"""List of regexes for urls that are exceptions from the `LOGIN_REQUIRED_URLS`."""
 
 # GitHub repository URL
 GITHUB_REPO_OWNER = "rmnldwg"
@@ -174,6 +199,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     "lyprox.middleware.MaintenanceMiddleware",
+    "lyprox.middleware.LoginRequiredMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
