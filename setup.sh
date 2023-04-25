@@ -23,17 +23,6 @@ help() {
     help_print "  -p VERSION  Python version to use for .venv (default: 3.8)"
 }
 
-prep_dir() {
-    sudo mkdir -p $1
-    sudo chown -R $user:www-data $1
-
-    if [[ $2 == "add_write" ]]; then
-        sudo find $1 -exec chmod g+w {} \;
-    else
-        sudo find $1 -exec chmod g-w {} \;
-    fi
-}
-
 while getopts ":hb:p:" option; do
     case $option in
         h)
@@ -73,13 +62,18 @@ python=/srv/www/$1/.venv/bin/python
 eval "$python -m pip install -U pip setuptools setuptools_scm wheel"
 eval "$python -m pip install /srv/www/$1"
 
-info "ensure all directories have correct ownership and permissions:"
-touch /srv/www/$1/db.sqlite3            # create db.sqlite3 file
-prep_dir /srv/www/$1                    # change group ownership to www-data
-prep_dir /srv/www/$1/static             # initialize static directory
-prep_dir /srv/www/$1/media add_write    # init media dir and allow write access
-sudo chmod 664 /srv/www/$1/db.sqlite3   # allow www-data to write to db.sqlite3
-prep_dir /srv/www/$1/.venv              # change group owner to allow www-data to execute .venv
-prep_dir /var/log/gunicorn add_write    # allow www-data to write to log dir
+info "ensure project directories have correct ownership and permissions:"
+sudo mkdir -pv /srv/www/$1                     # create project directory
+touch /srv/www/$1/db.sqlite3                   # create db.sqlite3 file
+sudo mkdir -pv /srv/www/$1/static              # initialize static directory
+sudo mkdir -pv /srv/www/$1/media               # init media dir
+sudo chown -Rv $user:www-data /srv/www/$1      # change group ownership to www-data
+sudo chmod -v g+w /srv/www/$1/db.sqlite3       # allow www-data to write to db.sqlite3
+sudo chmod -v g+w /srv/www/$1/media            # allow www-data to write to media dir
+
+info "create gunicorn log directory:"
+sudo mkdir -pv /var/log/gunicorn
+sudo chown -Rv $user:www-data /var/log/gunicorn
+sudo chmod -v g+w /var/log/gunicorn
 
 info "all done, don't forget to set env vars"
