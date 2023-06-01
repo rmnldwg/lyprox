@@ -84,7 +84,7 @@
                                                 </a>
                                                 {% endif %}
                                                 {% if dataset.export_csv %}
-                                                <a href="{% url 'patients:dataset_download' relative_path=dataset.export_csv.name %}" class="button tag is-success has-addons tooltip" data-tooltip="CSV fileexported from database&#10;MD5: {{ dataset.export_csv.md5_hash }}">
+                                                <a href="{% url 'patients:dataset_download' relative_path=dataset.export_csv.name %}" class="button tag is-success has-addons tooltip" data-tooltip="CSV file exported from database&#10;MD5: {{ dataset.export_csv.md5_hash }}">
                                                     Exported CSV
                                                 </a>
                                                 {% endif %}
