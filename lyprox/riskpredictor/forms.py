@@ -112,10 +112,10 @@ class DashboardForm(forms.Form):
     def add_lnl_fields(self, inference_result: InferenceResult):
         """Add the fields for the lymph node levels defined in the trained model."""
         for lnl in inference_result.lnls:
-            self.fields[f"ipsi_{lnl}"] = ThreeWayToggle()
+            self.fields[f"ipsi_{lnl}"] = ThreeWayToggle(initial=-1)
 
             if inference_result.is_bilateral:
-                self.fields[f"contra_{lnl}"] = ThreeWayToggle()
+                self.fields[f"contra_{lnl}"] = ThreeWayToggle(initial=-1)
 
 
     def add_t_stage_field(self, inference_result: InferenceResult):
