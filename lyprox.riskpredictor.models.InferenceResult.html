@@ -176,6 +176,26 @@
         
 
         
+            <div class="itemName"><code><a href="#fetch_params" class="internal-link" title="lyprox.riskpredictor.models.InferenceResult.fetch_params">fetch<wbr></wbr>_params</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="#fetch_samples" class="internal-link" title="lyprox.riskpredictor.models.InferenceResult.fetch_samples">fetch<wbr></wbr>_samples</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
             <div class="itemName"><code><a href="#__str__" class="internal-link" title="lyprox.riskpredictor.models.InferenceResult.__str__">__str__</a></code>
             </div>
         
@@ -206,17 +226,7 @@
         
 
         
-            <div class="itemName"><code><a href="#fetch_params" class="internal-link" title="lyprox.riskpredictor.models.InferenceResult.fetch_params">fetch<wbr></wbr>_params</a></code>
-            </div>
-        
-
-    </li><li class="">
-        
-        
-        
-
-        
-            <div class="itemName"><code><a href="#fetch_samples" class="internal-link" title="lyprox.riskpredictor.models.InferenceResult.fetch_samples">fetch<wbr></wbr>_samples</a></code>
+            <div class="itemName"><code><a href="#fetch_description" class="internal-link" title="lyprox.riskpredictor.models.InferenceResult.fetch_description">fetch<wbr></wbr>_description</a></code>
             </div>
         
 
@@ -275,7 +285,17 @@
         
 
         
-            <div class="itemName"><code><a href="#git_repo_url" class="internal-link" title="lyprox.riskpredictor.models.InferenceResult.git_repo_url">git<wbr></wbr>_repo<wbr></wbr>_url</a></code>
+            <div class="itemName"><code><a href="#git_repo_name" class="internal-link" title="lyprox.riskpredictor.models.InferenceResult.git_repo_name">git<wbr></wbr>_repo<wbr></wbr>_name</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="#git_repo_owner" class="internal-link" title="lyprox.riskpredictor.models.InferenceResult.git_repo_owner">git<wbr></wbr>_repo<wbr></wbr>_owner</a></code>
             </div>
         
 
@@ -325,7 +345,27 @@
         
 
         
+            <div class="itemName"><code><a href="#description" class="internal-link" title="lyprox.riskpredictor.models.InferenceResult.description">description</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
             <div class="itemName"><code><a href="#params" class="internal-link" title="lyprox.riskpredictor.models.InferenceResult.params">params</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="#git_repo_url" class="internal-link" title="lyprox.riskpredictor.models.InferenceResult.git_repo_url">git<wbr></wbr>_repo<wbr></wbr>_url</a></code>
             </div>
         
 
@@ -490,6 +530,16 @@ compute the prior risk matrices and stores them in an HDF5 file, too.</p>
     <td>Class</td>
     <td><code><a href="lyprox.riskpredictor.models.InferenceResult.Meta.html" class="internal-link" title="lyprox.riskpredictor.models.InferenceResult.Meta"><wbr></wbr>Meta</a></code></td>
     <td><span class="undocumented">Undocumented</span></td>
+  </tr><tr class="staticmethod">
+    
+    <td>Static Method</td>
+    <td><code><a href="#fetch_params" class="internal-link" title="lyprox.riskpredictor.models.InferenceResult.fetch_params">fetch<wbr></wbr>_params</a></code></td>
+    <td>Load the model parameters from the YAML file in the DVC repo.</td>
+  </tr><tr class="staticmethod">
+    
+    <td>Static Method</td>
+    <td><code><a href="#fetch_samples" class="internal-link" title="lyprox.riskpredictor.models.InferenceResult.fetch_samples">fetch<wbr></wbr>_samples</a></code></td>
+    <td>Load the model samples from the HDF5 file in the DVC repo.</td>
   </tr><tr class="method">
     
     <td>Method</td>
@@ -508,18 +558,13 @@ compute the prior risk matrices and stores them in an HDF5 file, too.</p>
   </tr><tr class="method">
     
     <td>Method</td>
-    <td><code><a href="#fetch_params" class="internal-link" title="lyprox.riskpredictor.models.InferenceResult.fetch_params">fetch<wbr></wbr>_params</a></code></td>
-    <td>Load the model parameters from the YAML file in the DVC repo.</td>
-  </tr><tr class="method">
-    
-    <td>Method</td>
-    <td><code><a href="#fetch_samples" class="internal-link" title="lyprox.riskpredictor.models.InferenceResult.fetch_samples">fetch<wbr></wbr>_samples</a></code></td>
-    <td>Load the model samples from the HDF5 file in the DVC repo.</td>
+    <td><code><a href="#fetch_description" class="internal-link" title="lyprox.riskpredictor.models.InferenceResult.fetch_description">fetch<wbr></wbr>_description</a></code></td>
+    <td>Fetch the release description from the GitHub API.</td>
   </tr><tr class="method">
     
     <td>Method</td>
     <td><code><a href="#get_lymph_model" class="internal-link" title="lyprox.riskpredictor.models.InferenceResult.get_lymph_model">get<wbr></wbr>_lymph<wbr></wbr>_model</a></code></td>
-    <td>Create a lymph model instance from the stored parameters.</td>
+    <td>Get (create if necessary) lymph model instance from the stored params.</td>
   </tr><tr class="method">
     
     <td>Method</td>
@@ -538,8 +583,13 @@ compute the prior risk matrices and stores them in an HDF5 file, too.</p>
   </tr><tr class="classvariable">
     
     <td>Class Variable</td>
-    <td><code><a href="#git_repo_url" class="internal-link" title="lyprox.riskpredictor.models.InferenceResult.git_repo_url">git<wbr></wbr>_repo<wbr></wbr>_url</a></code></td>
-    <td>URL of the git repository that contains the trained model.</td>
+    <td><code><a href="#git_repo_name" class="internal-link" title="lyprox.riskpredictor.models.InferenceResult.git_repo_name">git<wbr></wbr>_repo<wbr></wbr>_name</a></code></td>
+    <td>Name of the GitHub repository that contains the trained model.</td>
+  </tr><tr class="classvariable">
+    
+    <td>Class Variable</td>
+    <td><code><a href="#git_repo_owner" class="internal-link" title="lyprox.riskpredictor.models.InferenceResult.git_repo_owner">git<wbr></wbr>_repo<wbr></wbr>_owner</a></code></td>
+    <td>Owner of the GitHub repository that contains the trained model.</td>
   </tr><tr class="classvariable">
     
     <td>Class Variable</td>
@@ -563,8 +613,18 @@ compute the prior risk matrices and stores them in an HDF5 file, too.</p>
   </tr><tr class="instancevariable">
     
     <td>Instance Variable</td>
+    <td><code><a href="#description" class="internal-link" title="lyprox.riskpredictor.models.InferenceResult.description">description</a></code></td>
+    <td>GitHub release description of the inference run.</td>
+  </tr><tr class="instancevariable">
+    
+    <td>Instance Variable</td>
     <td><code><a href="#params" class="internal-link" title="lyprox.riskpredictor.models.InferenceResult.params">params</a></code></td>
     <td>Parameters to recreate lymph model for risk prediction.</td>
+  </tr><tr class="property">
+    
+    <td>Property</td>
+    <td><code><a href="#git_repo_url" class="internal-link" title="lyprox.riskpredictor.models.InferenceResult.git_repo_url">git<wbr></wbr>_repo<wbr></wbr>_url</a></code></td>
+    <td>Return the URL of the GitHub repository.</td>
   </tr><tr class="property">
     
     <td>Property</td>
@@ -579,7 +639,7 @@ compute the prior risk matrices and stores them in an HDF5 file, too.</p>
     
     <td>Property</td>
     <td><code><a href="#lnls" class="internal-link" title="lyprox.riskpredictor.models.InferenceResult.lnls">lnls</a></code></td>
-    <td>Return list of lymph node levels.</td>
+    <td>Return a list with the names of the included LNLs.</td>
   </tr><tr class="property">
     
     <td>Property</td>
@@ -598,7 +658,55 @@ compute the prior risk matrices and stores them in an HDF5 file, too.</p>
         </div>
 
         <div id="childList">
-          <div class="basemethod">
+          <div class="basestaticmethod">
+  
+  
+  <a name="lyprox.riskpredictor.models.InferenceResult.fetch_params">
+    
+  </a>
+  <a name="fetch_params">
+    
+  </a>
+  <div class="functionHeader">
+    @staticmethod<br />
+    <span class="py-keyword">def</span> <span class="py-defname">fetch_params</span>(dvc_file_system, params_path):
+    
+    <a class="headerLink" href="#fetch_params" title="lyprox.riskpredictor.models.InferenceResult.fetch_params">
+      
+      
+      ¶
+    </a>
+  </div>
+  <div class="docstring functionBody">
+    
+    <div><p>Load the model parameters from the YAML file in the DVC repo.</p>
+<table class="fieldTable"><tr class="fieldStart"><td class="fieldName" colspan="2">Parameters</td></tr><tr><td class="fieldArgContainer"><span class="fieldArg">dvc<wbr></wbr>_file<wbr></wbr>_system:</span><code>DVCFileSystem</code></td><td class="fieldArgDesc"><span class="undocumented">Undocumented</span></td></tr><tr><td class="fieldArgContainer"><span class="fieldArg">params<wbr></wbr>_path:</span><code>Union[<wbr></wbr>Path, <wbr></wbr>str]</code></td><td class="fieldArgDesc"><span class="undocumented">Undocumented</span></td></tr><tr class="fieldStart"><td class="fieldName" colspan="2">Returns</td></tr><tr><td class="fieldArgContainer"><code>Dict[<wbr></wbr>str, <wbr></wbr>Any]</code></td><td class="fieldArgDesc"><span class="undocumented">Undocumented</span></td></tr></table></div>
+  </div>
+</div><div class="basestaticmethod">
+  
+  
+  <a name="lyprox.riskpredictor.models.InferenceResult.fetch_samples">
+    
+  </a>
+  <a name="fetch_samples">
+    
+  </a>
+  <div class="functionHeader">
+    @staticmethod<br />
+    <span class="py-keyword">def</span> <span class="py-defname">fetch_samples</span>(dvc_file_system, samples_path, num_samples=100):
+    
+    <a class="headerLink" href="#fetch_samples" title="lyprox.riskpredictor.models.InferenceResult.fetch_samples">
+      
+      
+      ¶
+    </a>
+  </div>
+  <div class="docstring functionBody">
+    
+    <div><p>Load the model samples from the HDF5 file in the DVC repo.</p>
+<table class="fieldTable"><tr class="fieldStart"><td class="fieldName" colspan="2">Parameters</td></tr><tr><td class="fieldArgContainer"><span class="fieldArg">dvc<wbr></wbr>_file<wbr></wbr>_system:</span><code>DVCFileSystem</code></td><td class="fieldArgDesc"><span class="undocumented">Undocumented</span></td></tr><tr><td class="fieldArgContainer"><span class="fieldArg">samples<wbr></wbr>_path:</span><code>str</code></td><td class="fieldArgDesc"><span class="undocumented">Undocumented</span></td></tr><tr><td class="fieldArgContainer"><span class="fieldArg">num<wbr></wbr>_samples:</span><code>int</code></td><td class="fieldArgDesc"><span class="undocumented">Undocumented</span></td></tr><tr class="fieldStart"><td class="fieldName" colspan="2">Returns</td></tr><tr><td class="fieldArgContainer"><code>np.ndarray</code></td><td class="fieldArgDesc"><span class="undocumented">Undocumented</span></td></tr></table></div>
+  </div>
+</div><div class="basemethod">
   
   
   <a name="lyprox.riskpredictor.models.InferenceResult.__str__">
@@ -672,17 +780,17 @@ compute the prior risk matrices and stores them in an HDF5 file, too.</p>
 </div><div class="basemethod">
   
   
-  <a name="lyprox.riskpredictor.models.InferenceResult.fetch_params">
+  <a name="lyprox.riskpredictor.models.InferenceResult.fetch_description">
     
   </a>
-  <a name="fetch_params">
+  <a name="fetch_description">
     
   </a>
   <div class="functionHeader">
     
-    <span class="py-keyword">def</span> <span class="py-defname">fetch_params</span>(self, fs):
+    <span class="py-keyword">def</span> <span class="py-defname">fetch_description</span>(self):
     
-    <a class="headerLink" href="#fetch_params" title="lyprox.riskpredictor.models.InferenceResult.fetch_params">
+    <a class="headerLink" href="#fetch_description" title="lyprox.riskpredictor.models.InferenceResult.fetch_description">
       
       
       ¶
@@ -690,32 +798,8 @@ compute the prior risk matrices and stores them in an HDF5 file, too.</p>
   </div>
   <div class="docstring functionBody">
     
-    <div><p>Load the model parameters from the YAML file in the DVC repo.</p>
-<table class="fieldTable"><tr class="fieldStart"><td class="fieldName" colspan="2">Parameters</td></tr><tr><td class="fieldArgContainer"><span class="fieldArg">fs:</span><code>DVCFileSystem</code></td><td class="fieldArgDesc"><span class="undocumented">Undocumented</span></td></tr><tr class="fieldStart"><td class="fieldName" colspan="2">Returns</td></tr><tr><td class="fieldArgContainer"><code>Dict[<wbr></wbr>str, <wbr></wbr>Any]</code></td><td class="fieldArgDesc"><span class="undocumented">Undocumented</span></td></tr></table></div>
-  </div>
-</div><div class="basemethod">
-  
-  
-  <a name="lyprox.riskpredictor.models.InferenceResult.fetch_samples">
-    
-  </a>
-  <a name="fetch_samples">
-    
-  </a>
-  <div class="functionHeader">
-    
-    <span class="py-keyword">def</span> <span class="py-defname">fetch_samples</span>(self, fs, samples_path):
-    
-    <a class="headerLink" href="#fetch_samples" title="lyprox.riskpredictor.models.InferenceResult.fetch_samples">
-      
-      
-      ¶
-    </a>
-  </div>
-  <div class="docstring functionBody">
-    
-    <div><p>Load the model samples from the HDF5 file in the DVC repo.</p>
-<table class="fieldTable"><tr class="fieldStart"><td class="fieldName" colspan="2">Parameters</td></tr><tr><td class="fieldArgContainer"><span class="fieldArg">fs:</span><code>DVCFileSystem</code></td><td class="fieldArgDesc"><span class="undocumented">Undocumented</span></td></tr><tr><td class="fieldArgContainer"><span class="fieldArg">samples<wbr></wbr>_path:</span><code>str</code></td><td class="fieldArgDesc"><span class="undocumented">Undocumented</span></td></tr><tr class="fieldStart"><td class="fieldName" colspan="2">Returns</td></tr><tr><td class="fieldArgContainer"><code>np.ndarray</code></td><td class="fieldArgDesc"><span class="undocumented">Undocumented</span></td></tr></table></div>
+    <div><p>Fetch the release description from the GitHub API.</p>
+<table class="fieldTable"><tr class="fieldStart"><td class="fieldName" colspan="2">Returns</td></tr><tr><td class="fieldArgContainer"><code>str</code></td><td class="fieldArgDesc"><span class="undocumented">Undocumented</span></td></tr></table></div>
   </div>
 </div><div class="basemethod">
   
@@ -738,7 +822,7 @@ compute the prior risk matrices and stores them in an HDF5 file, too.</p>
   </div>
   <div class="docstring functionBody">
     
-    <div><p>Create a lymph model instance from the stored parameters.</p>
+    <div><p>Get (create if necessary) lymph model instance from the stored params.</p>
 <table class="fieldTable"><tr class="fieldStart"><td class="fieldName" colspan="2">Returns</td></tr><tr><td class="fieldArgContainer"><code>Union[<wbr></wbr>Unilateral, <wbr></wbr>Bilateral, <wbr></wbr>MidlineBilateral]</code></td><td class="fieldArgDesc"><span class="undocumented">Undocumented</span></td></tr></table></div>
   </div>
 </div><div class="basemethod">
@@ -817,17 +901,17 @@ stage and lateralization.</p>
 </div><div class="baseclassvariable">
   
   
-  <a name="lyprox.riskpredictor.models.InferenceResult.git_repo_url">
+  <a name="lyprox.riskpredictor.models.InferenceResult.git_repo_name">
     
   </a>
-  <a name="git_repo_url">
+  <a name="git_repo_name">
     
   </a>
   <div class="functionHeader">
     
-    <span class="py-defname">git_repo_url</span> =
+    <span class="py-defname">git_repo_name</span> =
     
-    <a class="headerLink" href="#git_repo_url" title="lyprox.riskpredictor.models.InferenceResult.git_repo_url">
+    <a class="headerLink" href="#git_repo_name" title="lyprox.riskpredictor.models.InferenceResult.git_repo_name">
       
       
       ¶
@@ -835,7 +919,32 @@ stage and lateralization.</p>
   </div>
   <div class="functionBody">
     
-    <div><p>URL of the git repository that contains the trained model.</p>
+    <div><p>Name of the GitHub repository that contains the trained model.</p>
+</div>
+    
+  </div>
+</div><div class="baseclassvariable">
+  
+  
+  <a name="lyprox.riskpredictor.models.InferenceResult.git_repo_owner">
+    
+  </a>
+  <a name="git_repo_owner">
+    
+  </a>
+  <div class="functionHeader">
+    
+    <span class="py-defname">git_repo_owner</span> =
+    
+    <a class="headerLink" href="#git_repo_owner" title="lyprox.riskpredictor.models.InferenceResult.git_repo_owner">
+      
+      
+      ¶
+    </a>
+  </div>
+  <div class="functionBody">
+    
+    <div><p>Owner of the GitHub repository that contains the trained model.</p>
 </div>
     
   </div>
@@ -942,6 +1051,31 @@ stage and lateralization.</p>
 </div><div class="baseinstancevariable">
   
   
+  <a name="lyprox.riskpredictor.models.InferenceResult.description">
+    
+  </a>
+  <a name="description">
+    
+  </a>
+  <div class="functionHeader">
+    
+    <span class="py-defname">description</span> =
+    
+    <a class="headerLink" href="#description" title="lyprox.riskpredictor.models.InferenceResult.description">
+      
+      
+      ¶
+    </a>
+  </div>
+  <div class="functionBody">
+    
+    <div><p>GitHub release description of the inference run.</p>
+</div>
+    
+  </div>
+</div><div class="baseinstancevariable">
+  
+  
   <a name="lyprox.riskpredictor.models.InferenceResult.params">
     
   </a>
@@ -961,6 +1095,31 @@ stage and lateralization.</p>
   <div class="functionBody">
     
     <div><p>Parameters to recreate lymph model for risk prediction.</p>
+</div>
+    
+  </div>
+</div><div class="baseproperty">
+  
+  
+  <a name="lyprox.riskpredictor.models.InferenceResult.git_repo_url">
+    
+  </a>
+  <a name="git_repo_url">
+    
+  </a>
+  <div class="functionHeader">
+    @property<br />
+    <span class="py-defname">git_repo_url</span> =
+    
+    <a class="headerLink" href="#git_repo_url" title="lyprox.riskpredictor.models.InferenceResult.git_repo_url">
+      
+      
+      ¶
+    </a>
+  </div>
+  <div class="functionBody">
+    
+    <div><p>Return the URL of the GitHub repository.</p>
 </div>
     
   </div>
@@ -1035,7 +1194,7 @@ stage and lateralization.</p>
   </div>
   <div class="functionBody">
     
-    <div><p>Return list of lymph node levels.</p>
+    <div><p>Return a list with the names of the included LNLs.</p>
 </div>
     
   </div>
@@ -1100,7 +1259,7 @@ stage and lateralization.</p>
   <div class="container">
     <a href="index.html">API Documentation</a> for LyProX,
   generated by <a href="https://github.com/twisted/pydoctor/">pydoctor</a>
-    22.9.1 at 2023-04-19 14:38:25.
+    22.9.1 at 2023-06-16 11:31:08.
   </div>
 
   <!-- Search related scripts needs to be loaded at the end of HTML 

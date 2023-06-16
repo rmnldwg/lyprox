@@ -322,6 +322,16 @@
         
 
         
+            <div class="itemName"><code><a href="#GITHUB_TOKEN" class="internal-link" title="lyprox.settings.GITHUB_TOKEN">GITHUB<wbr></wbr>_TOKEN</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
             <div class="itemName"><code><a href="#INSTALLED_APPS" class="internal-link" title="lyprox.settings.INSTALLED_APPS">INSTALLED<wbr></wbr>_APPS</a></code>
             </div>
         
@@ -372,7 +382,37 @@
         
 
         
+            <div class="itemName"><code><a href="#LOGIN_NOT_REQUIRED_URLS" class="internal-link" title="lyprox.settings.LOGIN_NOT_REQUIRED_URLS">LOGIN<wbr></wbr>_NOT<wbr></wbr>_REQUIRED<wbr></wbr>_URLS</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
             <div class="itemName"><code><a href="#LOGIN_REDIRECT_URL" class="internal-link" title="lyprox.settings.LOGIN_REDIRECT_URL">LOGIN<wbr></wbr>_REDIRECT<wbr></wbr>_URL</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="#LOGIN_REQUIRED_URLS" class="internal-link" title="lyprox.settings.LOGIN_REQUIRED_URLS">LOGIN<wbr></wbr>_REQUIRED<wbr></wbr>_URLS</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="#LOGIN_URL" class="internal-link" title="lyprox.settings.LOGIN_URL">LOGIN<wbr></wbr>_URL</a></code>
             </div>
         
 
@@ -583,6 +623,16 @@
 
         
             <div class="itemName"><code><a href="#USE_TZ" class="internal-link" title="lyprox.settings.USE_TZ">USE<wbr></wbr>_TZ</a></code>
+            </div>
+        
+
+    </li><li class="private">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="#_login_required_urls_env" class="internal-link" title="lyprox.settings._login_required_urls_env">_login<wbr></wbr>_required<wbr></wbr>_urls<wbr></wbr>_env</a></code>
             </div>
         
 
@@ -813,7 +863,7 @@ host environment is configured for the application.</p>
     
     <td>Constant</td>
     <td><code><a href="#BASE_DIR" class="internal-link" title="lyprox.settings.BASE_DIR">BASE<wbr></wbr>_DIR</a></code></td>
-    <td><span class="undocumented">Undocumented</span></td>
+    <td>Setting the base dir manually is necessary, because otherwise everything might be set up relative to venv's site-packages.</td>
   </tr><tr class="constant">
     
     <td>Constant</td>
@@ -867,6 +917,11 @@ host environment is configured for the application.</p>
   </tr><tr class="constant">
     
     <td>Constant</td>
+    <td><code><a href="#GITHUB_TOKEN" class="internal-link" title="lyprox.settings.GITHUB_TOKEN">GITHUB<wbr></wbr>_TOKEN</a></code></td>
+    <td>Read-only GitHub access token for fetching information about <code><a href="lyprox.riskpredictor.models.InferenceResult.html" class="internal-link">lyprox.riskpredictor.models.InferenceResult</a></code>.</td>
+  </tr><tr class="constant">
+    
+    <td>Constant</td>
     <td><code><a href="#INSTALLED_APPS" class="internal-link" title="lyprox.settings.INSTALLED_APPS">INSTALLED<wbr></wbr>_APPS</a></code></td>
     <td><span class="undocumented">Undocumented</span></td>
   </tr><tr class="constant">
@@ -892,13 +947,28 @@ host environment is configured for the application.</p>
   </tr><tr class="constant">
     
     <td>Constant</td>
+    <td><code><a href="#LOGIN_NOT_REQUIRED_URLS" class="internal-link" title="lyprox.settings.LOGIN_NOT_REQUIRED_URLS">LOGIN<wbr></wbr>_NOT<wbr></wbr>_REQUIRED<wbr></wbr>_URLS</a></code></td>
+    <td>List of regexes for urls that are exceptions from the <code><a href="lyprox.settings.html#LOGIN_REQUIRED_URLS" class="internal-link" title="lyprox.settings.LOGIN_REQUIRED_URLS">LOGIN_REQUIRED_URLS</a></code>.</td>
+  </tr><tr class="constant">
+    
+    <td>Constant</td>
     <td><code><a href="#LOGIN_REDIRECT_URL" class="internal-link" title="lyprox.settings.LOGIN_REDIRECT_URL">LOGIN<wbr></wbr>_REDIRECT<wbr></wbr>_URL</a></code></td>
-    <td><span class="undocumented">Undocumented</span></td>
+    <td>Redirect to this URL after successful login.</td>
+  </tr><tr class="constant">
+    
+    <td>Constant</td>
+    <td><code><a href="#LOGIN_REQUIRED_URLS" class="internal-link" title="lyprox.settings.LOGIN_REQUIRED_URLS">LOGIN<wbr></wbr>_REQUIRED<wbr></wbr>_URLS</a></code></td>
+    <td>List of regexes for urls that require login.</td>
+  </tr><tr class="constant">
+    
+    <td>Constant</td>
+    <td><code><a href="#LOGIN_URL" class="internal-link" title="lyprox.settings.LOGIN_URL">LOGIN<wbr></wbr>_URL</a></code></td>
+    <td>URL to redirect to when login is required.</td>
   </tr><tr class="constant">
     
     <td>Constant</td>
     <td><code><a href="#MAINTENANCE" class="internal-link" title="lyprox.settings.MAINTENANCE">MAINTENANCE</a></code></td>
-    <td>If <tt class="rst-docutils literal">True</tt>, all requests to are redirected to a maintenance page. <tt class="rst-docutils literal">DJANGO_ENV</tt> must be set to <tt class="rst-docutils literal">"maintenance"</tt> for this to work. Also see <code>core.views.maintenance</code>.</td>
+    <td>If <tt class="rst-docutils literal">True</tt>, all requests to are redirected to a maintenance page. <tt class="rst-docutils literal">DJANGO_ENV</tt> must be set to <tt class="rst-docutils literal">"maintenance"</tt> for this to work. Also see <code><a href="lyprox.views.html#maintenance" class="internal-link">lyprox.views.maintenance</a></code>.</td>
   </tr><tr class="constant">
     
     <td>Constant</td>
@@ -998,6 +1068,11 @@ host environment is configured for the application.</p>
     
     <td>Constant</td>
     <td><code><a href="#USE_TZ" class="internal-link" title="lyprox.settings.USE_TZ">USE<wbr></wbr>_TZ</a></code></td>
+    <td><span class="undocumented">Undocumented</span></td>
+  </tr><tr class="variable private">
+    
+    <td>Variable</td>
+    <td><code><a href="#_login_required_urls_env" class="internal-link" title="lyprox.settings._login_required_urls_env">_login<wbr></wbr>_required<wbr></wbr>_urls<wbr></wbr>_env</a></code></td>
     <td><span class="undocumented">Undocumented</span></td>
   </tr>
 </table>
@@ -1132,8 +1207,10 @@ with the env var <tt class="rst-docutils literal">DJANGO_ALLOWED_HOSTS</tt>.</p>
   </div>
   <div class="functionBody">
     
-    <div><p class="undocumented">Undocumented</p></div>
-    <table class="valueTable"><tr class="fieldStart"><td class="fieldName">Value</td></tr><tr><td><pre class="constant-value"><code>Path(__file__).resolve().parent.parent</code></pre></td></tr></table>
+    <div><p>Setting the base dir manually is necessary, because otherwise everything might be
+set up relative to venv's site-packages.</p>
+</div>
+    <table class="valueTable"><tr class="fieldStart"><td class="fieldName">Value</td></tr><tr><td><pre class="constant-value"><code>Path(<wbr></wbr>os.environ[<wbr></wbr><span class="rst-variable-quote">'</span><span class="rst-variable-string">DJANGO_BASE_DIR</span><span class="rst-variable-quote">'</span>])</code></pre></td></tr></table>
   </div>
 </div><div class="baseconstant">
   
@@ -1380,6 +1457,32 @@ with the env var <tt class="rst-docutils literal">DJANGO_ALLOWED_HOSTS</tt>.</p>
 </div><div class="baseconstant">
   
   
+  <a name="lyprox.settings.GITHUB_TOKEN">
+    
+  </a>
+  <a name="GITHUB_TOKEN">
+    
+  </a>
+  <div class="functionHeader">
+    
+    <span class="py-defname">GITHUB_TOKEN</span> =
+    
+    <a class="headerLink" href="#GITHUB_TOKEN" title="lyprox.settings.GITHUB_TOKEN">
+      
+      
+      ¶
+    </a>
+  </div>
+  <div class="functionBody">
+    
+    <div><p>Read-only GitHub access token for fetching information about
+<code><a href="lyprox.riskpredictor.models.InferenceResult.html" class="internal-link">lyprox.riskpredictor.models.InferenceResult</a></code>.</p>
+</div>
+    <table class="valueTable"><tr class="fieldStart"><td class="fieldName">Value</td></tr><tr><td><pre class="constant-value"><code>os.environ[<wbr></wbr><span class="rst-variable-quote">'</span><span class="rst-variable-string">GITHUB_TOKEN</span><span class="rst-variable-quote">'</span>]</code></pre></td></tr></table>
+  </div>
+</div><div class="baseconstant">
+  
+  
   <a name="lyprox.settings.INSTALLED_APPS">
     
   </a>
@@ -1510,6 +1613,34 @@ and <tt class="rst-docutils literal">"production"</tt> this is fixed to <tt clas
 </div><div class="baseconstant">
   
   
+  <a name="lyprox.settings.LOGIN_NOT_REQUIRED_URLS">
+    
+  </a>
+  <a name="LOGIN_NOT_REQUIRED_URLS">
+    
+  </a>
+  <div class="functionHeader">
+    
+    <span class="py-defname">LOGIN_NOT_REQUIRED_URLS</span>: <code>list[<wbr></wbr>str]</code> =
+    
+    <a class="headerLink" href="#LOGIN_NOT_REQUIRED_URLS" title="lyprox.settings.LOGIN_NOT_REQUIRED_URLS">
+      
+      
+      ¶
+    </a>
+  </div>
+  <div class="functionBody">
+    
+    <div><p>List of regexes for urls that are exceptions from the <code><a href="#LOGIN_REQUIRED_URLS" class="internal-link" title="lyprox.settings.LOGIN_REQUIRED_URLS">LOGIN_REQUIRED_URLS</a></code>.</p>
+</div>
+    <table class="valueTable"><tr class="fieldStart"><td class="fieldName">Value</td></tr><tr><td><pre class="constant-value"><code>[<wbr></wbr><span class="rst-variable-quote">'</span><span class="rst-variable-string">/accounts/login/(.*)$</span><span class="rst-variable-quote">'</span>,
+ <wbr></wbr><span class="rst-variable-quote">'</span><span class="rst-variable-string">/accounts/logout/(.*)$</span><span class="rst-variable-quote">'</span>,
+ <wbr></wbr><span class="rst-variable-quote">'</span><span class="rst-variable-string">/admin/(.*)$</span><span class="rst-variable-quote">'</span>,
+ <wbr></wbr><span class="rst-variable-quote">'</span><span class="rst-variable-string">/maintenance/(.*)$</span><span class="rst-variable-quote">'</span>]</code></pre></td></tr></table>
+  </div>
+</div><div class="baseconstant">
+  
+  
   <a name="lyprox.settings.LOGIN_REDIRECT_URL">
     
   </a>
@@ -1528,8 +1659,62 @@ and <tt class="rst-docutils literal">"production"</tt> this is fixed to <tt clas
   </div>
   <div class="functionBody">
     
-    <div><p class="undocumented">Undocumented</p></div>
+    <div><p>Redirect to this URL after successful login.</p>
+</div>
     <table class="valueTable"><tr class="fieldStart"><td class="fieldName">Value</td></tr><tr><td><pre class="constant-value"><code><span class="rst-variable-quote">'</span><span class="rst-variable-string">/</span><span class="rst-variable-quote">'</span></code></pre></td></tr></table>
+  </div>
+</div><div class="baseconstant">
+  
+  
+  <a name="lyprox.settings.LOGIN_REQUIRED_URLS">
+    
+  </a>
+  <a name="LOGIN_REQUIRED_URLS">
+    
+  </a>
+  <div class="functionHeader">
+    
+    <span class="py-defname">LOGIN_REQUIRED_URLS</span> =
+    
+    <a class="headerLink" href="#LOGIN_REQUIRED_URLS" title="lyprox.settings.LOGIN_REQUIRED_URLS">
+      
+      
+      ¶
+    </a>
+  </div>
+  <div class="functionBody">
+    
+    <div><p>List of regexes for urls that require login.</p>
+<p>Note that this may simply be left empty, since the critical views are protected by
+default. But if you want to protect e.g. the entire website, you can add <tt class="rst-docutils literal"><span class="pre">"(.*)$"</span></tt>
+to the list.</p>
+</div>
+    <table class="valueTable"><tr class="fieldStart"><td class="fieldName">Value</td></tr><tr><td><pre class="constant-value"><code>_login_required_urls_env.split(<wbr></wbr><span class="rst-variable-quote">'</span><span class="rst-variable-string"> </span><span class="rst-variable-quote">'</span>)</code></pre></td></tr></table>
+  </div>
+</div><div class="baseconstant">
+  
+  
+  <a name="lyprox.settings.LOGIN_URL">
+    
+  </a>
+  <a name="LOGIN_URL">
+    
+  </a>
+  <div class="functionHeader">
+    
+    <span class="py-defname">LOGIN_URL</span> =
+    
+    <a class="headerLink" href="#LOGIN_URL" title="lyprox.settings.LOGIN_URL">
+      
+      
+      ¶
+    </a>
+  </div>
+  <div class="functionBody">
+    
+    <div><p>URL to redirect to when login is required.</p>
+</div>
+    <table class="valueTable"><tr class="fieldStart"><td class="fieldName">Value</td></tr><tr><td><pre class="constant-value"><code>urls.reverse_lazy(<wbr></wbr><span class="rst-variable-quote">'</span><span class="rst-variable-string">accounts:login</span><span class="rst-variable-quote">'</span>)</code></pre></td></tr></table>
   </div>
 </div><div class="baseconstant">
   
@@ -1553,7 +1738,7 @@ and <tt class="rst-docutils literal">"production"</tt> this is fixed to <tt clas
   <div class="functionBody">
     
     <div><p>If <tt class="rst-docutils literal">True</tt>, all requests to are redirected to a maintenance page. <tt class="rst-docutils literal">DJANGO_ENV</tt> must
-be set to <tt class="rst-docutils literal">"maintenance"</tt> for this to work. Also see <code>core.views.maintenance</code>.</p>
+be set to <tt class="rst-docutils literal">"maintenance"</tt> for this to work. Also see <code><a href="lyprox.views.html#maintenance" class="internal-link">lyprox.views.maintenance</a></code>.</p>
 </div>
     <table class="valueTable"><tr class="fieldStart"><td class="fieldName">Value</td></tr><tr><td><pre class="constant-value"><code>(os.environ['DJANGO_ENV'] == 'maintenance')</code></pre></td></tr></table>
   </div>
@@ -1628,12 +1813,12 @@ be set to <tt class="rst-docutils literal">"maintenance"</tt> for this to work. 
     
     <div><p class="undocumented">Undocumented</p></div>
     <table class="valueTable"><tr class="fieldStart"><td class="fieldName">Value</td></tr><tr><td><pre class="constant-value"><code>[<wbr></wbr><span class="rst-variable-quote">'</span><span class="rst-variable-string">lyprox.middleware.MaintenanceMiddleware</span><span class="rst-variable-quote">'</span>,
+ <wbr></wbr><span class="rst-variable-quote">'</span><span class="rst-variable-string">lyprox.middleware.LoginRequiredMiddleware</span><span class="rst-variable-quote">'</span>,
  <wbr></wbr><span class="rst-variable-quote">'</span><span class="rst-variable-string">django.middleware.security.SecurityMiddleware</span><span class="rst-variable-quote">'</span>,
  <wbr></wbr><span class="rst-variable-quote">'</span><span class="rst-variable-string">django.contrib.sessions.middleware.SessionMiddleware</span><span class="rst-variable-quote">'</span>,
  <wbr></wbr><span class="rst-variable-quote">'</span><span class="rst-variable-string">django.middleware.common.CommonMiddleware</span><span class="rst-variable-quote">'</span>,
  <wbr></wbr><span class="rst-variable-quote">'</span><span class="rst-variable-string">django.middleware.csrf.CsrfViewMiddleware</span><span class="rst-variable-quote">'</span>,
  <wbr></wbr><span class="rst-variable-quote">'</span><span class="rst-variable-string">django.contrib.auth.middleware.AuthenticationMiddleware</span><span class="rst-variable-quote">'</span>,
- <wbr></wbr><span class="rst-variable-quote">'</span><span class="rst-variable-string">django.contrib.messages.middleware.MessageMiddleware</span><span class="rst-variable-quote">'</span>,
 <span class="rst-variable-ellipsis">...</span></code></pre></td></tr></table>
   </div>
 </div><div class="baseconstant">
@@ -2054,6 +2239,30 @@ the application. It is set via the environment variable <tt class="rst-docutils 
     <div><p class="undocumented">Undocumented</p></div>
     <table class="valueTable"><tr class="fieldStart"><td class="fieldName">Value</td></tr><tr><td><pre class="constant-value"><code>True</code></pre></td></tr></table>
   </div>
+</div><div class="basevariable private">
+  
+  
+  <a name="lyprox.settings._login_required_urls_env">
+    
+  </a>
+  <a name="_login_required_urls_env">
+    
+  </a>
+  <div class="functionHeader">
+    
+    <span class="py-defname">_login_required_urls_env</span> =
+    
+    <a class="headerLink" href="#_login_required_urls_env" title="lyprox.settings._login_required_urls_env">
+      
+      
+      ¶
+    </a>
+  </div>
+  <div class="functionBody">
+    
+    <div><p class="undocumented">Undocumented</p></div>
+    
+  </div>
 </div>
         </div>
       
@@ -2066,7 +2275,7 @@ the application. It is set via the environment variable <tt class="rst-docutils 
   <div class="container">
     <a href="index.html">API Documentation</a> for LyProX,
   generated by <a href="https://github.com/twisted/pydoctor/">pydoctor</a>
-    22.9.1 at 2023-04-19 14:38:25.
+    22.9.1 at 2023-06-16 11:31:08.
   </div>
 
   <!-- Search related scripts needs to be loaded at the end of HTML 
