@@ -34,71 +34,40 @@
               {% endif %}
             </div>
             <div class="block">
-              <div class="field is-grouped">
-                <div class="control is-expanded">
-                  <label for="{{ form.name.if_for_label }}" class="label">
-                    {{ form.name.label }}
-                  </label>
-                  {{ form.name }}
-                  {% if form.errors.name %}
-                  <small class="help is-danger">{{ form.errors.name }}</small>
-                  {% endif %}
-                </div>
-                <div class="control">
-                  <label for="{{ form.is_public.id_for_label }}" class="label">
-                    Make public?
-                  </label>
-                  <div class="select">
-                    {{ form.is_public }}
-                  </div>
-                </div>
-              </div>
               <div class="field">
-                <div class="control">
-                  <label for="{{ form.description.if_for_label }}" class="label">
-                    {{ form.description.label }}
-                  </label>
-                  {{ form.description }}
-                  {% if form.errors.description %}
-                  <small class="help is-danger">{{ form.errors.description }}</small>
-                  {% endif %}
-                </div>
-              </div>
-              <div class="field is-grouped">
-                <div class="control">
-                  <label for="{{ form.repo_provider.if_for_label }}" class="label">
-                    {{ form.repo_provider.label }} <span class="has-text-info">(optional)</span>
-                  </label>
-                  {{ form.repo_provider }}
-                </div>
                 <div class="control is-expanded">
-                  <label for="{{ form.repo_data_url.if_for_label }}" class="label">
-                    {{ form.repo_data_url.label }} <span class="has-text-info">(optional)</span>
+                  <label for="{{ form.git_repo_url.id_for_label }}" class="label">
+                    {{ form.git_repo_url.label }} <span class="has-text-info">(optional)</span>
                   </label>
-                  {{ form.repo_data_url }}
-                  {% if form.errors.repo_data_url %}
-                  <small class="help is-danger">{{ form.errors.repo_data_url }}</small>
+                  {{ form.git_repo_url }}
+                  {% if form.errors.git_repo_url %}
+                  <small class="help is-danger">{{ form.errors.git_repo_url }}</small>
                   {% endif %}
                 </div>
               </div>
             </div>
+            <div class="field is-grouped">
+              <div class="control">
+                <label for="{{ form.revision.id_for_label }}" class="label">
+                  {{ form.revision.label }}
+                </label>
+                {{ form.revision }}
+                {% if form.errors.revision %}
+                <small class="help is-danger">{{ form.errors.revision }}</small>
+                {% endif %}
+              </div>
+              <div class="control">
+                <label for="{{ form.data_path.id_for_label }}" class="label">
+                  {{ form.data_path.label }}
+                </label>
+                {{ form.data_path }}
+                {% if form.errors.data_path %}
+                <small class="help is-danger">{{ form.errors.data_path }}</small>
+                {% endif %}
+              </div>
+            </div>
             <div class="block">
-              <div class="field is-grouped">
-                <div class="control">
-                  <div class="file" id="file-upload">
-                    <label class="file-label">
-                      {{ form.source_csv }}
-                      <span class="file-cta">
-                        <span class="file-icon">
-                          <i class="fas fa-folder-open"></i>
-                        </span>
-                        <span class="file-label" id="file-label-text">
-                          Choose CSV table...
-                        </span>
-                      </span>
-                    </label>
-                  </div>
-                </div>
+              <div class="field">
                 <button class="button is-primary" type="submit">
                   <span class="icon">
                     <i class="fas fa-cloud-upload-alt"></i>
@@ -106,9 +75,6 @@
                   <span>Upload</span>
                 </button>
               </div>
-              {% if form.errors.source_csv %}
-              <small class="help is-danger">{{ form.errors.source_csv }}</small>
-              {% endif %}
             </div>
           </form>
         </div>

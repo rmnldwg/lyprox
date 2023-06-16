@@ -24,6 +24,7 @@ import pandas as pd
 from django.db import models
 from django.forms import ValidationError
 from django.urls import reverse
+from dvc.api import DVCFileSystem
 from github import Github, GithubException
 
 from lyprox import settings
@@ -61,6 +62,8 @@ class Dataset(loggers.ModelLoggerMixin, models.Model):
     """The institution that provided the dataset."""
     is_locked = models.BooleanField(default=False)
     """Whether the dataset is locked or not. Locked datasets cannot be edited."""
+    is_public = models.BooleanField(default=False)
+    """Whether the dataset is public or not. Public datasets can be viewed by everyone."""
 
 
     class Meta:
@@ -94,7 +97,9 @@ class Dataset(loggers.ModelLoggerMixin, models.Model):
         """Fetch the dataset from GitHub and return it as a pandas DataFrame."""
         # pylint: disable=attribute-defined-outside-init
         if not hasattr(self, "_source_csv"):
-            self._source_csv = pd.read_csv(self.download_url, header=[0, 1, 2])
+            dvc_fs = DVCFileSystem(url=self.git_repo_url, revision=self.revision)
+            data_file = dvc_fs.open(self.data_path, mode="r")
+            self._source_csv = pd.read_csv(data_file, header=[0, 1, 2])
 
         return self._source_csv
 

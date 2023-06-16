@@ -54,6 +54,7 @@ class CreateDatasetView(
         kwargs["user"] = self.request.user
         return kwargs
 
+
 class DatasetListView(ViewLoggerMixin, generic.ListView):
     """
     View that displays all datasets in a list.
@@ -72,6 +73,7 @@ class DatasetListView(ViewLoggerMixin, generic.ListView):
             queryset = queryset.filter(is_public=True)
 
         return queryset
+
 
 class DatasetView(ViewLoggerMixin, View):
     """View that serves the respective `Dataset` CSV file."""

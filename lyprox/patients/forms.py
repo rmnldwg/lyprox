@@ -15,6 +15,11 @@ import pandas
 from django import forms
 from django.core.exceptions import ValidationError
 from django.forms import widgets
+from dvc.api import DVCFileSystem
+from dvc.scm import CloneError, RevError
+from github import Github
+
+from lyprox import settings
 
 from ..loggers import FormLoggerMixin
 from .models import Dataset, Diagnose, Patient, Tumor
@@ -24,9 +29,16 @@ class DatasetForm(FormLoggerMixin, forms.ModelForm):
     """
     Form to create and edit datasets, based on their model definition.
     """
-    initial = {
-        "is_public": False,
-    }
+    git_repo_url = forms.URLField(
+        label="GitHub repository URL",
+        help_text="The URL of the GitHub repository that contains the data.",
+        initial="https://github.com/rmnldwg/lydata",
+        widget=widgets.TextInput(attrs={
+            "class": "input",
+            "placeholder": "e.g. https://github.com/my/repo",
+        }),
+    ),
+
     class Meta:
         """The underlying model."""
         model = Dataset
@@ -37,18 +49,6 @@ class DatasetForm(FormLoggerMixin, forms.ModelForm):
             "data_path",
         ]
         widgets = {
-            "git_repo_owner": widgets.TextInput(
-                attrs={
-                    "class": "input",
-                    "placeholder": "e.g. rmnldwg"
-                }
-            ),
-            "git_repo_name": widgets.TextInput(
-                attrs={
-                    "class": "input",
-                    "placeholder": "e.g. lydata"
-                }
-            ),
             "revision": widgets.TextInput(
                 attrs={
                     "class": "input",
@@ -68,6 +68,44 @@ class DatasetForm(FormLoggerMixin, forms.ModelForm):
         user = kwargs.pop("user")
         self.user = user
         super().__init__(*args, **kwargs)
+
+
+    def clean(self) -> Dict[str, Any]:
+        """
+        Check that the git repository and revision are valid. If so, return
+        the cleaned data.
+        """
+        cleaned_data = super().clean()
+        git_repo_url = cleaned_data.get("git_repo_url")
+        revision = cleaned_data.get("revision")
+        data_path = cleaned_data.get("data_path")
+
+        repo_id = git_repo_url.split("github.com/")[-1]
+        cleaned_data["git_repo_owner"] = repo_id.split("/")[0]
+        cleaned_data["git_repo_name"] = repo_id.split("/")[1]
+
+        try:
+            # Check that the git repository is valid.
+            dvc_fs = DVCFileSystem(url=git_repo_url, rev=revision)
+
+            if not dvc_fs.isfile(data_path):
+                self.add_error(
+                    field="git_repo_url",
+                    error=ValidationError("Not a valid file path."),
+                )
+        except CloneError as _e:
+            self.add_error(
+                field="git_repo_url",
+                error=ValidationError("Not a valid git repository."),
+            )
+        except RevError as _e:
+            self.add_error(
+                field="revision",
+                error=ValidationError("Not a valid revision."),
+            )
+
+        github = Github(login_or_token=settings.GITHUB_TOKEN)
+        repo = github.repo(repo_id)
 
 
     def save(self, commit=True):
