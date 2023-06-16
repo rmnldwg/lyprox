@@ -19,6 +19,8 @@ Only four env vars should need to be changed:
 import os
 from pathlib import Path
 
+from django import urls
+
 from ._version import version
 
 # old secret key: "k_&(m5ymps%p=4&qjnwkv-avxb@@ez1tewc8g_eg4k#jx59ukx"
@@ -30,7 +32,7 @@ DEBUG = os.environ["DJANGO_ENV"] == "debug"
 MAINTENANCE = os.environ["DJANGO_ENV"] == "maintenance"
 """
 If ``True``, all requests to are redirected to a maintenance page. ``DJANGO_ENV`` must
-be set to ``"maintenance"`` for this to work. Also see `core.views.maintenance`.
+be set to ``"maintenance"`` for this to work. Also see `lyprox.views.maintenance`.
 """
 
 PRODUCTION = os.environ["DJANGO_ENV"] == "production"
@@ -55,6 +57,12 @@ Space-separated list of hostnames for which django will accept requests. Can be 
 with the env var ``DJANGO_ALLOWED_HOSTS``.
 """
 
+GITHUB_TOKEN = os.environ["GITHUB_TOKEN"]
+"""
+Read-only GitHub access token for fetching information about
+`lyprox.riskpredictor.models.InferenceResult`.
+"""
+
 
 CSRF_COOKIE_SECURE = not DEBUG
 CRSF_TRUSTED_ORIGINS = [f"https://{host}" for host in ALLOWED_HOSTS]
@@ -65,8 +73,36 @@ SECURE_HSTS_INCLUDE_SUBDOMAINS = not DEBUG
 SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
-BASE_DIR = Path(__file__).resolve().parent.parent
+BASE_DIR = Path(os.environ["DJANGO_BASE_DIR"])
+"""
+Setting the base dir manually is necessary, because otherwise everything might be
+set up relative to venv's site-packages.
+"""
+
+LOGIN_URL = urls.reverse_lazy("accounts:login")
+"""URL to redirect to when login is required."""
+
 LOGIN_REDIRECT_URL = "/"
+"""Redirect to this URL after successful login."""
+
+LOGIN_REQUIRED_URLS = []
+"""List of regexes for urls that require login.
+
+Note that this may simply be left empty, since the critical views are protected by
+default. But if you want to protect e.g. the entire website, you can add ``"(.*)$"``
+to the list.
+"""
+_login_required_urls_env = os.getenv("DJANGO_LOGIN_REQUIRED_URLS")
+if _login_required_urls_env is not None:
+    LOGIN_REQUIRED_URLS = _login_required_urls_env.split(" ")
+
+LOGIN_NOT_REQUIRED_URLS = [
+    r"/accounts/login/(.*)$",
+    r"/accounts/logout/(.*)$",
+    r"/admin/(.*)$",
+    r"/maintenance/(.*)$",
+]
+"""List of regexes for urls that are exceptions from the `LOGIN_REQUIRED_URLS`."""
 
 # GitHub repository URL
 GITHUB_REPO_OWNER = "rmnldwg"
@@ -163,6 +199,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     "lyprox.middleware.MaintenanceMiddleware",
+    "lyprox.middleware.LoginRequiredMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",

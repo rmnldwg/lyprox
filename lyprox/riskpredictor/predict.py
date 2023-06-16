@@ -6,7 +6,7 @@ The code in this module is utilized by the `views.RiskPredictionView` of the
 """
 import logging
 import time
-from typing import Any, Dict, Optional, Union
+from typing import Any, Dict, List, Optional, Union
 
 import numpy as np
 import pandas as pd
@@ -180,12 +180,18 @@ def compute_marginalised_risks(
 def aggregate_results(
     inference_result: InferenceResult,
     marginalized_risks: Dict[str, np.ndarray],
-) -> Dict[str, Any]:
+) -> Dict[str, List[float]]:
     """Aggregate the results of the risk computation into a dictionary.
 
     This is a helper function that is used to convert the numpy arrays that are
     returned by the risk computation into a dictionary that can be used as context
     for the `views.RiskPredictionView` view.
+
+    The returned dictionary has the following structure: For each side (ipsi or contra)
+    and each LNL, the dictionary contains a list of three values: The first value is
+    the error of the prediction, the second value is the risk of involvement (but minus
+    half the error), and the third value is the probability of being healthy (again
+    minus half the error).
     """
     result = {}
     for side in ["ipsi", "contra"]:
@@ -193,8 +199,13 @@ def aggregate_results(
             continue
 
         for i, lnl in enumerate(inference_result.lnls):
-            lnl_risk = 100 * np.mean(marginalized_risks[side][i])
-            result[f"{side}_{lnl}"] = [0, lnl_risk, 100. - lnl_risk]
+            risk_mean = 100 * np.mean(marginalized_risks[side][i])
+            risk_stddev = 100 * np.std(marginalized_risks[side][i])
+            result[f"{side}_{lnl}"] = [
+                risk_stddev,                         # error of the prediction
+                risk_mean - risk_stddev/2.,          # risk of involvement - half error
+                100. - (risk_mean - risk_stddev/2.), # prob of healthy - half error
+            ]
 
     return result
 

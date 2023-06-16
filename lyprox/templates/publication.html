@@ -16,7 +16,7 @@
         <br>
         <strong class="has-text-secondary">{{ pub.title }}</strong>
         <br>
-        <em>{{ pub|get:'container-title-short' }}</em> <strong>{{ pub.volume }},</strong> {{ pub.page }} ({{ pub.issued.0.year }})
+        <em>{{ pub|get:'container-title' }}</em> <strong>{{ pub.volume }},</strong> {{ pub.page }} ({{ pub.issued.0.year }})
         <a href="https://doi.org/{{ pub.DOI }}" target="_blank">{{ pub.DOI }}</a>
       </p>
     </div>

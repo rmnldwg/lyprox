@@ -19,6 +19,11 @@ from .models import InferenceResult
 logger = logging.getLogger(__name__)
 
 
+def test_view(request):
+    """View for testing the riskpredictor app."""
+    return render(request, "riskpredictor/test.html")
+
+
 class AddInferenceResultView(
     ViewLoggerMixin,
     LoginRequiredMixin,

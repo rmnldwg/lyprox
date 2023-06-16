@@ -13,4 +13,5 @@ urlpatterns = [
     path("<int:pk>/", views.RiskPredictionView.as_view(), name="dashboard"),
     path("<int:pk>/ajax/", views.riskpredictor_AJAX_view, name="ajax"),
     path("help/", views.help_view, name="help"),
+    path("test/", views.test_view, name="test"),
 ]

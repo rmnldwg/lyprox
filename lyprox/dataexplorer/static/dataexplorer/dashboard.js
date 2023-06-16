@@ -318,6 +318,8 @@ function populateFields(response) {
             };
         } else if (index != 0) {
             $(this).html(newValue.toFixed(0) + "%");
+        } else {
+            $(this).html("±" + newValue.toFixed(0) + "%");
         }
 	});
 };

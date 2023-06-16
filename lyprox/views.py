@@ -34,5 +34,5 @@ def index(request):
     return render(request, "index.html", context)
 
 def maintenance(request):
-    """Redirect to maintenance page when `core.settings.MAINTENANCE` is ``True``."""
+    """Redirect to maintenance page when `lyprox.settings.MAINTENANCE` is ``True``."""
     return render(request, "maintenance.html", {})

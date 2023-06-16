@@ -9,11 +9,16 @@
 {% endblock head %}
 
 {% block "css" %}
-<link rel="stylesheet" href="{% static 'riskpredictor/dashboard.css' %}">
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/default.min.css">
 {% endblock "css" %}
 
 {% block "js" %}
+<script src="https://unpkg.com/prettier@2.8.7/standalone.js"></script>
+<script src="https://unpkg.com/prettier@2.8.7/parser-yaml.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
 <script src="{% static 'dataexplorer/dashboard.js' %}"></script>
+<script src="{% static 'riskpredictor/yaml_formatter.js' %}"></script>
+<link rel="stylesheet" href="{% static 'riskpredictor/dashboard.css' %}">
 {% endblock "js" %}
 
 {% block content %}
@@ -21,100 +26,230 @@
 <form action="{% url 'riskpredictor:dashboard' inference_result.pk %}" method="GET" id="dashboard-form"
   name="dashboardform">
   <section class="section">
-    <div class="tile is-ancestor">
-      <div class="tile is-3 is-vertical">
-        <!-- T-Category -->
-        <div class="tile is-parent">
-          <div class="tile is-child box">
-            <div class="level">
-              <div class="level-left">
-                <div class="level-item">
-                  <p class="title is-4">Tumor</p>
-                </div>
-              </div>
-              <div class="level-right">
-                <div class="level-item">
-                  <div class="tooltip">
-                    <span class="icon">
-                      <i class="fas fa-question"></i>
-                    </span>
-                    {% include 'dataexplorer/help/tooltip.html' with side="right" position="bottom" html='riskpredictor/help/tumor.html' %}
+    <div class="tile is-ancestor is-vertical">
+      <div class="tile">
+        <div class="tile is-3 is-vertical">
+          <!-- T-Category -->
+          <div class="tile is-parent">
+            <div class="tile is-child box">
+              <div class="level">
+                <div class="level-left">
+                  <div class="level-item">
+                    <p class="title is-4">Tumor</p>
                   </div>
                 </div>
-              </div>
-            </div>
-
-            <div class="columns">
-              <div class="column">
-                <div class="field">
-                  <div class="control is-flex is-flex-direction-column is-align-items-center">
-                    <label for="{{ form.t_stage.id_for_label }}" class="heading">T-Category</label>
-                    <div class="select">
-                      {{ form.t_stage }}
+                <div class="level-right">
+                  <div class="level-item">
+                    <div class="tooltip">
+                      <span class="icon">
+                        <i class="fas fa-question"></i>
+                      </span>
+                      {% include 'dataexplorer/help/tooltip.html' with side="right" position="bottom" html='riskpredictor/help/tumor.html' %}
                     </div>
                   </div>
                 </div>
               </div>
 
-              {% if inference_result.is_midline %}
-              <div class="column">
-                <div class="field">
-                  <div class="control is-flex is-flex-direction-column is-align-items-center">
-                    <label for="{{ form.midline_extension.id_for_label }}" class="heading pb-2">Midline
-                      Extension</label>
-                    {{ form.midline_extension }}
-                    {% if form.errors.midline_extension %}
-                    <small class="help is-danger">
-                      {{ form.errors.midline_extension }}
-                    </small>
-                    {% endif %}
+              <div class="columns">
+                <div class="column">
+                  <div class="field">
+                    <div class="control is-flex is-flex-direction-column is-align-items-center">
+                      <label for="{{ form.t_stage.id_for_label }}" class="heading">T-Category</label>
+                      <div class="select">
+                        {{ form.t_stage }}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {% if inference_result.is_midline %}
+                <div class="column">
+                  <div class="field">
+                    <div class="control is-flex is-flex-direction-column is-align-items-center">
+                      <label for="{{ form.midline_extension.id_for_label }}" class="heading pb-2">Midline
+                        Extension</label>
+                      {{ form.midline_extension }}
+                      {% if form.errors.midline_extension %}
+                      <small class="help is-danger">
+                        {{ form.errors.midline_extension }}
+                      </small>
+                      {% endif %}
+                    </div>
+                  </div>
+                </div>
+                {% endif %}
+              </div>
+
+            </div>
+          </div>
+
+          <!-- Sensitivity and Specificity -->
+          <div class="tile is-parent">
+            <div class="tile is-child box">
+              <div class="level">
+                <div class="level-left">
+                  <div class="level-item">
+                    <p class="title is-4">Diagnostic Modality</p>
+                  </div>
+                </div>
+                <div class="level-right">
+                  <div class="level-item">
+                    <div class="tooltip">
+                      <span class="icon">
+                        <i class="fas fa-question"></i>
+                      </span>
+                      {% include 'dataexplorer/help/tooltip.html' with side="right" position="bottom" html='riskpredictor/help/modality.html' %}
+                    </div>
                   </div>
                 </div>
               </div>
-              {% endif %}
-            </div>
 
+              <label for="{{ form.specificity.id_for_label }}" class="heading">Specificity</label>
+              <div class="field has-addons">
+                <div class="control is-expanded">
+                  {{ form.specificity }}
+                </div>
+                <div class="control is-flex is-align-items-center">
+                  <output class="slider tag is-medium is-info" id="specificity-display">0.8</output>
+                </div>
+              </div>
+
+              <label for="{{ form.sensitivity.id_for_label }}" class="heading">Sensitivity</label>
+              <div class="field has-addons">
+                <div class="control is-expanded">
+                  {{ form.sensitivity }}
+                </div>
+                <div class="control is-flex is-align-items-center">
+                  <output class="slider tag is-medium is-info" id="sensitivity-display">0.8</output>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
 
-        <!-- Sensitivity and Specificity -->
-        <div class="tile is-parent">
-          <div class="tile is-child box">
-            <div class="level">
-              <div class="level-left">
-                <div class="level-item">
-                  <p class="title is-4">Diagnostic Modality</p>
+        <div class="tile">
+          <div class="tile is-vertical">
+            <div class="tile">
+              {% if inference_result.is_bilateral %}
+              <div class="tile is-parent">
+                <div class="tile is-child box">
+                  <div class="level">
+                    <div class="level-item">
+                      <p class="title is-4">contralateral</p>
+                    </div>
+                    <div class="level-right">
+                      <div class="level-item">
+                        <div class="tooltip">
+                          <span class="icon">
+                            <i class="fas fa-question"></i>
+                          </span>
+                          {% include 'dataexplorer/help/tooltip.html' with side="right" position="bottom" html='riskpredictor/help/risks.html' %}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <table class="table is-fullwidth">
+                    <thead>
+                      <tr>
+                        <td colspan="2">LNL</td>
+                        <td class="has-text-centered">select</td>
+                        <td class="has-text-centered">marginalized risk (<span class="has-text-danger">involved</span>, <span class="has-text-info">error</span>, <span class="has-text-success">healthy</span>)</td>
+                      </tr>
+                    </thead>
+
+                    <tbody>
+                      {% for lnl in inference_result.lnls %}
+                      {% with "contra_"|addstr:lnl as lnl_key %}
+                      <tr>
+                        <td colspan="2">{{ lnl }}</td>
+                        <td>{{ form|get:lnl_key }}</td>
+                        {% include 'dataexplorer/barplot.html' with lnl="II "|addstr:"contralateral" stats=risks lnl_key=lnl_key show_percent=True hide_tooltip=True %}
+                      </tr>
+                      {% endwith %}
+                      {% endfor %}
+                    </tbody>
+                  </table>
                 </div>
               </div>
-              <div class="level-right">
-                <div class="level-item">
-                  <div class="tooltip">
-                    <span class="icon">
-                      <i class="fas fa-question"></i>
-                    </span>
-                    {% include 'dataexplorer/help/tooltip.html' with side="right" position="bottom" html='riskpredictor/help/modality.html' %}
+              {% endif %}
+
+              <div class="tile is-parent">
+                <div class="tile is-child box">
+                  <div class="level">
+                    <div class="level-item">
+                      <p class="title is-4">ipsilateral</p>
+                    </div>
+                    <div class="level-right">
+                      <div class="level-item">
+                        <div class="tooltip">
+                          <span class="icon">
+                            <i class="fas fa-question"></i>
+                          </span>
+                          {% include 'dataexplorer/help/tooltip.html' with side="left" position="bottom" html='riskpredictor/help/risks.html' %}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <table class="table is-fullwidth">
+                    <thead>
+                      <tr>
+                        <td colspan="2">LNL</td>
+                        <td class="has-text-centered">select</td>
+                        <td class="has-text-centered">marginalized risk (<span class="has-text-danger">involved</span>, <span class="has-text-info">error</span>, <span class="has-text-success">healthy</span>)</td>
+                      </tr>
+                    </thead>
+
+                    <tbody>
+                      {% for lnl in inference_result.lnls %}
+                      {% with "ipsi_"|addstr:lnl as lnl_key %}
+                      <tr>
+                        <td colspan="2">{{ lnl }}</td>
+                        <td>{{ form|get:lnl_key }}</td>
+                        {% include 'dataexplorer/barplot.html' with lnl="II "|addstr:"ipsilateral" stats=risks lnl_key=lnl_key show_percent=True hide_tooltip=True %}
+                      </tr>
+                      {% endwith %}
+                      {% endfor %}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+
+            <div class="tile is-parent">
+              <div class="tile is-child box">
+                <div class="level">
+                  <div class="level-left">
+                    <div class="level-item">
+                      <a href="{{ inference_result }}" class="button is-medium is-primary is-outlined" target="_blank">
+                        <span class="icon">
+                          <i class="fas fa-code-branch"></i>
+                        </span>
+                        <span>Model Definition</span>
+                      </a>
+                    </div>
+                  </div>
+                  <div class="level-right">
+                    <div class="level-item">
+                      <div class="buttons">
+                        <a href="{% url 'riskpredictor:help' %}" class="button is-medium is-primary is-outlined">
+                          <span class="icon">
+                            <i class="fas fa-question"></i>
+                          </span>
+                          <span>Help</span>
+                        </a>
+                        <button class="button is-medium is-warning has-tooltip-multiline" type="submit" id="compute"
+                          data-tooltip="Compute risk for selected diagnosis.">
+                          <span class="icon">
+                            <i class="fas fa-cogs"></i>
+                          </span>
+                          <span><strong>Compute</strong></span>
+                        </button>
+                      </div>
+                    </div>
                   </div>
                 </div>
-              </div>
-            </div>
-
-            <label for="{{ form.specificity.id_for_label }}" class="heading">Specificity</label>
-            <div class="field has-addons">
-              <div class="control is-expanded">
-                {{ form.specificity }}
-              </div>
-              <div class="control is-flex is-align-items-center">
-                <output class="slider tag is-medium is-info" id="specificity-display">0.8</output>
-              </div>
-            </div>
-
-            <label for="{{ form.sensitivity.id_for_label }}" class="heading">Sensitivity</label>
-            <div class="field has-addons">
-              <div class="control is-expanded">
-                {{ form.sensitivity }}
-              </div>
-              <div class="control is-flex is-align-items-center">
-                <output class="slider tag is-medium is-info" id="sensitivity-display">0.8</output>
               </div>
             </div>
           </div>
@@ -122,128 +257,27 @@
       </div>
 
       <div class="tile">
-        <div class="tile is-vertical">
-          <div class="tile">
-            {% if inference_result.is_bilateral %}
-            <div class="tile is-parent">
-              <div class="tile is-child box">
-                <div class="level">
-                  <div class="level-item">
-                    <p class="title is-4">contralateral</p>
-                  </div>
-                  <div class="level-right">
-                    <div class="level-item">
-                      <div class="tooltip">
-                        <span class="icon">
-                          <i class="fas fa-question"></i>
-                        </span>
-                        {% include 'dataexplorer/help/tooltip.html' with side="right" position="bottom" html='riskpredictor/help/risks.html' %}
-                      </div>
-                    </div>
-                  </div>
-                </div>
+        <div class="tile is-parent">
+          <div class="tile is-child box">
+            <h1 class="title is-4">Release Description</h1>
 
-                <table class="table is-fullwidth">
-                  <thead>
-                    <tr>
-                      <td colspan="2">LNL</td>
-                      <td class="has-text-centered">select</td>
-                      <td class="has-text-centered">risk</td>
-                    </tr>
-                  </thead>
-
-                  <tbody>
-                    {% for lnl in inference_result.lnls %}
-                    {% with "contra_"|addstr:lnl as lnl_key %}
-                    <tr>
-                      <td colspan="2">{{ lnl }}</td>
-                      <td>{{ form|get:lnl_key }}</td>
-                      {% include 'dataexplorer/barplot.html' with lnl="II "|addstr:"contralateral" stats=risks lnl_key=lnl_key show_percent=True hide_tooltip=True %}
-                    </tr>
-                    {% endwith %}
-                    {% endfor %}
-                  </tbody>
-                </table>
-              </div>
-            </div>
-            {% endif %}
-
-            <div class="tile is-parent">
-              <div class="tile is-child box">
-                <div class="level">
-                  <div class="level-item">
-                    <p class="title is-4">ipsilateral</p>
-                  </div>
-                  <div class="level-right">
-                    <div class="level-item">
-                      <div class="tooltip">
-                        <span class="icon">
-                          <i class="fas fa-question"></i>
-                        </span>
-                        {% include 'dataexplorer/help/tooltip.html' with side="left" position="bottom" html='riskpredictor/help/risks.html' %}
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                <table class="table is-fullwidth">
-                  <thead>
-                    <tr>
-                      <td colspan="2">LNL</td>
-                      <td class="has-text-centered">select</td>
-                      <td class="has-text-centered">risk</td>
-                    </tr>
-                  </thead>
-
-                  <tbody>
-                    {% for lnl in inference_result.lnls %}
-                    {% with "ipsi_"|addstr:lnl as lnl_key %}
-                    <tr>
-                      <td colspan="2">{{ lnl }}</td>
-                      <td>{{ form|get:lnl_key }}</td>
-                      {% include 'dataexplorer/barplot.html' with lnl="II "|addstr:"ipsilateral" stats=risks lnl_key=lnl_key show_percent=True hide_tooltip=True %}
-                    </tr>
-                    {% endwith %}
-                    {% endfor %}
-                  </tbody>
-                </table>
-              </div>
+            <div class="content">
+              {% render_md inference_result.description %}
             </div>
           </div>
+        </div>
+        <div class="tile is-parent">
+          <div class="tile is-child box">
+            <h1 class="title is-4">Model Parameters</h1>
 
-          <div class="tile is-parent">
-            <div class="tile is-child box">
-              <div class="level">
-                <div class="level-left">
-                  <div class="level-item">
-                    <a href="{{ inference_result }}" class="button is-medium is-primary is-outlined" target="_blank">
-                      <span class="icon">
-                        <i class="fas fa-code-branch"></i>
-                      </span>
-                      <span>Model Definition</span>
-                    </a>
-                  </div>
-                </div>
-                <div class="level-right">
-                  <div class="level-item">
-                    <div class="buttons">
-                      <a href="{% url 'riskpredictor:help' %}" class="button is-medium is-primary is-outlined">
-                        <span class="icon">
-                          <i class="fas fa-question"></i>
-                        </span>
-                        <span>Help</span>
-                      </a>
-                      <button class="button is-medium is-warning has-tooltip-multiline" type="submit" id="compute"
-                        data-tooltip="Compute risk for selected diagnosis.">
-                        <span class="icon">
-                          <i class="fas fa-cogs"></i>
-                        </span>
-                        <span><strong>Compute</strong></span>
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              </div>
+            <h2 class="title is-5 mb-2">General Settings</h2>
+            <div class="block yaml-source" data-yaml="{% render_yaml inference_result.params.model %}">
+              <pre class="p-3"><code class="yaml-display language-yaml p-0"></code></pre>
+            </div>
+
+            <h2 class="title is-5 mb-2">Graph Structure</h2>
+            <div class="block yaml-source" data-yaml="{% render_yaml inference_result.params.graph %}">
+              <pre class="p-3"><code class="yaml-display language-yaml p-0"></code></pre>
             </div>
           </div>
         </div>
