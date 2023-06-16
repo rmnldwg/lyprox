@@ -39,10 +39,6 @@ class InferenceResultForm(loggers.FormLoggerMixin, forms.ModelForm):
         model = InferenceResult
         fields = ["revision", "params_path", "num_samples"]
         widgets = {
-            # "git_repo_url": widgets.TextInput(attrs={
-            #     "class": "input",
-            #     "placeholder": "e.g. https://github.com/my/repo",
-            # }),
             "revision": widgets.TextInput(attrs={
                 "class": "input",
                 "placeholder": "e.g. `main` or a tag name",

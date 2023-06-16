@@ -25,9 +25,6 @@ from django.db import models
 from django.forms import ValidationError
 from django.urls import reverse
 from dvc.api import DVCFileSystem
-from github import Github, GithubException
-
-from lyprox import settings
 
 from .. import loggers
 from ..accounts.models import Institution
@@ -54,7 +51,7 @@ class Dataset(loggers.ModelLoggerMixin, models.Model):
     """Name of the GitHub repository that contains the dataset."""
     revision = models.CharField(max_length=40, default="main")
     """Git revision in which to search for the data. E.g., a commit hash, or tag."""
-    data_path = models.CharField(max_length=100, default="data.csv")
+    data_path = models.CharField(max_length=100, default="2021-usz-oropharynx/data.csv")
     """Path to the CSV file containing the patient data inside the git repo."""
     description = models.TextField(default="")
     """Associated README.md that usually comes with a dataset."""
@@ -97,25 +94,11 @@ class Dataset(loggers.ModelLoggerMixin, models.Model):
         """Fetch the dataset from GitHub and return it as a pandas DataFrame."""
         # pylint: disable=attribute-defined-outside-init
         if not hasattr(self, "_source_csv"):
-            dvc_fs = DVCFileSystem(url=self.git_repo_url, revision=self.revision)
+            dvc_fs = DVCFileSystem(url=self.git_repo_url, rev=self.revision)
             data_file = dvc_fs.open(self.data_path, mode="r")
             self._source_csv = pd.read_csv(data_file, header=[0, 1, 2])
 
         return self._source_csv
-
-
-    def is_public(self) -> bool:
-        """Return whether the dataset is public or not."""
-        try:
-            github = Github(login_or_token=settings.GITHUB_TOKEN)
-            repo = github.get_repo(f"{self.git_repo_owner}/{self.git_repo_name}")
-            return not repo.private
-
-        except GithubException as gh_exc:
-            self.logger.error(
-                f"Could not determine if dataset is public, assuming private: {gh_exc}"
-            )
-            return False
 
 
     def lock(self):

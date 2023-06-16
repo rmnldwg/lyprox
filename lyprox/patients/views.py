@@ -13,13 +13,11 @@ listing the models in the ``patients`` app.
 
 import logging
 import time
-from pathlib import Path
 from typing import Any, Dict
 
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models.query import QuerySet
-from django.http import FileResponse, HttpResponse, HttpResponseForbidden
-from django.shortcuts import get_object_or_404
+from django.http import HttpResponse
 from django.urls.base import reverse
 from django.views import View, generic
 
@@ -77,28 +75,7 @@ class DatasetListView(ViewLoggerMixin, generic.ListView):
 
 class DatasetView(ViewLoggerMixin, View):
     """View that serves the respective `Dataset` CSV file."""
-    def get(self, request, pk, which):
-        """Get correct table and render download response."""
-        dataset = get_object_or_404(Dataset, pk=pk)
-        year = dataset.create_date.year
-        institution = dataset.institution.shortname
-        name = dataset.name
-
-        if not dataset.is_public and not request.user.is_authenticated:
-            return HttpResponseForbidden()
-
-        if which == "source":
-            csv_file_path = Path(dataset.source_csv.path)
-        elif which == "export":
-            csv_file_path = dataset.export_db_to_csv().name
-
-        buffer = open(csv_file_path, "rb")
-        buffer.seek(0)
-        return FileResponse(
-            buffer,
-            as_attachment=True,
-            filename=f"{year}-{institution}-{name}-{which}.csv",
-        )
+    model = Dataset
 
 
 # PATIENT related views

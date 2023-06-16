@@ -37,17 +37,12 @@ class DatasetForm(FormLoggerMixin, forms.ModelForm):
             "class": "input",
             "placeholder": "e.g. https://github.com/my/repo",
         }),
-    ),
+    )
 
     class Meta:
         """The underlying model."""
         model = Dataset
-        fields = [
-            "git_repo_owner",
-            "git_repo_name",
-            "revision",
-            "data_path",
-        ]
+        fields = ["revision", "data_path"]
         widgets = {
             "revision": widgets.TextInput(
                 attrs={
@@ -105,7 +100,12 @@ class DatasetForm(FormLoggerMixin, forms.ModelForm):
             )
 
         github = Github(login_or_token=settings.GITHUB_TOKEN)
-        repo = github.repo(repo_id)
+        repo = github.get_repo(repo_id)
+        cleaned_data["is_public"] = not repo.private
+
+        self.logger.info(f"Errors: {self.errors}")
+
+        return cleaned_data
 
 
     def save(self, commit=True):
