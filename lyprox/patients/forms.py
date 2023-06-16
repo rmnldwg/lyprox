@@ -11,21 +11,13 @@ that the data is properly cleaned before its being passed on to the next step.
 
 from typing import Any, Dict, Optional
 
-import magic
 import pandas
 from django import forms
 from django.core.exceptions import ValidationError
 from django.forms import widgets
 
 from ..loggers import FormLoggerMixin
-from .models import (
-    Dataset,
-    Diagnose,
-    DuplicateFileError,
-    Patient,
-    Tumor,
-    get_path_from_file,
-)
+from .models import Dataset, Diagnose, Patient, Tumor
 
 
 class DatasetForm(FormLoggerMixin, forms.ModelForm):
@@ -39,71 +31,44 @@ class DatasetForm(FormLoggerMixin, forms.ModelForm):
         """The underlying model."""
         model = Dataset
         fields = [
-            "name",
-            "description",
-            "is_public",
-            "repo_provider",
-            "repo_data_url",
-            "source_csv",
+            "git_repo_owner",
+            "git_repo_name",
+            "revision",
+            "data_path",
         ]
         widgets = {
-            "name": widgets.TextInput(
+            "git_repo_owner": widgets.TextInput(
                 attrs={
                     "class": "input",
-                    "placeholder": "e.g. lyDATA"
+                    "placeholder": "e.g. rmnldwg"
                 }
             ),
-            "description": widgets.TextInput(
-                attrs={
-                    "class": "textarea",
-                    "placeholder": "A brief description of your dataset"
-                }
-            ),
-            "is_public": widgets.Select(
-                attrs={"class": "select"},
-                choices=[(True, "yes"), (False, "no")],
-            ),
-            "repo_provider": widgets.TextInput(
+            "git_repo_name": widgets.TextInput(
                 attrs={
                     "class": "input",
-                    "placeholder": "e.g. GitHub"
+                    "placeholder": "e.g. lydata"
                 }
             ),
-            "repo_data_url": widgets.TextInput(
+            "revision": widgets.TextInput(
                 attrs={
                     "class": "input",
-                    "placeholder": "link to the repository's download page"
+                    "placeholder": "commit hash, tag, or branch name",
                 }
+            ),
+            "data_path": widgets.TextInput(
+                attrs={
+                    "class": "input",
+                    "placeholder": "e.g. 2021-usz-oropharynx/data.csv",
+                },
             ),
         }
 
-    source_csv = forms.FileField(
-        required=True,
-        widget=widgets.FileInput(
-            attrs={
-                "class": "file-input",
-                "type": "file"
-            }
-        ),
-    )
 
     def __init__(self, *args, **kwargs):
         user = kwargs.pop("user")
         self.user = user
         super().__init__(*args, **kwargs)
 
-    def clean_source_csv(self):
-        """Raise a `ValidationError`, when the file already exists."""
-        source_csv = self.cleaned_data["source_csv"]
-
-        self.logger.info(magic.from_buffer(source_csv.read(), mime=True))
-
-        try:
-            _path = get_path_from_file(source_csv)
-        except DuplicateFileError as df_err:
-            raise ValidationError("File has already been uploaded.") from df_err
-
-        return source_csv
 
     def save(self, commit=True):
         """
@@ -115,7 +80,7 @@ class DatasetForm(FormLoggerMixin, forms.ModelForm):
 
         if commit:
             dataset.save()
-            dataset.import_source_csv_to_db()
+            dataset.import_csv_to_db()
 
         return dataset
 
