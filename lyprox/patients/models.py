@@ -17,221 +17,143 @@ respective superlevel (in that case ``I``).
 # pylint: disable=no-member
 # pylint: disable=logging-fstring-interpolation
 
-import hashlib
 import logging
 from collections import namedtuple
-from io import BytesIO
-from pathlib import Path
-from tempfile import NamedTemporaryFile
 
 import pandas as pd
 from django.db import models
-from django.db.models.fields.files import FileField
 from django.forms import ValidationError
 from django.urls import reverse
-from django.utils import timezone
+from github import Github, GithubException
+
+from lyprox import settings
 
 from .. import loggers
 from ..accounts.models import Institution
-from ..settings import MEDIA_ROOT
 from . import ioports, mixins
 from .fields import RobustDateField
 
 logger = logging.getLogger(name=__name__)
 
 
-class DuplicateFileError(Exception):
-    """Raised when a file to be saved already exists on disk."""
-
-class CorruptedFileError(Exception):
-    """Raised when an uploaded file has been changed since being written to disk."""
-
 class LockedDatasetError(Exception):
     """Raised when a `Dataset` or an associated entry was tried to be edited."""
 
 
-def get_md5_hash(file):
-    """Compute the hexadecimal MD5 file hash of ``file``."""
-    file_hash = hashlib.md5()
-
-    for chunk in file.chunks():
-        file_hash.update(chunk)
-
-    return file_hash.hexdigest()
-
-
-def does_file_match_path(file, path):
-    """Check if the MD5 hash matches the ``path`` of ``file``."""
-    file_hash = get_md5_hash(file)
-    path = Path(path).with_suffix("").name
-    return file_hash == path
-
-
-def get_path_from_file(file, directory="source", suffix=".csv"):
-    """Compute MD5 hash of ``file`` and return filepath based on that.
-
-    The resulting filepath will be contructed from the `lyprox.settings.MEDIA_ROOT`, the
-    ``directory`` parameter and the MD5 hash of the ``file`` together with the
-    parameter ``suffix``. If there is already a file at the computed path, an error is
-    thrown, because the exact same file already exists on disk. We know that because
-    the path always contains the file's hash.
-    """
-    md5_hash = get_md5_hash(file)
-    filename = Path(md5_hash).with_suffix(suffix)
-    absolute_directory = Path(MEDIA_ROOT) / directory
-
-    if (absolute_directory / filename).exists():
-        raise DuplicateFileError("File already exists.")
-
-    return f"{directory}/{filename}"
-
-
-def get_path_for_source_csv(instance, _filename):
-    """Compile path for the ``upload_to`` argument of the `Dataset.source_csv` field."""
-    return get_path_from_file(instance.source_csv)
-
-
 class Dataset(loggers.ModelLoggerMixin, models.Model):
-    """
-    This model represents a collection of patients that have been added to the
-    database together. E.g., via uploading a CSV file where each row represents a
-    patient. But also patients added via the interface one by one should be associated
-    to a dataset.
+    """A collection of patients, usually importet from a CSV file in a GitHub repo.
 
-    The dataset model's functionality includes an interface between the database and
-    CSV files. As mentioned, a user should be able to batch-import patients via a
-    specifically formatted CSV table. But one should also be able to export all
-    patients of a dataset to a CSV file.
+    When created, this model fetches the CSV file from the GitHub repo and adds the
+    `Patient` entries to the database. It also creates the realted `Tumor` and
+    `Diagnose` entries.
     """
-    name = models.CharField(max_length=100)
-    """The name of the dataset. Should not include any dates or the institution."""
-    description = models.TextField()
-    """A brief description of the dataset."""
-    create_date = models.DateField(default=timezone.now)
-    """Date when the dataset was uploaded."""
+    git_repo_owner = models.CharField(max_length=50, default="rmnldwg")
+    """Owner of the GitHub repository that contains the dataset."""
+    git_repo_name = models.CharField(max_length=50, default="lydata")
+    """Name of the GitHub repository that contains the dataset."""
+    revision = models.CharField(max_length=40, default="main")
+    """Git revision in which to search for the data. E.g., a commit hash, or tag."""
+    data_path = models.CharField(max_length=100, default="data.csv")
+    """Path to the CSV file containing the patient data inside the git repo."""
+    description = models.TextField(default="")
+    """Associated README.md that usually comes with a dataset."""
     institution = models.ForeignKey(to=Institution, on_delete=models.CASCADE)
-    """The clinic or research institute that collected and uploaded the patients."""
-    is_public = models.BooleanField(default=False)
-    """Should this dataset be visible to non-authenticated users?"""
+    """The institution that provided the dataset."""
     is_locked = models.BooleanField(default=False)
-    """This indicates that one is done adding patients to this dataset and it should
-    be prohibited to change the dataset or any of its associated entries when this is
-    set to ``True``."""
+    """Whether the dataset is locked or not. Locked datasets cannot be edited."""
 
-    repo_provider = models.CharField(
-        verbose_name="Repository Provider",
-        max_length=100, blank=True, null=True
-    )
-    """(Optional) name of the repository provider from where the data for the upload
-    came from. This could e.g. be 'GitHub' or 'Zenodo'."""
-    repo_data_url = models.URLField(
-        verbose_name="Link to Data Download",
-        blank=True, null=True,
-    )
-    """(Optional) link to the repository's downloads page for the uploaded data. Note
-    that it is not checked whether the data behind this URL actually matches the
-    uploaded data or not."""
 
-    source_csv = FileField(
-        upload_to=get_path_for_source_csv,
-        null=True, blank=True,
-    )
-    """A ``FileField`` that holds the uploaded CSV source file."""
+    class Meta:
+        unique_together = ("git_repo_owner", "git_repo_name", "data_path")
 
-    def __str__(self) -> str:
-        year = self.create_date.strftime("%Y")
-        return f"{year}-{self.institution.shortname}-{self.name}"
+
+    def __str__(self):
+        return f"{self.institution.shortname}: "
+
+    @property
+    def name(self):
+        """Return the name of the dataset."""
+        return self.data_path.replace("data.csv", "").replace("/", "").replace("-", " ")
+
+    @property
+    def git_repo_url(self):
+        """Return the URL of the GitHub repository."""
+        return f"https://github.com/{self.git_repo_owner}/{self.git_repo_name}"
+
+    @property
+    def download_url(self):
+        """Return the URL to download the dataset."""
+        return (
+            "https://raw.githubusercontent.com/"
+            f"{self.git_repo_owner}/{self.git_repo_name}/"
+            f"{self.revision}/{self.data_path}"
+        )
+
+
+    def fetch_data(self) -> pd.DataFrame:
+        """Fetch the dataset from GitHub and return it as a pandas DataFrame."""
+        # pylint: disable=attribute-defined-outside-init
+        if not hasattr(self, "_source_csv"):
+            self._source_csv = pd.read_csv(self.download_url, header=[0, 1, 2])
+
+        return self._source_csv
+
+
+    def is_public(self) -> bool:
+        """Return whether the dataset is public or not."""
+        try:
+            github = Github(login_or_token=settings.GITHUB_TOKEN)
+            repo = github.get_repo(f"{self.git_repo_owner}/{self.git_repo_name}")
+            return not repo.private
+
+        except GithubException as gh_exc:
+            self.logger.error(
+                f"Could not determine if dataset is public, assuming private: {gh_exc}"
+            )
+            return False
+
 
     def lock(self):
-        """Set the field `is_locked` to ``True``"""
-        if not self.is_locked:
-            self.is_locked = True
-            self.save(override=True)
-            self.logger.info(f"Dataset {self} successfully locked.")
+        """Lock the dataset, so that it cannot be edited anymore."""
+        self.is_locked = True
+        self.save(override=True)
+
 
     def unlock(self):
-        """
-        Set `is_locked` to ``False``, allowing the dataset and its patients to be
-        edited again.
-        """
-        if self.is_locked:
-            self.is_locked = False
-            self.save()
-            self.logger.warning(f"Dataset {self} has been unlocked.")
+        """Unlock the dataset, so that it can be edited again."""
+        self.is_locked = False
+        self.save(override=True)
 
-    def save(self, *args, override=False, **kwargs):
-        """
-        Add uniqueness checks to save method, as well as blocking any changes when
-        the dataset is locked (and `override` is not set to ``True``).
+
+    def save(self, *args, override: bool = False, **kwargs):
+        """Save the model instance to the database.
+
+        Rise an error if the dataset is locked and ``override`` is not set to ``True``.
         """
         if self.is_locked and not override:
-            self.logger.warning(f"Attemptet change to locked dataset {self}")
-            raise LockedDatasetError("Cannot edit/save a locked dataset.")
+            raise LockedDatasetError("Cannot edit locked dataset.")
 
-        return super().save(*args, **kwargs)
+        super().save(*args, **kwargs)
 
-    def delete(self, *args, override=False, **kwargs):
-        """
-        Block deletion if dataset is locked. Unless the red override is pushed.
+
+    def delete(self, *args, override: bool = False, **kwargs):
+        """Delete the model instance from the database.
+
+        Rise an error if the dataset is locked and ``override`` is not set to ``True``.
         """
         if self.is_locked and not override:
-            self.logger.warning(f"Attemptet change to locked dataset {self}")
-            raise LockedDatasetError("Cannot delete a locked dataset.")
+            raise LockedDatasetError("Cannot delete locked dataset.")
 
-        # Making sure that the files associated with the dataset get deleted. The
-        # `delete` method of the `FieldFiles` should already take care of that, but I
-        # noticed that this doesn't seem to always happen, so I made sure with `pathlib`
-
-        upload_path = Path(self.source_csv.path)
-        self.source_csv.delete(save=False)
-        upload_path.unlink(missing_ok=True)
-
-        return super().delete(*args, **kwargs)
-
-    def get_pandas_from_db(self):
-        """
-        Generate a `pandas.DataFrame` for all patients associated with this dataset
-        using the `ioports` module and then return that.
-        """
-        patients = Patient.objects.all().filter(dataset=self)
-        return ioports.export_to_pandas(patients)
-
-    def get_pandas_from_csv(self):
-        """
-        Simply extract a `pandas.DataFrame` from an uploaded CSV.
-        """
-        if not self.source_csv.readable() or self.source_csv.mode != "rb":
-            self.source_csv.open(mode="rb")
-
-        file_content = self.source_csv.read()
-        binary_buffer = BytesIO(file_content)
-        self.source_csv.close()
-
-        table = pd.read_csv(binary_buffer, header=[0,1,2])
-        return table
-
-    def export_db_to_csv(self) -> NamedTemporaryFile:
-        """Export database entries beloning to this `Dataset` to CSV.
-
-        First, call the `get_pandas_from_db` method to get a `pandas.DataFrame` of
-        patients from the database. Then, save that table in the form of a CSV file
-        to a ``NamedTemporaryFile`` and return that file.
-        """
-        table = self.get_pandas_from_db()
-
-        temp_file = NamedTemporaryFile(suffix=".csv", delete=False)
-        table.to_csv(temp_file, index=None)
-
-        return temp_file
+        super().delete(*args, **kwargs)
 
 
-    def import_source_csv_to_db(self):
-        """Import uploaded CSV into the database using `ioports` module.
+    def import_csv_to_db(self):
+        """Import the dataset from the CSV file into the database.
 
         This method lock the dataset right afterwards to prevent editing the uploaded
         patients.
         """
-        table = self.get_pandas_from_csv()
+        table = self.fetch_data()
         num_new, num_skipped = ioports.import_from_pandas(table, self)
         self.logger.info(
             f"{num_new} new patients were added to dataset {self}. "
@@ -252,8 +174,10 @@ class Patient(mixins.LockedDatasetMixin, loggers.ModelLoggerMixin, models.Model)
     `Diagnose` model.
     """
     # pylint: disable=invalid-name
-    sex = models.CharField(max_length=10, choices=[("female", "female"),
-                                                   ("male"  , "male"  )])
+    sex = models.CharField(
+        max_length=10,
+        choices=[("female", "female"), ("male", "male")],
+    )
     """Biological sex of the patient."""
 
     age = models.IntegerField()
