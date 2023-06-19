@@ -62,6 +62,10 @@ class Dataset(loggers.ModelLoggerMixin, models.Model):
     """Whether the dataset is locked or not. Locked datasets cannot be edited."""
     is_public = models.BooleanField(default=False)
     """Whether the dataset is public or not. Public datasets can be viewed by everyone."""
+    date_created = models.DateTimeField()
+    """Date and time when the dataset was created."""
+    file_url = models.URLField(max_length=400)
+    """URL to the CSV file in the GitHub repo."""
 
 
     class Meta:
@@ -77,6 +81,16 @@ class Dataset(loggers.ModelLoggerMixin, models.Model):
         return self.data_path.replace("/data.csv", "").split("-")[-1]
 
     @property
+    def git_repo_id(self):
+        """Return the ID of the GitHub repository."""
+        return f"{self.git_repo_owner}/{self.git_repo_name}"
+
+    @property
+    def git_repo_url(self):
+        """Return the URL of the GitHub repository."""
+        return f"https://github.com/{self.git_repo_id}"
+
+    @property
     def patient_count(self) -> int:
         """Return the number of patients in the dataset."""
         return Patient.objects.filter(dataset=self).count()
@@ -87,22 +101,6 @@ class Dataset(loggers.ModelLoggerMixin, models.Model):
         if not hasattr(self, "_repo"):
             self._repo = github.get_repo(f"{self.git_repo_owner}/{self.git_repo_name}")
         return self._repo
-
-
-    @property
-    def git_repo_id(self):
-        """Return the ID of the GitHub repository."""
-        return f"{self.git_repo_owner}/{self.git_repo_name}"
-
-    @property
-    def git_repo_url(self):
-        """Return the URL of the GitHub repository."""
-        return self.fetch_repo().html_url
-
-    @property
-    def file_download_url(self):
-        """Return the URL to download the dataset."""
-        return self.fetch_file().download_url
 
 
     def fetch_file(self):
@@ -128,16 +126,9 @@ class Dataset(loggers.ModelLoggerMixin, models.Model):
         return self._readme
 
 
-    def fetch_date(self) -> str:
-        """Return the date of the dataset as a string."""
-        if not hasattr(self, "_date"):
-            self._date = self.fetch_repo().get_commit(sha=self.revision).commit.author.date
-        return self._date
-
-
-    def get_table(self) -> pd.DataFrame:
+    def fetch_table(self) -> pd.DataFrame:
         """Return the dataset as a pandas DataFrame."""
-        return pd.read_csv(self.file_download_url, header=[0, 1, 2])
+        return pd.read_csv(self.file_url, header=[0, 1, 2])
 
 
     def lock(self):
@@ -180,7 +171,7 @@ class Dataset(loggers.ModelLoggerMixin, models.Model):
         This method lock the dataset right afterwards to prevent editing the uploaded
         patients.
         """
-        table = self.get_table()
+        table = self.fetch_table()
         num_new, num_skipped = ioports.import_from_pandas(table, self)
         self.logger.info(
             f"{num_new} new patients were added to dataset {self}. "

@@ -11,6 +11,7 @@ that the data is properly cleaned before its being passed on to the next step.
 
 from typing import Any, Dict, Optional
 
+import dateparser
 import pandas
 from django import forms
 from django.core.exceptions import ValidationError
@@ -19,6 +20,7 @@ from github import Github
 from github.GithubException import GithubException, UnknownObjectException
 
 from lyprox import settings
+from lyprox.accounts.models import Institution
 
 from ..loggers import FormLoggerMixin
 from .models import Dataset, Diagnose, Patient, Tumor
@@ -42,6 +44,8 @@ class DatasetForm(FormLoggerMixin, forms.ModelForm):
         "git_repo_name",
         "institution",
         "is_public",
+        "date_created",
+        "file_url",
     ]
 
     class Meta:
@@ -70,13 +74,21 @@ class DatasetForm(FormLoggerMixin, forms.ModelForm):
         super().__init__(*args, **kwargs)
 
 
+    def get_institution(self, table: pandas.DataFrame) -> str:
+        """Get institution of `table`. Fall back to user's institution if unavailable."""
+        try:
+            institution_name = table["patient", "#", "institution"].unique()[0]
+            return Institution.objects.get(name=institution_name)
+        except KeyError:
+            return self.user.institution
+
+
     def clean(self) -> Dict[str, Any]:
         """
         Check that the git repository and revision are valid. If so, return
         the cleaned data.
         """
         cleaned_data = super().clean()
-        cleaned_data["institution"] = self.user.institution
 
         git_repo_url = cleaned_data.get("git_repo_url")
         revision = cleaned_data.get("revision")
@@ -100,7 +112,7 @@ class DatasetForm(FormLoggerMixin, forms.ModelForm):
 
         # Check if the revision and the path inside the repository is valid
         try:
-            _file = repo.get_contents(data_path, ref=revision)
+            file = repo.get_contents(data_path, ref=revision)
         except UnknownObjectException as _e:
             self.add_error(
                 field="data_path",
@@ -114,6 +126,10 @@ class DatasetForm(FormLoggerMixin, forms.ModelForm):
             )
             return cleaned_data
 
+        cleaned_data["date_created"] = dateparser.parse(file.last_modified)
+        cleaned_data["file_url"] = file.download_url
+        table = pandas.read_csv(cleaned_data["file_url"], header=[0, 1, 2])
+        cleaned_data["institution"] = self.get_institution(table)
         cleaned_data["is_public"] = not repo.private
         return cleaned_data
 

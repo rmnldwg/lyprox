@@ -59,7 +59,7 @@
                       <span class="icon">
                         <i class="fas fa-calendar-alt"></i>
                       </span>
-                      <span>{{ dataset.fetch_date }}</span>
+                      <span>{{ dataset.date_created }}</span>
                     </span>
                   </p>
                   <p class="mb-1">
@@ -105,7 +105,7 @@
                   <div class="level-left">
                     <div class="level-item">
                       <div class="tags">
-                        <a href="{{ dataset.file_download_url }}"
+                        <a href="{{ dataset.file_url }}"
                           class="button tag is-success has-addons tooltip" id="export"
                           data-tooltip="Export dataset from database to CSV">
                           <span class="icon is-small"><i class="fas fa-download"></i></span>
