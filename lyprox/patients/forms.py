@@ -15,9 +15,8 @@ import pandas
 from django import forms
 from django.core.exceptions import ValidationError
 from django.forms import widgets
-from dvc.api import DVCFileSystem
-from dvc.scm import CloneError, RevError
 from github import Github
+from github.GithubException import GithubException, UnknownObjectException
 
 from lyprox import settings
 
@@ -38,6 +37,12 @@ class DatasetForm(FormLoggerMixin, forms.ModelForm):
             "placeholder": "e.g. https://github.com/my/repo",
         }),
     )
+    auto_determined_fields = [
+        "git_repo_owner",
+        "git_repo_name",
+        "institution",
+        "is_public",
+    ]
 
     class Meta:
         """The underlying model."""
@@ -71,6 +76,8 @@ class DatasetForm(FormLoggerMixin, forms.ModelForm):
         the cleaned data.
         """
         cleaned_data = super().clean()
+        cleaned_data["institution"] = self.user.institution
+
         git_repo_url = cleaned_data.get("git_repo_url")
         revision = cleaned_data.get("revision")
         data_path = cleaned_data.get("data_path")
@@ -79,32 +86,35 @@ class DatasetForm(FormLoggerMixin, forms.ModelForm):
         cleaned_data["git_repo_owner"] = repo_id.split("/")[0]
         cleaned_data["git_repo_name"] = repo_id.split("/")[1]
 
-        try:
-            # Check that the git repository is valid.
-            dvc_fs = DVCFileSystem(url=git_repo_url, rev=revision)
+        github = Github(login_or_token=settings.GITHUB_TOKEN)
 
-            if not dvc_fs.isfile(data_path):
-                self.add_error(
-                    field="git_repo_url",
-                    error=ValidationError("Not a valid file path."),
-                )
-        except CloneError as _e:
+        # Make sure the repository exists
+        try:
+            repo = github.get_repo(repo_id)
+        except UnknownObjectException as _e:
             self.add_error(
                 field="git_repo_url",
-                error=ValidationError("Not a valid git repository."),
+                error=ValidationError("Not a valid GitHub repository."),
             )
-        except RevError as _e:
+            return cleaned_data
+
+        # Check if the revision and the path inside the repository is valid
+        try:
+            _file = repo.get_contents(data_path, ref=revision)
+        except UnknownObjectException as _e:
+            self.add_error(
+                field="data_path",
+                error=ValidationError("Not a valid path in repository."),
+            )
+            return cleaned_data
+        except GithubException as _e:
             self.add_error(
                 field="revision",
                 error=ValidationError("Not a valid revision."),
             )
+            return cleaned_data
 
-        github = Github(login_or_token=settings.GITHUB_TOKEN)
-        repo = github.get_repo(repo_id)
         cleaned_data["is_public"] = not repo.private
-
-        self.logger.info(f"Errors: {self.errors}")
-
         return cleaned_data
 
 
@@ -113,8 +123,10 @@ class DatasetForm(FormLoggerMixin, forms.ModelForm):
         Get institution from user and import uploaded CSV file into database. Then
         lock the dataset.
         """
-        dataset = super(DatasetForm, self).save(commit=False)
-        dataset.institution = self.user.institution
+        dataset = super().save(commit=False)
+
+        for field in self.auto_determined_fields:
+            setattr(dataset, field, self.cleaned_data[field])
 
         if commit:
             dataset.save()

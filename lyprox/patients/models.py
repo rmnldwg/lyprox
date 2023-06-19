@@ -24,7 +24,9 @@ import pandas as pd
 from django.db import models
 from django.forms import ValidationError
 from django.urls import reverse
-from dvc.api import DVCFileSystem
+from github import Github, UnknownObjectException
+
+from lyprox import settings
 
 from .. import loggers
 from ..accounts.models import Institution
@@ -32,6 +34,7 @@ from . import ioports, mixins
 from .fields import RobustDateField
 
 logger = logging.getLogger(name=__name__)
+github = Github(login_or_token=settings.GITHUB_TOKEN)
 
 
 class LockedDatasetError(Exception):
@@ -47,14 +50,12 @@ class Dataset(loggers.ModelLoggerMixin, models.Model):
     """
     git_repo_owner = models.CharField(max_length=50, default="rmnldwg")
     """Owner of the GitHub repository that contains the dataset."""
-    git_repo_name = models.CharField(max_length=50, default="lydata")
+    git_repo_name = models.CharField(max_length=50, default="lydata.test")
     """Name of the GitHub repository that contains the dataset."""
     revision = models.CharField(max_length=40, default="main")
     """Git revision in which to search for the data. E.g., a commit hash, or tag."""
     data_path = models.CharField(max_length=100, default="2021-usz-oropharynx/data.csv")
     """Path to the CSV file containing the patient data inside the git repo."""
-    description = models.TextField(default="")
-    """Associated README.md that usually comes with a dataset."""
     institution = models.ForeignKey(to=Institution, on_delete=models.CASCADE)
     """The institution that provided the dataset."""
     is_locked = models.BooleanField(default=False)
@@ -68,37 +69,63 @@ class Dataset(loggers.ModelLoggerMixin, models.Model):
 
 
     def __str__(self):
-        return f"{self.institution.shortname}: "
+        return f"{self.institution.shortname}: {self.git_repo_id}"
 
     @property
     def name(self):
         """Return the name of the dataset."""
         return self.data_path.replace("data.csv", "").replace("/", "").replace("-", " ")
 
+
+    def fetch_repo(self):
+        """Return the GitHub repository object."""
+        if not hasattr(self, "_repo"):
+            self._repo = github.get_repo(f"{self.git_repo_owner}/{self.git_repo_name}")
+        return self._repo
+
+
+    @property
+    def git_repo_id(self):
+        """Return the ID of the GitHub repository."""
+        return f"{self.git_repo_owner}/{self.git_repo_name}"
+
     @property
     def git_repo_url(self):
         """Return the URL of the GitHub repository."""
-        return f"https://github.com/{self.git_repo_owner}/{self.git_repo_name}"
+        return self.fetch_repo().html_url
 
     @property
-    def download_url(self):
+    def file_download_url(self):
         """Return the URL to download the dataset."""
-        return (
-            "https://raw.githubusercontent.com/"
-            f"{self.git_repo_owner}/{self.git_repo_name}/"
-            f"{self.revision}/{self.data_path}"
-        )
+        return self.fetch_file().download_url
 
 
-    def fetch_data(self) -> pd.DataFrame:
-        """Fetch the dataset from GitHub and return it as a pandas DataFrame."""
-        # pylint: disable=attribute-defined-outside-init
-        if not hasattr(self, "_source_csv"):
-            dvc_fs = DVCFileSystem(url=self.git_repo_url, rev=self.revision)
-            data_file = dvc_fs.open(self.data_path, mode="r")
-            self._source_csv = pd.read_csv(data_file, header=[0, 1, 2])
+    def fetch_file(self):
+        """Return the GitHub file object."""
+        if not hasattr(self, "_file"):
+            self._file = self.fetch_repo().get_contents(self.data_path, ref=self.revision)
+        return self._file
 
-        return self._source_csv
+
+    def fetch_readme(self) -> str:
+        """Return the README.md file of the dataset as a string."""
+        if not hasattr(self, "_readme"):
+            relative_readme_path = self.data_path.replace("data.csv", "README.md")
+
+            try:
+                self._readme = self.fetch_repo().get_contents(
+                    relative_readme_path,
+                    ref=self.revision,
+                ).decoded_content.decode("utf-8")
+            except UnknownObjectException as _e:
+                self._readme = "No README.md file found."
+
+        return self._readme
+
+
+    def get_table(self) -> pd.DataFrame:
+        """Return the dataset as a pandas DataFrame."""
+        return pd.read_csv(self.file_download_url, header=[0, 1, 2])
 
 
     def lock(self):
@@ -141,7 +168,7 @@ class Dataset(loggers.ModelLoggerMixin, models.Model):
         This method lock the dataset right afterwards to prevent editing the uploaded
         patients.
         """
-        table = self.fetch_data()
+        table = self.get_table()
         num_new, num_skipped = ioports.import_from_pandas(table, self)
         self.logger.info(
             f"{num_new} new patients were added to dataset {self}. "
