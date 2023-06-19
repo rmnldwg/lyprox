@@ -19,7 +19,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models.query import QuerySet
 from django.http import HttpResponse
 from django.urls.base import reverse
-from django.views import View, generic
+from django.views import generic
 
 from ..accounts.mixins import (
     InstitutionCheckObjectMixin,
@@ -73,9 +73,10 @@ class DatasetListView(ViewLoggerMixin, generic.ListView):
         return queryset
 
 
-class DatasetView(ViewLoggerMixin, View):
+class DatasetView(ViewLoggerMixin, generic.DetailView):
     """View that serves the respective `Dataset` CSV file."""
     model = Dataset
+    template_name = "patients/dataset_detail.html"
 
 
 # PATIENT related views

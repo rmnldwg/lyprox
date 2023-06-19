@@ -85,4 +85,9 @@ urlpatterns = [
         views.DatasetView.as_view(),
         name="dataset_download"
     ),
+    path(
+        "dataset/<int:pk>",
+        views.DatasetView.as_view(),
+        name="dataset_view"
+    ),
 ]

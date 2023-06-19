@@ -74,7 +74,12 @@ class Dataset(loggers.ModelLoggerMixin, models.Model):
     @property
     def name(self):
         """Return the name of the dataset."""
-        return self.data_path.replace("data.csv", "").replace("/", "").replace("-", " ")
+        return self.data_path.replace("/data.csv", "").split("-")[-1]
+
+    @property
+    def patient_count(self) -> int:
+        """Return the number of patients in the dataset."""
+        return Patient.objects.filter(dataset=self).count()
 
 
     def fetch_repo(self):
@@ -121,6 +126,13 @@ class Dataset(loggers.ModelLoggerMixin, models.Model):
                 self._readme = "No README.md file found."
 
         return self._readme
+
+
+    def fetch_date(self) -> str:
+        """Return the date of the dataset as a string."""
+        if not hasattr(self, "_date"):
+            self._date = self.fetch_repo().get_commit(sha=self.revision).commit.author.date
+        return self._date
 
 
     def get_table(self) -> pd.DataFrame:
