@@ -59,7 +59,12 @@
                       <span class="icon">
                         <i class="fas fa-calendar-alt"></i>
                       </span>
-                      <span>{{ dataset.date_created }}</span>
+                      <span>{{ dataset.date_created }}&nbsp;</span>
+                      {% if dataset.is_outdated %}
+                      <span class="has-text-danger">(outdated)</span>
+                      {% else %}
+                      <span class="has-text-success">(up to date)</span>
+                      {% endif %}
                     </span>
                   </p>
                   <p class="mb-1">
@@ -105,16 +110,25 @@
                   <div class="level-left">
                     <div class="level-item">
                       <div class="tags">
-                        <a href="{{ dataset.file_url }}"
+                        <a href="{{ dataset.data_url }}"
                           class="button tag is-success has-addons tooltip" id="export"
                           data-tooltip="Export dataset from database to CSV">
                           <span class="icon is-small"><i class="fas fa-download"></i></span>
                           <span>Download</span>
                         </a>
                         <a href="{% url 'patients:dataset_view' pk=dataset.pk %}"
-                          class="button tag is-info has-addons tooltip">
+                          class="button tag is-info has-addons tooltip"
+                          data-tooltip="Display the dataset's description">
                           <span class="icon is-small"><i class="fas fa-info-circle"></i></span>
                           <span>Readme</span>
+                        </a>
+                        {% if not dataset.is_locked %}
+                        <a href="{% url 'patients:dataset_delete' pk=dataset.pk %}"
+                          class="button tag is-danger has-addons tooltip"
+                          data-tooltip="Delete the dataset">
+                          <span class="icon is-small"><i class="fas fa-trash-alt"></i></span>
+                          <span>Delete</span>
+                        {% endif %}
                         </a>
                       </div>
                     </div>
@@ -154,7 +168,5 @@
     </div>
   </div>
 </section>
-
-<script src="{% static 'patients/dataset_list.js' %}"></script>
 
 {% endblock content %}

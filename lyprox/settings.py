@@ -20,6 +20,7 @@ import os
 from pathlib import Path
 
 from django import urls
+from github import Github
 
 from ._version import version
 
@@ -62,6 +63,7 @@ GITHUB_TOKEN = os.environ["GITHUB_TOKEN"]
 Read-only GitHub access token for fetching information about
 `lyprox.riskpredictor.models.InferenceResult`.
 """
+GITHUB = Github(login_or_token=GITHUB_TOKEN)
 
 
 CSRF_COOKIE_SECURE = not DEBUG

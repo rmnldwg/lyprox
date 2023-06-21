@@ -20,25 +20,28 @@ respective superlevel (in that case ``I``).
 import logging
 from collections import namedtuple
 
+import dateparser
 import pandas as pd
 from django.db import models
 from django.forms import ValidationError
 from django.urls import reverse
-from github import Github, UnknownObjectException
+from github import UnknownObjectException
 
-from lyprox import settings
-
-from .. import loggers
-from ..accounts.models import Institution
-from . import ioports, mixins
-from .fields import RobustDateField
+from lyprox import loggers
+from lyprox.accounts.models import Institution
+from lyprox.patients import ioports, mixins
+from lyprox.patients.fields import RobustDateField
+from lyprox.settings import GITHUB
 
 logger = logging.getLogger(name=__name__)
-github = Github(login_or_token=settings.GITHUB_TOKEN)
 
 
 class LockedDatasetError(Exception):
     """Raised when a `Dataset` or an associated entry was tried to be edited."""
+
+
+class CorruptedDatasetError(Exception):
+    """Raised when there is reason to believe that the dataset is corrupted."""
 
 
 class Dataset(loggers.ModelLoggerMixin, models.Model):
@@ -56,6 +59,10 @@ class Dataset(loggers.ModelLoggerMixin, models.Model):
     """Git revision in which to search for the data. E.g., a commit hash, or tag."""
     data_path = models.CharField(max_length=100, default="2021-usz-oropharynx/data.csv")
     """Path to the CSV file containing the patient data inside the git repo."""
+    data_url = models.URLField(max_length=400)
+    """URL to the CSV file in the GitHub repo."""
+    data_sha = models.CharField(max_length=40)
+    """SHA of the CSV file in the GitHub repo."""
     institution = models.ForeignKey(to=Institution, on_delete=models.CASCADE)
     """The institution that provided the dataset."""
     is_locked = models.BooleanField(default=False)
@@ -64,8 +71,8 @@ class Dataset(loggers.ModelLoggerMixin, models.Model):
     """Whether the dataset is public or not. Public datasets can be viewed by everyone."""
     date_created = models.DateTimeField()
     """Date and time when the dataset was created."""
-    file_url = models.URLField(max_length=400)
-    """URL to the CSV file in the GitHub repo."""
+    is_outdated = models.BooleanField(default=False)
+    """Whether the data file has been updated since the last import."""
 
 
     class Meta:
@@ -99,7 +106,21 @@ class Dataset(loggers.ModelLoggerMixin, models.Model):
     def fetch_repo(self):
         """Return the GitHub repository object."""
         if not hasattr(self, "_repo"):
-            self._repo = github.get_repo(f"{self.git_repo_owner}/{self.git_repo_name}")
+            self._repo = GITHUB.get_repo(f"{self.git_repo_owner}/{self.git_repo_name}")
+            last_modified = dateparser.parse(self._repo.last_modified)
+            data_sha = self.fetch_file().sha
+
+            is_repo_modfied = last_modified > self.date_created
+            is_sha_changed = data_sha != self.data_sha
+
+            if is_repo_modfied and is_sha_changed:
+                self.logger.warning("Data file has been updated since last import.")
+                self.is_outdated = True
+                self.save(override=True)
+
+            if not is_repo_modfied and is_sha_changed:
+                raise RuntimeError("Data file has been updated without changing the repo.")
+
         return self._repo
 
 
@@ -107,6 +128,18 @@ class Dataset(loggers.ModelLoggerMixin, models.Model):
         """Return the GitHub file object."""
         if not hasattr(self, "_file"):
             self._file = self.fetch_repo().get_contents(self.data_path, ref=self.revision)
+
+            if not self.is_locked:
+                self.data_sha = self._file.sha
+                self.save()
+            elif self.data_sha != self._file.sha:
+                raise CorruptedDatasetError(
+                    "Data file SHA of locked dataset does not match SHA of file "
+                    "in GitHub repo. This should never happen."
+                )
+            else:
+                self.logger.info("Dataset is locked, not updating data SHA.")
+
         return self._file
 
 
@@ -126,9 +159,9 @@ class Dataset(loggers.ModelLoggerMixin, models.Model):
         return self._readme
 
 
-    def fetch_table(self) -> pd.DataFrame:
+    def fetch_dataframe(self) -> pd.DataFrame:
         """Return the dataset as a pandas DataFrame."""
-        return pd.read_csv(self.file_url, header=[0, 1, 2])
+        return pd.read_csv(self.data_url, header=[0, 1, 2])
 
 
     def lock(self):
@@ -171,7 +204,7 @@ class Dataset(loggers.ModelLoggerMixin, models.Model):
         This method lock the dataset right afterwards to prevent editing the uploaded
         patients.
         """
-        table = self.fetch_table()
+        table = self.fetch_dataframe()
         num_new, num_skipped = ioports.import_from_pandas(table, self)
         self.logger.info(
             f"{num_new} new patients were added to dataset {self}. "

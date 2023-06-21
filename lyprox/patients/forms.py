@@ -16,14 +16,12 @@ import pandas
 from django import forms
 from django.core.exceptions import ValidationError
 from django.forms import widgets
-from github import Github
 from github.GithubException import GithubException, UnknownObjectException
 
-from lyprox import settings
 from lyprox.accounts.models import Institution
-
-from ..loggers import FormLoggerMixin
-from .models import Dataset, Diagnose, Patient, Tumor
+from lyprox.loggers import FormLoggerMixin
+from lyprox.patients.models import Dataset, Diagnose, Patient, Tumor
+from lyprox.settings import GITHUB
 
 
 class DatasetForm(FormLoggerMixin, forms.ModelForm):
@@ -39,14 +37,17 @@ class DatasetForm(FormLoggerMixin, forms.ModelForm):
             "placeholder": "e.g. https://github.com/my/repo",
         }),
     )
+    """The URL of the GitHub repository that contains the data."""
     auto_determined_fields = [
         "git_repo_owner",
         "git_repo_name",
+        "data_url",
+        "data_sha",
         "institution",
         "is_public",
         "date_created",
-        "file_url",
     ]
+    """Fields that are not shown to the user but are automatically determined."""
 
     class Meta:
         """The underlying model."""
@@ -90,19 +91,17 @@ class DatasetForm(FormLoggerMixin, forms.ModelForm):
         """
         cleaned_data = super().clean()
 
-        git_repo_url = cleaned_data.get("git_repo_url")
-        revision = cleaned_data.get("revision")
-        data_path = cleaned_data.get("data_path")
+        git_repo_url = cleaned_data["git_repo_url"]
+        revision = cleaned_data["revision"]
+        data_path = cleaned_data["data_path"]
 
         repo_id = git_repo_url.split("github.com/")[-1]
         cleaned_data["git_repo_owner"] = repo_id.split("/")[0]
         cleaned_data["git_repo_name"] = repo_id.split("/")[1]
 
-        github = Github(login_or_token=settings.GITHUB_TOKEN)
-
         # Make sure the repository exists
         try:
-            repo = github.get_repo(repo_id)
+            repo = GITHUB.get_repo(repo_id)
         except UnknownObjectException as _e:
             self.add_error(
                 field="git_repo_url",
@@ -126,11 +125,13 @@ class DatasetForm(FormLoggerMixin, forms.ModelForm):
             )
             return cleaned_data
 
-        cleaned_data["date_created"] = dateparser.parse(file.last_modified)
-        cleaned_data["file_url"] = file.download_url
-        table = pandas.read_csv(cleaned_data["file_url"], header=[0, 1, 2])
+        cleaned_data["data_url"] = file.download_url
+        cleaned_data["data_sha"] = file.sha
+        table = pandas.read_csv(cleaned_data["data_url"], header=[0, 1, 2])
         cleaned_data["institution"] = self.get_institution(table)
         cleaned_data["is_public"] = not repo.private
+        cleaned_data["date_created"] = dateparser.parse(repo.last_modified)
+
         return cleaned_data
 
 
@@ -363,12 +364,12 @@ class DataFileForm(FormLoggerMixin, forms.Form):
                 skip_blank_lines=True,
                 infer_datetime_format=True
             )
-        except:
+        except Exception as exc:
             msg = ("Error while parsing CSV table.")
             self.logger.error(msg)
             raise forms.ValidationError(
                 msg + " Make sure format is as specified"
-            )
+            ) from exc
 
         cleaned_data["data_frame"] = data_frame
         return cleaned_data
