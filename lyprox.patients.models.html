@@ -200,17 +200,7 @@
         
 
         
-            <div class="itemName"><code><a href="lyprox.patients.models.CorruptedFileError.html" class="internal-link" title="lyprox.patients.models.CorruptedFileError"><wbr></wbr>Corrupted<wbr></wbr>File<wbr></wbr>Error</a></code>
-            </div>
-        
-
-    </li><li class="">
-        
-        
-        
-
-        
-            <div class="itemName"><code><a href="lyprox.patients.models.DuplicateFileError.html" class="internal-link" title="lyprox.patients.models.DuplicateFileError"><wbr></wbr>Duplicate<wbr></wbr>File<wbr></wbr>Error</a></code>
+            <div class="itemName"><code><a href="lyprox.patients.models.CorruptedDatasetError.html" class="internal-link" title="lyprox.patients.models.CorruptedDatasetError"><wbr></wbr>Corrupted<wbr></wbr>Dataset<wbr></wbr>Error</a></code>
             </div>
         
 
@@ -227,51 +217,8 @@
     </li>
 </ul>
 
-        <div class="childrenKindTitle">Functions</div>
-        <ul>
-    
-    <li class="">
         
-        
-        
-
-        
-            <div class="itemName"><code><a href="#does_file_match_path" class="internal-link" title="lyprox.patients.models.does_file_match_path">does<wbr></wbr>_file<wbr></wbr>_match<wbr></wbr>_path</a></code>
-            </div>
-        
-
-    </li><li class="">
-        
-        
-        
-
-        
-            <div class="itemName"><code><a href="#get_md5_hash" class="internal-link" title="lyprox.patients.models.get_md5_hash">get<wbr></wbr>_md5<wbr></wbr>_hash</a></code>
-            </div>
-        
-
-    </li><li class="">
-        
-        
-        
-
-        
-            <div class="itemName"><code><a href="#get_path_for_source_csv" class="internal-link" title="lyprox.patients.models.get_path_for_source_csv">get<wbr></wbr>_path<wbr></wbr>_for<wbr></wbr>_source<wbr></wbr>_csv</a></code>
-            </div>
-        
-
-    </li><li class="">
-        
-        
-        
-
-        
-            <div class="itemName"><code><a href="#get_path_from_file" class="internal-link" title="lyprox.patients.models.get_path_from_file">get<wbr></wbr>_path<wbr></wbr>_from<wbr></wbr>_file</a></code>
-            </div>
-        
-
-    </li>
-</ul> 
+         
 
         
          
@@ -475,7 +422,7 @@ respective superlevel (in that case <tt class="rst-docutils literal">I</tt>).</p
     
     <td>Class</td>
     <td><code><a href="lyprox.patients.models.Dataset.html" class="internal-link" title="lyprox.patients.models.Dataset"><wbr></wbr>Dataset</a></code></td>
-    <td>This model represents a collection of patients that have been added to the database together. E.g., via uploading a CSV file where each row represents a patient. But also patients added via the interface one by one should be associated to a dataset.</td>
+    <td>A collection of patients, usually importet from a CSV file in a GitHub repo.</td>
   </tr><tr class="class">
     
     <td>Class</td>
@@ -494,38 +441,13 @@ respective superlevel (in that case <tt class="rst-docutils literal">I</tt>).</p
   </tr><tr class="exception">
     
     <td>Exception</td>
-    <td><code><a href="lyprox.patients.models.CorruptedFileError.html" class="internal-link" title="lyprox.patients.models.CorruptedFileError"><wbr></wbr>Corrupted<wbr></wbr>File<wbr></wbr>Error</a></code></td>
-    <td>Raised when an uploaded file has been changed since being written to disk.</td>
-  </tr><tr class="exception">
-    
-    <td>Exception</td>
-    <td><code><a href="lyprox.patients.models.DuplicateFileError.html" class="internal-link" title="lyprox.patients.models.DuplicateFileError"><wbr></wbr>Duplicate<wbr></wbr>File<wbr></wbr>Error</a></code></td>
-    <td>Raised when a file to be saved already exists on disk.</td>
+    <td><code><a href="lyprox.patients.models.CorruptedDatasetError.html" class="internal-link" title="lyprox.patients.models.CorruptedDatasetError"><wbr></wbr>Corrupted<wbr></wbr>Dataset<wbr></wbr>Error</a></code></td>
+    <td>Raised when there is reason to believe that the dataset is corrupted.</td>
   </tr><tr class="exception">
     
     <td>Exception</td>
     <td><code><a href="lyprox.patients.models.LockedDatasetError.html" class="internal-link" title="lyprox.patients.models.LockedDatasetError"><wbr></wbr>Locked<wbr></wbr>Dataset<wbr></wbr>Error</a></code></td>
     <td>Raised when a <code><a href="lyprox.patients.models.Dataset.html" class="internal-link" title="lyprox.patients.models.Dataset">Dataset</a></code> or an associated entry was tried to be edited.</td>
-  </tr><tr class="function">
-    
-    <td>Function</td>
-    <td><code><a href="#does_file_match_path" class="internal-link" title="lyprox.patients.models.does_file_match_path">does<wbr></wbr>_file<wbr></wbr>_match<wbr></wbr>_path</a></code></td>
-    <td>Check if the MD5 hash matches the <tt class="rst-docutils literal">path</tt> of <tt class="rst-docutils literal">file</tt>.</td>
-  </tr><tr class="function">
-    
-    <td>Function</td>
-    <td><code><a href="#get_md5_hash" class="internal-link" title="lyprox.patients.models.get_md5_hash">get<wbr></wbr>_md5<wbr></wbr>_hash</a></code></td>
-    <td>Compute the hexadecimal MD5 file hash of <tt class="rst-docutils literal">file</tt>.</td>
-  </tr><tr class="function">
-    
-    <td>Function</td>
-    <td><code><a href="#get_path_for_source_csv" class="internal-link" title="lyprox.patients.models.get_path_for_source_csv">get<wbr></wbr>_path<wbr></wbr>_for<wbr></wbr>_source<wbr></wbr>_csv</a></code></td>
-    <td>Compile path for the <tt class="rst-docutils literal">upload_to</tt> argument of the <code><a href="lyprox.patients.models.Dataset.html#source_csv" class="internal-link" title="lyprox.patients.models.Dataset.source_csv">Dataset.source_csv</a></code> field.</td>
-  </tr><tr class="function">
-    
-    <td>Function</td>
-    <td><code><a href="#get_path_from_file" class="internal-link" title="lyprox.patients.models.get_path_from_file">get<wbr></wbr>_path<wbr></wbr>_from<wbr></wbr>_file</a></code></td>
-    <td>Compute MD5 hash of <tt class="rst-docutils literal">file</tt> and return filepath based on that.</td>
   </tr><tr class="variable">
     
     <td>Variable</td>
@@ -544,108 +466,7 @@ respective superlevel (in that case <tt class="rst-docutils literal">I</tt>).</p
         </div>
 
         <div id="childList">
-          <div class="basefunction">
-  
-  
-  <a name="lyprox.patients.models.does_file_match_path">
-    
-  </a>
-  <a name="does_file_match_path">
-    
-  </a>
-  <div class="functionHeader">
-    
-    <span class="py-keyword">def</span> <span class="py-defname">does_file_match_path</span>(file, path):
-    
-    <a class="headerLink" href="#does_file_match_path" title="lyprox.patients.models.does_file_match_path">
-      
-      
-      ¶
-    </a>
-  </div>
-  <div class="docstring functionBody">
-    
-    <div><p>Check if the MD5 hash matches the <tt class="rst-docutils literal">path</tt> of <tt class="rst-docutils literal">file</tt>.</p>
-</div>
-  </div>
-</div><div class="basefunction">
-  
-  
-  <a name="lyprox.patients.models.get_md5_hash">
-    
-  </a>
-  <a name="get_md5_hash">
-    
-  </a>
-  <div class="functionHeader">
-    
-    <span class="py-keyword">def</span> <span class="py-defname">get_md5_hash</span>(file):
-    
-    <a class="headerLink" href="#get_md5_hash" title="lyprox.patients.models.get_md5_hash">
-      
-      
-      ¶
-    </a>
-  </div>
-  <div class="docstring functionBody">
-    
-    <div><p>Compute the hexadecimal MD5 file hash of <tt class="rst-docutils literal">file</tt>.</p>
-</div>
-  </div>
-</div><div class="basefunction">
-  
-  
-  <a name="lyprox.patients.models.get_path_for_source_csv">
-    
-  </a>
-  <a name="get_path_for_source_csv">
-    
-  </a>
-  <div class="functionHeader">
-    
-    <span class="py-keyword">def</span> <span class="py-defname">get_path_for_source_csv</span>(instance, _filename):
-    
-    <a class="headerLink" href="#get_path_for_source_csv" title="lyprox.patients.models.get_path_for_source_csv">
-      
-      
-      ¶
-    </a>
-  </div>
-  <div class="docstring functionBody">
-    
-    <div><p>Compile path for the <tt class="rst-docutils literal">upload_to</tt> argument of the <code><a href="lyprox.patients.models.Dataset.html#source_csv" class="internal-link" title="lyprox.patients.models.Dataset.source_csv">Dataset.source_csv</a></code> field.</p>
-</div>
-  </div>
-</div><div class="basefunction">
-  
-  
-  <a name="lyprox.patients.models.get_path_from_file">
-    
-  </a>
-  <a name="get_path_from_file">
-    
-  </a>
-  <div class="functionHeader">
-    
-    <span class="py-keyword">def</span> <span class="py-defname">get_path_from_file</span>(file, directory=<span class="rst-variable-quote">'</span><span class="rst-variable-string">source</span><span class="rst-variable-quote">'</span>, suffix=<span class="rst-variable-quote">'</span><span class="rst-variable-string">.csv</span><span class="rst-variable-quote">'</span>):
-    
-    <a class="headerLink" href="#get_path_from_file" title="lyprox.patients.models.get_path_from_file">
-      
-      
-      ¶
-    </a>
-  </div>
-  <div class="docstring functionBody">
-    
-    <div><p>Compute MD5 hash of <tt class="rst-docutils literal">file</tt> and return filepath based on that.</p>
-<p>The resulting filepath will be contructed from the <code><a href="lyprox.settings.html#MEDIA_ROOT" class="internal-link">lyprox.settings.MEDIA_ROOT</a></code>, the
-<tt class="rst-docutils literal">directory</tt> parameter and the MD5 hash of the <tt class="rst-docutils literal">file</tt> together with the
-parameter <tt class="rst-docutils literal">suffix</tt>. If there is already a file at the computed path, an error is
-thrown, because the exact same file already exists on disk. We know that because
-the path always contains the file's hash.</p>
-</div>
-  </div>
-</div><div class="basevariable">
+          <div class="basevariable">
   
   
   <a name="lyprox.patients.models.logger">
@@ -705,7 +526,7 @@ the path always contains the file's hash.</p>
   <div class="container">
     <a href="index.html">API Documentation</a> for LyProX,
   generated by <a href="https://github.com/twisted/pydoctor/">pydoctor</a>
-    22.9.1 at 2023-06-16 11:31:08.
+    22.9.1 at 2023-06-22 14:02:50.
   </div>
 
   <!-- Search related scripts needs to be loaded at the end of HTML 

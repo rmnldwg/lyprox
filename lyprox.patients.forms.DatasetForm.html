@@ -186,7 +186,7 @@
         
 
         
-            <div class="itemName"><code><a href="#clean_source_csv" class="internal-link" title="lyprox.patients.forms.DatasetForm.clean_source_csv">clean<wbr></wbr>_source<wbr></wbr>_csv</a></code>
+            <div class="itemName"><code><a href="#clean" class="internal-link" title="lyprox.patients.forms.DatasetForm.clean">clean</a></code>
             </div>
         
 
@@ -215,7 +215,7 @@
         
 
         
-            <div class="itemName"><code><a href="#initial" class="internal-link" title="lyprox.patients.forms.DatasetForm.initial">initial</a></code>
+            <div class="itemName"><code><a href="#auto_determined_fields" class="internal-link" title="lyprox.patients.forms.DatasetForm.auto_determined_fields">auto<wbr></wbr>_determined<wbr></wbr>_fields</a></code>
             </div>
         
 
@@ -225,7 +225,7 @@
         
 
         
-            <div class="itemName"><code><a href="#source_csv" class="internal-link" title="lyprox.patients.forms.DatasetForm.source_csv">source<wbr></wbr>_csv</a></code>
+            <div class="itemName"><code><a href="#git_repo_url" class="internal-link" title="lyprox.patients.forms.DatasetForm.git_repo_url">git<wbr></wbr>_repo<wbr></wbr>_url</a></code>
             </div>
         
 
@@ -383,8 +383,8 @@
   </tr><tr class="method">
     
     <td>Method</td>
-    <td><code><a href="#clean_source_csv" class="internal-link" title="lyprox.patients.forms.DatasetForm.clean_source_csv">clean<wbr></wbr>_source<wbr></wbr>_csv</a></code></td>
-    <td>Raise a <code>ValidationError</code>, when the file already exists.</td>
+    <td><code><a href="#clean" class="internal-link" title="lyprox.patients.forms.DatasetForm.clean">clean</a></code></td>
+    <td>Insert current user's institution into the form's cleaned data.</td>
   </tr><tr class="method">
     
     <td>Method</td>
@@ -393,13 +393,13 @@
   </tr><tr class="classvariable">
     
     <td>Class Variable</td>
-    <td><code><a href="#initial" class="internal-link" title="lyprox.patients.forms.DatasetForm.initial">initial</a></code></td>
-    <td><span class="undocumented">Undocumented</span></td>
+    <td><code><a href="#auto_determined_fields" class="internal-link" title="lyprox.patients.forms.DatasetForm.auto_determined_fields">auto<wbr></wbr>_determined<wbr></wbr>_fields</a></code></td>
+    <td>Fields that are not shown to the user but are automatically determined.</td>
   </tr><tr class="classvariable">
     
     <td>Class Variable</td>
-    <td><code><a href="#source_csv" class="internal-link" title="lyprox.patients.forms.DatasetForm.source_csv">source<wbr></wbr>_csv</a></code></td>
-    <td><span class="undocumented">Undocumented</span></td>
+    <td><code><a href="#git_repo_url" class="internal-link" title="lyprox.patients.forms.DatasetForm.git_repo_url">git<wbr></wbr>_repo<wbr></wbr>_url</a></code></td>
+    <td>The URL of the GitHub repository that contains the data.</td>
   </tr><tr class="instancevariable">
     
     <td>Instance Variable</td>
@@ -439,17 +439,17 @@
 </div><div class="basemethod">
   
   
-  <a name="lyprox.patients.forms.DatasetForm.clean_source_csv">
+  <a name="lyprox.patients.forms.DatasetForm.clean">
     
   </a>
-  <a name="clean_source_csv">
+  <a name="clean">
     
   </a>
   <div class="functionHeader">
     
-    <span class="py-keyword">def</span> <span class="py-defname">clean_source_csv</span>(self):
+    <span class="py-keyword">def</span> <span class="py-defname">clean</span>(self):
     
-    <a class="headerLink" href="#clean_source_csv" title="lyprox.patients.forms.DatasetForm.clean_source_csv">
+    <a class="headerLink" href="#clean" title="lyprox.patients.forms.DatasetForm.clean">
       
       
       ¶
@@ -457,8 +457,8 @@
   </div>
   <div class="docstring functionBody">
     
-    <div><p>Raise a <code>ValidationError</code>, when the file already exists.</p>
-</div>
+    <div><p>Insert current user's institution into the form's cleaned data.</p>
+<table class="fieldTable"><tr class="fieldStart"><td class="fieldName" colspan="2">Returns</td></tr><tr><td class="fieldArgContainer"><code>Dict[<wbr></wbr>str, <wbr></wbr>Any]</code></td><td class="fieldArgDesc"><span class="undocumented">Undocumented</span></td></tr></table></div>
   </div>
 </div><div class="basemethod">
   
@@ -488,17 +488,17 @@ lock the dataset.</p>
 </div><div class="baseclassvariable">
   
   
-  <a name="lyprox.patients.forms.DatasetForm.initial">
+  <a name="lyprox.patients.forms.DatasetForm.auto_determined_fields">
     
   </a>
-  <a name="initial">
+  <a name="auto_determined_fields">
     
   </a>
   <div class="functionHeader">
     
-    <span class="py-defname">initial</span>: <code>dict[<wbr></wbr>str, <wbr></wbr>bool]</code> =
+    <span class="py-defname">auto_determined_fields</span>: <code>list[<wbr></wbr>str]</code> =
     
-    <a class="headerLink" href="#initial" title="lyprox.patients.forms.DatasetForm.initial">
+    <a class="headerLink" href="#auto_determined_fields" title="lyprox.patients.forms.DatasetForm.auto_determined_fields">
       
       
       ¶
@@ -506,23 +506,24 @@ lock the dataset.</p>
   </div>
   <div class="functionBody">
     
-    <div><p class="undocumented">Undocumented</p></div>
+    <div><p>Fields that are not shown to the user but are automatically determined.</p>
+</div>
     
   </div>
 </div><div class="baseclassvariable">
   
   
-  <a name="lyprox.patients.forms.DatasetForm.source_csv">
+  <a name="lyprox.patients.forms.DatasetForm.git_repo_url">
     
   </a>
-  <a name="source_csv">
+  <a name="git_repo_url">
     
   </a>
   <div class="functionHeader">
     
-    <span class="py-defname">source_csv</span> =
+    <span class="py-defname">git_repo_url</span> =
     
-    <a class="headerLink" href="#source_csv" title="lyprox.patients.forms.DatasetForm.source_csv">
+    <a class="headerLink" href="#git_repo_url" title="lyprox.patients.forms.DatasetForm.git_repo_url">
       
       
       ¶
@@ -530,7 +531,8 @@ lock the dataset.</p>
   </div>
   <div class="functionBody">
     
-    <div><p class="undocumented">Undocumented</p></div>
+    <div><p>The URL of the GitHub repository that contains the data.</p>
+</div>
     
   </div>
 </div><div class="baseinstancevariable">
@@ -569,7 +571,7 @@ lock the dataset.</p>
   <div class="container">
     <a href="index.html">API Documentation</a> for LyProX,
   generated by <a href="https://github.com/twisted/pydoctor/">pydoctor</a>
-    22.9.1 at 2023-06-16 11:31:08.
+    22.9.1 at 2023-06-22 14:02:50.
   </div>
 
   <!-- Search related scripts needs to be loaded at the end of HTML 
