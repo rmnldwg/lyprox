@@ -103,44 +103,92 @@ class Dataset(loggers.ModelLoggerMixin, models.Model):
         return Patient.objects.filter(dataset=self).count()
 
 
+    def compute_fields(
+        self,
+        git_repo_url: str,
+        revision: str,
+        data_path: str,
+        user_institution: Institution,
+        **_kwargs,
+    ) -> None:
+        """Dynamically compute fields from the GitHub repository."""
+        repo_id = git_repo_url.split("github.com/")[-1]
+        self.git_repo_owner, self.git_repo_name = repo_id.split("/")
+
+        repo = self.fetch_repo()
+        self.date_created = dateparser.parse(repo.last_modified)
+        self.is_public = not repo.private
+
+        self.revision = revision
+        self.data_path = data_path
+
+        data_file = self.fetch_file()
+        self.data_sha = data_file.sha
+        self.data_url = data_file.download_url
+        table = self.fetch_dataframe()
+        self.institution = self.get_institution(table, fallback=user_institution)
+
+
+    @staticmethod
+    def get_institution(table: pd.DataFrame, fallback: Institution) -> Institution:
+        """Return the institution that provided the dataset."""
+        try:
+            institution_name = table["patient", "#", "institution"].unique()[0]
+            return Institution.objects.get(name=institution_name)
+        except KeyError:
+            return fallback
+
+
     def fetch_repo(self):
         """Return the GitHub repository object."""
-        if not hasattr(self, "_repo"):
+        if hasattr(self, "_repo"):
+            return self._repo
+
+        try:
             self._repo = GITHUB.get_repo(f"{self.git_repo_owner}/{self.git_repo_name}")
-            last_modified = dateparser.parse(self._repo.last_modified)
-            data_sha = self.fetch_file().sha
-
-            is_repo_modfied = last_modified > self.date_created
-            is_sha_changed = data_sha != self.data_sha
-
-            if is_repo_modfied and is_sha_changed:
-                self.logger.warning("Data file has been updated since last import.")
-                self.is_outdated = True
-                self.save(override=True)
-
-            if not is_repo_modfied and is_sha_changed:
-                raise RuntimeError("Data file has been updated without changing the repo.")
+        except UnknownObjectException as unk_obj_exc:
+            raise ValidationError(
+                f"Could not find repository {self.git_repo_owner}/{self.git_repo_name}."
+            ) from unk_obj_exc
 
         return self._repo
 
 
     def fetch_file(self):
         """Return the GitHub file object."""
-        if not hasattr(self, "_file"):
-            self._file = self.fetch_repo().get_contents(self.data_path, ref=self.revision)
+        if hasattr(self, "_file"):
+            return self._file
 
-            if not self.is_locked:
-                self.data_sha = self._file.sha
-                self.save()
-            elif self.data_sha != self._file.sha:
-                raise CorruptedDatasetError(
-                    "Data file SHA of locked dataset does not match SHA of file "
-                    "in GitHub repo. This should never happen."
-                )
-            else:
-                self.logger.info("Dataset is locked, not updating data SHA.")
+        repo = self.fetch_repo()
+        try:
+            self._file = repo.get_contents(self.data_path, ref=self.revision)
+        except UnknownObjectException as unk_obj_exc:
+            raise ValidationError(
+                f"Could not find file {self.data_path} in repository "
+                f"{self.git_repo_owner}/{self.git_repo_name}."
+            ) from unk_obj_exc
 
         return self._file
+
+
+    def check_itegrity(self):
+        """Check whether the dataset is still consistent with the GitHub repo."""
+        last_modified = dateparser.parse(self.fetch_repo().last_modified)
+        data_sha = self.fetch_file().sha
+
+        is_repo_modfied = last_modified > self.date_created
+        is_sha_changed = data_sha != self.data_sha
+
+        if is_repo_modfied and is_sha_changed:
+            self.logger.warning("Data file has been updated since last import.")
+            self.is_outdated = True
+            self.save(override=True)
+
+        if not is_repo_modfied and is_sha_changed:
+            raise CorruptedDatasetError(
+                "Data file SHA of locked dataset does not match SHA of file "
+                "in GitHub repo. This should never happen."
+            )
 
 
     def fetch_readme(self) -> str:

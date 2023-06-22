@@ -11,17 +11,13 @@ that the data is properly cleaned before its being passed on to the next step.
 
 from typing import Any, Dict, Optional
 
-import dateparser
 import pandas
 from django import forms
 from django.core.exceptions import ValidationError
 from django.forms import widgets
-from github.GithubException import GithubException, UnknownObjectException
 
-from lyprox.accounts.models import Institution
 from lyprox.loggers import FormLoggerMixin
 from lyprox.patients.models import Dataset, Diagnose, Patient, Tumor
-from lyprox.settings import GITHUB
 
 
 class DatasetForm(FormLoggerMixin, forms.ModelForm):
@@ -75,63 +71,10 @@ class DatasetForm(FormLoggerMixin, forms.ModelForm):
         super().__init__(*args, **kwargs)
 
 
-    def get_institution(self, table: pandas.DataFrame) -> str:
-        """Get institution of `table`. Fall back to user's institution if unavailable."""
-        try:
-            institution_name = table["patient", "#", "institution"].unique()[0]
-            return Institution.objects.get(name=institution_name)
-        except KeyError:
-            return self.user.institution
-
-
     def clean(self) -> Dict[str, Any]:
-        """
-        Check that the git repository and revision are valid. If so, return
-        the cleaned data.
-        """
+        """Insert current user's institution into the form's cleaned data."""
         cleaned_data = super().clean()
-
-        git_repo_url = cleaned_data["git_repo_url"]
-        revision = cleaned_data["revision"]
-        data_path = cleaned_data["data_path"]
-
-        repo_id = git_repo_url.split("github.com/")[-1]
-        cleaned_data["git_repo_owner"] = repo_id.split("/")[0]
-        cleaned_data["git_repo_name"] = repo_id.split("/")[1]
-
-        # Make sure the repository exists
-        try:
-            repo = GITHUB.get_repo(repo_id)
-        except UnknownObjectException as _e:
-            self.add_error(
-                field="git_repo_url",
-                error=ValidationError("Not a valid GitHub repository."),
-            )
-            return cleaned_data
-
-        # Check if the revision and the path inside the repository is valid
-        try:
-            file = repo.get_contents(data_path, ref=revision)
-        except UnknownObjectException as _e:
-            self.add_error(
-                field="data_path",
-                error=ValidationError("Not a valid path in repository."),
-            )
-            return cleaned_data
-        except GithubException as _e:
-            self.add_error(
-                field="revision",
-                error=ValidationError("Not a valid revision."),
-            )
-            return cleaned_data
-
-        cleaned_data["data_url"] = file.download_url
-        cleaned_data["data_sha"] = file.sha
-        table = pandas.read_csv(cleaned_data["data_url"], header=[0, 1, 2])
-        cleaned_data["institution"] = self.get_institution(table)
-        cleaned_data["is_public"] = not repo.private
-        cleaned_data["date_created"] = dateparser.parse(repo.last_modified)
-
+        cleaned_data["user_institution"] = self.user.institution
         return cleaned_data
 
 
@@ -142,10 +85,8 @@ class DatasetForm(FormLoggerMixin, forms.ModelForm):
         """
         dataset = super().save(commit=False)
 
-        for field in self.auto_determined_fields:
-            setattr(dataset, field, self.cleaned_data[field])
-
         if commit:
+            dataset.compute_fields(**self.cleaned_data)
             dataset.save()
             dataset.import_csv_to_db()
 
