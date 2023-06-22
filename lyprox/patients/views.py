@@ -13,26 +13,29 @@ listing the models in the ``patients`` app.
 
 import logging
 import time
-from pathlib import Path
 from typing import Any, Dict
 
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models.query import QuerySet
-from django.http import FileResponse, HttpResponse, HttpResponseForbidden
-from django.shortcuts import get_object_or_404
+from django.http import HttpResponse
 from django.urls.base import reverse
-from django.views import View, generic
+from django.views import generic
 
-from ..accounts.mixins import (
+from lyprox.accounts.mixins import (
     InstitutionCheckObjectMixin,
     InstitutionCheckPatientMixin,
 )
-from ..dataexplorer import query
-from ..dataexplorer.forms import DashboardForm
-from ..loggers import ViewLoggerMixin
-from .filters import PatientFilter
-from .forms import DatasetForm, DiagnoseForm, PatientForm, TumorForm
-from .models import Dataset, Diagnose, Patient, Tumor
+from lyprox.dataexplorer import query
+from lyprox.dataexplorer.forms import DashboardForm
+from lyprox.loggers import ViewLoggerMixin
+from lyprox.patients.filters import PatientFilter
+from lyprox.patients.forms import (
+    DatasetForm,
+    DiagnoseForm,
+    PatientForm,
+    TumorForm,
+)
+from lyprox.patients.models import Dataset, Diagnose, Patient, Tumor
 
 logger = logging.getLogger(__name__)
 
@@ -46,7 +49,6 @@ class CreateDatasetView(
     """Create a dataset from a form."""
     model = Dataset
     form_class = DatasetForm
-    template_name = "patients/dataset_form.html"
     success_url = "/patients/dataset"
 
     def get_form_kwargs(self) -> Dict[str, Any]:
@@ -54,12 +56,13 @@ class CreateDatasetView(
         kwargs["user"] = self.request.user
         return kwargs
 
+
 class DatasetListView(ViewLoggerMixin, generic.ListView):
     """
     View that displays all datasets in a list.
     """
     model = Dataset
-    template_name: str = "patients/dataset_patient_list.html"
+    template_name: str = "patients/dataset_list.html"
 
     def get_queryset(self):
         """
@@ -73,30 +76,20 @@ class DatasetListView(ViewLoggerMixin, generic.ListView):
 
         return queryset
 
-class DatasetView(ViewLoggerMixin, View):
+
+class DatasetView(ViewLoggerMixin, generic.DetailView):
     """View that serves the respective `Dataset` CSV file."""
-    def get(self, request, pk, which):
-        """Get correct table and render download response."""
-        dataset = get_object_or_404(Dataset, pk=pk)
-        year = dataset.create_date.year
-        institution = dataset.institution.shortname
-        name = dataset.name
+    model = Dataset
 
-        if not dataset.is_public and not request.user.is_authenticated:
-            return HttpResponseForbidden()
 
-        if which == "source":
-            csv_file_path = Path(dataset.source_csv.path)
-        elif which == "export":
-            csv_file_path = dataset.export_db_to_csv().name
-
-        buffer = open(csv_file_path, "rb")
-        buffer.seek(0)
-        return FileResponse(
-            buffer,
-            as_attachment=True,
-            filename=f"{year}-{institution}-{name}-{which}.csv",
-        )
+class DeleteDatasetView(
+    ViewLoggerMixin,
+    LoginRequiredMixin,
+    generic.DeleteView
+):
+    """Remove this dataset from the database, and all associated patients with it."""
+    model = Dataset
+    success_url = "/patients/dataset"
 
 
 # PATIENT related views
@@ -165,7 +158,6 @@ class PatientListView(ViewLoggerMixin, generic.ListView):
 class PatientDetailView(generic.DetailView):
     """Show details of a particular patient."""
     model = Patient
-    template_name = "patients/patient_detail.html"  #:
     action = "show_patient_detail"  #:
 
 
@@ -177,7 +169,6 @@ class CreatePatientView(
     """View used to create a new patient entry in the database."""
     model = Patient
     form_class = PatientForm
-    template_name = "patients/patient_form.html"  #:
     action = "create_patient"  #:
 
     def get_context_data(self, **kwargs: Any) -> Dict[str, Any]:
@@ -203,7 +194,6 @@ class UpdatePatientView(
     """Update a given patient's information."""
     model = Patient
     form_class = PatientForm
-    template_name = "patients/patient_form.html"  #:
     action = "edit_patient"  #:
 
     def get_success_url(self) -> str:
@@ -232,7 +222,6 @@ class DeletePatientView(
 ):
     """Remove this patient from the database."""
     model = Patient
-    template_name = "patients/patient_delete.html"  #:
     success_url = "/patients"  #:
     action = "delete_patient"  #:
 
@@ -247,7 +236,6 @@ class CreateTumorView(
     """Create a tumor and add it to a given patient."""
     model = Tumor
     form_class = TumorForm
-    template_name = "patients/patient_detail.html"  #:
     action = "create_tumor"  #:
 
     def form_valid(self, form: TumorForm) -> HttpResponse:

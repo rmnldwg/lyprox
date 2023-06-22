@@ -37,6 +37,7 @@ class FormLoggerMixin(object):
     def is_valid(self) -> bool:
         if super().is_valid():
             self.logger.info(f"Form successfully cleaned.")
+            self.logger.debug(f"Form cleaned data: {self.cleaned_data}")
             return True
         elif self.errors:
             self.logger.warn(self.errors.as_data())

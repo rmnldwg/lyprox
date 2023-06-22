@@ -16,10 +16,19 @@
             {% csrf_token %}
             <div class="block">
               <p class="title is-3">Upload Dataset</p>
-              <p>
-                Upload a CSV file and fill in some basic metadata. If
-                the dataset can be found in an open repository, feel
-                free to add the link to it as well.
+              <p class="block mb-2">
+                Upload a CSV table of patients by specifiying a GitHub repository URL,
+                a revision (branch or tag) and a path to the CSV file.
+              </p>
+              <p class="notification is-warning is-light">
+                <span class="icon-text">
+                  <span class="icon">
+                    <i class="far fa-clock"></i>
+                  </span>
+                  <span>
+                    Note that the import may take a few minutes to complete.
+                  </span>
+                </span>
               </p>
               {% if form.non_field_errors %}
               <p class="notification is-danger is-light">
@@ -33,82 +42,56 @@
               </p>
               {% endif %}
             </div>
+
             <div class="block">
-              <div class="field is-grouped">
-                <div class="control is-expanded">
-                  <label for="{{ form.name.if_for_label }}" class="label">
-                    {{ form.name.label }}
-                  </label>
-                  {{ form.name }}
-                  {% if form.errors.name %}
-                  <small class="help is-danger">{{ form.errors.name }}</small>
-                  {% endif %}
-                </div>
-                <div class="control">
-                  <label for="{{ form.is_public.id_for_label }}" class="label">
-                    Make public?
-                  </label>
-                  <div class="select">
-                    {{ form.is_public }}
-                  </div>
-                </div>
-              </div>
               <div class="field">
-                <div class="control">
-                  <label for="{{ form.description.if_for_label }}" class="label">
-                    {{ form.description.label }}
+                <div class="control is-expanded">
+                  <label for="{{ form.git_repo_url.id_for_label }}" class="label">
+                    {{ form.git_repo_url.label }}
                   </label>
-                  {{ form.description }}
-                  {% if form.errors.description %}
-                  <small class="help is-danger">{{ form.errors.description }}</small>
+                  {{ form.git_repo_url }}
+                  {% if form.errors.git_repo_url %}
+                  <small class="help is-danger">{{ form.errors.git_repo_url }}</small>
                   {% endif %}
                 </div>
               </div>
               <div class="field is-grouped">
                 <div class="control">
-                  <label for="{{ form.repo_provider.if_for_label }}" class="label">
-                    {{ form.repo_provider.label }} <span class="has-text-info">(optional)</span>
+                  <label for="{{ form.revision.id_for_label }}" class="label">
+                    {{ form.revision.label }}
                   </label>
-                  {{ form.repo_provider }}
+                  {{ form.revision }}
+                  {% if form.errors.revision %}
+                  <small class="help is-danger">{{ form.errors.revision }}</small>
+                  {% endif %}
                 </div>
                 <div class="control is-expanded">
-                  <label for="{{ form.repo_data_url.if_for_label }}" class="label">
-                    {{ form.repo_data_url.label }} <span class="has-text-info">(optional)</span>
+                  <label for="{{ form.data_path.id_for_label }}" class="label">
+                    {{ form.data_path.label }}
                   </label>
-                  {{ form.repo_data_url }}
-                  {% if form.errors.repo_data_url %}
-                  <small class="help is-danger">{{ form.errors.repo_data_url }}</small>
+                  {{ form.data_path }}
+                  {% if form.errors.data_path %}
+                  <small class="help is-danger">{{ form.errors.data_path }}</small>
                   {% endif %}
                 </div>
               </div>
             </div>
-            <div class="block">
-              <div class="field is-grouped">
-                <div class="control">
-                  <div class="file" id="file-upload">
-                    <label class="file-label">
-                      {{ form.source_csv }}
-                      <span class="file-cta">
-                        <span class="file-icon">
-                          <i class="fas fa-folder-open"></i>
-                        </span>
-                        <span class="file-label" id="file-label-text">
-                          Choose CSV table...
-                        </span>
+
+            <div class="level">
+              <div class="level-left">
+              </div>
+              <div class="level-right">
+                <div class="level-item">
+                  <div class="field">
+                    <button class="button is-primary" type="submit">
+                      <span class="icon">
+                        <i class="fas fa-cloud-upload-alt"></i>
                       </span>
-                    </label>
+                      <span>Upload</span>
+                    </button>
                   </div>
                 </div>
-                <button class="button is-primary" type="submit">
-                  <span class="icon">
-                    <i class="fas fa-cloud-upload-alt"></i>
-                  </span>
-                  <span>Upload</span>
-                </button>
               </div>
-              {% if form.errors.source_csv %}
-              <small class="help is-danger">{{ form.errors.source_csv }}</small>
-              {% endif %}
             </div>
           </form>
         </div>

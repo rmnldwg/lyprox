@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+
+{% block head %}
+{% include 'head_content.html' with title="LyProX · delete Patient" %}
+{% endblock head %}
+
+
+{% block content %}
+
+<section class="section">
+  <div class="container">
+    <div class="columns is-centered">
+      <div class="column is-5">
+        <div class="box">
+          <form action="{% url 'patients:delete' patient.pk %}" method="post">
+            {% csrf_token %}
+            <p class="title is-3">Delete patient {{ patient.pk }}?</p>
+
+            <div class="field is-grouped is-grouped-centered">
+              <div class="control">
+                <a href="{% url 'patients:detail' patient.pk %}" class="button is-info">
+                  <span class="icon">
+                    <i class="fas fa-arrow-left"></i>
+                  </span>
+                  <span>Cancel</span>
+                </a>
+              </div>
+
+              <div class="control">
+                <button class="button is-danger" type="submit" value="confirm">
+                  <span>Delete</span>
+                  <span class="icon">
+                    <i class="fas fa-trash"></i>
+                  </span>
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock content %}

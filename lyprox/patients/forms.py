@@ -11,111 +11,84 @@ that the data is properly cleaned before its being passed on to the next step.
 
 from typing import Any, Dict, Optional
 
-import magic
 import pandas
 from django import forms
 from django.core.exceptions import ValidationError
 from django.forms import widgets
 
-from ..loggers import FormLoggerMixin
-from .models import (
-    Dataset,
-    Diagnose,
-    DuplicateFileError,
-    Patient,
-    Tumor,
-    get_path_from_file,
-)
+from lyprox.loggers import FormLoggerMixin
+from lyprox.patients.models import Dataset, Diagnose, Patient, Tumor
 
 
 class DatasetForm(FormLoggerMixin, forms.ModelForm):
     """
     Form to create and edit datasets, based on their model definition.
     """
-    initial = {
-        "is_public": False,
-    }
+    git_repo_url = forms.URLField(
+        label="GitHub repository URL",
+        help_text="The URL of the GitHub repository that contains the data.",
+        initial="https://github.com/rmnldwg/lydata",
+        widget=widgets.TextInput(attrs={
+            "class": "input",
+            "placeholder": "e.g. https://github.com/my/repo",
+        }),
+    )
+    """The URL of the GitHub repository that contains the data."""
+    auto_determined_fields = [
+        "git_repo_owner",
+        "git_repo_name",
+        "data_url",
+        "data_sha",
+        "institution",
+        "is_public",
+        "date_created",
+    ]
+    """Fields that are not shown to the user but are automatically determined."""
+
     class Meta:
         """The underlying model."""
         model = Dataset
-        fields = [
-            "name",
-            "description",
-            "is_public",
-            "repo_provider",
-            "repo_data_url",
-            "source_csv",
-        ]
+        fields = ["revision", "data_path"]
         widgets = {
-            "name": widgets.TextInput(
+            "revision": widgets.TextInput(
                 attrs={
                     "class": "input",
-                    "placeholder": "e.g. lyDATA"
+                    "placeholder": "commit hash, tag, or branch name",
                 }
             ),
-            "description": widgets.TextInput(
-                attrs={
-                    "class": "textarea",
-                    "placeholder": "A brief description of your dataset"
-                }
-            ),
-            "is_public": widgets.Select(
-                attrs={"class": "select"},
-                choices=[(True, "yes"), (False, "no")],
-            ),
-            "repo_provider": widgets.TextInput(
+            "data_path": widgets.TextInput(
                 attrs={
                     "class": "input",
-                    "placeholder": "e.g. GitHub"
-                }
-            ),
-            "repo_data_url": widgets.TextInput(
-                attrs={
-                    "class": "input",
-                    "placeholder": "link to the repository's download page"
-                }
+                    "placeholder": "e.g. 2021-usz-oropharynx/data.csv",
+                },
             ),
         }
 
-    source_csv = forms.FileField(
-        required=True,
-        widget=widgets.FileInput(
-            attrs={
-                "class": "file-input",
-                "type": "file"
-            }
-        ),
-    )
 
     def __init__(self, *args, **kwargs):
         user = kwargs.pop("user")
         self.user = user
         super().__init__(*args, **kwargs)
 
-    def clean_source_csv(self):
-        """Raise a `ValidationError`, when the file already exists."""
-        source_csv = self.cleaned_data["source_csv"]
 
-        self.logger.info(magic.from_buffer(source_csv.read(), mime=True))
+    def clean(self) -> Dict[str, Any]:
+        """Insert current user's institution into the form's cleaned data."""
+        cleaned_data = super().clean()
+        cleaned_data["user_institution"] = self.user.institution
+        return cleaned_data
 
-        try:
-            _path = get_path_from_file(source_csv)
-        except DuplicateFileError as df_err:
-            raise ValidationError("File has already been uploaded.") from df_err
-
-        return source_csv
 
     def save(self, commit=True):
         """
         Get institution from user and import uploaded CSV file into database. Then
         lock the dataset.
         """
-        dataset = super(DatasetForm, self).save(commit=False)
-        dataset.institution = self.user.institution
+        dataset = super().save(commit=False)
 
         if commit:
+            dataset.compute_fields(**self.cleaned_data)
             dataset.save()
-            dataset.import_source_csv_to_db()
+            dataset.import_csv_to_db()
 
         return dataset
 
@@ -332,12 +305,12 @@ class DataFileForm(FormLoggerMixin, forms.Form):
                 skip_blank_lines=True,
                 infer_datetime_format=True
             )
-        except:
+        except Exception as exc:
             msg = ("Error while parsing CSV table.")
             self.logger.error(msg)
             raise forms.ValidationError(
                 msg + " Make sure format is as specified"
-            )
+            ) from exc
 
         cleaned_data["data_frame"] = data_frame
         return cleaned_data

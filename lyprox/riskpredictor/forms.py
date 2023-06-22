@@ -39,10 +39,6 @@ class InferenceResultForm(loggers.FormLoggerMixin, forms.ModelForm):
         model = InferenceResult
         fields = ["revision", "params_path", "num_samples"]
         widgets = {
-            # "git_repo_url": widgets.TextInput(attrs={
-            #     "class": "input",
-            #     "placeholder": "e.g. https://github.com/my/repo",
-            # }),
             "revision": widgets.TextInput(attrs={
                 "class": "input",
                 "placeholder": "e.g. `main` or a tag name",
@@ -59,13 +55,14 @@ class InferenceResultForm(loggers.FormLoggerMixin, forms.ModelForm):
 
     def clean(self) -> Dict[str, Any]:
         """Check all the fields for validity."""
-        git_repo_url = self.cleaned_data["git_repo_url"]
-        revision = self.cleaned_data["revision"]
-        params_path = self.cleaned_data["params_path"]
+        cleaned_data = super().clean()
+        git_repo_url = cleaned_data["git_repo_url"]
+        revision = cleaned_data["revision"]
+        params_path = cleaned_data["params_path"]
 
         repo_id = git_repo_url.split("github.com/")[-1]
-        self.cleaned_data["git_repo_owner"] = repo_id.split("/")[0]
-        self.cleaned_data["git_repo_name"] = repo_id.split("/")[1]
+        cleaned_data["git_repo_owner"] = repo_id.split("/")[0]
+        cleaned_data["git_repo_name"] = repo_id.split("/")[1]
 
         try:
             fs = DVCFileSystem(url=git_repo_url, rev=revision)
@@ -86,7 +83,7 @@ class InferenceResultForm(loggers.FormLoggerMixin, forms.ModelForm):
                 error=ValidationError("Not a valid git revision."),
             )
 
-        return self.cleaned_data
+        return cleaned_data
 
 
 class DashboardForm(forms.Form):

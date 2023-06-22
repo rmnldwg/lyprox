@@ -81,8 +81,13 @@ urlpatterns = [
         name="dataset_list"
     ),
     path(
-        "dataset/<int:pk>/<str:which>",
+        "dataset/<int:pk>",
         views.DatasetView.as_view(),
-        name="dataset_download"
+        name="dataset_view"
+    ),
+    path(
+        "dataset/<int:pk>/delete",
+        views.DeleteDatasetView.as_view(),
+        name="dataset_delete"
     ),
 ]
