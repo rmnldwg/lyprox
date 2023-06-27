@@ -116,7 +116,7 @@ class Dataset(loggers.ModelLoggerMixin, models.Model):
         self.git_repo_owner, self.git_repo_name = repo_id.split("/")
 
         repo = self.fetch_repo()
-        self.date_created = dateparser.parse(repo.last_modified)
+        self.date_created = dateparser.parse(repo.pushed_at)
         self.is_public = not repo.private
 
         self.revision = revision
@@ -173,10 +173,10 @@ class Dataset(loggers.ModelLoggerMixin, models.Model):
 
     def check_itegrity(self):
         """Check whether the dataset is still consistent with the GitHub repo."""
-        last_modified = dateparser.parse(self.fetch_repo().last_modified)
+        pushed_at = dateparser.parse(self.fetch_repo().pushed_at)
         data_sha = self.fetch_file().sha
 
-        is_repo_modfied = last_modified > self.date_created
+        is_repo_modfied = pushed_at > self.date_created
         is_sha_changed = data_sha != self.data_sha
 
         if is_repo_modfied and is_sha_changed:
