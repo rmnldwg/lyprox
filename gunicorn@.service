@@ -15,6 +15,7 @@ ExecStartPre = /srv/www/%i/.venv/bin/manage.py collectstatic --noinput
 ExecStartPre = /srv/www/%i/.venv/bin/manage.py init_institutions
 ExecStartPre = /srv/www/%i/.venv/bin/manage.py init_users
 ExecStartPre = /srv/www/%i/.venv/bin/manage.py init_datasets
+ExecStartPre = /srv/www/%i/.venv/bin/manage.py init_riskmodels
 ExecStart = /srv/www/%i/.venv/bin/python -m gunicorn -c /srv/www/%i/gunicorn.conf.py
 
 ExecReload = kill -s HUP $MAINPID
