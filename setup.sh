@@ -68,6 +68,7 @@ touch /srv/www/$1/db.sqlite3                   # create db.sqlite3 file
 sudo mkdir -pv /srv/www/$1/static              # initialize static directory
 sudo mkdir -pv /srv/www/$1/media               # init media dir
 sudo chown -Rv $user:www-data /srv/www/$1      # change group ownership to www-data
+sudo chmod -v g+w /srv/www/$1                  # allow www-data to write to project dir
 sudo chmod -v g+w /srv/www/$1/db.sqlite3       # allow www-data to write to db.sqlite3
 sudo chmod -v g+w /srv/www/$1/media            # allow www-data to write to media dir
 
