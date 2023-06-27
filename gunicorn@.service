@@ -8,6 +8,7 @@ User = www-data
 Group = www-data
 WorkingDirectory = /srv/www/%i
 EnvironmentFile = /srv/www/%i/.env
+TimeoutSec = 600
 
 ExecStartPre = /srv/www/%i/.venv/bin/manage.py migrate --noinput
 ExecStartPre = /srv/www/%i/.venv/bin/manage.py collectstatic --noinput
