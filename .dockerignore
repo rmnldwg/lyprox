@@ -2,6 +2,9 @@
 .github/
 .vscode/
 .venv/
+.env
+.pre-commit-config.yaml
+.gitattributes
 docs/
 nginx/
 tests/
@@ -13,3 +16,7 @@ debug.log
 gunicorn@.service
 setup.sh
 docker-compose.yml
+LICENSE
+README.md
+CHANGELOG.md
+mermaid.py

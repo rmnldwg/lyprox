@@ -14,11 +14,8 @@ WORKDIR /srv/www/lyprox
 # upgrade pip and setuptools
 RUN pip install --upgrade pip setuptools
 
-# copy the repo content to the home directory
+# copy the repo content to the WORKDIR directory
 COPY . .
 
 # install LyProX
 RUN pip install .
-
-# expose the port 8000
-EXPOSE 8000

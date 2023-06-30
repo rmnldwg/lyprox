@@ -1,4 +1,5 @@
 version: '3.8'
+name: lyprox
 
 services:
   nginx:
@@ -6,8 +7,8 @@ services:
     ports:
       - 1300:80
     volumes:
-      - static_volume:/srv/www/static
-      - media_volume:/srv/www/media
+      - static_volume:/srv/www/lyprox/static
+      - media_volume:/srv/www/lyprox/media
     depends_on:
       - webapp
     restart: "on-failure"
@@ -25,10 +26,10 @@ services:
     env_file:
       - .env
     volumes:
-      - static_volume:/srv/www/static
-      - media_volume:/srv/www/media
+      - static_volume:/srv/www/lyprox/static
+      - media_volume:/srv/www/lyprox/media
     expose:
-      - ${DJANGO_GUNICORN_PORT}
+      - 8000
 
 volumes:
   static_volume:
