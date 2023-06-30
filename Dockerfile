@@ -5,18 +5,17 @@ FROM python:3.10
 RUN apt update && apt install git -y
 
 # set some env variables
-ENV LYPROX_HOME /srv/www/lyprox
 ENV PYTHONDONOTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
 
 # set the working directory to the home directory
-WORKDIR $LYPROX_HOME
+WORKDIR $DJANGO_BASE_DIR
 
 # upgrade pip and setuptools
 RUN pip install --upgrade pip setuptools
 
 # copy the repo content to the home directory
-COPY . $LYPROX_HOME
+COPY . $DJANGO_BASE_DIR
 
 # install LyProX
 RUN pip install .

@@ -9,18 +9,18 @@ services:
       - static_volume:/srv/www/static
       - media_volume:/srv/www/media
     depends_on:
-      - lyprox
+      - webapp
     restart: "on-failure"
 
-  lyprox:
+  webapp:
     build: .
-    command: sh -c "python manage.py makemigrations --noinput &&
-                    python manage.py migrate --noinput &&
-                    python manage.py collectstatic --noinput &&
-                    python manage.py init_institutions &&
-                    python manage.py init_users &&
-                    python manage.py init_datasets &&
-                    python manage.py init_riskmodels &&
+    command: sh -c "manage.py makemigrations --noinput &&
+                    manage.py migrate --noinput &&
+                    manage.py collectstatic --noinput &&
+                    manage.py init_institutions &&
+                    manage.py init_users &&
+                    manage.py init_datasets &&
+                    manage.py init_riskmodels &&
                     gunicorn -c gunicorn.conf.py"
     env_file:
       - .env
