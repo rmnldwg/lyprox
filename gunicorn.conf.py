@@ -11,8 +11,7 @@ wsgi_app = "lyprox.wsgi:application"
 workers = multiprocessing.cpu_count()
 
 # The socket to bind
-_port = os.environ["DJANGO_GUNICORN_PORT"]
-bind = f"0.0.0.0:{_port}"
+bind = "0.0.0.0:8000"
 
 # Restart workers when code changes (development only!)
 reload = os.environ["DJANGO_ENV"] == "debug"
