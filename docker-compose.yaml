@@ -1,0 +1,35 @@
+version: '3.8'
+
+services:
+  nginx:
+    build: ./nginx
+    ports:
+      - 1300:80
+    volumes:
+      - static_volume:/srv/www/static
+      - media_volume:/srv/www/media
+    depends_on:
+      - lyprox
+    restart: "on-failure"
+
+  lyprox:
+    build: .
+    command: sh -c "python manage.py makemigrations --noinput &&
+                    python manage.py migrate --noinput &&
+                    python manage.py collectstatic --noinput &&
+                    python manage.py init_institutions &&
+                    python manage.py init_users &&
+                    python manage.py init_datasets &&
+                    python manage.py init_riskmodels &&
+                    gunicorn -c gunicorn.conf.py"
+    env_file:
+      - .env
+    volumes:
+      - static_volume:/srv/www/static
+      - media_volume:/srv/www/media
+    expose:
+      - ${DJANGO_GUNICORN_PORT}
+
+volumes:
+  static_volume:
+  media_volume:

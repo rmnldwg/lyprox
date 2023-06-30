@@ -1,0 +1,14 @@
+.chglog/
+.github/
+.vscode/
+.venv/
+docs/
+nginx/
+tests/
+lyprox.egg-info/
+backup.sh
+clean.sh
+db.sqlite3
+debug.log
+gunicorn@.service
+setup.sh
