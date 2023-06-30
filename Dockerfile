@@ -14,6 +14,12 @@ WORKDIR /srv/www/lyprox
 # upgrade pip and setuptools
 RUN pip install --upgrade pip setuptools
 
+# copy the requirements file to the WORKDIR directory
+COPY requirements.txt .
+
+# install the requirements
+RUN pip install -r requirements.txt
+
 # copy the repo content to the WORKDIR directory
 COPY . .
 

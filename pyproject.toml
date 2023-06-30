@@ -14,27 +14,8 @@ authors = [
 readme = "README.md"
 keywords = ["web app", "head and neck", "cancer", "radiation oncology", "lymph nodes", "metastases"]
 license = { text = "MIT"}
-dynamic = ["version"]
-requires-python = "~=3.8"
-dependencies = [
-    "Django ~= 4.1",
-    "django-filter ~= 2.4",
-    "django-phonenumber-field[phonenumbers] ~= 6.1",
-    "django-auth-logger ~= 2.1",
-    "django-sekizai ~= 4.0",
-    "Markdown ~= 3.3",
-    "numpy ~= 1.24",
-    "pandas ~= 1.5",
-    "fontawesomefree ~= 5.15",
-    "icd10-cm == 0.0.4",
-    "python-magic ~= 0.4",
-    "gunicorn ~= 20.1",
-    "dvc ~= 3.2",
-    "lymph-model ~= 0.4.3",
-    "lyscripts ~= 0.6.6",
-    "PyGithub ~= 1.58",
-    "dateparser ~= 1.1",
-]
+dynamic = ["version", "dependencies"]
+requires-python = ">=3.8"
 
 [project.urls]
 source = "https://github.com/rmnldwg/lyprox"
@@ -63,6 +44,7 @@ packages = ["lyprox"]
 
 [tool.setuptools.dynamic]
 version = {attr = "lyprox._version.version"}
+dependencies = {file = ["requirements.txt"]}
 
 [tool.setuptools_scm]
 write_to = "lyprox/_version.py"
