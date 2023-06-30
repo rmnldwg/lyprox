@@ -75,7 +75,7 @@ SECURE_HSTS_INCLUDE_SUBDOMAINS = not DEBUG
 SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
-BASE_DIR = Path(os.environ["DJANGO_BASE_DIR"])
+BASE_DIR = Path(os.getenv("DJANGO_BASE_DIR", "/srv/www/lyprox"))
 """
 Setting the base dir manually is necessary, because otherwise everything might be
 set up relative to venv's site-packages.
