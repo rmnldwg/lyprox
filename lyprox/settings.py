@@ -7,12 +7,13 @@ fetched from environment variables. The settings are written such that errors ar
 thrown when the required env vars are not present. This is by design, to ensure the
 host environment is configured for the application.
 
-Only four env vars should need to be changed:
+Only these env vars should need to be changed:
 
 - `DJANGO_ENV` can take on the values `"debug"`, `"maintenance"`, or `"production"`.
 - `DJANGO_SECRET_KEY` must contain the secret key for Django's security stuff.
 - `DJANGO_ALLOWED_HOSTS` needs to contain the allowed host names separated by spaces.
 - `DJANGO_LOG_LEVEL` for the log level. This only has an effect in debug mode.
+- `DJANGO_BASE_DIR` is the directory in which Django is based.
 
 .. _Django documentation: https://docs.djangoproject.com/en/4.1/ref/settings/
 """
@@ -23,9 +24,6 @@ from django import urls
 from github import Github
 
 from ._version import version
-
-# old secret key: "k_&(m5ymps%p=4&qjnwkv-avxb@@ez1tewc8g_eg4k#jx59ukx"
-
 
 DEBUG = os.environ["DJANGO_ENV"] == "debug"
 """``True``, when in debug mode, meaning ``DJANGO_ENV`` is set to ``"debug"``."""
