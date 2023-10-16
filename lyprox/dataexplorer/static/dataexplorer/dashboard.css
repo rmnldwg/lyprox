@@ -21,6 +21,16 @@ input[type="checkbox"].checkbox:checked:hover + .tags label {
     color: white;
 }
 
+input[type="checkbox"].checkbox:checked + .buttons label {
+    background-color: #005EA8;
+    color: white;
+}
+
+input[type="checkbox"].checkbox:checked:hover + .buttons label {
+    background-color: #005392;
+    color: white;
+}
+
 input[type="radio"].radio:checked + label {
     background-color: #005EA8;
     color: white;
