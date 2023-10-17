@@ -21,12 +21,12 @@ input[type="checkbox"].checkbox:checked:hover + .tags label {
     color: white;
 }
 
-input[type="checkbox"].checkbox:checked + .buttons label {
+input[type="checkbox"].checkbox:checked + .tumor.buttons label {
     background-color: #005EA8;
     color: white;
 }
 
-input[type="checkbox"].checkbox:checked:hover + .buttons label {
+input[type="checkbox"].checkbox:checked:hover + .tumor.buttons label {
     background-color: #005392;
     color: white;
 }
