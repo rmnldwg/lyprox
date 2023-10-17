@@ -116,7 +116,7 @@ class Dataset(loggers.ModelLoggerMixin, models.Model):
         self.git_repo_owner, self.git_repo_name = repo_id.split("/")
 
         repo = self.fetch_repo()
-        self.date_created = dateparser.parse(repo.pushed_at)
+        self.date_created = repo.pushed_at
         self.is_public = not repo.private
 
         self.revision = revision
