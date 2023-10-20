@@ -72,9 +72,14 @@ sudo chmod -v g+w /srv/www/$1                  # allow www-data to write to proj
 sudo chmod -v g+w /srv/www/$1/db.sqlite3       # allow www-data to write to db.sqlite3
 sudo chmod -v g+w /srv/www/$1/media            # allow www-data to write to media dir
 
+info "create nginx site and make it available"
+sudo cp /srv/www/$1/nginx.conf /etc/nginx/sites-available/$1
+sudo ln -s /etc/nginx/sites-available/$1 /etc/nginx/sites-enabled/$1
+sudo service nginx reload
+
 info "create gunicorn log directory:"
 sudo mkdir -pv /var/log/gunicorn
 sudo chown -Rv $user:www-data /var/log/gunicorn
 sudo chmod -v g+w /var/log/gunicorn
 
-info "all done, don't forget to set env vars"
+info "all done, don't forget to set env vars and start service"
