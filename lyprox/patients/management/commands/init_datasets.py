@@ -26,6 +26,11 @@ INITIAL_DATASETS = [
         "revision": "main",
         "data_path": "2023-clb-multisite/data.csv",
     },
+    {
+        "git_repo_url": "https://github.com/rmnldwg/lydata.private",
+        "revision": "2023-usz-hypopharynx-larynx",
+        "data_path": "2023-usz-hypopharynx-larynx/data.csv",
+    },
 ]
 
 
