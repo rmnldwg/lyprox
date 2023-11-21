@@ -136,7 +136,12 @@ class Dataset(loggers.ModelLoggerMixin, models.Model):
             institution_name = table["patient", "#", "institution"].unique()[0]
             return Institution.objects.get(name=institution_name)
         except KeyError:
-            return fallback
+            logger.debug("Could not find an institution name in data file.")
+        except Institution.DoesNotExist:
+            logger.debug(f"Could not find institution {institution_name} in database.")
+
+        logger.debug(f"Using fallback institution {fallback.name}.")
+        return fallback
 
 
     def fetch_repo(self):
