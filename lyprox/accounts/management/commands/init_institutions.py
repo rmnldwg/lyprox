@@ -33,6 +33,15 @@ INITIAL_INSTITUTIONS = [
         "phone": "+41316322111",
         "logo": "logos/isb.png",
     },
+    {
+        "name": "Vall d'Hebron University Hospital",
+        "shortname": "HVH",
+        "street": "Passeig de la Vall d'Hebron, 119-129",
+        "city": "Barcelona",
+        "country": "ES",
+        "phone": "+34934893000",
+        "logo": "logos/hvh.png",
+    },
 ]
 
 

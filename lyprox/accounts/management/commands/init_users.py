@@ -80,6 +80,15 @@ INITIAL_USERS = [
         "is_staff": False,
         "is_superuser": False,
     },
+    {
+        "email": "sergi.benavente@vallhebron.cat",
+        "first_name": "Sergio",
+        "last_name": "Benavente Norza",
+        "institution": "HVH",
+        "is_active": True,
+        "is_staff": False,
+        "is_superuser": False,
+    },
 ]
 
 
