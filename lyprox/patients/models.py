@@ -19,6 +19,7 @@ respective superlevel (in that case ``I``).
 
 import logging
 from collections import namedtuple
+from io import BytesIO
 
 import dateparser
 import pandas as pd
@@ -59,8 +60,6 @@ class Dataset(loggers.ModelLoggerMixin, models.Model):
     """Git revision in which to search for the data. E.g., a commit hash, or tag."""
     data_path = models.CharField(max_length=100, default="2021-usz-oropharynx/data.csv")
     """Path to the CSV file containing the patient data inside the git repo."""
-    data_url = models.URLField(max_length=400)
-    """URL to the CSV file in the GitHub repo."""
     data_sha = models.CharField(max_length=40)
     """SHA of the CSV file in the GitHub repo."""
     institution = models.ForeignKey(to=Institution, on_delete=models.CASCADE)
@@ -98,6 +97,12 @@ class Dataset(loggers.ModelLoggerMixin, models.Model):
         return f"https://github.com/{self.git_repo_id}"
 
     @property
+    def data_url(self):
+        """Return the URL of the data file in the GitHub repository."""
+        contents = self.fetch_repo().get_contents(self.data_path, ref=self.revision)
+        return contents.download_url
+
+    @property
     def patient_count(self) -> int:
         """Return the number of patients in the dataset."""
         return Patient.objects.filter(dataset=self).count()
@@ -122,10 +127,9 @@ class Dataset(loggers.ModelLoggerMixin, models.Model):
         self.revision = revision
         self.data_path = data_path
 
-        data_file = self.fetch_file()
-        self.data_sha = data_file.sha
-        self.data_url = data_file.download_url
         table = self.fetch_dataframe()
+        data_file = self._file
+        self.data_sha = data_file.sha
         self.institution = self.get_institution(table, fallback=user_institution)
 
 
@@ -136,37 +140,39 @@ class Dataset(loggers.ModelLoggerMixin, models.Model):
             institution_name = table["patient", "#", "institution"].unique()[0]
             return Institution.objects.get(name=institution_name)
         except KeyError:
-            return fallback
+            logger.debug("Could not find an institution name in data file.")
+        except Institution.DoesNotExist:
+            logger.debug(f"Could not find institution {institution_name} in database.")
+
+        logger.debug(f"Using fallback institution {fallback.name}.")
+        return fallback
 
 
     def fetch_repo(self):
         """Return the GitHub repository object."""
-        if hasattr(self, "_repo"):
-            return self._repo
-
-        try:
-            self._repo = GITHUB.get_repo(f"{self.git_repo_owner}/{self.git_repo_name}")
-        except UnknownObjectException as unk_obj_exc:
-            raise ValidationError(
-                f"Could not find repository {self.git_repo_owner}/{self.git_repo_name}."
-            ) from unk_obj_exc
+        if not hasattr(self, "_repo"):
+            repo_id = f"{self.git_repo_owner}/{self.git_repo_name}"
+            try:
+                self._repo = GITHUB.get_repo(repo_id)
+            except UnknownObjectException as unk_obj_exc:
+                raise ValidationError(
+                    "Could not find repository " + repo_id
+                ) from unk_obj_exc
 
         return self._repo
 
 
     def fetch_file(self):
         """Return the GitHub file object."""
-        if hasattr(self, "_file"):
-            return self._file
-
-        repo = self.fetch_repo()
-        try:
-            self._file = repo.get_contents(self.data_path, ref=self.revision)
-        except UnknownObjectException as unk_obj_exc:
-            raise ValidationError(
-                f"Could not find file {self.data_path} in repository "
-                f"{self.git_repo_owner}/{self.git_repo_name}."
-            ) from unk_obj_exc
+        if not hasattr(self, "_file"):
+            repo = self.fetch_repo()
+            try:
+                self._file = repo.get_contents(self.data_path, ref=self.revision)
+            except UnknownObjectException as unk_obj_exc:
+                raise ValidationError(
+                    f"Could not find file {self.data_path} in repository "
+                    f"{self.git_repo_owner}/{self.git_repo_name}."
+                ) from unk_obj_exc
 
         return self._file
 
@@ -209,7 +215,12 @@ class Dataset(loggers.ModelLoggerMixin, models.Model):
 
     def fetch_dataframe(self) -> pd.DataFrame:
         """Return the dataset as a pandas DataFrame."""
-        return pd.read_csv(self.data_url, header=[0, 1, 2])
+        if not hasattr(self, "_dataframe"):
+            decoded_content = self.fetch_file().decoded_content
+            file_like_object = BytesIO(decoded_content)
+            self._dataframe = pd.read_csv(file_like_object, header=[0, 1, 2])
+
+        return self._dataframe
 
 
     def lock(self):
