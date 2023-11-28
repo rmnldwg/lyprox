@@ -1,0 +1,32 @@
+[
+    {
+        "git_repo_url": "https://github.com/rmnldwg/lydata",
+        "revision": "main",
+        "data_path": "2021-usz-oropharynx/data.csv"
+    },
+    {
+        "git_repo_url": "https://github.com/rmnldwg/lydata",
+        "revision": "main",
+        "data_path": "2021-clb-oropharynx/data.csv"
+    },
+    {
+        "git_repo_url": "https://github.com/rmnldwg/lydata",
+        "revision": "main",
+        "data_path": "2023-isb-multisite/data.csv"
+    },
+    {
+        "git_repo_url": "https://github.com/rmnldwg/lydata",
+        "revision": "main",
+        "data_path": "2023-clb-multisite/data.csv"
+    },
+    {
+        "git_repo_url": "https://github.com/rmnldwg/lydata.private",
+        "revision": "2023-usz-hypopharynx-larynx",
+        "data_path": "2023-usz-hypopharynx-larynx/data.csv"
+    },
+    {
+        "git_repo_url": "https://github.com/rmnldwg/lydata.private",
+        "revision": "2023-hvh-oropharynx",
+        "data_path": "2023-hvh-oropharynx/data.csv"
+    }
+]
