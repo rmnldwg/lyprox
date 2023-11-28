@@ -47,7 +47,7 @@ while getopts ":hb:p:" option; do
 done
 shift $((OPTIND - 1))
 branch=${branch:-main}
-py_version=${py_version:-3.8}
+py_version=${py_version:-3.10}
 
 info "clone LyProX repo into correct location:"
 if [[ ! -d /srv/www/$1/.git ]]; then
