@@ -1,5 +1,6 @@
-"""Command to initialize institutions."""
-
+"""
+Management command to add institutions from a file or the command line.
+"""
 import json
 from pathlib import Path
 from django.core.management import base

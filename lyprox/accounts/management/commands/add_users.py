@@ -1,4 +1,6 @@
-"""Command to initialize users."""
+"""
+Add users from a JSON file or via command line arguments.
+"""
 import json
 import os
 from pathlib import Path
@@ -11,7 +13,7 @@ from lyprox.accounts.models import Institution, User
 
 
 class Command(base.BaseCommand):
-    """Command to initialize users."""
+    """Command to add users from a file or via arguments."""
     help = __doc__
 
     def add_arguments(self, parser):

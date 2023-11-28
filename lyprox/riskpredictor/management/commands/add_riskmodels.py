@@ -1,8 +1,6 @@
 """
-Command to add risk prediction models either from a file with a list of them, or
-via arguments from the command line directly.
+Command to add risk prediction models to database.
 """
-
 import json
 from pathlib import Path
 from django.core.management import base
