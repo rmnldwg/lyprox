@@ -34,7 +34,7 @@ class Command(base.BaseCommand):
             help="Name of git repository.",
         )
         parser.add_argument(
-            "--revision", type=str, required=True,
+            "--revision", type=str,
             help="Revision of git repository.",
         )
         parser.add_argument(

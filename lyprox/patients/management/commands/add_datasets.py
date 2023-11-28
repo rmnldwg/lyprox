@@ -2,7 +2,7 @@
 Management command to add patients from a file or via arguments.
 """
 import json
-from click import Path
+from pathlib import Path
 from django.core.management import base
 
 from lyprox.accounts.models import User
