@@ -6,7 +6,7 @@
 
   <head>
     
-    <title>lyprox.accounts.management.commands.init_institutions.Command</title>
+    <title>lyprox.accounts.management.commands.add_institutions.Command</title>
     <meta name="generator" content="pydoctor 22.9.1"> 
         
     </meta>
@@ -142,7 +142,7 @@
 
       <div class="thingTitle">
         <span>Class</span>
-        <code class="thisobject"><a href="lyprox.accounts.management.commands.init_institutions.Command.html" class="internal-link" title="This class"><wbr></wbr>Command</a></code> 
+        <code class="thisobject"><a href="lyprox.accounts.management.commands.add_institutions.Command.html" class="internal-link" title="This class"><wbr></wbr>Command</a></code> 
       </div>
       
       <div>
@@ -163,7 +163,17 @@
         
 
         
-            <div class="itemName"><code><a href="#handle" class="internal-link" title="lyprox.accounts.management.commands.init_institutions.Command.handle">handle</a></code>
+            <div class="itemName"><code><a href="#add_arguments" class="internal-link" title="lyprox.accounts.management.commands.add_institutions.Command.add_arguments">add<wbr></wbr>_arguments</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="#handle" class="internal-link" title="lyprox.accounts.management.commands.add_institutions.Command.handle">handle</a></code>
             </div>
         
 
@@ -184,7 +194,7 @@
 
       <div class="thingTitle">
         <span>Module</span>
-        <code><a href="lyprox.accounts.management.commands.init_institutions.html" class="internal-link" title="The parent of this class">init<wbr></wbr>_institutions</a></code> 
+        <code><a href="lyprox.accounts.management.commands.add_institutions.html" class="internal-link" title="The parent of this class">add<wbr></wbr>_institutions</a></code> 
       </div>
       
       <div>
@@ -202,7 +212,7 @@
         
 
         
-            <div class="itemName"><code><a href="lyprox.accounts.management.commands.init_institutions.Command.html" class="internal-link" title="lyprox.accounts.management.commands.init_institutions.Command"><wbr></wbr>Command</a></code>
+            <div class="itemName"><code><a href="lyprox.accounts.management.commands.add_institutions.Command.html" class="internal-link" title="lyprox.accounts.management.commands.add_institutions.Command"><wbr></wbr>Command</a></code>
             </div>
         
 
@@ -215,21 +225,8 @@
         
          
 
-        <div class="childrenKindTitle">Variables</div>
-        <ul>
-    
-    <li class="">
         
-        
-        
-
-        
-            <div class="itemName"><code><a href="lyprox.accounts.management.commands.init_institutions.html#INITIAL_INSTITUTIONS" class="internal-link" title="lyprox.accounts.management.commands.init_institutions.INITIAL_INSTITUTIONS">INITIAL<wbr></wbr>_INSTITUTIONS</a></code>
-            </div>
-        
-
-    </li>
-</ul> 
+         
 
         
          
@@ -253,7 +250,7 @@
         
 
         <div class="page-header">
-          <h1 class="class"><code><code><a href="index.html" class="internal-link">lyprox</a></code><wbr></wbr>.<code><a href="lyprox.accounts.html" class="internal-link" title="lyprox.accounts">accounts</a></code><wbr></wbr>.<code><a href="lyprox.accounts.management.html" class="internal-link" title="lyprox.accounts.management">management</a></code><wbr></wbr>.<code><a href="lyprox.accounts.management.commands.html" class="internal-link" title="lyprox.accounts.management.commands">commands</a></code><wbr></wbr>.<code><a href="lyprox.accounts.management.commands.init_institutions.html" class="internal-link" title="lyprox.accounts.management.commands.init_institutions">init_institutions</a></code><wbr></wbr>.<code><a href="lyprox.accounts.management.commands.init_institutions.Command.html" class="internal-link" title="lyprox.accounts.management.commands.init_institutions.Command">Command</a></code></code></h1>
+          <h1 class="class"><code><code><a href="index.html" class="internal-link">lyprox</a></code><wbr></wbr>.<code><a href="lyprox.accounts.html" class="internal-link" title="lyprox.accounts">accounts</a></code><wbr></wbr>.<code><a href="lyprox.accounts.management.html" class="internal-link" title="lyprox.accounts.management">management</a></code><wbr></wbr>.<code><a href="lyprox.accounts.management.commands.html" class="internal-link" title="lyprox.accounts.management.commands">commands</a></code><wbr></wbr>.<code><a href="lyprox.accounts.management.commands.add_institutions.html" class="internal-link" title="lyprox.accounts.management.commands.add_institutions">add_institutions</a></code><wbr></wbr>.<code><a href="lyprox.accounts.management.commands.add_institutions.Command.html" class="internal-link" title="lyprox.accounts.management.commands.add_institutions.Command">Command</a></code></code></h1>
           <div id="showPrivate">
             <button class="btn btn-link" onclick="togglePrivate()">Toggle Private API</button>
           </div>
@@ -265,11 +262,11 @@
 
         <div class="extrasDocstring">
           <p><code><span class="py-keyword">class</span> <span class="py-defname">Command</span>(base.BaseCommand):</code></p>
-          <p><a href="classIndex.html#lyprox.accounts.management.commands.init_institutions.Command">View In Hierarchy</a></p>
+          <p><a href="classIndex.html#lyprox.accounts.management.commands.add_institutions.Command">View In Hierarchy</a></p>
         </div>
 
         <div class="moduleDocstring">
-          <div><p>Command to initialize institutions.</p>
+          <div><p>Command to add institutions from a file or the command line.</p>
 </div>
         </div>
 
@@ -280,7 +277,12 @@
   <tr class="method">
     
     <td>Method</td>
-    <td><code><a href="#handle" class="internal-link" title="lyprox.accounts.management.commands.init_institutions.Command.handle">handle</a></code></td>
+    <td><code><a href="#add_arguments" class="internal-link" title="lyprox.accounts.management.commands.add_institutions.Command.add_arguments">add<wbr></wbr>_arguments</a></code></td>
+    <td>Add arguments to command.</td>
+  </tr><tr class="method">
+    
+    <td>Method</td>
+    <td><code><a href="#handle" class="internal-link" title="lyprox.accounts.management.commands.add_institutions.Command.handle">handle</a></code></td>
     <td>Execute command.</td>
   </tr>
 </table>
@@ -293,7 +295,31 @@
           <div class="basemethod">
   
   
-  <a name="lyprox.accounts.management.commands.init_institutions.Command.handle">
+  <a name="lyprox.accounts.management.commands.add_institutions.Command.add_arguments">
+    
+  </a>
+  <a name="add_arguments">
+    
+  </a>
+  <div class="functionHeader">
+    
+    <span class="py-keyword">def</span> <span class="py-defname">add_arguments</span>(self, parser):
+    
+    <a class="headerLink" href="#add_arguments" title="lyprox.accounts.management.commands.add_institutions.Command.add_arguments">
+      
+      
+      ¶
+    </a>
+  </div>
+  <div class="docstring functionBody">
+    
+    <div><p>Add arguments to command.</p>
+<table class="fieldTable"><tr class="fieldStart"><td class="fieldName" colspan="2">Parameters</td></tr><tr><td class="fieldArgContainer"><span class="fieldArg">parser:</span><code>CommandParser</code></td><td class="fieldArgDesc"><span class="undocumented">Undocumented</span></td></tr></table></div>
+  </div>
+</div><div class="basemethod">
+  
+  
+  <a name="lyprox.accounts.management.commands.add_institutions.Command.handle">
     
   </a>
   <a name="handle">
@@ -303,7 +329,7 @@
     
     <span class="py-keyword">def</span> <span class="py-defname">handle</span>(self, *args, **options):
     
-    <a class="headerLink" href="#handle" title="lyprox.accounts.management.commands.init_institutions.Command.handle">
+    <a class="headerLink" href="#handle" title="lyprox.accounts.management.commands.add_institutions.Command.handle">
       
       
       ¶
@@ -326,7 +352,7 @@
   <div class="container">
     <a href="index.html">API Documentation</a> for LyProX,
   generated by <a href="https://github.com/twisted/pydoctor/">pydoctor</a>
-    22.9.1 at 2023-11-28 09:32:38.
+    22.9.1 at 2023-11-28 11:10:24.
   </div>
 
   <!-- Search related scripts needs to be loaded at the end of HTML 
