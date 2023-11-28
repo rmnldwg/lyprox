@@ -12,10 +12,10 @@ TimeoutSec = 1200
 
 ExecStartPre = /srv/www/%i/.venv/bin/manage.py migrate --noinput
 ExecStartPre = /srv/www/%i/.venv/bin/manage.py collectstatic --noinput
-ExecStartPre = /srv/www/%i/.venv/bin/manage.py add_institutions --from-file /srv/www/%i/initial/add_institutions
-ExecStartPre = /srv/www/%i/.venv/bin/manage.py add_users --from-file /srv/www/%i/initial/add_users
-ExecStartPre = /srv/www/%i/.venv/bin/manage.py add_datasets --from-file /srv/www/%i/initial/add_datasets
-ExecStartPre = /srv/www/%i/.venv/bin/manage.py add_riskmodels --from-file /srv/www/%i/initial/add_riskmodels
+ExecStartPre = /srv/www/%i/.venv/bin/manage.py add_institutions --from-file /srv/www/%i/initial/institutions.json
+ExecStartPre = /srv/www/%i/.venv/bin/manage.py add_users --from-file /srv/www/%i/initial/users.json
+ExecStartPre = /srv/www/%i/.venv/bin/manage.py add_datasets --from-file /srv/www/%i/initial/datasets.json
+ExecStartPre = /srv/www/%i/.venv/bin/manage.py add_riskmodels --from-file /srv/www/%i/initial/riskmodels.json
 ExecStart = /srv/www/%i/.venv/bin/python -m gunicorn -c /srv/www/%i/gunicorn.conf.py
 
 ExecReload = kill -s HUP $MAINPID
