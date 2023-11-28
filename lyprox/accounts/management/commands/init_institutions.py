@@ -34,7 +34,7 @@ INITIAL_INSTITUTIONS = [
         "logo": "logos/isb.png",
     },
     {
-        "name": "Vall d'Hebron University Hospital",
+        "name": "Vall d'Hebron Barcelona Hospital",
         "shortname": "HVH",
         "street": "Passeig de la Vall d'Hebron, 119-129",
         "city": "Barcelona",
