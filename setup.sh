@@ -80,7 +80,9 @@ sudo chmod -v g+w /srv/www/$1/db.sqlite3       # allow www-data to write to db.s
 sudo chmod -v g+w /srv/www/$1/media            # allow www-data to write to media dir
 
 info "create nginx site and make it available:"
-sudo cat /srv/www/$1/nginx.conf | sed 's/{{ hostname }}/$1/' | sed 's/{{ port }}/$2/' > /etc/nginx/sites-available/$1
+tempfile=$(mktemp)
+cat /srv/www/$1/nginx.conf | sed 's/{{ hostname }}/$1/' | sed 's/{{ port }}/$2/' > $tempfile
+sudo cp tempfile /etc/nginx/sites-available/$1
 sudo ln -s /etc/nginx/sites-available/$1 /etc/nginx/sites-enabled/$1
 sudo service nginx reload
 
