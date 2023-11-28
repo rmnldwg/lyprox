@@ -300,7 +300,7 @@ class DashboardForm(FormLoggerMixin, forms.Form):
             },
         ),
         choices=Patient.T_stages.choices,
-        initial=[1,2,3,4]
+        initial=[0,1,2,3,4]
     )
     central = ThreeWayToggle(
         label="central",

@@ -169,7 +169,7 @@ def compute_statistics(patients: Dict[int, Any]) -> Dict[str, Any]:
 
         # TUMOR specific counts
         statistics['subsites'] += subsite2arr(patient["tumor"]["subsite"])
-        statistics['t_stages'][patient["tumor"]["t_stage"]-1] += 1
+        statistics['t_stages'][patient["tumor"]["t_stage"]] += 1
         statistics['central'] += tf2arr(patient["tumor"]["central"])
         statistics['extension'] += tf2arr(patient["tumor"]["extension"])
 

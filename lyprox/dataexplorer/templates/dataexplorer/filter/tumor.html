@@ -120,10 +120,10 @@
   <p class="title is-5 mb-2 mt-4">T-stage</p>
   <div class="field is-grouped is-grouped-multiline">
     {% for checkbox in form.t_stage__in %}
-    <div class="control is-expanded">
+    <div class="control">
       {{ checkbox.tag }}
       <div class="tumor buttons has-addons">
-        <label for="{{ checkbox.id_for_label }}" class="button is-primary is-light is-expanded">
+        <label for="{{ checkbox.id_for_label }}" class="button is-primary is-light">
           <span>{{ checkbox.choice_label }}</span>
         </label>
         <div class="button is-info is-static">
@@ -132,11 +132,6 @@
         </div>
       </div>
     </div>
-
-    {% if forloop.counter == 2 %}
-  </div>
-  <div class="field is-grouped is-grouped-multiline">
-    {% endif %}
     {% endfor %}
   </div>
 </div>
