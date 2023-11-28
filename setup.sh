@@ -63,7 +63,7 @@ eval "$python -m pip install -U pip setuptools setuptools_scm wheel"
 eval "$python -m pip install /srv/www/$1"
 
 info "initialize variable file .env"
-echo "DJANGO_ENV=production" >> /srv/www/$1/.env
+echo "DJANGO_ENV=production" > /srv/www/$1/.env
 echo "DJANGO_ALLOWED_HOSTS=$1" >> /srv/www/$1/.env
 echo "DJANGO_GUNICORN_PORT=$2" >> /srv/www/$1/.env
 echo "DJANGO_BASE_DIR=/srv/www/$1" >> /srv/www/$1/.env
