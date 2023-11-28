@@ -1,0 +1,18 @@
+{% extends 'errors.html' %}
+
+{% block head %}
+{% include 'head_content.html' with title="403 · Permission denied" %}
+{% endblock %}
+
+{% block content %}
+<div class="notification is-danger">
+  <p class="title is-1">
+    500
+    <i class="fas fa-exclamation-triangle"></i>
+  </p>
+  <p class="subtitle is-3">Server error</p>
+  <p>
+    Sorry, something isn't working right on our side. Check back later
+  </p>
+</div>
+{% endblock %}

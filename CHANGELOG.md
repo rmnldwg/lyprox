@@ -1,5 +1,60 @@
-<a name="unreleased"></a>
-## [Unreleased]
+<a name="0.4.0"></a>
+## [0.4.0] - 2023-06-27
+
+### Bug Fixes
+- add minor version to all dependencies
+- store GitHub/repo related `Dataset` info in fields to reduce number of API calls
+- `Dataset` import now works with private repos and stores them hidden behind authentication
+- set initial diagnosis in risk predictor to be all negative (cN0), fixes [#104]
+- replace `core` with `lyprox` in some places
+- simplify permissions in setup.sh
+- add `BASE_DIR` to settings fetched from env vars, to avoid it being inside site-packages
+- `get` templatetag catches KeyErrors
+- make midline in risk predictor subset of bilateral
+- fix JS not updating data explorer values of 0
+- risk predictor sensitivity & specificity start at 50%
+- risk predictor form shows error when midline is not set
+- make AJAX update data-tooltips, fixes [#99]
+
+### Code Refactoring
+- trim down duplicate & unused CSS code, related to [#100]
+- pull apart CSS files in dataexplorer, related to [#100]
+- clean up index templates & static files, related to [#100]
+- put publication data in YAML file, related to [#100]
+- use sekizai to make index modular, related to [#100]
+- modularize navbar, related to [#100]
+- move tags from `patients` app to `lyprox` root
+- manage.py script & custom bulma sass
+- move apps into lyprox directory
+- rename `core` to `lyprox`
+
+### Documentation
+- update home, add link to lynference revision
+- add help tooltips to risk predictor
+
+### Features
+- add command `init_datasets` to initialize all 4 datasets (2021-usz-oropharynx (public), 2021-clb-oropharynx (public), 2023-isb-multisite (private), 2023-clb-multisite (private))
+- enable dataset to detect corruption via SHA value of file
+- allow datasets to be uploaded via GitHub, fixes [#103]
+- add download button & link to dataset readme
+- add ability to login-protect entire site
+- add errorbars to risk predictor app
+- add selected model params to risk predictor app
+- add description & params to risk predictor dashboard
+- add inference result description to list
+- add spinner to model upload button
+- implement AJAX request for risk prediction
+- sync position & value of sens/spec slider
+- add list view of precomputed, trained models
+- add lymph model & form to get it from repository (e.g. [lynference])
+- implement risk predictor, fixes [#15]
+
+### Maintenance
+- replace migration with command for initial user and institution data
+- add Esmee to initial user database
+
+### Testing
+- write tests for dataset functionality
 
 
 <a name="0.3.4"></a>
@@ -67,6 +122,9 @@
 
 Commits before the 2nd of March 2023 did not use conventional commits and no changelog was maintained. For completeness, we give the links to the respective diffs of previous releases below.
 
+
+[lynference]: https://github.com/rmnldwg/lynference
+
 - [0.3.0] - 2022-07-05
 - [0.2.17] - 2022-06-02
 - [0.2.16] - 2022-05-24
@@ -94,7 +152,8 @@ Commits before the 2nd of March 2023 did not use conventional commits and no cha
 - [0.0.2] - 2021-10-04
 - 0.0.1 - 2021-10-04
 
-[Unreleased]: https://github.com/rmnldwg/lyprox/compare/0.3.4...HEAD
+[Unreleased]: https://github.com/rmnldwg/lyprox/compare/0.4.0...HEAD
+[0.4.0]: https://github.com/rmnldwg/lyprox/compare/0.3.4...0.4.0
 [0.3.4]: https://github.com/rmnldwg/lyprox/compare/0.3.3...0.3.4
 [0.3.3]: https://github.com/rmnldwg/lyprox/compare/0.3.2...0.3.3
 [0.3.2]: https://github.com/rmnldwg/lyprox/compare/0.3.1...0.3.2
@@ -125,8 +184,13 @@ Commits before the 2nd of March 2023 did not use conventional commits and no cha
 [0.1.0]: https://github.com/rmnldwg/lyprox/compare/0.0.2...0.1.0
 [0.0.2]: https://github.com/rmnldwg/lyprox/compare/0.0.1...0.0.2
 
+[#15]: https://github.com/rmnldwg/lyprox/issues/15
 [#89]: https://github.com/rmnldwg/lyprox/issues/89
 [#94]: https://github.com/rmnldwg/lyprox/issues/94
 [#95]: https://github.com/rmnldwg/lyprox/issues/95
 [#96]: https://github.com/rmnldwg/lyprox/issues/96
 [#97]: https://github.com/rmnldwg/lyprox/issues/97
+[#99]: https://github.com/rmnldwg/lyprox/issues/99
+[#100]: https://github.com/rmnldwg/lyprox/issues/100
+[#103]: https://github.com/rmnldwg/lyprox/issues/103
+[#104]: https://github.com/rmnldwg/lyprox/issues/104

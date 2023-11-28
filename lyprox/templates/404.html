@@ -1,0 +1,28 @@
+{% extends 'errors.html' %}
+
+{% block head %}
+{% include 'head_content.html' with title="404 · Not Found" %}
+{% endblock %}
+
+{% block content %}
+<div class="notification is-info">
+  <p class="title is-1">
+    <i class="fas fa-map-signs"></i>
+    404
+  </p>
+  <p class="subtitle is-3">Page not found</p>
+  <p>
+    Maybe you mistyped the URL you were looking for. Try again or start over from the
+    <span class="icon-text">
+      <span class="icon">
+        <i class="fas fa-home"></i>
+      </span>
+      <span>
+        <a href="{% url 'index' %}">
+          home page.
+        </a>
+      </span>
+    </span>
+  </p>
+</div>
+{% endblock %}

@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load customtags %}
+
+{% block head %}
+{% include 'head_content.html' with title="LyProX · Lymphatic Progression eXplorer" %}
+{% endblock head %}
+
+{% block content %}
+<div class="hero is-primary has-background-primary-light">
+  <div class="hero-body">
+    <div class="container">
+      <div class="columns">
+        <div class="column is-3">
+          <figure class="image is-fullwidth">
+            <img src="{% static 'logo.svg' %}" alt="LyProX logo">
+          </figure>
+        </div>
+
+        <div class="column is-1 is-hidden-touch"></div>
+
+        <div class="column">
+          <h1 class="title is-2 has-text-danger">
+            <b>Ly</b>mphatic <b>Pro</b>gression e<b>X</b>plorer
+          </h1>
+          <p class="subtitle is-4 has-text-primary">
+            Collecting, sharing, and visualizing data on the lymphatic progression
+            patterns in head and neck cancer.
+          </p>
+        </div>
+
+        <div class="column is-1 is-hidden-touch"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<section class="section">
+  <div class="container">
+    <div class="content">
+      {% include_md 'description.md' %}
+    </div>
+    {% if IS_FROZEN %}
+    <div class="notification is-warning is-light">
+      <strong>Note:</strong> You are looking at version {{ VERSION }} of the
+      interface, which is frozen to serve as a reference for readers of our
+      recent publication. If you want to use the latest version of this website
+      that we try to continually develop and improve, click
+      <a href="https://www.lyprox.org">
+        <span class="icon">
+          <i class="fas fa-external-link-alt"></i>
+        </span>
+        here.
+      </a>
+    </div>
+    {% endif %}
+  </div>
+</section>
+
+<!-- Publications -->
+<section class="section">
+  <div class="container">
+    <h1 class="title" id="publications">Our Publications</h1>
+
+    {% for pub in publications %}
+    {% include 'publication.html' with pub=pub %}
+    {% endfor %}
+  </div>
+</section>
+
+{% endblock content %}

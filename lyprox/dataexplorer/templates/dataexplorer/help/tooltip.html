@@ -1,0 +1,11 @@
+{% load sekizai_tags %}
+{% load static %}
+{% load customtags %}
+
+{% addtoblock "css" %}
+<link rel="stylesheet" href="{% static 'dataexplorer/help.css' %}">
+{% endaddtoblock %}
+
+<div class="box {{ side }} {{ position }} notification is-info">
+    {% include 'dataexplorer/help/media.html' with image=image markdown=markdown html=html %}
+</div>

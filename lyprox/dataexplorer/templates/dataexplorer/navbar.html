@@ -1,0 +1,20 @@
+<!--
+  This gets loaded by the main navbar.html template. This allows for easy customization of the navbar.
+-->
+<div class="navbar-item has-dropdown is-hoverable">
+  <a href="{% url 'dataexplorer:dashboard' %}" class="navbar-link"
+    title="explore patterns of progression in datasets">
+    Data Explorer
+  </a>
+
+  <div class="navbar-dropdown">
+    <a href="{% url 'dataexplorer:dashboard' %}" class="navbar-item"
+      title="explore patterns of progression in datasets">
+      Dashboard
+    </a>
+    <a href="{% url 'dataexplorer:help' %}" class="navbar-item"
+      title="videos and descriptions on how to use the dashboard">
+      Help
+    </a>
+  </div>
+</div>

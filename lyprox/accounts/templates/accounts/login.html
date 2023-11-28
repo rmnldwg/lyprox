@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+
+
+{% block head %}
+{% include 'head_content.html' with title="LyProX · Login" %}
+{% endblock head %}
+
+
+{% block content %}
+
+<section class="section">
+    <div class="container">
+        <div class="block columns is-centered">
+            <div class="column is-4">
+                <div class="box">
+                    <p class="title is-3">Login</p>
+
+                    {% if form.errors %}
+                    <div class="notification is-danger is-light">
+                        Username and/or password wrong!
+                    </div>
+                    {% endif %}
+
+                    <form action="{% url 'accounts:login' %}" method="post">
+                        {% csrf_token %}
+
+                        <div class="field">
+                            <label for="{{ form.username.id_for_label }}" class="label">
+                                {{ form.username.label }}
+                            </label>
+                            <div class="control">
+                                {{ form.username }}
+                            </div>
+                        </div>
+
+                        <div class="field">
+                            <label for="{{ form.password.id_for_label }}" class="label">
+                                {{ form.password.label }}
+                            </label>
+                            <div class="control">
+                                {{ form.password }}
+                            </div>
+                        </div>
+
+                        <div class="field is-grouped is-grouped-right">
+                            <p class="control">
+                                <button class="button is-primary">
+                                    <span class="icon">
+                                        <i class="fas fa-sign-in-alt"></i>
+                                    </span>
+                                    <span>Log in</span>
+                                </button>
+                            </p>
+                        </div>
+
+                        <input type="hidden" name="next" value="{{ next }}">
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+
+{% endblock %}

@@ -1,0 +1,398 @@
+---
+references:
+- id: ludwig_detailed_2022
+  abstract: >-
+    Purpose/Objective
+
+    Whereas the prevalence of lymph node level (LNL) involvement in head & neck
+    squamous cell carcinomas (HNSCC) has been reported, the details of lymphatic
+    progression patterns are insufficiently quantified. In this study, we
+    investigate how the risk of metastases in each LNL depends on the
+    involvement of upstream LNLs, T-category, HPV status and other risk factors.
+
+    Materials/Methods
+
+    We retrospectively analyzed patients with newly diagnosed oropharyngeal
+    squamous cell carcinoma (OPSCC) treated at a single institution, resulting
+    in a dataset of 287 patients. For all patients, involvement of LNLs I-VII
+    was recorded individually based on available diagnostic modalities (PET,
+    MRI, CT, FNA) together with clinicopathological factors. To analyze the
+    dataset, a web-based graphical user interface (GUI) was developed, which
+    allows querying the number of patients with a certain combination of
+    co-involved LNLs and tumor characteristics.
+
+    Results
+
+    The full dataset and GUI is part of the publication. Selected findings are:
+    Ipsilateral level IV was involved in 27% of patients with level II and III
+    involvement, but only in 2% of patients with level II but not III
+    involvement. Prevalence of involvement of ipsilateral levels II, III, IV, V
+    was 79%, 34%, 7%, 3% for early T-category patients (T1/T2) and 85%, 50%,
+    17%, 9% for late T-category (T3/T4), quantifying increasing involvement with
+    T-category. Contralateral levels II, III, IV were involved in 41%, 19%, 4%
+    and 12%, 3%, 2% for tumors with and without midline extension, respectively.
+    T-stage dependence of LNL involvement was more pronounced in HPV negative
+    than positive tumors, but overall involvement was similar. Ipsilateral level
+    VII was involved in 14% and 6% of patients with primary tumors in the tonsil
+    and the base of tongue, respectively.
+
+    Conclusions
+
+    Detailed quantification of LNL involvement in HNSCC depending on involvement
+    of upstream LNLs and clinicopathological factors may allow for further
+    personalization of CTV-N definition in the future.
+  accessed:
+    - year: 2022
+      month: 10
+      day: 25
+  author:
+    - family: Ludwig
+      given: Roman
+    - family: Hoffmann
+      given: Jean-Marc
+    - family: Pouymayou
+      given: Bertrand
+    - family: Däppen
+      given: Martina Broglie
+    - family: Morand
+      given: Grégoire
+    - family: Guckenberger
+      given: Matthias
+    - family: Grégoire
+      given: Vincent
+    - family: Balermpas
+      given: Panagiotis
+    - family: Unkelbach
+      given: Jan
+  citation-key: ludwig_detailed_2022
+  container-title: Radiotherapy and Oncology
+  container-title-short: Radiotherapy and Oncology
+  DOI: 10.1016/j.radonc.2022.01.035
+  ISSN: 0167-8140
+  issued:
+    - year: 2022
+      month: 4
+      day: 1
+  language: en
+  page: 1-7
+  source: ScienceDirect
+  title: >-
+    Detailed patient-individual reporting of lymph node involvement in
+    oropharyngeal squamous cell carcinoma with an online interface
+  type: article-journal
+  URL: https://www.sciencedirect.com/science/article/pii/S0167814022000615
+  volume: '169'
+
+- id: ludwig_dataset_2022
+  abstract: >-
+    Dataset
+
+    We provide a dataset on lymph node level (LNL) involvement in 287 patients
+    with newly diagnosed oropharyngeal squamous cell carcinoma (OPSCC). For each
+    patient, ipsilateral and contralateral LNL involvement for levels I to VII
+    is reported together with clinicopathological factors including TNM-stage,
+    primary tumor subsite, tumor lateralization, HPV status, sex, age, smoking
+    status, and primary treatment. LNL involvement was assessed individually
+    based on available diagnostic modalities (PET, MRI, CT, fine needle
+    aspiration) by reviewing pathology and radiology reports together with the
+    radiological images. The data is shared as a CSV-table with rows of patients
+    and columns of patient/tumor-specific information and the involvement of
+    individual LNL based on the respective diagnostic modalities.
+
+    Reuse potential
+
+    Patterns of lymphatic progression have never been reported on a
+    patient-individual basis in as much detail as provided in this dataset. The
+    data can be used to build quantitative models for lymphatic tumor
+    progression to estimate the probability of occult metastases in LNLs. This
+    may in turn allow for further personalization of the elective clinical
+    target volume definition in radiotherapy and the extent of neck dissection
+    for surgically treated patients. The data can be pooled with other data to
+    build large multi-institutional datasets on lymphatic metastatic progression
+    in the future.
+
+    Co-submission
+
+    This paper supports the original scientific article by Roman Ludwig,
+    Jean-Marc Hoffmann, Bertrand Pouymayou, Grégoire Morand, Martina Broglie
+    Däppen, Matthias Guckenberger, Vincent Grégoire, Panagiotis Balermpas, Jan
+    Unkelbach, “Detailed patient-individual reporting of lymph node involvement
+    in oropharyngeal squamous cell carcinoma with an online interface”,
+    Radiotherapy & Oncology [1]
+  accessed:
+    - year: 2022
+      month: 10
+      day: 25
+  author:
+    - family: Ludwig
+      given: Roman
+    - family: Hoffmann
+      given: Jean-Marc
+    - family: Pouymayou
+      given: Bertrand
+    - family: Morand
+      given: Grégoire
+    - family: Däppen
+      given: Martina Broglie
+    - family: Guckenberger
+      given: Matthias
+    - family: Grégoire
+      given: Vincent
+    - family: Balermpas
+      given: Panagiotis
+    - family: Unkelbach
+      given: Jan
+  citation-key: ludwig_dataset_2022
+  container-title: Data in Brief
+  container-title-short: Data in Brief
+  DOI: 10.1016/j.dib.2022.108345
+  ISSN: 2352-3409
+  issued:
+    - year: 2022
+      month: 8
+      day: 1
+  language: en
+  page: '108345'
+  source: ScienceDirect
+  title: >-
+    A dataset on patient-individual lymph node involvement in oropharyngeal
+    squamous cell carcinoma
+  type: article-journal
+  URL: https://www.sciencedirect.com/science/article/pii/S2352340922005479
+  volume: '43'
+
+- id: bauwens_prevalence_2021
+  abstract: "OBJECTIVE: In oropharyngeal squamous cell carcinoma (OP-SCC), the prevalence and distribution of clinical and pathological lymph node metastasis in the neck have been extensively reported. It served as the basis for consensus recommendations on the selection of the lymph node levels in the neck requiring a treatment. The objective of the study is to compare the prevalence and distribution of neck node metastases in HPV+ and HPV- OP-SCC from a large series of patients with OP-SCC who underwent a cervical lymph-node dissection (LND) as part of their treatment.\nMETHODS: The study concentrated on OP-SCC patients treated by various neck node dissection (LND) procedures from January 2014 to December 2018 in 3 French institutions. Patients with prior head and neck cancer, prior neck surgery, the use of induction chemotherapy, or patients with carcinoma of unknown primary were excluded. HPV-status was assessed by p16 immunohistochemistry. For each patient, the clinical and the pathological nodal status, as well as the distribution of the positive nodes in each neck level (from Ia to V) were reported.\nRESULTS: Two-hundred and sixty-three patients were included (126 p16-negative (p16-), and 137 p16-positive (p16+). The rate of clinical positive node (cN+) reached 54% and 88.3% in the p16- and p16+ groups, respectively (p\_<\_0.001); the corresponding rate of pathological positive node (pN+) reached 61.9% and 91.2%, respectively (p\_<\_0.001). Regarding the clinical lymph node distribution, in p16+ patients, more positive nodes were observed in the ipsilateral level IV (p\_=\_0.003), and less positive nodes were observed in the contralateral levels III and IV (p\_=\_0.003 and p\_=\_0.045, respectively). Regarding the pathologic lymph node distribution in the ipsilateral neck, in the cN0 patients, no significant difference was observed between p16- and p16+ patients (p\_=\_0.33 to 1); in the cN+ patients, the nodes were distributed in levels Ib, II, III, IV and V without differences between the p16- and the p16+ patients. In the contralateral neck of p16- patients, nodes metastases were mainly observed in levels II, III and IV, whereas for the p16+ patients, positive nodes were only observed in level II (p\_=\_0.03).\nCONCLUSION: This study demonstrated the higher prevalence of cN+ and pN+ in p16+ OP-SCC patients, but without meaningful difference in the distribution of the lymph node drainage between p16- and p16+ OP-SCC. It indicates that no difference should be made between p16- and p16+ patients regarding the extend of neck treatment."
+  author:
+    - family: Bauwens
+      given: Laurence
+    - family: Baltres
+      given: Aline
+    - family: Fiani
+      given: Danny-Joe
+    - family: Zrounba
+      given: Philippe
+    - family: Buiret
+      given: Guillaume
+    - family: Fleury
+      given: Bertrand
+    - family: Benzerdjeb
+      given: Nazim
+    - family: Grégoire
+      given: Vincent
+  citation-key: bauwens_prevalence_2021
+  container-title: Radiotherapy and Oncology
+  container-title-short: Radiother Oncol
+  DOI: 10.1016/j.radonc.2021.01.028
+  ISSN: 1879-0887
+  issued:
+    - year: 2021
+      month: 4
+  language: eng
+  page: 122-129
+  PMID: '33545255'
+  source: PubMed
+  title: >-
+    Prevalence and distribution of cervical lymph node metastases in
+    HPV-positive and HPV-negative oropharyngeal squamous cell carcinoma
+  type: article-journal
+  volume: '157'
+
+- id: ludwig_hidden_2021
+  abstract: >-
+    Currently, elective clinical target volume (CTV-N) definition for head and
+    neck squamous cell carcinoma (HNSCC) is mostly based on the prevalence of
+    nodal involvement for a given tumor location. In this work, we propose a
+    probabilistic model for lymphatic metastatic spread that can quantify the
+    risk of microscopic involvement in lymph node levels (LNL) given the
+    location of macroscopic metastases and T-category. This may allow for
+    further personalized CTV-N definition based on an individual patient’s state
+    of disease. We model the patient's state of metastatic lymphatic progression
+    as a collection of hidden binary random variables that indicate the
+    involvement of LNLs. In addition, each LNL is associated with observed
+    binary random variables that indicate whether macroscopic metastases are
+    detected. A hidden Markov model (HMM) is used to compute the probabilities
+    of transitions between states over time. The underlying graph of the HMM
+    represents the anatomy of the lymphatic drainage system. Learning of the
+    transition probabilities is done via Markov chain Monte Carlo sampling and
+    is based on a dataset of HNSCC patients in whom involvement of individual
+    LNLs was reported. The model is demonstrated for ipsilateral metastatic
+    spread in oropharyngeal HNSCC patients. We demonstrate the model's
+    capability to quantify the risk of microscopic involvement in levels III and
+    IV, depending on whether macroscopic metastases are observed in the upstream
+    levels II and III, and depending on T-category. In conclusion, the
+    statistical model of lymphatic progression may inform future, more
+    personalized, guidelines on which LNL to include in the elective CTV.
+    However, larger multi-institutional datasets for model parameter learning
+    are required for that.
+  accessed:
+    - year: 2021
+      month: 9
+      day: 27
+  author:
+    - family: Ludwig
+      given: Roman
+    - family: Pouymayou
+      given: Bertrand
+    - family: Balermpas
+      given: Panagiotis
+    - family: Unkelbach
+      given: Jan
+  citation-key: ludwig_hidden_2021
+  container-title: Scientific Reports
+  container-title-short: Sci Rep
+  DOI: 10.1038/s41598-021-91544-1
+  ISSN: 2045-2322
+  issue: '1'
+  issued:
+    - year: 2021
+      month: 12
+  language: en
+  page: '12261'
+  source: DOI.org (Crossref)
+  title: A hidden Markov model for lymphatic tumor progression in the head and neck
+  type: article-journal
+  URL: http://www.nature.com/articles/s41598-021-91544-1
+  volume: '11'
+
+- id: pouymayou_bayesian_2019
+  abstract: >-
+    Many tumors including head and neck squamous cell carcinoma (HNSCC) spread
+    along the lymphatic network. Current imaging modalities can only detect
+    sufficiently large metastases. Therefore, adjacent lymph node levels (LNL)
+    are irradiated electively since they may harbor microscopic tumors. We apply
+    Bayesian Networks (BN) to model lymphatic tumor progression. The model can
+    subsequently be used to personalize the risk estimation of microscopic lymph
+    node metastases in newly diagnosed patients based on their distribution of
+    macroscopic metastases. A BN is a graphical representation of a joint
+    probability distribution. We represent LNLs by binary random variables
+    corresponding to the BN nodes. Each LNL is associated with a hidden
+    microscopic state and an observed macroscopic state (e.g. 18F-FDG-PET/CT
+    imaging). The primary tumor is represented by network input nodes. We
+    demonstrate the concept for early T-stage oropharyngeal carcinomas and their
+    spread to ipsilateral lymph node levels (LNL) Ib to IV. We show that the BN
+    parameters can be efficiently learnt by merging pathology findings on
+    microscopic tumor progression (which is limited to a few published studies)
+    and imaging data on macroscopic tumor progression such as CT and 18F-FDG-PET
+    (which are widely available in clinical practice). The trained network can
+    be used to quantify how the distribution of macroscopic metastases impacts
+    the probability of microscopic involvement of the remaining LNLs. The
+    analysis suggests that the risk of microscopic involvement of level IV
+    exceeds 5% only if level III harbors metastases. Excluding level IV from the
+    elective CTV for other patients would reduce the integral dose delivered to
+    the patient and potentially reduce acute and late side effects.
+  author:
+    - family: Pouymayou
+      given: Bertrand
+    - family: Balermpas
+      given: Panagiotis
+    - family: Riesterer
+      given: Oliver
+    - family: Guckenberger
+      given: Matthias
+    - family: Unkelbach
+      given: Jan
+  citation-key: pouymayou_bayesian_2019
+  container-title: Physics in Medicine & Biology
+  DOI: 10.1088/1361-6560/ab2a18
+  ISSN: 1361-6560
+  issue: '16'
+  issued:
+    - year: 2019
+      month: 8
+      day: 14
+  page: '165003'
+  publisher: IOP Publishing
+  title: >-
+    A Bayesian network model of lymphatic tumor progression for personalized
+    elective CTV definition in head and neck cancers
+  type: article-journal
+  URL: http://dx.doi.org/10.1088/1361-6560/ab2a18
+  volume: '64'
+
+- id: unkelbach_role_2020
+  abstract: >-
+    Treatment planning in radiotherapy distinguishes three target volume
+    concepts: the gross tumor volume (GTV), the clinical target volume (CTV),
+    and the planning target volume (PTV). Over time, GTV definition and PTV
+    margins have improved through the development of novel imaging techniques
+    and better image guidance, respectively. CTV definition is sometimes
+    considered the weakest element in the planning process. CTV definition is
+    particularly complex since the extension of microscopic disease cannot be
+    seen using currently available in-vivo imaging techniques. Instead, CTV
+    definition has to incorporate knowledge of the patterns of tumor
+    progression. While CTV delineation has largely been considered the domain of
+    radiation oncologists, this paper, arising from a 2019 ESTRO Physics
+    research workshop, discusses the contributions that medical physics and
+    computer science can make by developing computational methods to support CTV
+    definition. First, we overview the role of image segmentation algorithms,
+    which may in part automate CTV delineation through segmentation of lymph
+    node stations or normal tissues representing anatomical boundaries of
+    microscopic tumor progression. The recent success of deep convolutional
+    neural networks has also enabled learning entire CTV delineations from
+    examples. Second, we discuss the use of mathematical models of tumor
+    progression for CTV definition, using as example the application of glioma
+    growth models to facilitate GTV-to-CTV expansion for glioblastoma that is
+    consistent with neuroanatomy. We further consider statistical machine
+    learning models to quantify lymphatic metastatic progression of tumors,
+    which may eventually improve elective CTV definition. Lastly, we discuss
+    approaches to incorporate uncertainty in CTV definition into treatment plan
+    optimization as well as general limitations of the CTV concept in the case
+    of infiltrating tumors without natural boundaries.
+  accessed:
+    - year: 2023
+      month: 3
+      day: 13
+  author:
+    - family: Unkelbach
+      given: Jan
+    - family: Bortfeld
+      given: Thomas
+    - family: Cardenas
+      given: Carlos E.
+    - family: Gregoire
+      given: Vincent
+    - family: Hager
+      given: Wille
+    - family: Heijmen
+      given: Ben
+    - family: Jeraj
+      given: Robert
+    - family: Korreman
+      given: Stine S.
+    - family: Ludwig
+      given: Roman
+    - family: Pouymayou
+      given: Bertrand
+    - family: Shusharina
+      given: Nadya
+    - family: Söderberg
+      given: Jonas
+    - family: Toma-Dasu
+      given: Iuliana
+    - family: Troost
+      given: Esther G. C.
+    - family: Vasquez Osorio
+      given: Eliana
+  citation-key: unkelbach_role_2020
+  collection-title: >-
+    Physics Special Issue: ESTRO Physics Research Workshops on Science in
+    Development
+  container-title: Radiotherapy and Oncology
+  container-title-short: Radiotherapy and Oncology
+  DOI: 10.1016/j.radonc.2020.10.002
+  ISSN: 0167-8140
+  issued:
+    - year: 2020
+      month: 12
+      day: 1
+  language: en
+  page: 15-25
+  source: ScienceDirect
+  title: >-
+    The role of computational methods for automating and improving clinical
+    target volume definition
+  type: article-journal
+  URL: https://www.sciencedirect.com/science/article/pii/S0167814020308380
+  volume: '153'
+...

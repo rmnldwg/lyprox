@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+{% load static %}
+{% load customtags %}
+
+{% block head %}
+{% include 'head_content.html' with title="LyProX · Upload CSV" %}
+{% endblock head %}
+
+
+{% block content %}
+
+<section class="section">
+    <div class="container">
+        <div class="columns is-centered">
+            <div class="column is-5">
+                <div class="box">
+                    <p class="title">Upload</p>
+                    <p class="block">
+                        Import multiple patients at once from a
+                        <a href="{% url 'patients:dataset_list' %}" data-tooltip="click to download example CSV">
+                            specifically formatted
+                        </a>
+                        CSV table. See also below for an explanation of the expected columns.
+                    </p>
+
+                    {% if form.errors %}
+                    <div class="notification is-danger is-light">
+                        {{ form.non_field_errors }}
+                    </div>
+                    {% endif %}
+
+                    {% if error %}
+                    <div class="notification is-danger is-light">
+                        {{ error }}
+                    </div>
+                    {% endif %}
+
+                    {% if not upload_success %}
+                    <form action="{% url 'patients:dataset_upload' %}" method="POST" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="field is-grouped is-grouped-centered">
+                            <div class="control">
+                                <div class="file" id="file-upload">
+                                    <label class="file-label">
+                                        {{ form.data_file }}
+                                        <span class="file-cta">
+                                            <span class="file-icon">
+                                                <i class="fas fa-folder-open"></i>
+                                            </span>
+                                            <span class="file-label" id="file-label-text">
+                                                Choose CSV table...
+                                            </span>
+                                        </span>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="control">
+                                <button class="button is-primary" type="submit" id="upload">
+                                    <span class="icon">
+                                        <i class="fas fa-cloud-upload-alt"></i>
+                                    </span>
+                                    <span>Upload</span>
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                    {% else %}
+                    <div class="notification is-success is-light">
+                        {{ num_new }} patients have been added and {{ num_skipped }} were skipped.
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <div class="content">
+            {% include_md 'patients/data_description.md' %}
+        </div>
+    </div>
+</section>
+
+<script src="{% static 'patients/dataset_upload.js' %}"></script>
+
+{% endblock content %}

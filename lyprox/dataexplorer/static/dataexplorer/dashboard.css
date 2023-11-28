@@ -1,0 +1,80 @@
+body {
+    background-color: #dbe6eb;
+}
+
+input[type="checkbox"].checkbox:checked + label {
+    background-color: #005EA8;
+    color: white;
+}
+input[type="checkbox"].checkbox:checked:hover + label {
+    background-color: #005392;
+    color: white;
+}
+
+input[type="checkbox"].checkbox:checked + .tags label {
+    background-color: #005EA8;
+    color: white;
+}
+
+input[type="checkbox"].checkbox:checked:hover + .tags label {
+    background-color: #005392;
+    color: white;
+}
+
+input[type="checkbox"].checkbox:checked + .tumor.buttons label {
+    background-color: #005EA8;
+    color: white;
+}
+
+input[type="checkbox"].checkbox:checked:hover + .tumor.buttons label {
+    background-color: #005392;
+    color: white;
+}
+
+input[type="radio"].radio:checked + label {
+    background-color: #005EA8;
+    color: white;
+}
+
+div.stats.tag {
+    width: 29px;
+}
+
+.table td {
+    padding: 0.3em;
+}
+
+.tooltip {
+    position: relative;
+}
+
+.tooltip .box {
+    display: none;
+}
+
+.tooltip:hover .box {
+    display: inherit;
+    position: absolute;
+    z-index: 1000;
+    width: 700px;
+}
+
+.tooltip:hover .box.right {
+    left: 0;
+    margin-left: 32px;
+}
+
+.tooltip:hover .box.left {
+    right: 0;
+    margin-right: 32px;
+}
+
+.tooltip:hover .box.top {
+    bottom: 0;
+    margin-bottom: 60px;
+}
+
+.tooltip:hover .box.bottom {
+    top: 0;
+    margin-top: 32px;
+}

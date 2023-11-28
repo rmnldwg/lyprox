@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% load customtags %}
+
+
+{% block head %}
+{% include 'head_content.html' with title="LyProX · Add Trained Lymph Model" %}
+{% endblock head %}
+
+
+{% block content %}
+
+<section class="section">
+  <div class="container">
+    <div class="columns is-centered">
+      <div class="column is-8">
+        {% for inference_result in inference_results %}
+        {% include 'riskpredictor/inference_result_card.html' with ir=inference_result %}
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</section>
+
+{% endblock content%}

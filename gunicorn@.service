@@ -8,10 +8,15 @@ User = www-data
 Group = www-data
 WorkingDirectory = /srv/www/%i
 EnvironmentFile = /srv/www/%i/.env
+TimeoutSec = 1200
 
-ExecStartPre = /srv/www/%i/.venv/bin/python /srv/www/%i/manage.py migrate --noinput
-ExecStartPre = /srv/www/%i/.venv/bin/python /srv/www/%i/manage.py collectstatic --noinput
-ExecStart = /srv/www/%i/.venv/bin/python -m gunicorn -c /srv/www/%i/gunicorn.conf.py
+ExecStartPre = .venv/bin/manage.py migrate --noinput
+ExecStartPre = .venv/bin/manage.py collectstatic --noinput
+ExecStartPre = .venv/bin/manage.py add_institutions --from-file initial/add_institutions
+ExecStartPre = .venv/bin/manage.py add_users --from-file initial/add_users
+ExecStartPre = .venv/bin/manage.py add_datasets --from-file initial/add_datasets
+ExecStartPre = .venv/bin/manage.py add_riskmodels --from-file initial/add_riskmodels
+ExecStart = .venv/bin/python -m gunicorn -c gunicorn.conf.py
 
 ExecReload = kill -s HUP $MAINPID
 ExecStop = kill -s TERM $MAINPID

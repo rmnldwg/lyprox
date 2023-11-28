@@ -1,0 +1,20 @@
+<!--
+  This gets loaded by the main navbar.html template. This allows for easy customization of the navbar.
+-->
+<div class="navbar-item has-dropdown is-hoverable">
+  <a href="{% url 'riskpredictor:list' %}" class="navbar-link" title="risk prediction dashboard">
+    Risk Predictor
+  </a>
+
+  <div class="navbar-dropdown">
+    <a href="{% url 'riskpredictor:list' %}" class="navbar-item" title="risk prediction dashboard">
+      List
+    </a>
+    <a href="{% url 'riskpredictor:add' %}" class="navbar-item" title="add trained model">
+      Add
+    </a>
+    <a href="{% url 'riskpredictor:help' %}" class="navbar-item" title="description of the risk predictor">
+      Help
+    </a>
+  </div>
+</div>

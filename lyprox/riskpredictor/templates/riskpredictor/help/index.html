@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+
+{% load customtags %}
+{% load static %}
+
+{% block head %}
+{% include 'head_content.html' with title="LyProX · Risk Predictor Help" %}
+{% endblock head %}
+
+{% block content %}
+<link rel="stylesheet" href="{% static 'dataexplorer/help.css' %}">
+
+<section class="section">
+  <div class="container">
+    <div class="columns">
+      <div class="column is-3 is-hidden-touch">
+        <aside class="menu is-fixed">
+          <p class="menu-label">General</p>
+          <ul class="menu-list">
+            <li><a href="">The Risk Predictor</a></li>
+          </ul>
+
+          <p class="menu-label">Components</p>
+          <ul class="menu-list">
+            <li><a href="#Tumor Diagnosis">Tumor Diagnosis</a></li>
+            <li><a href="#Modality">Modality</a></li>
+            <li><a href="#LNL Diagnosis and Risk">LNL Diagnosis and Risk</a></li>
+          </ul>
+        </aside>
+      </div>
+      <div class="column">
+        <div class="content">
+          <h1 id="The Risk Predictor">The Risk Predictor</h1>
+          <p>
+            This tool can compute the marginalized risk for microscopic involvement in
+            individual lymph node levels based on the tumor and LNL diagnosis entered.
+          </p>
+          <p>
+            Each risk prediction is based on a particular model, which is selected from
+            the <a href="{% url 'riskpredictor:list' %}">model list</a>. From this list,
+            or from the link at the top of each risk predictor dashboard, you can
+            follow a link to the repository where the model was defined and trained.
+            More information on the data and parameters used can be found there.
+          </p>
+          <p class="notification is-warning is-light">
+            <strong>Warning:</strong> At this point in time, the risk prediction should
+            not yet serve as clinical guideline to any treatment! It is merely to
+            visualize the results of our work on modelling lymphatic metastatic
+            progression. We are, however, working on a clinical trial to validate the
+            model (reach out to us by sending a mail to
+            <a href="mailto:roman.ludwig@usz.ch">roman.ludwig@usz.ch</a> if you want to
+            know more).
+          </p>
+
+          <h2 id="Components" class="pt-6">Components</h2>
+
+          <h3 id="Tumor Diagnosis" class="pt-6 pb-4">Tumor Diagnosis</h3>
+          {% include 'dataexplorer/help/media.html' with html='riskpredictor/help/tumor.html' %}
+
+          <h3 id="Modality" class="pt-6 pb-4">Modality</h3>
+          {% include 'dataexplorer/help/media.html' with html='riskpredictor/help/modality.html' %}
+
+          <h3 id="LNL Diagnosis and Risk" class="pt-6 pb-4">LNL Diagnosis and Risk</h3>
+          {% include 'dataexplorer/help/media.html' with html='riskpredictor/help/risks.html' %}
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% endblock content %}
