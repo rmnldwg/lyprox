@@ -20,9 +20,9 @@ jobs:
           TMPFILE=$(mktemp)
           wget https://raw.githubusercontent.com/rmnldwg/lyprox/main/setup.sh -O $TMPFILE
           bash $TMPFILE -p 3.10 lyprox.org 8000
-          echo DJANGO_SECRET_KEY="${{ secrets.DJANGO_SECRET_KEY }}" >> /srv/www/lyprox.org/.env
-          echo GITHUB_TOKEN=${{ secrets.READONLY_TOKEN }} >> /srv/www/lyprox.org/.env
-          echo ${{ secrets.DJANGO_PASSWORDS }} >> /srv/www/lyprox.org/.env
+          echo 'DJANGO_SECRET_KEY="${{ secrets.DJANGO_SECRET_KEY }}"'' >> /srv/www/lyprox.org/.env
+          echo 'GITHUB_TOKEN="${{ secrets.READONLY_TOKEN }}"' >> /srv/www/lyprox.org/.env
+          echo '${{ secrets.DJANGO_PASSWORDS }}' >> /srv/www/lyprox.org/.env
           sudo cp /srv/www/lyprox.org/gunicorn@.service /etc/systemd/system/gunicorn@.service
           sudo systemctl daemon-reload
           sudo systemctl restart gunicorn@lyprox.org.service
