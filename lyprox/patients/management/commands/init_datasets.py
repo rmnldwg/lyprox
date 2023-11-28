@@ -17,12 +17,12 @@ INITIAL_DATASETS = [
         "data_path": "2021-clb-oropharynx/data.csv",
     },
     {
-        "git_repo_url": "https://github.com/rmnldwg/lydata.private",
+        "git_repo_url": "https://github.com/rmnldwg/lydata",
         "revision": "main",
         "data_path": "2023-isb-multisite/data.csv",
     },
     {
-        "git_repo_url": "https://github.com/rmnldwg/lydata.private",
+        "git_repo_url": "https://github.com/rmnldwg/lydata",
         "revision": "main",
         "data_path": "2023-clb-multisite/data.csv",
     },
