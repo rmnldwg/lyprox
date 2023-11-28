@@ -318,6 +318,7 @@ class Patient(mixins.LockedDatasetMixin, loggers.ModelLoggerMixin, models.Model)
 
     class T_stages(models.IntegerChoices):
         """Defines the possible T-stages as choice class."""
+        T0 = 0, "T0"
         T1 = 1, "T1"
         T2 = 2, "T2"
         T3 = 3, "T3"
