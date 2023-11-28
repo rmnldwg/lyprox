@@ -22,7 +22,7 @@ INITIAL_RISKMODELS = [
     {
         "git_repo_owner": "rmnldwg",
         "git_repo_name": "lynference",
-        "revision": "simple-IItoIII-v1",
+        "revision": "add-I-to-II-and-IV-to-V",
         "params_path": "params.yaml",
         "num_samples": 100,
     },
