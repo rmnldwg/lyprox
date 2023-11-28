@@ -1,5 +1,5 @@
 <a name="0.4.0"></a>
-## [0.4.0] - 2023-06-27
+## [0.4.0] - 2023-11-28
 
 ### Bug Fixes
 - add minor version to all dependencies
@@ -33,7 +33,8 @@
 - add help tooltips to risk predictor
 
 ### Features
-- add command `init_datasets` to initialize all 4 datasets (2021-usz-oropharynx (public), 2021-clb-oropharynx (public), 2023-isb-multisite (private), 2023-clb-multisite (private))
+- add T0 button to the Data Explorer. Fixes [#108]
+- add commands `add_institutions`, `add_users`, `add_datasets`, and `add_riskmodels` twith which one can either initialize the respective models from a JSON file or add individual instances using command line arguments. This fixes [#109]
 - enable dataset to detect corruption via SHA value of file
 - allow datasets to be uploaded via GitHub, fixes [#103]
 - add download button & link to dataset readme
@@ -194,3 +195,5 @@ Commits before the 2nd of March 2023 did not use conventional commits and no cha
 [#100]: https://github.com/rmnldwg/lyprox/issues/100
 [#103]: https://github.com/rmnldwg/lyprox/issues/103
 [#104]: https://github.com/rmnldwg/lyprox/issues/104
+[#108]: https://github.com/rmnldwg/lyprox/issues/108
+[#109]: https://github.com/rmnldwg/lyprox/issues/109
