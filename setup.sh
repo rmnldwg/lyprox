@@ -14,7 +14,7 @@ help_print() {
 }
 
 help() {
-    help_print "Usage: setup.sh [OPTION] HOSTNAME"
+    help_print "Usage: setup.sh [OPTION] HOSTNAME PORT"
     help_print "Prepare the directoy /srv/www/HOSTNAME for deployment of LyProX"
     help_print
     help_print "Options:"
@@ -47,7 +47,7 @@ while getopts ":hb:p:" option; do
 done
 shift $((OPTIND - 1))
 branch=${branch:-main}
-py_version=${py_version:-3.8}
+py_version=${py_version:-3.10}
 
 info "clone LyProX repo into correct location:"
 if [[ ! -d /srv/www/$1/.git ]]; then
@@ -62,6 +62,13 @@ python=/srv/www/$1/.venv/bin/python
 eval "$python -m pip install -U pip setuptools setuptools_scm wheel"
 eval "$python -m pip install /srv/www/$1"
 
+info "initialize variable file .env"
+echo "DJANGO_ENV=production" > /srv/www/$1/.env
+echo "DJANGO_ALLOWED_HOSTS=$1" >> /srv/www/$1/.env
+echo "DJANGO_GUNICORN_PORT=$2" >> /srv/www/$1/.env
+echo "DJANGO_BASE_DIR=/srv/www/$1" >> /srv/www/$1/.env
+echo "DJANGO_LOG_LEVEL=INFO" >> /srv/www/$1/.env
+
 info "ensure project directories have correct ownership and permissions:"
 sudo mkdir -pv /srv/www/$1                     # create project directory
 touch /srv/www/$1/db.sqlite3                   # create db.sqlite3 file
@@ -72,8 +79,10 @@ sudo chmod -v g+w /srv/www/$1                  # allow www-data to write to proj
 sudo chmod -v g+w /srv/www/$1/db.sqlite3       # allow www-data to write to db.sqlite3
 sudo chmod -v g+w /srv/www/$1/media            # allow www-data to write to media dir
 
-info "create nginx site and make it available"
-sudo cp /srv/www/$1/nginx.conf /etc/nginx/sites-available/$1
+info "create nginx site and make it available:"
+tempfile=$(mktemp)
+cat /srv/www/$1/nginx.conf | sed "s|{{ hostname }}|$1|" | sed "s|{{ port }}|$2|" > $tempfile
+sudo cp $tempfile /etc/nginx/sites-available/$1
 sudo ln -s /etc/nginx/sites-available/$1 /etc/nginx/sites-enabled/$1
 sudo service nginx reload
 
