@@ -60,9 +60,9 @@ git --git-dir=/srv/www/$1/.git --work-tree=/srv/www/$1 pull --force
 info "create .venv and install dependencies:"
 eval "rm -rf /srv/www/$1/.venv"
 eval "python$py_version -m venv /srv/www/$1/.venv"
-python=/srv/www/$1/.venv/bin/python
-eval "$python -m pip install -U pip setuptools setuptools_scm wheel"
-eval "$python -m pip install /srv/www/$1"
+pip=/srv/www/$1/.venv/bin/pip
+eval "$pip install -U pip setuptools setuptools_scm wheel"
+eval "$pip install /srv/www/$1"
 
 info "initialize variable file .env"
 echo "DJANGO_ENV=production" > /srv/www/$1/.env
@@ -92,5 +92,12 @@ info "create gunicorn log directory:"
 sudo mkdir -p /var/log/gunicorn
 sudo chown -R $user:www-data /var/log/gunicorn
 sudo chmod g+w /var/log/gunicorn
+
+info "create and start systemd service:"
+tempfile=$(mktemp)
+cat /srv/www/$1/systemd.service | sed "s|{{ hostname }}|$1|" > $tempfile
+sudo cp $tempfile /etc/systemd/system/$1.service
+sudo systemctl daemon-reload
+sudo systemctl start $1.service
 
 info "all done, don't forget to set env vars and start service"
