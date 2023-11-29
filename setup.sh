@@ -83,7 +83,7 @@ sudo chmod g+w /srv/www/$1/media            # allow www-data to write to media d
 
 info "create nginx site and make it available:"
 tempfile=$(mktemp)
-cat /srv/www/$1/nginx.conf | sed "s|{{ hostname }}|$1|" | sed "s|{{ port }}|$2|" > $tempfile
+cat /srv/www/$1/nginx.conf | sed "s|{{ hostname }}|$1|g" | sed "s|{{ port }}|$2|g" > $tempfile
 sudo cp $tempfile /etc/nginx/sites-available/$1
 sudo ln -s /etc/nginx/sites-available/$1 /etc/nginx/sites-enabled/$1
 sudo service nginx reload
@@ -95,7 +95,7 @@ sudo chmod g+w /var/log/gunicorn
 
 info "create and set up systemd service:"
 tempfile=$(mktemp)
-cat /srv/www/$1/systemd.service | sed "s|{{ hostname }}|$1|" > $tempfile
+cat /srv/www/$1/systemd.service | sed "s|{{ hostname }}|$1|g" > $tempfile
 sudo cp $tempfile /etc/systemd/system/$1.service
 sudo systemctl daemon-reload
 
