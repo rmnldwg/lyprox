@@ -93,11 +93,10 @@ sudo mkdir -p /var/log/gunicorn
 sudo chown -R $user:www-data /var/log/gunicorn
 sudo chmod g+w /var/log/gunicorn
 
-info "create and start systemd service:"
+info "create and set up systemd service:"
 tempfile=$(mktemp)
 cat /srv/www/$1/systemd.service | sed "s|{{ hostname }}|$1|" > $tempfile
 sudo cp $tempfile /etc/systemd/system/$1.service
 sudo systemctl daemon-reload
-sudo systemctl start $1.service
 
 info "all done, don't forget to set env vars and start service"
