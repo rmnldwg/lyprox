@@ -53,10 +53,12 @@ info "clone LyProX repo into correct location:"
 if [[ ! -d /srv/www/$1/.git ]]; then
     git clone --branch $branch https://github.com/rmnldwg/lyprox /srv/www/$1
 fi
+git --git-dir=/srv/www/$1/.git --work-tree=/srv/www/$1 fetch --tags --force
 git --git-dir=/srv/www/$1/.git --work-tree=/srv/www/$1 checkout --force $branch
 git --git-dir=/srv/www/$1/.git --work-tree=/srv/www/$1 pull --force
 
 info "create .venv and install dependencies:"
+eval "rm -rf /srv/www/$1/.venv"
 eval "python$py_version -m venv /srv/www/$1/.venv"
 python=/srv/www/$1/.venv/bin/python
 eval "$python -m pip install -U pip setuptools setuptools_scm wheel"
