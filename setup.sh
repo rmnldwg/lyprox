@@ -72,14 +72,14 @@ echo "DJANGO_BASE_DIR=/srv/www/$1" >> /srv/www/$1/.env
 echo "DJANGO_LOG_LEVEL=INFO" >> /srv/www/$1/.env
 
 info "ensure project directories have correct ownership and permissions:"
-sudo mkdir -pv /srv/www/$1                     # create project directory
+sudo mkdir -p /srv/www/$1                     # create project directory
 touch /srv/www/$1/db.sqlite3                   # create db.sqlite3 file
-sudo mkdir -pv /srv/www/$1/static              # initialize static directory
-sudo mkdir -pv /srv/www/$1/media               # init media dir
-sudo chown -Rv $user:www-data /srv/www/$1      # change group ownership to www-data
-sudo chmod -v g+w /srv/www/$1                  # allow www-data to write to project dir
-sudo chmod -v g+w /srv/www/$1/db.sqlite3       # allow www-data to write to db.sqlite3
-sudo chmod -v g+w /srv/www/$1/media            # allow www-data to write to media dir
+sudo mkdir -p /srv/www/$1/static              # initialize static directory
+sudo mkdir -p /srv/www/$1/media               # init media dir
+sudo chown -R $user:www-data /srv/www/$1      # change group ownership to www-data
+sudo chmod g+w /srv/www/$1                  # allow www-data to write to project dir
+sudo chmod g+w /srv/www/$1/db.sqlite3       # allow www-data to write to db.sqlite3
+sudo chmod g+w /srv/www/$1/media            # allow www-data to write to media dir
 
 info "create nginx site and make it available:"
 tempfile=$(mktemp)
@@ -89,8 +89,8 @@ sudo ln -s /etc/nginx/sites-available/$1 /etc/nginx/sites-enabled/$1
 sudo service nginx reload
 
 info "create gunicorn log directory:"
-sudo mkdir -pv /var/log/gunicorn
-sudo chown -Rv $user:www-data /var/log/gunicorn
-sudo chmod -v g+w /var/log/gunicorn
+sudo mkdir -p /var/log/gunicorn
+sudo chown -R $user:www-data /var/log/gunicorn
+sudo chmod g+w /var/log/gunicorn
 
 info "all done, don't forget to set env vars and start service"
