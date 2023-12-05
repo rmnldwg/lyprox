@@ -6,10 +6,19 @@ import markdown as md
 import yaml
 from django import template
 from django.template.loader import render_to_string
-from django.utils.html import format_html
+from django.utils.safestring import mark_safe
+from mdx_math import MathExtension
 
 register = template.Library()
 logger = logging.getLogger(__name__)
+
+
+class MyMathExtension(MathExtension):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.config.update({
+            "enable_dollar_delimiter": [True, "Enable single-dollar delimiter"],
+        })
 
 
 @register.filter(name="index")
@@ -42,7 +51,7 @@ def percent(indexable, i):
         return f"{100 * indexable[i] / total:.0f}"
 
 def custom_markdown(text):
-    return md.markdown(text, extensions=["footnotes", "tables"])
+    return md.markdown(text, extensions=["footnotes", "tables", MyMathExtension()])
 
 @register.simple_tag(name="include_md", takes_context=True)
 def include_md(context, template_name):
@@ -52,11 +61,11 @@ def include_md(context, template_name):
     template = render_to_string(template_name, context=context_dict)
 
     html_string = custom_markdown(template)
-    return format_html(html_string)
+    return mark_safe(html_string)
 
 @register.simple_tag(name="render_md")
 def render_md(raw):
-    return format_html(custom_markdown(raw))
+    return mark_safe(custom_markdown(raw))
 
 @register.simple_tag(name="render_json")
 def render_json(raw):
