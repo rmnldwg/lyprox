@@ -2,6 +2,23 @@ name: Push to Azure VM
 
 on:
   workflow_dispatch:
+    inputs:
+      hostname:
+        description: 'Hostname where the webapp should be reachable'
+        type: string
+        required: true
+        default: 'lyprox.org'
+      port:
+        description: 'Port to use on the hosting VM'
+        type: number
+        required: true
+        default: 8000
+      pyver:
+        description: 'Python version to use'
+        type: string
+        required: true
+        default: '3.10'
+
   push:
     tags: [ '*' ]
 
@@ -11,7 +28,7 @@ jobs:
 
     steps:
     - name: SSH Remote Commands
-      uses: appleboy/ssh-action@v0.1.4
+      uses: appleboy/ssh-action@v1.0.0
       with:
         host: ${{ secrets.REMOTE_IP }}
         username: ${{ secrets.REMOTE_USERNAME }}
@@ -19,11 +36,9 @@ jobs:
         port: 22
         script: |
           TMPFILE=$(mktemp)
-          wget https://raw.githubusercontent.com/rmnldwg/lyprox/main/setup.sh -O $TMPFILE
-          bash $TMPFILE -p 3.10 lyprox.org 8000
-          echo 'DJANGO_SECRET_KEY="${{ secrets.DJANGO_SECRET_KEY }}"' >> /srv/www/lyprox.org/.env
-          echo 'GITHUB_TOKEN="${{ secrets.READONLY_TOKEN }}"' >> /srv/www/lyprox.org/.env
-          echo '${{ secrets.DJANGO_PASSWORDS }}' >> /srv/www/lyprox.org/.env
-          sudo cp /srv/www/lyprox.org/gunicorn@.service /etc/systemd/system/gunicorn@.service
-          sudo systemctl daemon-reload
-          sudo systemctl restart gunicorn@lyprox.org.service
+          wget https://raw.githubusercontent.com/rmnldwg/lyprox/${{ github.ref_name }}/setup.sh -O $TMPFILE
+          bash $TMPFILE -p ${{ inputs.pyver }} -b ${{ github.ref_name }} ${{ inputs.hostname }} ${{ inputs.port }}
+          echo 'DJANGO_SECRET_KEY="${{ secrets.DJANGO_SECRET_KEY }}"' >> /srv/www/${{ inputs.hostname }}/.env
+          echo 'GITHUB_TOKEN="${{ secrets.READONLY_TOKEN }}"' >> /srv/www/${{ inputs.hostname }}/.env
+          echo '${{ secrets.DJANGO_PASSWORDS }}' >> /srv/www/${{ inputs.hostname }}/.env
+          sudo systemctl start ${{ inputs.hostname }}.service
