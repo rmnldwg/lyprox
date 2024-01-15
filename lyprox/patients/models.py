@@ -26,7 +26,7 @@ import pandas as pd
 from django.db import models
 from django.forms import ValidationError
 from django.urls import reverse
-from github import UnknownObjectException
+from github import BadCredentialsException, UnknownObjectException
 
 from lyprox import loggers
 from lyprox.accounts.models import Institution
@@ -158,6 +158,8 @@ class Dataset(loggers.ModelLoggerMixin, models.Model):
                 raise ValidationError(
                     "Could not find repository " + repo_id
                 ) from unk_obj_exc
+            except BadCredentialsException as bad_cred_exc:
+                raise ValidationError("GitHub token probably expired.") from bad_cred_exc
 
         return self._repo
 
