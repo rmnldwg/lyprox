@@ -34,5 +34,14 @@
         "country": "ES",
         "phone": "+34934893000",
         "logo": "logos/hvh.png"
+    },
+    {
+        "name": "University Medical Center Groningen",
+        "shortname": "UMCG",
+        "street": "Hanzeplein 1",
+        "city": "Groningen",
+        "country": "NL",
+        "phone": "+31503616161",
+        "logo": "logos/umcg.png"
     }
 ]
