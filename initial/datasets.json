@@ -28,5 +28,10 @@
         "git_repo_url": "https://github.com/rmnldwg/lydata.private",
         "revision": "2023-hvh-oropharynx",
         "data_path": "2023-hvh-oropharynx/data.csv"
+    },
+    {
+        "git_repo_url": "https://github.com/rmnldwg/lydata.private",
+        "revision": "2024-umcg-hypopharynx-larynx",
+        "data_path": "2024-umcg-hypopharynx-larynx/data_radiotherapy.csv"
     }
 ]

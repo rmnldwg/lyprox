@@ -27,6 +27,20 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+    - name: Set variables for workflow_dispatch event
+      if: github.event_name == 'workflow_dispatch'
+      run: |
+        echo "PYVER=${{ github.event.inputs.pyver }}" >> $GITHUB_ENV
+        echo "HOSTNAME=${{ github.event.inputs.hostname }}" >> $GITHUB_ENV
+        echo "PORT=${{ github.event.inputs.port }}" >> $GITHUB_ENV
+
+    - name: Set variables for push event
+      if: github.event_name == 'push'
+      run: |
+        echo "PYVER=3.10" >> $GITHUB_ENV
+        echo "HOSTNAME=lyprox.org" >> $GITHUB_ENV
+        echo "PORT=8000" >> $GITHUB_ENV
+
     - name: SSH Remote Commands
       uses: appleboy/ssh-action@v1.0.0
       with:
@@ -37,8 +51,8 @@ jobs:
         script: |
           TMPFILE=$(mktemp)
           wget https://raw.githubusercontent.com/rmnldwg/lyprox/${{ github.ref_name }}/setup.sh -O $TMPFILE
-          bash $TMPFILE -p ${{ inputs.pyver }} -b ${{ github.ref_name }} ${{ inputs.hostname }} ${{ inputs.port }}
-          echo 'DJANGO_SECRET_KEY="${{ secrets.DJANGO_SECRET_KEY }}"' >> /srv/www/${{ inputs.hostname }}/.env
-          echo 'GITHUB_TOKEN="${{ secrets.READONLY_TOKEN }}"' >> /srv/www/${{ inputs.hostname }}/.env
-          echo '${{ secrets.DJANGO_PASSWORDS }}' >> /srv/www/${{ inputs.hostname }}/.env
-          sudo systemctl start ${{ inputs.hostname }}.service
+          bash $TMPFILE -p ${{ env.PYVER }} -b ${{ github.ref_name }} ${{ env.HOSTNAME }} ${{ env.PORT }}
+          echo 'DJANGO_SECRET_KEY="${{ secrets.DJANGO_SECRET_KEY }}"' >> /srv/www/${{ env.HOSTNAME }}/.env
+          echo 'GITHUB_TOKEN="${{ secrets.READONLY_TOKEN }}"' >> /srv/www/${{ env.HOSTNAME }}/.env
+          echo '${{ secrets.DJANGO_PASSWORDS }}' >> /srv/www/${{ env.HOSTNAME }}/.env
+          sudo systemctl start ${{ env.HOSTNAME }}.service

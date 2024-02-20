@@ -1,3 +1,21 @@
+# Changelog
+
+<a name=0.4.1></a>
+## [0.4.1] - 2023-12-05
+
+### Bug Fixes
+
+- Don't use `format()` on markdown string containing LaTeX (fixes [#111])
+
+### Features
+
+- Render LaTeX equations in README of risk models
+
+### Miscellaneous Tasks
+
+- Deployment script (GitHub actions) runs more stably now and accepts inputs (fixes [#110])
+
+
 <a name="0.4.0"></a>
 ## [0.4.0] - 2023-11-28
 
@@ -153,7 +171,8 @@ Commits before the 2nd of March 2023 did not use conventional commits and no cha
 - [0.0.2] - 2021-10-04
 - 0.0.1 - 2021-10-04
 
-[Unreleased]: https://github.com/rmnldwg/lyprox/compare/0.4.0...HEAD
+[Unreleased]: https://github.com/rmnldwg/lyprox/compare/0.4.1...HEAD
+[0.4.1]: https://github.com/rmnldwg/lyprox/compare/0.4.0...0.4.1
 [0.4.0]: https://github.com/rmnldwg/lyprox/compare/0.3.4...0.4.0
 [0.3.4]: https://github.com/rmnldwg/lyprox/compare/0.3.3...0.3.4
 [0.3.3]: https://github.com/rmnldwg/lyprox/compare/0.3.2...0.3.3
@@ -197,3 +216,5 @@ Commits before the 2nd of March 2023 did not use conventional commits and no cha
 [#104]: https://github.com/rmnldwg/lyprox/issues/104
 [#108]: https://github.com/rmnldwg/lyprox/issues/108
 [#109]: https://github.com/rmnldwg/lyprox/issues/109
+[#110]: https://github.com/rmnldwg/lyprox/issues/110
+[#111]: https://github.com/rmnldwg/lyprox/issues/111
