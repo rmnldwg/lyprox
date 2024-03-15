@@ -79,5 +79,14 @@
         "is_active": true,
         "is_staff": false,
         "is_superuser": false
+    },
+    {
+        "email": "j.a.langendijk@umcg.nl",
+        "first_name": "Hans",
+        "last_name": "Langendijk",
+        "institution": "UMCG",
+        "is_active": true,
+        "is_staff": false,
+        "is_superuser": false
     }
 ]
