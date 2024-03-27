@@ -1,6 +1,30 @@
 # Changelog
 
 <a name=0.4.1></a>
+## [0.4.2] - 2024-03-15
+
+### Change
+
+- Update initial riskmodels
+
+### Ci
+
+- Bump python version for building docs
+- Fix python version in docs build
+
+### Feat
+
+- Add UMCG institution & prelim dataset
+- Add UMCG surgical dataset to initial
+- Add hans langendijk to initial users
+
+### Fix
+
+- Refs parsed as equation
+- Throw better error when GitHub token expired
+
+
+<a name=0.4.1></a>
 ## [0.4.1] - 2023-12-05
 
 ### Bug Fixes
@@ -171,7 +195,8 @@ Commits before the 2nd of March 2023 did not use conventional commits and no cha
 - [0.0.2] - 2021-10-04
 - 0.0.1 - 2021-10-04
 
-[Unreleased]: https://github.com/rmnldwg/lyprox/compare/0.4.1...HEAD
+[Unreleased]: https://github.com/rmnldwg/lyprox/compare/0.4.2...HEAD
+[0.4.2]: https://github.com/rmnldwg/lyprox/compare/0.4.1...0.4.2
 [0.4.1]: https://github.com/rmnldwg/lyprox/compare/0.4.0...0.4.1
 [0.4.0]: https://github.com/rmnldwg/lyprox/compare/0.3.4...0.4.0
 [0.3.4]: https://github.com/rmnldwg/lyprox/compare/0.3.3...0.3.4
