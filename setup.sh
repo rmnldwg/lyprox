@@ -62,7 +62,7 @@ sudo mkdir -p /srv/www/$1/media && chmod g+w /srv/www/$1/media
 info "clone LyProX repo into correct location:"
 if [[ ! -d /srv/www/$1/.git ]]; then
     git init /srv/www/$1
-    git --git-dir=/srv/www/$1/.git remote add origin https://github.com/rmnldwg/lyprox /srv/www/$1
+    git --git-dir=/srv/www/$1/.git remote add origin https://github.com/rmnldwg/lyprox
 fi
 git --git-dir=/srv/www/$1/.git --work-tree=/srv/www/$1 fetch --tags --force
 git --git-dir=/srv/www/$1/.git --work-tree=/srv/www/$1 checkout --force $branch
