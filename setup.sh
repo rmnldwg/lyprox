@@ -49,6 +49,16 @@ shift $((OPTIND - 1))
 branch=${branch:-main}
 py_version=${py_version:-3.10}
 
+info "ensure project dirs exist, have correct owners and permissions:"
+# loosely following https://www.datanovia.com/en/lessons/how-to-create-a-website-directory-and-set-up-proper-permissions/
+sudo mkdir -p /srv/www/$1
+sudo chown -R $user:www-data /srv/www/$1
+sudo chmod -R 755 /srv/www/$1
+sudo chmod g+s /srv/www/$1        # anything created underneath will inherit group owner
+sudo touch /srv/www/$1/db.sqlite3 && chmod g+w /srw/www/$1/db.sqlite3
+sudo mkdir -p /srv/www/$1/static && chmod g+w /srv/www/$1/static
+sudo mkdir -p /srv/www/$1/media && chmod g+w /srv/www/$1/media
+
 info "clone LyProX repo into correct location:"
 if [[ ! -d /srv/www/$1/.git ]]; then
     git clone --branch $branch https://github.com/rmnldwg/lyprox /srv/www/$1
@@ -57,13 +67,19 @@ git --git-dir=/srv/www/$1/.git --work-tree=/srv/www/$1 fetch --tags --force
 git --git-dir=/srv/www/$1/.git --work-tree=/srv/www/$1 checkout --force $branch
 git --git-dir=/srv/www/$1/.git --work-tree=/srv/www/$1 pull --force
 
-info "create .venv and install dependencies:"
+info "manage .venv and install dependencies:"
 if [[ ! -d /srv/www/$1/.venv ]]; then
     eval "python$py_version -m venv /srv/www/$1/.venv"
+else
+    venv_version = $(/srv/www/$1/.venv/bin/python --verson | cut -d ' ' -f 2 | cut -d '.' -f 1,2)
+    if [[ $venv_version != $py_version ]]; then
+        rm -rf /srv/www/$1/.venv
+        eval "python$py_version -m venv /srv/www/$1/.venv"
+    fi
 fi
 pip=/srv/www/$1/.venv/bin/pip
 eval "$pip install -U pip setuptools setuptools_scm wheel"
-eval "$pip install /srv/www/$1 --no-cache-dir"
+eval "$pip install /srv/www/$1"
 
 info "initialize variable file .env"
 echo "DJANGO_ENV=production" > /srv/www/$1/.env
@@ -71,22 +87,7 @@ echo "DJANGO_ALLOWED_HOSTS=$1" >> /srv/www/$1/.env
 echo "DJANGO_GUNICORN_PORT=$2" >> /srv/www/$1/.env
 echo "DJANGO_BASE_DIR=/srv/www/$1" >> /srv/www/$1/.env
 echo "DJANGO_LOG_LEVEL=INFO" >> /srv/www/$1/.env
-
-info "ensure project directories have correct ownership and permissions:"
-sudo mkdir -p /srv/www/$1                          # create project directory
-touch /srv/www/$1/db.sqlite3                       # create db.sqlite3 file
-sudo mkdir -p /srv/www/$1/static                   # initialize static directory
-sudo mkdir -p /srv/www/$1/media                    # init media dir
-sudo chown $user:www-data /srv/www/$1              # www-data needs to be group owner
-sudo chmod -R u=rwx,go=rx /srv/www/$1              # prohibit www-data to write to files in project dir...
-sudo chmod ug=rwx,o=rx /srv/www/$1                 # ... but dir must be writeable
-sudo chown $user:www-data /srv/www/$1/db.sqlite3   # www-data needs to own the database
-sudo chown -R $user:www-data /srv/www/$1/media     # www-data may need to own media dir
-sudo chmod -R ug=rwx,o=rx /srv/www/$1/media
-sudo chown -R $user:www-data /srv/www/$1/static    # www-data may need to own static dir
-sudo chmod -R ug=rwx,o=rx /srv/www/$1/static
-sudo chmod u=rw,go= /srv/www/$1/.env               # prohibit anyone from reading secrets
-sudo chmod ug=rw,o= /srv/www/$1/db.sqlite3         # allow www-data to write to db.sqlite3
+sudo chmod go= /srv/www/$1/.env   # no one may read this file
 
 info "create nginx site and make it available:"
 tempfile=$(mktemp)
