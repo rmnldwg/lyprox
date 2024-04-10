@@ -55,15 +55,15 @@ sudo mkdir -p /srv/www/$1
 sudo chown -R $user:www-data /srv/www/$1
 sudo chmod -R 755 /srv/www/$1
 sudo chmod g+s /srv/www/$1        # anything created underneath will inherit group owner
-sudo touch /srv/www/$1/db.sqlite3 && chmod g+w /srw/www/$1/db.sqlite3
-sudo mkdir -p /srv/www/$1/static && chmod g+w /srv/www/$1/static
-sudo mkdir -p /srv/www/$1/media && chmod g+w /srv/www/$1/media
+sudo touch /srv/www/$1/db.sqlite3 && sudo chmod g+w /srw/www/$1/db.sqlite3
+sudo mkdir -p /srv/www/$1/static && sudo chmod g+w /srv/www/$1/static
+sudo mkdir -p /srv/www/$1/media && sudo chmod g+w /srv/www/$1/media
 
 info "clone LyProX repo into correct location:"
 if [[ ! -d /srv/www/$1/.git ]]; then
     git init /srv/www/$1
-    git --git-dir=/srv/www/$1/.git remote add origin https://github.com/rmnldwg/lyprox
 fi
+git --git-dir=/srv/www/$1/.git remote add origin https://github.com/rmnldwg/lyprox
 git --git-dir=/srv/www/$1/.git --work-tree=/srv/www/$1 fetch --tags --force
 git --git-dir=/srv/www/$1/.git --work-tree=/srv/www/$1 checkout --force $branch
 git --git-dir=/srv/www/$1/.git --work-tree=/srv/www/$1 pull --force
