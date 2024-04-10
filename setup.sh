@@ -82,9 +82,6 @@ pip=/srv/www/$1/.venv/bin/pip
 eval "$pip install -U pip setuptools setuptools_scm wheel"
 eval "$pip install /srv/www/$1"
 
-info "ensure ownership again:"
-chown -R $user:www-data /srv/www/$1
-
 info "initialize variable file .env"
 echo "DJANGO_ENV=production" > /srv/www/$1/.env
 echo "DJANGO_ALLOWED_HOSTS=$1" >> /srv/www/$1/.env
@@ -92,6 +89,9 @@ echo "DJANGO_GUNICORN_PORT=$2" >> /srv/www/$1/.env
 echo "DJANGO_BASE_DIR=/srv/www/$1" >> /srv/www/$1/.env
 echo "DJANGO_LOG_LEVEL=INFO" >> /srv/www/$1/.env
 chmod u=rw,go= /srv/www/$1/.env   # no one may read this file
+
+info "ensure ownership again:"
+chown -R $user:www-data /srv/www/$1
 
 info "create nginx site and make it available:"
 tempfile=$(mktemp)
