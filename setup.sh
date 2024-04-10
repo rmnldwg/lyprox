@@ -62,7 +62,7 @@ eval "rm -rf /srv/www/$1/.venv"
 eval "python$py_version -m venv /srv/www/$1/.venv"
 pip=/srv/www/$1/.venv/bin/pip
 eval "$pip install -U pip setuptools setuptools_scm wheel"
-eval "$pip install /srv/www/$1"
+eval "$pip install /srv/www/$1 --no-cache-dir"
 
 info "initialize variable file .env"
 echo "DJANGO_ENV=production" > /srv/www/$1/.env
