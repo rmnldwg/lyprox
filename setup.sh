@@ -77,12 +77,15 @@ sudo mkdir -p /srv/www/$1                          # create project directory
 touch /srv/www/$1/db.sqlite3                       # create db.sqlite3 file
 sudo mkdir -p /srv/www/$1/static                   # initialize static directory
 sudo mkdir -p /srv/www/$1/media                    # init media dir
-sudo chown -R $user:$user /srv/www/$1              # make sure all is owned by user at first
+sudo chown $user:www-data /srv/www/$1              # www-data needs to be group owner
+sudo chmod -R u=rwx,go=rx /srv/www/$1              # prohibit www-data to write to files in project dir...
+sudo chmod ug=rwx,o=rx /srv/www/$1                 # ... but dir must be writeable
 sudo chown $user:www-data /srv/www/$1/db.sqlite3   # www-data needs to own the database
 sudo chown -R $user:www-data /srv/www/$1/media     # www-data may need to own media dir
+sudo chmod -R ug=rwx,o=rx /srv/www/$1/media
 sudo chown -R $user:www-data /srv/www/$1/static    # www-data may need to own static dir
-sudo chmod -R u=rwx,go=rx /srv/www/$1              # prohibit www-data to write to project dir
-sudo chmod u=rw,go= /srv/www/$1/.env               # prohibit everyone from reading secrets
+sudo chmod -R ug=rwx,o=rx /srv/www/$1/static
+sudo chmod u=rw,go= /srv/www/$1/.env               # prohibit anyone from reading secrets
 sudo chmod ug=rw,o= /srv/www/$1/db.sqlite3         # allow www-data to write to db.sqlite3
 
 info "create nginx site and make it available:"
