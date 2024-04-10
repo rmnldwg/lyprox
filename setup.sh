@@ -58,8 +58,9 @@ git --git-dir=/srv/www/$1/.git --work-tree=/srv/www/$1 checkout --force $branch
 git --git-dir=/srv/www/$1/.git --work-tree=/srv/www/$1 pull --force
 
 info "create .venv and install dependencies:"
-eval "rm -rf /srv/www/$1/.venv"
-eval "python$py_version -m venv /srv/www/$1/.venv"
+if [[ ! -d /srv/www/$1/.venv ]]; then
+    eval "python$py_version -m venv /srv/www/$1/.venv"
+fi
 pip=/srv/www/$1/.venv/bin/pip
 eval "$pip install -U pip setuptools setuptools_scm wheel"
 eval "$pip install /srv/www/$1 --no-cache-dir"
