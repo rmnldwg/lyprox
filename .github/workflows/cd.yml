@@ -51,7 +51,7 @@ jobs:
         script: |
           TMPFILE=$(mktemp)
           wget https://raw.githubusercontent.com/rmnldwg/lyprox/${{ github.ref_name }}/setup.sh -O $TMPFILE
-          bash $TMPFILE -p ${{ env.PYVER }} -b ${{ github.ref_name }} ${{ env.HOSTNAME }} ${{ env.PORT }}
+          sudo bash $TMPFILE -p ${{ env.PYVER }} -b ${{ github.ref_name }} ${{ env.HOSTNAME }} ${{ env.PORT }}
           echo 'DJANGO_SECRET_KEY="${{ secrets.DJANGO_SECRET_KEY }}"' >> /srv/www/${{ env.HOSTNAME }}/.env
           echo 'GITHUB_TOKEN="${{ secrets.READONLY_TOKEN }}"' >> /srv/www/${{ env.HOSTNAME }}/.env
           echo '${{ secrets.DJANGO_PASSWORDS }}' >> /srv/www/${{ env.HOSTNAME }}/.env
