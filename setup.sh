@@ -89,7 +89,7 @@ info "create nginx site and make it available:"
 tempfile=$(mktemp)
 cat /srv/www/$1/nginx.conf | sed "s|{{ hostname }}|$1|g" | sed "s|{{ port }}|$2|g" > $tempfile
 sudo cp $tempfile /etc/nginx/sites-available/$1
-sudo ln -s /etc/nginx/sites-available/$1 /etc/nginx/sites-enabled/$1
+sudo ln -sf /etc/nginx/sites-available/$1 /etc/nginx/sites-enabled/$1
 sudo service nginx reload
 
 info "create gunicorn log directory:"
