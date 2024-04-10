@@ -72,7 +72,7 @@ info "manage .venv and install dependencies:"
 if [[ ! -d /srv/www/$1/.venv ]]; then
     eval "python$py_version -m venv /srv/www/$1/.venv"
 else
-    venv_version = $(/srv/www/$1/.venv/bin/python --verson | cut -d ' ' -f 2 | cut -d '.' -f 1,2)
+    venv_version=$(/srv/www/$1/.venv/bin/python --version | cut -d ' ' -f 2 | cut -d '.' -f 1,2)
     if [[ $venv_version != $py_version ]]; then
         rm -rf /srv/www/$1/.venv
         eval "python$py_version -m venv /srv/www/$1/.venv"
