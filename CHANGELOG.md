@@ -1,5 +1,20 @@
 # Changelog
 
+All notable changes to this project will be documented in this file.
+
+<a name="0.4.3"></a>
+## [0.4.3] - 2024-04-10
+
+### 🐛 Bug Fixes
+
+- Update initial datasets JSON file
+- Don't allow nginx access to any files in the server dir. Fixes [#115].
+
+### Build
+
+- Bump git-cliff
+
+
 <a name=0.4.1></a>
 ## [0.4.2] - 2024-03-15
 
@@ -195,7 +210,8 @@ Commits before the 2nd of March 2023 did not use conventional commits and no cha
 - [0.0.2] - 2021-10-04
 - 0.0.1 - 2021-10-04
 
-[Unreleased]: https://github.com/rmnldwg/lyprox/compare/0.4.2...HEAD
+[Unreleased]: https://github.com/rmnldwg/lyprox/compare/0.4.3...HEAD
+[0.4.3]: https://github.com/rmnldwg/lyprox/compare/0.4.2...0.4.3
 [0.4.2]: https://github.com/rmnldwg/lyprox/compare/0.4.1...0.4.2
 [0.4.1]: https://github.com/rmnldwg/lyprox/compare/0.4.0...0.4.1
 [0.4.0]: https://github.com/rmnldwg/lyprox/compare/0.3.4...0.4.0
@@ -243,3 +259,4 @@ Commits before the 2nd of March 2023 did not use conventional commits and no cha
 [#109]: https://github.com/rmnldwg/lyprox/issues/109
 [#110]: https://github.com/rmnldwg/lyprox/issues/110
 [#111]: https://github.com/rmnldwg/lyprox/issues/111
+[#115]: https://github.com/rmnldwg/lyprox/issues/115
