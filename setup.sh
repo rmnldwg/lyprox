@@ -54,7 +54,7 @@ info "ensure project dirs exist, has correct owners and permissions:"
 mkdir -p /srv/www/$1
 chown -R $user:www-data /srv/www/$1
 chmod -R 755 /srv/www/$1
-chmod ug+s /srv/www/$1        # anything created underneath will inherit group owner
+chmod g+ws /srv/www/$1        # s = anything created underneath will inherit group owner
 touch /srv/www/$1/db.sqlite3 && chmod g+w /srv/www/$1/db.sqlite3
 mkdir -p /srv/www/$1/static && chmod g+w /srv/www/$1/static
 mkdir -p /srv/www/$1/media && chmod g+w /srv/www/$1/media
