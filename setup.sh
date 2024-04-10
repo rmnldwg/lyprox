@@ -55,9 +55,9 @@ mkdir -p /srv/www/$1
 chown -R $user:www-data /srv/www/$1
 chmod -R 755 /srv/www/$1
 chmod g+ws /srv/www/$1        # s = anything created underneath will inherit group owner
-touch /srv/www/$1/db.sqlite3 && chmod g+w /srv/www/$1/db.sqlite3
-mkdir -p /srv/www/$1/static && chmod g+w /srv/www/$1/static
-mkdir -p /srv/www/$1/media && chmod g+w /srv/www/$1/media
+touch /srv/www/$1/db.sqlite3 && chmod ug=rw,o= /srv/www/$1/db.sqlite3
+mkdir -p /srv/www/$1/static && chmod ug=rwx,o=rx /srv/www/$1/static
+mkdir -p /srv/www/$1/media && chmod ug=rwx,o=rx /srv/www/$1/media
 
 info "clone LyProX repo into correct location:"
 if [[ ! -d /srv/www/$1/.git ]]; then
@@ -81,6 +81,9 @@ fi
 pip=/srv/www/$1/.venv/bin/pip
 eval "$pip install -U pip setuptools setuptools_scm wheel"
 eval "$pip install /srv/www/$1"
+
+info "ensure ownership again:"
+chown -R $user:www-data /srv/www/$1
 
 info "initialize variable file .env"
 echo "DJANGO_ENV=production" > /srv/www/$1/.env
