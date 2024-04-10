@@ -61,12 +61,12 @@ sudo mkdir -p /srv/www/$1/media && sudo chmod g+w /srv/www/$1/media
 
 info "clone LyProX repo into correct location:"
 if [[ ! -d /srv/www/$1/.git ]]; then
-    git init /srv/www/$1
+    sudo git init /srv/www/$1
 fi
-git --git-dir=/srv/www/$1/.git remote add origin https://github.com/rmnldwg/lyprox
-git --git-dir=/srv/www/$1/.git --work-tree=/srv/www/$1 fetch --tags --force
-git --git-dir=/srv/www/$1/.git --work-tree=/srv/www/$1 checkout --force $branch
-git --git-dir=/srv/www/$1/.git --work-tree=/srv/www/$1 pull --force
+sudo git --git-dir=/srv/www/$1/.git remote add origin https://github.com/rmnldwg/lyprox
+sudo git --git-dir=/srv/www/$1/.git --work-tree=/srv/www/$1 fetch --tags --force
+sudo git --git-dir=/srv/www/$1/.git --work-tree=/srv/www/$1 checkout --force $branch
+sudo git --git-dir=/srv/www/$1/.git --work-tree=/srv/www/$1 pull --force
 
 info "manage .venv and install dependencies:"
 if [[ ! -d /srv/www/$1/.venv ]]; then
