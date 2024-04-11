@@ -88,6 +88,7 @@ echo "DJANGO_ALLOWED_HOSTS=$1" >> /srv/www/$1/.env
 echo "DJANGO_GUNICORN_PORT=$2" >> /srv/www/$1/.env
 echo "DJANGO_BASE_DIR=/srv/www/$1" >> /srv/www/$1/.env
 echo "DJANGO_LOG_LEVEL=INFO" >> /srv/www/$1/.env
+echo "MPLCONFIGDIR=/opt/$1/.config/matplotlib" >> /srv/www/$1/.env   # shush mpl's warning
 chmod u=rw,go= /srv/www/$1/.env   # no one may read this file
 
 info "ensure ownership again:"
