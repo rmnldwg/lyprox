@@ -49,17 +49,35 @@ shift $((OPTIND - 1))
 branch=${branch:-main}
 py_version=${py_version:-3.10}
 
+info "ensure project dirs exist, has correct owners and permissions:"
+# loosely following https://www.datanovia.com/en/lessons/how-to-create-a-website-directory-and-set-up-proper-permissions/
+mkdir -p /srv/www/$1
+chown -R $user:www-data /srv/www/$1
+chmod -R 755 /srv/www/$1
+chmod g+ws /srv/www/$1        # s = anything created underneath will inherit group owner
+touch /srv/www/$1/db.sqlite3 && chmod ug=rw,o= /srv/www/$1/db.sqlite3
+mkdir -p /srv/www/$1/static && chmod ug=rwx,o=rx /srv/www/$1/static
+mkdir -p /srv/www/$1/media && chmod ug=rwx,o=rx /srv/www/$1/media
+
 info "clone LyProX repo into correct location:"
 if [[ ! -d /srv/www/$1/.git ]]; then
-    git clone --branch $branch https://github.com/rmnldwg/lyprox /srv/www/$1
+    git init /srv/www/$1
 fi
+git --git-dir=/srv/www/$1/.git remote add origin https://github.com/rmnldwg/lyprox
 git --git-dir=/srv/www/$1/.git --work-tree=/srv/www/$1 fetch --tags --force
 git --git-dir=/srv/www/$1/.git --work-tree=/srv/www/$1 checkout --force $branch
 git --git-dir=/srv/www/$1/.git --work-tree=/srv/www/$1 pull --force
 
-info "create .venv and install dependencies:"
-eval "rm -rf /srv/www/$1/.venv"
-eval "python$py_version -m venv /srv/www/$1/.venv"
+info "manage .venv and install dependencies:"
+if [[ ! -d /srv/www/$1/.venv ]]; then
+    eval "python$py_version -m venv /srv/www/$1/.venv"
+else
+    venv_version=$(/srv/www/$1/.venv/bin/python --version | cut -d ' ' -f 2 | cut -d '.' -f 1,2)
+    if [[ $venv_version != $py_version ]]; then
+        rm -rf /srv/www/$1/.venv
+        eval "python$py_version -m venv /srv/www/$1/.venv"
+    fi
+fi
 pip=/srv/www/$1/.venv/bin/pip
 eval "$pip install -U pip setuptools setuptools_scm wheel"
 eval "$pip install /srv/www/$1"
@@ -70,37 +88,28 @@ echo "DJANGO_ALLOWED_HOSTS=$1" >> /srv/www/$1/.env
 echo "DJANGO_GUNICORN_PORT=$2" >> /srv/www/$1/.env
 echo "DJANGO_BASE_DIR=/srv/www/$1" >> /srv/www/$1/.env
 echo "DJANGO_LOG_LEVEL=INFO" >> /srv/www/$1/.env
+echo "MPLCONFIGDIR=/opt/$1/.config/matplotlib" >> /srv/www/$1/.env   # shush mpl's warning
+chmod u=rw,go= /srv/www/$1/.env   # no one may read this file
 
-info "ensure project directories have correct ownership and permissions:"
-sudo mkdir -p /srv/www/$1                    # create project directory
-touch /srv/www/$1/db.sqlite3                 # create db.sqlite3 file
-sudo mkdir -p /srv/www/$1/static             # initialize static directory
-sudo mkdir -p /srv/www/$1/media              # init media dir
-sudo chown -R $user:$user /srv/www/$1        # make sure all is owned by user at first
-sudo chown $user:www-data /srv/www/$1/db.sqlite
-sudo chown -R $user:www-data /srv/www/$1/media
-sudo chmod u=rwx,go=rx /srv/www/$1           # prohibit www-data to write to project dir
-sudo chmod u=rw,go= /srv/www/$1/.env         # prohibit everyone from reading secrets
-sudo chmod ug=rw,o= /srv/www/$1/db.sqlite3   # allow www-data to write to db.sqlite3
-sudo chmod ug=rw,o=r /srv/www/$1/media       # allow www-data to write to media dir
-sudo chmod ug=rw,o=r /srv/www/$1/static      # allow www-data to write to media dir
+info "ensure ownership again:"
+chown -R $user:www-data /srv/www/$1
 
 info "create nginx site and make it available:"
 tempfile=$(mktemp)
 cat /srv/www/$1/nginx.conf | sed "s|{{ hostname }}|$1|g" | sed "s|{{ port }}|$2|g" > $tempfile
-sudo cp $tempfile /etc/nginx/sites-available/$1
-sudo ln -s /etc/nginx/sites-available/$1 /etc/nginx/sites-enabled/$1
-sudo service nginx reload
+cp $tempfile /etc/nginx/sites-available/$1
+ln -sf /etc/nginx/sites-available/$1 /etc/nginx/sites-enabled/$1
+service nginx reload
 
 info "create gunicorn log directory:"
-sudo mkdir -p /var/log/gunicorn
-sudo chown -R $user:www-data /var/log/gunicorn
-sudo chmod g+w /var/log/gunicorn
+mkdir -p /var/log/gunicorn
+chown -R $user:www-data /var/log/gunicorn
+chmod g+w /var/log/gunicorn
 
 info "create and set up systemd service:"
 tempfile=$(mktemp)
 cat /srv/www/$1/systemd.service | sed "s|{{ hostname }}|$1|g" > $tempfile
-sudo cp $tempfile /etc/systemd/system/$1.service
-sudo systemctl daemon-reload
+cp $tempfile /etc/systemd/system/$1.service
+systemctl daemon-reload
 
 info "all done, don't forget to set env vars and start service"
