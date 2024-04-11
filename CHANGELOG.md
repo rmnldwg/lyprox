@@ -2,6 +2,28 @@
 
 All notable changes to this project will be documented in this file.
 
+<a name="0.4.4"></a>
+## [0.4.4] - 2024-04-11
+
+With a lot of trial end error I have improved the setup process to a point where I think it runs stable and reproducible. Also, this fixes an issue where secrets could have been leaked.
+
+### 🐛 Bug Fixes
+
+- Delete default server block and block direct IP access
+- make access to most files more restricted
+
+### ⚙️ Miscellaneous Tasks
+
+- Refactor setup script
+- Force replace symlink to available nginx site
+- Don't delete `.venv` if present and Python version matches
+- Update & test setup again
+- Add write group permissions to lyprox repo
+- Restart service instead of just start & don't run all `ExecStartPre` as root
+- Collectstatic & migrate may need root access during service startup
+- Shush matplotlib's warning (not used anyways)
+
+
 <a name="0.4.3"></a>
 ## [0.4.3] - 2024-04-10
 
@@ -210,7 +232,8 @@ Commits before the 2nd of March 2023 did not use conventional commits and no cha
 - [0.0.2] - 2021-10-04
 - 0.0.1 - 2021-10-04
 
-[Unreleased]: https://github.com/rmnldwg/lyprox/compare/0.4.3...HEAD
+[Unreleased]: https://github.com/rmnldwg/lyprox/compare/0.4.4...HEAD
+[0.4.4]: https://github.com/rmnldwg/lyprox/compare/0.4.3...0.4.4
 [0.4.3]: https://github.com/rmnldwg/lyprox/compare/0.4.2...0.4.3
 [0.4.2]: https://github.com/rmnldwg/lyprox/compare/0.4.1...0.4.2
 [0.4.1]: https://github.com/rmnldwg/lyprox/compare/0.4.0...0.4.1
