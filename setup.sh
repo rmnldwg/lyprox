@@ -57,7 +57,6 @@ chmod -R 755 /srv/www/$1
 chmod g+ws /srv/www/$1        # s = anything created underneath will inherit group owner
 touch /srv/www/$1/db.sqlite3 && chmod ug=rw,o= /srv/www/$1/db.sqlite3
 mkdir -p /srv/www/$1/static && chmod ug=rwx,o=rx /srv/www/$1/static
-mkdir -p /srv/www/$1/media && chmod ug=rwx,o=rx /srv/www/$1/media
 
 info "clone LyProX repo into correct location:"
 if [[ ! -d /srv/www/$1/.git ]]; then
@@ -88,11 +87,12 @@ echo "DJANGO_ALLOWED_HOSTS=$1" >> /srv/www/$1/.env
 echo "DJANGO_GUNICORN_PORT=$2" >> /srv/www/$1/.env
 echo "DJANGO_BASE_DIR=/srv/www/$1" >> /srv/www/$1/.env
 echo "DJANGO_LOG_LEVEL=INFO" >> /srv/www/$1/.env
-echo "MPLCONFIGDIR=/opt/$1/.config/matplotlib" >> /srv/www/$1/.env   # shush mpl's warning
 chmod u=rw,go= /srv/www/$1/.env   # no one may read this file
 
 info "ensure ownership again:"
 chown -R $user:www-data /srv/www/$1
+chown -R www-data /var/www/       # fix mpl warning and should be that so anyways
+chmod g+rwxs /srv/www/$1/media
 
 info "create nginx site and make it available:"
 tempfile=$(mktemp)

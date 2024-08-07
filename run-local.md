@@ -2,7 +2,6 @@
 
 To use this interface on your machine, you can follow these steps below to get it up and running locally on your computer.
 
-
 ## Cloning the repo
 
 Start by cloning this GitHub repository to you machine. In a terminal enter:
@@ -12,7 +11,6 @@ git clone https://github.com/rmnldwg/lyprox.git
 ```
 
 Afterwards, `cd` into `lyprox`.
-
 
 ## Set up environment
 
@@ -44,7 +42,6 @@ If everything went according to plan, your terminal should now prefix everything
 ```
 (.venv) user@machine:~$
 ```
-
 
 ## Installing prerequisites
 
@@ -92,34 +89,32 @@ The four variables that need to be set are:
 - `DJANGO_ALLOWED_HOSTS`: space-separated list of hostnames. Set to `"localhost 127.0.0.1"` for local use
 - `DJANGO_LOG_LEVEL`: log level. Only has an effect in `"debug"` mode. Is set to `"WARNING"` otherwise
 
-
 [12-factor app]: https://12factor.net/
-
 
 ## Running the interface
 
 Now you should be ready to execute the following commands:
 
 ```
-python manage.py makemigrations patients accounts
-python manage.py migrate
+manage.py makemigrations patients accounts
+manage.py migrate
+manage.py collectstatic
 ```
 
 This will prepare django's database. If that worked, it is finally time to launch the server locally:
 
 ```
-python manage.py runserver
+manage.py runserver
 ```
 
 If everything goes according to plan, django will output a link to the locally hosted web server. It usually runs at [http://127.0.0.1:8000/](http://127.0.0.1:8000/).
-
 
 ## Populating the database
 
 Since uploading data (also to the local host) requires an authentication, you will want to create a superuser by running
 
 ```
-python manage.oy createsuperuser
+manage.py createsuperuser
 ```
 
 Afterwards you can use the defined credentials to log into the admin page at [http://127.0.0.1:8000/admin](http://127.0.0.1:8000/admin) and edit all database entries.

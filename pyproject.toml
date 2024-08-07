@@ -51,10 +51,6 @@ test = [
 ]
 dev = [
     "django-extensions ~= 3.2",
-    "pylint ~= 2.17",
-    "pre-commit ~= 3.1",
-    "conventional-pre-commit ~= 2.1",
-    "git-cliff ~= 2.2",
 ]
 
 [project.scripts]
@@ -70,17 +66,9 @@ version = {attr = "lyprox._version.version"}
 write_to = "lyprox/_version.py"
 local_scheme = "no-local-version"
 
-
-[tool.isort]
-line_length = 79
-multi_line_output = 3
-include_trailing_comma = true
-force_grid_wrap = 0
-use_parentheses = true
-ensure_newline_before_comments = true
-
-[tool.pycln]
-all = true
+[tool.ruff.lint]
+select = ["E", "F", "W", "B", "C", "R", "U", "D", "I", "S", "T", "A", "N"]
+ignore = ["D204"]
 
 [tool.pytest.ini_options]
 DJANGO_SETTINGS_MODULE = "lyprox.settings"
