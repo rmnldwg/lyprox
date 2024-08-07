@@ -19,9 +19,9 @@ respective superlevel (in that case ``I``).
 
 import logging
 from collections import namedtuple
+from datetime import timezone
 from io import BytesIO
 
-import dateparser
 import pandas as pd
 from django.db import models
 from django.forms import ValidationError
@@ -179,9 +179,9 @@ class Dataset(loggers.ModelLoggerMixin, models.Model):
         return self._file
 
 
-    def check_itegrity(self):
+    def check_integrity(self):
         """Check whether the dataset is still consistent with the GitHub repo."""
-        pushed_at = dateparser.parse(self.fetch_repo().pushed_at)
+        pushed_at = self.fetch_repo().pushed_at.replace(tzinfo=timezone.utc)
         data_sha = self.fetch_file().sha
 
         is_repo_modfied = pushed_at > self.date_created
@@ -342,11 +342,11 @@ class Patient(mixins.LockedDatasetMixin, loggers.ModelLoggerMixin, models.Model)
 
     class M_stages(models.IntegerChoices):
         """Defines the possible M-stages as choice class."""
-        M0 = 0, "M0"
-        M1 = 1, "M1"
-        MX = 2, "MX"
+        M0 =  0, "M0"
+        M1 =  1, "M1"
+        MX = -1, "MX"
 
-    m_stage = models.PositiveSmallIntegerField(choices=M_stages.choices, default=0)
+    m_stage = models.SmallIntegerField(choices=M_stages.choices, default=0)
     """Indicates whether or not there are distant metastases."""
 
     dataset = models.ForeignKey(to=Dataset, on_delete=models.CASCADE)
