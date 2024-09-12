@@ -541,8 +541,10 @@ class Tumor(mixins.LockedDatasetMixin, loggers.ModelLoggerMixin, models.Model):
             "C13.8",
             "C13.9",
         ],
-        "glottis": ["C32", "C32.0"],
-        "rest_larynx": ["C32.1", "C32.2", "C32.3", "C32.8", "C32.9"],
+        "glottis": ["C32.0"],
+        "supraglottis": ["C32.1"],
+        "subglottis": ["C32.2"],
+        "rest_larynx": ["C32", "C32.1", "C32.2", "C32.3", "C32.8", "C32.9"],
         "tongue": [
             "C02",
             "C02.0",
