@@ -123,10 +123,10 @@
     <div class="control">
       {{ checkbox.tag }}
       <div class="tumor buttons has-addons">
-        <label for="{{ checkbox.id_for_label }}" class="button is-primary is-light">
+        <label for="{{ checkbox.id_for_label }}" class="tag button is-primary is-light">
           <span>{{ checkbox.choice_label }}</span>
         </label>
-        <div class="button is-info is-static">
+        <div class="tag button is-info is-static">
           <span class="stats" data-statfield="t_stages"
             data-index="{{ forloop.counter0 }}">{% if show_percent %}{{ stats.t_stages|percent:forloop.counter0 }}%{% else %}{{ stats.t_stages|index:forloop.counter0 }}{% endif %}</span>
         </div>
