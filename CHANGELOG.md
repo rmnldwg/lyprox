@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file.
 
+<a name="0.4.6"></a>
+
+## [0.4.6] - 2024-09-12
+
+### 🐛 Bug Fixes
+
+- Add sub-/supraglottis to larynx selection (related to [#119])
+
+### Change
+
+- Add pCT to default selection
+
 <a name="0.4.5"></a>
 
 ## [0.4.5] - 2024-08-07
@@ -314,3 +326,4 @@ Commits before the 2nd of March 2023 did not use conventional commits and no cha
 [#110]: https://github.com/rmnldwg/lyprox/issues/110
 [#111]: https://github.com/rmnldwg/lyprox/issues/111
 [#115]: https://github.com/rmnldwg/lyprox/issues/115
+[#119]: https://github.com/rmnldwg/lyprox/issues/119
