@@ -2,7 +2,25 @@
 
 All notable changes to this project will be documented in this file.
 
+<a name="0.4.5"></a>
+
+## [0.4.5] - 2024-08-07
+
+### 📚 Documentation
+
+- Add `collectstatic` to `run-local.md` help
+
+### ⚙️ Miscellaneous Tasks
+
+- Minor permission stuff
+- Switch to ruff
+
+### Change
+
+- Represent M-stage MX as -1 instead of 2 in model definition
+
 <a name="0.4.4"></a>
+
 ## [0.4.4] - 2024-04-11
 
 With a lot of trial end error I have improved the setup process to a point where I think it runs stable and reproducible. Also, this fixes an issue where secrets could have been leaked.
@@ -23,8 +41,8 @@ With a lot of trial end error I have improved the setup process to a point where
 - Collectstatic & migrate may need root access during service startup
 - Shush matplotlib's warning (not used anyways)
 
-
 <a name="0.4.3"></a>
+
 ## [0.4.3] - 2024-04-10
 
 ### 🐛 Bug Fixes
@@ -36,8 +54,8 @@ With a lot of trial end error I have improved the setup process to a point where
 
 - Bump git-cliff
 
-
 <a name=0.4.1></a>
+
 ## [0.4.2] - 2024-03-15
 
 ### Change
@@ -60,8 +78,8 @@ With a lot of trial end error I have improved the setup process to a point where
 - Refs parsed as equation
 - Throw better error when GitHub token expired
 
-
 <a name=0.4.1></a>
+
 ## [0.4.1] - 2023-12-05
 
 ### Bug Fixes
@@ -76,11 +94,12 @@ With a lot of trial end error I have improved the setup process to a point where
 
 - Deployment script (GitHub actions) runs more stably now and accepts inputs (fixes [#110])
 
-
 <a name="0.4.0"></a>
+
 ## [0.4.0] - 2023-11-28
 
 ### Bug Fixes
+
 - add minor version to all dependencies
 - store GitHub/repo related `Dataset` info in fields to reduce number of API calls
 - `Dataset` import now works with private repos and stores them hidden behind authentication
@@ -96,6 +115,7 @@ With a lot of trial end error I have improved the setup process to a point where
 - make AJAX update data-tooltips, fixes [#99]
 
 ### Code Refactoring
+
 - trim down duplicate & unused CSS code, related to [#100]
 - pull apart CSS files in dataexplorer, related to [#100]
 - clean up index templates & static files, related to [#100]
@@ -108,10 +128,12 @@ With a lot of trial end error I have improved the setup process to a point where
 - rename `core` to `lyprox`
 
 ### Documentation
+
 - update home, add link to lynference revision
 - add help tooltips to risk predictor
 
 ### Features
+
 - add T0 button to the Data Explorer. Fixes [#108]
 - add commands `add_institutions`, `add_users`, `add_datasets`, and `add_riskmodels` twith which one can either initialize the respective models from a JSON file or add individual instances using command line arguments. This fixes [#109]
 - enable dataset to detect corruption via SHA value of file
@@ -130,21 +152,25 @@ With a lot of trial end error I have improved the setup process to a point where
 - implement risk predictor, fixes [#15]
 
 ### Maintenance
+
 - replace migration with command for initial user and institution data
 - add Esmee to initial user database
 
 ### Testing
+
 - write tests for dataset functionality
 
-
 <a name="0.3.4"></a>
+
 ## [0.3.4] - 2023-03-23
 
 ### Documentation
+
 - add info to important settings
 - update run-local instructions
 
 ### Maintenance
+
 - use a minimalistic deploy bash script and change GitHub actions CI
 - write a simple bash script for backing up the [SQLite3] database
 - add `systemd` config for [gunicorn] service, making start-up faster and more seamless
@@ -159,49 +185,55 @@ With a lot of trial end error I have improved the setup process to a point where
 [gunicorn]: https://gunicorn.org/
 [nginx]: https://nginx.org/en/
 
-
 <a name="0.3.3"></a>
+
 ## [0.3.3] - 2023-03-08
 
 ### Bug Fixes
+
 - revert syntax to python 3.8
 
-
 <a name="0.3.2"></a>
+
 ## [0.3.2] - 2023-03-08
 
 ### Bug Fixes
+
 - new query produces fewer SQL lines, thereby fixing [#89]
 - patient list working again after new query broke it
 
 ### Documentation
+
 - switch to markdown for `README.md`
 - improve `README.md`
 - correct two small errors in static texts
 - improve query function's docstrings
 
 ### Testing
+
 - Implement some unit tests for new querying
 
-
 <a name="0.3.1"></a>
+
 ## [0.3.1] - 2023-03-06
 
 ### Code Refactoring
+
 - make `DashboardView` methods more reusable
 - modularize dashboard HTML layout
 - put dashboard help templates in separate folder
 
 ### Features
+
 - dashboard uses AJAX now (fixes [#94])
 
 ### Maintenance
+
 - use conventional commits & start changelog
 
 ## Before [0.3.0] - 2023-03-02
 
 Commits before the 2nd of March 2023 did not use conventional commits and no changelog was maintained. For completeness, we give the links to the respective diffs of previous releases below.
-
 
 [lynference]: https://github.com/rmnldwg/lynference
 
@@ -232,7 +264,6 @@ Commits before the 2nd of March 2023 did not use conventional commits and no cha
 - [0.0.2] - 2021-10-04
 - 0.0.1 - 2021-10-04
 
-[Unreleased]: https://github.com/rmnldwg/lyprox/compare/0.4.4...HEAD
 [0.4.4]: https://github.com/rmnldwg/lyprox/compare/0.4.3...0.4.4
 [0.4.3]: https://github.com/rmnldwg/lyprox/compare/0.4.2...0.4.3
 [0.4.2]: https://github.com/rmnldwg/lyprox/compare/0.4.1...0.4.2
