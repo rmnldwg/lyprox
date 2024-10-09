@@ -88,5 +88,14 @@
         "is_active": true,
         "is_staff": false,
         "is_superuser": false
+    },
+    {
+        "email": "friedrichkaspargiuliano.kurz@uzh.ch",
+        "first_name": "Fritz",
+        "last_name": "Kurz",
+        "institution": "USZ",
+        "is_active": true,
+        "is_staff": false,
+        "is_superuser": false
     }
 ]
