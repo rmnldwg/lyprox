@@ -68,7 +68,7 @@ local_scheme = "no-local-version"
 
 [tool.ruff.lint]
 select = ["E", "F", "W", "B", "C", "R", "U", "D", "I", "S", "T", "A", "N"]
-ignore = ["D204"]
+ignore = ["D204", "D205", "D212"]
 
 [tool.pytest.ini_options]
 DJANGO_SETTINGS_MODULE = "lyprox.settings"
