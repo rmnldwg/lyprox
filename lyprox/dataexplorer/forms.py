@@ -1,4 +1,5 @@
-"""The `dataexplorer.forms` module defines the relatively complex form that is
+"""
+The `dataexplorer.forms` module defines the relatively complex form that is
 used for querying the database later.
 
 It also implements some custom form elements, like `ThreeWayToggle` and
@@ -18,13 +19,13 @@ from django import forms
 from django.core.exceptions import ValidationError
 
 from ..loggers import FormLoggerMixin
-from ..patients.models import Dataset, Diagnose, Patient, Tumor
 
 logger = logging.getLogger(__name__)
 
 
 def trio_to_bool(value: int):
-    """Transform -1, 0, and +1 to False, None and True respectively.
+    """
+    Transform -1, 0, and +1 to False, None and True respectively.
 
     Any other values are simply passed through unchanged. This is used to map the
     values of the three-way toggle buttons to its boolean representation.
@@ -40,7 +41,8 @@ def trio_to_bool(value: int):
 
 
 class ThreeWayToggleWidget(forms.RadioSelect):
-    """Widget that renders the three-way toggle button and allows to set the
+    """
+    Widget that renders the three-way toggle button and allows to set the
     attributes of the individual inputs (radio buttons) as `option_attrs` as
     well as the attributes of the container as ``attrs``.
     """
@@ -63,7 +65,7 @@ class ThreeWayToggleWidget(forms.RadioSelect):
         super().__init__(attrs, choices)
 
     def get_context(self, name, value, attrs):
-        """Pass label and tooltip to the context variable"""
+        """Pass label and tooltip to the context variable."""
         context = super().get_context(name, value, attrs)
         context["widget"]["label"] = self.label
         context["widget"]["tooltip"] = self.tooltip
@@ -72,7 +74,7 @@ class ThreeWayToggleWidget(forms.RadioSelect):
     def create_option(
         self, name, value, label, selected, index, subindex=None, attrs=None
     ):
-        """Pass the option attributes to the actual options"""
+        """Pass the option attributes to the actual options."""
         return super().create_option(
             name,
             value,
@@ -85,7 +87,8 @@ class ThreeWayToggleWidget(forms.RadioSelect):
 
 
 class ThreeWayToggle(forms.ChoiceField):
-    """A toggle switch than can be in three different states: Positive/True,
+    """
+    A toggle switch than can be in three different states: Positive/True,
     unkown/None and negative/False.
     """
 
@@ -100,7 +103,8 @@ class ThreeWayToggle(forms.ChoiceField):
         required=False,
         **kwargs,
     ):
-        """Pass the arguments, like `label` and `tooltip` to the constructor
+        """
+        Pass the arguments, like `label` and `tooltip` to the constructor
         of the custom widget.
         """
         if choices is None:
@@ -130,7 +134,8 @@ class ThreeWayToggle(forms.ChoiceField):
 
 
 class DatasetModelChoiceIndexer:
-    """Custom class with which one can access additional information from
+    """
+    Custom class with which one can access additional information from
     the model that is chosen by the `DatasetMultipleChoiceField`.
     """
 
@@ -151,7 +156,8 @@ class DatasetModelChoiceIndexer:
 
 
 class DatasetMultipleChoiceField(forms.ModelMultipleChoiceField):
-    """Customize label description and add method that returns the logo URL for
+    """
+    Customize label description and add method that returns the logo URL for
     Datasets. The implementation is inspired by how the ``choices`` are
     implemented. But since some other functionality depends on how those
     choices are implemented, it cannot be changed easily.
@@ -321,7 +327,8 @@ class DashboardForm(FormLoggerMixin, forms.Form):
     )
 
     def __init__(self, *args, user, **kwargs):
-        """Extend default initialization to create lots of fields for the
+        """
+        Extend default initialization to create lots of fields for the
         LNLs from a list and hide some datasets for unauthenticated users.
         """
         super().__init__(*args, **kwargs)
@@ -346,7 +353,8 @@ class DashboardForm(FormLoggerMixin, forms.Form):
                     self.fields[f"{side}_{lnl}"] = ThreeWayToggle()
 
     def clean(self):
-        """Make sure LNLs I & II have correct values corresponding to their
+        """
+        Make sure LNLs I & II have correct values corresponding to their
         sublevels a & b. Also convert tstages from list of str to list of int.
         """
         cleaned_data = super(DashboardForm, self).clean()

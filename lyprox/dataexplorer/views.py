@@ -8,7 +8,7 @@ the context variable that is rendered into the HTML response.
 
 import json
 import logging
-from typing import Any, Dict
+from typing import Any
 
 import numpy as np
 from django.http.response import HttpResponse, JsonResponse
@@ -16,7 +16,6 @@ from django.shortcuts import render
 from django.views import generic
 
 from ..loggers import ViewLoggerMixin
-from ..patients.models import Diagnose, Patient
 from . import query
 from .forms import DashboardForm
 
@@ -37,6 +36,7 @@ class DashboardView(ViewLoggerMixin, generic.ListView):
     from the database and render it into the HTML response displaying the
     lymphatic patterns of progression.
     """
+
     model = Patient
     form_class = DashboardForm
     template_name = "dataexplorer/layout.html"
@@ -51,17 +51,14 @@ class DashboardView(ViewLoggerMixin, generic.ListView):
             # validation fails
             initial_data = {}
             for field_name, field in form.fields.items():
-                initial_data[field_name] = form.get_initial_for_field(
-                    field, field_name
-                )
+                initial_data[field_name] = form.get_initial_for_field(field, field_name)
             form = cls.form_class(initial_data, user=user)
 
             if not form.is_valid():
                 # return empy queryset when something goes wrong with the validation of
                 # the inital queryset
                 logger.warn(
-                    "Initial form is invalid, errors are: "
-                    f"{form.errors.as_data()}"
+                    "Initial form is invalid, errors are: " f"{form.errors.as_data()}"
                 )
                 patients = Patient.objects.none()
 
@@ -77,7 +74,7 @@ class DashboardView(ViewLoggerMixin, generic.ListView):
         self.stats = stats
         return queryset
 
-    def get_context_data(self) -> Dict[str, Any]:
+    def get_context_data(self) -> dict[str, Any]:
         """
         Pass form and stats to the context. No need to have the list of patients in
         there too.
@@ -94,7 +91,7 @@ class DashboardView(ViewLoggerMixin, generic.ListView):
         return context
 
 
-def transform_np_to_lists(stats: Dict[str, Any]) -> Dict[str, Any]:
+def transform_np_to_lists(stats: dict[str, Any]) -> dict[str, Any]:
     """
     If ``stats`` contains any values that are of type ``np.ndarray``, then they are
     converted to normal lists.

@@ -12,23 +12,23 @@ from a `form.DashboardForm`.
 import logging
 import re
 import time
+from collections.abc import Callable
 from functools import lru_cache
-from typing import Any, Callable, Dict, List, Optional, Tuple
+from typing import Any
 
 import numpy as np
 from django.db.models import QuerySet
 
 from ..accounts.models import Institution
-from ..patients.models import Dataset, Diagnose, Patient, Tumor
 
 logger = logging.getLogger(__name__)
 
 
 def run_query(
-    patients: Optional[QuerySet],
-    cleaned_form_data: Dict[str, Any],
+    patients: QuerySet | None,
+    cleaned_form_data: dict[str, Any],
     do_compute_statistics: bool = True,
-) -> Dict[int, Any]:
+) -> dict[int, Any]:
     """
     Run a database query using the cleaned form data from the
     `forms.DashboardForm`.
@@ -60,9 +60,7 @@ def run_query(
     # This is now a dictionary with exactly those patient's IDs who are
     # still not filtered out (after patient-, tumor- and diagnose-specific
     # filtering).
-    combined_diagnoses_by_id = diagnose_specific(
-        diagnoses, **cleaned_form_data
-    )
+    combined_diagnoses_by_id = diagnose_specific(diagnoses, **cleaned_form_data)
     filtered_patient_ids = combined_diagnoses_by_id.keys()
     patients = patients.filter(id__in=filtered_patient_ids)
     tumors = tumors.filter(patient__id__in=filtered_patient_ids)
@@ -95,10 +93,10 @@ def run_query(
 
 
 def collect_info(
-    patients: Dict[int, Any],
-    tumors: Dict[int, Any],
-    diagnoses: Dict[int, Any],
-) -> Dict[int, Any]:
+    patients: dict[int, Any],
+    tumors: dict[int, Any],
+    diagnoses: dict[int, Any],
+) -> dict[int, Any]:
     """
     Collect the patient-, tumor-, and diagonse-information in one dictionary.
 
@@ -110,6 +108,7 @@ def collect_info(
 
     Returns:
         A dictionary with patient IDs as keys and the combined information underneath.
+
     """
     for id, patient in patients.items():
         patient["tumor"] = tumors[id]
@@ -120,7 +119,7 @@ def collect_info(
     return patients
 
 
-def compute_statistics(patients: Dict[int, Any]) -> Dict[str, Any]:
+def compute_statistics(patients: dict[int, Any]) -> dict[str, Any]:
     """
     Use the collected information as returned by `collect_info` and generate
     statistics for them.
@@ -138,54 +137,51 @@ def compute_statistics(patients: Dict[int, Any]) -> Dict[str, Any]:
     """
     start_time = time.perf_counter()
 
-    statistics = {   # initialize counts of patient- & tumor-related fields
-        'total': len(patients),
-
-        'datasets': {ds.id: 0 for ds in Dataset.objects.all()},
-
-        'sex': np.zeros(shape=(3,), dtype=int),
-        'nicotine_abuse': np.zeros(shape=(3,), dtype=int),
-        'hpv_status': np.zeros(shape=(3,), dtype=int),
-        'neck_dissection': np.zeros(shape=(3,), dtype=int),
-        'n_status': np.zeros(shape=(3,), dtype=int),
-
-        'subsites': np.zeros(shape=len(Tumor.SUBSITE_DICT), dtype=int),
-        't_stages': np.zeros(shape=(len(Patient.T_stages),), dtype=int),
-        'central': np.zeros(shape=(3,), dtype=int),
-        'extension': np.zeros(shape=(3,), dtype=int),
+    statistics = {  # initialize counts of patient- & tumor-related fields
+        "total": len(patients),
+        "datasets": {ds.id: 0 for ds in Dataset.objects.all()},
+        "sex": np.zeros(shape=(3,), dtype=int),
+        "nicotine_abuse": np.zeros(shape=(3,), dtype=int),
+        "hpv_status": np.zeros(shape=(3,), dtype=int),
+        "neck_dissection": np.zeros(shape=(3,), dtype=int),
+        "n_status": np.zeros(shape=(3,), dtype=int),
+        "subsites": np.zeros(shape=len(Tumor.SUBSITE_DICT), dtype=int),
+        "t_stages": np.zeros(shape=(len(Patient.T_stages),), dtype=int),
+        "central": np.zeros(shape=(3,), dtype=int),
+        "extension": np.zeros(shape=(3,), dtype=int),
     }
-    for side in ['ipsi', 'contra']:
+    for side in ["ipsi", "contra"]:
         for lnl in Diagnose.LNLs:
-            statistics[f'{side}_{lnl}'] = np.zeros(shape=(3,), dtype=int)
+            statistics[f"{side}_{lnl}"] = np.zeros(shape=(3,), dtype=int)
 
     # loop through patients to populate the counts dictionary
     for id, patient in patients.items():
-        statistics['datasets'][patient["dataset_id"]] += 1
+        statistics["datasets"][patient["dataset_id"]] += 1
 
         # PATIENT specific counts
-        statistics['nicotine_abuse'] += tf2arr(patient["nicotine_abuse"])
-        statistics['hpv_status'] += tf2arr(patient["hpv_status"])
-        statistics['neck_dissection'] += tf2arr(patient["neck_dissection"])
+        statistics["nicotine_abuse"] += tf2arr(patient["nicotine_abuse"])
+        statistics["hpv_status"] += tf2arr(patient["hpv_status"])
+        statistics["neck_dissection"] += tf2arr(patient["neck_dissection"])
 
         # TUMOR specific counts
-        statistics['subsites'] += subsite2arr(patient["tumor"]["subsite"])
-        statistics['t_stages'][patient["tumor"]["t_stage"]] += 1
-        statistics['central'] += tf2arr(patient["tumor"]["central"])
-        statistics['extension'] += tf2arr(patient["tumor"]["extension"])
+        statistics["subsites"] += subsite2arr(patient["tumor"]["subsite"])
+        statistics["t_stages"][patient["tumor"]["t_stage"]] += 1
+        statistics["central"] += tf2arr(patient["tumor"]["central"])
+        statistics["extension"] += tf2arr(patient["tumor"]["extension"])
 
         # N0/N+ counts
         has_ipsi = any(patient["ipsi"][lnl] for lnl in Diagnose.LNLs)
         has_contra = any(patient["contra"][lnl] for lnl in Diagnose.LNLs)
 
         if not has_ipsi and not has_contra:
-            statistics['n_status'] += np.array([0,0,1])
+            statistics["n_status"] += np.array([0, 0, 1])
         else:
-            statistics['n_status'] += np.array([0,1,0])
+            statistics["n_status"] += np.array([0, 1, 0])
 
         # DIAGNOSE specific (involvement) counts
-        for side in ['ipsi', 'contra']:
+        for side in ["ipsi", "contra"]:
             for lnl in Diagnose.LNLs:
-                statistics[f'{side}_{lnl}'] += tf2arr(patient[side][lnl])
+                statistics[f"{side}_{lnl}"] += tf2arr(patient[side][lnl])
 
     statistics["datasets"] = [num for num in statistics["datasets"].values()]
 
@@ -212,11 +208,9 @@ def tf2arr(value):
     """
     if value is None:
         return np.array([1, 0, 0], dtype=int)
-    else:
-        if value:
-            return np.array([0, 1, 0], dtype=int)
-        else:
-            return np.array([0, 0, 1], dtype=int)
+    if value:
+        return np.array([0, 1, 0], dtype=int)
+    return np.array([0, 0, 1], dtype=int)
 
 
 def subsite2arr(subsite):
@@ -228,7 +222,7 @@ def subsite2arr(subsite):
     """
     res = np.zeros(shape=len(Tumor.SUBSITE_DICT), dtype=int)
 
-    for i,subsite_list in enumerate(Tumor.SUBSITE_DICT.values()):
+    for i, subsite_list in enumerate(Tumor.SUBSITE_DICT.values()):
         if subsite in subsite_list:
             res[i] = 1
 
@@ -239,12 +233,12 @@ def subsite2arr(subsite):
 
 
 def patient_specific(
-    patients: Optional[QuerySet] = None,
-    nicotine_abuse: Optional[bool] = None,
-    hpv_status: Optional[bool] = None,
-    neck_dissection: Optional[bool] = None,
-    dataset__in: Optional[Institution] = None,
-    **rest
+    patients: QuerySet | None = None,
+    nicotine_abuse: bool | None = None,
+    hpv_status: bool | None = None,
+    neck_dissection: bool | None = None,
+    dataset__in: Institution | None = None,
+    **rest,
 ) -> QuerySet:
     """
     Filter ``QuerySet`` of patients based on patient-specific properties.
@@ -264,14 +258,15 @@ def patient_specific(
 
     Returns:
         The filtered ``QuerySet``.
+
     """
     if patients is None:
         patients = Patient.objects.all()
 
     kwargs = locals()
     start_time = time.perf_counter()
-    kwargs.pop('patients')
-    kwargs.pop('rest')
+    kwargs.pop("patients")
+    kwargs.pop("rest")
 
     # the form fields are named such that they can be inserted into the
     # QuerySet filtering function directly
@@ -288,7 +283,7 @@ def patient_specific(
     return patients
 
 
-def sort_patients_by_id(patients: QuerySet) -> Dict[int, Any]:
+def sort_patients_by_id(patients: QuerySet) -> dict[int, Any]:
     """Collect patient information by patient ID in a dictionary."""
     sorted_patients = {}
     for patient in patients:
@@ -299,12 +294,12 @@ def sort_patients_by_id(patients: QuerySet) -> Dict[int, Any]:
 
 
 def tumor_specific(
-    tumors: Optional[QuerySet] = None,
-    subsite__in: Optional[List[str]] = None,
-    t_stage__in: Optional[List[int]] = None,
-    central: Optional[bool] = None,
-    extension: Optional[bool] = None,
-    **rest
+    tumors: QuerySet | None = None,
+    subsite__in: list[str] | None = None,
+    t_stage__in: list[int] | None = None,
+    central: bool | None = None,
+    extension: bool | None = None,
+    **rest,
 ) -> QuerySet:
     """
     Filter ``QuerySet`` of tumors based on tumor-specific properties.
@@ -322,17 +317,18 @@ def tumor_specific(
 
     Returns:
         The ``QuerySet`` of tumors filtered for the requested characterisics.
+
     """
     if tumors is None:
         tumors = Tumor.objects.all()
 
-    kwargs = locals()                     # extract keyword arguments and...
+    kwargs = locals()  # extract keyword arguments and...
     start_time = time.perf_counter()
-    kwargs.pop('tumors')                  # ...remove the tumor queryset and...
-    kwargs.pop('rest')                    # ...any other kwargs from this dictionary.
+    kwargs.pop("tumors")  # ...remove the tumor queryset and...
+    kwargs.pop("rest")  # ...any other kwargs from this dictionary.
 
-    for key, value in kwargs.items():     # iterate over provided kwargs and ...
-        if value is not None:             # ...if it's of interest, then filter
+    for key, value in kwargs.items():  # iterate over provided kwargs and ...
+        if value is not None:  # ...if it's of interest, then filter
             tumors = tumors.filter(**{key: value})
 
     end_time = time.perf_counter()
@@ -344,7 +340,7 @@ def tumor_specific(
     return tumors
 
 
-def sort_tumors_by_patient(tumors: QuerySet) -> Dict[int, Any]:
+def sort_tumors_by_patient(tumors: QuerySet) -> dict[int, Any]:
     """Collect tumor information by patient ID in a dictionary."""
     sorted_tumors = {}
     for tumor in tumors:
@@ -355,12 +351,12 @@ def sort_tumors_by_patient(tumors: QuerySet) -> Dict[int, Any]:
 
 
 def diagnose_specific(
-    diagnoses: Optional[QuerySet],
-    modalities: Optional[List[int]],
+    diagnoses: QuerySet | None,
+    modalities: list[int] | None,
     modality_combine: str = "maxLLH",
-    n_status: Optional[bool] = None,
+    n_status: bool | None = None,
     **kwargs,
-) -> Dict[int, Dict[str, Dict[str, Optional[bool]]]]:
+) -> dict[int, dict[str, dict[str, bool | None]]]:
     """
     Filter the diagnoses based on selected involvement patterns.
 
@@ -382,6 +378,7 @@ def diagnose_specific(
         there are the keys ``"ipsi"`` and ``"contra"``. And under that, finally, a
         dictionary stores the combined involvement (can be ``True`` for metastatic,
         ``False`` for healthy, or ``None`` for unknown) per LNL.
+
     """
     if diagnoses is None:
         diagnoses = Diagnose.objects.all()
@@ -410,7 +407,7 @@ def diagnose_specific(
     return combined_diagnoses
 
 
-def sort_diagnoses_by_patient(diagnoses: QuerySet) -> Dict[int, Dict[str, np.ndarray]]:
+def sort_diagnoses_by_patient(diagnoses: QuerySet) -> dict[int, dict[str, np.ndarray]]:
     """
     Use a ``QuerySet`` of `patient.models.Diagnose` and sort its entries into a
     nested dictionary.
@@ -425,6 +422,7 @@ def sort_diagnoses_by_patient(diagnoses: QuerySet) -> Dict[int, Dict[str, np.nda
 
     Returns:
         The sorted, nested dictionary.
+
     """
     diagnoses = diagnoses.values()
 
@@ -433,7 +431,7 @@ def sort_diagnoses_by_patient(diagnoses: QuerySet) -> Dict[int, Dict[str, np.nda
         shape=(len(Diagnose.LNLs), len(Diagnose.Modalities)),
         fill_value=None,
     )
-    modality_to_idx = {mod: i for i,mod in enumerate(Diagnose.Modalities.values)}
+    modality_to_idx = {mod: i for i, mod in enumerate(Diagnose.Modalities.values)}
 
     for diagnose in diagnoses:
         if (patient_id := diagnose["patient_id"]) not in sorted_diagnoses:
@@ -448,8 +446,8 @@ def sort_diagnoses_by_patient(diagnoses: QuerySet) -> Dict[int, Dict[str, np.nda
 
         modality_idx = modality_to_idx[diagnose["modality"]]
 
-        for i,lnl in enumerate(Diagnose.LNLs):
-            side_diagnose[i,modality_idx] = diagnose[lnl]
+        for i, lnl in enumerate(Diagnose.LNLs):
+            side_diagnose[i, modality_idx] = diagnose[lnl]
 
         patient_diagnose[side] = side_diagnose
         sorted_diagnoses[patient_id] = patient_diagnose
@@ -462,6 +460,7 @@ class ModalityCombinor:
     Utility class that defines and helps to select the various methods for combining
     diagnoses from different modalities.
     """
+
     def __init__(self, method: str) -> None:
         """
         Initialize the helper class with the name of the method to combine modalities.
@@ -474,9 +473,9 @@ class ModalityCombinor:
     @staticmethod
     @lru_cache
     def logical_OR(
-        values: Tuple[Optional[bool]],
-        specificities: Tuple[float],
-        sensitivities: Tuple[float],
+        values: tuple[bool | None],
+        specificities: tuple[float],
+        sensitivities: tuple[float],
     ) -> bool:
         """Use the logical OR to determine combined involvement."""
         return any(values)
@@ -484,58 +483,60 @@ class ModalityCombinor:
     @staticmethod
     @lru_cache
     def logical_AND(
-        values: Tuple[Optional[bool]],
-        specificities: Tuple[float],
-        sensitivities: Tuple[float],
+        values: tuple[bool | None],
+        specificities: tuple[float],
+        sensitivities: tuple[float],
     ) -> bool:
         """Logical AND combination method."""
-        return any(not(v) if v is not None else None for v in values)
+        return any(not (v) if v is not None else None for v in values)
 
     @staticmethod
     @lru_cache
     def rank(
-        values: Tuple[Optional[bool]],
-        specificities: Tuple[float],
-        sensitivities: Tuple[float],
+        values: tuple[bool | None],
+        specificities: tuple[float],
+        sensitivities: tuple[float],
     ) -> bool:
         """
         Combine diagnoses by trusting the one with the highest spcificity/sensitivity.
         """
         healthy_sens = [
-            sensitivities[i] for i,value in enumerate(values) if value is False
+            sensitivities[i] for i, value in enumerate(values) if value is False
         ]
         involved_spec = [
-            specificities[i] for i,value in enumerate(values) if value is True
+            specificities[i] for i, value in enumerate(values) if value is True
         ]
-        return np.max([*healthy_sens, 0.]) < np.max([*involved_spec, 0.])
+        return np.max([*healthy_sens, 0.0]) < np.max([*involved_spec, 0.0])
 
     @staticmethod
     @lru_cache
     def max_llh(
-        values: Tuple[Optional[bool]],
-        specificities: Tuple[float],
-        sensitivities: Tuple[float],
+        values: tuple[bool | None],
+        specificities: tuple[float],
+        sensitivities: tuple[float],
     ) -> bool:
         """
         Combine diagnoses by computing true involvement is the most likely, given the
         provided set of observations.
         """
-        healthy_llh = 1.
-        involved_llh = 1.
+        healthy_llh = 1.0
+        involved_llh = 1.0
 
-        for value, spec, sens in zip(values, specificities, sensitivities):
+        for value, spec, sens in zip(
+            values, specificities, sensitivities, strict=False
+        ):
             if value is None:
                 continue
             if value:
-                healthy_llh *= 1. - spec
+                healthy_llh *= 1.0 - spec
                 involved_llh *= sens
             else:
                 healthy_llh *= spec
-                involved_llh *= 1. - sens
+                involved_llh *= 1.0 - sens
 
         return healthy_llh < involved_llh
 
-    def combine(self, values: Tuple[Optional[bool]]) -> Optional[bool]:
+    def combine(self, values: tuple[bool | None]) -> bool | None:
         """
         Choose the method to combine the diagnoses and perform the combination using
         the stored values for sensitivity and specificity.
@@ -550,15 +551,12 @@ class ModalityCombinor:
             "maxLLH": self.max_llh,
         }
 
-        return method_dict[self.method](
-            values, self.specificities, self.sensitivities
-        )
+        return method_dict[self.method](values, self.specificities, self.sensitivities)
 
 
 def combine_diagnoses(
-    method: Callable,
-    diagnoses: Dict[int, Dict[str, np.ndarray]]
-) -> Dict[int, Dict[str, Dict[str, Optional[bool]]]]:
+    method: Callable, diagnoses: dict[int, dict[str, np.ndarray]]
+) -> dict[int, dict[str, dict[str, bool | None]]]:
     """
     Combine the potentially conflicting diagnoses for each patient and each side
     according to the chosen combination method.
@@ -574,6 +572,7 @@ def combine_diagnoses(
         A dictionary where the combined involvement per LNL is stored under the
         corresponding patient ID, side (``ipsi`` or ``contra``) and the respective
         LNL's name (e.g. ``IIa``).
+
     """
     method = ModalityCombinor(method).combine
     combined_diagnoses = {}
@@ -589,7 +588,7 @@ def combine_diagnoses(
 
             side_diagnose = patient_diagnose[side]
             combined_diagnoses[patient_id][side] = {}
-            for i,lnl in enumerate(Diagnose.LNLs):
+            for i, lnl in enumerate(Diagnose.LNLs):
                 combined_diagnoses[patient_id][side][lnl] = method(
                     tuple(side_diagnose[i])
                 )
@@ -598,8 +597,8 @@ def combine_diagnoses(
 
 
 def extract_filter_pattern(
-    kwargs: Dict[str, Optional[bool]],
-) -> Dict[str, Dict[str, Optional[bool]]]:
+    kwargs: dict[str, bool | None],
+) -> dict[str, dict[str, bool | None]]:
     """
     Sort the ``kwargs`` from the request.
 
@@ -616,9 +615,9 @@ def extract_filter_pattern(
 
 
 def does_patient_match(
-    patient_diagnose: Dict[str, Dict[str, Optional[bool]]],
-    filter_pattern: Dict[str, Dict[str, Optional[bool]]],
-    n_status: Optional[bool],
+    patient_diagnose: dict[str, dict[str, bool | None]],
+    filter_pattern: dict[str, dict[str, bool | None]],
+    n_status: bool | None,
 ) -> bool:
     """
     Compare the diagnose of a patient with the involvement pattern to filter for.
@@ -637,6 +636,7 @@ def does_patient_match(
 
     Returns:
         Whether ``patient_diagnose`` and ``filter_pattern`` match or not.
+
     """
     is_n_plus = False
     for side, side_diagnose in patient_diagnose.items():
