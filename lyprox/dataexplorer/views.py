@@ -14,10 +14,11 @@ import numpy as np
 from django.http.response import HttpResponse, JsonResponse
 from django.shortcuts import render
 from django.views import generic
+from lydata.utils import get_default_modalities
 
-from ..loggers import ViewLoggerMixin
-from . import query
-from .forms import DashboardForm
+from lyprox.dataexplorer import query
+from lyprox.dataexplorer.forms import DashboardForm
+from lyprox.loggers import ViewLoggerMixin
 
 logger = logging.getLogger(__name__)
 
@@ -25,70 +26,8 @@ logger = logging.getLogger(__name__)
 def help_view(request) -> HttpResponse:
     """Simply display the dashboard help text."""
     template_name = "dataexplorer/help/index.html"
-    context = {"modalities": list(Diagnose.Modalities)}
+    context = {"modalities": get_default_modalities()}
     return render(request, template_name, context)
-
-
-class DashboardView(ViewLoggerMixin, generic.ListView):
-    """
-    Use the `forms.DashboardForm` and the `patients.models.Patient` model
-    along with the `query` functions to extract the requested information
-    from the database and render it into the HTML response displaying the
-    lymphatic patterns of progression.
-    """
-
-    model = Patient
-    form_class = DashboardForm
-    template_name = "dataexplorer/layout.html"
-
-    @classmethod
-    def _get_queryset(cls, data, user, logger):
-        form = cls.form_class(data, user=user)
-        patients = Patient.objects.all()
-
-        if not form.is_valid():
-            # fill form with initial values from respective form fields when
-            # validation fails
-            initial_data = {}
-            for field_name, field in form.fields.items():
-                initial_data[field_name] = form.get_initial_for_field(field, field_name)
-            form = cls.form_class(initial_data, user=user)
-
-            if not form.is_valid():
-                # return empy queryset when something goes wrong with the validation of
-                # the inital queryset
-                logger.warn(
-                    "Initial form is invalid, errors are: " f"{form.errors.as_data()}"
-                )
-                patients = Patient.objects.none()
-
-        patients, statistics = query.run_query(patients, form.cleaned_data)
-
-        return form, patients, statistics
-
-    def get_queryset(self):
-        data = self.request.GET
-        user = self.request.user
-        form, queryset, stats = self._get_queryset(data, user, self.logger)
-        self.form = form
-        self.stats = stats
-        return queryset
-
-    def get_context_data(self) -> dict[str, Any]:
-        """
-        Pass form and stats to the context. No need to have the list of patients in
-        there too.
-        """
-        context = {
-            "form": self.form,
-            "stats": self.stats,
-            "modalities": list(Diagnose.Modalities),
-        }
-
-        if self.form.is_valid():
-            context["show_percent"] = self.form.cleaned_data["show_percent"]
-
-        return context
 
 
 def transform_np_to_lists(stats: dict[str, Any]) -> dict[str, Any]:
@@ -103,20 +42,35 @@ def transform_np_to_lists(stats: dict[str, Any]) -> dict[str, Any]:
     return stats
 
 
-def dashboard_AJAX_view(request):
+def dashboard_view(request):
+    """Return the dashboard view when the user first accesses the dashboard."""
+    data = request.GET
+    form = DashboardForm(data, user=request.user)
+    context = {"form": form, "modalities": get_default_modalities()}
+
+    if form.is_valid():
+        logger.info("Form valid, running query.")
+        # stats = run_query(form.cleaned_data)
+        # context["stats"] = transform_np_to_lists(stats)
+        context["show_percent"] = form.cleaned_data["show_percent"]
+        ...
+
+    return render(request, "dataexplorer/layout.html", context)
+
+
+def dashboard_ajax_view(request):
     """
     View that receives JSON data from the AJAX request and cleans it using the
     same method as the class-based ``DashboardView``.
     """
     data = json.loads(request.body.decode("utf-8"))
-    user = request.user
-    form, _, stats = DashboardView._get_queryset(data, user, logger)
-    stats = transform_np_to_lists(stats)
-    stats["type"] = "stats"
+    form = DashboardForm(data, user=request.user)
 
     if form.is_valid():
-        logger.info("AJAX form valid, returning success and stats.")
-        return JsonResponse(data=stats)
+        logger.info("Form from AJAX request is valid, running query.")
+        # stats = run_query(form.cleaned_data)
+        # return JsonResponse(data=stats)
+        ...
 
-    logger.warn("AJAX form invalid.")
+    logger.warning("AJAX form invalid.")
     return JsonResponse(data={"error": "Something went wrong."}, status=400)
