@@ -9,7 +9,7 @@ from threading import Lock
 from typing import Literal
 
 import pandas as pd
-from lydata import join_datasets
+from lydata import available_datasets, join_datasets
 
 from lyprox.settings import GITHUB
 
@@ -45,7 +45,7 @@ class DataInterface(metaclass=SingletonMeta):
 
     def __init__(self) -> None:
         """Initialize an empty public and private dataset."""
-        self._data: dict[Literal["public", "private"], pd.DataFrame] = {}
+        self._data: dict[Literal["public", "private"], dict[str, pd.DataFrame]] = {}
         self._lock: Lock = Lock()
 
     def _load_and_enhance_data(
@@ -57,26 +57,24 @@ class DataInterface(metaclass=SingletonMeta):
         ref: str = "main",
     ) -> None:
         visibility = GITHUB.get_repo(repo).visibility
-        data = join_datasets(
+
+        if visibility not in self._data:
+            self._data[visibility] = {}
+
+        for dset_info in available_datasets(
             year=year,
             institution=institution,
             subsite=subsite,
             repo=repo,
             ref=ref,
-        )
-        data = data.join(data.ly.infer_sublevels())
-        data = data.join(data.ly.infer_superlevels())
-
-        logger.info(f"Loaded {len(data)} patients with visibility {visibility}")
-
-        if visibility in self._data:
-            data = pd.concat(
-                [self._data[visibility], data],
-                axis="index",
-                ignore_index=True,
+        ):
+            dset = dset_info.load(use_github=True)
+            dset = dset.join(dset.ly.infer_sublevels())
+            dset = dset.join(dset.ly.infer_superlevels())
+            self._data[visibility][dset_info.name] = dset
+            logger.info(
+                f"Loaded {visibility} dataset {dset_info.name} ({len(dset)} patients)."
             )
-
-        self._data[visibility] = data
 
     def load_and_enhance_data(
         self,
@@ -107,8 +105,7 @@ class DataInterface(metaclass=SingletonMeta):
             )
 
     def _delete_data(self, visibility: Literal["public", "private"]) -> None:
-        n = len(self._data[visibility])
-        logger.info(f"Deleting all {visibility} patients ({n})")
+        logger.info(f"Deleting all {visibility} patients")
         del self._data[visibility]
 
     def delete_data(self, visibility: Literal["public", "private"]) -> None:
@@ -116,11 +113,23 @@ class DataInterface(metaclass=SingletonMeta):
         with self._lock:
             self._delete_data(visibility)
 
-    def _get_data(self, visibility: Literal["public", "private"]) -> pd.DataFrame:
-        logger.debug(f"Returning {visibility} data")
-        return self._data[visibility].copy()
+    def _get_data(
+        self,
+        visibility: Literal["public", "private"],
+        datasets: list[str],
+    ) -> pd.DataFrame:
+        logger.debug(f"Returning {visibility} datasets {datasets}")
+        return pd.concat(
+            [self._data[visibility][dset] for dset in datasets],
+            axis="index",
+            ignore_index=True,
+        )
 
-    def get_data(self, visibility: Literal["public", "private"]) -> pd.DataFrame:
+    def get_data(
+        self,
+        visibility: Literal["public", "private"],
+        datasets: list[str],
+    ) -> pd.DataFrame:
         """Return the dataset with the specified visibility."""
         with self._lock:
-            return self._get_data(visibility)
+            return self._get_data(visibility=visibility, datasets=datasets)
