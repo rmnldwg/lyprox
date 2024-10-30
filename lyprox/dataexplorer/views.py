@@ -13,12 +13,10 @@ from typing import Any
 import numpy as np
 from django.http.response import HttpResponse, JsonResponse
 from django.shortcuts import render
-from django.views import generic
 from lydata.utils import get_default_modalities
 
 from lyprox.dataexplorer import query
 from lyprox.dataexplorer.forms import DashboardForm
-from lyprox.loggers import ViewLoggerMixin
 
 logger = logging.getLogger(__name__)
 

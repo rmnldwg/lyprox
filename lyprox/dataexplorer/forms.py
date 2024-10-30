@@ -44,6 +44,17 @@ def trio_to_bool(value: int | Any) -> bool | Any:
     return value
 
 
+def format_dataset_choices(datasets: list[str]) -> list[tuple[str, str]]:
+    """Create a list of tuples for the dataset choices."""
+    choices = []
+    for dataset in datasets:
+        year, institution, subsite = dataset.split("-", maxsplit=2)
+        label = f"{year} {institution.upper()} {subsite.capitalize()}"
+        choices.append((dataset, label))
+
+    return choices
+
+
 class ThreeWayToggleWidget(forms.RadioSelect):
     """
     Widget that renders the three-way toggle button and allows to set the
@@ -149,7 +160,7 @@ class DashboardForm(FormLoggerMixin, forms.Form):
                 "onchange": "changeHandler();",
             },
         ),
-        choices=get_default_modalities().keys(),
+        choices=[(mod, mod) for mod in get_default_modalities()],
         initial=["CT", "MRI", "PET", "FNA", "diagnostic_consensus", "pathology", "pCT"],
     )
     modality_combine = forms.ChoiceField(
@@ -257,7 +268,13 @@ class DashboardForm(FormLoggerMixin, forms.Form):
                 "onchange": "changeHandler();",
             },
         ),
-        choices=[0, 1, 2, 3, 4],
+        choices=[
+            ("0", "T0"),
+            ("1", "T1"),
+            ("2", "T2"),
+            ("3", "T3"),
+            ("4", "T4"),
+        ],
         initial=[0, 1, 2, 3, 4],
     )
     central = ThreeWayToggle(
@@ -290,12 +307,12 @@ class DashboardForm(FormLoggerMixin, forms.Form):
 
         # dynamically define which datasets should be selectable
         public_datasets = DataInterface().get_datasets(visibility="public")
-        self.fields["datasets"].choices = public_datasets
+        self.fields["datasets"].choices = format_dataset_choices(public_datasets)
         self.fields["datasets"].initial = public_datasets
 
         if user.is_authenticated:
             private_datasets = DataInterface().get_datasets("private")
-            self.fields["datasets"].choices.append(private_datasets)
+            self.fields["datasets"].choices.append(format_dataset_choices(private_datasets))
             self.fields["datasets"].initial.append(private_datasets)
 
         # add all LNL ToggleButtons so I don't have to write a myriad of them

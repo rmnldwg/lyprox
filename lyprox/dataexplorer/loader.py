@@ -114,7 +114,7 @@ class DataInterface(metaclass=SingletonMeta):
             self._delete_data(visibility)
 
     def _get_datasets(self, visibility: Literal["public", "private"]) -> list[str]:
-        return list(self._data[visibility].keys())
+        return list(self._data.get(visibility, {}).keys())
 
     def get_datasets(self, visibility: Literal["public", "private"]) -> list[str]:
         """Return the list of datasets with the specified visibility."""
