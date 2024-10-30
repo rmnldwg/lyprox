@@ -35,13 +35,20 @@ class SingletonMeta(type):
 
 
 class DataInterface(metaclass=SingletonMeta):
-    """Class to load the patient cohort data into memory on server start-up."""
+    """
+    Class to load the patient cohort data into memory on server start-up.
+
+    All public methods are also thread-safe by using a lock. This may become important
+    when the server is running in a multi-threaded environment and multiple threads
+    try to access the data at the same time.
+    """
 
     def __init__(self) -> None:
         """Initialize an empty public and private dataset."""
         self._data: dict[Literal["public", "private"], pd.DataFrame] = {}
+        self._lock: Lock = Lock()
 
-    def load_and_enhance_data(
+    def _load_and_enhance_data(
         self,
         year: int | str = "*",
         institution: str = "*",
@@ -49,17 +56,6 @@ class DataInterface(metaclass=SingletonMeta):
         repo: str = "rmnldwg/lydata",
         ref: str = "main",
     ) -> None:
-        """
-        Use `lydata` to load matching datasets from the specified repository.
-
-        All arguments are directly passed to the `lydata.join_datasets` function. The
-        method also infers sub- and superlevel involvement in case the data does not
-        report either.
-
-        The data is then stored according to the visibility of the repository. This
-        ensures that during accessing, we can easily provide the correct data based on
-        which user is requesting it.
-        """
         visibility = GITHUB.get_repo(repo).visibility
         data = join_datasets(
             year=year,
@@ -82,13 +78,49 @@ class DataInterface(metaclass=SingletonMeta):
 
         self._data[visibility] = data
 
+    def load_and_enhance_data(
+        self,
+        year: int | str = "*",
+        institution: str = "*",
+        subsite: str = "*",
+        repo: str = "rmnldwg/lydata",
+        ref: str = "main",
+    ) -> None:
+        """
+        Use `lydata` to load matching datasets from the specified repository.
+
+        All arguments are directly passed to the `lydata.join_datasets` function. The
+        method also infers sub- and superlevel involvement in case the data does not
+        report either.
+
+        The data is then stored according to the visibility of the repository. This
+        ensures that during accessing, we can easily provide the correct data based on
+        which user is requesting it.
+        """
+        with self._lock:
+            self._load_and_enhance_data(
+                year=year,
+                institution=institution,
+                subsite=subsite,
+                repo=repo,
+                ref=ref,
+            )
+
+    def _delete_data(self, visibility: Literal["public", "private"]) -> None:
+        n = len(self._data[visibility])
+        logger.info(f"Deleting all {visibility} patients ({n})")
+        del self._data[visibility]
+
     def delete_data(self, visibility: Literal["public", "private"]) -> None:
         """Delete the dataset with the specified visibility."""
-        n = len(self._data[visibility])
-        logger.info(f"Deleting all ({n}) {visibility} patients")
-        del self._data[visibility]
+        with self._lock:
+            self._delete_data(visibility)
+
+    def _get_data(self, visibility: Literal["public", "private"]) -> pd.DataFrame:
+        logger.debug(f"Returning {visibility} data")
+        return self._data[visibility].copy()
 
     def get_data(self, visibility: Literal["public", "private"]) -> pd.DataFrame:
         """Return the dataset with the specified visibility."""
-        logger.debug(f"Returning {visibility} data")
-        return self._data[visibility].copy()
+        with self._lock:
+            return self._get_data(visibility)
