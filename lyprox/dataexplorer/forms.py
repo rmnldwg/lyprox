@@ -14,16 +14,20 @@ ptients should be included via check boxes with the institution logo on it.
 
 # pylint: disable=no-member
 import logging
+from typing import Any
 
 from django import forms
 from django.core.exceptions import ValidationError
+from lydata.utils import get_default_modalities
 
-from ..loggers import FormLoggerMixin
+from lyprox.dataexplorer.loader import DataInterface
+from lyprox.loggers import FormLoggerMixin
+from lyprox.settings import LNLS, SUBSITE_DICT
 
 logger = logging.getLogger(__name__)
 
 
-def trio_to_bool(value: int):
+def trio_to_bool(value: int | Any) -> bool | Any:
     """
     Transform -1, 0, and +1 to False, None and True respectively.
 
@@ -133,52 +137,6 @@ class ThreeWayToggle(forms.ChoiceField):
             raise ValidationError("Expects a number") from type_err
 
 
-class DatasetModelChoiceIndexer:
-    """
-    Custom class with which one can access additional information from
-    the model that is chosen by the `DatasetMultipleChoiceField`.
-    """
-
-    def __init__(self, field) -> None:
-        self.field = field
-        self.queryset = field.queryset
-
-    def __getitem__(self, key):
-        obj = self.queryset[key]
-        return self.info(obj)
-
-    def info(self, obj: Dataset) -> tuple[int, str]:
-        """Return the label and logo URL for the Dataset."""
-        return (
-            self.field.label_from_instance(obj),
-            self.field.logo_url_from_instance(obj),
-        )
-
-
-class DatasetMultipleChoiceField(forms.ModelMultipleChoiceField):
-    """
-    Customize label description and add method that returns the logo URL for
-    Datasets. The implementation is inspired by how the ``choices`` are
-    implemented. But since some other functionality depends on how those
-    choices are implemented, it cannot be changed easily.
-    """
-
-    name_and_url_indexer = DatasetModelChoiceIndexer
-    """Allows one to extract more info (name and logo) about the objects."""
-
-    def label_from_instance(self, obj: Dataset) -> str:
-        """Dataset name as label."""
-        return obj.__str__()
-
-    def logo_url_from_instance(self, obj: Dataset) -> str:
-        """Return URL of Dataset's logo."""
-        return obj.institution.logo.url
-
-    @property
-    def names_and_urls(self):
-        return self.name_and_url_indexer(self)
-
-
 class DashboardForm(FormLoggerMixin, forms.Form):
     """Form for querying the database."""
 
@@ -191,19 +149,17 @@ class DashboardForm(FormLoggerMixin, forms.Form):
                 "onchange": "changeHandler();",
             },
         ),
-        choices=Diagnose.Modalities.choices,
+        choices=get_default_modalities().keys(),
         initial=["CT", "MRI", "PET", "FNA", "diagnostic_consensus", "pathology", "pCT"],
     )
     modality_combine = forms.ChoiceField(
         widget=forms.Select(attrs={"onchange": "changeHandler();"}),
         choices=[
-            ("AND", "AND"),
-            ("OR", "OR"),
-            ("maxLLH", "maxLLH"),
-            ("RANK", "RANK"),
+            ("max_llh", "maxLLH"),
+            ("rank", "RANK"),
         ],
         label="Combine",
-        initial="maxLLH",
+        initial="max_llh",
     )
 
     # patient specific fields
@@ -220,17 +176,16 @@ class DashboardForm(FormLoggerMixin, forms.Form):
     n_status = ThreeWayToggle(
         label="N+ vs N0", tooltip="Select all N+ (or N0) patients"
     )
-    dataset__in = DatasetMultipleChoiceField(
-        required=False,
+
+    datasets = forms.MultipleChoiceField(
         widget=forms.CheckboxSelectMultiple(
-            # doesn't do anything since it's written by hand
             attrs={
                 "class": "checkbox is-hidden",
                 "onchange": "changeHandler();",
             },
         ),
-        queryset=Dataset.objects.all().filter(is_public=True),
-        initial=Dataset.objects.all().filter(is_public=True),
+        choices=[],
+        initial=[],
     )
 
     # tumor specific info
@@ -294,7 +249,7 @@ class DashboardForm(FormLoggerMixin, forms.Form):
         initial=["tongue", "gum_cheek", "mouth_floor", "palate", "glands"],
     )
 
-    t_stage__in = forms.MultipleChoiceField(
+    t_stage = forms.MultipleChoiceField(
         required=False,
         widget=forms.CheckboxSelectMultiple(
             attrs={
@@ -302,7 +257,7 @@ class DashboardForm(FormLoggerMixin, forms.Form):
                 "onchange": "changeHandler();",
             },
         ),
-        choices=Patient.T_stages.choices,
+        choices=[0, 1, 2, 3, 4],
         initial=[0, 1, 2, 3, 4],
     )
     central = ThreeWayToggle(
@@ -334,18 +289,23 @@ class DashboardForm(FormLoggerMixin, forms.Form):
         super().__init__(*args, **kwargs)
 
         # dynamically define which datasets should be selectable
+        public_datasets = DataInterface().get_datasets(visibility="public")
+        self.fields["datasets"].choices = public_datasets
+        self.fields["datasets"].initial = public_datasets
+
         if user.is_authenticated:
-            self.fields["dataset__in"].queryset = Dataset.objects.all()
-            self.fields["dataset__in"].initial = Dataset.objects.all()
+            private_datasets = DataInterface().get_datasets("private")
+            self.fields["datasets"].choices.append(private_datasets)
+            self.fields["datasets"].initial.append(private_datasets)
 
         # add all LNL ToggleButtons so I don't have to write a myriad of them
         for side in ["ipsi", "contra"]:
-            for lnl in Diagnose.LNLs:
+            for lnl in LNLS:
                 if lnl in ["I", "II", "V"]:
                     self.fields[f"{side}_{lnl}"] = ThreeWayToggle(
                         option_attrs={"onclick": "bothClickHandler(this)"}
                     )
-                elif lnl in ["Ia", "Ib", "IIa", "IIb", "Va", "Vb"]:
+                elif "a" in lnl or "b" in lnl:
                     self.fields[f"{side}_{lnl}"] = ThreeWayToggle(
                         option_attrs={"onclick": "subClickHandler(this)"}
                     )
@@ -378,14 +338,6 @@ class DashboardForm(FormLoggerMixin, forms.Form):
                 if a is False and b is False:
                     cleaned_data[f"{side}_{lnl}"] = False
 
-        # map `central` from False,None,True to the respective list of sides
-        if cleaned_data["central"] is True:
-            cleaned_data["side__in"] = ["central"]
-        elif cleaned_data["central"] is False:
-            cleaned_data["side__in"] = ["left", "right"]
-        else:
-            cleaned_data["side__in"] = ["left", "right", "central"]
-
         # map subsites 'base','tonsil','rest' to list of ICD codes.
         subsites = (
             cleaned_data["subsite_oropharynx"]
@@ -394,14 +346,13 @@ class DashboardForm(FormLoggerMixin, forms.Form):
             + cleaned_data["subsite_oral_cavity"]
         )
 
-        icd_codes = []
+        cleaned_data["subsite"] = []
         for sub in subsites:
-            icd_codes += Tumor.SUBSITE_DICT[sub]
-        cleaned_data["subsite__in"] = icd_codes
+            cleaned_data["subsite"] += SUBSITE_DICT[sub]
 
         # make sure T-stages are list of ints
-        str_list = cleaned_data["t_stage__in"]
-        cleaned_data["t_stage__in"] = [int(s) for s in str_list]
+        str_list = cleaned_data["t_stage"]
+        cleaned_data["t_stage"] = [int(s) for s in str_list]
 
         self.logger.debug(f"cleaned data: {cleaned_data}")
         return cleaned_data

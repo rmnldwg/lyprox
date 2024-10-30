@@ -113,12 +113,22 @@ class DataInterface(metaclass=SingletonMeta):
         with self._lock:
             self._delete_data(visibility)
 
+    def _get_datasets(self, visibility: Literal["public", "private"]) -> list[str]:
+        return list(self._data[visibility].keys())
+
+    def get_datasets(self, visibility: Literal["public", "private"]) -> list[str]:
+        """Return the list of datasets with the specified visibility."""
+        with self._lock:
+            return self._get_datasets(visibility)
+
     def _get_data(
         self,
         visibility: Literal["public", "private"],
-        datasets: list[str],
+        datasets: list[str] | None = None,
     ) -> pd.DataFrame:
+        datasets = datasets or self._get_datasets(visibility)
         logger.debug(f"Returning {visibility} datasets {datasets}")
+
         return pd.concat(
             [self._data[visibility][dset] for dset in datasets],
             axis="index",
@@ -128,7 +138,7 @@ class DataInterface(metaclass=SingletonMeta):
     def get_data(
         self,
         visibility: Literal["public", "private"],
-        datasets: list[str],
+        datasets: list[str] | None = None,
     ) -> pd.DataFrame:
         """Return the dataset with the specified visibility."""
         with self._lock:
