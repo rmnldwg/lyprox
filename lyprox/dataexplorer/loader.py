@@ -4,16 +4,19 @@ start-up. It then provides a unified interface to access the data in different m
 most importantly the `DataExplorer` module.
 """
 
+from collections import namedtuple
 import logging
 from threading import Lock
 from typing import Literal
 
 import pandas as pd
-from lydata import available_datasets, join_datasets
-
-from lyprox.settings import GITHUB
+from lydata import available_datasets
+from lydata.utils import infer_all_levels
 
 logger = logging.getLogger(__name__)
+
+
+DatasetStorage = namedtuple("DatasetStorage", ["visibility", "pushed_at", "dataframe"])
 
 
 class SingletonMeta(type):
@@ -45,44 +48,50 @@ class DataInterface(metaclass=SingletonMeta):
 
     def __init__(self) -> None:
         """Initialize an empty public and private dataset."""
-        self._data: dict[Literal["public", "private"], dict[str, pd.DataFrame]] = {}
+        self._data: dict[str, DatasetStorage] = {}
         self._lock: Lock = Lock()
 
-    def _load_and_enhance_data(
+    def _load_and_enhance_datasets(
         self,
         year: int | str = "*",
         institution: str = "*",
         subsite: str = "*",
         repo: str = "rmnldwg/lydata",
         ref: str = "main",
+        replace_existing: bool = False,
     ) -> None:
-        visibility = GITHUB.get_repo(repo).visibility
-
-        if visibility not in self._data:
-            self._data[visibility] = {}
-
-        for dset_info in available_datasets(
+        for dset_config in available_datasets(
             year=year,
             institution=institution,
             subsite=subsite,
             repo=repo,
             ref=ref,
+            use_github=True,
         ):
-            dset = dset_info.load(use_github=True)
-            dset = dset.join(dset.ly.infer_sublevels())
-            dset = dset.join(dset.ly.infer_superlevels())
-            self._data[visibility][dset_info.name] = dset
-            logger.info(
-                f"Loaded {visibility} dataset {dset_info.name} ({len(dset)} patients)."
+            if dset_config.name in self._data:
+                if not replace_existing:
+                    logger.info(f"Skip loading existing dataset {dset_config.name}")
+                    continue
+                logger.info(f"Replacing existing dataset {dset_config.name}")
+            else:
+                logger.info(f"Loading new dataset {dset_config.name}")
+
+            repo = dset_config.get_repo()
+            dataframe = infer_all_levels(dset_config.load(use_github=True))
+            self._data[dset_config.name] = DatasetStorage(
+                visibility=repo.visibility,
+                pushed_at=repo.pushed_at,
+                dataframe=dataframe,
             )
 
-    def load_and_enhance_data(
+    def load_and_enhance_datasets(
         self,
         year: int | str = "*",
         institution: str = "*",
         subsite: str = "*",
         repo: str = "rmnldwg/lydata",
         ref: str = "main",
+        replace_existing: bool = False,
     ) -> None:
         """
         Use `lydata` to load matching datasets from the specified repository.
@@ -96,32 +105,34 @@ class DataInterface(metaclass=SingletonMeta):
         which user is requesting it.
         """
         with self._lock:
-            self._load_and_enhance_data(
+            self._load_and_enhance_datasets(
                 year=year,
                 institution=institution,
                 subsite=subsite,
                 repo=repo,
                 ref=ref,
+                replace_existing=replace_existing,
             )
 
-    def _delete_data(self, visibility: Literal["public", "private"]) -> None:
-        logger.info(f"Deleting all {visibility} patients")
-        del self._data[visibility]
-
-    def delete_data(self, visibility: Literal["public", "private"]) -> None:
-        """Delete the dataset with the specified visibility."""
-        with self._lock:
-            self._delete_data(visibility)
-
     def _get_datasets(self, visibility: Literal["public", "private"]) -> list[str]:
-        return list(self._data.get(visibility, {}).keys())
+        return [d for d, s in self._data.items() if s.visibility == visibility]
 
     def get_datasets(self, visibility: Literal["public", "private"]) -> list[str]:
-        """Return the list of datasets with the specified visibility."""
+        """Return the list of dataset names with the specified visibility."""
         with self._lock:
             return self._get_datasets(visibility)
 
-    def _get_data(
+    def _delete_datasets(self, visibility: Literal["public", "private"]) -> None:
+        logger.info(f"Deleting all {visibility} patients")
+        for dset in self._get_datasets(visibility):
+            del self._data[dset]
+
+    def delete_datasets(self, visibility: Literal["public", "private"]) -> None:
+        """Delete the dataset with the specified visibility."""
+        with self._lock:
+            self._delete_datasets(visibility)
+
+    def _get_joined_data(
         self,
         visibility: Literal["public", "private"],
         datasets: list[str] | None = None,
@@ -130,16 +141,16 @@ class DataInterface(metaclass=SingletonMeta):
         logger.debug(f"Returning {visibility} datasets {datasets}")
 
         return pd.concat(
-            [self._data[visibility][dset] for dset in datasets],
+            [self._data[dset].dataframe for dset in datasets],
             axis="index",
             ignore_index=True,
         )
 
-    def get_data(
+    def get_joined_data(
         self,
         visibility: Literal["public", "private"],
         datasets: list[str] | None = None,
     ) -> pd.DataFrame:
         """Return the dataset with the specified visibility."""
         with self._lock:
-            return self._get_data(visibility=visibility, datasets=datasets)
+            return self._get_joined_data(visibility=visibility, datasets=datasets)

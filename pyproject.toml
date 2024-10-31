@@ -17,16 +17,15 @@ license = { text = "MIT"}
 dynamic = ["version"]
 requires-python = "~=3.10"
 dependencies = [
-    "Django ~= 4.1",
+    "Django ~= 4.2",
     "django-filter ~= 2.4",
     "django-phonenumber-field[phonenumbers] ~= 6.1",
     "django-auth-logger ~= 2.1",
     "django-sekizai ~= 4.0",
     "Markdown ~= 3.3",
-    "numpy ~= 1.24",
-    "pandas ~= 1.5",
+    "numpy < 2",
+    "pandas < 3",
     "fontawesomefree ~= 5.15",
-    "icd10-cm == 0.0.4",
     "python-magic ~= 0.4",
     "gunicorn ~= 20.1",
     "dvc ~= 3.2",
@@ -35,6 +34,7 @@ dependencies = [
     "PyGithub ~= 1.58",
     "dateparser ~= 1.1",
     "python-markdown-math ~= 0.8",
+    "lydata == 0.1.2",
 ]
 
 [project.urls]
@@ -47,7 +47,7 @@ docs = [
     "pydoctor ~= 22.9",
 ]
 test = [
-    "factory_boy ~= 3.2",
+    "pytest-django",
 ]
 dev = [
     "django-extensions ~= 3.2",

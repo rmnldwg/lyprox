@@ -311,9 +311,9 @@ class DashboardForm(FormLoggerMixin, forms.Form):
         self.fields["datasets"].initial = public_datasets
 
         if user.is_authenticated:
-            private_datasets = DataInterface().get_datasets("private")
-            self.fields["datasets"].choices.append(format_dataset_choices(private_datasets))
-            self.fields["datasets"].initial.append(private_datasets)
+            private_datasets = DataInterface().get_datasets(visibility="private")
+            self.fields["datasets"].choices += format_dataset_choices(private_datasets)
+            self.fields["datasets"].initial += private_datasets
 
         # add all LNL ToggleButtons so I don't have to write a myriad of them
         for side in ["ipsi", "contra"]:

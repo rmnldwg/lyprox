@@ -64,7 +64,7 @@ Read-only GitHub access token for fetching information about
 """
 GITHUB = Github(login_or_token=GITHUB_TOKEN)
 
-LNLS = ["I", "Ia", "Ia", "II", "IIa", "IIb", "III", "IV", "V", "Va", "Vb", "VII"]
+LNLS = ["I", "Ia", "Ib", "II", "IIa", "IIb", "III", "IV", "V", "Va", "Vb", "VII"]
 
 # NOTE: The ICD-10 codes `C01` and `C01.9` refer to the same subsite. `C01`
 # is correct, but for resilience, I also accept `C01.9` until I implement

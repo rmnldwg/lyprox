@@ -40,7 +40,7 @@ class FormLoggerMixin(object):
             self.logger.debug(f"Form cleaned data: {self.cleaned_data}")
             return True
         elif self.errors:
-            self.logger.warn(self.errors.as_data())
+            self.logger.warning(self.errors.as_data())
         else:
             self.logger.info(f"Form has errors (or is unbound).")
             return False
