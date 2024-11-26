@@ -11,7 +11,7 @@ from . import views
 
 app_name = "dataexplorer"
 urlpatterns = [
-    path("", views.dashboard_view(), name="dashboard"),
+    path("", views.dashboard_view, name="dashboard"),
     path("ajax/", views.dashboard_ajax_view, name="ajax"),
     path("help/", views.help_view, name="help")
 ]

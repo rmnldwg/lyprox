@@ -17,6 +17,7 @@ from lydata.utils import get_default_modalities
 
 from lyprox.dataexplorer import query
 from lyprox.dataexplorer.forms import DashboardForm
+from lyprox.settings import LNLS, SUBSITE_DICT
 
 logger = logging.getLogger(__name__)
 
@@ -40,11 +41,37 @@ def transform_np_to_lists(stats: dict[str, Any]) -> dict[str, Any]:
     return stats
 
 
+def get_initial_stats(form: DashboardForm) -> dict[str, Any]:
+    """Return the initial statistics to be displayed on the dashboard."""
+    stats = {
+        "total": 42,
+        "datasets": {},
+        "sex": np.zeros(shape=(3,), dtype=int),
+        "nicotine_abuse": np.zeros(shape=(3,), dtype=int),
+        "hpv_status": np.zeros(shape=(3,), dtype=int),
+        "neck_dissection": np.zeros(shape=(3,), dtype=int),
+        "n_status": np.zeros(shape=(3,), dtype=int),
+        "subsites": np.zeros(shape=len(SUBSITE_DICT), dtype=int),
+        "t_stages": np.zeros(shape=(len(form["t_stage"].initial),), dtype=int),
+        "central": np.zeros(shape=(3,), dtype=int),
+        "extension": np.zeros(shape=(3,), dtype=int),
+    }
+    for side in ["ipsi", "contra"]:
+        for lnl in LNLS:
+            stats[f"{side}_{lnl}"] = np.zeros(shape=(3,), dtype=int)
+
+    return stats
+
+
 def dashboard_view(request):
     """Return the dashboard view when the user first accesses the dashboard."""
     data = request.GET
     form = DashboardForm(data, user=request.user)
-    context = {"form": form, "modalities": get_default_modalities()}
+    context = {
+        "form": form,
+        "modalities": get_default_modalities(),
+        "stats": get_initial_stats(form=form),
+    }
 
     if form.is_valid():
         logger.info("Form valid, running query.")

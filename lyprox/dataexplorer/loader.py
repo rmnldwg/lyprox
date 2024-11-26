@@ -4,8 +4,8 @@ start-up. It then provides a unified interface to access the data in different m
 most importantly the `DataExplorer` module.
 """
 
-from collections import namedtuple
 import logging
+from collections import namedtuple
 from threading import Lock
 from typing import Literal
 
@@ -56,7 +56,7 @@ class DataInterface(metaclass=SingletonMeta):
         year: int | str = "*",
         institution: str = "*",
         subsite: str = "*",
-        repo: str = "rmnldwg/lydata",
+        repo_name: str = "rmnldwg/lydata",
         ref: str = "main",
         replace_existing: bool = False,
     ) -> None:
@@ -64,7 +64,7 @@ class DataInterface(metaclass=SingletonMeta):
             year=year,
             institution=institution,
             subsite=subsite,
-            repo=repo,
+            repo_name=repo_name,
             ref=ref,
             use_github=True,
         ):
@@ -76,11 +76,11 @@ class DataInterface(metaclass=SingletonMeta):
             else:
                 logger.info(f"Loading new dataset {dset_config.name}")
 
-            repo = dset_config.get_repo()
-            dataframe = infer_all_levels(dset_config.load(use_github=True))
+            repo_name = dset_config.get_repo()
+            dataframe = infer_all_levels(dset_config.get_dataframe(use_github=True))
             self._data[dset_config.name] = DatasetStorage(
-                visibility=repo.visibility,
-                pushed_at=repo.pushed_at,
+                visibility=repo_name.visibility,
+                pushed_at=repo_name.pushed_at,
                 dataframe=dataframe,
             )
 
@@ -109,7 +109,7 @@ class DataInterface(metaclass=SingletonMeta):
                 year=year,
                 institution=institution,
                 subsite=subsite,
-                repo=repo,
+                repo_name=repo,
                 ref=ref,
                 replace_existing=replace_existing,
             )
