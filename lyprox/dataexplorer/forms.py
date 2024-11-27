@@ -22,7 +22,7 @@ from lydata.utils import get_default_modalities
 
 from lyprox.dataexplorer.loader import DataInterface
 from lyprox.loggers import FormLoggerMixin
-from lyprox.settings import LNLS, SUBSITE_DICT, TStages, get_choices_for
+from lyprox.settings import LNLS, SUBSITE_CHOICES_DICT, TStages, get_subsite_choices_for, get_subsite_values_for
 
 logger = logging.getLogger(__name__)
 
@@ -148,18 +148,16 @@ class ThreeWayToggle(forms.ChoiceField):
             raise ValidationError("Expects a number") from type_err
 
 
+checkbox_attrs = {"class": "checkbox is-hidden", "onchange": "changeHandler();"}
+
+
 class DashboardForm(FormLoggerMixin, forms.Form):
     """Form for querying the database."""
 
     # select modalities to show
     modalities = forms.MultipleChoiceField(
         required=False,
-        widget=forms.CheckboxSelectMultiple(
-            attrs={
-                "class": "checkbox is-hidden",
-                "onchange": "changeHandler();",
-            },
-        ),
+        widget=forms.CheckboxSelectMultiple(attrs=checkbox_attrs),
         choices=[(mod, mod) for mod in get_default_modalities()],
         initial=["CT", "MRI", "PET", "FNA", "diagnostic_consensus", "pathology", "pCT"],
     )
@@ -189,12 +187,7 @@ class DashboardForm(FormLoggerMixin, forms.Form):
     )
 
     datasets = forms.MultipleChoiceField(
-        widget=forms.CheckboxSelectMultiple(
-            attrs={
-                "class": "checkbox is-hidden",
-                "onchange": "changeHandler();",
-            },
-        ),
+        widget=forms.CheckboxSelectMultiple(attrs=checkbox_attrs),
         choices=[],
         initial=[],
     )
@@ -202,70 +195,34 @@ class DashboardForm(FormLoggerMixin, forms.Form):
     # tumor specific info
     subsite_oropharynx = forms.MultipleChoiceField(
         required=False,
-        widget=forms.CheckboxSelectMultiple(
-            attrs={
-                "class": "checkbox is-hidden",
-                "onchange": "changeHandler();",
-            },
-        ),
-        choices=get_choices_for(["Base of Tongue", "Tonsil", "Rest Oropharynx"]),
-        initial=["base", "tonsil", "rest_oro"],
+        widget=forms.CheckboxSelectMultiple(attrs=checkbox_attrs),
+        choices=get_subsite_choices_for(["Base of Tongue", "Tonsil", "Rest Oropharynx"]),
+        initial=get_subsite_values_for(["Base of Tongue", "Tonsil", "Rest Oropharynx"]),
     )
     subsite_hypopharynx = forms.MultipleChoiceField(
         required=False,
-        widget=forms.CheckboxSelectMultiple(
-            attrs={
-                "class": "checkbox is-hidden",
-                "onchange": "changeHandler();",
-            },
-        ),
-        choices=get_choices_for(["Rest Hypopharynx"]),
-        initial=["rest_hypo"],
+        widget=forms.CheckboxSelectMultiple(attrs=checkbox_attrs),
+        choices=get_subsite_choices_for(["Hypopharynx"]),
+        initial=get_subsite_values_for(["Hypopharynx"]),
     )
     subsite_larynx = forms.MultipleChoiceField(
         required=False,
-        widget=forms.CheckboxSelectMultiple(
-            attrs={
-                "class": "checkbox is-hidden",
-                "onchange": "changeHandler();",
-            },
-        ),
-        choices=[
-            ("glottis", "glottis"),  # choices here must match entries
-            ("supraglottis", "supraglottis"),  # in the Tumor.SUBSITE_DICT keys
-            ("subglottis", "subglottis"),
-            ("rest_larynx", "other"),
-        ],
-        initial=["glottis", "supraglottis", "subglottis", "rest_larynx"],
+        widget=forms.CheckboxSelectMultiple(attrs=checkbox_attrs),
+        choices=get_subsite_choices_for(["Glottis", "Supraglottis", "Subglottis", "Rest Larynx"]),
+        initial=get_subsite_values_for(["Glottis", "Supraglottis", "Subglottis", "Rest Larynx"]),
     )
     subsite_oral_cavity = forms.MultipleChoiceField(
         required=False,
-        widget=forms.CheckboxSelectMultiple(
-            attrs={
-                "class": "checkbox is-hidden",
-                "onchange": "changeHandler();",
-            },
-        ),
-        choices=[
-            ("tongue", "tongue"),  # choices here must match entries
-            ("gum_cheek", "gums and cheek"),  # in the Tumor.SUBSITE_DICT keys
-            ("mouth_floor", "floor of mouth"),
-            ("palate", "palate"),
-            ("glands", "salivary glands"),
-        ],
-        initial=["tongue", "gum_cheek", "mouth_floor", "palate", "glands"],
+        widget=forms.CheckboxSelectMultiple(attrs=checkbox_attrs),
+        choices=get_subsite_choices_for(["Tongue", "Gums and Cheeks", "Floor of Mouth", "Palate", "Glands"]),
+        initial=get_subsite_values_for(["Tongue", "Gums and Cheeks", "Floor of Mouth", "Palate", "Glands"]),
     )
 
     t_stage = forms.MultipleChoiceField(
         required=False,
-        widget=forms.CheckboxSelectMultiple(
-            attrs={
-                "class": "checkbox is-hidden",
-                "onchange": "changeHandler();",
-            },
-        ),
+        widget=forms.CheckboxSelectMultiple(attrs=checkbox_attrs),
         choices=TStages,
-        initial=[0, 1, 2, 3, 4],
+        initial=TStages.values,
     )
     central = ThreeWayToggle(
         label="central", tooltip="Choose to in- or exclude patients with central tumors"
@@ -324,7 +281,7 @@ class DashboardForm(FormLoggerMixin, forms.Form):
         Make sure LNLs I & II have correct values corresponding to their
         sublevels a & b. Also convert tstages from list of str to list of int.
         """
-        cleaned_data = super(DashboardForm, self).clean()
+        cleaned_data = super().clean()
 
         # necessary to prevent errors from processing invalid data
         if len(self.errors) != 0:
@@ -346,20 +303,12 @@ class DashboardForm(FormLoggerMixin, forms.Form):
                     cleaned_data[f"{side}_{lnl}"] = False
 
         # map subsites 'base','tonsil','rest' to list of ICD codes.
-        subsites = (
+        cleaned_data["subsites"] = (
             cleaned_data["subsite_oropharynx"]
             + cleaned_data["subsite_hypopharynx"]
             + cleaned_data["subsite_larynx"]
             + cleaned_data["subsite_oral_cavity"]
         )
-
-        cleaned_data["subsite"] = []
-        for sub in subsites:
-            cleaned_data["subsite"] += SUBSITE_DICT[sub]
-
-        # make sure T-stages are list of ints
-        str_list = cleaned_data["t_stage"]
-        cleaned_data["t_stage"] = [int(s) for s in str_list]
 
         self.logger.debug(f"cleaned data: {cleaned_data}")
         return cleaned_data

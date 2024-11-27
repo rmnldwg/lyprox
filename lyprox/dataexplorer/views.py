@@ -18,7 +18,7 @@ from lydata.utils import get_default_modalities
 
 from lyprox.dataexplorer import query
 from lyprox.dataexplorer.forms import DashboardForm
-from lyprox.settings import LNLS, SUBSITE_DICT
+from lyprox.settings import LNLS, SUBSITE_CHOICES_DICT
 
 logger = logging.getLogger(__name__)
 
