@@ -22,6 +22,7 @@ import os
 from pathlib import Path
 
 from django import urls
+from django.db import models
 from github import Github
 
 from ._version import version
@@ -66,81 +67,151 @@ GITHUB = Github(login_or_token=GITHUB_TOKEN)
 
 LNLS = ["I", "Ia", "Ib", "II", "IIa", "IIb", "III", "IV", "V", "Va", "Vb", "VII"]
 
-# NOTE: The ICD-10 codes `C01` and `C01.9` refer to the same subsite. `C01`
-# is correct, but for resilience, I also accept `C01.9` until I implement
-# my own ICD interface.
+class TStages(models.IntegerChoices):
+    """Tumor stages."""
+    # TIS = -2, "TIS"
+    # TX  = -1, "TX"
+    T0  =  0, "T0"
+    T1  =  1, "T1"
+    T2  =  2, "T2"
+    T3  =  3, "T3"
+    T4  =  4, "T4"
+
+# TODO: Instead of repeating the ICD code, the labels should precisely define
+# the subsites. Then I can use the labels in the dashboard.
+class BaseOfTongueSubsites(models.TextChoices):
+    """Tumor subsites in the base of the tongue."""
+    C01   = "C01"  , "C01"
+    C01_9 = "C01.9", "C01.9"  # technically invalid ICD-10 code, but often used
+
+class TonsilSubsites(models.TextChoices):
+    """Tumor subsites in the tonsils."""
+    C09   = "C09"  , "C09"
+    C09_0 = "C09.0", "C09.0"
+    C09_1 = "C09.1", "C09.1"
+    C09_8 = "C09.8", "C09.8"
+    C09_9 = "C09.9", "C09.9"
+
+class RestOropharynxSubsites(models.TextChoices):
+    """Tumor subsites in the rest of the oropharynx."""
+    C10   = "C10"  , "C10"
+    C10_0 = "C10.0", "C10.0"
+    C10_1 = "C10.1", "C10.1"
+    C10_2 = "C10.2", "C10.2"
+    C10_3 = "C10.3", "C10.3"
+    C10_4 = "C10.4", "C10.4"
+    C10_8 = "C10.8", "C10.8"
+    C10_9 = "C10.9", "C10.9"
+
+class RestHypopharynxSubsites(models.TextChoices):
+    """Tumor subsites in the rest of the hypopharynx."""
+    C12   = "C12"  , "C12"
+    C12_9 = "C12.9", "C12.9"
+    C13   = "C13"  , "C13"
+    C13_0 = "C13.0", "C13.0"
+    C13_1 = "C13.1", "C13.1"
+    C13_2 = "C13.2", "C13.2"
+    C13_8 = "C13.8", "C13.8"
+    C13_9 = "C13.9", "C13.9"
+
+class GlottisSubsites(models.TextChoices):
+    """Tumor subsites in the glottis."""
+    C32_0 = "C32.0", "C32.0"
+
+class SupraglottisSubsites(models.TextChoices):
+    """Tumor subsites in the supraglottis."""
+    C32_1 = "C32.1", "C32.1"
+
+class SubglottisSubsites(models.TextChoices):
+    """Tumor subsites in the subglottis."""
+    C32_2 = "C32.2", "C32.2"
+
+class RestLarynxSubsites(models.TextChoices):
+    """Tumor subsites in the rest of the larynx."""
+    C32   = "C32"  , "C32"
+    C32_1 = "C32.1", "C32.1"
+    C32_2 = "C32.2", "C32.2"
+    C32_3 = "C32.3", "C32.3"
+    C32_8 = "C32.8", "C32.8"
+    C32_9 = "C32.9", "C32.9"
+
+class TongueSubsites(models.TextChoices):
+    """Tumor subsites in the tongue."""
+    C02   = "C02"  , "C02"
+    C02_0 = "C02.0", "C02.0"
+    C02_1 = "C02.1", "C02.1"
+    C02_2 = "C02.2", "C02.2"
+    C02_3 = "C02.3", "C02.3"
+    C02_4 = "C02.4", "C02.4"
+    C02_8 = "C02.8", "C02.8"
+    C02_9 = "C02.9", "C02.9"
+
+class GumsAndCheeksSubsites(models.TextChoices):
+    """Tumor subsites in the gums and cheeks."""
+    C03   = "C03"  , "C03"
+    C03_0 = "C03.0", "C03.0"
+    C03_1 = "C03.1", "C03.1"
+    C03_9 = "C03.9", "C03.9"
+    C06   = "C06"  , "C06"
+    C06_0 = "C06.0", "C06.0"
+    C06_1 = "C06.1", "C06.1"
+    C06_2 = "C06.2", "C06.2"
+    C06_8 = "C06.8", "C06.8"
+    C06_9 = "C06.9", "C06.9"
+
+class FloorOfMouthSubsites(models.TextChoices):
+    """Tumor subsites in the floor of the mouth."""
+    C04   = "C04"  , "C04"
+    C04_0 = "C04.0", "C04.0"
+    C04_1 = "C04.1", "C04.1"
+    C04_8 = "C04.8", "C04.8"
+    C04_9 = "C04.9", "C04.9"
+
+class PalateSubsites(models.TextChoices):
+    """Tumor subsites in the palate."""
+    C05   = "C05"  , "C05"
+    C05_0 = "C05.0", "C05.0"
+    C05_1 = "C05.1", "C05.1"
+    C05_2 = "C05.2", "C05.2"
+    C05_8 = "C05.8", "C05.8"
+    C05_9 = "C05.9", "C05.9"
+
+class GlandsSubsites(models.TextChoices):
+    """Tumor subsites in the glands."""
+    C08   = "C08"  , "C08"
+    C08_0 = "C08.0", "C08.0"
+    C08_1 = "C08.1", "C08.1"
+    C08_9 = "C08.9", "C08.9"
+
+
 SUBSITE_DICT = {
-    "base": ["C01", "C01.9"],
-    "tonsil": ["C09", "C09.0", "C09.1", "C09.8", "C09.9"],
-    "rest_oro": [
-        "C10",
-        "C10.0",
-        "C10.1",
-        "C10.2",
-        "C10.3",
-        "C10.4",
-        "C10.8",
-        "C10.9",
-    ],
-    "rest_hypo": [
-        "C12",
-        "C12.9",
-        "C13",
-        "C13.0",
-        "C13.1",
-        "C13.2",
-        "C13.8",
-        "C13.9",
-    ],
-    "glottis": ["C32.0"],
-    "supraglottis": ["C32.1"],
-    "subglottis": ["C32.2"],
-    "rest_larynx": ["C32", "C32.1", "C32.2", "C32.3", "C32.8", "C32.9"],
-    "tongue": [
-        "C02",
-        "C02.0",
-        "C02.1",
-        "C02.2",
-        "C02.3",
-        "C02.4",
-        "C02.8",
-        "C02.9",
-    ],
-    "gum_cheek": [
-        "C03",
-        "C03.0",
-        "C03.1",
-        "C03.9",
-        "C06",
-        "C06.0",
-        "C06.1",
-        "C06.2",
-        "C06.8",
-        "C06.9",
-    ],
-    "mouth_floor": [
-        "C04",
-        "C04.0",
-        "C04.1",
-        "C04.8",
-        "C04.9",
-    ],
-    "palate": [
-        "C05",
-        "C05.0",
-        "C05.1",
-        "C05.2",
-        "C05.8",
-        "C05.9",
-    ],
-    "glands": [
-        "C08",
-        "C08.0",
-        "C08.1",
-        "C08.9",
-    ],
+    "Base of Tongue": BaseOfTongueSubsites.choices,
+    "Tonsil": TonsilSubsites.choices,
+    "Rest Oropharynx": RestOropharynxSubsites.choices,
+    "Rest Hypopharynx": RestHypopharynxSubsites.choices,
+    "Glottis": GlottisSubsites.choices,
+    "Supraglottis": SupraglottisSubsites.choices,
+    "Subglottis": SubglottisSubsites,
+    "Rest Larynx": RestLarynxSubsites.choices,
+    "Tongue": TongueSubsites.choices,
+    "Gums and Cheeks": GumsAndCheeksSubsites.choices,
+    "Floor of Mouth": FloorOfMouthSubsites.choices,
+    "Palate": PalateSubsites.choices,
+    "Glands": GlandsSubsites.choices,
 }
-SUBSITE_LIST = [icd for icd_list in SUBSITE_DICT.values() for icd in icd_list]
+SUBSITE_LIST = [
+    choice
+    for choices_list in SUBSITE_DICT.values()
+    for choice in choices_list
+]
+
+def get_choices_for(subsites: list[str]) -> list[tuple[str, str]]:
+    """Return the choices for the given subsites."""
+    return [
+        choice
+        for subsite in subsites
+        for choice in SUBSITE_DICT[subsite].choices
+    ]
 
 
 CSRF_COOKIE_SECURE = not DEBUG
