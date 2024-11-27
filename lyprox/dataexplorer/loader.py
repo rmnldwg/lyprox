@@ -10,8 +10,8 @@ from threading import Lock
 from typing import Literal
 
 import pandas as pd
-from lydata import available_datasets
-from lydata.utils import infer_all_levels
+import lydata
+import lydata.utils as lyutils
 
 logger = logging.getLogger(__name__)
 
@@ -60,7 +60,7 @@ class DataInterface(metaclass=SingletonMeta):
         ref: str = "main",
         replace_existing: bool = False,
     ) -> None:
-        for dset_config in available_datasets(
+        for dset in lydata.available_datasets(
             year=year,
             institution=institution,
             subsite=subsite,
@@ -68,17 +68,17 @@ class DataInterface(metaclass=SingletonMeta):
             ref=ref,
             use_github=True,
         ):
-            if dset_config.name in self._data:
+            if dset.name in self._data:
                 if not replace_existing:
-                    logger.info(f"Skip loading existing dataset {dset_config.name}")
+                    logger.info(f"Skip loading existing dataset {dset.name}")
                     continue
-                logger.info(f"Replacing existing dataset {dset_config.name}")
+                logger.info(f"Replacing existing dataset {dset.name}")
             else:
-                logger.info(f"Loading new dataset {dset_config.name}")
+                logger.info(f"Loading new dataset {dset.name}")
 
-            repo_name = dset_config.get_repo()
-            dataframe = infer_all_levels(dset_config.get_dataframe(use_github=True))
-            self._data[dset_config.name] = DatasetStorage(
+            repo_name = dset.get_repo()
+            dataframe = lyutils.infer_all_levels(dset.get_dataframe(use_github=True))
+            self._data[dset.name] = DatasetStorage(
                 visibility=repo_name.visibility,
                 pushed_at=repo_name.pushed_at,
                 dataframe=dataframe,
