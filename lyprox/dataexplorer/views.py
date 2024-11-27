@@ -10,6 +10,7 @@ import json
 import logging
 from typing import Any
 
+from django.http import HttpResponseBadRequest
 import numpy as np
 from django.http.response import HttpResponse, JsonResponse
 from django.shortcuts import render
@@ -41,44 +42,27 @@ def transform_np_to_lists(stats: dict[str, Any]) -> dict[str, Any]:
     return stats
 
 
-def get_initial_stats(form: DashboardForm) -> dict[str, Any]:
-    """Return the initial statistics to be displayed on the dashboard."""
-    stats = {
-        "total": 42,
-        "datasets": {},
-        "sex": np.zeros(shape=(3,), dtype=int),
-        "nicotine_abuse": np.zeros(shape=(3,), dtype=int),
-        "hpv_status": np.zeros(shape=(3,), dtype=int),
-        "neck_dissection": np.zeros(shape=(3,), dtype=int),
-        "n_status": np.zeros(shape=(3,), dtype=int),
-        "subsites": np.zeros(shape=len(SUBSITE_DICT), dtype=int),
-        "t_stages": np.zeros(shape=(len(form["t_stage"].initial),), dtype=int),
-        "central": np.zeros(shape=(3,), dtype=int),
-        "extension": np.zeros(shape=(3,), dtype=int),
-    }
-    for side in ["ipsi", "contra"]:
-        for lnl in LNLS:
-            stats[f"{side}_{lnl}"] = np.zeros(shape=(3,), dtype=int)
-
-    return stats
-
-
 def dashboard_view(request):
     """Return the dashboard view when the user first accesses the dashboard."""
     data = request.GET
     form = DashboardForm(data, user=request.user)
+
+    if not form.is_valid():
+        logger.info("Dashboard form not valid, initializing with initial data.")
+        initial_data = {}
+        for field_name, field in form.fields.items():
+            initial_data[field_name] = form.get_initial_for_field(field, field_name)
+        form = DashboardForm(initial_data, user=request.user)
+
+    if not form.is_valid():
+        logger.error("Form is not valid even after initializing with initial data.")
+        return HttpResponseBadRequest("Form is not valid.")
+
     context = {
         "form": form,
         "modalities": get_default_modalities(),
-        "stats": get_initial_stats(form=form),
+        # "stats": generate_stats(form.cleaned_data),
     }
-
-    if form.is_valid():
-        logger.info("Form valid, running query.")
-        # stats = run_query(form.cleaned_data)
-        # context["stats"] = transform_np_to_lists(stats)
-        context["show_percent"] = form.cleaned_data["show_percent"]
-        ...
 
     return render(request, "dataexplorer/layout.html", context)
 
