@@ -22,7 +22,7 @@ from lydata.utils import get_default_modalities
 
 from lyprox.dataexplorer.loader import DataInterface
 from lyprox.loggers import FormLoggerMixin
-from lyprox.settings import LNLS, SUBSITE_DICT
+from lyprox.settings import LNLS, SUBSITE_DICT, TStages, get_choices_for
 
 logger = logging.getLogger(__name__)
 
@@ -208,11 +208,7 @@ class DashboardForm(FormLoggerMixin, forms.Form):
                 "onchange": "changeHandler();",
             },
         ),
-        choices=[
-            ("base", "base of tongue"),  # choices here must match entries
-            ("tonsil", "tonsil"),  # in the Tumor.SUBSITE_DICT keys
-            ("rest_oro", "other"),
-        ],
+        choices=get_choices_for(["Base of Tongue", "Tonsil", "Rest Oropharynx"]),
         initial=["base", "tonsil", "rest_oro"],
     )
     subsite_hypopharynx = forms.MultipleChoiceField(
@@ -223,8 +219,8 @@ class DashboardForm(FormLoggerMixin, forms.Form):
                 "onchange": "changeHandler();",
             },
         ),
-        choices=[("rest_hypo", "all")],  # choices here must match entries in
-        initial=["rest_hypo"],  # the Tumor.SUBSITE_DICT keys
+        choices=get_choices_for(["Rest Hypopharynx"]),
+        initial=["rest_hypo"],
     )
     subsite_larynx = forms.MultipleChoiceField(
         required=False,
@@ -268,13 +264,7 @@ class DashboardForm(FormLoggerMixin, forms.Form):
                 "onchange": "changeHandler();",
             },
         ),
-        choices=[
-            ("0", "T0"),
-            ("1", "T1"),
-            ("2", "T2"),
-            ("3", "T3"),
-            ("4", "T4"),
-        ],
+        choices=TStages,
         initial=[0, 1, 2, 3, 4],
     )
     central = ThreeWayToggle(
