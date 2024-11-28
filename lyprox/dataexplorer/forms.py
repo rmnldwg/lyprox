@@ -20,8 +20,8 @@ from django import forms
 from django.core.exceptions import ValidationError
 from lydata.utils import get_default_modalities
 
-from lyprox.dataexplorer.subsites import Subsites
 from lyprox.dataexplorer.loader import DataInterface
+from lyprox.dataexplorer.subsites import Subsites
 from lyprox.loggers import FormLoggerMixin
 from lyprox.settings import LNLS, TStages
 
@@ -236,14 +236,18 @@ class DashboardForm(FormLoggerMixin, forms.Form):
         super().__init__(*args, **kwargs)
 
         # dynamically define which datasets should be selectable
-        public_datasets = DataInterface().list_datasets_by(visibility="public")
-        self.fields["datasets"].choices = format_dataset_choices(public_datasets)
-        self.fields["datasets"].initial = public_datasets
+        data = DataInterface().get_dataset()
+        is_public = data["dataset", "info", "visibility"] == "public"
+        name_col = ("dataset", "info", "name")
+        pub_dset_names = list(data.loc[is_public, name_col].unique())
+        self.fields["datasets"].choices = format_dataset_choices(pub_dset_names)
+        self.fields["datasets"].initial = pub_dset_names
 
         if user.is_authenticated:
-            private_datasets = DataInterface().list_datasets_by(visibility="private")
-            self.fields["datasets"].choices += format_dataset_choices(private_datasets)
-            self.fields["datasets"].initial += private_datasets
+            is_private = data["dataset", "info", "visibility"] == "private"
+            priv_dset_names = list(data.loc[is_private, name_col].unique())
+            self.fields["datasets"].choices += format_dataset_choices(priv_dset_names)
+            self.fields["datasets"].initial += priv_dset_names
 
         # add all LNL ToggleButtons so I don't have to write a myriad of them
         for side in ["ipsi", "contra"]:

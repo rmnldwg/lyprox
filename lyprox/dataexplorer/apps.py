@@ -11,4 +11,4 @@ class DataExplorerConfig(AppConfig):
     def ready(self):
         """Load the data into memory when the app is ready."""
         di = DataInterface()
-        di.load_and_enhance_datasets(repo="rmnldwg/lydata")
+        di.load_and_enhance_datasets(repo_name="rmnldwg/lydata")
