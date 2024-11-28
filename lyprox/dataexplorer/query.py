@@ -35,28 +35,26 @@ class BaseStatistics(BaseModel):
         return sum(self.datasets.values())
 
     @classmethod
-    def from_datasets(cls: type[T], datasets: dict[str, pd.DataFrame]) -> T:
+    def from_datasets(cls: type[T], dataset: pd.DataFrame) -> T:
         """
         Compute statistics from a dataset.
 
-        >>> datasets = DataInterface().get_datasets(visibility="public")
-        >>> stats = BaseStatistics.from_datasets(datasets)
+        >>> dataset = DataInterface().get_dataset()
+        >>> stats = BaseStatistics.from_datasets(dataset)
         >>> print(stats)
         """
-        dataset = pd.concat(
-            list(datasets.values()),
-            axis="index",
-            ignore_index=True,
-        )
-
         stats = {}
         for name in cls.model_fields:
-            # the key `datasets` is not a columns in the dataset
+            # key `datasets` is not a shorthand code provided by the `lydata` package
             if name == "datasets":
-                stats[name] = {n: len(df) for n, df in datasets.items()}
+                stats[name] = (
+                    dataset["dataset", "info", "name"]
+                    .value_counts()
+                    .to_dict()
+                )
                 continue
 
-            # the key `central` is not a shorthand code provided by the `lydata` package
+            # key `central` is not a shorthand code provided by the `lydata` package
             if name == "central":
                 stats[name] = (
                     dataset["tumor", "1", "central"]
