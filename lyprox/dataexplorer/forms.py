@@ -236,12 +236,12 @@ class DashboardForm(FormLoggerMixin, forms.Form):
         super().__init__(*args, **kwargs)
 
         # dynamically define which datasets should be selectable
-        public_datasets = DataInterface().get_datasets(visibility="public")
+        public_datasets = DataInterface().list_datasets_by(visibility="public")
         self.fields["datasets"].choices = format_dataset_choices(public_datasets)
         self.fields["datasets"].initial = public_datasets
 
         if user.is_authenticated:
-            private_datasets = DataInterface().get_datasets(visibility="private")
+            private_datasets = DataInterface().list_datasets_by(visibility="private")
             self.fields["datasets"].choices += format_dataset_choices(private_datasets)
             self.fields["datasets"].initial += private_datasets
 

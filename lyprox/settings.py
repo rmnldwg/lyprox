@@ -20,7 +20,6 @@ Only these env vars should need to be changed:
 
 import os
 from pathlib import Path
-from typing import Literal
 
 from django import urls
 from django.db import models

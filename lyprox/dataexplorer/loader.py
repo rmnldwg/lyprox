@@ -76,11 +76,11 @@ class DataInterface(metaclass=SingletonMeta):
             else:
                 logger.info(f"Loading new dataset {dset.name}")
 
-            repo_name = dset.get_repo()
+            repo = dset.get_repo()
             dataframe = lyutils.infer_all_levels(dset.get_dataframe(use_github=True))
             self._data[dset.name] = DatasetStorage(
-                visibility=repo_name.visibility,
-                pushed_at=repo_name.pushed_at,
+                visibility=repo.visibility,
+                pushed_at=repo.pushed_at,
                 dataframe=dataframe,
             )
 
@@ -114,17 +114,17 @@ class DataInterface(metaclass=SingletonMeta):
                 replace_existing=replace_existing,
             )
 
-    def _get_datasets(self, visibility: Literal["public", "private"]) -> list[str]:
+    def _list_datasets_by(self, visibility: Literal["public", "private"]) -> list[str]:
         return [d for d, s in self._data.items() if s.visibility == visibility]
 
-    def get_datasets(self, visibility: Literal["public", "private"]) -> list[str]:
+    def list_datasets_by(self, visibility: Literal["public", "private"]) -> list[str]:
         """Return the list of dataset names with the specified visibility."""
         with self._lock:
-            return self._get_datasets(visibility)
+            return self._list_datasets_by(visibility)
 
     def _delete_datasets(self, visibility: Literal["public", "private"]) -> None:
         logger.info(f"Deleting all {visibility} patients")
-        for dset in self._get_datasets(visibility):
+        for dset in self._list_datasets_by(visibility):
             del self._data[dset]
 
     def delete_datasets(self, visibility: Literal["public", "private"]) -> None:
@@ -137,7 +137,7 @@ class DataInterface(metaclass=SingletonMeta):
         visibility: Literal["public", "private"],
         datasets: list[str] | None = None,
     ) -> pd.DataFrame:
-        datasets = datasets or self._get_datasets(visibility)
+        datasets = datasets or self._list_datasets_by(visibility)
         logger.debug(f"Returning {visibility} datasets {datasets}")
 
         return pd.concat(
