@@ -10,15 +10,14 @@ import json
 import logging
 from typing import Any
 
-from django.http import HttpResponseBadRequest
 import numpy as np
+from django.http import HttpResponseBadRequest
 from django.http.response import HttpResponse, JsonResponse
 from django.shortcuts import render
 from lydata.utils import get_default_modalities
 
-from lyprox.dataexplorer import query
 from lyprox.dataexplorer.forms import DashboardForm
-from lyprox.settings import LNLS, SUBSITE_CHOICES_DICT
+from lyprox.settings import LNLS
 
 logger = logging.getLogger(__name__)
 

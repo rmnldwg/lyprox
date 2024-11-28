@@ -35,7 +35,7 @@
   <div class="notification is-info is-light p-2 mb-2">
     <div class="field is-grouped is-grouped-multiline">
       <p class="control">Oropharynx:</p>
-      {% for checkbox in form.subsite_oropharynx %}
+      {% for checkbox in form.subsites %}
       <div class="control mr-1">
         {{ checkbox.tag }}
         <div class="tags has-addons">
@@ -44,69 +44,6 @@
           </label>
           <p class="tag button is-static">
             {% with counter=forloop.counter0|add:0 %}
-            <span class="stats" data-statfield="subsites"
-              data-index="{{ counter }}">{% if show_percent %}{{ stats.subsites|percent:counter }}%{% else %}{{ stats.subsites|index:counter }}{% endif %}</span>
-            {% endwith %}
-          </p>
-        </div>
-      </div>
-      {% endfor %}
-    </div>
-  </div>
-  <div class="notification is-info is-light p-2 mb-2">
-    <div class="field is-grouped is-grouped-multiline">
-      <p class="control">Hypopharynx:</p>
-      {% for checkbox in form.subsite_hypopharynx %}
-      <div class="control mr-1">
-        {{ checkbox.tag }}
-        <div class="tags has-addons">
-          <label for="{{ checkbox.id_for_label }}" class="tag button is-primary is-light is-expanded">
-            <span>{{ checkbox.choice_label }}</span>
-          </label>
-          <p class="tag button is-static">
-            {% with counter=forloop.counter0|add:3 %}
-            <span class="stats" data-statfield="subsites"
-              data-index="{{ counter }}">{% if show_percent %}{{ stats.subsites|percent:counter }}%{% else %}{{ stats.subsites|index:counter }}{% endif %}</span>
-            {% endwith %}
-          </p>
-        </div>
-      </div>
-      {% endfor %}
-    </div>
-  </div>
-  <div class="notification is-info is-light p-2 mb-2">
-    <div class="field is-grouped is-grouped-multiline">
-      <p class="control">Larynx:</p>
-      {% for checkbox in form.subsite_larynx %}
-      <div class="control mr-1">
-        {{ checkbox.tag }}
-        <div class="tags has-addons">
-          <label for="{{ checkbox.id_for_label }}" class="tag button is-primary is-light is-expanded">
-            <span>{{ checkbox.choice_label }}</span>
-          </label>
-          <p class="tag button is-static">
-            {% with counter=forloop.counter0|add:4 %}
-            <span class="stats" data-statfield="subsites"
-              data-index="{{ counter }}">{% if show_percent %}{{ stats.subsites|percent:counter }}%{% else %}{{ stats.subsites|index:counter }}{% endif %}</span>
-            {% endwith %}
-          </p>
-        </div>
-      </div>
-      {% endfor %}
-    </div>
-  </div>
-  <div class="notification is-info is-light p-2 mb-2">
-    <div class="field is-grouped is-grouped-multiline">
-      <p class="control">Oral cavity:</p>
-      {% for checkbox in form.subsite_oral_cavity %}
-      <div class="control mr-1">
-        {{ checkbox.tag }}
-        <div class="tags has-addons">
-          <label for="{{ checkbox.id_for_label }}" class="tag button is-primary is-light is-expanded">
-            <span>{{ checkbox.choice_label }}</span>
-          </label>
-          <p class="tag button is-static">
-            {% with counter=forloop.counter0|add:6 %}
             <span class="stats" data-statfield="subsites"
               data-index="{{ counter }}">{% if show_percent %}{{ stats.subsites|percent:counter }}%{% else %}{{ stats.subsites|index:counter }}{% endif %}</span>
             {% endwith %}

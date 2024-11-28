@@ -20,9 +20,10 @@ from django import forms
 from django.core.exceptions import ValidationError
 from lydata.utils import get_default_modalities
 
+from lyprox.dataexplorer.subsites import Subsites
 from lyprox.dataexplorer.loader import DataInterface
 from lyprox.loggers import FormLoggerMixin
-from lyprox.settings import LNLS, SUBSITE_CHOICES_DICT, TStages, get_subsite_choices_for, get_subsite_values_for
+from lyprox.settings import LNLS, TStages
 
 logger = logging.getLogger(__name__)
 
@@ -193,35 +194,17 @@ class DashboardForm(FormLoggerMixin, forms.Form):
     )
 
     # tumor specific info
-    subsite_oropharynx = forms.MultipleChoiceField(
+    subsites = forms.MultipleChoiceField(
         required=False,
         widget=forms.CheckboxSelectMultiple(attrs=checkbox_attrs),
-        choices=get_subsite_choices_for(["Base of Tongue", "Tonsil", "Rest Oropharynx"]),
-        initial=get_subsite_values_for(["Base of Tongue", "Tonsil", "Rest Oropharynx"]),
-    )
-    subsite_hypopharynx = forms.MultipleChoiceField(
-        required=False,
-        widget=forms.CheckboxSelectMultiple(attrs=checkbox_attrs),
-        choices=get_subsite_choices_for(["Hypopharynx"]),
-        initial=get_subsite_values_for(["Hypopharynx"]),
-    )
-    subsite_larynx = forms.MultipleChoiceField(
-        required=False,
-        widget=forms.CheckboxSelectMultiple(attrs=checkbox_attrs),
-        choices=get_subsite_choices_for(["Glottis", "Supraglottis", "Subglottis", "Rest Larynx"]),
-        initial=get_subsite_values_for(["Glottis", "Supraglottis", "Subglottis", "Rest Larynx"]),
-    )
-    subsite_oral_cavity = forms.MultipleChoiceField(
-        required=False,
-        widget=forms.CheckboxSelectMultiple(attrs=checkbox_attrs),
-        choices=get_subsite_choices_for(["Tongue", "Gums and Cheeks", "Floor of Mouth", "Palate", "Glands"]),
-        initial=get_subsite_values_for(["Tongue", "Gums and Cheeks", "Floor of Mouth", "Palate", "Glands"]),
+        choices=Subsites.all_choices(),
+        initial=Subsites.all_values(),
     )
 
     t_stage = forms.MultipleChoiceField(
         required=False,
         widget=forms.CheckboxSelectMultiple(attrs=checkbox_attrs),
-        choices=TStages,
+        choices=TStages.choices,
         initial=TStages.values,
     )
     central = ThreeWayToggle(
@@ -301,14 +284,6 @@ class DashboardForm(FormLoggerMixin, forms.Form):
                     cleaned_data[f"{side}_{lnl}"] = True
                 if a is False and b is False:
                     cleaned_data[f"{side}_{lnl}"] = False
-
-        # map subsites 'base','tonsil','rest' to list of ICD codes.
-        cleaned_data["subsites"] = (
-            cleaned_data["subsite_oropharynx"]
-            + cleaned_data["subsite_hypopharynx"]
-            + cleaned_data["subsite_larynx"]
-            + cleaned_data["subsite_oral_cavity"]
-        )
 
         self.logger.debug(f"cleaned data: {cleaned_data}")
         return cleaned_data

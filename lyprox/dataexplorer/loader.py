@@ -9,9 +9,9 @@ from collections import namedtuple
 from threading import Lock
 from typing import Literal
 
-import pandas as pd
 import lydata
 import lydata.utils as lyutils
+import pandas as pd
 
 logger = logging.getLogger(__name__)
 
