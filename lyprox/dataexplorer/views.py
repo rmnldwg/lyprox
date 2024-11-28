@@ -47,11 +47,8 @@ def dashboard_view(request):
     form = DashboardForm(data, user=request.user)
 
     if not form.is_valid():
-        logger.info("Dashboard form not valid, initializing with initial data.")
-        initial_data = {}
-        for field_name, field in form.fields.items():
-            initial_data[field_name] = form.get_initial_for_field(field, field_name)
-        form = DashboardForm(initial_data, user=request.user)
+        logger.info("Dashboard form not valid.")
+        form = DashboardForm.from_initial(user=request.user)
 
     if not form.is_valid():
         logger.error("Form is not valid even after initializing with initial data.")

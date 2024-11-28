@@ -14,7 +14,7 @@ ptients should be included via check boxes with the institution logo on it.
 
 # pylint: disable=no-member
 import logging
-from typing import Any
+from typing import Any, TypeVar
 
 from django import forms
 from django.core.exceptions import ValidationError
@@ -152,6 +152,8 @@ class ThreeWayToggle(forms.ChoiceField):
 checkbox_attrs = {"class": "checkbox is-hidden", "onchange": "changeHandler();"}
 
 
+T = TypeVar("T", bound="DashboardForm")
+
 class DashboardForm(FormLoggerMixin, forms.Form):
     """Form for querying the database."""
 
@@ -262,6 +264,23 @@ class DashboardForm(FormLoggerMixin, forms.Form):
                     )
                 else:
                     self.fields[f"{side}_{lnl}"] = ThreeWayToggle()
+
+    @classmethod
+    def from_initial(cls: type[T], user) -> T:
+        """
+        Return the initial data for the form.
+
+        This is used to set the initial values of the form fields to the
+        values that are stored in the session.
+        """
+        form = cls(user=user)
+        initial_data = {}
+        for name, field in form.fields.items():
+            initial_data[name] = form.get_initial_for_field(field, name)
+
+        logger.info("Creating DashboardForm with initial data.")
+        logger.debug(f"Initial data: {initial_data}")
+        return cls(initial_data, user=user)
 
     def clean(self):
         """
