@@ -4,6 +4,7 @@ import logging
 from typing import Any, Literal, TypeVar
 
 import lydata  # noqa: F401
+import lydata.utils as lyutils
 import numpy as np
 import pandas as pd
 from pydantic import BaseModel, create_model
@@ -52,7 +53,12 @@ class BaseStatistics(BaseModel):
         return sum(self.datasets.values())
 
     @classmethod
-    def from_datasets(cls: type[T], dataset: pd.DataFrame) -> T:
+    def from_datasets(
+        cls: type[T],
+        dataset: pd.DataFrame,
+        modalities: dict[str, lyutils.ModalityConfig] | None = None,
+        method: Literal["max_llh", "rank"] = "max_llh",
+    ) -> T:
         """
         Compute statistics from a dataset.
 
@@ -63,8 +69,15 @@ class BaseStatistics(BaseModel):
         >>> stats.hpv
         {True: 181, False: 96, None: 10}
         """
+        combined = dataset.ly.combine(modalities=modalities, method=method)
         stats = {}
         for name in cls.model_fields:
+            # these fields deal with the LNLs
+            if "ipsi" in name or "contra" in name:
+                side, lnl = name.split("_")
+                stats[name] = safe_value_counts(combined[side, lnl])
+                continue
+
             # key `datasets` is not a shorthand code provided by the `lydata` package
             if name == "datasets":
                 stats[name] = safe_value_counts(dataset["dataset", "info", "name"])
