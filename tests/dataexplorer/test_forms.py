@@ -19,10 +19,7 @@ def mock_user() -> MockUser:
     return MockUser(is_authenticated=True)
 
 
-def test_initial_dashboard_form(
-    initial_data: dict[str, Any],
-    mock_user: MockUser,
-) -> None:
+def test_initial_dashboard_form(mock_user: MockUser) -> None:
     """Test the dashboard form with initial data."""
     form = DashboardForm.from_initial(user=mock_user)
     assert form.is_valid()
