@@ -23,8 +23,6 @@ dependencies = [
     "django-auth-logger ~= 2.1",
     "django-sekizai ~= 4.0",
     "Markdown ~= 3.3",
-    "numpy < 2",
-    "pandas < 3",
     "fontawesomefree ~= 5.15",
     "python-magic ~= 0.4",
     "gunicorn ~= 20.1",
@@ -34,7 +32,7 @@ dependencies = [
     "PyGithub ~= 1.58",
     "dateparser ~= 1.1",
     "python-markdown-math ~= 0.8",
-    "lydata == 0.2.0",
+    "lydata == 0.2.1",
 ]
 
 [project.urls]

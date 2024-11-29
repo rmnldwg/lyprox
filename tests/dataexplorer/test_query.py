@@ -23,4 +23,4 @@ def test_stats_from_datasets(dataset: pd.DataFrame) -> None:
 def test_lnl_stats(dataset: pd.DataFrame) -> None:
     """Test the statistics computed from the LNLS dataset."""
     stats = Statistics.from_datasets(dataset)
-    assert stats.ipsi_II == {True: 671, False: 584}, "Wrong ipsi_II counts"
+    assert stats.ipsi_II == {True: 671, False: 541, None: 43}, "Wrong ipsi_II counts"
