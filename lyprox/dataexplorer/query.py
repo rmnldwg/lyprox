@@ -1,7 +1,7 @@
 """Executes the query sent by the user via the dashboard form and returns statistics."""
 
 import logging
-from typing import Literal, TypeVar
+from typing import Any, Literal, TypeVar
 
 import lydata  # noqa: F401
 import numpy as np
@@ -12,6 +12,23 @@ from lyprox.dataexplorer.loader import DataInterface  # noqa: F401
 from lyprox.settings import LNLS
 
 logger = logging.getLogger(__name__)
+
+
+def safe_value_counts(column: pd.Series) -> dict[Any, int]:
+    """
+    Return the value counts of a column, including missing values as `None`.
+
+    >>> column = pd.Series(['a', 'b', 'c', np.nan, 'a', 'b', 'c', 'a', 'b', 'c'])
+    >>> safe_value_counts(column)
+    {'a': 3, 'b': 3, 'c': 3, None: 1}
+    """
+    result = {}
+
+    for key, value in column.value_counts(dropna=False).to_dict().items():
+        key = key if not pd.isna(key) else None
+        result[key] = value
+
+    return result
 
 
 T = TypeVar("T", bound="BaseStatistics")
@@ -39,37 +56,26 @@ class BaseStatistics(BaseModel):
         """
         Compute statistics from a dataset.
 
-        >>> dataset = DataInterface().get_dataset()
+        >>> di = DataInterface()
+        >>> di.load_and_enhance_datasets(year=2021, institution="usz")
+        >>> dataset = di.get_dataset()
         >>> stats = BaseStatistics.from_datasets(dataset)
-        >>> print(stats)
+        >>> stats.hpv
+        {True: 181, False: 96, None: 10}
         """
         stats = {}
         for name in cls.model_fields:
             # key `datasets` is not a shorthand code provided by the `lydata` package
             if name == "datasets":
-                stats[name] = (
-                    dataset["dataset", "info", "name"]
-                    .value_counts()
-                    .to_dict()
-                )
+                stats[name] = safe_value_counts(dataset["dataset", "info", "name"])
                 continue
 
             # key `central` is not a shorthand code provided by the `lydata` package
             if name == "central":
-                stats[name] = (
-                    dataset["tumor", "1", "central"]
-                    .value_counts(dropna=False)
-                    .to_dict()
-                )
-                stats[name][None] = stats[name].pop(np.nan, 0)
+                stats[name] = safe_value_counts(dataset["tumor", "1", "central"])
                 continue
 
-            stats[name] = (
-                getattr(dataset.ly, name)
-                .value_counts(dropna=False)
-                .to_dict()
-            )
-            stats[name][None] = stats[name].pop(np.nan, 0)
+            stats[name] = safe_value_counts(dataset.ly[name])
 
         return cls(**stats)
 
