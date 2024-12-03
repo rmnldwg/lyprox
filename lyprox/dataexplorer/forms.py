@@ -236,8 +236,11 @@ class DashboardForm(FormLoggerMixin, forms.Form):
         LNLs from a list and hide some datasets for unauthenticated users.
         """
         super().__init__(*args, **kwargs)
+        self.populate_dataset_options(user=user)
+        self.add_lnl_toggle_buttons()
 
-        # dynamically define which datasets should be selectable
+    def populate_dataset_options(self, user) -> None:
+        """Populate the dataset choices based on the user's permissions."""
         data = DataInterface().get_dataset()
         is_public = data["dataset", "info", "visibility"] == "public"
         name_col = ("dataset", "info", "name")
@@ -251,7 +254,8 @@ class DashboardForm(FormLoggerMixin, forms.Form):
             self.fields["datasets"].choices += format_dataset_choices(priv_dset_names)
             self.fields["datasets"].initial += priv_dset_names
 
-        # add all LNL ToggleButtons so I don't have to write a myriad of them
+    def add_lnl_toggle_buttons(self) -> None:
+        """Add all LNL toggle buttons to the form."""
         for side in ["ipsi", "contra"]:
             for lnl in LNLS:
                 if lnl in ["I", "II", "V"]:
