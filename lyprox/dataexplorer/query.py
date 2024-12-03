@@ -1,13 +1,13 @@
 """Executes the query sent by the user via the dashboard form and returns statistics."""
 
 import logging
-from typing import Any, Literal, TypeVar
+from typing import Annotated, Any, Callable, Literal, TypeVar
 
 import lydata  # noqa: F401
 import lydata.utils as lyutils
 import numpy as np
 import pandas as pd
-from pydantic import BaseModel, create_model
+from pydantic import AfterValidator, BaseModel, create_model
 
 from lyprox.dataexplorer.loader import DataInterface  # noqa: F401
 from lyprox.settings import LNLS
@@ -32,20 +32,57 @@ def safe_value_counts(column: pd.Series) -> dict[Any, int]:
     return result
 
 
+KT = TypeVar("KT")
+EnsureKeysSignature = Callable[[dict[KT, int]], dict[KT, int]]
+
+def make_ensure_keys_validator(keys: list[KT]) -> EnsureKeysSignature:
+    """
+    Create an `AfterValidator` to ensure all `keys` are present in the data.
+
+    This creates a function that can be used with pydantic's `AfterValidator` to ensure
+    that all `keys` are present in the validated data. pydantic first receives the value
+    counts from the `safe_value_counts` function, validates it, and then calls the
+    function created by this wrapper to ensure that all keys are present.
+    """
+    def ensure_keys(data: dict[KT, int]) -> dict[KT, int]:
+        """Ensure all `keys` are present in the data."""
+        initial = {key: 0 for key in keys}
+        initial.update(data)
+        return initial
+
+    return ensure_keys
+
+NullableBoolCounts = Annotated[
+    dict[Literal[True, False, None], int],
+    AfterValidator(make_ensure_keys_validator([True, False, None])),
+]
+SexCounts = Annotated[
+    dict[Literal["male", "female"], int],
+    AfterValidator(make_ensure_keys_validator(keys=["male", "female"])),
+]
+TStageCounts = Annotated[
+    dict[Literal[0, 1, 2, 3, 4], int],
+    AfterValidator(make_ensure_keys_validator(keys=[0, 1, 2, 3, 4])),
+]
+NStageCounts = Annotated[
+    dict[Literal[0, 1, 2, 3], int],
+    AfterValidator(make_ensure_keys_validator(keys=[0, 1, 2, 3])),
+]
+
 T = TypeVar("T", bound="BaseStatistics")
 
 class BaseStatistics(BaseModel):
     """Basic statistics to be computed and displayed on the dashboard."""
     datasets: dict[str, int]
-    sex: dict[Literal["male", "female"], int]
-    smoke: dict[Literal[True, False, None], int]
-    hpv: dict[Literal[True, False, None], int]
-    surgery: dict[Literal[True, False, None], int]
-    t_stage: dict[Literal[0,1,2,3,4], int]
-    n_stage: dict[Literal[0,1,2,3], int]
+    sex: SexCounts
+    smoke: NullableBoolCounts
+    hpv: NullableBoolCounts
+    surgery: NullableBoolCounts
+    t_stage: TStageCounts
+    n_stage: NStageCounts
     subsite: dict[str, int]
-    central: dict[Literal[True, False, None], int]
-    midext: dict[Literal[True, False, None], int]
+    central: NullableBoolCounts
+    midext: NullableBoolCounts
 
     @property
     def total(self) -> int:
@@ -94,7 +131,7 @@ class BaseStatistics(BaseModel):
 
 
 lnl_fields = {
-    f"{side}_{lnl}": (dict[Literal[True, False, None], int], ...)
+    f"{side}_{lnl}": (NullableBoolCounts, ...)
     for side in ["ipsi", "contra"]
     for lnl in LNLS
 }
@@ -103,6 +140,11 @@ lnl_fields = {
 Statistics = create_model(
     "Statistics",
     __base__=BaseStatistics,
-    __doc__="Statistics to be computed and displayed on the dashboard.",
+    __doc__="""
+    Statistics to be computed and displayed on the dashboard.
+
+    This class extends the `BaseStatistics` class by adding the dynamically created
+    fields for the LNLs. That way, I did not have to write them by hand.
+    """,
     **lnl_fields,
 )
