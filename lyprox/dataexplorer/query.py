@@ -145,6 +145,9 @@ Statistics = create_model(
 
     This class extends the `BaseStatistics` class by adding the dynamically created
     fields for the LNLs. That way, I did not have to write them by hand.
+
+    Its fields are somewhat mirrored in the `DashboardForm` class, which is used to
+    query the data on which the statistics are computed.
     """,
     **lnl_fields,
 )

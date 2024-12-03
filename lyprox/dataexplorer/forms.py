@@ -58,17 +58,22 @@ def format_dataset_choices(datasets: list[str]) -> list[tuple[str, str]]:
 
 class ThreeWayToggleWidget(forms.RadioSelect):
     """
-    Widget that renders the three-way toggle button and allows to set the
-    attributes of the individual inputs (radio buttons) as `option_attrs` as
-    well as the attributes of the container as ``attrs``.
-    """
+    Widget that renders the three-way toggle button.
 
+    It also allows to set the attributes of the individual inputs (radio buttons) as
+    `option_attrs` as well as the attributes of the container as ``attrs``.
+    """
     template_name = "widgets/three_way_toggle.html"
     option_template_name = "widgets/three_way_toggle_option.html"
     option_attrs = {"class": "radio is-hidden", "onchange": "changeHandler();"}
 
     def __init__(
-        self, attrs=None, choices=(), option_attrs=None, label=None, tooltip=None
+        self,
+        attrs=None,
+        choices=(),
+        option_attrs=None,
+        label=None,
+        tooltip=None,
     ):
         """Store arguments and option attributes for later use."""
         self.label = label
@@ -103,10 +108,7 @@ class ThreeWayToggleWidget(forms.RadioSelect):
 
 
 class ThreeWayToggle(forms.ChoiceField):
-    """
-    A toggle switch than can be in three different states: Positive/True,
-    unkown/None and negative/False.
-    """
+    """Toggle switch than of three states: pos./True, unkown/None and neg./False."""
 
     def __init__(
         self,
@@ -119,10 +121,7 @@ class ThreeWayToggle(forms.ChoiceField):
         required=False,
         **kwargs,
     ):
-        """
-        Pass the arguments, like `label` and `tooltip` to the constructor
-        of the custom widget.
-        """
+        """Pass args like `label` and `tooltip` to constructor of custom widget."""
         if choices is None:
             choices = [(1, "plus"), (0, "ban"), (-1, "minus")]
 
@@ -155,9 +154,12 @@ checkbox_attrs = {"class": "checkbox is-hidden", "onchange": "changeHandler();"}
 T = TypeVar("T", bound="DashboardForm")
 
 class DashboardForm(FormLoggerMixin, forms.Form):
-    """Form for querying the database."""
+    """
+    Form for querying the database.
 
-    # select modalities to show
+    The form's fields somewhat mirror the fields in the `Statistics` class in
+    the `query` module.
+    """
     modalities = forms.MultipleChoiceField(
         required=False,
         widget=forms.CheckboxSelectMultiple(attrs=checkbox_attrs),
@@ -173,54 +175,50 @@ class DashboardForm(FormLoggerMixin, forms.Form):
         label="Combine",
         initial="max_llh",
     )
-
-    # patient specific fields
-    nicotine_abuse = ThreeWayToggle(
-        label="smoking status", tooltip="Select smokers or non-smokers"
-    )
-    hpv_status = ThreeWayToggle(
-        label="HPV status", tooltip="Select patients being HPV positive or negative"
-    )
-    neck_dissection = ThreeWayToggle(
-        label="neck dissection",
-        tooltip="Include patients that have (or have not) received neck dissection",
-    )
-    n_status = ThreeWayToggle(
-        label="N+ vs N0", tooltip="Select all N+ (or N0) patients"
-    )
-
     datasets = forms.MultipleChoiceField(
         widget=forms.CheckboxSelectMultiple(attrs=checkbox_attrs),
         choices=[],
         initial=[],
     )
-
-    # tumor specific info
-    subsites = forms.MultipleChoiceField(
-        required=False,
-        widget=forms.CheckboxSelectMultiple(attrs=checkbox_attrs),
-        choices=Subsites.all_choices(),
-        initial=Subsites.all_values(),
+    smoke = ThreeWayToggle(
+        label="smoking status",
+        tooltip="Select smokers or non-smokers"
     )
-
+    hpv = ThreeWayToggle(
+        label="HPV status",
+        tooltip="Select patients being HPV positive or negative"
+    )
+    surgery = ThreeWayToggle(
+        label="neck dissection",
+        tooltip="Include patients that have (or have not) received neck dissection",
+    )
     t_stage = forms.MultipleChoiceField(
         required=False,
         widget=forms.CheckboxSelectMultiple(attrs=checkbox_attrs),
         choices=TStages.choices,
         initial=TStages.values,
     )
-    central = ThreeWayToggle(
-        label="central", tooltip="Choose to in- or exclude patients with central tumors"
+    n_stage = ThreeWayToggle(
+        label="N+ vs N0",
+        tooltip="Select all N+ (or N0) patients"
     )
-    extension = ThreeWayToggle(
+    subsite = forms.MultipleChoiceField(
+        required=False,
+        widget=forms.CheckboxSelectMultiple(attrs=checkbox_attrs),
+        choices=Subsites.all_choices(),
+        initial=Subsites.all_values(),
+    )
+    central = ThreeWayToggle(
+        label="central",
+        tooltip="Choose to in- or exclude patients with central tumors"
+    )
+    midext = ThreeWayToggle(
         label="midline extension",
         tooltip=(
             "Investigate patients with tumors that do (or do not) "
             "cross the mid-sagittal line"
         ),
     )
-
-    # checkbutton for switching to percent
     show_percent = forms.BooleanField(
         required=False,
         initial=False,
@@ -230,6 +228,7 @@ class DashboardForm(FormLoggerMixin, forms.Form):
         ),
     )
 
+
     def __init__(self, *args, user, **kwargs):
         """
         Extend default initialization to create lots of fields for the
@@ -238,6 +237,7 @@ class DashboardForm(FormLoggerMixin, forms.Form):
         super().__init__(*args, **kwargs)
         self.populate_dataset_options(user=user)
         self.add_lnl_toggle_buttons()
+
 
     def populate_dataset_options(self, user) -> None:
         """Populate the dataset choices based on the user's permissions."""
@@ -254,6 +254,7 @@ class DashboardForm(FormLoggerMixin, forms.Form):
             self.fields["datasets"].choices += format_dataset_choices(priv_dset_names)
             self.fields["datasets"].initial += priv_dset_names
 
+
     def add_lnl_toggle_buttons(self) -> None:
         """Add all LNL toggle buttons to the form."""
         for side in ["ipsi", "contra"]:
@@ -268,6 +269,7 @@ class DashboardForm(FormLoggerMixin, forms.Form):
                     )
                 else:
                     self.fields[f"{side}_{lnl}"] = ThreeWayToggle()
+
 
     @classmethod
     def from_initial(cls: type[T], user) -> T:
@@ -286,10 +288,12 @@ class DashboardForm(FormLoggerMixin, forms.Form):
         logger.debug(f"Initial data: {initial_data}")
         return cls(initial_data, user=user)
 
+
     def clean(self):
         """
-        Make sure LNLs I & II have correct values corresponding to their
-        sublevels a & b. Also convert tstages from list of str to list of int.
+        Ensure LNLs I, II, V have correct sublevel values.
+
+        Also convert tstages from list of `str` to list of `int`.
         """
         cleaned_data = super().clean()
 
@@ -302,7 +306,7 @@ class DashboardForm(FormLoggerMixin, forms.Form):
 
         # make sure LNLs I & II aren't in conflict with their sublevels
         for side in ["ipsi", "contra"]:
-            for lnl in ["I", "II"]:
+            for lnl in ["I", "II", "V"]:
                 a = cleaned_data[f"{side}_{lnl}a"]
                 b = cleaned_data[f"{side}_{lnl}b"]
 
