@@ -1,5 +1,7 @@
+import ast
 import json
 import logging
+from typing import Any
 from urllib.parse import urlparse
 
 import markdown as md
@@ -11,6 +13,14 @@ from mdx_math import MathExtension
 
 register = template.Library()
 logger = logging.getLogger(__name__)
+
+
+def safe_eval(expr: str) -> Any:
+    """Safely evaluate an expression."""
+    if expr not in ["True", "False", "None"]:
+        raise ValueError(f"Invalid expression: {expr}")
+
+    return ast.literal_eval(expr)
 
 
 class MyMathExtension(MathExtension):
@@ -26,29 +36,25 @@ def index(indexable, i):
     return indexable[int(f"{i}".lower())]
 
 @register.filter(name="bar")
-def bar(indexable, argstr):
-    istr, widthstr = argstr.split(',')
-    i = int(istr)
+def bar(value_counts: dict[Any, int], argstr: str):
+    keystr, widthstr = argstr.split(',')
+    key = safe_eval(keystr)
     width = float(widthstr)
-    total = sum(indexable)
-    return width * indexable[i] / total
+    total = sum(list(value_counts.values()))
+    return width * value_counts[key] / total
 
 @register.filter(name="sum")
-def mysum(indexable):
-    return sum(indexable)
+def mysum(value_counts: dict[Any, int]) -> int:
+    return sum(counts for counts in value_counts.values())
 
 @register.filter(name="multiply")
 def myprod(num, fac):
     return num * fac
 
 @register.filter(name="percent")
-def percent(indexable, i):
-    i = int(f"{i}".lower())
-    total = sum(indexable)
-    if total == 0:
-        return " - "
-    else:
-        return f"{100 * indexable[i] / total:.0f}"
+def percent(value_counts: dict[Any, int], key: Any) -> str:
+    total = sum(count for count in value_counts.values())
+    return " - " if total == 0 else f"{100 * value_counts[key] / total:.0f}"
 
 def custom_markdown(text):
     return md.markdown(text, extensions=["footnotes", "tables", MyMathExtension()])
@@ -90,7 +96,17 @@ def get(object, key):
     except KeyError:
         return None
 
+@register.filter(name="getattr")
+def getattribute(object, key):
+    """Get an item from dict-like `object` using `key`."""
+    return getattr(object, key, None)
+
 @register.filter(name="remove_host")
 def remove_host(url):
     """Remove the host from `url`. So, `https://foo.com/bar/baz` becomes `bar/baz`."""
     return urlparse(url).path[1:]
+
+@register.simple_tag(name="to_list")
+def to_list(*args) -> list:
+    """Convert arguments to a list."""
+    return list(args)

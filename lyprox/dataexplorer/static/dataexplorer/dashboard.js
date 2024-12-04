@@ -256,7 +256,7 @@ function populateFields(response) {
 		let index = $(this).data("index");
 		let showPercent = $('input[name="show_percent"]:checked').val();
 		let isBarplot = $(this).hasClass("barplot");
-        let isBarplotLegend = $(this).hasClass("barplot-legend");
+    let isBarplotLegend = $(this).hasClass("barplot-legend");
 		let isTotal = $(this).data("statfield") == "total";
 		let newValue;
 

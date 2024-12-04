@@ -1,15 +1,16 @@
 {% load customtags %}
-{% with stat=stats|get:field %}
+{% with stat=stats|getattr:field %}
 
 <div class="tags has-addons is-justify-content-center">
-    {% for i in '102' %}
-    <div class="stats tag button is-static" data-statfield="{{ field }}" data-index="{{ i }}">
-        {% if show_percent %}
-        {{ stat|percent:i }}%
-        {% else %}
-        {{ stat|index:i }}
-        {% endif %}
-    </div>
-    {% endfor %}
+  {% to_list True None False as toggle_options %}
+  {% for key in toggle_options %}
+  <div class="stats tag button is-static" data-statfield="{{ field }}" data-index="{{ key }}">
+      {% if show_percent %}
+      {{ stat|percent:key }}%
+      {% else %}
+      {{ stat|get:key }}
+      {% endif %}
+  </div>
+  {% endfor %}
 </div>
 {% endwith %}

@@ -90,7 +90,7 @@ class BaseStatistics(BaseModel):
         return sum(self.datasets.values())
 
     @classmethod
-    def from_datasets(
+    def from_dataset(
         cls: type[T],
         dataset: pd.DataFrame,
         modalities: dict[str, lyutils.ModalityConfig] | None = None,

@@ -17,6 +17,8 @@ from django.shortcuts import render
 from lydata.utils import get_default_modalities
 
 from lyprox.dataexplorer.forms import DashboardForm
+from lyprox.dataexplorer.loader import DataInterface
+from lyprox.dataexplorer.query import Statistics
 from lyprox.settings import LNLS
 
 logger = logging.getLogger(__name__)
@@ -57,7 +59,7 @@ def dashboard_view(request):
     context = {
         "form": form,
         "modalities": get_default_modalities(),
-        # "stats": generate_stats(form.cleaned_data),
+        "stats": Statistics.from_dataset(DataInterface().get_dataset()),
     }
 
     return render(request, "dataexplorer/layout.html", context)
