@@ -6,7 +6,7 @@
   {% for key in toggle_options %}
   <div class="stats tag button is-static" data-statfield="{{ field }}" data-index="{{ key }}">
       {% if show_percent %}
-      {{ stat|percent:key }}%
+      {{ stat|get_percent:key }}%
       {% else %}
       {{ stat|get:key }}
       {% endif %}

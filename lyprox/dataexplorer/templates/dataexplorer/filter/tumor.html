@@ -44,7 +44,7 @@
           <p class="tag button is-static px-1">
             {% with counter=forloop.counter0|add:0 %}
             <span class="stats" data-statfield="subsite"
-              data-index="{{ counter }}">{% if show_percent %}{{ stats.subsite|percent:checkbox.data.value }}%{% else %}{{ stats.subsite|get:checkbox.data.value }}{% endif %}</span>
+              data-index="{{ counter }}">{% if show_percent %}{{ stats.subsite|get_percent:checkbox.data.value }}%{% else %}{{ stats.subsite|get:checkbox.data.value }}{% endif %}</span>
             {% endwith %}
           </p>
         </div>
@@ -64,7 +64,7 @@
         </label>
         <div class="tag button is-info is-static">
           <span class="stats" data-statfield="t_stages"
-            data-index="{{ forloop.counter0 }}">{% if show_percent %}{{ stats.t_stage|percent:checkbox.data.value }}%{% else %}{{ stats.t_stage|get:checkbox.data.value }}{% endif %}</span>
+            data-index="{{ forloop.counter0 }}">{% if show_percent %}{{ stats.t_stage|get_percent:checkbox.data.value }}%{% else %}{{ stats.t_stage|get:checkbox.data.value }}{% endif %}</span>
         </div>
       </div>
     </div>
