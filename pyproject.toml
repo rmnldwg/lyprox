@@ -52,7 +52,7 @@ dev = [
 ]
 
 [project.scripts]
-"manage.py" = "lyprox.manage:main"
+"lyprox" = "lyprox.manage:main"
 
 [tool.setuptools]
 packages = ["lyprox"]
