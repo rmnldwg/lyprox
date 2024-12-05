@@ -1,11 +1,12 @@
 """Test the querying functionality."""
 
+from typing import Any
 from lydata import C
 import pandas as pd
 from pytest import fixture
 
 from lyprox.dataexplorer.loader import DataInterface
-from lyprox.dataexplorer.query import BaseStatistics, Statistics
+from lyprox.dataexplorer.query import BaseStatistics, Statistics, execute_query
 
 
 @fixture
@@ -31,5 +32,11 @@ def test_stats_from_datasets(dataset: pd.DataFrame) -> None:
 
 def test_lnl_stats(dataset: pd.DataFrame) -> None:
     """Test the statistics computed from the LNLS dataset."""
-    stats = Statistics.from_datasets(dataset)
+    stats = Statistics.from_dataset(dataset)
     assert stats.ipsi_II == {True: 696, False: 559, None: 0}, "Wrong ipsi_II counts"
+
+
+def test_execute_query(cleaned_initial_form: dict[str, Any]) -> None:
+    """Test the execution of a query."""
+    queried_dataset = execute_query(cleaned_form=cleaned_initial_form)
+    assert len(queried_dataset) == 1254, "Wrong number of patients in queried dataset"
