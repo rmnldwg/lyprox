@@ -64,9 +64,9 @@ TStageCounts = Annotated[
     dict[Literal[0, 1, 2, 3, 4], int],
     AfterValidator(make_ensure_keys_validator(keys=[0, 1, 2, 3, 4])),
 ]
-NStageCounts = Annotated[
-    dict[Literal[0, 1, 2, 3], int],
-    AfterValidator(make_ensure_keys_validator(keys=[0, 1, 2, 3])),
+IsNPlusCounts = Annotated[
+    dict[Literal[True, False, None], int],
+    AfterValidator(make_ensure_keys_validator(keys=[True, False, None])),
 ]
 
 T = TypeVar("T", bound="BaseStatistics")
@@ -79,7 +79,7 @@ class BaseStatistics(BaseModel):
     hpv: NullableBoolCounts
     surgery: NullableBoolCounts
     t_stage: TStageCounts
-    n_stage: NStageCounts
+    is_n_plus: IsNPlusCounts
     subsite: dict[str, int]
     central: NullableBoolCounts
     midext: NullableBoolCounts
@@ -120,9 +120,9 @@ class BaseStatistics(BaseModel):
                 stats[name] = safe_value_counts(dataset["dataset", "info", "name"])
                 continue
 
-            # key `central` is not a shorthand code provided by the `lydata` package
-            if name == "central":
-                stats[name] = safe_value_counts(dataset["tumor", "1", "central"])
+            # key `is_n_plus` is not a shorthand code provided by the `lydata` package
+            if name == "is_n_plus":
+                stats[name] = safe_value_counts(dataset.ly["n_stage"] > 0)
                 continue
 
             stats[name] = safe_value_counts(dataset.ly[name])

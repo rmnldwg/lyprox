@@ -198,7 +198,7 @@ class DashboardForm(FormLoggerMixin, forms.Form):
         choices=TStages.choices,
         initial=TStages.values,
     )
-    n_stage = ThreeWayToggle(
+    is_n_plus = ThreeWayToggle(
         label="N+ vs N0",
         tooltip="Select all N+ (or N0) patients"
     )
