@@ -32,7 +32,7 @@ dependencies = [
     "PyGithub ~= 1.58",
     "dateparser ~= 1.1",
     "python-markdown-math ~= 0.8",
-    "lydata == 0.2.2",
+    "lydata == 0.2.3",
 ]
 
 [project.urls]
