@@ -304,6 +304,9 @@ class DashboardForm(FormLoggerMixin, forms.Form):
         # map all -1,0,1 fields to False,None,True
         cleaned_data = {key: trio_to_bool(value) for key, value in cleaned_data.items()}
 
+        # convert tstages from list of strings to list of integers
+        cleaned_data["t_stage"] = [int(t) for t in cleaned_data["t_stage"]]
+
         # make sure LNLs I & II aren't in conflict with their sublevels
         for side in ["ipsi", "contra"]:
             for lnl in ["I", "II", "V"]:

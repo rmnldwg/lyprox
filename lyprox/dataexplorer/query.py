@@ -1,18 +1,78 @@
-"""Executes the query sent by the user via the dashboard form and returns statistics."""
+"""
+Querying and generating statistics from the dataset.
 
+In this module, we define the classes and methods to filter and query the datasets, as
+well as compute statistics from a queried/filtered dataset to be displayed on the
+main dashboard of LyProX.
+"""
 import logging
-from typing import Annotated, Any, Callable, Literal, TypeVar
+from collections.abc import Callable
+import time
+from typing import Annotated, Any, Literal, TypeVar
 
 import lydata  # noqa: F401
+import lydata.accessor
 import lydata.utils as lyutils
-import numpy as np
 import pandas as pd
+from lydata import C
 from pydantic import AfterValidator, BaseModel, create_model
 
 from lyprox.dataexplorer.loader import DataInterface  # noqa: F401
 from lyprox.settings import LNLS
 
 logger = logging.getLogger(__name__)
+
+
+def create_filter(
+    column_name: str,
+    filter_value: Any | None,
+) -> lydata.accessor.QTypes:
+    """
+    Create a filter for a column in the dataset.
+
+    This function creates a filter for a column in the dataset. If the `filter_value`
+    is `None`, it will also return `None`, because `Q & None` returns just `Q`.
+    """
+    if filter_value is None:
+        return None
+
+    return C(column_name) == filter_value
+
+
+def execute_query(
+    cleaned_form: dict[str, Any],
+    dataset: pd.DataFrame | None = None,
+) -> pd.DataFrame:
+    """
+    Execute a query on a dataset.
+
+    This function takes the `cleaned_form` data from the `DashboardForm` class and
+    executes a query on the `dataset` provided. If no dataset is provided, it will
+    query the entire dataset accessible from the `DataInterface`.
+    """
+    start_time = time.perf_counter()
+    dataset = dataset or DataInterface().get_dataset()
+
+    query = C("dataset", "info", "name").isin(cleaned_form["datasets"])
+    query &= C("t_stage").isin(cleaned_form["t_stage"])
+    query &= C("subsite").isin(cleaned_form["subsite"])
+
+    for short_names in ["smoke", "hpv", "surgery", "midext", "central"]:
+        if cleaned_form[short_names] is not None:
+            query &= C(short_names) == cleaned_form[short_names]
+
+    if (is_n_plus := cleaned_form["is_n_plus"]) is not None:
+        query &= C("n_stage") > 0 if is_n_plus else C("n_stage") == 0
+
+    logger.info(f"Query: {query}")
+
+    queried_dataset = dataset.ly.query(query)
+    end_time = time.perf_counter()
+
+    logger.info(f"Query executed in {end_time - start_time:.2f} seconds.")
+    logger.info(f"{len(queried_dataset)} patients remain in queried dataset.")
+
+    return queried_dataset
 
 
 def safe_value_counts(column: pd.Series) -> dict[Any, int]:

@@ -18,7 +18,7 @@ from lydata.utils import get_default_modalities
 
 from lyprox.dataexplorer.forms import DashboardForm
 from lyprox.dataexplorer.loader import DataInterface
-from lyprox.dataexplorer.query import Statistics
+from lyprox.dataexplorer.query import Statistics, execute_query
 from lyprox.settings import LNLS
 
 logger = logging.getLogger(__name__)
@@ -56,10 +56,12 @@ def dashboard_view(request):
         logger.error("Form is not valid even after initializing with initial data.")
         return HttpResponseBadRequest("Form is not valid.")
 
+    dataset = execute_query(cleaned_form=form.cleaned_data)
+
     context = {
         "form": form,
         "modalities": get_default_modalities(),
-        "stats": Statistics.from_dataset(DataInterface().get_dataset()),
+        "stats": Statistics.from_dataset(dataset),
     }
 
     return render(request, "dataexplorer/layout.html", context)
