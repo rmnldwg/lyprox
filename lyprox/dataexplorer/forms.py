@@ -14,7 +14,7 @@ ptients should be included via check boxes with the institution logo on it.
 
 # pylint: disable=no-member
 import logging
-from typing import Any, TypeVar
+from typing import Any, Literal, TypeVar
 
 from django import forms
 from django.core.exceptions import ValidationError
@@ -117,13 +117,13 @@ class ThreeWayToggle(forms.ChoiceField):
         label=None,
         tooltip=None,
         choices=None,
-        initial=0,
+        initial=None,
         required=False,
         **kwargs,
     ):
         """Pass args like `label` and `tooltip` to constructor of custom widget."""
         if choices is None:
-            choices = [(1, "plus"), (0, "ban"), (-1, "minus")]
+            choices = [(True, "plus"), (None, "ban"), (False, "minus")]
 
         if len(choices) != 3:
             raise ValueError("Three-way toggle button must have three choices")
@@ -138,14 +138,15 @@ class ThreeWayToggle(forms.ChoiceField):
             **kwargs,
         )
 
-    def to_python(self, value):
+    def to_python(self, value: bool | None) -> bool | None:
         """Cast the string to an integer."""
-        try:
-            return int(value)
-        except ValueError:
+        if value in [True, False, None]:
             return value
-        except TypeError as type_err:
-            raise ValidationError("Expects a number") from type_err
+
+        if value == "":
+            return None
+
+        raise ValidationError(f"Invalid {value = } for ThreeWayToggle")
 
 
 checkbox_attrs = {"class": "checkbox is-hidden", "onchange": "changeHandler();"}

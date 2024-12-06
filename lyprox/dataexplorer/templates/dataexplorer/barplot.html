@@ -9,7 +9,7 @@
 {% with stat=stats|getattr:lnl_key %}
 <td class="barplot-tablecell">
   <div class="tags has-addons">
-    <span class="stats tag barplot-legend is-danger is-light" data-statfield="{{ lnl_key }}" data-index="1"
+    <span class="stats tag barplot-legend is-danger is-light" data-statfield="{{ lnl_key }}" data-key="True"
       {% if not hide_tooltip %}data-tooltip="{{ stat|get:True }} of {{ stat.values|sum }} ({{ stat|get_percent:True }}%) patients have metastases in LNL {{ lnl }}"
       {% endif %}>
       {% if show_percent %}
@@ -18,19 +18,19 @@
       {{ stat|index:1 }}
       {% endif %}
     </span>
-    <span class="stats tag barplot has-text-white is-flex is-flex-grow-1" data-statfield="{{ lnl_key }}" data-index="0"
+    <span class="stats tag barplot has-text-white is-flex is-flex-grow-1" data-statfield="{{ lnl_key }}" data-key="None"
       {% if not hide_tooltip %}data-tooltip="{{ stat|get:None }} of {{ stat.values|sum }} ({{ stat|get_percent:None }}%) patients have unknown involvement in LNL {{ lnl }}"
       {% endif %}
       style="background-size: {{ stat|barplot_css:'True,100' }}% 100%, calc({{ stat|barplot_css:'True,100' }}% + {{ stat|barplot_css:'None,100' }}%) 100%, 100% 100%;">
-      {% if stat|index:0 > 0 %}
+      {% if stat|get:None > 0 %}
       {% if show_percent %}
-      {{ stat|get_percent:0 }}%
+      {{ stat|get_percent:None }}%
       {% else %}
-      {{ stat|index:0 }}
+      {{ stat|get:None }}
       {% endif %}
       {% endif %}
     </span>
-    <span class="stats tag barplot-legend is-success is-light" data-statfield="{{ lnl_key }}" data-index="2"
+    <span class="stats tag barplot-legend is-success is-light" data-statfield="{{ lnl_key }}" data-key="False"
       {% if not hide_tooltip %}data-tooltip="{{ stat|get:False }} of {{ stat.values|sum }} ({{ stat|get_percent:False }}%) patients do not have metastases in LNL {{ lnl }}"
       {% endif %}>
       {% if show_percent %}

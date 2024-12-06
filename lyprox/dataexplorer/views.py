@@ -45,8 +45,8 @@ def transform_np_to_lists(stats: dict[str, Any]) -> dict[str, Any]:
 
 def dashboard_view(request):
     """Return the dashboard view when the user first accesses the dashboard."""
-    data = request.GET
-    form = DashboardForm(data, user=request.user)
+    request_data = request.GET
+    form = DashboardForm(request_data, user=request.user)
 
     if not form.is_valid():
         logger.info("Dashboard form not valid.")
@@ -56,12 +56,12 @@ def dashboard_view(request):
         logger.error("Form is not valid even after initializing with initial data.")
         return HttpResponseBadRequest("Form is not valid.")
 
-    dataset = execute_query(cleaned_form=form.cleaned_data)
+    patients = execute_query(cleaned_form=form.cleaned_data)
 
     context = {
         "form": form,
         "modalities": get_default_modalities(),
-        "stats": Statistics.from_dataset(dataset),
+        "stats": Statistics.from_dataset(patients),
     }
 
     return render(request, "dataexplorer/layout.html", context)
@@ -72,14 +72,14 @@ def dashboard_ajax_view(request):
     View that receives JSON data from the AJAX request and cleans it using the
     same method as the class-based ``DashboardView``.
     """
-    data = json.loads(request.body.decode("utf-8"))
-    form = DashboardForm(data, user=request.user)
+    request_data = json.loads(request.body.decode("utf-8"))
+    form = DashboardForm(request_data, user=request.user)
 
-    if form.is_valid():
-        logger.info("Form from AJAX request is valid, running query.")
-        # stats = run_query(form.cleaned_data)
-        # return JsonResponse(data=stats)
-        ...
+    if not form.is_valid():
+        logger.error("Form is not valid even after initializing with initial data.")
+        return JsonResponse(data={"error": "Something went wrong."}, status=400)
 
-    logger.warning("AJAX form invalid.")
-    return JsonResponse(data={"error": "Something went wrong."}, status=400)
+    patients = execute_query(cleaned_form=form.cleaned_data)
+    stats = Statistics.from_dataset(patients).model_dump()
+    stats["type"] = "stats"
+    return JsonResponse(data=stats)

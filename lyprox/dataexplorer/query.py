@@ -53,6 +53,17 @@ def execute_query(
     start_time = time.perf_counter()
     dataset = dataset or DataInterface().get_dataset()
 
+    modalities = {
+        name: modality_config
+        for name, modality_config in lyutils.get_default_modalities().items()
+        if name in cleaned_form["modalities"]
+    }
+    method = cleaned_form["modality_combine"]
+    dataset[method] = dataset.ly.combine(
+        modalities=modalities,
+        method=method,
+    )
+
     query = C("dataset", "info", "name").isin(cleaned_form["datasets"])
     query &= C("t_stage").isin(cleaned_form["t_stage"])
     query &= C("subsite").isin(cleaned_form["subsite"])
@@ -63,6 +74,12 @@ def execute_query(
 
     if (is_n_plus := cleaned_form["is_n_plus"]) is not None:
         query &= C("n_stage") > 0 if is_n_plus else C("n_stage") == 0
+
+    for side in ["ipsi", "contra"]:
+        for lnl in LNLS:
+            field = f"{side}_{lnl}"
+            if (value := cleaned_form[field]) is not None:
+                query &= C(method, side, lnl) == value
 
     logger.info(f"Query: {query}")
 

@@ -4,7 +4,7 @@
 <div class="tags has-addons is-justify-content-center">
   {% to_list True None False as toggle_options %}
   {% for key in toggle_options %}
-  <div class="stats tag button is-static" data-statfield="{{ field }}" data-index="{{ key }}">
+  <div class="stats tag button is-static" data-statfield="{{ field }}" data-key="{{ key }}">
       {% if show_percent %}
       {{ stat|get_percent:key }}%
       {% else %}
