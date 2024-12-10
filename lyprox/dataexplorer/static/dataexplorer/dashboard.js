@@ -160,8 +160,10 @@ function castString(input) {
     return Number(input);
   }
 
-  if (input === "True" || input === "False") {
-    return Boolean(input);
+  if (input == "True") {
+    return true;
+  } else if (input == "False") {
+    return false;
   }
 
   return input;
@@ -289,8 +291,8 @@ function populateFields(response) {
     };
 
     if (isBarplot) {
-      let involved = response[field][1];
-      let unknown = response[field][0];
+      let involved = response[field][true];
+      let unknown = response[field][null];
       let involvedPercent = 100 * involved / totalNum;
       let unknownPercent = 100 * unknown / totalNum;
       let side = field.split("_")[0] + "lateral";

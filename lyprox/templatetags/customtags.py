@@ -87,17 +87,6 @@ def multiply(value: N, factor: N) -> N:
     return value * factor
 
 
-@register.filter(name="get_percent")
-def get_percent(value_counts: dict[Any, int], key: Any) -> str:
-    """
-    Get the percentage `value_counts[key]` in the total of `value_counts`.
-
-    Use it like this in the HTML templates: `{{ value_counts|get_percent:key }}`.
-    """
-    total = sum(value_counts.values())
-    return " - " if total == 0 else f"{100 * value_counts[key] / total:.0f}"
-
-
 def custom_markdown(text):
     """Render custom markdown with footnotes and tables."""
     return md.markdown(text, extensions=["footnotes", "tables", MyMathExtension()])
@@ -155,6 +144,16 @@ def get(mapping: Mapping[KT, VT], key: KT) -> VT | None:
         return mapping[key]
     except KeyError:
         return None
+
+@register.filter(name="get_percent")
+def get_percent(value_counts: dict[Any, int], key: Any) -> str:
+    """
+    Get the percentage `value_counts[key]` in the total of `value_counts`.
+
+    Use it like this in the HTML templates: `{{ value_counts|get_percent:key }}`.
+    """
+    total = sum(list(value_counts.values()))
+    return " - " if total == 0 else f"{100 * value_counts[key] / total:.0f}"
 
 
 @register.filter(name="getattr")

@@ -40,3 +40,8 @@ def test_execute_query(cleaned_initial_form: dict[str, Any]) -> None:
     """Test the execution of a query."""
     queried_dataset = execute_query(cleaned_form=cleaned_initial_form)
     assert len(queried_dataset) == 1254, "Wrong number of patients in queried dataset"
+
+    cleaned_initial_form["ipsi_II"] = True
+    cleaned_initial_form["contra_II"] = False
+    queried_dataset = execute_query(cleaned_form=cleaned_initial_form)
+    assert len(queried_dataset) == 696, "Wrong number of patients in queried dataset"

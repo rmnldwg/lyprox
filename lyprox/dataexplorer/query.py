@@ -15,7 +15,7 @@ import lydata.accessor
 import lydata.utils as lyutils
 import pandas as pd
 from lydata import C
-from pydantic import AfterValidator, BaseModel, create_model
+from pydantic import AfterValidator, BaseModel, computed_field, create_model
 
 from lyprox.dataexplorer.loader import DataInterface  # noqa: F401
 from lyprox.settings import LNLS
@@ -81,11 +81,11 @@ def execute_query(
             if (value := cleaned_form[field]) is not None:
                 query &= C(method, side, lnl) == value
 
-    logger.info(f"Query: {query}")
 
     queried_dataset = dataset.ly.query(query)
     end_time = time.perf_counter()
 
+    logger.debug(f"Query: {query}")
     logger.info(f"Query executed in {end_time - start_time:.2f} seconds.")
     logger.info(f"{len(queried_dataset)} patients remain in queried dataset.")
 
@@ -161,6 +161,7 @@ class BaseStatistics(BaseModel):
     central: NullableBoolCounts
     midext: NullableBoolCounts
 
+    @computed_field
     @property
     def total(self) -> int:
         """Return the total number of patients in the dataset."""
