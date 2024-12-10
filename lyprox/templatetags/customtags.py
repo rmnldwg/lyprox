@@ -44,9 +44,9 @@ T = TypeVar("T")
 @register.filter(name="index")
 def index(seq: Sequence[T], i: str) -> T:
     """
-    Get the `i`-th element of `seq`.
+    Get the ``i``-th element of ``seq``.
 
-    Allows one to use `{{ seq|index:'i' }}` in Django templates.
+    Allows one to use ``{{ seq|index:'i' }}`` in Django templates.
     """
     i = int(f"{i}".lower())
     return seq[i]
@@ -58,9 +58,9 @@ def barplot_css(value_counts: dict[Any, int], argstr: str) -> float:
     Return the relative width to be sent to the CSS for the dashboard's bar plot.
 
     Use it like this in the HTML templates:
-    `{{ value_counts|barplot_css:'<key>,<width>' }}`, where the key and the total width
-    are separated by a comma. The key is the key of the value in the `value_counts` dict
-    and the width is the total width of the bar plot.
+    ``{{ value_counts|barplot_css:'<key>,<width>' }}``, where the key and the total
+    width are separated by a comma. The key is the key of the value in the
+    ``value_counts`` dict and the width is the total width of the bar plot.
     """
     keystr, widthstr = argstr.split(',')
     key = safe_eval(keystr)
@@ -76,14 +76,14 @@ def sum_(iterable: Iterable[N]) -> N:
     """
     Implement the sum im Django templates.
 
-    Use it like this: `{{ mylist|sum }}` or `{{ mydict.values|sum }}`.
+    Use it like this: ``{{ mylist|sum }}`` or ``{{ mydict.values|sum }}``.
     """
     return sum(iterable)
 
 
 @register.filter(name="multiply")
 def multiply(value: N, factor: N) -> N:
-    """Multiply `value` by `factor`."""
+    """Multiply ``value`` by ``factor``."""
     return value * factor
 
 
@@ -98,7 +98,7 @@ def include_md(context: template.RequestContext, template_name: str):
     Include a markdown file in the template.
 
     The markdown file may also include Django template tags, just as the HTML. This tag
-    is used like this: `{% include_md "path/to/file.md" %}`.
+    is used like this: ``{% include_md "path/to/file.md" %}``.
     """
     # 'context' here isn't a dictionary, but an instance of RequestContext
     context_dict = {k: v for subdict in context.dicts for k,v in subdict.items()}
@@ -130,7 +130,7 @@ def render_yaml(raw: str) -> str:
 
 @register.filter(name="concat")
 def concat(this: str, other: str) -> str:
-    """Concatenate `this` & `other`."""
+    """Concatenate ``this`` & ``other``."""
     return str(this) + str(other)
 
 
@@ -139,7 +139,7 @@ VT = TypeVar("VT")
 
 @register.filter(name="get")
 def get(mapping: Mapping[KT, VT], key: KT) -> VT | None:
-    """Get an item from dict-like `mapping` using `key`."""
+    """Get an item from dict-like ``mapping`` using ``key``."""
     try:
         return mapping[key]
     except KeyError:
@@ -148,9 +148,9 @@ def get(mapping: Mapping[KT, VT], key: KT) -> VT | None:
 @register.filter(name="get_percent")
 def get_percent(value_counts: dict[Any, int], key: Any) -> str:
     """
-    Get the percentage `value_counts[key]` in the total of `value_counts`.
+    Get the percentage ``value_counts[key]`` in the total of ``value_counts``.
 
-    Use it like this in the HTML templates: `{{ value_counts|get_percent:key }}`.
+    Use it like this in the HTML templates: ``{{ value_counts|get_percent:key }}``.
     """
     total = sum(list(value_counts.values()))
     return " - " if total == 0 else f"{100 * value_counts[key] / total:.0f}"
@@ -158,13 +158,13 @@ def get_percent(value_counts: dict[Any, int], key: Any) -> str:
 
 @register.filter(name="getattr")
 def getattr_(instance, attr) -> Any:
-    """Get an attribute from `instance` using `attr`."""
+    """Get an attribute from ``instance`` using ``attr``."""
     return getattr(instance, attr, None)
 
 
 @register.filter(name="remove_host")
 def remove_host(url: str) -> str:
-    """Remove the host from `url`. So, `https://foo.com/bar/baz` becomes `bar/baz`."""
+    """Remove host from ``url``. So, ``https://foo.com/bar/baz`` becomes ``bar/baz``."""
     return urlparse(url).path[1:]
 
 
@@ -175,7 +175,7 @@ def to_list(*args) -> list:
 
     This is useful if you want to iterate over a list of items in a Django template
     and you don't want to provide that list to the context, but 'harcoded' in the
-    template. Use it like this: `{% to_list 1 2 3 4 as mylist %}` and then afterwards
-    you can iterate over `mylist`.
+    template. Use it like this: ``{% to_list 1 2 3 4 as mylist %}`` and then afterwards
+    you can iterate over ``mylist``.
     """
     return list(args)

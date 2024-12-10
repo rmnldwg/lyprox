@@ -1,7 +1,10 @@
 """
-Define the two URLs within the dashboard app (reachable via
-``https://lyprox.org/dashboard``). Those are the dashboard itself of course, but
-also the help menu explaining how to use the former.
+Define the URLs within the dashboard app.
+
+It defines that the default dataexplorer view is handled by the `dashboard_view`
+function and the AJAX view is handled by the `dashboard_ajax_view` function.
+
+Also, a help page is defined here, which is handled by the `help_view` function.
 """
 # pylint: disable=invalid-name
 

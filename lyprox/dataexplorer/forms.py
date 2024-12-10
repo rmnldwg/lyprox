@@ -1,15 +1,18 @@
 """
-The `dataexplorer.forms` module defines the relatively complex form that is
-used for querying the database later.
+The `dataexplorer.forms` module defines the fields used to query the patient records.
 
-It also implements some custom form elements, like `ThreeWayToggle` and
-`ThreeWayToggleWidget` that represent the custom logic and appearance of a
-three-way toggle button respectively, which appears numerous times in the
-Dashboard interface.
+Basically, this defines what buttons, dropdowns, and checkboxes are displayed on the
+dashboard and to some extent also how they look. Here, we also define the
+`ThreeWayToggle` button that is used to select between three states: positive, negative,
+and unknown. The `ThreeWayToggle` button is used for selecting HPV status, nicotine
+abuse, LNL involvement and more.
 
-Finally, a custom ``MultipleChoice`` field of somewhat unnecessary complexity
-is implemented here that allows us to select the institutions from which the
-ptients should be included via check boxes with the institution logo on it.
+Typically, when calling one of the `dataexplorer.views` functions, an instance of the
+`DashboardForm` is created with the user's permissions and the initial data from the
+`DashboardForm.from_initial` class method. This initial data is then used to display
+the dashboard. Then, the user applies filters to the data and submits the form by
+pressing the "Compute" button. The form is then validated and cleaned
+(``form.is_valid()``), also in the `dataexplorer.views` module.
 """
 
 # pylint: disable=no-member
@@ -30,7 +33,7 @@ logger = logging.getLogger(__name__)
 
 def trio_to_bool(value: int | Any) -> bool | Any:
     """
-    Transform -1, 0, and +1 to False, None and True respectively.
+    Transform -1, 0, and +1 to ``False``, ``None`` and ``True`` respectively.
 
     Any other values are simply passed through unchanged. This is used to map the
     values of the three-way toggle buttons to its boolean representation.
@@ -294,7 +297,7 @@ class DashboardForm(FormLoggerMixin, forms.Form):
         """
         Ensure LNLs I, II, V have correct sublevel values.
 
-        Also convert tstages from list of `str` to list of `int`.
+        Also convert tstages from list of ``str`` to list of ``int``.
         """
         cleaned_data = super().clean()
 

@@ -1,7 +1,7 @@
 """
 LyProX' URL configuration. This defines the view for the landing page, the URLs for
 downloads and media and the maintenance page. Otherwise it basically calls the URL
-configuration from the other apps, `patients.urls`, `dataexplorer.urls` and
+configuration from the other apps, `dataexplorer.urls` and
 `accounts.urls`.
 """
 

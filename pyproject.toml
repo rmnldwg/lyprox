@@ -75,6 +75,11 @@ python_files = "test_*.py"
 [tool.pydoctor]
 project-name = "LyProX"
 add-package = ["lyprox"]
+intersphinx = [
+    "https://lymph-model.readthedocs.io/latest/objects.inv",
+    "https://lydata.readthedocs.io/latest/objects.inv",
+    "https://docs.pydantic.dev/latest/objects.inv",
+]
 docformat = "google"
 make-html = true
 html-output = "./docs"

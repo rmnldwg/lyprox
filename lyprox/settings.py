@@ -9,21 +9,20 @@ host environment is configured for the application.
 
 Only these env vars should need to be changed:
 
-- `DJANGO_ENV` can take on the values `"debug"`, `"maintenance"`, or `"production"`.
-- `DJANGO_SECRET_KEY` must contain the secret key for Django's security stuff.
-- `DJANGO_ALLOWED_HOSTS` needs to contain the allowed host names separated by spaces.
-- `DJANGO_LOG_LEVEL` for the log level. This only has an effect in debug mode.
-- `DJANGO_BASE_DIR` is the directory in which Django is based.
+- ``DJANGO_ENV`` can be ``"debug"``, ``"maintenance"``, or ``"production"``.
+- ``DJANGO_SECRET_KEY`` must contain the secret key for Django's security stuff.
+- ``DJANGO_ALLOWED_HOSTS`` needs to contain the allowed host names separated by spaces.
+- ``DJANGO_LOG_LEVEL`` for the log level. This only has an effect in debug mode.
+- ``DJANGO_BASE_DIR`` is the directory in which Django is based.
 
-.. _Django documentation: https://docs.djangoproject.com/en/4.1/ref/settings/
+.. _Django documentation: https://docs.djangoproject.com/en/4.2/ref/settings/
 """
-
 import os
 from pathlib import Path
 
 from django import urls
 from django.db import models
-from github import Github, Auth
+from github import Auth, Github
 
 from ._version import version
 

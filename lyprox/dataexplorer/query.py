@@ -6,8 +6,8 @@ well as compute statistics from a queried/filtered dataset to be displayed on th
 main dashboard of LyProX.
 """
 import logging
-from collections.abc import Callable
 import time
+from collections.abc import Callable
 from typing import Annotated, Any, Literal, TypeVar
 
 import lydata  # noqa: F401
@@ -23,22 +23,6 @@ from lyprox.settings import LNLS
 logger = logging.getLogger(__name__)
 
 
-def create_filter(
-    column_name: str,
-    filter_value: Any | None,
-) -> lydata.accessor.QTypes:
-    """
-    Create a filter for a column in the dataset.
-
-    This function creates a filter for a column in the dataset. If the `filter_value`
-    is `None`, it will also return `None`, because `Q & None` returns just `Q`.
-    """
-    if filter_value is None:
-        return None
-
-    return C(column_name) == filter_value
-
-
 def execute_query(
     cleaned_form: dict[str, Any],
     dataset: pd.DataFrame | None = None,
@@ -46,9 +30,12 @@ def execute_query(
     """
     Execute a query on a dataset.
 
-    This function takes the `cleaned_form` data from the `DashboardForm` class and
-    executes a query on the `dataset` provided. If no dataset is provided, it will
-    query the entire dataset accessible from the `DataInterface`.
+    After validating a `DashboardForm` by calling ``form.is_valid()``, the cleaned data
+    is accessible as the attribute ``form.cleaned_data``. The returned dictionary should
+    be passed to this function as the ``cleaned_form`` argument. Based on this cleaned
+    form data, a query is executed on the dataset and the resulting dataset is returned.
+
+    If no dataset is provided, the default dataset is loaded from the `DataInterface`.
     """
     start_time = time.perf_counter()
     dataset = dataset or DataInterface().get_dataset()
@@ -81,7 +68,6 @@ def execute_query(
             if (value := cleaned_form[field]) is not None:
                 query &= C(method, side, lnl) == value
 
-
     queried_dataset = dataset.ly.query(query)
     end_time = time.perf_counter()
 
@@ -94,7 +80,7 @@ def execute_query(
 
 def safe_value_counts(column: pd.Series) -> dict[Any, int]:
     """
-    Return the value counts of a column, including missing values as `None`.
+    Return the value counts of a column, including missing values as ``None``.
 
     >>> column = pd.Series(['a', 'b', 'c', np.nan, 'a', 'b', 'c', 'a', 'b', 'c'])
     >>> safe_value_counts(column)
@@ -114,11 +100,11 @@ EnsureKeysSignature = Callable[[dict[KT, int]], dict[KT, int]]
 
 def make_ensure_keys_validator(keys: list[KT]) -> EnsureKeysSignature:
     """
-    Create an `AfterValidator` to ensure all `keys` are present in the data.
+    Create an `AfterValidator` to ensure all ``keys`` are present in the data.
 
     This creates a function that can be used with pydantic's `AfterValidator` to ensure
-    that all `keys` are present in the validated data. pydantic first receives the value
-    counts from the `safe_value_counts` function, validates it, and then calls the
+    that all ``keys`` are present in the validated data. pydantic first receives the
+    value counts from the `safe_value_counts` function, validates it, and then calls the
     function created by this wrapper to ensure that all keys are present.
     """
     def ensure_keys(data: dict[KT, int]) -> dict[KT, int]:
@@ -177,6 +163,12 @@ class BaseStatistics(BaseModel):
         """
         Compute statistics from a dataset.
 
+        This method computes e.g. how many patients in the queried dataset are
+        HPV positive, or how many patients have a certain T-stage. The statistics are
+        computed from the queried dataset and passed to the context of the
+        `dataexplorer.views`. From there, the statistics can be displayed in the
+        rendered HTML or JSON response.
+
         >>> di = DataInterface()
         >>> di.load_and_enhance_datasets(year=2021, institution="usz")
         >>> dataset = di.get_dataset()
@@ -224,8 +216,15 @@ Statistics = create_model(
     This class extends the `BaseStatistics` class by adding the dynamically created
     fields for the LNLs. That way, I did not have to write them by hand.
 
-    Its fields are somewhat mirrored in the `DashboardForm` class, which is used to
-    query the data on which the statistics are computed.
+    The intended use is to first query a dataset using the `execute_query` function
+    with the cleaned form data from the `DashboardForm`. Then, pass the queried dataset
+    to this class's `from_dataset` method to compute the statistics. Finally, pass the
+    computed statistics to the context of the `dataexplorer.views` to be displayed in
+    the rendered HTML or JSON response.
+
+    By design, this class's fields mirror the fields of the `DashboardForm` class. This
+    is obviously necessary, since any information data might be queried on is also
+    information that one can compute statistics on.
     """,
     **lnl_fields,
 )

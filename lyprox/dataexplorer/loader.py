@@ -1,7 +1,7 @@
 """
 The `DataInterface` class is used to load the patient cohort data into memory on server
 start-up. It then provides a unified interface to access the data in different modules,
-most importantly the `DataExplorer` module.
+most importantly the `dataexplorer` module.
 """
 
 import logging
