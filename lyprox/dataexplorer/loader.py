@@ -1,13 +1,13 @@
 """
-The `DataInterface` class is used to load the patient cohort data into memory on server
-start-up. It then provides a unified interface to access the data in different modules,
-most importantly the `dataexplorer` module.
-"""
+Provides the `DataInterface` singleton to load the patient records.
 
+From anywhere within the application, the data can be accessed by calling the
+`DataInterface.get_dataset` method. The data is loaded from the `lydata` repository
+on startup using the `DataInterface.load_and_enhance_datasets` method.
+"""
 import logging
 from collections import namedtuple
 from threading import Lock
-from typing import Literal
 
 import lydata
 import lydata.utils as lyutils
@@ -53,7 +53,7 @@ def load_with_metadata(dataset: LyDataset) -> pd.DataFrame:
 
 class DataInterface(metaclass=SingletonMeta):
     """
-    Class to load the patient cohort data into memory on server start-up.
+    Class to load the patient cohort data into memory on server startup.
 
     All public methods are also thread-safe by using a lock. This may become important
     when the server is running in a multi-threaded environment and multiple threads

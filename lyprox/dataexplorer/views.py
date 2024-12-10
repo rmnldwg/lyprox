@@ -1,19 +1,22 @@
 """
-Orchestrate the views for the data explorer dashboard.
+Orchestrate the logic of the dashboard. Start here to understand the `dataexplorer`.
 
-The views in this module are responsible for rendering the dashboard and handling
-AJAX requests that update the dashboard's statistics without reloading the entire page.
+The views in this module are being called when the user sends a request to the server.
+They process the data in the request and return a response. In between, the views
+delegate the creation of the form, its validation and cleaning, then execute the query
+and compute the statistics.
 
 The way this typically plays out is the following: The user navigates to the URL
 ``https://lyprox.org/dataexplorer/`` and the `dashboard_view` is called. This view
 creates a `DashboardForm` instance with the default initial values and renders the
-dashboard HTML layout. The user can then interact with the dashboard and change the
-values of the form fields. Upon clicking the "Compute" button, an AJAX request is sent
-with the updated form data. In the `dashboard_ajax_view`, another form instance is
-created, this time with the selected queries from the user. The form is validated and
-cleaned (using ``form.is_valid()``) and the cleaned data (``form.cleaned_data``) is
-passed to the `execute_query` function. This function queries the dataset and returns
-the patients that match the query.
+dashboard HTML layout. The template that is used for this is defined in
+``./lyprox/dataexplorer/templates/dataexplorer/layout.html``. The user can then
+interact with the dashboard and change the values of the form fields. Upon clicking the
+"Compute" button, an AJAX request is sent with the updated form data. In the
+`dashboard_ajax_view`, another form instance is created, this time with the selected
+queries from the user. The form is validated and cleaned (using ``form.is_valid()``)
+and the cleaned data (``form.cleaned_data``) is passed to the `execute_query` function.
+This function queries the dataset and returns the patients that match the query.
 
 From the returned queried patients, the `Statistics` class is used to compute the
 statistics, which are then returned as JSON data to the frontend. The frontend then
