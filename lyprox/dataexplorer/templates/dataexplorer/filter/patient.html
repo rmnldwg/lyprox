@@ -18,7 +18,7 @@
   </div>
 
   <div class="columns">
-    <div class="column">
+    <div class="column py-0">
       {{ form.smoke }}
       {% include 'dataexplorer/three_way_toggle_stats.html' with stats=stats field='smoke' show_percent=show_percent %}
 
@@ -26,7 +26,7 @@
       {% include 'dataexplorer/three_way_toggle_stats.html' with stats=stats field='hpv' show_percent=show_percent %}
     </div>
 
-    <div class="column">
+    <div class="column py-0">
       {{ form.surgery }}
       {% include 'dataexplorer/three_way_toggle_stats.html' with stats=stats field='surgery' show_percent=show_percent %}
 
