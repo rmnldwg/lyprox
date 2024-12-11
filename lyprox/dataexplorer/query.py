@@ -24,10 +24,11 @@ import lydata  # noqa: F401
 import lydata.utils as lyutils
 import pandas as pd
 from lydata import C
-from lydata.accessor import QTypes
+from lydata.accessor import NoneQ, QTypes
 from pydantic import AfterValidator, BaseModel, computed_field, create_model
 
 from lyprox.dataexplorer.loader import DataInterface  # noqa: F401
+from lyprox.dataexplorer.subsites import Subsites
 from lyprox.settings import LNLS
 
 logger = logging.getLogger(__name__)
@@ -61,7 +62,7 @@ def get_risk_factor_query(cleaned_form: dict[str, Any]) -> QTypes:
 
 def get_lnl_query(cleaned_form: dict[str, Any]) -> QTypes:
     """Create a query for the LNLs based on the cleaned form data."""
-    lnl_query = None
+    lnl_query = NoneQ()
     method = cleaned_form["modality_combine"]
 
     for side in ["ipsi", "contra"]:
@@ -161,6 +162,11 @@ TStageCounts = Annotated[
     AfterValidator(make_ensure_keys_validator(keys=[0, 1, 2, 3, 4])),
 ]
 """Keys are the T-stages, values are the counts of each."""
+SubsiteCounts = Annotated[
+    dict[str, int],
+    AfterValidator(make_ensure_keys_validator(keys=Subsites.all_values())),
+]
+"""Keys are the subsite ICD codes, values are the counts of each."""
 
 T = TypeVar("T", bound="BaseStatistics")
 
@@ -187,7 +193,7 @@ class BaseStatistics(BaseModel):
     """Counts of patients with different T-stages."""
     is_n_plus: NullableBoolCounts
     """Number of patients with or without N+ status."""
-    subsite: dict[str, int]
+    subsite: SubsiteCounts
     """Number of patients with tumors in different subsites."""
     central: NullableBoolCounts
     """For how many patients was the tumor located centrally, for how many not?"""

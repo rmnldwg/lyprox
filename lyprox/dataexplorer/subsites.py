@@ -3,6 +3,18 @@
 from django.db import models
 
 
+def convert_camel_to_snake(name: str) -> str:
+    """
+    Convert camel case to snake case.
+
+    >>> convert_camel_to_snake("BaseOfTongue")
+    'base_of_tongue'
+    >>> convert_camel_to_snake("DorsalSurfaceOfTongue")
+    'dorsal_surface_of_tongue'
+    """
+    return "".join(["_" + c.lower() if c.isupper() else c for c in name]).lstrip("_")
+
+
 class Subsites:
     """
     All tumor subsites as ICD-10 codes with the respective names.
@@ -69,12 +81,12 @@ class Subsites:
         C06_8 = "C06.8", "Overlapping lesion of other and unspecified parts of mouth"
         C06_9 = "C06.9", "Mouth, unspecified"
 
-    class Glands(models.TextChoices):
-        """Tumor subsites in the glands."""
-        C08   = "C08"  , "Salivary glands"
-        C08_0 = "C08.0", "Submandibular gland"
-        C08_1 = "C08.1", "Sublingual gland"
-        C08_9 = "C08.9", "Major salivary gland, unspecified"
+    # class Glands(models.TextChoices):
+    #     """Tumor subsites in the glands."""
+    #     C08   = "C08"  , "Salivary glands"
+    #     C08_0 = "C08.0", "Submandibular gland"
+    #     C08_1 = "C08.1", "Sublingual gland"
+    #     C08_9 = "C08.9", "Major salivary gland, unspecified"
 
     class Tonsil(models.TextChoices):
         """Tumor subsites in the tonsils."""
@@ -117,25 +129,39 @@ class Subsites:
         C32_9 = "C32.9", "Larynx, unspecified"
 
     @classmethod
+    def get_subsite_enums(cls) -> dict[str, models.enums.ChoicesMeta]:
+        """
+        Return a dictionary of all subsite enums.
+
+        Note that the keys are the subsite names in snake case. E.g., ``BaseOfTongue``
+        would become ``base_of_tongue``. This is done by the `convert_camel_to_snake`
+        helper function.
+
+        >>> Subsites.get_subsite_enums().keys()   # doctest: +NORMALIZE_WHITESPACE
+        dict_keys(['base_of_tongue', 'tongue', 'gum', 'floor_of_mouth', 'palate',
+                   'cheek', 'glands', 'tonsil', 'oropharynx', 'hypopharynx', 'larynx'])
+        """
+        return {
+            convert_camel_to_snake(name): value
+            for name, value in cls.__dict__.items()
+            if (
+                not name.startswith("_")
+                and isinstance(value, models.enums.ChoicesMeta)
+            )
+        }
+
+    @classmethod
     def all_choices(cls) -> list[tuple[str, str]]:
         """Return concatenated choices list of all subsites."""
         choices = []
-        for subsite in cls.__dict__.values():
-            try:
-                if issubclass(subsite, models.TextChoices):
-                    choices.extend(subsite.choices)
-            except TypeError:
-                pass
+        for subsite in cls.get_subsite_enums().values():
+            choices.extend(subsite.choices)
         return choices
 
     @classmethod
     def all_values(cls) -> list[str]:
         """Return concatenated values list of all subsites."""
         values = []
-        for subsite in cls.__dict__.values():
-            try:
-                if issubclass(subsite, models.TextChoices):
-                    values.extend(subsite.values)
-            except TypeError:
-                pass
+        for subsite in cls.get_subsite_enums().values():
+            values.extend(subsite.values)
         return values

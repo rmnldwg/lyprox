@@ -25,6 +25,7 @@ created from the initial defaults or from the user's input.
 .. _as Django intends forms to be used: https://docs.djangoproject.com/en/4.2/ref/forms/
 """
 import logging
+from collections.abc import Generator
 from typing import Any, TypeVar
 
 from django import forms
@@ -174,6 +175,27 @@ class ThreeWayToggle(forms.ChoiceField):
 
 checkbox_attrs = {"class": "checkbox is-hidden", "onchange": "changeHandler();"}
 
+class EasySubsiteChoiceField(forms.MultipleChoiceField):
+    """Simple subclass that provides a convenience method to create subsite fields."""
+
+    @classmethod
+    def from_enum(cls, enum: type, **kwargs) -> "EasySubsiteChoiceField":
+        """
+        Create a field from a subsite enum.
+
+        All this does is pass the ``enum``'s choices and values to the constructor as
+        ``choices`` and ``initial``, respectively. It makes the field not required and
+        uses a checkbox widget with the `checkbox_attrs` as ``attrs``.
+        """
+        default_kwargs = {
+            "required": False,
+            "widget": forms.CheckboxSelectMultiple(attrs=checkbox_attrs),
+            "choices": enum.choices,
+            "initial": enum.values,
+        }
+        default_kwargs.update(kwargs)
+        return cls(**default_kwargs)
+
 
 T = TypeVar("T", bound="DashboardForm")
 
@@ -228,12 +250,7 @@ class DashboardForm(FormLoggerMixin, forms.Form):
     )
     """Did the patient undergo neck dissection?"""
 
-    t_stage = forms.MultipleChoiceField(
-        required=False,
-        widget=forms.CheckboxSelectMultiple(attrs=checkbox_attrs),
-        choices=TStages.choices,
-        initial=TStages.values,
-    )
+    t_stage = EasySubsiteChoiceField.from_enum(TStages)
     """Only include patients with the selected T-stages."""
 
     is_n_plus = ThreeWayToggle(
@@ -241,14 +258,6 @@ class DashboardForm(FormLoggerMixin, forms.Form):
         tooltip="Select all N+ (or N0) patients"
     )
     """Select patients with N+ or N0 status."""
-
-    subsite = forms.MultipleChoiceField(
-        required=False,
-        widget=forms.CheckboxSelectMultiple(attrs=checkbox_attrs),
-        choices=Subsites.all_choices(),
-        initial=Subsites.all_values(),
-    )
-    """Only include patients with tumors in the selected subsites."""
 
     central = ThreeWayToggle(
         label="central",
@@ -284,16 +293,21 @@ class DashboardForm(FormLoggerMixin, forms.Form):
         based on the user's permissions. I.e., a logged-in user can see private
         datasets, while an anonymous user can only see public datasets.
 
+        Then, the defined `Subsites` as separate `MultipleChoiceField` fields are added
+        to the form. We do this dynamically via the `add_subsite_choice_fields` method,
+        because we want to render the subsites separately in the frontend.
+
         Also, the LNL toggle buttons are added to the form dynamically, because it
         would be cumbersome to add them manually for each LNL and side.
 
-        Note that the form contains the data already upon initialization. But it is OK
-        to add fields even after that, because the form only goes through its fields
-        and tries to validate its data for each of then when ``form.is_valid()`` is
-        called.
+        Note that the form contains the user input or initial values already upon
+        initialization. But it is OK to add fields even after that, because the form
+        only goes through its fields and tries to validate its data for each of then
+        when ``form.is_valid()`` is called.
         """
         super().__init__(*args, **kwargs)
         self.populate_dataset_options(user=user)
+        self.add_subsite_choice_fields()
         self.add_lnl_toggle_buttons()
 
 
@@ -311,6 +325,12 @@ class DashboardForm(FormLoggerMixin, forms.Form):
             priv_dset_names = list(data.loc[is_private, name_col].unique())
             self.fields["datasets"].choices += format_dataset_choices(priv_dset_names)
             self.fields["datasets"].initial += priv_dset_names
+
+
+    def add_subsite_choice_fields(self):
+        """Add all subsite choice fields to the form."""
+        for subsite, enum in Subsites.get_subsite_enums().items():
+            self.fields[f"subsite_{subsite}"] = EasySubsiteChoiceField.from_enum(enum)
 
 
     def add_lnl_toggle_buttons(self) -> None:
@@ -342,7 +362,34 @@ class DashboardForm(FormLoggerMixin, forms.Form):
         return cls(initial_data, user=user)
 
 
-    def clean(self):
+    def get_subsite_fields(self) -> list[str]:
+        """Return the subsite checkboxes."""
+        return [name for name in self.fields.keys() if name.startswith("subsite_")]
+
+
+    @staticmethod
+    def generate_icd_codes(cleaned_data: dict[str, Any]) -> Generator[str, None, None]:
+        """Generate all subsite ICD codes."""
+        for subsite in Subsites.get_subsite_enums().keys():
+            yield from cleaned_data[f"subsite_{subsite}"]
+
+
+    def check_lnl_conflicts(self, cleaned_data: dict[str, Any]) -> dict[str, Any]:
+        """Ensure that LNLs I, II, and V are not in conflict with their sublevels."""
+        for side in ["ipsi", "contra"]:
+            for lnl in ["I", "II", "V"]:
+                a = cleaned_data[f"{side}_{lnl}a"]
+                b = cleaned_data[f"{side}_{lnl}b"]
+
+                if a is True or b is True:
+                    cleaned_data[f"{side}_{lnl}"] = True
+                if a is False and b is False:
+                    cleaned_data[f"{side}_{lnl}"] = False
+
+        return cleaned_data
+
+
+    def clean(self) -> dict[str, Any]:
         """
         Clean the form data.
 
@@ -354,24 +401,12 @@ class DashboardForm(FormLoggerMixin, forms.Form):
         """
         cleaned_data = super().clean()
 
-        # necessary to prevent errors from processing invalid data
         if len(self.errors) != 0:
             return {}
 
-        # convert tstages from list of strings to list of integers
         cleaned_data["t_stage"] = [int(t) for t in cleaned_data["t_stage"]]
-
-        # make sure LNLs I & II aren't in conflict with their sublevels
-        for side in ["ipsi", "contra"]:
-            for lnl in ["I", "II", "V"]:
-                a = cleaned_data[f"{side}_{lnl}a"]
-                b = cleaned_data[f"{side}_{lnl}b"]
-
-                # make sure data regarding sublevels is not conflicting
-                if a is True or b is True:
-                    cleaned_data[f"{side}_{lnl}"] = True
-                if a is False and b is False:
-                    cleaned_data[f"{side}_{lnl}"] = False
+        cleaned_data["subsite"] = list(self.generate_icd_codes(cleaned_data))
+        cleaned_data = self.check_lnl_conflicts(cleaned_data)
 
         self.logger.debug(f"cleaned data: {cleaned_data}")
         return cleaned_data
