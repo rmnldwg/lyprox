@@ -1,13 +1,18 @@
 """
-Django settings module that defines important configurations. For an explanation of
-all the listed values, see the official `Django documentation`_.
+Main configurations. An explanation of all options can be found in the `Django docs`_.
 
 Generally, the most important settings - but also as few as possible - should be
-fetched from environment variables. The settings are written such that errors are
-thrown when the required env vars are not present. This is by design, to ensure the
-host environment is configured for the application.
+fetched from environment variables. This is good practice (see `12 Factor App`_) and
+especially for security related stuff important. Although LyProX doesn't really have
+much security relevant stuff going on.
 
-Only these env vars should need to be changed:
+The settings are written such that errors are thrown when the required environment vars
+are not present. This is by design, to ensure the host environment is configured for
+the application. It is recommended that you write an `.env` file at the root of the
+project (DON'T TRACK IT WITH GIT!) and source it (source .env) before running the
+application.
+
+Only these environment vars should need to be changed:
 
 - ``DJANGO_ENV`` can be ``"debug"``, ``"maintenance"``, or ``"production"``.
 - ``DJANGO_SECRET_KEY`` must contain the secret key for Django's security stuff.
@@ -15,7 +20,8 @@ Only these env vars should need to be changed:
 - ``DJANGO_LOG_LEVEL`` for the log level. This only has an effect in debug mode.
 - ``DJANGO_BASE_DIR`` is the directory in which Django is based.
 
-.. _Django documentation: https://docs.djangoproject.com/en/4.2/ref/settings/
+.. _Django docs: https://docs.djangoproject.com/en/4.2/ref/settings/
+.. _12 Factor App: https://12factor.net/config
 """
 import os
 from pathlib import Path
@@ -260,9 +266,7 @@ DBBACKUP_STORAGE_OPTIONS = {"location": "/home/rmnldwg/backups/lyprox/"}
 # Password validation
 # https://docs.djangoproject.com/en/3.1/ref/settings/#auth-password-validators
 AUTH_PASSWORD_VALIDATORS = [
-    {
-        "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator"
-    },
+    {"NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator"},  # noqa: E501
     {"NAME": "django.contrib.auth.password_validation.MinimumLengthValidator"},
     {"NAME": "django.contrib.auth.password_validation.CommonPasswordValidator"},
     {"NAME": "django.contrib.auth.password_validation.NumericPasswordValidator"},

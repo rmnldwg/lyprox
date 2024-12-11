@@ -41,8 +41,7 @@ documentation = "https://rmnldwg.github.io/lyprox"
 
 [project.optional-dependencies]
 docs = [
-    "docutils ~= 0.19",
-    "pydoctor ~= 22.9",
+    "pydoctor",
 ]
 test = [
     "pytest-django",
@@ -79,23 +78,13 @@ intersphinx = [
     "https://lymph-model.readthedocs.io/latest/objects.inv",
     "https://lydata.readthedocs.io/latest/objects.inv",
     "https://docs.pydantic.dev/latest/objects.inv",
+    "https://pandas.pydata.org/docs/objects.inv",
 ]
 docformat = "google"
 make-html = true
 html-output = "./docs"
 verbose = 1
 privacy = [
-    "HIDDEN:lyprox.context_processors",
     "HIDDEN:lyprox.middleware",
     "HIDDEN:lyprox.loggers",
-    "HIDDEN:lyprox.patients.migrations",
-    "HIDDEN:lyprox.patients.static",
-    "HIDDEN:lyprox.patients.templates",
-    "HIDDEN:lyprox.patients.templatetags",
-    "HIDDEN:lyprox.patients.admin",
-    "HIDDEN:lyprox.patients.apps",
-    "HIDDEN:lyprox.patients.tests",
-    "HIDDEN:lyprox.dataexplorer.admin",
-    "HIDDEN:lyprox.dataexplorer.apps",
-    "HIDDEN:lyprox.dataexplorer.models",
 ]

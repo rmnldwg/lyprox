@@ -18,6 +18,7 @@ logger = logging.getLogger(__name__)
 
 
 DatasetStorage = namedtuple("DatasetStorage", ["visibility", "pushed_at", "dataframe"])
+"""Simple namedtuple to store visibility, pushed_at, and the dataframe of a dataset."""
 
 
 class SingletonMeta(type):
@@ -53,15 +54,20 @@ def load_with_metadata(dataset: LyDataset) -> pd.DataFrame:
 
 class DataInterface(metaclass=SingletonMeta):
     """
-    Class to load the patient cohort data into memory on server startup.
+    Class to load and access the patient cohort.
+
+    The method `load_and_enhance_datasets` is called in the
+    `apps.DataExplorerConfig.ready` method to load the data from the `lyDATA`_ repo
+    on server startup. The data is stored in a pandas DataFrame in memory.
 
     All public methods are also thread-safe by using a lock. This may become important
     when the server is running in a multi-threaded environment and multiple threads
     try to access the data at the same time.
-    """
 
+    .. _lyDATA: https://github.com/rmnldwg/lydata
+    """
     def __init__(self) -> None:
-        """Initialize an empty public and private dataset."""
+        """Initialize an empty dataset and a lock."""
         self._data: pd.DataFrame | None = None
         self._lock: Lock = Lock()
 
@@ -76,7 +82,7 @@ class DataInterface(metaclass=SingletonMeta):
             )
 
     def add_dataset(self, dataset: LyDataset) -> None:
-        """Add a dataset to the data storage."""
+        """Concatenate the dataset with the existing stored data."""
         dataset = load_with_metadata(dataset)
 
         with self._lock:
@@ -91,7 +97,7 @@ class DataInterface(metaclass=SingletonMeta):
         return has_name.sum()
 
     def delete_dataset(self, name: str) -> None:
-        """Delete the dataset with the specified visibility."""
+        """Delete the dataset with ``name`` from the stored data."""
         with self._lock:
             num_deleted = self._delete_dataset(name=name)
 
@@ -112,7 +118,7 @@ class DataInterface(metaclass=SingletonMeta):
         replace_existing: bool = False,
     ) -> None:
         """
-        Use `lydata` to find and load matching datasets from the specified repository.
+        Use `lyDATA`_ to find and load matching datasets from the specified repository.
 
         All arguments are directly passed to the `lydata.join_datasets` function. The
         method also infers sub- and superlevel involvement in case the data does not
@@ -121,6 +127,8 @@ class DataInterface(metaclass=SingletonMeta):
         Some metadata, like the visibility, the dataset name, and the time the dataset
         was last pushed to the repository, are added to the concatenated dataframe in
         the storage of this interface singleton.
+
+        .. _lyDATA: https://github.com/rmnldwg/lydata
         """
         for dset in lydata.available_datasets(
             year=year,

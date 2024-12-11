@@ -1,5 +1,5 @@
 """
-The `dataexplorer.forms` module defines the fields used to query the patient records.
+Defines the fields that can be used to query the patient records.
 
 Basically, this defines what buttons, dropdowns, and checkboxes are displayed on the
 dashboard and to some extent also how they look. Here, we also define the
@@ -13,11 +13,19 @@ Typically, when calling one of the `dataexplorer.views` functions, an instance o
 the dashboard. Then, the user applies filters to the data and submits the form by
 pressing the "Compute" button. The form is then validated and cleaned
 (``form.is_valid()``), also in the `dataexplorer.views` module.
-"""
 
-# pylint: disable=no-member
+Note: the `DashboardForm` is not strictly used `as Django intends forms to be used`_.
+In Django's logic, a form just after creation is "unbound" and in that state expects
+user input (think of a login form with empty fields). However, in our dashboard, no
+fields are ever "empty". Even when you first load the dashboard, the `ThreeWayToggle`
+buttons are already set to a value (``None``). Therefore, we never have this "unbound"
+state of the form. Instead, we always work with bound and validated forms, either
+created from the initial defaults or from the user's input.
+
+.. _as Django intends forms to be used: https://docs.djangoproject.com/en/4.2/ref/forms/
+"""
 import logging
-from typing import Any, Literal, TypeVar
+from typing import Any, TypeVar
 
 from django import forms
 from django.core.exceptions import ValidationError
@@ -67,8 +75,11 @@ class ThreeWayToggleWidget(forms.RadioSelect):
     `option_attrs` as well as the attributes of the container as ``attrs``.
     """
     template_name = "widgets/three_way_toggle.html"
+    """HTML template that renders the button containing its three options."""
     option_template_name = "widgets/three_way_toggle_option.html"
+    """HTML template that renders the individual options of the button."""
     option_attrs = {"class": "radio is-hidden", "onchange": "changeHandler();"}
+    """HTML attributes. Also adds the call to a JS function."""
 
     def __init__(
         self,
@@ -111,8 +122,17 @@ class ThreeWayToggleWidget(forms.RadioSelect):
 
 
 class ThreeWayToggle(forms.ChoiceField):
-    """Toggle switch than of three states: pos./True, unkown/None and neg./False."""
+    """
+    Field to choose one of three options: ``True``, ``None`` and ``False``.
 
+    ``True`` is represented by a plus sign and means "positive", ``None`` is
+    represented by a ban sign and means "unknown", and ``False`` is represented by a
+    minus sign and means "negative".
+
+    The field is rendered by the `ThreeWayToggleWidget`. Every LNL's involvement as
+    well as many binary risk factors such as smoking status, HPV status, and neck
+    dissection status are represented by this field.
+    """
     def __init__(
         self,
         attrs=None,
@@ -124,7 +144,7 @@ class ThreeWayToggle(forms.ChoiceField):
         required=False,
         **kwargs,
     ):
-        """Pass args like `label` and `tooltip` to constructor of custom widget."""
+        """Pass args like ``label`` and ``tooltip`` to constructor of custom widget."""
         if choices is None:
             choices = [(True, "plus"), (None, "ban"), (False, "minus")]
 
@@ -142,7 +162,7 @@ class ThreeWayToggle(forms.ChoiceField):
         )
 
     def to_python(self, value: bool | None) -> bool | None:
-        """Cast the string to an integer."""
+        """Cast the string to an integer. ``""`` is interpreted as ``None``."""
         if value in [True, False, None]:
             return value
 
@@ -170,6 +190,8 @@ class DashboardForm(FormLoggerMixin, forms.Form):
         choices=[(mod, mod) for mod in get_default_modalities()],
         initial=["CT", "MRI", "PET", "FNA", "diagnostic_consensus", "pathology", "pCT"],
     )
+    """Which modalities to combine into a consensus diagnosis."""
+
     modality_combine = forms.ChoiceField(
         widget=forms.Select(attrs={"onchange": "changeHandler();"}),
         choices=[
@@ -179,50 +201,70 @@ class DashboardForm(FormLoggerMixin, forms.Form):
         label="Combine",
         initial="max_llh",
     )
+    """Method to use to combine the modalities' LNL involvement diagnoses."""
+
     datasets = forms.MultipleChoiceField(
         widget=forms.CheckboxSelectMultiple(attrs=checkbox_attrs),
         choices=[],
         initial=[],
     )
+    """Patients from which datasets to include in the query."""
+
     smoke = ThreeWayToggle(
         label="smoking status",
         tooltip="Select smokers or non-smokers"
     )
+    """Select patients that are smokers, non-smokers, or unknown."""
+
     hpv = ThreeWayToggle(
         label="HPV status",
         tooltip="Select patients being HPV positive or negative"
     )
+    """Select patients that are HPV positive, negative, or unknown."""
+
     surgery = ThreeWayToggle(
         label="neck dissection",
         tooltip="Include patients that have (or have not) received neck dissection",
     )
+    """Did the patient undergo neck dissection?"""
+
     t_stage = forms.MultipleChoiceField(
         required=False,
         widget=forms.CheckboxSelectMultiple(attrs=checkbox_attrs),
         choices=TStages.choices,
         initial=TStages.values,
     )
+    """Only include patients with the selected T-stages."""
+
     is_n_plus = ThreeWayToggle(
         label="N+ vs N0",
         tooltip="Select all N+ (or N0) patients"
     )
+    """Select patients with N+ or N0 status."""
+
     subsite = forms.MultipleChoiceField(
         required=False,
         widget=forms.CheckboxSelectMultiple(attrs=checkbox_attrs),
         choices=Subsites.all_choices(),
         initial=Subsites.all_values(),
     )
+    """Only include patients with tumors in the selected subsites."""
+
     central = ThreeWayToggle(
         label="central",
         tooltip="Choose to in- or exclude patients with central tumors"
     )
+    """Filter by whether the tumor is central or not."""
+
     midext = ThreeWayToggle(
         label="midline extension",
         tooltip=(
             "Investigate patients with tumors that do (or do not) "
-            "cross the mid-sagittal line"
+            "cross the mid-sagittal plane"
         ),
     )
+    """Filter by whether the tumor crosses the mid-sagittal plane."""
+
     show_percent = forms.BooleanField(
         required=False,
         initial=False,
@@ -231,12 +273,24 @@ class DashboardForm(FormLoggerMixin, forms.Form):
             choices=[(True, "percent"), (False, "absolute")],
         ),
     )
+    """Show the statistics after querying as percentages or absolute numbers."""
 
 
     def __init__(self, *args, user, **kwargs):
         """
-        Extend default initialization to create lots of fields for the
-        LNLs from a list and hide some datasets for unauthenticated users.
+        Extend default initialization.
+
+        After calling the parent constructor, the selectable datasets are populated
+        based on the user's permissions. I.e., a logged-in user can see private
+        datasets, while an anonymous user can only see public datasets.
+
+        Also, the LNL toggle buttons are added to the form dynamically, because it
+        would be cumbersome to add them manually for each LNL and side.
+
+        Note that the form contains the data already upon initialization. But it is OK
+        to add fields even after that, because the form only goes through its fields
+        and tries to validate its data for each of then when ``form.is_valid()`` is
+        called.
         """
         super().__init__(*args, **kwargs)
         self.populate_dataset_options(user=user)
@@ -277,12 +331,7 @@ class DashboardForm(FormLoggerMixin, forms.Form):
 
     @classmethod
     def from_initial(cls: type[T], user) -> T:
-        """
-        Return the initial data for the form.
-
-        This is used to set the initial values of the form fields to the
-        values that are stored in the session.
-        """
+        """Return a bound form filled with the default values for each field."""
         form = cls(user=user)
         initial_data = {}
         for name, field in form.fields.items():
@@ -295,9 +344,13 @@ class DashboardForm(FormLoggerMixin, forms.Form):
 
     def clean(self):
         """
-        Ensure LNLs I, II, V have correct sublevel values.
+        Clean the form data.
 
-        Also convert tstages from list of ``str`` to list of ``int``.
+        The default cleaning provided by Django is extended to deal with some special
+        cases that arise from our data. On the one hand, this involved casting the
+        ``t_stage`` list of values to integers, but more importantly, it also ensures
+        that the sub- and superlevel involvement of the LNLs I, II, and V are not in
+        conflict.
         """
         cleaned_data = super().clean()
 

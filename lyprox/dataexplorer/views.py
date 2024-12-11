@@ -1,28 +1,34 @@
 """
-Orchestrate the logic of the dashboard. Start here to understand the `dataexplorer`.
+Orchestrate the logic of the dashboard.
 
 The views in this module are being called when the user sends a request to the server.
-They process the data in the request and return a response. In between, the views
-delegate the creation of the form, its validation and cleaning, then execute the query
-and compute the statistics.
+Which view is called for which URL is defined in the `urls` module. The views process
+the data in the request and return a response. In between, the views delegate the
+creation of the `DashboardForm`, its validation and cleaning, then `execute_query` and
+compute the `Statistics` from the filtered dataset.
 
-The way this typically plays out is the following: The user navigates to the URL
-``https://lyprox.org/dataexplorer/`` and the `dashboard_view` is called. This view
-creates a `DashboardForm` instance with the default initial values and renders the
-dashboard HTML layout. The template that is used for this is defined in
+The way this typically plays out in detail is the following: The user navigates to the
+URL ``https://lyprox.org/dataexplorer/`` and the `dashboard_view` is called. This view
+creates an instance of `DashboardForm.from_initial` with the default values and renders
+the dashboard HTML layout. The template that is used for this is defined in
 ``./lyprox/dataexplorer/templates/dataexplorer/layout.html``. The user can then
 interact with the dashboard and change the values of the form fields. Upon clicking the
 "Compute" button, an AJAX request is sent with the updated form data. In the
-`dashboard_ajax_view`, another form instance is created, this time with the selected
-queries from the user. The form is validated and cleaned (using ``form.is_valid()``)
-and the cleaned data (``form.cleaned_data``) is passed to the `execute_query` function.
-This function queries the dataset and returns the patients that match the query.
+`dashboard_ajax_view`, another `DashboardForm` instance is created, this time with the
+selected queries from the user. The form is validated and cleaned (using
+``form.is_valid()``) and the cleaned data (``form.cleaned_data``) is passed to the
+`execute_query` function. This function queries the dataset and returns the patients
+that match the query.
 
 From the returned queried patients, the `Statistics` class is used to compute the
 statistics, which are then returned as JSON data to the frontend. The frontend then
 updates the dashboard with the new statistics without reloading the entire page.
-"""
 
+Read more about how views work in Django, what responses they return and how to use
+the context they may provide in the `Django documentation`_.
+
+.. _Django documentation: https://docs.djangoproject.com/en/4.2/topics/http/views/
+"""
 import json
 import logging
 
@@ -90,6 +96,11 @@ def dashboard_ajax_view(request):
     It also doesn't receive a GET request, but a POST request with the `DashboardForm`
     fields as JSON data. The form is validated and cleaned as always (using
     ``form.is_valid()``).
+
+    Some resources to learn more about AJAX requests in Django can be found
+    `in this article`_.
+
+    .. _in this article: https://realpython.com/django-and-ajax-form-submissions/
     """
     request_data = json.loads(request.body.decode("utf-8"))
     form = DashboardForm(request_data, user=request.user)
