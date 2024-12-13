@@ -339,7 +339,7 @@ class DashboardForm(FormLoggerMixin, forms.Form):
             for lnl in LNLS:
                 if lnl in ["I", "II", "V"]:
                     self.fields[f"{side}_{lnl}"] = ThreeWayToggle(
-                        option_attrs={"onclick": "bothClickHandler(this)"}
+                        option_attrs={"onclick": "superClickHandler(this)"}
                     )
                 elif "a" in lnl or "b" in lnl:
                     self.fields[f"{side}_{lnl}"] = ThreeWayToggle(

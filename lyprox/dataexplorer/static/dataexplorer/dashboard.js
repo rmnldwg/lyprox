@@ -1,68 +1,66 @@
 /**
  * Handle the case when the user select a super-level involvement. E.g., when the '-'
- * is clicked, all the sub-levels also need to switch to '-'.
+ * is clicked on a super-level's three-way toggle button, all the sub-levels also need
+ * to switch to '-'.
  *
- * @param {*} radio_both Radio button element that selects involvement status of super-level
+ * @param {*} super_radio Radio button element that selects involvement status of super-level
  */
-function bothClickHandler(radio_both) {
-  both_name = radio_both.name;
-  sub_a_name = both_name + "a";
-  sub_b_name = both_name + "b";
+function superClickHandler(super_radio) {
+  const radio_a = document.forms["dashboardform"].elements[super_radio.name + "a"];
+  const radio_b = document.forms["dashboardform"].elements[super_radio.name + "b"];
+  const a_val = radio_a.value;
+  const b_val = radio_b.value;
 
-  radio_a = document.forms["dashboardform"].elements[sub_a_name];
-  radio_b = document.forms["dashboardform"].elements[sub_b_name];
-  a_val = radio_a.value;
-  b_val = radio_b.value;
-
-  if (radio_both.value == 1) {
-    if (a_val == -1 && b_val == -1) {
-      radio_a.value = 0;
-      radio_b.value = 0;
-    };
-  } else if (radio_both.value == 0) {
-    if (a_val == 1) {
-      radio_a.value = 0;
-    };
-    if (b_val == 1) {
-      radio_b.value = 0;
-    };
-    if (a_val == -1 && b_val == -1) {
-      radio_a.value = 0;
-      radio_b.value = 0;
-    };
-  } else if (radio_both.value == -1) {
-    if (radio_a.value == 1) {
-      radio_a.value = 0;
-    };
-    if (radio_b.value == 1) {
-      radio_b.value = 0;
-    };
-  };
+  if (super_radio.value == "True") {
+    if (a_val == "False" && b_val == "False") {
+      radio_a.value = "";
+      radio_b.value = "";
+    }
+  } else if (super_radio.value == "") {
+    if (a_val == "True") {
+      radio_a.value = "";
+    }
+    if (b_val == "True") {
+      radio_b.value = "";
+    }
+    if (a_val == "False" && b_val == "False") {
+      radio_a.value = "";
+      radio_b.value = "";
+    }
+  } else if (super_radio.value == "False") {
+    if (a_val == "True") {
+      radio_a.value = "";
+    }
+    if (b_val == "True") {
+      radio_b.value = "";
+    }
+  }
 };
 
 /**
  * Define what happens when a sub-level's involvement is changed. E.g., when sub-level
  * 'a' is set to '+', the super-level also needs to be set to '+'.
  *
- * @param {*} radio_sub Radiobutton element of a lymph node sub-level
+ * @param {*} this_sub_radio Radiobutton element of a lymph node sub-level
  */
-function subClickHandler(radio_sub) {
-  sub_name = radio_sub.name;
-  both_name = sub_name.slice(0, sub_name.length - 1)
-  radio_both = document.forms["dashboardform"].elements[both_name];
+function subClickHandler(this_sub_radio) {
+  const this_sub_name = this_sub_radio.name;
+  const super_name = this_sub_name.slice(0, this_sub_name.length - 1)
+  const super_radio = document.forms["dashboardform"].elements[super_name];
+  let other_sub_name;
 
-  if (sub_name.slice(sub_name.length - 1, sub_name.length) === 'a') {
-    other_sub_name = both_name + 'b';
+  if (this_sub_name.endsWith('a')) {
+    other_sub_name = super_name + 'b';
   } else {
-    other_sub_name = both_name + 'a';
+    other_sub_name = super_name + 'a';
   }
 
-  radio_other_sub = document.forms["dashboardform"].elements[other_sub_name];
+  const other_sub_radio = document.forms["dashboardform"].elements[other_sub_name];
 
-  if (radio_sub.value == 1) {
-    radio_both.value = 1;
-  } else if (radio_sub.value == -1 && radio_other_sub.value == -1) {
-    radio_both.value = -1
+  if (this_sub_radio.value == "True") {
+    super_radio.value = "True";
+  } else if (this_sub_radio.value == "False" && other_sub_radio.value == "False") {
+    super_radio.value = "False"
   };
 };
 
@@ -95,9 +93,9 @@ $(document).keydown(function (event) {
  * @param {*} element Slider element
  */
 function syncSliderValue(element) {
-  var name = element.attr('name');
-  var value = element.val();
-  var valuePercentDisplay = $(`#${name}-display`);
+  const name = element.attr('name');
+  const value = element.val();
+  const valuePercentDisplay = $(`#${name}-display`);
   valuePercentDisplay.text((100 * value).toFixed(0) + '%');
 }
 
@@ -155,6 +153,12 @@ function isChecked(index, element) {
   return $(element).is(":checked");
 };
 
+/**
+ * Cast a string to a number or boolean if possible.
+ *
+ * @param {string} input A string that may be cast to a number or boolean.
+ * @returns {string|number|boolean} A number, boolean, or the original string.
+ */
 function castString(input) {
   if (/^\d+$/.test(input)) {
     return Number(input);
@@ -170,13 +174,11 @@ function castString(input) {
 }
 
 /**
- * Iterate through all checked input elements in the form and collect their values in
- * a dictionary.
+ * Collect form data from all radio boxes and add it to the dictionary `data`.
+ *
+ * @param {*} data The dictionary to which the radio data will be added.
  */
-function collectDataFromFields() {
-  var data = {};
-
-  // Get all the radio boxes' values
+function collectRadioData(data) {
   $("#dashboard-form *")
     .filter(isRadio)
     .filter(isChecked)
@@ -186,8 +188,14 @@ function collectDataFromFields() {
 
       data[fieldName] = castString(rawValue);
     });
+}
 
-  // Get the list of values for the checkbox options
+/**
+ * Collect form data from all checkboxes and add it to the dictionary `data`.
+ *
+ * @param {*} data The dictionary to which the checkbox data will be added.
+ */
+function collectCheckboxData(data) {
   $("#dashboard-form *")
     .filter(isCheckbox)
     .filter(isChecked)
@@ -199,10 +207,16 @@ function collectDataFromFields() {
         data[fieldName].push(castString(rawValue));
       } else {
         data[fieldName] = [castString(rawValue)];
-      };
+      }
     });
+}
 
-  // Get the selected values from dropdown menus (there's only one right now)
+/**
+ * Collect form data from all dropdowns and add it to the dictionary `data`.
+ *
+ * @param {*} data The dictionary to which the dropdown data will be added.
+ */
+function collectDropdownData(data) {
   $("#dashboard-form *")
     .filter(function () {
       return $(this).is("select");
@@ -213,8 +227,14 @@ function collectDataFromFields() {
 
       data[fieldName] = castString(rawValue);
     });
+}
 
-  // Get the values from the range sliders
+/**
+ * Collect form data from all range sliders and add it to the dictionary `data`.
+ *
+ * @param {*} data The dictionary to which the range slider data will be added.
+ */
+function collectRangeSliderData(data) {
   $("#dashboard-form *")
     .filter(function () {
       return $(this).is("input[type=range]");
@@ -225,8 +245,14 @@ function collectDataFromFields() {
 
       data[fieldName] = castString(rawValue);
     });
+}
 
-  // Get the values from the hidden inputs
+/**
+ * Collect form data from all hidden inputs and add it to the dictionary `data`.
+ *
+ * @param {*} data The dictionary to which the hidden input data will be added.
+ */
+function collectHiddenInputData(data) {
   $("#dashboard-form *")
     .filter(function () {
       return $(this).is("input[type=hidden]");
@@ -237,14 +263,29 @@ function collectDataFromFields() {
 
       data[fieldName] = castString(rawValue);
     });
-
-  jsonData = JSON.stringify(data);
-  console.log(data);
-  return jsonData;
-};
+}
 
 /**
- * Map the data-key field values "True", "False", and "None" to true, false, null
+ * Collect data from all the fields in the form and return it as a JSON string.
+ *
+ * @returns A JSON string of the data collected from the form.
+ */
+function collectDataFromFields() {
+  var data = {};
+
+  collectRadioData(data);
+  collectCheckboxData(data);
+  collectDropdownData(data);
+  collectRangeSliderData(data);
+  collectHiddenInputData(data);
+
+  var jsonData = JSON.stringify(data);
+  console.log(data);
+  return jsonData;
+}
+
+/**
+ * Map the data-key field values "True", "False", and "" to true, false, null
  * respectively and return anything else unchanged.
  *
  * @param {string} strKey The 'data-key' value from the form.
@@ -255,7 +296,7 @@ function mapDataKey(strKey) {
     return true;
   } else if (strKey == "False") {
     return false;
-  } else if (strKey == "None") {
+  } else if (strKey == "") {
     return null;
   };
 
@@ -270,16 +311,53 @@ function mapDataKey(strKey) {
  */
 function populateFields(response) {
   console.log(response);
-  let totalNum = response.total;
-  let type = response.type;
+  const totalNum = response.total;
+  const type = response.type;
+
+  function percent(value) {
+    return 100 * value / totalNum;
+  };
+
+  function updateBarplotStyle(element, field) {
+    const involved = response[field][true];
+    const unknown = response[field][null];
+    const side = field.split("_")[0] + "lateral";
+    const lnl = field.split("_")[1];
+
+    let newStyle = "";
+    newStyle += "background-size: " + percent(involved) + "% 100%, ";
+    newStyle += percent(involved) + percent(unknown) + "% 100%, 100% 100%;";
+    $(element).attr("style", newStyle);
+
+    if (type == "stats") {
+      const newTooltip = (
+        `${unknown} of ${totalNum} (${percent(unknown).toFixed(0)}%) `
+        + `patients have unknown involvement in LNL ${lnl} ${side}.`
+      );
+      $(element).attr("data-tooltip", newTooltip);
+    }
+  };
+
+  function updateBarplotLegend(element, field, key) {
+    const fieldVal = response[field][key];
+    const side = field.split("_")[0] + "lateral";
+    const lnl = field.split("_")[1];
+
+    const toggle = (key == "True") ? "" : "do not ";
+
+    if (type == "stats") {
+      const newTooltip = (
+        `${fieldVal} of ${totalNum} (${percent(fieldVal).toFixed(0)}%) `
+        + `patients ${toggle}have metastases in LNL ${lnl} ${side}.`
+      );
+      $(element).attr("data-tooltip", newTooltip);
+    }
+  };
 
   $(".stats").each(function () {
-    let field = $(this).data("statfield");
-    let key = mapDataKey($(this).data("key"));
-    let showPercent = $('input[name="show_percent"]:checked').val();
-    let isBarplot = $(this).hasClass("barplot");
-    let isBarplotLegend = $(this).hasClass("barplot-legend");
-    let isTotal = $(this).data("statfield") == "total";
+    const field = $(this).data("statfield");
+    const key = mapDataKey($(this).data("key"));
+    const showPercent = $('input[name="show_percent"]:checked').val();
     let newValue;
 
     if (key === undefined) {
@@ -290,57 +368,20 @@ function populateFields(response) {
       newValue = 0;
     };
 
-    if (isBarplot) {
-      let involved = response[field][true];
-      let unknown = response[field][null];
-      let involvedPercent = 100 * involved / totalNum;
-      let unknownPercent = 100 * unknown / totalNum;
-      let side = field.split("_")[0] + "lateral";
-      let lnl = field.split("_")[1];
+    const isBarplot = $(this).hasClass("barplot");
+    if (isBarplot) {updateBarplotStyle(this, field)};
 
-      let newStyle = "";
-      newStyle += "background-size: " + involvedPercent + "% 100%, ";
-      newStyle += involvedPercent + unknownPercent + "% 100%, 100% 100%;";
-      $(this).attr("style", newStyle);
-
-      if (type == "stats") {
-        let newTooltip = (
-          `${unknown} of ${totalNum} (${unknownPercent.toFixed(0)}%) `
-          + `patients have unknown involvement in LNL ${lnl} ${side}.`
-        );
-        $(this).attr("data-tooltip", newTooltip);
-      }
-    };
-
-    if (isBarplotLegend) {
-      let fieldVal = response[field][key];
-      let fieldValPercent = 100 * fieldVal / totalNum;
-      let toggle;
-      let side = field.split("_")[0] + "lateral";
-      let lnl = field.split("_")[1];
-
-      if (key == 1) {
-        toggle = "";
-      } else if (key == 2) {
-        toggle = "do not ";
-      }
-
-      if (type == "stats") {
-        let newTooltip = (
-          `${fieldVal} of ${totalNum} (${fieldValPercent.toFixed(0)}%) `
-          + `patients ${toggle}have metastases in LNL ${lnl} ${side}.`
-        );
-        $(this).attr("data-tooltip", newTooltip);
-      }
-    };
+    const isBarplotLegend = $(this).hasClass("barplot-legend");
+    if (isBarplotLegend) {updateBarplotLegend(this, field, key)};
 
     if (type == "stats") {
+      const isTotal = $(this).data("statfield") == "total";
       if (showPercent == "True" && !isTotal) {
-        $(this).html(parseInt(100 * newValue / totalNum) + "%");
+        $(this).html(percent(newValue).toFixed(0) + "%");
       } else {
         $(this).html(newValue.toFixed(0));
       };
-    } else if (key != 0) {
+    } else if (key != "" || key != "") {
       $(this).html(newValue.toFixed(0) + "%");
     } else {
       $(this).html("±" + newValue.toFixed(0) + "%");
