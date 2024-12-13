@@ -229,6 +229,8 @@ class BaseStatistics(BaseModel):
         >>> stats.hpv
         {True: 181, False: 96, None: 10}
         """
+        start_time = time.perf_counter()
+
         combined = dataset.ly.combine(modalities=modalities, method=method)
         stats = {}
         for name in cls.model_fields:
@@ -250,6 +252,9 @@ class BaseStatistics(BaseModel):
 
             stats[name] = safe_value_counts(dataset.ly[name])
 
+        end_time = time.perf_counter()
+        logger.info(f"Statistics computed in {end_time - start_time:.2f} seconds.")
+        logger.debug(f"Statistics: {stats}")
         return cls(**stats)
 
 
