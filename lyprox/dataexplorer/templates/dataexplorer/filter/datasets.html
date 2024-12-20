@@ -7,31 +7,32 @@
 {% endaddtoblock %}
 
 <div class="tile is-child box">
-  <div class="columns">
-    <div class="column is-2 is-flex is-flex-direction-row is-justify-content-left is-align-items-center">
-      <p id="datasets-title" class="title is-4">Datasets</p>
+  <div class="level">
+    <div class="level-left">
+      <div class="level-item">
+        <p class="title is-4">Datasets</p>
+      </div>
     </div>
-
-    <div class="column is-8">
-      <div class="field is-grouped is-grouped-multiline">
-        {% for checkbox in form.datasets %}
-        <div class="control is-expanded">
-          {{ checkbox.tag }}
-          <label for="{{ checkbox.id_for_label }}" class="button is-primary is-light is-fullwidth">
-            {{ checkbox.choice_label}}
-          </label>
+    <div class="level-right">
+      <div class="level-item">
+        <div class="tooltip">
+          <span class="icon">
+            <i class="fas fa-question"></i>
+          </span>
+          {% include 'dataexplorer/help/tooltip.html' with side="left" position="bottom" image='dataexplorer/help/institutions.gif' markdown='dataexplorer/help/institutions.md' %}
         </div>
-        {% endfor %}
       </div>
     </div>
+  </div>
 
-    <div class="column is-2 is-flex is-flex-direction-row is-justify-content-right is-align-items-center">
-      <div class="tooltip">
-        <span class="icon">
-          <i class="fas fa-question"></i>
-        </span>
-        {% include 'dataexplorer/help/tooltip.html' with side="left" position="bottom" image='dataexplorer/help/institutions.gif' markdown='dataexplorer/help/institutions.md' %}
-      </div>
+  <div class="field is-grouped is-grouped-multiline">
+    {% for checkbox in form.datasets %}
+    <div class="control">
+      {{ checkbox.tag }}
+      <label for="{{ checkbox.id_for_label }}" class="button is-primary is-light is-fullwidth">
+        {{ checkbox.choice_label}}
+      </label>
     </div>
+    {% endfor %}
   </div>
 </div>

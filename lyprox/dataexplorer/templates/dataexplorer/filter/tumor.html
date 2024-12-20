@@ -20,37 +20,48 @@
   </div>
 
   <div class="columns is-multiline">
-    <div class="column py-0">
+    <div class="column">
       {{ form.central }}
       {% include 'dataexplorer/three_way_toggle_stats.html' with stats=stats field='central' show_percent=show_percent %}
     </div>
 
-    <div class="column py-0">
+    <div class="column">
       {{ form.midext }}
       {% include 'dataexplorer/three_way_toggle_stats.html' with stats=stats field='midext' show_percent=show_percent %}
     </div>
   </div>
 
-  <p class="title is-5 mb-2">Location & Subsite</p>
-  {% for subsite in form.get_subsite_fields %}
-  {% include 'dataexplorer/filter/subsite.html' with checkboxes=form|get:subsite stats=stats show_percent=show_percent %}
-  {% endfor %}
+  <div class="columns">
+    <div class="column">
+      <p class="title is-5">Location & Subsite</p>
+      {% for subsite in form.get_subsite_fields %}
+      <div class="notification is-light is-info p-2 my-2">
+        {% include 'dataexplorer/filter/subsite.html' with checkboxes=form|get:subsite stats=stats show_percent=show_percent %}
+      </div>
+      {% endfor %}
+    </div>
+  </div>
 
-  <p class="title is-5 mb-2 mt-4">T-stage</p>
-  <div class="field is-grouped is-grouped-multiline">
-    {% for checkbox in form.t_stage %}
-    <div class="control">
-      {{ checkbox.tag }}
-      <div class="tumor buttons has-addons">
-        <label for="{{ checkbox.id_for_label }}" class="tag button is-primary is-light">
-          <span>{{ checkbox.choice_label }}</span>
-        </label>
-        <div class="tag button is-info is-static">
-          <span class="stats" data-statfield="t_stage"
-            data-key="{{ checkbox.data.value }}">{% if show_percent %}{{ stats.t_stage|get_percent:checkbox.data.value }}%{% else %}{{ stats.t_stage|get:checkbox.data.value }}{% endif %}</span>
+
+  <p class="title is-5">T-stage</p>
+  <div class="columns">
+    <div class="column">
+      <div class="field is-grouped is-grouped-multiline">
+        {% for checkbox in form.t_stage %}
+        <div class="control">
+          {{ checkbox.tag }}
+          <div class="tumor buttons has-addons">
+            <label for="{{ checkbox.id_for_label }}" class="tag button is-primary is-light">
+              <span>{{ checkbox.choice_label }}</span>
+            </label>
+            <div class="tag button is-info is-static">
+              <span class="stats" data-statfield="t_stage"
+                data-key="{{ checkbox.data.value }}">{% if show_percent %}{{ stats.t_stage|get_percent:checkbox.data.value }}%{% else %}{{ stats.t_stage|get:checkbox.data.value }}{% endif %}</span>
+            </div>
+          </div>
         </div>
+        {% endfor %}
       </div>
     </div>
-    {% endfor %}
   </div>
 </div>
