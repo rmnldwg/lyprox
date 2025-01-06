@@ -355,7 +355,7 @@ function populateFields(response) {
     const side = field.split("_")[0] + "lateral";
     const lnl = field.split("_")[1];
 
-    const toggle = (key == "True") ? "" : "do not ";
+    const toggle = (key) ? "" : "do not ";
 
     if (type == "stats") {
       const newTooltip = (

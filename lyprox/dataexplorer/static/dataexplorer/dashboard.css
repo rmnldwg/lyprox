@@ -80,5 +80,5 @@ div.stats.tag {
 }
 
 .is-toggle-all {
-    margin-left: auto;
+    margin-right: auto !important;
 }
