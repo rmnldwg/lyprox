@@ -28,3 +28,19 @@ class DataExplorerConfig(AppConfig):
         """Load the data into memory when the app is ready."""
         di = DataInterface()
         di.load_and_enhance_datasets(repo_name="rmnldwg/lydata")
+        di.load_and_enhance_datasets(
+            institution="hvh",
+            repo_name="rmnldwg/lydata.private",
+            ref="dib-update-paper",
+        )
+        di.load_and_enhance_datasets(
+            institution="umcg",
+            repo_name="rmnldwg/lydata.private",
+            ref="2024-umcg-hypopharynx-larynx",
+        )
+        di.load_and_enhance_datasets(
+            institution="usz",
+            subsite="hypopharynx-larynx",
+            repo_name="rmnldwg/lydata.private",
+            ref="2023-usz-hypopharynx-larynx",
+        )
