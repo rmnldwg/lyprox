@@ -79,6 +79,18 @@ $("#close-help-modal").click(function () {
   $("#help-modal").removeClass("is-active");
 });
 
+/**
+ * Toggle all checkboxes in a checkbox group.
+ * @param {string} name The name of the checkbox group to toggle.
+ */
+function toggleAll(name) {
+  const checkboxes = document.getElementsByName(name);
+  const checked = checkboxes[0].checked;
+  for (let i = 0; i < checkboxes.length; i++) {
+    checkboxes[i].checked = !checked;
+  }
+}
+
 // Add the ability to submit the form via non-AJAX GET request to the server
 $(document).keydown(function (event) {
   if (event.altKey && event.key == 'c') {

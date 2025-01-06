@@ -31,18 +31,6 @@
     </div>
   </div>
 
-  <div class="columns">
-    <div class="column">
-      <p class="title is-5">Location & Subsite</p>
-      {% for subsite in form.get_subsite_fields %}
-      <div class="notification is-light is-info p-2 my-2">
-        {% include 'dataexplorer/filter/subsite.html' with checkboxes=form|get:subsite stats=stats show_percent=show_percent %}
-      </div>
-      {% endfor %}
-    </div>
-  </div>
-
-
   <p class="title is-5">T-stage</p>
   <div class="columns">
     <div class="column">
@@ -62,6 +50,17 @@
         </div>
         {% endfor %}
       </div>
+    </div>
+  </div>
+
+  <div class="columns">
+    <div class="column">
+      <p class="title is-5">Location & Subsite</p>
+      {% for subsite in form.get_subsite_fields %}
+      <div class="notification is-light is-info p-2 my-2">
+        {% include 'dataexplorer/filter/subsite.html' with checkboxes=form|get:subsite stats=stats show_percent=show_percent %}
+      </div>
+      {% endfor %}
     </div>
   </div>
 </div>

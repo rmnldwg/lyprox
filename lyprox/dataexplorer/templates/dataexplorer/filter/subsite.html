@@ -5,14 +5,17 @@
   <div class="control mr-1">
     {{ checkbox.tag }}
     <div class="tags has-addons" data-tooltip="{{ checkbox.choice_label }}">
-      <label for="{{ checkbox.id_for_label }}" class="tag button is-primary is-light is-expanded px-1">
+      <label for="{{ checkbox.id_for_label }}" class="tag button is-primary is-light is-expanded px-1 mb-0">
         <span>{{ checkbox.data.value }}</span>
       </label>
-      <p class="tag button is-static is-info px-1">
+      <p class="tag button is-static is-info px-1 mb-0">
         <span class="stats" data-statfield="subsite"
           data-key="{{ checkbox.data.value }}">{% if show_percent %}{{ stats.subsite|get_percent:checkbox.data.value }}%{% else %}{{ stats.subsite|get:checkbox.data.value }}{% endif %}</span>
       </p>
     </div>
   </div>
   {% endfor %}
+  <div class="control tag button is-warning is-light is-outlined mr-1 is-toggle-all" onclick="toggleAll('{{ checkboxes.name }}');">
+    <span>{{ checkboxes.label|capitalize_subsite }}</span>
+  </div>
 </div>

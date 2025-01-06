@@ -87,6 +87,16 @@ def multiply(value: N, factor: N) -> N:
     return value * factor
 
 
+@register.filter(name="capitalize_subsite")
+def capitalize_subsite(subsite: str) -> str:
+    """Capitalize the subsite name."""
+    result = subsite.replace("Subsite", "")
+    result = result.lstrip().rstrip()
+    result = result.split(" ")
+    result = " ".join([word.capitalize() for word in result])
+    return result.replace("Of", "of")
+
+
 def custom_markdown(text):
     """Render custom markdown with footnotes and tables."""
     return md.markdown(text, extensions=["footnotes", "tables", MyMathExtension()])
