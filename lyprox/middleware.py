@@ -1,6 +1,11 @@
 """
-Middlewares intercepts requests and process them before they are sent back to the user.
+Middlewares intercept and modify requests before handling them.
+
+That may be useful if one wants to redirect a user in specific situation. For example,
+if the website is in maintenance mode, the `MaintenanceMiddleware` will redirect all
+requests to the maintenance page.
 """
+
 import logging
 import re
 
@@ -17,18 +22,19 @@ class MaintenanceMiddleware:
     Redirect a visitor to the maintenance page if the ``MAINTENANCE`` is set
     to ``True`` in the `settings`.
     """
+
     def __init__(self, get_response) -> None:
+        """Create the middleware."""
         self.get_response = get_response
 
     def __call__(self, request):
-        path = request.META.get('PATH_INFO', "")
+        """Process the request."""
+        path = request.META.get("PATH_INFO", "")
 
         if settings.MAINTENANCE and not path == urls.reverse("maintenance"):
-            response = redirect(urls.reverse("maintenance"))
-            return response
+            return redirect(urls.reverse("maintenance"))
 
-        response = self.get_response(request)
-        return response
+        return self.get_response(request)
 
 
 class LoginRequiredMiddleware:
@@ -40,7 +46,9 @@ class LoginRequiredMiddleware:
 
     .. _stackoverflow: https://stackoverflow.com/questions/2164069/best-way-to-make-djangos-login-required-the-default
     """
+
     def __init__(self, get_response) -> None:
+        """Create the middleware."""
         self.get_response = get_response
         self.login_required_urls = tuple(
             re.compile(url) for url in settings.LOGIN_REQUIRED_URLS
@@ -50,8 +58,8 @@ class LoginRequiredMiddleware:
         )
 
     def __call__(self, request):
-        response = self.get_response(request)
-        return response
+        """Process the request."""
+        return self.get_response(request)
 
     def process_view(self, request, view_func, view_args, view_kwargs):
         """
@@ -67,6 +75,8 @@ class LoginRequiredMiddleware:
 
         for url in self.login_required_urls:
             if url.match(request.path):
-                return redirect(urls.reverse("accounts:login") + "?next=" + request.path)
+                return redirect(
+                    urls.reverse("accounts:login") + "?next=" + request.path
+                )
 
         return None
