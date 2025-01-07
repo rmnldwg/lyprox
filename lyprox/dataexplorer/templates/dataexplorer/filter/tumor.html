@@ -39,10 +39,10 @@
         <div class="control">
           {{ checkbox.tag }}
           <div class="tumor buttons has-addons">
-            <label for="{{ checkbox.id_for_label }}" class="button is-small is-primary is-light">
+            <label for="{{ checkbox.id_for_label }}" class="button is-small is-link is-light">
               <span>{{ checkbox.choice_label }}</span>
             </label>
-            <div class="button is-small is-info is-static">
+            <div class="button is-small is-static">
               <span class="stats" data-statfield="t_stage"
                 data-key="{{ checkbox.data.value }}">{% if show_percent %}{{ stats.t_stage|get_percent:checkbox.data.value }}%{% else %}{{ stats.t_stage|get:checkbox.data.value }}{% endif %}</span>
             </div>

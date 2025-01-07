@@ -9,7 +9,7 @@
   {% for checkbox in checkboxes %}
   <div class="control">
     {{ checkbox.tag }}
-    <label for="{{ checkbox.id_for_label }}" class="button is-small is-primary is-light" data-tooltip="{{ checkbox.choice_label }}">
+    <label for="{{ checkbox.id_for_label }}" class="button is-small is-link is-light" data-tooltip="{{ checkbox.choice_label }}">
       <span>{{ checkbox.data.value }}</span>
     </label>
   </div>

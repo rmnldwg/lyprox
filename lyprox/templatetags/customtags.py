@@ -19,6 +19,8 @@ from django.template.loader import render_to_string
 from django.utils.safestring import mark_safe
 from mdx_math import MathExtension
 
+from lyprox.settings import MEDIA_URL
+
 register = template.Library()
 logger = logging.getLogger(__name__)
 
@@ -95,6 +97,22 @@ def capitalize_subsite(subsite: str) -> str:
     result = result.split(" ")
     result = " ".join([word.capitalize() for word in result])
     return result.replace("Of", "of")
+
+
+@register.filter(name="get_logo")
+def get_logo(dataset: str) -> str:
+    """Get the logo of the institution providing a dataset."""
+    abbr = dataset.split(" ")[1].lower()
+    return f"{MEDIA_URL}logos/{abbr}.png"
+
+
+@register.filter(name="get_subsite")
+def get_subsite(dataset: str) -> str:
+    """Get the subsite name from the dataset name."""
+    result = " ".join([word.capitalize() for word in dataset.split(" ")[-1].split("-")])
+    if result == "Hypopharynx Larynx":
+        result = "Hypo. & Larynx"
+    return result
 
 
 def custom_markdown(text):
