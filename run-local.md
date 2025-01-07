@@ -74,7 +74,7 @@ There are four important settings that the `core/settings.py` file does not defi
 export ENV_VARIABLE_NAME="variable-value"
 ```
 
-The four variables that need to be set are:
+The variables that need to be set are:
 
 - `DJANGO_ENV`: can be `"debug"`, `"production"`, or `"maintenance"`. For running the interface locally, it should be set to `"debug"`.
 - `DJANGO_SECRET_KEY`: the app-wide secret for authentication and security functions. It can be generated using django's built-in functions. Enter a python REPL by typing `python` into the terminal and then execute these two commands:
@@ -88,23 +88,26 @@ The four variables that need to be set are:
 
 - `DJANGO_ALLOWED_HOSTS`: space-separated list of hostnames. Set to `"localhost 127.0.0.1"` for local use
 - `DJANGO_LOG_LEVEL`: log level. Only has an effect in `"debug"` mode. Is set to `"WARNING"` otherwise
+- `DJANGO_BASE_PATH`: The base directory of the server. Typically the root of the repository.
+- `GITHUB_TOKEN`: A personal GitHub token for the API. This is used to acces the [lyDATA] repo and fetch the datasets
 
 [12-factor app]: https://12factor.net/
+[lyDATA]: https://github.com/rmnldwg/lydata
 
 ## Running the interface
 
 Now you should be ready to execute the following commands:
 
 ```
-manage.py makemigrations patients accounts
-manage.py migrate
-manage.py collectstatic
+lyprox makemigrations accounts
+lyprox migrate
+lyprox collectstatic
 ```
 
 This will prepare django's database. If that worked, it is finally time to launch the server locally:
 
 ```
-manage.py runserver
+lyprox runserver
 ```
 
 If everything goes according to plan, django will output a link to the locally hosted web server. It usually runs at [http://127.0.0.1:8000/](http://127.0.0.1:8000/).
@@ -114,7 +117,7 @@ If everything goes according to plan, django will output a link to the locally h
 Since uploading data (also to the local host) requires an authentication, you will want to create a superuser by running
 
 ```
-manage.py createsuperuser
+lyprox createsuperuser
 ```
 
 Afterwards you can use the defined credentials to log into the admin page at [http://127.0.0.1:8000/admin](http://127.0.0.1:8000/admin) and edit all database entries.

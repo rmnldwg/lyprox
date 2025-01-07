@@ -1,0 +1,21 @@
+{% load customtags %}
+
+<div class="field is-grouped is-grouped-multiline is-justify-content-right mb-0">
+  <div class="control tag button is-warning is-light is-outlined is-toggle-all ml-1 mb-1" onclick="toggleAll('{{ checkboxes.name }}');">
+    <span>{{ checkboxes.label|capitalize_subsite }}</span>
+  </div>
+  {% for checkbox in checkboxes %}
+  <div class="control mr-1 mb-1">
+    {{ checkbox.tag }}
+    <div class="tags has-addons" data-tooltip="{{ checkbox.choice_label }}">
+      <label for="{{ checkbox.id_for_label }}" class="tag button is-primary is-light is-expanded px-1 mb-0">
+        <span>{{ checkbox.data.value }}</span>
+      </label>
+      {% comment %} <p class="tag button is-static is-info px-1 mb-0">
+        <span class="stats" data-statfield="subsite"
+          data-key="{{ checkbox.data.value }}">{% if show_percent %}{{ stats.subsite|get_percent:checkbox.data.value }}%{% else %}{{ stats.subsite|get:checkbox.data.value }}{% endif %}</span>
+      </p> {% endcomment %}
+    </div>
+  </div>
+  {% endfor %}
+</div>

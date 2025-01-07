@@ -160,11 +160,11 @@
 
                     <tbody>
                       {% for lnl in inference_result.lnls %}
-                      {% with "contra_"|addstr:lnl as lnl_key %}
+                      {% with "contra_"|concat:lnl as lnl_key %}
                       <tr>
                         <td colspan="2">{{ lnl }}</td>
                         <td>{{ form|get:lnl_key }}</td>
-                        {% include 'dataexplorer/barplot.html' with lnl="II "|addstr:"contralateral" stats=risks lnl_key=lnl_key show_percent=True hide_tooltip=True %}
+                        {% include 'dataexplorer/barplot.html' with lnl="II "|concat:"contralateral" stats=risks lnl_key=lnl_key show_percent=True hide_tooltip=True %}
                       </tr>
                       {% endwith %}
                       {% endfor %}
@@ -203,11 +203,11 @@
 
                     <tbody>
                       {% for lnl in inference_result.lnls %}
-                      {% with "ipsi_"|addstr:lnl as lnl_key %}
+                      {% with "ipsi_"|concat:lnl as lnl_key %}
                       <tr>
                         <td colspan="2">{{ lnl }}</td>
                         <td>{{ form|get:lnl_key }}</td>
-                        {% include 'dataexplorer/barplot.html' with lnl="II "|addstr:"ipsilateral" stats=risks lnl_key=lnl_key show_percent=True hide_tooltip=True %}
+                        {% include 'dataexplorer/barplot.html' with lnl="II "|concat:"ipsilateral" stats=risks lnl_key=lnl_key show_percent=True hide_tooltip=True %}
                       </tr>
                       {% endwith %}
                       {% endfor %}

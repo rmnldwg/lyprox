@@ -27,19 +27,22 @@
 
     <div class="tile is-ancestor">
       <div class="tile is-3 is-vertical is-parent">
-
-        <!-- Patient details -->
-        {% include 'dataexplorer/filter/patient.html' with form=form %}
-
         <!-- Primary tumor -->
         {% include 'dataexplorer/filter/tumor.html' with form=form %}
       </div>
 
       <div class="tile is-9 is-vertical">
+        <div class="tile">
+          <div class="tile is-parent">
+            <!-- Patient details -->
+            {% include 'dataexplorer/filter/patient.html' with form=form %}
+          </div>
+          <div class="tile is-parent">
+            <!-- Datasets -->
+            {% include 'dataexplorer/filter/datasets.html' with form=form %}
+          </div>
+        </div>
         <div class="tile is-parent is-vertical">
-
-          <!-- Datasets -->
-          {% include 'dataexplorer/filter/datasets.html' with form=form %}
 
           <!-- Modalities -->
           {% include 'dataexplorer/filter/modalities.html' with form=form %}

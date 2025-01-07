@@ -1,30 +1,48 @@
-"""The `dataexplorer.forms` module defines the relatively complex form that is
-used for querying the database later.
-
-It also implements some custom form elements, like `ThreeWayToggle` and
-`ThreeWayToggleWidget` that represent the custom logic and appearance of a
-three-way toggle button respectively, which appears numerous times in the
-Dashboard interface.
-
-Finally, a custom ``MultipleChoice`` field of somewhat unnecessary complexity
-is implemented here that allows us to select the institutions from which the
-ptients should be included via check boxes with the institution logo on it.
 """
+Defines the fields that can be used to query the patient records.
 
-# pylint: disable=no-member
+Basically, this defines what buttons, dropdowns, and checkboxes are displayed on the
+dashboard and to some extent also how they look. Here, we also define the
+`ThreeWayToggle` button that is used to select between three states: positive, negative,
+and unknown. The `ThreeWayToggle` button is used for selecting HPV status, nicotine
+abuse, LNL involvement and more.
+
+Typically, when calling one of the `dataexplorer.views` functions, an instance of the
+`DashboardForm` is created with the user's permissions and the initial data from the
+`DashboardForm.from_initial` class method. This initial data is then used to display
+the dashboard. Then, the user applies filters to the data and submits the form by
+pressing the "Compute" button. The form is then validated and cleaned
+(``form.is_valid()``), also in the `dataexplorer.views` module.
+
+Note: the `DashboardForm` is not strictly used `as Django intends forms to be used`_.
+In Django's logic, a form just after creation is "unbound" and in that state expects
+user input (think of a login form with empty fields). However, in our dashboard, no
+fields are ever "empty". Even when you first load the dashboard, the `ThreeWayToggle`
+buttons are already set to a value (``None``). Therefore, we never have this "unbound"
+state of the form. Instead, we always work with bound and validated forms, either
+created from the initial defaults or from the user's input.
+
+.. _as Django intends forms to be used: https://docs.djangoproject.com/en/4.2/ref/forms/
+"""
 import logging
+from collections.abc import Generator
+from typing import Any, TypeVar
 
 from django import forms
 from django.core.exceptions import ValidationError
+from lydata.utils import get_default_modalities
 
-from ..loggers import FormLoggerMixin
-from ..patients.models import Dataset, Diagnose, Patient, Tumor
+from lyprox.dataexplorer.loader import DataInterface
+from lyprox.dataexplorer.subsites import Subsites
+from lyprox.loggers import FormLoggerMixin
+from lyprox.settings import LNLS, TStages
 
 logger = logging.getLogger(__name__)
 
 
-def trio_to_bool(value: int):
-    """Transform -1, 0, and +1 to False, None and True respectively.
+def trio_to_bool(value: int | Any) -> bool | Any:
+    """
+    Transform -1, 0, and +1 to ``False``, ``None`` and ``True`` respectively.
 
     Any other values are simply passed through unchanged. This is used to map the
     values of the three-way toggle buttons to its boolean representation.
@@ -39,18 +57,38 @@ def trio_to_bool(value: int):
     return value
 
 
-class ThreeWayToggleWidget(forms.RadioSelect):
-    """Widget that renders the three-way toggle button and allows to set the
-    attributes of the individual inputs (radio buttons) as `option_attrs` as
-    well as the attributes of the container as ``attrs``.
-    """
+def format_dataset_choices(datasets: list[str]) -> list[tuple[str, str]]:
+    """Create a list of tuples for the dataset choices."""
+    choices = []
+    for dataset in datasets:
+        year, institution, subsite = dataset.split("-", maxsplit=2)
+        label = f"{year} {institution.upper()} {subsite.capitalize()}"
+        choices.append((dataset, label))
 
+    return choices
+
+
+class ThreeWayToggleWidget(forms.RadioSelect):
+    """
+    Widget that renders the three-way toggle button.
+
+    It also allows to set the attributes of the individual inputs (radio buttons) as
+    `option_attrs` as well as the attributes of the container as ``attrs``.
+    """
     template_name = "widgets/three_way_toggle.html"
+    """HTML template that renders the button containing its three options."""
     option_template_name = "widgets/three_way_toggle_option.html"
+    """HTML template that renders the individual options of the button."""
     option_attrs = {"class": "radio is-hidden", "onchange": "changeHandler();"}
+    """HTML attributes. Also adds the call to a JS function."""
 
     def __init__(
-        self, attrs=None, choices=(), option_attrs=None, label=None, tooltip=None
+        self,
+        attrs=None,
+        choices=(),
+        option_attrs=None,
+        label=None,
+        tooltip=None,
     ):
         """Store arguments and option attributes for later use."""
         self.label = label
@@ -63,7 +101,7 @@ class ThreeWayToggleWidget(forms.RadioSelect):
         super().__init__(attrs, choices)
 
     def get_context(self, name, value, attrs):
-        """Pass label and tooltip to the context variable"""
+        """Pass label and tooltip to the context variable."""
         context = super().get_context(name, value, attrs)
         context["widget"]["label"] = self.label
         context["widget"]["tooltip"] = self.tooltip
@@ -72,7 +110,7 @@ class ThreeWayToggleWidget(forms.RadioSelect):
     def create_option(
         self, name, value, label, selected, index, subindex=None, attrs=None
     ):
-        """Pass the option attributes to the actual options"""
+        """Pass the option attributes to the actual options."""
         return super().create_option(
             name,
             value,
@@ -85,10 +123,17 @@ class ThreeWayToggleWidget(forms.RadioSelect):
 
 
 class ThreeWayToggle(forms.ChoiceField):
-    """A toggle switch than can be in three different states: Positive/True,
-    unkown/None and negative/False.
     """
+    Field to choose one of three options: ``True``, ``None`` and ``False``.
 
+    ``True`` is represented by a plus sign and means "positive", ``None`` is
+    represented by a ban sign and means "unknown", and ``False`` is represented by a
+    minus sign and means "negative".
+
+    The field is rendered by the `ThreeWayToggleWidget`. Every LNL's involvement as
+    well as many binary risk factors such as smoking status, HPV status, and neck
+    dissection status are represented by this field.
+    """
     def __init__(
         self,
         attrs=None,
@@ -96,15 +141,13 @@ class ThreeWayToggle(forms.ChoiceField):
         label=None,
         tooltip=None,
         choices=None,
-        initial=0,
+        initial=None,
         required=False,
         **kwargs,
     ):
-        """Pass the arguments, like `label` and `tooltip` to the constructor
-        of the custom widget.
-        """
+        """Pass args like ``label`` and ``tooltip`` to constructor of custom widget."""
         if choices is None:
-            choices = [(1, "plus"), (0, "ban"), (-1, "minus")]
+            choices = [(True, "plus"), (None, "ban"), (False, "minus")]
 
         if len(choices) != 3:
             raise ValueError("Three-way toggle button must have three choices")
@@ -119,198 +162,118 @@ class ThreeWayToggle(forms.ChoiceField):
             **kwargs,
         )
 
-    def to_python(self, value):
-        """Cast the string to an integer."""
-        try:
-            return int(value)
-        except ValueError:
+    def to_python(self, value: bool | None) -> bool | None:
+        """Cast the string to an integer. ``""`` is interpreted as ``None``."""
+        if value in [True, False, None]:
             return value
-        except TypeError as type_err:
-            raise ValidationError("Expects a number") from type_err
+
+        if value == "":
+            return None
+
+        raise ValidationError(f"Invalid {value = } for ThreeWayToggle")
 
 
-class DatasetModelChoiceIndexer:
-    """Custom class with which one can access additional information from
-    the model that is chosen by the `DatasetMultipleChoiceField`.
-    """
+checkbox_attrs = {"class": "checkbox is-hidden", "onchange": "changeHandler();"}
 
-    def __init__(self, field) -> None:
-        self.field = field
-        self.queryset = field.queryset
+class EasySubsiteChoiceField(forms.MultipleChoiceField):
+    """Simple subclass that provides a convenience method to create subsite fields."""
 
-    def __getitem__(self, key):
-        obj = self.queryset[key]
-        return self.info(obj)
+    @classmethod
+    def from_enum(cls, enum: type, **kwargs) -> "EasySubsiteChoiceField":
+        """
+        Create a field from a subsite enum.
 
-    def info(self, obj: Dataset) -> tuple[int, str]:
-        """Return the label and logo URL for the Dataset."""
-        return (
-            self.field.label_from_instance(obj),
-            self.field.logo_url_from_instance(obj),
-        )
+        All this does is pass the ``enum``'s choices and values to the constructor as
+        ``choices`` and ``initial``, respectively. It makes the field not required and
+        uses a checkbox widget with the `checkbox_attrs` as ``attrs``.
+        """
+        default_kwargs = {
+            "required": False,
+            "widget": forms.CheckboxSelectMultiple(attrs=checkbox_attrs),
+            "choices": enum.choices,
+            "initial": enum.values,
+        }
+        default_kwargs.update(kwargs)
+        return cls(**default_kwargs)
 
 
-class DatasetMultipleChoiceField(forms.ModelMultipleChoiceField):
-    """Customize label description and add method that returns the logo URL for
-    Datasets. The implementation is inspired by how the ``choices`` are
-    implemented. But since some other functionality depends on how those
-    choices are implemented, it cannot be changed easily.
-    """
-
-    name_and_url_indexer = DatasetModelChoiceIndexer
-    """Allows one to extract more info (name and logo) about the objects."""
-
-    def label_from_instance(self, obj: Dataset) -> str:
-        """Dataset name as label."""
-        return obj.__str__()
-
-    def logo_url_from_instance(self, obj: Dataset) -> str:
-        """Return URL of Dataset's logo."""
-        return obj.institution.logo.url
-
-    @property
-    def names_and_urls(self):
-        return self.name_and_url_indexer(self)
-
+T = TypeVar("T", bound="DashboardForm")
 
 class DashboardForm(FormLoggerMixin, forms.Form):
-    """Form for querying the database."""
+    """
+    Form for querying the database.
 
-    # select modalities to show
+    The form's fields somewhat mirror the fields in the `Statistics` class in
+    the `query` module.
+    """
     modalities = forms.MultipleChoiceField(
         required=False,
-        widget=forms.CheckboxSelectMultiple(
-            attrs={
-                "class": "checkbox is-hidden",
-                "onchange": "changeHandler();",
-            },
-        ),
-        choices=Diagnose.Modalities.choices,
+        widget=forms.CheckboxSelectMultiple(attrs=checkbox_attrs),
+        choices=[(mod, mod) for mod in get_default_modalities()],
         initial=["CT", "MRI", "PET", "FNA", "diagnostic_consensus", "pathology", "pCT"],
     )
+    """Which modalities to combine into a consensus diagnosis."""
+
     modality_combine = forms.ChoiceField(
         widget=forms.Select(attrs={"onchange": "changeHandler();"}),
         choices=[
-            ("AND", "AND"),
-            ("OR", "OR"),
-            ("maxLLH", "maxLLH"),
-            ("RANK", "RANK"),
+            ("max_llh", "maxLLH"),
+            ("rank", "RANK"),
         ],
         label="Combine",
-        initial="maxLLH",
+        initial="max_llh",
     )
+    """Method to use to combine the modalities' LNL involvement diagnoses."""
 
-    # patient specific fields
-    nicotine_abuse = ThreeWayToggle(
-        label="smoking status", tooltip="Select smokers or non-smokers"
+    datasets = forms.MultipleChoiceField(
+        widget=forms.CheckboxSelectMultiple(attrs=checkbox_attrs),
+        choices=[],
+        initial=[],
     )
-    hpv_status = ThreeWayToggle(
-        label="HPV status", tooltip="Select patients being HPV positive or negative"
+    """Patients from which datasets to include in the query."""
+
+    smoke = ThreeWayToggle(
+        label="smoking status",
+        tooltip="Select smokers or non-smokers"
     )
-    neck_dissection = ThreeWayToggle(
+    """Select patients that are smokers, non-smokers, or unknown."""
+
+    hpv = ThreeWayToggle(
+        label="HPV status",
+        tooltip="Select patients being HPV positive or negative"
+    )
+    """Select patients that are HPV positive, negative, or unknown."""
+
+    surgery = ThreeWayToggle(
         label="neck dissection",
         tooltip="Include patients that have (or have not) received neck dissection",
     )
-    n_status = ThreeWayToggle(
-        label="N+ vs N0", tooltip="Select all N+ (or N0) patients"
-    )
-    dataset__in = DatasetMultipleChoiceField(
-        required=False,
-        widget=forms.CheckboxSelectMultiple(
-            # doesn't do anything since it's written by hand
-            attrs={
-                "class": "checkbox is-hidden",
-                "onchange": "changeHandler();",
-            },
-        ),
-        queryset=Dataset.objects.all().filter(is_public=True),
-        initial=Dataset.objects.all().filter(is_public=True),
-    )
+    """Did the patient undergo neck dissection?"""
 
-    # tumor specific info
-    subsite_oropharynx = forms.MultipleChoiceField(
-        required=False,
-        widget=forms.CheckboxSelectMultiple(
-            attrs={
-                "class": "checkbox is-hidden",
-                "onchange": "changeHandler();",
-            },
-        ),
-        choices=[
-            ("base", "base of tongue"),  # choices here must match entries
-            ("tonsil", "tonsil"),  # in the Tumor.SUBSITE_DICT keys
-            ("rest_oro", "other"),
-        ],
-        initial=["base", "tonsil", "rest_oro"],
-    )
-    subsite_hypopharynx = forms.MultipleChoiceField(
-        required=False,
-        widget=forms.CheckboxSelectMultiple(
-            attrs={
-                "class": "checkbox is-hidden",
-                "onchange": "changeHandler();",
-            },
-        ),
-        choices=[("rest_hypo", "all")],  # choices here must match entries in
-        initial=["rest_hypo"],  # the Tumor.SUBSITE_DICT keys
-    )
-    subsite_larynx = forms.MultipleChoiceField(
-        required=False,
-        widget=forms.CheckboxSelectMultiple(
-            attrs={
-                "class": "checkbox is-hidden",
-                "onchange": "changeHandler();",
-            },
-        ),
-        choices=[
-            ("glottis", "glottis"),  # choices here must match entries
-            ("supraglottis", "supraglottis"),  # in the Tumor.SUBSITE_DICT keys
-            ("subglottis", "subglottis"),
-            ("rest_larynx", "other"),
-        ],
-        initial=["glottis", "supraglottis", "subglottis", "rest_larynx"],
-    )
-    subsite_oral_cavity = forms.MultipleChoiceField(
-        required=False,
-        widget=forms.CheckboxSelectMultiple(
-            attrs={
-                "class": "checkbox is-hidden",
-                "onchange": "changeHandler();",
-            },
-        ),
-        choices=[
-            ("tongue", "tongue"),  # choices here must match entries
-            ("gum_cheek", "gums and cheek"),  # in the Tumor.SUBSITE_DICT keys
-            ("mouth_floor", "floor of mouth"),
-            ("palate", "palate"),
-            ("glands", "salivary glands"),
-        ],
-        initial=["tongue", "gum_cheek", "mouth_floor", "palate", "glands"],
-    )
+    t_stage = EasySubsiteChoiceField.from_enum(TStages)
+    """Only include patients with the selected T-stages."""
 
-    t_stage__in = forms.MultipleChoiceField(
-        required=False,
-        widget=forms.CheckboxSelectMultiple(
-            attrs={
-                "class": "checkbox is-hidden",
-                "onchange": "changeHandler();",
-            },
-        ),
-        choices=Patient.T_stages.choices,
-        initial=[0, 1, 2, 3, 4],
+    is_n_plus = ThreeWayToggle(
+        label="N+ vs N0",
+        tooltip="Select all N+ (or N0) patients"
     )
+    """Select patients with N+ or N0 status."""
+
     central = ThreeWayToggle(
-        label="central", tooltip="Choose to in- or exclude patients with central tumors"
+        label="central",
+        tooltip="Choose to in- or exclude patients with central tumors"
     )
-    extension = ThreeWayToggle(
+    """Filter by whether the tumor is central or not."""
+
+    midext = ThreeWayToggle(
         label="midline extension",
         tooltip=(
             "Investigate patients with tumors that do (or do not) "
-            "cross the mid-sagittal line"
+            "cross the mid-sagittal plane"
         ),
     )
+    """Filter by whether the tumor crosses the mid-sagittal plane."""
 
-    # checkbutton for switching to percent
     show_percent = forms.BooleanField(
         required=False,
         initial=False,
@@ -319,81 +282,131 @@ class DashboardForm(FormLoggerMixin, forms.Form):
             choices=[(True, "percent"), (False, "absolute")],
         ),
     )
+    """Show the statistics after querying as percentages or absolute numbers."""
+
 
     def __init__(self, *args, user, **kwargs):
-        """Extend default initialization to create lots of fields for the
-        LNLs from a list and hide some datasets for unauthenticated users.
+        """
+        Extend default initialization.
+
+        After calling the parent constructor, the selectable datasets are populated
+        based on the user's permissions. I.e., a logged-in user can see private
+        datasets, while an anonymous user can only see public datasets.
+
+        Then, the defined `Subsites` as separate `MultipleChoiceField` fields are added
+        to the form. We do this dynamically via the `add_subsite_choice_fields` method,
+        because we want to render the subsites separately in the frontend.
+
+        Also, the LNL toggle buttons are added to the form dynamically, because it
+        would be cumbersome to add them manually for each LNL and side.
+
+        Note that the form contains the user input or initial values already upon
+        initialization. But it is OK to add fields even after that, because the form
+        only goes through its fields and tries to validate its data for each of then
+        when ``form.is_valid()`` is called.
         """
         super().__init__(*args, **kwargs)
+        self.populate_dataset_options(user=user)
+        self.add_subsite_choice_fields()
+        self.add_lnl_toggle_buttons()
 
-        # dynamically define which datasets should be selectable
+
+    def populate_dataset_options(self, user) -> None:
+        """Populate the dataset choices based on the user's permissions."""
+        data = DataInterface().get_dataset()
+        is_public = data["dataset", "info", "visibility"] == "public"
+        name_col = ("dataset", "info", "name")
+        pub_dset_names = list(data.loc[is_public, name_col].unique())
+        self.fields["datasets"].choices = format_dataset_choices(pub_dset_names)
+        self.fields["datasets"].initial = pub_dset_names
+
         if user.is_authenticated:
-            self.fields["dataset__in"].queryset = Dataset.objects.all()
-            self.fields["dataset__in"].initial = Dataset.objects.all()
+            is_private = data["dataset", "info", "visibility"] == "private"
+            priv_dset_names = list(data.loc[is_private, name_col].unique())
+            self.fields["datasets"].choices += format_dataset_choices(priv_dset_names)
+            self.fields["datasets"].initial += priv_dset_names
 
-        # add all LNL ToggleButtons so I don't have to write a myriad of them
+
+    def add_subsite_choice_fields(self):
+        """Add all subsite choice fields to the form."""
+        for subsite, enum in Subsites.get_subsite_enums().items():
+            self.fields[f"subsite_{subsite}"] = EasySubsiteChoiceField.from_enum(enum)
+
+
+    def add_lnl_toggle_buttons(self) -> None:
+        """Add all LNL toggle buttons to the form."""
         for side in ["ipsi", "contra"]:
-            for lnl in Diagnose.LNLs:
+            for lnl in LNLS:
                 if lnl in ["I", "II", "V"]:
                     self.fields[f"{side}_{lnl}"] = ThreeWayToggle(
-                        option_attrs={"onclick": "bothClickHandler(this)"}
+                        option_attrs={"onclick": "superClickHandler(this)"}
                     )
-                elif lnl in ["Ia", "Ib", "IIa", "IIb", "Va", "Vb"]:
+                elif "a" in lnl or "b" in lnl:
                     self.fields[f"{side}_{lnl}"] = ThreeWayToggle(
                         option_attrs={"onclick": "subClickHandler(this)"}
                     )
                 else:
                     self.fields[f"{side}_{lnl}"] = ThreeWayToggle()
 
-    def clean(self):
-        """Make sure LNLs I & II have correct values corresponding to their
-        sublevels a & b. Also convert tstages from list of str to list of int.
-        """
-        cleaned_data = super(DashboardForm, self).clean()
 
-        # necessary to prevent errors from processing invalid data
-        if len(self.errors) != 0:
-            return {}
+    @classmethod
+    def from_initial(cls: type[T], user) -> T:
+        """Return a bound form filled with the default values for each field."""
+        form = cls(user=user)
+        initial_data = {}
+        for name, field in form.fields.items():
+            initial_data[name] = form.get_initial_for_field(field, name)
 
-        # map all -1,0,1 fields to False,None,True
-        cleaned_data = {key: trio_to_bool(value) for key, value in cleaned_data.items()}
+        logger.info("Creating DashboardForm with initial data.")
+        logger.debug(f"Initial data: {initial_data}")
+        return cls(initial_data, user=user)
 
-        # make sure LNLs I & II aren't in conflict with their sublevels
+
+    def get_subsite_fields(self) -> list[str]:
+        """Return the subsite checkboxes."""
+        return [name for name in self.fields.keys() if name.startswith("subsite_")]
+
+
+    @staticmethod
+    def generate_icd_codes(cleaned_data: dict[str, Any]) -> Generator[str, None, None]:
+        """Generate all subsite ICD codes."""
+        for subsite in Subsites.get_subsite_enums().keys():
+            yield from cleaned_data[f"subsite_{subsite}"]
+
+
+    def check_lnl_conflicts(self, cleaned_data: dict[str, Any]) -> dict[str, Any]:
+        """Ensure that LNLs I, II, and V are not in conflict with their sublevels."""
         for side in ["ipsi", "contra"]:
-            for lnl in ["I", "II"]:
+            for lnl in ["I", "II", "V"]:
                 a = cleaned_data[f"{side}_{lnl}a"]
                 b = cleaned_data[f"{side}_{lnl}b"]
 
-                # make sure data regarding sublevels is not conflicting
                 if a is True or b is True:
                     cleaned_data[f"{side}_{lnl}"] = True
                 if a is False and b is False:
                     cleaned_data[f"{side}_{lnl}"] = False
 
-        # map `central` from False,None,True to the respective list of sides
-        if cleaned_data["central"] is True:
-            cleaned_data["side__in"] = ["central"]
-        elif cleaned_data["central"] is False:
-            cleaned_data["side__in"] = ["left", "right"]
-        else:
-            cleaned_data["side__in"] = ["left", "right", "central"]
+        return cleaned_data
 
-        # map subsites 'base','tonsil','rest' to list of ICD codes.
-        subsites = (
-            cleaned_data["subsite_oropharynx"]
-            + cleaned_data["subsite_hypopharynx"]
-            + cleaned_data["subsite_larynx"]
-            + cleaned_data["subsite_oral_cavity"]
-        )
 
-        icd_codes = []
-        for sub in subsites:
-            icd_codes += Tumor.SUBSITE_DICT[sub]
-        cleaned_data["subsite__in"] = icd_codes
+    def clean(self) -> dict[str, Any]:
+        """
+        Clean the form data.
 
-        # make sure T-stages are list of ints
-        str_list = cleaned_data["t_stage__in"]
-        cleaned_data["t_stage__in"] = [int(s) for s in str_list]
+        The default cleaning provided by Django is extended to deal with some special
+        cases that arise from our data. On the one hand, this involved casting the
+        ``t_stage`` list of values to integers, but more importantly, it also ensures
+        that the sub- and superlevel involvement of the LNLs I, II, and V are not in
+        conflict.
+        """
+        cleaned_data = super().clean()
+
+        if len(self.errors) != 0:
+            return {}
+
+        cleaned_data["t_stage"] = [int(t) for t in cleaned_data["t_stage"]]
+        cleaned_data["subsite"] = list(self.generate_icd_codes(cleaned_data))
+        cleaned_data = self.check_lnl_conflicts(cleaned_data)
 
         self.logger.debug(f"cleaned data: {cleaned_data}")
         return cleaned_data

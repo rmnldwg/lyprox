@@ -26,112 +26,41 @@
     </div>
 
     <div class="column">
-      {{ form.extension }}
-      {% include 'dataexplorer/three_way_toggle_stats.html' with stats=stats field='extension' show_percent=show_percent %}
+      {{ form.midext }}
+      {% include 'dataexplorer/three_way_toggle_stats.html' with stats=stats field='midext' show_percent=show_percent %}
     </div>
   </div>
 
-  <p class="title is-5 mb-2">Location & Subsite</p>
-  <div class="notification is-info is-light p-2 mb-2">
-    <div class="field is-grouped is-grouped-multiline">
-      <p class="control">Oropharynx:</p>
-      {% for checkbox in form.subsite_oropharynx %}
-      <div class="control mr-1">
-        {{ checkbox.tag }}
-        <div class="tags has-addons">
-          <label for="{{ checkbox.id_for_label }}" class="tag button is-primary is-light is-expanded">
-            <span>{{ checkbox.choice_label }}</span>
-          </label>
-          <p class="tag button is-static">
-            {% with counter=forloop.counter0|add:0 %}
-            <span class="stats" data-statfield="subsites"
-              data-index="{{ counter }}">{% if show_percent %}{{ stats.subsites|percent:counter }}%{% else %}{{ stats.subsites|index:counter }}{% endif %}</span>
-            {% endwith %}
-          </p>
+  <p class="title is-5">T-stage</p>
+  <div class="columns">
+    <div class="column">
+      <div class="field is-grouped is-grouped-multiline">
+        {% for checkbox in form.t_stage %}
+        <div class="control">
+          {{ checkbox.tag }}
+          <div class="tumor buttons has-addons">
+            <label for="{{ checkbox.id_for_label }}" class="tag button is-primary is-light">
+              <span>{{ checkbox.choice_label }}</span>
+            </label>
+            <div class="tag button is-info is-static">
+              <span class="stats" data-statfield="t_stage"
+                data-key="{{ checkbox.data.value }}">{% if show_percent %}{{ stats.t_stage|get_percent:checkbox.data.value }}%{% else %}{{ stats.t_stage|get:checkbox.data.value }}{% endif %}</span>
+            </div>
+          </div>
         </div>
+        {% endfor %}
       </div>
-      {% endfor %}
-    </div>
-  </div>
-  <div class="notification is-info is-light p-2 mb-2">
-    <div class="field is-grouped is-grouped-multiline">
-      <p class="control">Hypopharynx:</p>
-      {% for checkbox in form.subsite_hypopharynx %}
-      <div class="control mr-1">
-        {{ checkbox.tag }}
-        <div class="tags has-addons">
-          <label for="{{ checkbox.id_for_label }}" class="tag button is-primary is-light is-expanded">
-            <span>{{ checkbox.choice_label }}</span>
-          </label>
-          <p class="tag button is-static">
-            {% with counter=forloop.counter0|add:3 %}
-            <span class="stats" data-statfield="subsites"
-              data-index="{{ counter }}">{% if show_percent %}{{ stats.subsites|percent:counter }}%{% else %}{{ stats.subsites|index:counter }}{% endif %}</span>
-            {% endwith %}
-          </p>
-        </div>
-      </div>
-      {% endfor %}
-    </div>
-  </div>
-  <div class="notification is-info is-light p-2 mb-2">
-    <div class="field is-grouped is-grouped-multiline">
-      <p class="control">Larynx:</p>
-      {% for checkbox in form.subsite_larynx %}
-      <div class="control mr-1">
-        {{ checkbox.tag }}
-        <div class="tags has-addons">
-          <label for="{{ checkbox.id_for_label }}" class="tag button is-primary is-light is-expanded">
-            <span>{{ checkbox.choice_label }}</span>
-          </label>
-          <p class="tag button is-static">
-            {% with counter=forloop.counter0|add:4 %}
-            <span class="stats" data-statfield="subsites"
-              data-index="{{ counter }}">{% if show_percent %}{{ stats.subsites|percent:counter }}%{% else %}{{ stats.subsites|index:counter }}{% endif %}</span>
-            {% endwith %}
-          </p>
-        </div>
-      </div>
-      {% endfor %}
-    </div>
-  </div>
-  <div class="notification is-info is-light p-2 mb-2">
-    <div class="field is-grouped is-grouped-multiline">
-      <p class="control">Oral cavity:</p>
-      {% for checkbox in form.subsite_oral_cavity %}
-      <div class="control mr-1">
-        {{ checkbox.tag }}
-        <div class="tags has-addons">
-          <label for="{{ checkbox.id_for_label }}" class="tag button is-primary is-light is-expanded">
-            <span>{{ checkbox.choice_label }}</span>
-          </label>
-          <p class="tag button is-static">
-            {% with counter=forloop.counter0|add:6 %}
-            <span class="stats" data-statfield="subsites"
-              data-index="{{ counter }}">{% if show_percent %}{{ stats.subsites|percent:counter }}%{% else %}{{ stats.subsites|index:counter }}{% endif %}</span>
-            {% endwith %}
-          </p>
-        </div>
-      </div>
-      {% endfor %}
     </div>
   </div>
 
-  <p class="title is-5 mb-2 mt-4">T-stage</p>
-  <div class="field is-grouped is-grouped-multiline">
-    {% for checkbox in form.t_stage__in %}
-    <div class="control">
-      {{ checkbox.tag }}
-      <div class="tumor buttons has-addons">
-        <label for="{{ checkbox.id_for_label }}" class="tag button is-primary is-light">
-          <span>{{ checkbox.choice_label }}</span>
-        </label>
-        <div class="tag button is-info is-static">
-          <span class="stats" data-statfield="t_stages"
-            data-index="{{ forloop.counter0 }}">{% if show_percent %}{{ stats.t_stages|percent:forloop.counter0 }}%{% else %}{{ stats.t_stages|index:forloop.counter0 }}{% endif %}</span>
-        </div>
+  <div class="columns">
+    <div class="column">
+      <p class="title is-5">Location & Subsite</p>
+      {% for subsite in form.get_subsite_fields %}
+      <div class="notification is-light is-info p-2 my-2">
+        {% include 'dataexplorer/filter/subsite.html' with checkboxes=form|get:subsite stats=stats show_percent=show_percent %}
       </div>
+      {% endfor %}
     </div>
-    {% endfor %}
   </div>
 </div>

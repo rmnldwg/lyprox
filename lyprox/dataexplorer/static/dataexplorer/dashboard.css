@@ -78,3 +78,7 @@ div.stats.tag {
     top: 0;
     margin-top: 32px;
 }
+
+.is-toggle-all {
+    margin-right: auto !important;
+}

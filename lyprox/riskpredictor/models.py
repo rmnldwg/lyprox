@@ -1,15 +1,17 @@
 """
+Models for the `riskpredictor` Django app.
+
 The model `InferenceResult` holds an upload of parameter samples that were produced
 during an inference run of the ``lymph-model``. The samples should be fetched from the
 DVC remote storage and used to compute the prior risk matrices.
 
-Given a specific diagnosis, as entered via the `forms.RiskForm`, the ``lymph-model``
-package and the precomputed risk matrices in the `InferenceResult` instances, the
-personalized risk estimates can be computed.
+Given a specific diagnosis, as entered via the `forms.DashboardForm`, the
+``lymph-model`` package and the precomputed risk matrices in the `InferenceResult`
+instances, the personalized risk estimates can be computed.
 """
 import io
 from pathlib import Path
-from typing import Any, Dict, Optional, Union
+from typing import Any
 
 import h5py
 import lyscripts
@@ -25,17 +27,15 @@ from lyprox import settings
 from .. import loggers
 
 
-def get_path_for_risk_matrices(instance, filename):
-    """
-    Returns the path where the risk matrices should be stored for a given
-    `InferenceResult` instance.
-    """
+def get_path_for_risk_matrices(instance, filename) -> str:
+    """Get path where risk matrices should be stored for `InferenceResult` instance."""
     repo_path = instance.git_repo_url.split("//")[-1]
     return f"risk/{repo_path}/{instance.revision}.hdf5"
 
 
 class InferenceResult(loggers.ModelLoggerMixin, models.Model):
-    """Results of an inference run of the ``lymph-model`` package.
+    """
+    Results of an inference run of the ``lymph-model`` package.
 
     It fetches the HDF5 parameter samples from the DVC remote storage and uses them to
     compute the prior risk matrices and stores them in an HDF5 file, too.
@@ -59,10 +59,12 @@ class InferenceResult(loggers.ModelLoggerMixin, models.Model):
 
 
     class Meta:
+        """Meta options for the `InferenceResult` model."""
         unique_together = ("git_repo_owner", "git_repo_name", "revision")
 
 
     def __str__(self):
+        """Return a string representation of the `InferenceResult` instance."""
         return f"{self.git_repo_url}/tree/{self.revision}"
 
     @property
@@ -84,7 +86,7 @@ class InferenceResult(loggers.ModelLoggerMixin, models.Model):
     def is_bilateral(self):
         """Return whether the model is bilateral."""
         lymph_model = self.get_lymph_model()
-        return isinstance(lymph_model, (Bilateral, MidlineBilateral))
+        return isinstance(lymph_model, Bilateral | MidlineBilateral)
 
     @property
     def is_midline(self):
@@ -92,21 +94,15 @@ class InferenceResult(loggers.ModelLoggerMixin, models.Model):
         lymph_model = self.get_lymph_model()
         return isinstance(lymph_model, MidlineBilateral)
 
-    @property
-    def lnls(self):
-        """Return a list with the names of the included LNLs."""
-        return list(self.params["graph"]["lnl"].keys())
-
 
     @staticmethod
     def fetch_params(
         dvc_file_system: DVCFileSystem,
-        params_path: Union[Path, str],
-    ) -> Dict[str, Any]:
+        params_path: Path | str,
+    ) -> dict[str, Any]:
         """Load the model parameters from the YAML file in the DVC repo."""
         with dvc_file_system.open(params_path) as params_file:
-            params = yaml.safe_load(params_file)
-        return params
+            return yaml.safe_load(params_file)
 
 
     @staticmethod
@@ -192,11 +188,9 @@ class InferenceResult(loggers.ModelLoggerMixin, models.Model):
     def load_risk_matrices(
         self,
         t_stage: str,
-        midline_extension: Optional[bool] = None,
+        midline_extension: bool | None = None,
     ) -> np.ndarray:
-        """Load the precomputed and stored prior risk matrices for the given tumor
-        stage and lateralization.
-        """
+        """Load stored risk matrices for ``t_stage`` and ``midline_extension``."""
         if self.is_midline and midline_extension is None:
             raise ValueError(
                 "For MidlineBilateral models, the lateralization must be specified."
@@ -211,7 +205,7 @@ class InferenceResult(loggers.ModelLoggerMixin, models.Model):
             return h5_file[key][:]
 
 
-    def get_lymph_model(self) -> Union[Unilateral, Bilateral, MidlineBilateral]:
+    def get_lymph_model(self) -> Unilateral | Bilateral | MidlineBilateral:
         """Get (create if necessary) lymph model instance from the stored params."""
         if hasattr(self, "_lymph_model"):
             return self._lymph_model
@@ -228,7 +222,11 @@ class InferenceResult(loggers.ModelLoggerMixin, models.Model):
         self.params = self.fetch_params(dvc_file_system, self.params_path)
 
         t_stages = self.params.get("models", {}).get("t_stages", ["early", "late"])
-        samples_path = self.params.get("general", {}).get("samples", "models/samples.hdf5")
+        samples_path = (
+            self.params
+            .get("general", {})
+            .get("samples", "models/samples.hdf5")
+        )
         samples = self.fetch_samples(dvc_file_system, samples_path, self.num_samples)
         self.logger.info("Loaded samples with dimensions %s", samples.shape)
 
