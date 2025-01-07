@@ -1,10 +1,10 @@
 {% load customtags %}
 
-<div class="tile is-child box">
+<div class="box is-height-100">
   <div class="level">
     <div class="level-left">
       <div class="level-item">
-        <p class="title is-4">Primary tumor</p>
+        <p class="title is-4">Primary Tumor</p>
       </div>
     </div>
     <div class="level-right">
@@ -19,19 +19,19 @@
     </div>
   </div>
 
-  <div class="columns is-multiline">
-    <div class="column">
+  <div class="grid">
+    <div class="cell is-flex is-flex-direction-column is-justify-content-center">
       {{ form.central }}
       {% include 'dataexplorer/three_way_toggle_stats.html' with stats=stats field='central' show_percent=show_percent %}
     </div>
 
-    <div class="column">
+    <div class="cell is-flex is-flex-direction-column is-justify-content-center">
       {{ form.midext }}
       {% include 'dataexplorer/three_way_toggle_stats.html' with stats=stats field='midext' show_percent=show_percent %}
     </div>
   </div>
 
-  <p class="title is-5">T-stage</p>
+  <p class="title is-5">T-Category</p>
   <div class="columns">
     <div class="column">
       <div class="field is-grouped is-grouped-multiline">
@@ -39,10 +39,10 @@
         <div class="control">
           {{ checkbox.tag }}
           <div class="tumor buttons has-addons">
-            <label for="{{ checkbox.id_for_label }}" class="tag button is-primary is-light">
+            <label for="{{ checkbox.id_for_label }}" class="button is-small is-primary is-light">
               <span>{{ checkbox.choice_label }}</span>
             </label>
-            <div class="tag button is-info is-static">
+            <div class="button is-small is-info is-static">
               <span class="stats" data-statfield="t_stage"
                 data-key="{{ checkbox.data.value }}">{% if show_percent %}{{ stats.t_stage|get_percent:checkbox.data.value }}%{% else %}{{ stats.t_stage|get:checkbox.data.value }}{% endif %}</span>
             </div>
@@ -53,14 +53,10 @@
     </div>
   </div>
 
-  <div class="columns">
-    <div class="column">
-      <p class="title is-5">Location & Subsite</p>
-      {% for subsite in form.get_subsite_fields %}
-      <div class="notification is-light is-info p-2 my-2">
-        {% include 'dataexplorer/filter/subsite.html' with checkboxes=form|get:subsite stats=stats show_percent=show_percent %}
-      </div>
-      {% endfor %}
-    </div>
+  <p class="title is-5">Location & Subsite</p>
+  {% for subsite in form.get_subsite_fields %}
+  <div class="notification is-info p-1 m-1">
+    {% include 'dataexplorer/filter/subsite.html' with checkboxes=form|get:subsite stats=stats show_percent=show_percent %}
   </div>
+  {% endfor %}
 </div>

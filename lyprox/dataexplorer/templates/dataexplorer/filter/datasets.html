@@ -6,7 +6,7 @@
 <link rel="stylesheet" href="{% static 'dataexplorer/datasets.css' %}">
 {% endaddtoblock %}
 
-<div class="tile is-child box">
+<div class="box is-height-100">
   <div class="level">
     <div class="level-left">
       <div class="level-item">
@@ -25,13 +25,17 @@
     </div>
   </div>
 
-  <div class="field is-grouped is-grouped-multiline">
+  <div class="grid">
     {% for checkbox in form.datasets %}
-    <div class="control">
-      {{ checkbox.tag }}
-      <label for="{{ checkbox.id_for_label }}" class="button is-primary is-light is-fullwidth">
-        {{ checkbox.choice_label}}
-      </label>
+    <div class="cell">
+      <div class="field">
+        <div class="control">
+          {{ checkbox.tag }}
+          <label for="{{ checkbox.id_for_label }}" class="button is-primary is-light is-fullwidth">
+            {{ checkbox.choice_label}}
+          </label>
+        </div>
+      </div>
     </div>
     {% endfor %}
   </div>
