@@ -1,4 +1,6 @@
 @import "https://cdn.jsdelivr.net/npm/bulma@1.0.2/css/versions/bulma-no-dark-mode.min.css";
+@import "https://cdn.jsdelivr.net/npm/@creativebulma/bulma-tooltip@1.2.0/dist/bulma-tooltip.min.css";
+
 
 :root {
     --bulma-primary-h: 206deg;
