@@ -158,6 +158,7 @@ class DashboardForm(forms.Form):
         self.fields["midline_extension"] = ThreeWayToggle(
             label=None,
             tooltip="Does the tumor cross the mid-sagittal line?",
+            choices=[(1, "plus"), (0, "ban"), (-1, "minus")],
             initial=-1,
         )
 

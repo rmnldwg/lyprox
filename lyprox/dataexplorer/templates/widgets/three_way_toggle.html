@@ -1,5 +1,5 @@
 {% with id=widget.attrs.id %}
-{% if widget.label %}<label for="{{ id }}" class="heading has-text-centered">{{ widget.label }}</label>{% endif %}
+{% if widget.label %}<label for="{{ id }}" class="is-justify-self-center is-capitalized has-text-centered">{{ widget.label }}</label>{% endif %}
 <div id="{{ id }}"
   class="field has-addons is-justify-content-center mb-1 {% if widget.attrs.class %}{{ widget.attrs.class }}{% endif %}"
   {% if widget.tooltip %}data-tooltip="{{ widget.tooltip }}" {% endif %}>

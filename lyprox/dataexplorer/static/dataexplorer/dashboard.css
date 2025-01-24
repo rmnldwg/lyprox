@@ -11,16 +11,6 @@ input[type="checkbox"].checkbox:checked:hover + label {
     color: white;
 }
 
-input[type="checkbox"].checkbox:checked + .tags label {
-    background-color: #005EA8;
-    color: white;
-}
-
-input[type="checkbox"].checkbox:checked:hover + .tags label {
-    background-color: #005392;
-    color: white;
-}
-
 input[type="checkbox"].checkbox:checked + .tumor.buttons label {
     background-color: #005EA8;
     color: white;
@@ -79,6 +69,10 @@ div.stats.tag {
     margin-top: 32px;
 }
 
-.is-toggle-all {
+.is-margin-right-auto {
     margin-right: auto !important;
+}
+
+.is-height-100 {
+    height: 100% !important;
 }
