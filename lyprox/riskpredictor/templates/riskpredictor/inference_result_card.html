@@ -63,13 +63,13 @@
 
     <div class="level-right">
       <div class="level-item buttons">
-        <a href="{% url 'riskpredictor:dashboard' pk=ir.pk %}" class="button is-warning">
+        <a href="{% url 'riskpredictor:dashboard' pk=ir.pk %}" class="button is-warning has-text-white">
           <span class="icon">
             <i class="fas fa-percentage"></i>
           </span>
           <span>risk</span>
         </a>
-        <button class="button is-primary" onClick="toggleCollapsible({{ ir.pk }})">
+        <button class="button is-primary has-text-white" onClick="toggleCollapsible({{ ir.pk }})">
           <span class="icon">
             <i class="fas fa-chevron-down"></i>
           </span>

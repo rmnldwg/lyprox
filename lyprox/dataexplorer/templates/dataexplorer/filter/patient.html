@@ -1,4 +1,4 @@
-<div class="tile is-child box">
+<div class="box is-height-100">
   <div class="level">
     <div class="level-left">
       <div class="level-item">
@@ -17,21 +17,21 @@
     </div>
   </div>
 
-  <div class="columns">
-    <div class="column">
+  <div class="grid">
+    <div class="cell is-flex is-flex-direction-column is-justify-content-center">
       {{ form.smoke }}
       {% include 'dataexplorer/three_way_toggle_stats.html' with stats=stats field='smoke' show_percent=show_percent %}
     </div>
-    <div class="column">
+    <div class="cell is-flex is-flex-direction-column is-justify-content-center">
       {{ form.hpv }}
       {% include 'dataexplorer/three_way_toggle_stats.html' with stats=stats field='hpv' show_percent=show_percent %}
     </div>
 
-    <div class="column">
+    <div class="cell is-flex is-flex-direction-column is-justify-content-center">
       {{ form.surgery }}
       {% include 'dataexplorer/three_way_toggle_stats.html' with stats=stats field='surgery' show_percent=show_percent %}
     </div>
-    <div class="column">
+    <div class="cell is-flex is-flex-direction-column is-justify-content-center">
       {{ form.is_n_plus }}
       {% include 'dataexplorer/three_way_toggle_stats.html' with stats=stats field='is_n_plus' show_percent=show_percent %}
     </div>

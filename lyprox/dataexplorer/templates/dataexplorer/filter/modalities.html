@@ -1,17 +1,21 @@
-<div class="tile is-child box">
+<div class="box is-height-100">
   <div class="columns">
     <div class="column is-2 is-flex is-flex-direction-row is-justify-content-left is-align-items-center">
       <p id="modalities-title" class="title is-4">Modalities</p>
     </div>
 
     <div class="column is-8">
-      <div class="field is-grouped is-grouped-multiline">
+      <div class="grid">
         {% for checkbox in form.modalities %}
-        <div class="control is-expanded">
-          {{ checkbox.tag }}
-          <label for="{{ checkbox.id_for_label }}" class="button is-primary is-light is-fullwidth">
-            {{ checkbox.choice_label }}
-          </label>
+        <div class="cell">
+          <div class="field">
+            <div class="control">
+              {{ checkbox.tag }}
+              <label for="{{ checkbox.id_for_label }}" class="button is-link is-light is-fullwidth">
+                {{ checkbox.choice_label }}
+              </label>
+            </div>
+          </div>
         </div>
         {% endfor %}
       </div>

@@ -89,6 +89,7 @@ function toggleAll(name) {
   for (let i = 0; i < checkboxes.length; i++) {
     checkboxes[i].checked = !checked;
   }
+  changeHandler();
 }
 
 // Add the ability to submit the form via non-AJAX GET request to the server

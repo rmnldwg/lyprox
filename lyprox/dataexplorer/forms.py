@@ -197,6 +197,14 @@ class EasySubsiteChoiceField(forms.MultipleChoiceField):
         return cls(**default_kwargs)
 
 
+def get_modality_choices() -> list[tuple[str, str]]:
+    """Return the choices for the modality field."""
+    return [
+        (mod, mod.replace("_", " "))
+        for mod in get_default_modalities()
+    ]
+
+
 T = TypeVar("T", bound="DashboardForm")
 
 class DashboardForm(FormLoggerMixin, forms.Form):
@@ -209,7 +217,7 @@ class DashboardForm(FormLoggerMixin, forms.Form):
     modalities = forms.MultipleChoiceField(
         required=False,
         widget=forms.CheckboxSelectMultiple(attrs=checkbox_attrs),
-        choices=[(mod, mod) for mod in get_default_modalities()],
+        choices=get_modality_choices(),
         initial=["CT", "MRI", "PET", "FNA", "diagnostic_consensus", "pathology", "pCT"],
     )
     """Which modalities to combine into a consensus diagnosis."""

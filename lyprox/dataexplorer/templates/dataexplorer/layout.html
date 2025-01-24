@@ -24,8 +24,39 @@
 {% csrf_token %}
 <form method="GET" action="{% url 'dataexplorer:dashboard' %}" id="dashboard-form" name="dashboardform">
   <section class="section">
+    <div class="fixed-grid has-4-cols">
+      <div class="grid">
+        <div class="cell is-col-span-1">
+          {% include 'dataexplorer/filter/tumor.html' with form=form %}
+        </div>
+        <div class="cell is-col-span-3">
+          <div class="fixed-grid is-height-100 has-2-cols">
+            <div class="grid is-height-100">
+              <div class="cell">
+                {% include 'dataexplorer/filter/patient.html' with form=form %}
+              </div>
+              <div class="cell">
+                {% include 'dataexplorer/filter/datasets.html' with form=form %}
+              </div>
+              <div class="cell is-col-span-2">
+                {% include 'dataexplorer/filter/modalities.html' with form=form %}
+              </div>
+              <div class="cell">
+                {% include 'dataexplorer/involvement.html' with form=form side='contra' %}
+              </div>
+              <div class="cell">
+                {% include 'dataexplorer/involvement.html' with form=form side='ipsi' %}
+              </div>
+              <div class="cell is-col-span-2">
+                {% include 'dataexplorer/controls.html' with form=form %}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
 
-    <div class="tile is-ancestor">
+    {% comment %} <div class="grid">
       <div class="tile is-3 is-vertical is-parent">
         <!-- Primary tumor -->
         {% include 'dataexplorer/filter/tumor.html' with form=form %}
@@ -60,7 +91,7 @@
         <!-- Controls -->
         {% include 'dataexplorer/controls.html' with form=form %}
       </div>
-    </div>
+    </div> {% endcomment %}
   </section>
 </form>
 {% endblock %}
