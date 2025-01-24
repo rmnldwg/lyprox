@@ -190,7 +190,7 @@ class InferenceResult(loggers.ModelLoggerMixin, models.Model):
         merged_yaml = self.get_merged_yaml()
         return validate_configs(merged_yaml)
 
-    def create_model(self) -> Model:
+    def construct_model(self) -> Model:
         """Create the lymph model instance from the validated configs."""
         graph_config, model_config, distributions_config = self.validate_configs()
         return memory.cache(construct_model_and_add_dists)(

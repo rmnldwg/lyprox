@@ -12,10 +12,10 @@ from django.core.validators import MaxValueValidator, MinValueValidator
 from django.forms import ValidationError, widgets
 from dvc.api import DVCFileSystem
 from dvc.scm import CloneError, RevError
-from lyscripts.predict.utils import complete_pattern
+from lymph import models
 
 from lyprox import loggers
-from lyprox.dataexplorer.forms import ThreeWayToggle, trio_to_bool
+from lyprox.dataexplorer.forms import ThreeWayToggle
 from lyprox.riskpredictor.models import InferenceResult
 
 
@@ -113,28 +113,44 @@ class DashboardForm(forms.Form):
 
         if inference_result is not None:
             self.inference_result = inference_result
-            self.add_lnl_fields(self.inference_result)
-            self.add_t_stage_field(self.inference_result)
+            self.model = self.inference_result.construct_model()
+            self.add_lnl_fields()
+            self.add_t_stage_field()
             self.add_sens_spec_fields()
 
-            if self.inference_result.is_midline:
+            if isinstance(self.model, models.Midline):
                 self.add_midline_field()
 
 
-    def add_lnl_fields(self, inference_result: InferenceResult):
+    def get_lnls(self):
+        """Get the lymph node levels from the model."""
+        if isinstance(self.model, models.Unilateral):
+            return self.model.graph.lnls
+        if isinstance(self.model, models.Bilateral):
+            return self.model.ipsi.graph.lnls
+        if isinstance(self.model, models.Midline):
+            return self.model.ext.ipsi.graph.lnls
+
+        raise RuntimeError(f"Model type {type(self.model)} not recognized.")
+
+
+    def add_lnl_fields(self):
         """Add the fields for the lymph node levels defined in the trained model."""
-        for lnl in inference_result.lnls:
+        lnls = self.get_lnls()
+
+        for lnl in lnls:
             self.fields[f"ipsi_{lnl}"] = ThreeWayToggle(initial=-1)
 
-            if inference_result.is_bilateral:
+            if isinstance(self.model, models.Bilateral | models.Midline):
                 self.fields[f"contra_{lnl}"] = ThreeWayToggle(initial=-1)
 
 
-    def add_t_stage_field(self, inference_result: InferenceResult):
+    def add_t_stage_field(self):
         """Add the field for the T stage with the choices being defined in the model."""
+        t_stages = list(self.model.get_all_distributions())
         self.fields["t_stage"] = forms.ChoiceField(
-            choices=[(t, t) for t in inference_result.t_stages],
-            initial=inference_result.t_stages[0],
+            choices=t_stages,
+            initial=t_stages[0],
         )
 
 
@@ -173,35 +189,14 @@ class DashboardForm(forms.Form):
         self.fields["midline_extension"] = ThreeWayToggle(
             label=None,
             tooltip="Does the tumor cross the mid-sagittal line?",
-            choices=[(1, "plus"), (0, "ban"), (-1, "minus")],
-            initial=-1,
+            choices=[(True, "plus"), (None, "ban"), (False, "minus")],
+            initial=False,
         )
 
 
     def clean_midline_extension(self) -> bool:
         """For now, the midline extension cannot be unknown (value of 0)."""
         midline_extension = self.cleaned_data["midline_extension"]
-        if midline_extension == 0:
+        if midline_extension is None:
             raise ValidationError("Midline extension cannot be unknown.")
         return midline_extension
-
-
-    def clean(self) -> dict[str, Any]:
-        """Transform three-way toggles to booleans."""
-        cleaned_data = super().clean()
-
-        for field_name, field_value in cleaned_data.items():
-            cleaned_data[field_name] = trio_to_bool(field_value)
-
-        diagnosis = {}
-        for side in ["ipsi", "contra"]:
-            diagnosis[side] = {}
-            for lnl in self.inference_result.lnls:
-                if (key := f"{side}_{lnl}") not in cleaned_data:
-                    continue
-                diagnosis[side][lnl] = cleaned_data.pop(key)
-
-        cleaned_data["diagnosis"] = complete_pattern(
-            diagnosis, self.inference_result.lnls
-        )
-        return cleaned_data
