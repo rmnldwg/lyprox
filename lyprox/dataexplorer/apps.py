@@ -7,8 +7,8 @@ There are two custom things going on here:
    ``True`` and tells the `lyprox.context_processors.navbar_apps` context processor to
    add an entry to the main navigation bar for this app.
 2. The `ready` method is called when the app is ready. It loads the datasets via the
-   `DataInterface` class. The idea is to do this once at startup and then keep the patient
-   records in memory for fast access.
+   `DataInterface` class. The idea is to do this once at startup and then keep the
+   patient records in memory for fast access.
 """
 
 from django.apps import AppConfig
@@ -26,21 +26,25 @@ class DataExplorerConfig(AppConfig):
 
     def ready(self):
         """Load the data into memory when the app is ready."""
+        # TODO: Load dataset specs from a configuration file
         di = DataInterface()
-        di.load_and_enhance_datasets(repo_name="rmnldwg/lydata")
-        di.load_and_enhance_datasets(
-            institution="hvh",
-            repo_name="rmnldwg/lydata.private",
-            ref="dib-update-paper",
-        )
-        di.load_and_enhance_datasets(
-            institution="umcg",
-            repo_name="rmnldwg/lydata.private",
-            ref="2024-umcg-hypopharynx-larynx",
-        )
         di.load_and_enhance_datasets(
             institution="usz",
-            subsite="hypopharynx-larynx",
-            repo_name="rmnldwg/lydata.private",
-            ref="2023-usz-hypopharynx-larynx",
+            repo_name="rmnldwg/lydata",
         )
+        # di.load_and_enhance_datasets(
+        #     institution="hvh",
+        #     repo_name="rmnldwg/lydata.private",
+        #     ref="dib-update-paper",
+        # )
+        # di.load_and_enhance_datasets(
+        #     institution="umcg",
+        #     repo_name="rmnldwg/lydata.private",
+        #     ref="2024-umcg-hypopharynx-larynx",
+        # )
+        # di.load_and_enhance_datasets(
+        #     institution="usz",
+        #     subsite="hypopharynx-larynx",
+        #     repo_name="rmnldwg/lydata.private",
+        #     ref="2023-usz-hypopharynx-larynx",
+        # )
