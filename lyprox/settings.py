@@ -294,3 +294,5 @@ MEDIA_URL = "/media/"
 STATICFILES_DIRS = [BASE_DIR / "lyprox" / "static"]
 
 PUBLICATIONS_PATH = STATIC_ROOT / "publications" / "data.yaml"
+
+JOBLIB_CACHE_DIR = BASE_DIR / ".cache"

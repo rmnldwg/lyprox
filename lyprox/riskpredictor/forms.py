@@ -1,11 +1,11 @@
 """
-This module contains the forms used in the riskpredictor app.
+Forms used in the `riskpredictor` app.
 
 The first form, the `InferenceResultForm`, is used to create a new
 `models.InferenceResult` and makes sure that the user enters a valid git repository
 and revision.
 """
-from typing import Any, Dict
+from typing import Any
 
 from django import forms
 from django.core.validators import MaxValueValidator, MinValueValidator
@@ -14,9 +14,9 @@ from dvc.api import DVCFileSystem
 from dvc.scm import CloneError, RevError
 from lyscripts.predict.utils import complete_pattern
 
-from .. import loggers
-from ..dataexplorer.forms import ThreeWayToggle, trio_to_bool
-from .models import InferenceResult
+from lyprox import loggers
+from lyprox.dataexplorer.forms import ThreeWayToggle, trio_to_bool
+from lyprox.riskpredictor.models import InferenceResult
 
 
 class RangeInput(widgets.NumberInput):
@@ -25,62 +25,77 @@ class RangeInput(widgets.NumberInput):
 
 class InferenceResultForm(loggers.FormLoggerMixin, forms.ModelForm):
     """Form for creating a new `InferenceResult` instance."""
-    git_repo_url = forms.URLField(
-        label="GitHub repository URL",
-        help_text="The URL of the GitHub repository that contains the trained model.",
-        initial="https://github.com/rmnldwg/lynference",
-        widget=widgets.TextInput(attrs={
-            "class": "input",
-            "placeholder": "e.g. https://github.com/my/repo",
-        }),
-    )
 
     class Meta:
         model = InferenceResult
-        fields = ["revision", "params_path", "num_samples"]
+        fields = [
+            "repo_name",
+            "ref",
+            "graph_config_path",
+            "model_config_path",
+            "distributions_config_path",
+            "num_samples",
+        ]
         widgets = {
-            "revision": widgets.TextInput(attrs={
+            "ref": widgets.TextInput(attrs={
                 "class": "input",
-                "placeholder": "e.g. `main` or a tag name",
+                "placeholder": "e.g. `main`, commit hash, or tag name",
             }),
-            "params_path": widgets.TextInput(attrs={
+            "graph_config_path": widgets.TextInput(attrs={
                 "class": "input",
-                "placeholder": "e.g. `params.yaml`",
+                "placeholder": "e.g. `graph.ly.yaml`",
+            }),
+            "model_config_path": widgets.TextInput(attrs={
+                "class": "input",
+                "placeholder": "e.g. `model.ly.yaml`",
+            }),
+            "distributions_config_path": widgets.TextInput(attrs={
+                "class": "input",
+                "placeholder": "e.g. `graph.ly.yaml`",
             }),
             "num_samples": widgets.NumberInput(attrs={
                 "class": "input",
-                "placeholder": "e.g. 1000",
+                "placeholder": "e.g. 100",
             }),
         }
 
-    def clean(self) -> Dict[str, Any]:
+    def clean(self) -> dict[str, Any]:
         """Check all the fields for validity."""
         cleaned_data = super().clean()
-        git_repo_url = cleaned_data["git_repo_url"]
-        revision = cleaned_data["revision"]
-        params_path = cleaned_data["params_path"]
-
-        repo_id = git_repo_url.split("github.com/")[-1]
-        cleaned_data["git_repo_owner"] = repo_id.split("/")[0]
-        cleaned_data["git_repo_name"] = repo_id.split("/")[1]
+        repo_name = cleaned_data["repo_name"]
+        repo_url = f"https://github.com/{repo_name}"
+        ref = cleaned_data["ref"]
+        graph_config_path = cleaned_data["graph_config_path"]
+        model_config_path = cleaned_data["model_config_path"]
+        distributions_config_path = cleaned_data["distributions_config_path"]
 
         try:
-            fs = DVCFileSystem(url=git_repo_url, rev=revision)
+            fs = DVCFileSystem(url=repo_url, rev=ref)
 
-            if not fs.isfile(params_path):
+            if not fs.isfile(graph_config_path):
                 self.add_error(
-                    field="params_path",
-                    error=ValidationError("Not a valid path to the model parameters."),
+                    field="graph_config_path",
+                    error=ValidationError("Not a valid path to the graph config."),
+                )
+            if not fs.isfile(model_config_path):
+                self.add_error(
+                    field="model_config_path",
+                    error=ValidationError("Not a valid path to the model config."),
+                )
+            if not fs.isfile(distributions_config_path):
+                self.add_error(
+                    field="distributions_config_path",
+                    error=ValidationError("Not a valid path to the distributions."),
                 )
         except CloneError as _e:
             self.add_error(
-                field="git_repo_url",
-                error=ValidationError("Not a valid git repository."),
+                field="repo_name",
+                error=ValidationError("Not an existing GitHub repository."),
             )
         except RevError as _e:
             self.add_error(
-                field="revision",
-                error=ValidationError("Not a valid git revision."),
+                field="ref",
+                error=ValidationError("Not a valid git ref."),
             )
 
         return cleaned_data
@@ -171,7 +186,7 @@ class DashboardForm(forms.Form):
         return midline_extension
 
 
-    def clean(self) -> Dict[str, Any]:
+    def clean(self) -> dict[str, Any]:
         """Transform three-way toggles to booleans."""
         cleaned_data = super().clean()
 

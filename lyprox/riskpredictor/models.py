@@ -9,28 +9,124 @@ Given a specific diagnosis, as entered via the `forms.DashboardForm`, the
 ``lymph-model`` package and the precomputed risk matrices in the `InferenceResult`
 instances, the personalized risk estimates can be computed.
 """
-import io
-from pathlib import Path
+
+import logging
+import tempfile
 from typing import Any
 
-import h5py
-import lyscripts
+import emcee
 import numpy as np
 import yaml
 from django.db import models
 from dvc.api import DVCFileSystem
-from github import Github, GithubException
-from lymph import Bilateral, MidlineBilateral, Unilateral
+from github import Github, Repository
+from joblib import Memory
+from lydata.loader import _get_github_auth
+from lymph.types import Model
+from lyscripts.configs import (
+    DeprecatedModelConfig,
+    DistributionConfig,
+    GraphConfig,
+    ModelConfig,
+    add_dists,
+    construct_model,
+)
+from pydantic import TypeAdapter
 
-from lyprox import settings
+from lyprox import loggers, settings
 
-from .. import loggers
+logger = logging.getLogger(__name__)
+memory = Memory(location=settings.JOBLIB_CACHE_DIR, verbose=0)
 
 
-def get_path_for_risk_matrices(instance, filename) -> str:
-    """Get path where risk matrices should be stored for `InferenceResult` instance."""
-    repo_path = instance.git_repo_url.split("//")[-1]
-    return f"risk/{repo_path}/{instance.revision}.hdf5"
+def fetch_and_merge_yaml(
+    repo_name: str,
+    ref: str,
+    graph_config_path: str,
+    model_config_path: str,
+    distributions_config_path: str,
+) -> dict[str, Any]:
+    """Fetch and merge the YAML configuration files from the repo."""
+    repo_url = f"https://github.com/{repo_name}"
+    dvc_fs = DVCFileSystem(url=repo_url, rev=ref)
+    config_paths = [graph_config_path, model_config_path, distributions_config_path]
+    merged_config = {}
+    for config_path in config_paths:
+        with dvc_fs.open(config_path) as config_file:
+            config_dict = yaml.safe_load(config_file)
+            merged_config.update(config_dict)
+
+    return merged_config
+
+
+def validate_configs(
+    merged_yaml: dict[str, Any],
+) -> tuple[GraphConfig, ModelConfig, dict[str | int, DistributionConfig]]:
+    """Validate the pydantic configs necessary for constructing the model."""
+    graph_config = GraphConfig.model_validate(merged_yaml["graph"])
+
+    if merged_yaml.get("version") != 1:
+        deprecated = DeprecatedModelConfig.model_validate(merged_yaml["model"])
+        model_config, distributions_config = deprecated.translate()
+        return graph_config, model_config, distributions_config
+
+    model_config = ModelConfig.model_validate(merged_yaml["model"])
+    adapter = TypeAdapter(dict[str | int, DistributionConfig])
+    distributions_config = adapter.validate_python(merged_yaml["distributions"])
+    return graph_config, model_config, distributions_config
+
+
+def construct_model_and_add_dists(
+    graph_config: GraphConfig,
+    model_config: ModelConfig,
+    distributions_config: dict[str | int, DistributionConfig],
+) -> Model:
+    """Construct the lymph model and add the distributions to it."""
+    model = construct_model(model_config=model_config, graph_config=graph_config)
+    return add_dists(model=model, distributions=distributions_config)
+
+
+def fetch_model_samples(
+    repo_name: str,
+    ref: str,
+    samples_path: str,
+    num_samples: int,
+    seed: int = 42,
+) -> np.ndarray:
+    """Fetch the model samples from the HDF5 file in the DVC repo."""
+    repo_url = f"https://github.com/{repo_name}"
+    dvc_fs = DVCFileSystem(url=repo_url, rev=ref)
+
+    with tempfile.NamedTemporaryFile() as temp_file:
+        dvc_fs.get_file(samples_path, temp_file.name)
+        hdf5_backend = emcee.backends.HDFBackend(
+            filename=temp_file.name,
+            read_only=True,
+        )
+        samples = hdf5_backend.get_chain(flat=True)
+
+    rng = np.random.default_rng(seed)
+    rand_idx = rng.choice(
+        a=len(samples),
+        size=num_samples,
+        replace=False,
+    )
+    return samples[rand_idx]
+
+
+def compute_priors(
+    model: Model,
+    samples: np.ndarray,
+    t_stage: str | int,
+) -> np.ndarray:
+    """Compute the prior state dists for the given model, samples, and t_stage."""
+    priors = []
+
+    for sample in samples:
+        model.set_params(*sample)
+        priors.append(model.state_dist(t_stage=t_stage))
+
+    return np.stack(priors)
 
 
 class InferenceResult(loggers.ModelLoggerMixin, models.Model):
@@ -40,208 +136,74 @@ class InferenceResult(loggers.ModelLoggerMixin, models.Model):
     It fetches the HDF5 parameter samples from the DVC remote storage and uses them to
     compute the prior risk matrices and stores them in an HDF5 file, too.
     """
-    git_repo_owner = models.CharField(max_length=50, default="rmnldwg")
-    """Owner of the GitHub repository that contains the trained model."""
-    git_repo_name = models.CharField(max_length=50, default="lynference")
-    """Name of the GitHub repository that contains the trained model."""
-    revision = models.CharField(max_length=40, default="main")
-    """Git revision of the trained model. E.g., a commit hash, tag, or branch name."""
-    params_path = models.CharField(max_length=100, default="params.yaml")
-    """Path to the YAML file containing the model parameters inside the git repo."""
-    params = models.JSONField(default=dict)
-    """Parameters to recreate lymph model for risk prediction."""
-    description = models.TextField(default="")
-    """GitHub release description of the inference run."""
-    risk_matrices = models.FileField(upload_to=get_path_for_risk_matrices)
-    """HDF5 file containing the computed prior risk matrices."""
+
+    repo_name = models.CharField(max_length=50, default="rmnldwg/lynference")
+    """Identifier of the GitHub repository that contains the trained model."""
+    ref = models.CharField(max_length=40, default="main")
+    """Git reference of the trained model. E.g., a commit hash, tag, or branch name."""
+    graph_config_path = models.CharField(max_length=100, default="graph.ly.yaml")
+    """Path to YAML file containing the graph configuration inside the git repo."""
+    model_config_path = models.CharField(max_length=100, default="model.ly.yaml")
+    """Path to YAML file containing the model configuration inside the git repo."""
+    distributions_config_path = models.CharField(
+        max_length=100,
+        default="distributions.ly.yaml",
+    )
+    """Path to YAML file defining the distributions over diagnose times."""
+    samples_path = models.CharField(max_length=100, default="models/samples.hdf5")
+    """Path to HDF5 file containing the parameter samples inside the git repo."""
     num_samples = models.PositiveIntegerField(default=100)
     """Number of samples to use for computing the prior risk matrices."""
 
-
     class Meta:
         """Meta options for the `InferenceResult` model."""
-        unique_together = ("git_repo_owner", "git_repo_name", "revision")
 
+        unique_together = ("repo_name", "ref")
 
-    def __str__(self):
-        """Return a string representation of the `InferenceResult` instance."""
-        return f"{self.git_repo_url}/tree/{self.revision}"
-
-    @property
-    def git_repo_url(self):
-        """Return the URL of the GitHub repository."""
-        return f"https://github.com/{self.git_repo_owner}/{self.git_repo_name}"
-
-    @property
-    def lnls(self):
-        """Return list of lymph node levels."""
-        return list(self.params["graph"]["lnl"].keys())
-
-    @property
-    def t_stages(self):
-        """Return list of tumor stages."""
-        return self.params["model"]["t_stages"]
-
-    @property
-    def is_bilateral(self):
-        """Return whether the model is bilateral."""
-        lymph_model = self.get_lymph_model()
-        return isinstance(lymph_model, Bilateral | MidlineBilateral)
-
-    @property
-    def is_midline(self):
-        """Return whether the model is midline."""
-        lymph_model = self.get_lymph_model()
-        return isinstance(lymph_model, MidlineBilateral)
-
-
-    @staticmethod
-    def fetch_params(
-        dvc_file_system: DVCFileSystem,
-        params_path: Path | str,
-    ) -> dict[str, Any]:
-        """Load the model parameters from the YAML file in the DVC repo."""
-        with dvc_file_system.open(params_path) as params_file:
-            return yaml.safe_load(params_file)
-
-
-    @staticmethod
-    def fetch_samples(
-        dvc_file_system: DVCFileSystem,
-        samples_path: str,
-        num_samples: int = 100,
-    ) -> np.ndarray:
-        """Load the model samples from the HDF5 file in the DVC repo."""
-        with dvc_file_system.open(samples_path) as samples_file:
-            with h5py.File(samples_file, "r") as samples_h5:
-                raw_chain = samples_h5["mcmc/chain"][:]
-                num_dims = raw_chain.shape[-1]
-                samples = raw_chain.reshape((-1, num_dims))
-                rand_idx = np.random.choice(
-                    samples.shape[0], size=num_samples, replace=False
-                )
-                samples = samples[rand_idx]
-
-        return samples
-
-
-    def fetch_description(self) -> str:
-        """Fetch the release description from the GitHub API."""
-        try:
-            gh = Github(login_or_token=settings.GITHUB_TOKEN)
-            repo = gh.get_repo(f"{self.git_repo_owner}/{self.git_repo_name}")
-            release = repo.get_release(id=self.revision)
-            return release.body
-
-        except GithubException:
-            return "This revision has no release description."
-
-
-    def compute_risk_matrices(self, lymph_model, t_stages, samples) -> np.ndarray:
-        """Compute the risk matrices for the given model and samples."""
-        per_sample_risk_shape = lymph_model.risk(
-            given_params=samples.mean(axis=0),
-            t_stage=t_stages[0],
-        ).shape
-
-        risk_shape = (self.num_samples, *per_sample_risk_shape)
-
-        if self.is_midline:
-            risk_matrices = {}
-            for stage in t_stages:
-                risk_matrices[f"{stage}/ext"] = np.empty(shape=risk_shape)
-                risk_matrices[f"{stage}/noext"] = np.empty(shape=risk_shape)
-        else:
-            risk_matrices = {stage: np.empty(shape=risk_shape) for stage in t_stages}
-
-        for i, sample in enumerate(samples):
-            lymph_model.check_and_assign(sample)
-            for stage in t_stages:
-                if self.is_midline:
-                    risk_matrices[f"{stage}/ext"][i] = lymph_model.risk(
-                        t_stage=stage, midline_extension=True
-                    )
-                    risk_matrices[f"{stage}/noext"][i] = lymph_model.risk(
-                        t_stage=stage, midline_extension=False
-                    )
-                else:
-                    risk_matrices[stage][i] = lymph_model.risk(t_stage=stage)
-
-        self.logger.info("Computed risk matrices for T-categories %s", t_stages)
-        return risk_matrices
-
-
-    def store_risk_matrices(self, risk_matrices):
-        """Store the risk matrices in the HDF5 file field on disk."""
-        bytes_io = io.BytesIO()
-        with h5py.File(bytes_io, "w") as h5_file:
-            for h5_path, risk_matrix in risk_matrices.items():
-                h5_file.create_dataset(h5_path, data=risk_matrix)
-
-        self.risk_matrices.save(
-            get_path_for_risk_matrices(self, "_"), bytes_io, save=False
-        )
-
-        self.logger.info("Stored risk matrices in %s", self.risk_matrices.path)
-
-
-    def load_risk_matrices(
+    def get_repo(
         self,
-        t_stage: str,
-        midline_extension: bool | None = None,
-    ) -> np.ndarray:
-        """Load stored risk matrices for ``t_stage`` and ``midline_extension``."""
-        if self.is_midline and midline_extension is None:
-            raise ValueError(
-                "For MidlineBilateral models, the lateralization must be specified."
-            )
+        token: str | None = None,
+        user: str | None = None,
+        password: str | None = None,
+    ) -> Repository:
+        """Return the GitHub repository object."""
+        auth = _get_github_auth(token=token, user=user, password=password)
+        gh = Github(auth=auth)
+        repo = gh.get_repo(self.repo_name)
+        logger.info(f"Fetched GitHub repository {self.repo_name}")
+        return repo
 
-        with h5py.File(self.risk_matrices.path, "r") as h5_file:
-            if self.is_midline:
-                key = f"{t_stage}/{'ext' if midline_extension else 'noext'}"
-            else:
-                key = t_stage
-
-            return h5_file[key][:]
-
-
-    def get_lymph_model(self) -> Unilateral | Bilateral | MidlineBilateral:
-        """Get (create if necessary) lymph model instance from the stored params."""
-        if hasattr(self, "_lymph_model"):
-            return self._lymph_model
-
-        self._lymph_model = lyscripts.utils.create_model_from_config(self.params)
-        return self._lymph_model
-
-
-    def save(self, *args, **kwargs) -> None:
-        """Compute the risk matrices and store them in the HDF5 file."""
-        self.description = self.fetch_description()
-
-        dvc_file_system = DVCFileSystem(url=self.git_repo_url, rev=self.revision)
-        self.params = self.fetch_params(dvc_file_system, self.params_path)
-
-        t_stages = self.params.get("models", {}).get("t_stages", ["early", "late"])
-        samples_path = (
-            self.params
-            .get("general", {})
-            .get("samples", "models/samples.hdf5")
+    def get_merged_yaml(self) -> dict[str, Any]:
+        """Fetch and merge the YAML configuration files from the repo."""
+        return memory.cache(fetch_and_merge_yaml)(
+            repo_name=self.repo_name,
+            ref=self.ref,
+            graph_config_path=self.graph_config_path,
+            model_config_path=self.model_config_path,
+            distributions_config_path=self.distributions_config_path,
         )
-        samples = self.fetch_samples(dvc_file_system, samples_path, self.num_samples)
-        self.logger.info("Loaded samples with dimensions %s", samples.shape)
 
-        lymph_model = self.get_lymph_model()
-        self.logger.info("Created trained lymph model %s", lymph_model)
+    def validate_configs(
+        self,
+    ) -> tuple[GraphConfig, ModelConfig, dict[str | int, DistributionConfig]]:
+        """Validate the pydantic configs necessary for constructing the model."""
+        merged_yaml = self.get_merged_yaml()
+        return validate_configs(merged_yaml)
 
-        risk_matrices = self.compute_risk_matrices(lymph_model, t_stages, samples)
-        self.store_risk_matrices(risk_matrices)
+    def create_model(self) -> Model:
+        """Create the lymph model instance from the validated configs."""
+        graph_config, model_config, distributions_config = self.validate_configs()
+        return memory.cache(construct_model_and_add_dists)(
+            graph_config=graph_config,
+            model_config=model_config,
+            distributions_config=distributions_config,
+        )
 
-        return super().save(*args, **kwargs)
-
-
-    def delete(self, *args, **kwargs) -> None:
-        """Delete the HDF5 file containing the risk matrices."""
-        samples_path = Path(self.risk_matrices.path)
-        self.risk_matrices.delete(save=False)
-        samples_path.unlink(missing_ok=True)
-        return super().delete(*args, **kwargs)
+    def fetch_samples(self) -> np.ndarray:
+        """Fetch the model samples from the HDF5 file in the DVC repo."""
+        return memory.cache(fetch_model_samples)(
+            repo_name=self.repo_name,
+            ref=self.ref,
+            samples_path=self.samples_path,
+            num_samples=self.num_samples,
+        )
