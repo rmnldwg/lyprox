@@ -4,16 +4,17 @@ Module for functions to predict the risk of lymphatic progression.
 The code in this module is utilized by the `views.RiskPredictionView` of the
 `riskpredictor` app to compute the risk of lymphatic progression for a given diagnosis.
 """
+
 import logging
 import time
 from typing import Any
 
 import numpy as np
 import pandas as pd
-from lymph import Bilateral, MidlineBilateral, Unilateral
+from lymph.models import Bilateral, Midline, Unilateral
 from lyscripts.utils import flatten
 
-from .models import InferenceResult
+from lyprox.riskpredictor.models import InferenceResult
 
 logger = logging.getLogger(__name__)
 
@@ -64,7 +65,8 @@ def compute_diagnose_probs(
     lymph_model.modalities = {"modality": [specificity, sensitivity]}
 
     patient = create_patient(
-        diagnosis, t_stage,
+        diagnosis,
+        t_stage,
         is_bilateral=inference_result.is_bilateral,
         midline_extension=midline_extension,
     )
@@ -117,7 +119,7 @@ def compute_posterior_risks(
 
 
 def create_marginalisation(
-    lymph_model: Unilateral | Bilateral | MidlineBilateral,
+    lymph_model: Unilateral | Bilateral | Midline,
     pattern: dict[str, bool | None],
 ) -> np.ndarray:
     """
@@ -128,7 +130,7 @@ def create_marginalisation(
     a vector that is 1 for all hidden states that match the given `pattern` and 0 for
     all others.
     """
-    if isinstance(lymph_model, MidlineBilateral):
+    if isinstance(lymph_model, Midline):
         lymph_model = lymph_model.ext
 
     if isinstance(lymph_model, Bilateral):
@@ -138,11 +140,14 @@ def create_marginalisation(
 
     marginalisation = np.zeros(shape=len(lymph_model.state_list), dtype=bool)
     for i, state in enumerate(lymph_model.state_list):
-        marginalisation[i] = np.all(np.equal(
-            pattern, state,
-            where=(pattern != None),  # noqa: E711
-            out=np.ones_like(pattern, dtype=bool),
-        ))
+        marginalisation[i] = np.all(
+            np.equal(
+                pattern,
+                state,
+                where=(pattern != None),  # noqa: E711
+                out=np.ones_like(pattern, dtype=bool),
+            )
+        )
 
     return marginalisation
 
@@ -207,9 +212,9 @@ def aggregate_results(
             risk_mean = 100 * np.mean(marginalized_risks[side][i])
             risk_stddev = 100 * np.std(marginalized_risks[side][i])
             result[f"{side}_{lnl}"] = [
-                risk_stddev,                         # error of the prediction
-                risk_mean - risk_stddev/2.,          # risk of involvement - half error
-                100. - (risk_mean - risk_stddev/2.), # prob of healthy - half error
+                risk_stddev,  # error of the prediction
+                risk_mean - risk_stddev / 2.0,  # risk of involvement - half error
+                100.0 - (risk_mean - risk_stddev / 2.0),  # prob of healthy - half error
             ]
 
     return result

@@ -4,9 +4,10 @@ URLs related to the `riskpredictor` prediction app.
 This app is reachable under the URL ``https://lyprox.org/riskpredictor``. Like the
 `dataexplorer`, this includes a dashboard and a help page.
 """
+
 from django.urls import path
 
-from . import views
+from lyprox.riskpredictor import views
 
 app_name = "riskpredictor"
 urlpatterns = [

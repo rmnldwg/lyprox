@@ -5,6 +5,7 @@ The first form, the `InferenceResultForm`, is used to create a new
 `models.InferenceResult` and makes sure that the user enters a valid git repository
 and revision.
 """
+
 from typing import Any
 
 from django import forms
@@ -20,6 +21,8 @@ from lyprox.riskpredictor.models import InferenceResult
 
 
 class RangeInput(widgets.NumberInput):
+    """A widget for a range slider input field."""
+
     input_type = "range"
 
 
@@ -27,36 +30,48 @@ class InferenceResultForm(loggers.FormLoggerMixin, forms.ModelForm):
     """Form for creating a new `InferenceResult` instance."""
 
     class Meta:
+        """Meta class for the form."""
+
         model = InferenceResult
         fields = [
             "repo_name",
             "ref",
             "graph_config_path",
             "model_config_path",
-            "distributions_config_path",
+            "dist_configs_path",
             "num_samples",
         ]
         widgets = {
-            "ref": widgets.TextInput(attrs={
-                "class": "input",
-                "placeholder": "e.g. `main`, commit hash, or tag name",
-            }),
-            "graph_config_path": widgets.TextInput(attrs={
-                "class": "input",
-                "placeholder": "e.g. `graph.ly.yaml`",
-            }),
-            "model_config_path": widgets.TextInput(attrs={
-                "class": "input",
-                "placeholder": "e.g. `model.ly.yaml`",
-            }),
-            "distributions_config_path": widgets.TextInput(attrs={
-                "class": "input",
-                "placeholder": "e.g. `graph.ly.yaml`",
-            }),
-            "num_samples": widgets.NumberInput(attrs={
-                "class": "input",
-                "placeholder": "e.g. 100",
-            }),
+            "ref": widgets.TextInput(
+                attrs={
+                    "class": "input",
+                    "placeholder": "e.g. `main`, commit hash, or tag name",
+                }
+            ),
+            "graph_config_path": widgets.TextInput(
+                attrs={
+                    "class": "input",
+                    "placeholder": "e.g. `graph.ly.yaml`",
+                }
+            ),
+            "model_config_path": widgets.TextInput(
+                attrs={
+                    "class": "input",
+                    "placeholder": "e.g. `model.ly.yaml`",
+                }
+            ),
+            "dist_configs_path": widgets.TextInput(
+                attrs={
+                    "class": "input",
+                    "placeholder": "e.g. `graph.ly.yaml`",
+                }
+            ),
+            "num_samples": widgets.NumberInput(
+                attrs={
+                    "class": "input",
+                    "placeholder": "e.g. 100",
+                }
+            ),
         }
 
     def clean(self) -> dict[str, Any]:
@@ -103,12 +118,14 @@ class InferenceResultForm(loggers.FormLoggerMixin, forms.ModelForm):
 
 class DashboardForm(forms.Form):
     """Form for the dashboard page."""
+
     is_submitted = forms.BooleanField(
         required=True, initial=True, widget=forms.HiddenInput
     )
     """Whether the form has been submitted via the button or not."""
 
     def __init__(self, *args, inference_result: InferenceResult = None, **kwargs):
+        """Initialize the form and add the fields for the lymph node levels."""
         super().__init__(*args, **kwargs)
 
         if inference_result is not None:
@@ -121,7 +138,6 @@ class DashboardForm(forms.Form):
             if isinstance(self.model, models.Midline):
                 self.add_midline_field()
 
-
     def get_lnls(self):
         """Get the lymph node levels from the model."""
         if isinstance(self.model, models.Unilateral):
@@ -133,7 +149,6 @@ class DashboardForm(forms.Form):
 
         raise RuntimeError(f"Model type {type(self.model)} not recognized.")
 
-
     def add_lnl_fields(self):
         """Add the fields for the lymph node levels defined in the trained model."""
         lnls = self.get_lnls()
@@ -144,7 +159,6 @@ class DashboardForm(forms.Form):
             if isinstance(self.model, models.Bilateral | models.Midline):
                 self.fields[f"contra_{lnl}"] = ThreeWayToggle(initial=-1)
 
-
     def add_t_stage_field(self):
         """Add the field for the T stage with the choices being defined in the model."""
         t_stages = list(self.model.get_all_distributions())
@@ -153,36 +167,42 @@ class DashboardForm(forms.Form):
             initial=t_stages[0],
         )
 
-
     def add_sens_spec_fields(self, step: float = 0.01):
         """Add the fields for the sensitivity and specificity."""
         self.fields["sensitivity"] = forms.FloatField(
-            min_value=0.5, max_value=1, initial=0.8,
-            widget=RangeInput(attrs={
-                "class": "tag slider is-fullwidth",
-                "min": "0.5",
-                "max": "1",
-                "step": f"{step:.2f}",
-            }),
+            min_value=0.5,
+            max_value=1,
+            initial=0.8,
+            widget=RangeInput(
+                attrs={
+                    "class": "tag slider is-fullwidth",
+                    "min": "0.5",
+                    "max": "1",
+                    "step": f"{step:.2f}",
+                }
+            ),
             validators=[
                 MinValueValidator(0.5, "Sensitivity below 0.5 makes no sense"),
                 MaxValueValidator(1, "Sensitivity above 1 makes no sense"),
             ],
         )
         self.fields["specificity"] = forms.FloatField(
-            min_value=0.5, max_value=1, initial=0.8,
-            widget=RangeInput(attrs={
-                "class": "tag slider is-fullwidth",
-                "min": "0.5",
-                "max": "1",
-                "step": f"{step:.2f}",
-            }),
+            min_value=0.5,
+            max_value=1,
+            initial=0.8,
+            widget=RangeInput(
+                attrs={
+                    "class": "tag slider is-fullwidth",
+                    "min": "0.5",
+                    "max": "1",
+                    "step": f"{step:.2f}",
+                }
+            ),
             validators=[
                 MinValueValidator(0.5, "Specificty below 0.5 makes no sense"),
                 MaxValueValidator(1, "Specificty above 1 makes no sense"),
-            ]
+            ],
         )
-
 
     def add_midline_field(self):
         """Add the field for the midline status."""
@@ -192,7 +212,6 @@ class DashboardForm(forms.Form):
             choices=[(True, "plus"), (None, "ban"), (False, "minus")],
             initial=False,
         )
-
 
     def clean_midline_extension(self) -> bool:
         """For now, the midline extension cannot be unknown (value of 0)."""

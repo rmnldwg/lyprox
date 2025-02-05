@@ -23,6 +23,7 @@ Only these environment vars should need to be changed:
 .. _Django docs: https://docs.djangoproject.com/en/4.2/ref/settings/
 .. _12 Factor App: https://12factor.net/config
 """
+
 import os
 from pathlib import Path
 from typing import Literal
@@ -73,15 +74,18 @@ GITHUB = Github(auth=Auth.Token(GITHUB_TOKEN))
 
 LNLS = ["I", "Ia", "Ib", "II", "IIa", "IIb", "III", "IV", "V", "Va", "Vb", "VII"]
 
+
 class TStages(models.IntegerChoices):
     """Tumor stages."""
+
     # TIS = -2, "TIS"
     # TX  = -1, "TX"
-    T0  =  0, "T0"
-    T1  =  1, "T1"
-    T2  =  2, "T2"
-    T3  =  3, "T3"
-    T4  =  4, "T4"
+    T0 = 0, "T0"
+    T1 = 1, "T1"
+    T2 = 2, "T2"
+    T3 = 3, "T3"
+    T4 = 4, "T4"
+
 
 CSRF_COOKIE_SECURE = not DEBUG
 CRSF_TRUSTED_ORIGINS = [f"https://{host}" for host in ALLOWED_HOSTS]
@@ -144,6 +148,7 @@ FROZEN_VERSIONS = [
 
 LogLevelType = Literal["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"]
 
+
 # Logging
 def set_logging(log_level: LogLevelType) -> dict:
     """
@@ -197,7 +202,7 @@ INSTALLED_APPS = [
     # my apps
     "lyprox.accounts.apps.AccountsConfig",
     "lyprox.dataexplorer.apps.DataExplorerConfig",
-    # "lyprox.riskpredictor.apps.RiskConfig",
+    "lyprox.riskpredictor.apps.RiskConfig",
     # third party apps
     "django_filters",
     "fontawesomefree",
@@ -267,7 +272,9 @@ DBBACKUP_STORAGE_OPTIONS = {"location": "/home/rmnldwg/backups/lyprox/"}
 # Password validation
 # https://docs.djangoproject.com/en/3.1/ref/settings/#auth-password-validators
 AUTH_PASSWORD_VALIDATORS = [
-    {"NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator"},  # noqa: E501
+    {
+        "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator"  # noqa: E501
+    },
     {"NAME": "django.contrib.auth.password_validation.MinimumLengthValidator"},
     {"NAME": "django.contrib.auth.password_validation.CommonPasswordValidator"},
     {"NAME": "django.contrib.auth.password_validation.NumericPasswordValidator"},

@@ -1,4 +1,5 @@
 """Command to add risk prediction models to database."""
+
 import json
 from pathlib import Path
 
@@ -10,6 +11,7 @@ from lyprox.riskpredictor.models import InferenceResult
 
 class Command(base.BaseCommand):
     """Command to add risk prediction models to database."""
+
     help = __doc__
 
     def add_arguments(self, parser):
@@ -26,23 +28,45 @@ class Command(base.BaseCommand):
             help="Use command line arguments to create a single risk model.",
         )
         parser.add_argument(
-            "--git-repo-owner", type=str, default="rmnldwg",
-            help="Owner of git repository.",
-        )
-        parser.add_argument(
-            "--git-repo-name", type=str, default="lynference",
+            "--repo-name",
+            type=str,
+            default="rmnldwg/lynference",
             help="Name of git repository.",
         )
         parser.add_argument(
-            "--revision", type=str,
-            help="Revision of git repository.",
+            "--ref",
+            type=str,
+            default="main",
+            help="Reference of git repository.",
         )
         parser.add_argument(
-            "--params-path", type=str, default="params.yaml",
+            "--graph-config-path",
+            type=str,
+            default="graph.ly.yaml",
+            help="Path to YAML graph config in git repository.",
+        )
+        parser.add_argument(
+            "--model-config-path",
+            type=str,
+            default="model.ly.yaml",
+            help="Path to YAML model config in git repository.",
+        )
+        parser.add_argument(
+            "--dist-configs-path",
+            type=str,
+            default="dists.ly.yaml",
+            help="Path to YAML distribution configs in git repository.",
+        )
+        parser.add_argument(
+            "--samples-path",
+            type=str,
+            default="models/samples.hdf5",
             help="Path to YAML params in git repository.",
         )
         parser.add_argument(
-            "--num-samples", type=int, default=100,
+            "--num-samples",
+            type=int,
+            default=100,
             help="Number of samples used.",
         )
 
@@ -52,31 +76,35 @@ class Command(base.BaseCommand):
             with open(options["from_file"], encoding="utf-8") as json_file:
                 riskmodel_configs = json.load(json_file)
         else:
-            riskmodel_configs = [{
-                "repo_name": options["repo_name"],
-                "ref": options["ref"],
-                # TODO: add remaining fields
-            }]
+            riskmodel_configs = [
+                {
+                    "repo_name": options["repo_name"],
+                    "ref": options["ref"],
+                    "graph_config_path": options["graph_config_path"],
+                    "model_config_path": options["model_config_path"],
+                    "dist_configs_path": options["dist_configs_path"],
+                    "samples_path": options["samples_path"],
+                    "num_samples": options["num_samples"],
+                }
+            ]
 
         for config in riskmodel_configs:
             try:
                 InferenceResult.objects.create(**config)
                 self.stdout.write(
-                    self.style.SUCCESS(
-                        f"InferenceResult '{config['revision']}' created."
-                    )
+                    self.style.SUCCESS(f"InferenceResult '{config['ref']}' created.")
                 )
             except IntegrityError:
                 self.stdout.write(
                     self.style.WARNING(
                         f"InferenceResult from repo_name='{config['repo_name']}' and "
-                        f"ref='{config["ref"]}' already exists."
+                        f"ref='{config['ref']}' already exists."
                     )
                 )
             except Exception as exc:
                 self.stdout.write(
                     self.style.ERROR(
                         f"InferenceResult from repo_name='{config['repo_name']}' and "
-                        f"ref='{config["ref"]}' could not be created doe to {exc}"
+                        f"ref='{config['ref']}' could not be created doe to {exc}"
                     )
                 )
