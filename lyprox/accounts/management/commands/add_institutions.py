@@ -52,7 +52,7 @@ class Command(base.BaseCommand):
     def handle(self, *args, **options):
         """Execute command."""
         if not options["from_stdin"]:
-            with open(options["from_file"], "r", encoding="utf-8") as json_file:
+            with open(options["from_file"], encoding="utf-8") as json_file:
                 institution_configurations = json.load(json_file)
         else:
             institution_configurations = [{

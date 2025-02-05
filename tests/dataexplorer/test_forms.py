@@ -1,6 +1,5 @@
 """Test the forms of the dataexplorer app."""
 
-from typing import Any
 
 from pytest import fixture
 

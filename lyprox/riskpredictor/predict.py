@@ -6,7 +6,7 @@ The code in this module is utilized by the `views.RiskPredictionView` of the
 """
 import logging
 import time
-from typing import Any, Dict, List, Optional, Union
+from typing import Any
 
 import numpy as np
 import pandas as pd
@@ -19,10 +19,10 @@ logger = logging.getLogger(__name__)
 
 
 def create_patient(
-    diagnosis: Dict[str, Dict[str, Optional[bool]]],
+    diagnosis: dict[str, dict[str, bool | None]],
     t_stage: str,
     is_bilateral: bool = False,
-    midline_extension: Optional[bool] = None,
+    midline_extension: bool | None = None,
 ) -> pd.DataFrame:
     """
     Create a patient dataframe from a specific diagnosis.
@@ -47,12 +47,13 @@ def create_patient(
 def compute_diagnose_probs(
     inference_result: InferenceResult,
     t_stage: str,
-    diagnosis: Dict[str, Dict[str, Optional[bool]]],
+    diagnosis: dict[str, dict[str, bool | None]],
     specificity: float,
     sensitivity: float,
-    midline_extension: Optional[bool] = None,
-) -> Dict[str, np.ndarray]:
-    """Compute the probability of the selected diagnosis for any possible hidden state
+    midline_extension: bool | None = None,
+) -> dict[str, np.ndarray]:
+    """
+    Compute the probability of the selected diagnosis for any possible hidden state
     and for both sides of the neck, if the model is a bilateral one.
 
     In probabilistic terms, this is the probability P(D=d|X) of the diagnosis D=d given
@@ -84,10 +85,11 @@ def compute_diagnose_probs(
 
 def compute_posterior_risks(
     inference_result: InferenceResult,
-    diagnose_probs: Dict[str, np.ndarray],
+    diagnose_probs: dict[str, np.ndarray],
     risk_matrices: np.ndarray,
 ) -> np.ndarray:
-    """Compute the posterior risks for any possible hidden state and for each of
+    """
+    Compute the posterior risks for any possible hidden state and for each of
     the samples used to compute the prior risks.
 
     In probabilistic terms, this is the probability P(X|D=d) of any of the possible
@@ -115,10 +117,11 @@ def compute_posterior_risks(
 
 
 def create_marginalisation(
-    lymph_model: Union[Unilateral, Bilateral, MidlineBilateral],
-    pattern: Dict[str, Optional[bool]],
+    lymph_model: Unilateral | Bilateral | MidlineBilateral,
+    pattern: dict[str, bool | None],
 ) -> np.ndarray:
-    """Create a vector for marginalizing over hidden states that match the given
+    """
+    Create a vector for marginalizing over hidden states that match the given
     pattern.
 
     If one wants to know the probability of e.g. LNL II involvement, one needs to
@@ -148,8 +151,9 @@ def create_marginalisation(
 def compute_marginalised_risks(
     inference_result: InferenceResult,
     posterior_risks: np.ndarray,
-) -> Dict[str, np.ndarray]:
-    """Compute the marginalised risks of involvement of each LNL.
+) -> dict[str, np.ndarray]:
+    """
+    Compute the marginalised risks of involvement of each LNL.
 
     In probabilistic terms, this is the probability P(X=x|D=d), which is computed by
     marginalizing over all hidden states that do match the given diagnosis (for wich
@@ -180,9 +184,10 @@ def compute_marginalised_risks(
 
 def aggregate_results(
     inference_result: InferenceResult,
-    marginalized_risks: Dict[str, np.ndarray],
-) -> Dict[str, List[float]]:
-    """Aggregate the results of the risk computation into a dictionary.
+    marginalized_risks: dict[str, np.ndarray],
+) -> dict[str, list[float]]:
+    """
+    Aggregate the results of the risk computation into a dictionary.
 
     This is a helper function that is used to convert the numpy arrays that are
     returned by the risk computation into a dictionary that can be used as context
@@ -214,13 +219,14 @@ def aggregate_results(
 def risks(
     inference_result: InferenceResult,
     t_stage: str,
-    diagnosis: Dict[str, Dict[str, Optional[bool]]],
+    diagnosis: dict[str, dict[str, bool | None]],
     specificity: float,
     sensitivity: float,
-    midline_extension: Optional[bool] = None,
+    midline_extension: bool | None = None,
     **_kwargs,
-) -> Dict[str, Any]:
-    """Compute the marginalized risk of microscopic involvement in any of the modelled
+) -> dict[str, Any]:
+    """
+    Compute the marginalized risk of microscopic involvement in any of the modelled
     LNLs for a given diagnosis.
     """
     start_time = time.perf_counter()
@@ -250,7 +256,7 @@ def risks(
     return result
 
 
-def default_risks(inference_result: InferenceResult, **kwargs) -> Dict[str, Any]:
+def default_risks(inference_result: InferenceResult, **kwargs) -> dict[str, Any]:
     """Return default risks (everything unknown)."""
     result = {}
     for side in ["ipsi", "contra"]:

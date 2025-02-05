@@ -2,7 +2,7 @@
 # pylint: disable=attribute-defined-outside-init
 import json
 import logging
-from typing import Any, Dict
+from typing import Any
 
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponse, JsonResponse
@@ -43,7 +43,7 @@ class ChooseInferenceResultView(
     template_name = "riskpredictor/inference_result_list.html"
     context_object_name = "inference_results"
 
-    def get_context_data(self, **kwargs: Any) -> Dict[str, Any]:
+    def get_context_data(self, **kwargs: Any) -> dict[str, Any]:
         context = super().get_context_data(**kwargs)
         self.logger.info(context)
         return context
@@ -64,9 +64,10 @@ class RiskPredictionView(
     def handle_form(
         cls,
         inference_result: InferenceResult,
-        data: Dict[str, Any],
-    ) -> Dict[str, Any]:
-        """Populate the form and compute the risks.
+        data: dict[str, Any],
+    ) -> dict[str, Any]:
+        """
+        Populate the form and compute the risks.
 
         Either fill the form with the request data or with the initial data. Then, call
         the risk prediction methods and store the results in the `risks` attribute.
@@ -119,7 +120,7 @@ class RiskPredictionView(
         return inference_result
 
 
-    def get_context_data(self, **kwargs: Any) -> Dict[str, Any]:
+    def get_context_data(self, **kwargs: Any) -> dict[str, Any]:
         context = super().get_context_data(**kwargs)
         context["form"] = self.form
         context["risks"] = self.risks
@@ -127,7 +128,8 @@ class RiskPredictionView(
 
 
 def riskpredictor_AJAX_view(request, pk: int, **kwargs: Any) -> JsonResponse:
-    """View for the AJAX request of the riskpredictor dashboard.
+    """
+    View for the AJAX request of the riskpredictor dashboard.
 
     This view receives the same data as the `RiskPredictionView`, albeit in JSON format.
     It then computes the risks and returns them in JSON format again to be handled

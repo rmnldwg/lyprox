@@ -1,5 +1,6 @@
 from collections import namedtuple
 from typing import Any
+
 from pytest import fixture
 
 from lyprox.dataexplorer.forms import DashboardForm
