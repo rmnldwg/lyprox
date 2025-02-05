@@ -17,7 +17,7 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path("accounts/", include("lyprox.accounts.urls")),
     path("dataexplorer/", include("lyprox.dataexplorer.urls")),
-    path("riskpredictor/", include("lyprox.riskpredictor.urls")),
+    # path("riskpredictor/", include("lyprox.riskpredictor.urls")),
     path("", views.index, name="index"),
     path("maintenance/", views.maintenance, name="maintenance"),
 ]

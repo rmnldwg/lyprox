@@ -1,6 +1,4 @@
-"""
-Module for the views of the riskpredictor app.
-"""
+"""Module for the views of the riskpredictor app."""
 # pylint: disable=attribute-defined-outside-init
 import json
 import logging

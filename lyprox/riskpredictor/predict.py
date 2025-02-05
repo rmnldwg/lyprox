@@ -24,7 +24,8 @@ def create_patient(
     is_bilateral: bool = False,
     midline_extension: Optional[bool] = None,
 ) -> pd.DataFrame:
-    """Create a patient dataframe from a specific diagnosis.
+    """
+    Create a patient dataframe from a specific diagnosis.
 
     This is necessary, so that the ``lymph-model`` can be used to compute the
     probability of the given diagnosis for any possible hidden state.

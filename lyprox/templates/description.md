@@ -25,7 +25,7 @@ Currently, the functions that have been implemented in this web-based applicatio
 - view the details of every patient in the two public datasets in the "[Patients]({# url 'patients:list' #})" tab
 - export and download the two public datasets as CSV files via the "[Datasets]({# url 'patients:dataset_list' #})" tab
 - visualize the correlations in the patterns of lymphatic progression in an interactive dashboard under the "[Data Explorer]({% url 'dataexplorer:dashboard' %})" tab
-- choose a model and get predictions for the risk of microscopic involvement, given a personalized diagnosis in the "[Risk Predictor]({% url 'riskpredictor:list' %})" tab.
+- choose a model and get predictions for the risk of microscopic involvement, given a personalized diagnosis in the "[Risk Predictor]({# url 'riskpredictor:list' #})" tab.
 
 
 # Roadmap

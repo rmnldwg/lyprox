@@ -196,7 +196,7 @@ INSTALLED_APPS = [
     # my apps
     "lyprox.accounts.apps.AccountsConfig",
     "lyprox.dataexplorer.apps.DataExplorerConfig",
-    "lyprox.riskpredictor.apps.RiskConfig",
+    # "lyprox.riskpredictor.apps.RiskConfig",
     # third party apps
     "django_filters",
     "fontawesomefree",
