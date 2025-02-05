@@ -1,8 +1,8 @@
-"""
-Management command to add institutions from a file or the command line.
-"""
+"""Management command to add institutions from a file or the command line."""
+
 import json
 from pathlib import Path
+
 from django.core.management import base
 from django.core.management.base import CommandParser
 from django.db.utils import IntegrityError

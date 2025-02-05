@@ -19,13 +19,15 @@ class ModelLoggerMixin:
 
     def save(self, *args, **kwargs):
         """Log information about the instance when saving."""
-        self.logger.info(f"Saving {self.__class__.__name__} <{self}>")
-        return super().save(*args, **kwargs)
+        res = super().save(*args, **kwargs)
+        self.logger.info(f"Saved {self.__class__.__name__} <{self}>")
+        return res
 
     def delete(self, *args, **kwargs):
         """Log information about the instance when deleting."""
+        res = super().delete(*args, **kwargs)
         self.logger.info(f"Deleting {self.__class__.__name__} <{self}>")
-        return super().delete(*args, **kwargs)
+        return res
 
 
 class FormLoggerMixin:
