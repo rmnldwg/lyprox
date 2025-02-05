@@ -81,7 +81,7 @@ def dashboard_view(request):
         "modalities": get_default_modalities(),
         "stats": Statistics.from_table(
             table=patients,
-            method=form.cleaned_data["method"],
+            method=form.cleaned_data["modality_combine"],
         ),
     }
 

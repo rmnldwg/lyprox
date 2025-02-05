@@ -16,6 +16,7 @@ import markdown as md
 import yaml
 from django import template
 from django.template.loader import render_to_string
+from django.utils.safestring import mark_safe
 from mdx_math import MathExtension
 
 from lyprox.settings import MEDIA_URL
@@ -103,7 +104,7 @@ def capitalize_subsite(subsite: str) -> str:
 @register.filter(name="get_logo")
 def get_logo(dataset: str) -> str:
     """Get the logo of the institution providing a dataset."""
-    abbr = dataset.split(" ")[1].lower()
+    abbr = dataset.split("-")[1].lower()
     return f"{MEDIA_URL}logos/{abbr}.png"
 
 
@@ -116,13 +117,13 @@ def get_subsite(dataset: str) -> str:
     return result
 
 
-def custom_markdown(text):
+def custom_markdown(text: str) -> str:
     """Render custom markdown with footnotes and tables."""
     return md.markdown(text, extensions=["footnotes", "tables", MyMathExtension()])
 
 
 @register.simple_tag(name="include_md", takes_context=True)
-def include_md(context: template.RequestContext, template_name: str):
+def include_md(context: template.RequestContext, template_name: str) -> str:
     """
     Include a markdown file in the template.
 
@@ -133,13 +134,13 @@ def include_md(context: template.RequestContext, template_name: str):
     context_dict = {k: v for subdict in context.dicts for k,v in subdict.items()}
     # parse the template and fill the tags with context variables
     template = render_to_string(template_name, context=context_dict)
-    return custom_markdown(template)
+    return mark_safe(custom_markdown(template))  # noqa: S308
 
 
 @register.simple_tag(name="render_md")
 def render_md(raw: str):
     """Render raw markdown text."""
-    return custom_markdown(raw)
+    return mark_safe(custom_markdown(raw))  # noqa: S308
 
 
 @register.simple_tag(name="render_json")
