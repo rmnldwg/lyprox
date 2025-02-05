@@ -1,13 +1,14 @@
 """Defines a minimal model representing a dataset."""
 
 import logging
+import time
 
 import pandas as pd
 from django.db import models
 from github import Repository
 from joblib import Memory
 from lydata.loader import LyDataset
-from lydata.utils import infer_and_combine_levels
+from lydata.utils import infer_all_levels
 
 from lyprox import loggers, settings
 from lyprox.accounts.models import Institution
@@ -33,7 +34,7 @@ def cached_load_dataframe(
         ref=ref,
     )
     df = lydataset.get_dataframe(use_github=True, token=settings.GITHUB_TOKEN)
-    df = infer_and_combine_levels(df)
+    df = infer_all_levels(df)
     logger.info(f"Loaded dataset {lydataset} into DataFrame ({df.shape=}).")
     return df
 
@@ -62,6 +63,11 @@ class DatasetModel(loggers.ModelLoggerMixin, models.Model):
     last_pushed: models.DateTimeField = models.DateTimeField()
     last_saved: models.DateTimeField = models.DateTimeField(auto_now=True)
 
+    class Meta:
+        """Meta options for the `DatasetModel`."""
+
+        unique_together = ("year", "institution", "subsite")
+
     def save(self, *args, **kwargs) -> None:
         """Update the ``is_private`` field based on the GitHub repository."""
         repo = self.get_repo()
@@ -73,6 +79,10 @@ class DatasetModel(loggers.ModelLoggerMixin, models.Model):
     def name(self) -> str:
         """Return the name of the dataset."""
         return f"{self.year}-{self.institution.shortname.lower()}-{self.subsite}"
+
+    def __str__(self):
+        """Return the name of the dataset."""
+        return self.name
 
     def get_repo(self) -> Repository:
         """Return the GitHub repository object."""
@@ -107,7 +117,10 @@ class DatasetModel(loggers.ModelLoggerMixin, models.Model):
         kwargs = self.get_kwargs()
         is_in_cache = cached_load_dataframe.check_call_in_cache(**kwargs)
 
-        if is_in_cache:
-            logger.info(f"Loading dataset {self} from cache.")
+        msg_add = "from cache." if is_in_cache else "from GitHub."
 
-        return cached_load_dataframe(**kwargs)
+        start_time = time.perf_counter()
+        table = cached_load_dataframe(**kwargs)
+        elapsed_time = time.perf_counter() - start_time
+        logger.info(f"Fetched dataset {self} in {elapsed_time:.2f}s {msg_add}")
+        return table

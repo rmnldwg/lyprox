@@ -1,8 +1,8 @@
 """
-Querying and generating statistics from the dataset.
+Querying and generating statistics from the table of patients.
 
-In this module, we define the classes and methods to filter and query the datasets, as
-well as compute statistics from a queried/filtered dataset to be displayed on the
+In this module, we define the classes and methods to filter and query the table, as
+well as compute statistics from a queried/filtered patient table to be displayed on the
 main dashboard of LyProX.
 
 In the `views`, the `execute_query` function is called with the cleaned data from the
@@ -11,23 +11,25 @@ the fancy `Q` and `C` objects from `lydata`. These classes allow arbitrary combi
 of deferred queries to be created and only later be executed.
 
 After executing the query, the filtered dataset is used to compute `Statistics` using
-the `from_dataset` classmethod. This `pydantic.BaseModel` has similar fields to the
+the `from_table` classmethod. This `pydantic.BaseModel` has similar fields to the
 `DashboardForm` and is used to display the aggregated information of the filtered
-dataset in the dashboard.
+patient table in the dashboard.
 """
 import logging
 import time
-from collections.abc import Callable
+from collections.abc import Callable, Sequence
 from typing import Annotated, Any, Literal, TypeVar
 
 import lydata  # noqa: F401
 import lydata.utils as lyutils
+import lydata.validator as lyvalidator
 import pandas as pd
+from django.db.models import QuerySet
 from lydata import C
 from lydata.accessor import NoneQ, QTypes
 from pydantic import AfterValidator, BaseModel, computed_field, create_model
 
-from lyprox.dataexplorer.loader import DataInterface  # noqa: F401
+from lyprox.dataexplorer.models import DatasetModel
 from lyprox.dataexplorer.subsites import Subsites
 from lyprox.settings import LNLS
 
@@ -45,8 +47,7 @@ def assemble_selected_modalities(names: list[str]) -> dict[str, lyutils.Modality
 
 def get_risk_factor_query(cleaned_form: dict[str, Any]) -> QTypes:
     """Create a query for the risk factors based on the cleaned form data."""
-    risk_factor_query = C("dataset", "info", "name").isin(cleaned_form["datasets"])
-    risk_factor_query &= C("t_stage").isin(cleaned_form["t_stage"])
+    risk_factor_query = C("t_stage").isin(cleaned_form["t_stage"])
     risk_factor_query &= C("subsite").isin(cleaned_form["subsite"])
 
     for short_names in ["smoke", "hpv", "surgery", "midext", "central"]:
@@ -75,12 +76,40 @@ def get_lnl_query(cleaned_form: dict[str, Any]) -> QTypes:
     return lnl_query
 
 
-def execute_query(
-    cleaned_form: dict[str, Any],
-    dataset: pd.DataFrame | None = None,
+def join_dataset_tables(
+    datasets: QuerySet | Sequence[DatasetModel],
+    method: Literal["max_llh", "rank"] = "max_llh",
 ) -> pd.DataFrame:
     """
-    Execute a query on a dataset.
+    Join the tables of the selected datasets into a single table.
+
+    This iterates through the datasets and loads their respective `DataFrame` tables.
+    It also adds a column `["dataset", "info", "name"]` to the table to keep track of
+    which dataset a row belongs to. Finally, it concatenates all tables into a single
+    table and returns it.
+
+    In case the `datasets` are empty, a likewise empty table is created with all the
+    columns necessary to create a `Statistics` object. These columns are in turn
+    constructed from the schema of the `lydata.validator` module.
+    """
+    tables = []
+    for dataset in datasets:
+        table = dataset.load_dataframe()
+        table["dataset", "info", "name"] = dataset.name
+        tables.append(table)
+
+    if len(tables) == 0:
+        schema = lyvalidator.construct_schema(modalities=[method])
+        empty_table = pd.DataFrame(columns=schema.columns.keys())
+        empty_table["dataset", "info", "name"] = []
+        return empty_table
+
+    return pd.concat(tables, ignore_index=True)
+
+
+def execute_query(cleaned_form: dict[str, Any]) -> pd.DataFrame:
+    """
+    Execute the query defined by the `DashboardForm`.
 
     After validating a `DashboardForm` by calling ``form.is_valid()``, the cleaned data
     is accessible as the attribute ``form.cleaned_data``. The returned dictionary should
@@ -89,25 +118,28 @@ def execute_query(
     `lydata` accessor method `lydata.LyDataAccessor.combine`. Then, a query is created
     using the `lydata.C` objects and executed on the dataset. The resulting filtered
     dataset is returned.
-
-    If no dataset is provided, the default dataset is loaded from the `DataInterface`.
     """
     start_time = time.perf_counter()
-    dataset = dataset or DataInterface().get_dataset()
-
     method = cleaned_form["modality_combine"]
-    dataset[method] = dataset.ly.combine(
+    joined_table = join_dataset_tables(datasets=cleaned_form["datasets"], method=method)
+
+    if len(joined_table) == 0:
+        return joined_table
+
+    combined_inv_subtable = joined_table.ly.combine(
         modalities=assemble_selected_modalities(names=cleaned_form["modalities"]),
         method=method,
     )
+    combined_inv_table = pd.concat({method: combined_inv_subtable}, axis="columns")
+    combined_table = joined_table.join(combined_inv_table)
     query = get_risk_factor_query(cleaned_form) & get_lnl_query(cleaned_form)
-    queried_dataset = dataset.ly.query(query)
+    queried_table = combined_table.ly.query(query)
     end_time = time.perf_counter()
 
     logger.info(f"Query executed in {end_time - start_time:.2f} seconds.")
-    logger.info(f"{len(queried_dataset)} patients remain in queried dataset.")
+    logger.info(f"{len(queried_table)} patients remain in queried dataset.")
 
-    return queried_dataset
+    return queried_table
 
 
 def safe_value_counts(column: pd.Series) -> dict[Any, int]:
@@ -207,50 +239,41 @@ class BaseStatistics(BaseModel):
         return sum(self.datasets.values())
 
     @classmethod
-    def from_dataset(
+    def from_table(
         cls: type[T],
-        dataset: pd.DataFrame,
-        modalities: dict[str, lyutils.ModalityConfig] | None = None,
+        table: pd.DataFrame,
         method: Literal["max_llh", "rank"] = "max_llh",
     ) -> T:
         """
-        Compute statistics from a dataset.
+        Compute statistics from a table of patients.
 
-        This method computes e.g. how many patients in the queried dataset are
+        This method computes e.g. how many patients in the queried table are
         HPV positive, or how many patients have a certain T-stage. The statistics are
-        computed from the queried dataset and passed to the context of the
+        computed from the queried table and passed to the context of the
         `dataexplorer.views`. From there, the statistics can be displayed in the
         rendered HTML or JSON response.
-
-        >>> di = DataInterface()
-        >>> di.load_and_enhance_datasets(year=2021, institution="usz")
-        >>> dataset = di.get_dataset()
-        >>> stats = BaseStatistics.from_datasets(dataset)
-        >>> stats.hpv
-        {True: 181, False: 96, None: 10}
         """
         start_time = time.perf_counter()
 
-        combined = dataset.ly.combine(modalities=modalities, method=method)
         stats = {}
         for name in cls.model_fields:
             # these fields deal with the LNLs
             if "ipsi" in name or "contra" in name:
                 side, lnl = name.split("_")
-                stats[name] = safe_value_counts(combined[side, lnl])
+                stats[name] = safe_value_counts(table[method, side, lnl])
                 continue
 
             # key `datasets` is not a shorthand code provided by the `lydata` package
             if name == "datasets":
-                stats[name] = safe_value_counts(dataset["dataset", "info", "name"])
+                stats[name] = safe_value_counts(table["dataset", "info", "name"])
                 continue
 
             # key `is_n_plus` is not a shorthand code provided by the `lydata` package
             if name == "is_n_plus":
-                stats[name] = safe_value_counts(dataset.ly["n_stage"] > 0)
+                stats[name] = safe_value_counts(table.ly["n_stage"] > 0)
                 continue
 
-            stats[name] = safe_value_counts(dataset.ly[name])
+            stats[name] = safe_value_counts(table.ly[name])
 
         end_time = time.perf_counter()
         logger.info(f"Statistics computed in {end_time - start_time:.2f} seconds.")
@@ -276,9 +299,9 @@ Statistics to be computed and displayed on the dashboard.
 This class extends the `BaseStatistics` class by adding the dynamically created
 fields for the LNLs. That way, I did not have to write them by hand.
 
-The intended use is to first query a dataset using the `execute_query` function
-with the cleaned form data from the `DashboardForm`. Then, pass the queried dataset
-to this class's `from_dataset` method to compute the statistics. Finally, pass the
+The intended use is to first query a table of patients using the `execute_query`
+function with the cleaned form data from the `DashboardForm`. Then, pass the queried
+table to this class's `from_table` method to compute the statistics. Finally, pass the
 computed statistics to the context of the `dataexplorer.views` to be displayed in
 the rendered HTML or JSON response.
 

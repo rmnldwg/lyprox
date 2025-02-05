@@ -32,7 +32,7 @@ from django import forms
 from django.core.exceptions import ValidationError
 from lydata.utils import get_default_modalities
 
-from lyprox.dataexplorer.loader import DataInterface
+from lyprox.dataexplorer.models import DatasetModel
 from lyprox.dataexplorer.subsites import Subsites
 from lyprox.loggers import FormLoggerMixin
 from lyprox.settings import LNLS, TStages
@@ -233,10 +233,11 @@ class DashboardForm(FormLoggerMixin, forms.Form):
     )
     """Method to use to combine the modalities' LNL involvement diagnoses."""
 
-    datasets = forms.MultipleChoiceField(
+    datasets = forms.ModelMultipleChoiceField(
         widget=forms.CheckboxSelectMultiple(attrs=checkbox_attrs),
-        choices=[],
-        initial=[],
+        queryset=DatasetModel.objects.all().filter(is_private=False),
+        initial=DatasetModel.objects.all().filter(is_private=False),
+        required=False,
     )
     """Patients from which datasets to include in the query."""
 
@@ -314,25 +315,16 @@ class DashboardForm(FormLoggerMixin, forms.Form):
         when ``form.is_valid()`` is called.
         """
         super().__init__(*args, **kwargs)
-        self.populate_dataset_options(user=user)
+        self.update_dataset_options(user=user)
         self.add_subsite_choice_fields()
         self.add_lnl_toggle_buttons()
 
 
-    def populate_dataset_options(self, user) -> None:
-        """Populate the dataset choices based on the user's permissions."""
-        data = DataInterface().get_dataset()
-        is_public = data["dataset", "info", "visibility"] == "public"
-        name_col = ("dataset", "info", "name")
-        pub_dset_names = list(data.loc[is_public, name_col].unique())
-        self.fields["datasets"].choices = format_dataset_choices(pub_dset_names)
-        self.fields["datasets"].initial = pub_dset_names
-
+    def update_dataset_options(self, user) -> None:
+        """Update the dataset choices based on the user's permissions."""
         if user.is_authenticated:
-            is_private = data["dataset", "info", "visibility"] == "private"
-            priv_dset_names = list(data.loc[is_private, name_col].unique())
-            self.fields["datasets"].choices += format_dataset_choices(priv_dset_names)
-            self.fields["datasets"].initial += priv_dset_names
+            self.fields["datasets"].queryset = DatasetModel.objects.all()
+            self.fields["datasets"].initial = DatasetModel.objects.all()
 
 
     def add_subsite_choice_fields(self):

@@ -79,7 +79,10 @@ def dashboard_view(request):
     context = {
         "form": form,
         "modalities": get_default_modalities(),
-        "stats": Statistics.from_dataset(patients),
+        "stats": Statistics.from_table(
+            table=patients,
+            method=form.cleaned_data["method"],
+        ),
     }
 
     return render(request, "dataexplorer/layout.html", context)
@@ -106,10 +109,13 @@ def dashboard_ajax_view(request):
     form = DashboardForm(request_data, user=request.user)
 
     if not form.is_valid():
-        logger.error("Form is not valid even after initializing with initial data.")
+        logger.error("Form is not valid.")
         return JsonResponse(data={"error": "Something went wrong."}, status=400)
 
     patients = execute_query(cleaned_form=form.cleaned_data)
-    stats = Statistics.from_dataset(patients).model_dump()
+    stats = Statistics.from_table(
+        table=patients,
+        method=form.cleaned_data["modality_combine"],
+    ).model_dump()
     stats["type"] = "stats"
     return JsonResponse(data=stats)
