@@ -16,7 +16,6 @@ import markdown as md
 import yaml
 from django import template
 from django.template.loader import render_to_string
-from django.utils.safestring import mark_safe
 from mdx_math import MathExtension
 
 from lyprox.settings import MEDIA_URL
@@ -34,7 +33,9 @@ def safe_eval(expr: str) -> Any:
 
 
 class MyMathExtension(MathExtension):
+    """Custom math extension for markdown."""
     def __init__(self, *args, **kwargs):
+        """Initialize the extension."""
         super().__init__(*args, **kwargs)
         self.config.update({
             "enable_dollar_delimiter": [True, "Enable single-dollar delimiter"],
@@ -132,28 +133,25 @@ def include_md(context: template.RequestContext, template_name: str):
     context_dict = {k: v for subdict in context.dicts for k,v in subdict.items()}
     # parse the template and fill the tags with context variables
     template = render_to_string(template_name, context=context_dict)
-    html_string = custom_markdown(template)
-    return mark_safe(html_string)
+    return custom_markdown(template)
 
 
 @register.simple_tag(name="render_md")
 def render_md(raw: str):
     """Render raw markdown text."""
-    return mark_safe(custom_markdown(raw))
+    return custom_markdown(raw)
 
 
 @register.simple_tag(name="render_json")
 def render_json(raw: str) -> str:
     """Format and render raw JSON text."""
-    json_string = json.dumps(raw, indent=4)
-    return json_string
+    return json.dumps(raw, indent=4)
 
 
 @register.simple_tag(name="render_yaml")
 def render_yaml(raw: str) -> str:
     """Format and render raw YAML text."""
-    yaml_string = yaml.safe_dump(raw, sort_keys=False, default_flow_style=False)
-    return yaml_string
+    return yaml.safe_dump(raw, sort_keys=False, default_flow_style=False)
 
 
 @register.filter(name="concat")

@@ -121,12 +121,11 @@ def create_marginalisation(
     pattern: dict[str, bool | None],
 ) -> np.ndarray:
     """
-    Create a vector for marginalizing over hidden states that match the given
-    pattern.
+    Create a vector for marginalizing over hidden states that match given `pattern`.
 
     If one wants to know the probability of e.g. LNL II involvement, one needs to
     marginalize over all hidden states where LNL II is involved. This function creates
-    a vector that is 1 for all hidden states that match the given pattern and 0 for
+    a vector that is 1 for all hidden states that match the given `pattern` and 0 for
     all others.
     """
     if isinstance(lymph_model, MidlineBilateral):
@@ -141,7 +140,7 @@ def create_marginalisation(
     for i, state in enumerate(lymph_model.state_list):
         marginalisation[i] = np.all(np.equal(
             pattern, state,
-            where=(pattern != None),
+            where=(pattern != None),  # noqa: E711
             out=np.ones_like(pattern, dtype=bool),
         ))
 

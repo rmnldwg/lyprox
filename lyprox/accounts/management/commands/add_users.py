@@ -1,6 +1,4 @@
-"""
-Add users from a JSON file or via command line arguments.
-"""
+"""Add users from a JSON file or via command line arguments."""
 import json
 import os
 from pathlib import Path
@@ -90,7 +88,9 @@ class Command(base.BaseCommand):
 
             try:
                 config["password"] = make_password(env_value)
-                config["institution"] = Institution.objects.get(shortname=config['institution'])
+                config["institution"] = Institution.objects.get(
+                    shortname=config['institution'],
+                )
                 User.objects.create(**config)
                 self.stdout.write(
                     self.style.SUCCESS(f"User '{config['email']}' created.")

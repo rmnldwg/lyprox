@@ -66,9 +66,7 @@ class SignupRequestForm(forms.ModelForm):
 
 
 class InsitutionForm(FormLoggerMixin, forms.Form):
-    """
-    Form for creating an institution. This is not yet in use or even functional.
-    """
+    """Form for creating an institution. This is not yet in use or even functional."""
 
     class Meta:
         model = Institution

@@ -25,6 +25,7 @@ Only these environment vars should need to be changed:
 """
 import os
 from pathlib import Path
+from typing import Literal
 
 from django import urls
 from django.db import models
@@ -141,15 +142,16 @@ FROZEN_VERSIONS = [
     }
 ]
 
+LogLevelType = Literal["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"]
 
 # Logging
-def set_LOGGING(LOG_LEVEL):
+def set_logging(log_level: LogLevelType) -> dict:
     """
     Return logging settings in the form of a dictionary as function of the
     log-level. This is used so that in a subdomain settings file the function
     can be called again to overwrite the logging settings easily.
     """
-    LOGGING = {
+    return {
         "version": 1,
         "disanle_existing_loggers": False,
         "formatters": {
@@ -165,30 +167,29 @@ def set_LOGGING(LOG_LEVEL):
         },
         "root": {
             "handlers": ["console"],
-            "level": LOG_LEVEL,
+            "level": log_level,
         },
         "loggers": {
             "": {
-                "level": LOG_LEVEL,
+                "level": log_level,
                 "handlers": ["console"],
                 "propagate": False,
             },
             "django": {
-                "level": LOG_LEVEL,
+                "level": log_level,
                 "handlers": ["console"],
                 "propagate": False,
             },
             "lyprox": {
-                "level": LOG_LEVEL,
+                "level": log_level,
                 "handlers": ["console"],
                 "propagate": False,
             },
         },
     }
-    return LOGGING
 
 
-LOGGING = set_LOGGING(LOG_LEVEL)
+LOGGING = set_logging(LOG_LEVEL)
 
 
 # Application definition

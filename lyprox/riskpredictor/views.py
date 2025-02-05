@@ -44,6 +44,7 @@ class ChooseInferenceResultView(
     context_object_name = "inference_results"
 
     def get_context_data(self, **kwargs: Any) -> dict[str, Any]:
+        """Add the form to the context."""
         context = super().get_context_data(**kwargs)
         self.logger.info(context)
         return context
@@ -113,6 +114,7 @@ class RiskPredictionView(
 
 
     def get_object(self, queryset=None) -> InferenceResult:
+        """Get the `InferenceResult` instance and handle the form."""
         inference_result = super().get_object(queryset)
         form, risks = self.handle_form(inference_result, data=self.request.GET)
         self.form = form
@@ -121,13 +123,14 @@ class RiskPredictionView(
 
 
     def get_context_data(self, **kwargs: Any) -> dict[str, Any]:
+        """Add the form and the risks to the context."""
         context = super().get_context_data(**kwargs)
         context["form"] = self.form
         context["risks"] = self.risks
         return context
 
 
-def riskpredictor_AJAX_view(request, pk: int, **kwargs: Any) -> JsonResponse:
+def riskpredictor_ajax_view(request, pk: int, **kwargs: Any) -> JsonResponse:
     """
     View for the AJAX request of the riskpredictor dashboard.
 
