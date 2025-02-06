@@ -20,13 +20,16 @@ import yaml
 from django.db import models
 from dvc.api import DVCFileSystem
 from joblib import Memory
+from lydata.utils import ModalityConfig
 from lymph.types import Model
 from lyscripts.configs import (
     DeprecatedModelConfig,
+    DiagnosisConfig,
     DistributionConfig,
     GraphConfig,
     ModelConfig,
     add_distributions,
+    add_modalities,
     construct_model,
 )
 from pydantic import TypeAdapter
@@ -132,6 +135,29 @@ def cached_compute_priors(
     return np.stack(priors)
 
 
+@memory.cache
+def cached_compute_posteriors(
+    model: Model,
+    priors: np.ndarray,
+    diagnosis: DiagnosisConfig,
+    specificity: float = 0.9,
+    sensitivity: float = 0.9,
+) -> np.ndarray:
+    """Compute the posterior state dists for the given model, priors, and diagnosis."""
+    modality_config = ModalityConfig(spec=specificity, sens=sensitivity)
+    model = add_modalities(model=model, modalities={"diagnosis": modality_config})
+    posteriors = []
+
+    for prior in priors:
+        posterior = model.posterior_state_dist(
+            given_state_dist=prior,
+            given_diagnosis=diagnosis,
+        )
+        posteriors.append(posterior)
+
+    return np.stack(posteriors)
+
+
 class InferenceResult(loggers.ModelLoggerMixin, models.Model):
     """
     Results of an inference run of the ``lymph-model`` package.
@@ -213,6 +239,22 @@ class InferenceResult(loggers.ModelLoggerMixin, models.Model):
             model=self.construct_model(),
             samples=self.fetch_samples(),
             t_stage=t_stage,
+        )
+
+    def compute_posteriors(
+        self,
+        t_stage: int | str,
+        diagnosis: DiagnosisConfig,
+        specificity: float = 0.9,
+        sensitivity: float = 0.9,
+    ) -> np.ndarray:
+        """Compute posteriors for every T-stage using the model samples."""
+        return cached_compute_posteriors(
+            model=self.construct_model(),
+            priors=self.compute_priors(t_stage=t_stage),
+            diagnosis=diagnosis,
+            specificity=specificity,
+            sensitivity=sensitivity,
         )
 
     def save(self, *args: Any, **kwargs: Any) -> None:

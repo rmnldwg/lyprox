@@ -1,4 +1,5 @@
 """Module for the views of the riskpredictor app."""
+
 # pylint: disable=attribute-defined-outside-init
 import json
 import logging
@@ -28,6 +29,7 @@ class AddInferenceResultView(
     CreateView,
 ):
     """View for adding a new `InferenceResult` instance."""
+
     model = InferenceResult
     form_class = InferenceResultForm
     template_name = "riskpredictor/inference_result_form.html"
@@ -39,6 +41,7 @@ class ChooseInferenceResultView(
     ListView,
 ):
     """View for choosing a `InferenceResult` instance."""
+
     model = InferenceResult
     template_name = "riskpredictor/inference_result_list.html"
     context_object_name = "inference_results"
@@ -55,11 +58,11 @@ class RiskPredictionView(
     DetailView,
 ):
     """View for the dashboard of the riskpredictor app."""
+
     model = InferenceResult
     form_class = DashboardForm
     template_name = "riskpredictor/dashboard.html"
     context_object_name = "inference_result"
-
 
     @classmethod
     def handle_form(
@@ -92,7 +95,6 @@ class RiskPredictionView(
 
         return form, risks
 
-
     @classmethod
     def initialize_form(
         cls,
@@ -112,7 +114,6 @@ class RiskPredictionView(
 
         return form
 
-
     def get_object(self, queryset=None) -> InferenceResult:
         """Get the `InferenceResult` instance and handle the form."""
         inference_result = super().get_object(queryset)
@@ -120,7 +121,6 @@ class RiskPredictionView(
         self.form = form
         self.risks = risks
         return inference_result
-
 
     def get_context_data(self, **kwargs: Any) -> dict[str, Any]:
         """Add the form and the risks to the context."""
@@ -141,8 +141,8 @@ def riskpredictor_ajax_view(request, pk: int, **kwargs: Any) -> JsonResponse:
     data = json.loads(request.body.decode("utf-8"))
     inference_result = InferenceResult.objects.get(pk=pk)
     form, risks = RiskPredictionView.handle_form(inference_result, data)
-    risks["type"] = "risks"   # tells JavaScript how to write the labels
-    risks["total"] = 100.     # necessary for JavaScript barplot updater
+    risks["type"] = "risks"  # tells JavaScript how to write the labels
+    risks["total"] = 100.0  # necessary for JavaScript barplot updater
 
     if form.is_valid():
         logger.info("AJAX form valid, returning success and risks.")
