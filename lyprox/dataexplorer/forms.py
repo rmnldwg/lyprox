@@ -8,13 +8,13 @@ and unknown. The `ThreeWayToggle` button is used for selecting HPV status, nicot
 abuse, LNL involvement and more.
 
 Typically, when calling one of the `dataexplorer.views` functions, an instance of the
-`DashboardForm` is created with the user's permissions and the initial data from the
-`DashboardForm.from_initial` class method. This initial data is then used to display
+`DataexplorerForm` is created with the user's permissions and the initial data from the
+`DataexplorerForm.from_initial` class method. This initial data is then used to display
 the dashboard. Then, the user applies filters to the data and submits the form by
 pressing the "Compute" button. The form is then validated and cleaned
 (``form.is_valid()``), also in the `dataexplorer.views` module.
 
-Note: the `DashboardForm` is not strictly used `as Django intends forms to be used`_.
+Note: the `DataexplorerForm` is not strictly used `as Django intends forms to be used`_.
 In Django's logic, a form just after creation is "unbound" and in that state expects
 user input (think of a login form with empty fields). However, in our dashboard, no
 fields are ever "empty". Even when you first load the dashboard, the `ThreeWayToggle`
@@ -24,6 +24,7 @@ created from the initial defaults or from the user's input.
 
 .. _as Django intends forms to be used: https://docs.djangoproject.com/en/4.2/ref/forms/
 """
+
 import logging
 from collections.abc import Generator
 from typing import Any, TypeVar
@@ -75,6 +76,7 @@ class ThreeWayToggleWidget(forms.RadioSelect):
     It also allows to set the attributes of the individual inputs (radio buttons) as
     `option_attrs` as well as the attributes of the container as ``attrs``.
     """
+
     template_name = "widgets/three_way_toggle.html"
     """HTML template that renders the button containing its three options."""
     option_template_name = "widgets/three_way_toggle_option.html"
@@ -134,6 +136,7 @@ class ThreeWayToggle(forms.ChoiceField):
     well as many binary risk factors such as smoking status, HPV status, and neck
     dissection status are represented by this field.
     """
+
     def __init__(
         self,
         attrs=None,
@@ -175,6 +178,7 @@ class ThreeWayToggle(forms.ChoiceField):
 
 checkbox_attrs = {"class": "checkbox is-hidden", "onchange": "changeHandler();"}
 
+
 class EasySubsiteChoiceField(forms.MultipleChoiceField):
     """Simple subclass that provides a convenience method to create subsite fields."""
 
@@ -199,21 +203,20 @@ class EasySubsiteChoiceField(forms.MultipleChoiceField):
 
 def get_modality_choices() -> list[tuple[str, str]]:
     """Return the choices for the modality field."""
-    return [
-        (mod, mod.replace("_", " "))
-        for mod in get_default_modalities()
-    ]
+    return [(mod, mod.replace("_", " ")) for mod in get_default_modalities()]
 
 
-T = TypeVar("T", bound="DashboardForm")
+T = TypeVar("T", bound="DataexplorerForm")
 
-class DashboardForm(FormLoggerMixin, forms.Form):
+
+class DataexplorerForm(FormLoggerMixin, forms.Form):
     """
     Form for querying the database.
 
     The form's fields somewhat mirror the fields in the `Statistics` class in
     the `query` module.
     """
+
     modalities = forms.MultipleChoiceField(
         required=False,
         widget=forms.CheckboxSelectMultiple(attrs=checkbox_attrs),
@@ -242,14 +245,12 @@ class DashboardForm(FormLoggerMixin, forms.Form):
     """Patients from which datasets to include in the query."""
 
     smoke = ThreeWayToggle(
-        label="smoking status",
-        tooltip="Select smokers or non-smokers"
+        label="smoking status", tooltip="Select smokers or non-smokers"
     )
     """Select patients that are smokers, non-smokers, or unknown."""
 
     hpv = ThreeWayToggle(
-        label="HPV status",
-        tooltip="Select patients being HPV positive or negative"
+        label="HPV status", tooltip="Select patients being HPV positive or negative"
     )
     """Select patients that are HPV positive, negative, or unknown."""
 
@@ -263,14 +264,12 @@ class DashboardForm(FormLoggerMixin, forms.Form):
     """Only include patients with the selected T-stages."""
 
     is_n_plus = ThreeWayToggle(
-        label="N+ vs N0",
-        tooltip="Select all N+ (or N0) patients"
+        label="N+ vs N0", tooltip="Select all N+ (or N0) patients"
     )
     """Select patients with N+ or N0 status."""
 
     central = ThreeWayToggle(
-        label="central",
-        tooltip="Choose to in- or exclude patients with central tumors"
+        label="central", tooltip="Choose to in- or exclude patients with central tumors"
     )
     """Filter by whether the tumor is central or not."""
 
@@ -292,7 +291,6 @@ class DashboardForm(FormLoggerMixin, forms.Form):
         ),
     )
     """Show the statistics after querying as percentages or absolute numbers."""
-
 
     def __init__(self, *args, user, **kwargs):
         """
@@ -319,19 +317,16 @@ class DashboardForm(FormLoggerMixin, forms.Form):
         self.add_subsite_choice_fields()
         self.add_lnl_toggle_buttons()
 
-
     def update_dataset_options(self, user) -> None:
         """Update the dataset choices based on the user's permissions."""
         if user.is_authenticated:
             self.fields["datasets"].queryset = DatasetModel.objects.all()
             self.fields["datasets"].initial = DatasetModel.objects.all()
 
-
     def add_subsite_choice_fields(self):
         """Add all subsite choice fields to the form."""
         for subsite, enum in Subsites.get_subsite_enums().items():
             self.fields[f"subsite_{subsite}"] = EasySubsiteChoiceField.from_enum(enum)
-
 
     def add_lnl_toggle_buttons(self) -> None:
         """Add all LNL toggle buttons to the form."""
@@ -348,7 +343,6 @@ class DashboardForm(FormLoggerMixin, forms.Form):
                 else:
                     self.fields[f"{side}_{lnl}"] = ThreeWayToggle()
 
-
     @classmethod
     def from_initial(cls: type[T], user) -> T:
         """Return a bound form filled with the default values for each field."""
@@ -357,22 +351,19 @@ class DashboardForm(FormLoggerMixin, forms.Form):
         for name, field in form.fields.items():
             initial_data[name] = form.get_initial_for_field(field, name)
 
-        logger.info("Creating DashboardForm with initial data.")
+        logger.info("Creating DataexplorerForm with initial data.")
         logger.debug(f"Initial data: {initial_data}")
         return cls(initial_data, user=user)
-
 
     def get_subsite_fields(self) -> list[str]:
         """Return the subsite checkboxes."""
         return [name for name in self.fields.keys() if name.startswith("subsite_")]
-
 
     @staticmethod
     def generate_icd_codes(cleaned_data: dict[str, Any]) -> Generator[str, None, None]:
         """Generate all subsite ICD codes."""
         for subsite in Subsites.get_subsite_enums().keys():
             yield from cleaned_data[f"subsite_{subsite}"]
-
 
     def check_lnl_conflicts(self, cleaned_data: dict[str, Any]) -> dict[str, Any]:
         """Ensure that LNLs I, II, and V are not in conflict with their sublevels."""
@@ -387,7 +378,6 @@ class DashboardForm(FormLoggerMixin, forms.Form):
                     cleaned_data[f"{side}_{lnl}"] = False
 
         return cleaned_data
-
 
     def clean(self) -> dict[str, Any]:
         """

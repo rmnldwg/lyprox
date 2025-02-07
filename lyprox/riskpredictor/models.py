@@ -1,12 +1,12 @@
 """
 Models for the `riskpredictor` Django app.
 
-The model `InferenceResult` holds an upload of parameter samples that were produced
+The model `CheckpointModel` holds an upload of parameter samples that were produced
 during an inference run of the ``lymph-model``. The samples should be fetched from the
 DVC remote storage and used to compute the prior risk matrices.
 
-Given a specific diagnosis, as entered via the `forms.DashboardForm`, the
-``lymph-model`` package and the precomputed risk matrices in the `InferenceResult`
+Given a specific diagnosis, as entered via the `forms.RiskpredictorForm`, the
+``lymph-model`` package and the precomputed risk matrices in the `CheckpointModel`
 instances, the personalized risk estimates can be computed.
 """
 
@@ -158,7 +158,7 @@ def cached_compute_posteriors(
     return np.stack(posteriors)
 
 
-class InferenceResult(loggers.ModelLoggerMixin, models.Model):
+class CheckpointModel(loggers.ModelLoggerMixin, models.Model):
     """
     Results of an inference run of the ``lymph-model`` package.
 
@@ -185,7 +185,7 @@ class InferenceResult(loggers.ModelLoggerMixin, models.Model):
     """Number of samples to use for computing the prior risk matrices."""
 
     class Meta:
-        """Meta options for the `InferenceResult` model."""
+        """Meta options for the `CheckpointModel`."""
 
         unique_together = (
             "repo_name",

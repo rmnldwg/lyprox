@@ -12,8 +12,8 @@ from django.views.generic import CreateView, DetailView, ListView
 
 from ..loggers import ViewLoggerMixin
 from . import predict
-from .forms import DashboardForm, InferenceResultForm
-from .models import InferenceResult
+from .forms import CheckpointModelForm, RiskpredictorForm
+from .models import CheckpointModel
 
 logger = logging.getLogger(__name__)
 
@@ -23,26 +23,26 @@ def test_view(request):
     return render(request, "riskpredictor/test.html")
 
 
-class AddInferenceResultView(
+class AddCheckpointModelView(
     ViewLoggerMixin,
     LoginRequiredMixin,
     CreateView,
 ):
-    """View for adding a new `InferenceResult` instance."""
+    """View for adding a new `CheckpointModel` instance."""
 
-    model = InferenceResult
-    form_class = InferenceResultForm
+    model = CheckpointModel
+    form_class = CheckpointModelForm
     template_name = "riskpredictor/inference_result_form.html"
     success_url = "/riskpredictor/list/"
 
 
-class ChooseInferenceResultView(
+class ChooseCheckpointModelView(
     ViewLoggerMixin,
     ListView,
 ):
-    """View for choosing a `InferenceResult` instance."""
+    """View for choosing a `CheckpointModel` instance."""
 
-    model = InferenceResult
+    model = CheckpointModel
     template_name = "riskpredictor/inference_result_list.html"
     context_object_name = "inference_results"
 
@@ -59,15 +59,15 @@ class RiskPredictionView(
 ):
     """View for the dashboard of the riskpredictor app."""
 
-    model = InferenceResult
-    form_class = DashboardForm
+    model = CheckpointModel
+    form_class = RiskpredictorForm
     template_name = "riskpredictor/dashboard.html"
     context_object_name = "inference_result"
 
     @classmethod
     def handle_form(
         cls,
-        inference_result: InferenceResult,
+        inference_result: CheckpointModel,
         data: dict[str, Any],
     ) -> dict[str, Any]:
         """
@@ -76,7 +76,7 @@ class RiskPredictionView(
         Either fill the form with the request data or with the initial data. Then, call
         the risk prediction methods and store the results in the `risks` attribute.
         """
-        form = cls.form_class(data, inference_result=inference_result)
+        form = cls.form_class(data, checkpoint=inference_result)
 
         if not form.is_valid():
             logger.info(form.errors.as_data())
@@ -98,15 +98,15 @@ class RiskPredictionView(
     @classmethod
     def initialize_form(
         cls,
-        form: DashboardForm,
-        inference_result: InferenceResult,
-    ) -> DashboardForm:
+        form: RiskpredictorForm,
+        inference_result: CheckpointModel,
+    ) -> RiskpredictorForm:
         """Fill the form with the initial data from the respective form fields."""
         initial = {}
         for field_name, field in form.fields.items():
             initial[field_name] = form.get_initial_for_field(field, field_name)
 
-        form = cls.form_class(initial, inference_result=inference_result)
+        form = cls.form_class(initial, checkpoint=inference_result)
 
         if not form.is_valid():
             errors = form.errors.as_data()
@@ -114,8 +114,8 @@ class RiskPredictionView(
 
         return form
 
-    def get_object(self, queryset=None) -> InferenceResult:
-        """Get the `InferenceResult` instance and handle the form."""
+    def get_object(self, queryset=None) -> CheckpointModel:
+        """Get the `CheckpointModel` instance and handle the form."""
         inference_result = super().get_object(queryset)
         form, risks = self.handle_form(inference_result, data=self.request.GET)
         self.form = form
@@ -139,7 +139,7 @@ def riskpredictor_ajax_view(request, pk: int, **kwargs: Any) -> JsonResponse:
     by JavaScript on the client side.
     """
     data = json.loads(request.body.decode("utf-8"))
-    inference_result = InferenceResult.objects.get(pk=pk)
+    inference_result = CheckpointModel.objects.get(pk=pk)
     form, risks = RiskPredictionView.handle_form(inference_result, data)
     risks["type"] = "risks"  # tells JavaScript how to write the labels
     risks["total"] = 100.0  # necessary for JavaScript barplot updater

@@ -14,7 +14,7 @@ import pandas as pd
 from lymph.models import Bilateral, Midline, Unilateral
 from lyscripts.utils import flatten
 
-from lyprox.riskpredictor.models import InferenceResult
+from lyprox.riskpredictor.models import CheckpointModel
 
 logger = logging.getLogger(__name__)
 
@@ -46,7 +46,7 @@ def create_patient(
 
 
 def compute_diagnose_probs(
-    inference_result: InferenceResult,
+    inference_result: CheckpointModel,
     t_stage: str,
     diagnosis: dict[str, dict[str, bool | None]],
     specificity: float,
@@ -86,7 +86,7 @@ def compute_diagnose_probs(
 
 
 def compute_posterior_risks(
-    inference_result: InferenceResult,
+    inference_result: CheckpointModel,
     diagnose_probs: dict[str, np.ndarray],
     risk_matrices: np.ndarray,
 ) -> np.ndarray:
@@ -153,7 +153,7 @@ def create_marginalisation(
 
 
 def compute_marginalised_risks(
-    inference_result: InferenceResult,
+    inference_result: CheckpointModel,
     posterior_risks: np.ndarray,
 ) -> dict[str, np.ndarray]:
     """
@@ -187,7 +187,7 @@ def compute_marginalised_risks(
 
 
 def aggregate_results(
-    inference_result: InferenceResult,
+    inference_result: CheckpointModel,
     marginalized_risks: dict[str, np.ndarray],
 ) -> dict[str, list[float]]:
     """
@@ -221,7 +221,7 @@ def aggregate_results(
 
 
 def risks(
-    inference_result: InferenceResult,
+    inference_result: CheckpointModel,
     t_stage: str,
     diagnosis: dict[str, dict[str, bool | None]],
     specificity: float,
@@ -260,7 +260,7 @@ def risks(
     return result
 
 
-def default_risks(inference_result: InferenceResult, **kwargs) -> dict[str, Any]:
+def default_risks(inference_result: CheckpointModel, **kwargs) -> dict[str, Any]:
     """Return default risks (everything unknown)."""
     result = {}
     for side in ["ipsi", "contra"]:

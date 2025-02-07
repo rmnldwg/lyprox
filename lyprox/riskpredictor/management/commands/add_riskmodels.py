@@ -6,7 +6,7 @@ from pathlib import Path
 from django.core.management import base
 from django.db import IntegrityError
 
-from lyprox.riskpredictor.models import InferenceResult
+from lyprox.riskpredictor.models import CheckpointModel
 
 
 class Command(base.BaseCommand):
@@ -90,21 +90,21 @@ class Command(base.BaseCommand):
 
         for config in riskmodel_configs:
             try:
-                InferenceResult.objects.create(**config)
+                CheckpointModel.objects.create(**config)
                 self.stdout.write(
-                    self.style.SUCCESS(f"InferenceResult '{config['ref']}' created.")
+                    self.style.SUCCESS(f"CheckpointModel '{config['ref']}' created.")
                 )
             except IntegrityError:
                 self.stdout.write(
                     self.style.WARNING(
-                        f"InferenceResult from repo_name='{config['repo_name']}' and "
+                        f"CheckpointModel from repo_name='{config['repo_name']}' and "
                         f"ref='{config['ref']}' already exists."
                     )
                 )
             except Exception as exc:
                 self.stdout.write(
                     self.style.ERROR(
-                        f"InferenceResult from repo_name='{config['repo_name']}' and "
+                        f"CheckpointModel from repo_name='{config['repo_name']}' and "
                         f"ref='{config['ref']}' could not be created doe to {exc}"
                     )
                 )

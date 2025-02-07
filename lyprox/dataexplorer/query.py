@@ -6,15 +6,16 @@ well as compute statistics from a queried/filtered patient table to be displayed
 main dashboard of LyProX.
 
 In the `views`, the `execute_query` function is called with the cleaned data from the
-`DashboardForm`. This `execute_query` function then creates a combined query using
+`DataexplorerForm`. This `execute_query` function then creates a combined query using
 the fancy `Q` and `C` objects from `lydata`. These classes allow arbitrary combinations
 of deferred queries to be created and only later be executed.
 
 After executing the query, the filtered dataset is used to compute `Statistics` using
 the `from_table` classmethod. This `pydantic.BaseModel` has similar fields to the
-`DashboardForm` and is used to display the aggregated information of the filtered
+`DataexplorerForm` and is used to display the aggregated information of the filtered
 patient table in the dashboard.
 """
+
 import logging
 import time
 from collections.abc import Callable, Sequence
@@ -109,15 +110,15 @@ def join_dataset_tables(
 
 def execute_query(cleaned_form: dict[str, Any]) -> pd.DataFrame:
     """
-    Execute the query defined by the `DashboardForm`.
+    Execute the query defined by the `DataexplorerForm`.
 
-    After validating a `DashboardForm` by calling ``form.is_valid()``, the cleaned data
-    is accessible as the attribute ``form.cleaned_data``. The returned dictionary should
-    be passed to this function as the ``cleaned_form`` argument. Based on this cleaned
-    form data, the involvement data from different modalities is combined using the
-    `lydata` accessor method `lydata.LyDataAccessor.combine`. Then, a query is created
-    using the `lydata.C` objects and executed on the dataset. The resulting filtered
-    dataset is returned.
+    After validating a `DataexplorerForm` by calling ``form.is_valid()``, the cleaned
+    data is accessible as the attribute ``form.cleaned_data``. The returned dictionary
+    should be passed to this function as the ``cleaned_form`` argument. Based on this
+    cleaned form data, the involvement data from different modalities is combined using
+    the `lydata` accessor method `lydata.LyDataAccessor.combine`. Then, a query is
+    created using the `lydata.C` objects and executed on the dataset. The resulting
+    filtered dataset is returned.
     """
     start_time = time.perf_counter()
     method = cleaned_form["modality_combine"]
@@ -162,6 +163,7 @@ def safe_value_counts(column: pd.Series) -> dict[Any, int]:
 KT = TypeVar("KT")
 EnsureKeysSignature = Callable[[dict[KT, int]], dict[KT, int]]
 
+
 def make_ensure_keys_validator(keys: list[KT]) -> EnsureKeysSignature:
     """
     Create an `AfterValidator` to ensure all ``keys`` are present in the data.
@@ -171,6 +173,7 @@ def make_ensure_keys_validator(keys: list[KT]) -> EnsureKeysSignature:
     value counts from the `safe_value_counts` function, validates it, and then calls the
     function created by this wrapper to ensure that all keys are present.
     """
+
     def ensure_keys(data: dict[KT, int]) -> dict[KT, int]:
         """Ensure all `keys` are present in the data."""
         initial = {key: 0 for key in keys}
@@ -178,6 +181,7 @@ def make_ensure_keys_validator(keys: list[KT]) -> EnsureKeysSignature:
         return initial
 
     return ensure_keys
+
 
 NullableBoolCounts = Annotated[
     dict[Literal[True, False, None], int],
@@ -202,6 +206,7 @@ SubsiteCounts = Annotated[
 
 T = TypeVar("T", bound="BaseStatistics")
 
+
 class BaseStatistics(BaseModel):
     """
     Basic statistics to be computed and displayed on the dashboard.
@@ -211,6 +216,7 @@ class BaseStatistics(BaseModel):
     dynamically created subclass of this one, the fields for every LNL ipsi- and
     contralaterally are added to the `Statistics` class.
     """
+
     datasets: dict[str, int]
     """How many patients are in each dataset."""
     sex: SexCounts
@@ -300,12 +306,12 @@ This class extends the `BaseStatistics` class by adding the dynamically created
 fields for the LNLs. That way, I did not have to write them by hand.
 
 The intended use is to first query a table of patients using the `execute_query`
-function with the cleaned form data from the `DashboardForm`. Then, pass the queried
+function with the cleaned form data from the `DataexplorerForm`. Then, pass the queried
 table to this class's `from_table` method to compute the statistics. Finally, pass the
 computed statistics to the context of the `dataexplorer.views` to be displayed in
 the rendered HTML or JSON response.
 
-By design, this class's fields mirror the fields of the `DashboardForm` class. This
+By design, this class's fields mirror the fields of the `DataexplorerForm` class. This
 is obviously necessary, since any information data might be queried on is also
 information that one can compute statistics on.
 """

@@ -1,8 +1,8 @@
 """
 Forms used in the `riskpredictor` app.
 
-The first form, the `InferenceResultForm`, is used to create a new
-`models.InferenceResult` and makes sure that the user enters a valid git repository
+The first form, the `CheckpointModelForm`, is used to create a new
+`models.CheckpointModel` and makes sure that the user enters a valid git repository
 and revision.
 """
 
@@ -13,11 +13,11 @@ from django.core.validators import MaxValueValidator, MinValueValidator
 from django.forms import ValidationError, widgets
 from dvc.api import DVCFileSystem
 from dvc.scm import CloneError, RevError
-from lymph import models
+from lymph import graph, models
 
 from lyprox import loggers
 from lyprox.dataexplorer.forms import ThreeWayToggle
-from lyprox.riskpredictor.models import InferenceResult
+from lyprox.riskpredictor.models import CheckpointModel
 
 
 class RangeInput(widgets.NumberInput):
@@ -26,13 +26,13 @@ class RangeInput(widgets.NumberInput):
     input_type = "range"
 
 
-class InferenceResultForm(loggers.FormLoggerMixin, forms.ModelForm):
-    """Form for creating a new `InferenceResult` instance."""
+class CheckpointModelForm(loggers.FormLoggerMixin, forms.ModelForm):
+    """Form for creating a new `CheckpointModel` instance."""
 
     class Meta:
         """Meta class for the form."""
 
-        model = InferenceResult
+        model = CheckpointModel
         fields = [
             "repo_name",
             "ref",
@@ -116,32 +116,75 @@ class InferenceResultForm(loggers.FormLoggerMixin, forms.ModelForm):
         return cleaned_data
 
 
-class DashboardForm(forms.Form):
-    """Form for the dashboard page."""
+class RiskpredictorForm(forms.Form):
+    """Form for the riskpredictor dashboard page."""
+
+    specificity = forms.FloatField(
+        min_value=0.5,
+        max_value=1,
+        initial=0.8,
+        widget=RangeInput(
+            attrs={
+                "class": "tag slider is-fullwidth",
+                "min": "0.5",
+                "max": "1",
+                "step": "0.01",
+            }
+        ),
+        validators=[
+            MinValueValidator(0.5, "Specificity below 0.5 makes no sense"),
+            MaxValueValidator(1, "Specificity above 1 makes no sense"),
+        ],
+    )
+    """The specificity of the entered diagnosis."""
+    sensitivity = forms.FloatField(
+        min_value=0.5,
+        max_value=1,
+        initial=0.8,
+        widget=RangeInput(
+            attrs={
+                "class": "tag slider is-fullwidth",
+                "min": "0.5",
+                "max": "1",
+                "step": "0.01",
+            }
+        ),
+        validators=[
+            MinValueValidator(0.5, "Sensitivity below 0.5 makes no sense"),
+            MaxValueValidator(1, "Sensitivity above 1 makes no sense"),
+        ],
+    )
+    """The sensitivity of the entered diagnosis."""
 
     is_submitted = forms.BooleanField(
         required=True, initial=True, widget=forms.HiddenInput
     )
     """Whether the form has been submitted via the button or not."""
 
-    def __init__(self, *args, inference_result: InferenceResult = None, **kwargs):
+    def __init__(
+        self,
+        *args,
+        checkpoint: CheckpointModel | None = None,
+        **kwargs,
+    ) -> None:
         """Initialize the form and add the fields for the lymph node levels."""
         super().__init__(*args, **kwargs)
 
-        if inference_result is not None:
-            self.inference_result = inference_result
-            self.model = self.inference_result.construct_model()
+        if checkpoint is not None:
+            self.checkpoint = checkpoint
+            self.model = self.checkpoint.construct_model()
             self.add_lnl_fields()
             self.add_t_stage_field()
-            self.add_sens_spec_fields()
 
             if isinstance(self.model, models.Midline):
                 self.add_midline_field()
 
-    def get_lnls(self):
+    def get_lnls(self) -> dict[str, graph.LymphNodeLevel]:
         """Get the lymph node levels from the model."""
         if isinstance(self.model, models.Unilateral):
             return self.model.graph.lnls
+        if isinstance(self.model, models.HPVUnilateral):
+            return self.model.hpv.graph.lnls
         if isinstance(self.model, models.Bilateral):
             return self.model.ipsi.graph.lnls
         if isinstance(self.model, models.Midline):
@@ -149,7 +192,7 @@ class DashboardForm(forms.Form):
 
         raise RuntimeError(f"Model type {type(self.model)} not recognized.")
 
-    def add_lnl_fields(self):
+    def add_lnl_fields(self) -> None:
         """Add the fields for the lymph node levels defined in the trained model."""
         lnls = self.get_lnls()
 
@@ -159,7 +202,7 @@ class DashboardForm(forms.Form):
             if isinstance(self.model, models.Bilateral | models.Midline):
                 self.fields[f"contra_{lnl}"] = ThreeWayToggle(initial=-1)
 
-    def add_t_stage_field(self):
+    def add_t_stage_field(self) -> None:
         """Add the field for the T stage with the choices being defined in the model."""
         t_stages = list(self.model.get_all_distributions())
         self.fields["t_stage"] = forms.ChoiceField(
@@ -167,44 +210,7 @@ class DashboardForm(forms.Form):
             initial=t_stages[0],
         )
 
-    def add_sens_spec_fields(self, step: float = 0.01):
-        """Add the fields for the sensitivity and specificity."""
-        self.fields["sensitivity"] = forms.FloatField(
-            min_value=0.5,
-            max_value=1,
-            initial=0.8,
-            widget=RangeInput(
-                attrs={
-                    "class": "tag slider is-fullwidth",
-                    "min": "0.5",
-                    "max": "1",
-                    "step": f"{step:.2f}",
-                }
-            ),
-            validators=[
-                MinValueValidator(0.5, "Sensitivity below 0.5 makes no sense"),
-                MaxValueValidator(1, "Sensitivity above 1 makes no sense"),
-            ],
-        )
-        self.fields["specificity"] = forms.FloatField(
-            min_value=0.5,
-            max_value=1,
-            initial=0.8,
-            widget=RangeInput(
-                attrs={
-                    "class": "tag slider is-fullwidth",
-                    "min": "0.5",
-                    "max": "1",
-                    "step": f"{step:.2f}",
-                }
-            ),
-            validators=[
-                MinValueValidator(0.5, "Specificty below 0.5 makes no sense"),
-                MaxValueValidator(1, "Specificty above 1 makes no sense"),
-            ],
-        )
-
-    def add_midline_field(self):
+    def add_midline_field(self) -> None:
         """Add the field for the midline status."""
         self.fields["midline_extension"] = ThreeWayToggle(
             label=None,

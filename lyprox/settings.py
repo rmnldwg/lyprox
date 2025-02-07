@@ -68,7 +68,7 @@ with the env var ``DJANGO_ALLOWED_HOSTS``.
 GITHUB_TOKEN = os.environ["GITHUB_TOKEN"]
 """
 Read-only GitHub access token for fetching information about
-`lyprox.riskpredictor.models.InferenceResult`.
+`lyprox.riskpredictor.models.CheckpointModel`.
 """
 GITHUB = Github(auth=Auth.Token(GITHUB_TOKEN))
 
