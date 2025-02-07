@@ -140,25 +140,27 @@ class ThreeWayToggle(forms.ChoiceField):
 
     def __init__(
         self,
-        attrs=None,
-        option_attrs=None,
-        label=None,
-        tooltip=None,
+        widget_attrs=None,
+        widget_option_attrs=None,
+        widget_label=None,
+        widget_tooltip=None,
         choices=None,
         initial=None,
         required=False,
         **kwargs,
     ):
         """Pass args like ``label`` and ``tooltip`` to constructor of custom widget."""
-        if choices is None:
-            choices = [(True, "plus"), (None, "ban"), (False, "minus")]
+        choices = choices or [(True, "plus"), (None, "ban"), (False, "minus")]
 
         if len(choices) != 3:
             raise ValueError("Three-way toggle button must have three choices")
 
         super().__init__(
             widget=ThreeWayToggleWidget(
-                attrs=attrs, option_attrs=option_attrs, label=label, tooltip=tooltip
+                attrs=widget_attrs,
+                option_attrs=widget_option_attrs,
+                label=widget_label,
+                tooltip=widget_tooltip,
             ),
             choices=choices,
             initial=initial,
@@ -246,18 +248,19 @@ class DataexplorerForm(FormLoggerMixin, forms.Form):
     """Patients from which datasets to include in the query."""
 
     smoke = ThreeWayToggle(
-        label="smoking status", tooltip="Select smokers or non-smokers"
+        widget_label="smoking status", widget_tooltip="Select smokers or non-smokers"
     )
     """Select patients that are smokers, non-smokers, or unknown."""
 
     hpv = ThreeWayToggle(
-        label="HPV status", tooltip="Select patients being HPV positive or negative"
+        widget_label="HPV status",
+        widget_tooltip="Select patients being HPV positive or negative",
     )
     """Select patients that are HPV positive, negative, or unknown."""
 
     surgery = ThreeWayToggle(
-        label="neck dissection",
-        tooltip="Include patients that have (or have not) received neck dissection",
+        widget_label="neck dissection",
+        widget_tooltip="Include patients that have (not) received neck dissection",
     )
     """Did the patient undergo neck dissection?"""
 
@@ -265,18 +268,19 @@ class DataexplorerForm(FormLoggerMixin, forms.Form):
     """Only include patients with the selected T-stages."""
 
     is_n_plus = ThreeWayToggle(
-        label="N+ vs N0", tooltip="Select all N+ (or N0) patients"
+        widget_label="N+ vs N0", widget_tooltip="Select all N+ (or N0) patients"
     )
     """Select patients with N+ or N0 status."""
 
     central = ThreeWayToggle(
-        label="central", tooltip="Choose to in- or exclude patients with central tumors"
+        widget_label="central",
+        widget_tooltip="Choose to in- or exclude patients with central tumors",
     )
     """Filter by whether the tumor is central or not."""
 
     midext = ThreeWayToggle(
-        label="midline extension",
-        tooltip=(
+        widget_label="midline extension",
+        widget_tooltip=(
             "Investigate patients with tumors that do (or do not) "
             "cross the mid-sagittal plane"
         ),
@@ -335,11 +339,11 @@ class DataexplorerForm(FormLoggerMixin, forms.Form):
             for lnl in LNLS:
                 if lnl in ["I", "II", "V"]:
                     self.fields[f"{side}_{lnl}"] = ThreeWayToggle(
-                        option_attrs={"onclick": "superClickHandler(this)"}
+                        widget_option_attrs={"onclick": "superClickHandler(this)"}
                     )
                 elif "a" in lnl or "b" in lnl:
                     self.fields[f"{side}_{lnl}"] = ThreeWayToggle(
-                        option_attrs={"onclick": "subClickHandler(this)"}
+                        widget_option_attrs={"onclick": "subClickHandler(this)"}
                     )
                 else:
                     self.fields[f"{side}_{lnl}"] = ThreeWayToggle()

@@ -33,7 +33,7 @@ the context they may provide in the `Django documentation`_.
 import json
 import logging
 
-from django.http import HttpResponseBadRequest
+from django.http import HttpRequest, HttpResponseBadRequest
 from django.http.response import HttpResponse, JsonResponse
 from django.shortcuts import render
 from lydata.utils import get_default_modalities
@@ -51,7 +51,7 @@ def help_view(request) -> HttpResponse:
     return render(request, template_name, context)
 
 
-def dashboard_view(request):
+def render_data_stats(request: HttpRequest) -> HttpResponse:
     """
     Return the dashboard view when the user first accesses the dashboard.
 
@@ -89,7 +89,7 @@ def dashboard_view(request):
     return render(request, "dataexplorer/layout.html", context)
 
 
-def dashboard_ajax_view(request):
+def update_data_stats(request: HttpRequest) -> JsonResponse:
     """
     AJAX view to update the dashboard statistics without reloading the page.
 

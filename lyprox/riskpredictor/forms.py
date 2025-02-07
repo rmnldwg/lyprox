@@ -201,10 +201,10 @@ class RiskpredictorForm(forms.Form):
         lnls = self.get_lnls()
 
         for lnl in lnls:
-            self.fields[f"ipsi_{lnl}"] = ThreeWayToggle(initial=-1)
+            self.fields[f"ipsi_{lnl}"] = ThreeWayToggle(initial=False)
 
             if isinstance(self.model, models.Bilateral | models.Midline):
-                self.fields[f"contra_{lnl}"] = ThreeWayToggle(initial=-1)
+                self.fields[f"contra_{lnl}"] = ThreeWayToggle(initial=False)
 
     def add_t_stage_field(self) -> None:
         """Add the field for the T stage with the choices being defined in the model."""
@@ -217,8 +217,8 @@ class RiskpredictorForm(forms.Form):
     def add_midline_field(self) -> None:
         """Add the field for the midline status."""
         self.fields["midline_extension"] = ThreeWayToggle(
-            label=None,
-            tooltip="Does the tumor cross the mid-sagittal line?",
+            widget_label=None,
+            widget_tooltip="Does the tumor cross the mid-sagittal line?",
             choices=[(True, "plus"), (None, "ban"), (False, "minus")],
             initial=False,
         )

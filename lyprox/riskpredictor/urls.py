@@ -14,7 +14,7 @@ urlpatterns = [
     path("add/", views.AddCheckpointModelView.as_view(), name="add"),
     path("list/", views.ChooseCheckpointModelView.as_view(), name="list"),
     path("<int:checkpoint_pk>/", views.RiskPredictionView.as_view(), name="dashboard"),
-    path("<int:checkpoint_pk>/ajax/", views.riskpredictor_ajax_view, name="ajax"),
+    path("<int:checkpoint_pk>/ajax/", views.update_risk_prediction, name="ajax"),
     path("help/", views.help_view, name="help"),
     path("test/", views.test_view, name="test"),
 ]

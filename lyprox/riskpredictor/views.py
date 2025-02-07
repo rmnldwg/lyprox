@@ -6,7 +6,7 @@ import logging
 from typing import Any
 
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.http import HttpResponse, JsonResponse
+from django.http import HttpRequest, HttpResponse, JsonResponse
 from django.shortcuts import render
 from django.views.generic import CreateView, ListView
 
@@ -52,7 +52,7 @@ class ChooseCheckpointModelView(
         return context
 
 
-def riskpredictor_view(request, checkpoint_pk: int) -> HttpResponse:
+def render_risk_prediction(request: HttpRequest, checkpoint_pk: int) -> HttpResponse:
     """View for the riskpredictor dashboard."""
     request_data = request.GET
     checkpoint = CheckpointModel.objects.get(pk=checkpoint_pk)
@@ -75,7 +75,7 @@ def riskpredictor_view(request, checkpoint_pk: int) -> HttpResponse:
     return render(request, "riskpredictor/dashboard.html", context)
 
 
-def riskpredictor_ajax_view(request, pk: int, **kwargs: Any) -> JsonResponse:
+def update_risk_prediction(request: HttpRequest, checkpoint_pk: int) -> JsonResponse:
     """
     View for the AJAX request of the riskpredictor dashboard.
 
@@ -84,7 +84,7 @@ def riskpredictor_ajax_view(request, pk: int, **kwargs: Any) -> JsonResponse:
     by JavaScript on the client side.
     """
     _data = json.loads(request.body.decode("utf-8"))
-    _inference_result = CheckpointModel.objects.get(pk=pk)
+    _checkpoint = CheckpointModel.objects.get(pk=checkpoint_pk)
     form, risks = ...
     risks["type"] = "risks"  # tells JavaScript how to write the labels
     risks["total"] = 100.0  # necessary for JavaScript barplot updater
