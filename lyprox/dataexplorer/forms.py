@@ -37,6 +37,7 @@ from lyprox.dataexplorer.models import DatasetModel
 from lyprox.dataexplorer.subsites import Subsites
 from lyprox.loggers import FormLoggerMixin
 from lyprox.settings import LNLS, TStages
+from lyprox.utils import form_from_initial
 
 logger = logging.getLogger(__name__)
 
@@ -346,14 +347,7 @@ class DataexplorerForm(FormLoggerMixin, forms.Form):
     @classmethod
     def from_initial(cls: type[T], user) -> T:
         """Return a bound form filled with the default values for each field."""
-        form = cls(user=user)
-        initial_data = {}
-        for name, field in form.fields.items():
-            initial_data[name] = form.get_initial_for_field(field, name)
-
-        logger.info("Creating DataexplorerForm with initial data.")
-        logger.debug(f"Initial data: {initial_data}")
-        return cls(initial_data, user=user)
+        return form_from_initial(cls, user=user)
 
     def get_subsite_fields(self) -> list[str]:
         """Return the subsite checkboxes."""

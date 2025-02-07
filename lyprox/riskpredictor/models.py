@@ -20,16 +20,13 @@ import yaml
 from django.db import models
 from dvc.api import DVCFileSystem
 from joblib import Memory
-from lydata.utils import ModalityConfig
 from lymph.types import Model
 from lyscripts.configs import (
     DeprecatedModelConfig,
-    DiagnosisConfig,
     DistributionConfig,
     GraphConfig,
     ModelConfig,
     add_distributions,
-    add_modalities,
     construct_model,
 )
 from pydantic import TypeAdapter
@@ -135,29 +132,6 @@ def cached_compute_priors(
     return np.stack(priors)
 
 
-@memory.cache
-def cached_compute_posteriors(
-    model: Model,
-    priors: np.ndarray,
-    diagnosis: DiagnosisConfig,
-    specificity: float = 0.9,
-    sensitivity: float = 0.9,
-) -> np.ndarray:
-    """Compute the posterior state dists for the given model, priors, and diagnosis."""
-    modality_config = ModalityConfig(spec=specificity, sens=sensitivity)
-    model = add_modalities(model=model, modalities={"diagnosis": modality_config})
-    posteriors = []
-
-    for prior in priors:
-        posterior = model.posterior_state_dist(
-            given_state_dist=prior,
-            given_diagnosis=diagnosis,
-        )
-        posteriors.append(posterior)
-
-    return np.stack(posteriors)
-
-
 class CheckpointModel(loggers.ModelLoggerMixin, models.Model):
     """
     Results of an inference run of the ``lymph-model`` package.
@@ -241,27 +215,15 @@ class CheckpointModel(loggers.ModelLoggerMixin, models.Model):
             t_stage=t_stage,
         )
 
-    def compute_posteriors(
-        self,
-        t_stage: int | str,
-        diagnosis: DiagnosisConfig,
-        specificity: float = 0.9,
-        sensitivity: float = 0.9,
-    ) -> np.ndarray:
-        """Compute posteriors for every T-stage using the model samples."""
-        return cached_compute_posteriors(
-            model=self.construct_model(),
-            priors=self.compute_priors(t_stage=t_stage),
-            diagnosis=diagnosis,
-            specificity=specificity,
-            sensitivity=sensitivity,
-        )
-
-    def save(self, *args: Any, **kwargs: Any) -> None:
-        """Save the instance and fill the cache with precomputed priors."""
+    def precompute_priors(self) -> None:
+        """Precompute the priors for all T-stages and cache them."""
         for t_stage in self.construct_model().get_all_distributions():
             priors = self.compute_priors(t_stage=t_stage)
             self.logger.info(
                 f"{self} precomputed prior for {t_stage=} with {priors.shape=}."
             )
+
+    def save(self, *args: Any, **kwargs: Any) -> None:
+        """Fill the cache with precomputed priors before saving the instance."""
+        self.precompute_priors()
         return super().save(*args, **kwargs)

@@ -4,17 +4,16 @@ Defines the URLs within the dashboard app.
 This module's basic job is to define the `urlpatterns` list, which binds a URL (or a
 part of a URL) to a view function. The view functions are defined in the `views` module.
 """
-# pylint: disable=invalid-name
 
 from django.urls import path
 
-from . import views
+from lyprox.dataexplorer import views
 
 app_name = "dataexplorer"
 urlpatterns = [
     path("", views.dashboard_view, name="dashboard"),
     path("ajax/", views.dashboard_ajax_view, name="ajax"),
-    path("help/", views.help_view, name="help")
+    path("help/", views.help_view, name="help"),
 ]
 """
 Contains three URL patterns:

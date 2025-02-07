@@ -6,7 +6,7 @@ The first form, the `CheckpointModelForm`, is used to create a new
 and revision.
 """
 
-from typing import Any
+from typing import Any, TypeVar
 
 from django import forms
 from django.core.validators import MaxValueValidator, MinValueValidator
@@ -18,6 +18,7 @@ from lymph import graph, models
 from lyprox import loggers
 from lyprox.dataexplorer.forms import ThreeWayToggle
 from lyprox.riskpredictor.models import CheckpointModel
+from lyprox.utils import form_from_initial
 
 
 class RangeInput(widgets.NumberInput):
@@ -114,6 +115,9 @@ class CheckpointModelForm(loggers.FormLoggerMixin, forms.ModelForm):
             )
 
         return cleaned_data
+
+
+T = TypeVar("T", bound="RiskpredictorForm")
 
 
 class RiskpredictorForm(forms.Form):
@@ -218,6 +222,11 @@ class RiskpredictorForm(forms.Form):
             choices=[(True, "plus"), (None, "ban"), (False, "minus")],
             initial=False,
         )
+
+    @classmethod
+    def from_initial(cls: type[T], checkpoint: CheckpointModel) -> T:
+        """Create a form instance with the initial form data."""
+        return form_from_initial(cls, checkpoint=checkpoint)
 
     def clean_midline_extension(self) -> bool:
         """For now, the midline extension cannot be unknown (value of 0)."""
