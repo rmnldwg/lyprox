@@ -1,0 +1,41 @@
+{% load customtags %}
+
+<div class="box is-height-100">
+  <div class="level">
+    <div class="level-left">
+      <div class="level-item">
+        <p class="title is-4">Primary Tumor</p>
+      </div>
+    </div>
+    <div class="level-right">
+      <div class="level-item">
+        <div class="tooltip">
+          <span class="icon">
+            <i class="fas fa-question"></i>
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="grid">
+    <div class="cell is-flex is-flex-direction-column is-justify-content-center">
+      <label for="{{ form.t_stage.id_for_label }}" class="label is-justify-self-center has-text-centered has-text-weight-normal mb-0">
+        T-Stage
+      </label>
+      <div class="field is-flex is-justify-content-center">
+        <div class="control">
+          <div class="select">
+            {{ form.t_stage }}
+          </div>
+        </div>
+      </div>
+    </div>
+    {% if is_midline %}
+    <div class="cell is-flex is-flex-direction-column is-justify-content-center">
+      {{ form.midext }}
+      {% comment %} {% include 'dataexplorer/three_way_toggle_stats.html' with stats=stats field='midext' show_percent=show_percent %} {% endcomment %}
+    </div>
+    {% endif %}
+  </div>
+</div>
