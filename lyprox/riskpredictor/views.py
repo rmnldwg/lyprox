@@ -10,9 +10,10 @@ from django.http import HttpRequest, HttpResponse, JsonResponse
 from django.shortcuts import render
 from django.views.generic import CreateView, ListView
 
-from ..loggers import ViewLoggerMixin
-from .forms import CheckpointModelForm, RiskpredictorForm
-from .models import CheckpointModel
+from lyprox.loggers import ViewLoggerMixin
+from lyprox.riskpredictor import predict
+from lyprox.riskpredictor.forms import CheckpointModelForm, RiskpredictorForm
+from lyprox.riskpredictor.models import CheckpointModel
 
 logger = logging.getLogger(__name__)
 
@@ -31,19 +32,16 @@ class AddCheckpointModelView(
 
     model = CheckpointModel
     form_class = CheckpointModelForm
-    template_name = "riskpredictor/inference_result_form.html"
+    template_name = "riskpredictor/checkpoint_form.html"
     success_url = "/riskpredictor/list/"
 
 
-class ChooseCheckpointModelView(
-    ViewLoggerMixin,
-    ListView,
-):
+class ChooseCheckpointModelView(ViewLoggerMixin, ListView):
     """View for choosing a `CheckpointModel` instance."""
 
     model = CheckpointModel
-    template_name = "riskpredictor/inference_result_list.html"
-    context_object_name = "inference_results"
+    template_name = "riskpredictor/checkpoint_list.html"
+    context_object_name = "checkpoints"
 
     def get_context_data(self, **kwargs: Any) -> dict[str, Any]:
         """Add the form to the context."""
@@ -66,11 +64,17 @@ def render_risk_prediction(request: HttpRequest, checkpoint_pk: int) -> HttpResp
         logger.error("Form is not valid even after initializing with initial data.")
         return HttpResponse("Form is not valid.")
 
-    risks = ...
-
+    lnls = list(form.get_lnls())
+    risks = predict.compute_risks(
+        checkpoint=checkpoint,
+        form_data=form.cleaned_data,
+        lnls=lnls,
+    )
     context = {
+        "checkpoint": checkpoint,
         "form": form,
         "risks": risks,
+        "lnls": lnls,
     }
     return render(request, "riskpredictor/dashboard.html", context)
 

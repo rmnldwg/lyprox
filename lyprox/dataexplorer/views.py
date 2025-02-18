@@ -72,7 +72,9 @@ def render_data_stats(request: HttpRequest) -> HttpResponse:
         form = DataexplorerForm.from_initial(user=request.user)
 
     if not form.is_valid():
-        logger.error("Form is not valid even after initializing with initial data.")
+        logger.error(
+            f"Form not valid even after initializing with initial data: {form.errors}"
+        )
         return HttpResponseBadRequest("Form is not valid.")
 
     patients = execute_query(cleaned_form=form.cleaned_data)

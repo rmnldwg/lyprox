@@ -160,11 +160,6 @@ class RiskpredictorForm(forms.Form):
     )
     """The sensitivity of the entered diagnosis."""
 
-    is_submitted = forms.BooleanField(
-        required=True, initial=True, widget=forms.HiddenInput
-    )
-    """Whether the form has been submitted via the button or not."""
-
     def __init__(
         self,
         *args,
@@ -181,7 +176,7 @@ class RiskpredictorForm(forms.Form):
             self.add_t_stage_field()
 
             if isinstance(self.model, models.Midline):
-                self.add_midline_field()
+                self.add_midext_field()
 
     def get_lnls(self) -> dict[str, graph.LymphNodeLevel]:
         """Get the lymph node levels from the model."""
@@ -198,9 +193,7 @@ class RiskpredictorForm(forms.Form):
 
     def add_lnl_fields(self) -> None:
         """Add the fields for the lymph node levels defined in the trained model."""
-        lnls = self.get_lnls()
-
-        for lnl in lnls:
+        for lnl in self.get_lnls():
             self.fields[f"ipsi_{lnl}"] = ThreeWayToggle(initial=False)
 
             if isinstance(self.model, models.Bilateral | models.Midline):
@@ -210,14 +203,14 @@ class RiskpredictorForm(forms.Form):
         """Add the field for the T stage with the choices being defined in the model."""
         t_stages = list(self.model.get_all_distributions())
         self.fields["t_stage"] = forms.ChoiceField(
-            choices=t_stages,
+            choices=[(t, t) for t in t_stages],
             initial=t_stages[0],
         )
 
-    def add_midline_field(self) -> None:
+    def add_midext_field(self) -> None:
         """Add the field for the midline status."""
-        self.fields["midline_extension"] = ThreeWayToggle(
-            widget_label=None,
+        self.fields["midext"] = ThreeWayToggle(
+            widget_label="Midline Extension",
             widget_tooltip="Does the tumor cross the mid-sagittal line?",
             choices=[(True, "plus"), (None, "ban"), (False, "minus")],
             initial=False,
@@ -228,9 +221,9 @@ class RiskpredictorForm(forms.Form):
         """Create a form instance with the initial form data."""
         return form_from_initial(cls, checkpoint=checkpoint)
 
-    def clean_midline_extension(self) -> bool:
+    def clean_midext(self) -> bool:
         """For now, the midline extension cannot be unknown (value of 0)."""
-        midline_extension = self.cleaned_data["midline_extension"]
-        if midline_extension is None:
+        midext = self.cleaned_data["midext"]
+        if midext is None:
             raise ValidationError("Midline extension cannot be unknown.")
-        return midline_extension
+        return midext
