@@ -38,14 +38,12 @@
           <div class="fixed-grid is-height-100 has-2-cols">
             <div class="grid is-height-100">
               <div class="cell">
-                <div class="box is-height-100">
-                  contra involvement
-                </div>
+                {% if not checkpoint.is_unilateral %}
+                {% include 'riskpredictor/boxes/risk.html' with form=form side='contra' %}
+                {% endif %}
               </div>
               <div class="cell">
-                <div class="box is-height-100">
-                  ipsi involvement
-                </div>
+                {% include 'riskpredictor/boxes/risk.html' with form=form side='ipsi' %}
               </div>
               <div class="cell is-col-span-2">
                 <div class="box is-height-100">
