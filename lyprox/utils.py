@@ -28,4 +28,4 @@ def form_from_initial(cls: type[T], **kwargs: Any) -> T:
 
     logger.info(f"Creating {cls.__name__} form with initial data.")
     logger.debug(f"{initial_data = }")
-    return cls(initial=initial_data, **kwargs)
+    return cls(initial_data, **kwargs)
