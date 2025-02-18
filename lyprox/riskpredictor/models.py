@@ -20,6 +20,7 @@ import yaml
 from django.db import models
 from dvc.api import DVCFileSystem
 from joblib import Memory
+from lymph.models import HPVUnilateral, Midline, Unilateral
 from lymph.types import Model
 from lyscripts.configs import (
     DeprecatedModelConfig,
@@ -58,22 +59,25 @@ def cached_fetch_and_merge_yaml(
     return merged_config
 
 
-ConfigTupleType = tuple[GraphConfig, ModelConfig, dict[str | int, DistributionConfig]]
+ConfigAndVersionTupleType = tuple[
+    GraphConfig, ModelConfig, dict[str | int, DistributionConfig], int
+]
 
 
-def validate_configs(merged_yaml: dict[str, Any]) -> ConfigTupleType:
+def validate_configs(merged_yaml: dict[str, Any]) -> ConfigAndVersionTupleType:
     """Validate the pydantic configs necessary for constructing the model."""
     graph_config = GraphConfig.model_validate(merged_yaml["graph"])
+    version = merged_yaml.get("version", 0)
 
-    if merged_yaml.get("version") != 1:
+    if version != 1:
         deprecated = DeprecatedModelConfig.model_validate(merged_yaml["model"])
         model_config, dist_configs = deprecated.translate()
-        return graph_config, model_config, dist_configs
+        return graph_config, model_config, dist_configs, version
 
     model_config = ModelConfig.model_validate(merged_yaml["model"])
     adapter = TypeAdapter(dict[str | int, DistributionConfig])
     dist_configs = adapter.validate_python(merged_yaml["distributions"])
-    return graph_config, model_config, dist_configs
+    return graph_config, model_config, dist_configs, version
 
 
 @memory.cache
@@ -81,10 +85,25 @@ def cached_construct_model_and_add_dists(
     graph_config: GraphConfig,
     model_config: ModelConfig,
     dist_configs: dict[str | int, DistributionConfig],
+    version: int,
 ) -> Model:
     """Construct the lymph model and add the distributions to it."""
     model = construct_model(model_config=model_config, graph_config=graph_config)
-    return add_distributions(model=model, configs=dist_configs)
+    model = add_distributions(model=model, configs=dist_configs)
+
+    if version == 0 and isinstance(model, Midline):
+        # This is necessary, since the previous version of the midline model did not
+        # have the `midext_prob` parameter. We set it to 0.5 and ignore it for setting
+        # the parameters to recreate the old behavior (at least as long as `midext` is
+        # always provided).
+        model.set_params(midext_prob=0.5)
+        logger.debug("Set `midext_prob=0.5` for the deprecated Midline model.")
+        params = list(model.get_params())
+        params.remove("midext_prob")
+        model.named_params = params
+        logger.debug(f"Set named params to {params} for the deprecated Midline model.")
+
+    return model
 
 
 @memory.cache
@@ -184,19 +203,30 @@ class CheckpointModel(loggers.ModelLoggerMixin, models.Model):
             dist_configs_path=self.dist_configs_path,
         )
 
-    def validate_configs(self) -> ConfigTupleType:
+    def validate_configs(self) -> ConfigAndVersionTupleType:
         """Validate the pydantic configs necessary for constructing the model."""
         merged_yaml = self.get_merged_yaml()
         return validate_configs(merged_yaml)
 
     def construct_model(self) -> Model:
         """Create the lymph model instance from the validated configs."""
-        graph_config, model_config, dist_configs = self.validate_configs()
+        graph_config, model_config, dist_configs, version = self.validate_configs()
         return cached_construct_model_and_add_dists(
             graph_config=graph_config,
             model_config=model_config,
             dist_configs=dist_configs,
+            version=version,
         )
+
+    @property
+    def is_unilateral(self) -> bool:
+        """Check if the model is a `Unilateral` model."""
+        return isinstance(self.construct_model(), Unilateral | HPVUnilateral)
+
+    @property
+    def is_midline(self) -> bool:
+        """Check if the model is a `Midline` model."""
+        return isinstance(self.construct_model(), Midline)
 
     def fetch_samples(self) -> np.ndarray:
         """Fetch the model samples from the HDF5 file in the DVC repo."""
