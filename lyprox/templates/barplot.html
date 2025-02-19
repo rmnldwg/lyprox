@@ -3,7 +3,7 @@
 {% load customtags %}
 
 {% addtoblock "css" %}
-<link rel="stylesheet" href="{% static 'dataexplorer/barplot.css' %}">
+<link rel="stylesheet" href="{% static 'barplot.css' %}">
 {% endaddtoblock %}
 
 {% with stat=stats|getattr:lnl_key %}
@@ -13,9 +13,9 @@
       {% if not hide_tooltip %}data-tooltip="{{ stat|get:True }} of {{ stat.values|sum }} ({{ stat|get_percent:True }}%) patients have metastases in LNL {{ lnl }}"
       {% endif %}>
       {% if show_percent %}
-      {{ stat|get_percent:1 }}%
+      {{ stat|get_percent:True }}%
       {% else %}
-      {{ stat|index:1 }}
+      {{ stat|get:True }}
       {% endif %}
     </span>
     <span class="stats tag barplot has-text-white is-flex is-flex-grow-1" data-statfield="{{ lnl_key }}" data-key="None"
