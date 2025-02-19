@@ -6,18 +6,26 @@ The code in this module is utilized by the `views.RiskPredictionView` of the
 """
 
 import logging
-from collections import namedtuple
-from typing import Any
+from typing import Annotated, Any, Literal, TypeVar
 
 import numpy as np
 from lydata.utils import ModalityConfig
 from lymph.models import HPVUnilateral, Unilateral
 from lymph.types import Model
 from lyscripts.configs import DiagnosisConfig, add_modalities
+from pydantic import AfterValidator, BaseModel, create_model
 
+from lyprox.dataexplorer.query import make_ensure_keys_validator
 from lyprox.riskpredictor.models import CheckpointModel
 
 logger = logging.getLogger(__name__)
+
+
+NullableBoolPercents = Annotated[
+    dict[Literal[True, False, None], float],
+    AfterValidator(make_ensure_keys_validator([True, False, None])),
+]
+"""Keys may be ``True``, ``False``, or ``None``, while values are the counts of each."""
 
 
 def compute_posteriors(
@@ -65,15 +73,54 @@ def assemble_diagnosis(
     return DiagnosisConfig(**diagnosis_dict)
 
 
-MeanAndStd = namedtuple("MeanAndStd", ["mean", "std"])
+def collect_risk_stats(
+    risk_values: np.ndarray,
+) -> dict[Literal[True, None, False], float]:
+    """
+    For an array of `risk_values`, collect the mean and std for each risk type.
+
+    The format is chosen like the `lyprox.dataexplorer.query.Statistics` object that
+    collects how many patients had `True`, `None`, or `False` involvement for a given
+    LNL. In this case, under the key `True`, we store the marginalized risk of
+    involvement in the respective LNL, under `None` two times the standard deviation,
+    and under `False` the remaining number to sum to 100%.
+    """
+    risk_values = 100 * np.array(risk_values)
+    mean = np.mean(risk_values, axis=0)
+    std = np.std(risk_values, axis=0)
+    return {
+        True: mean,
+        None: 2 * std,
+        False: 100 - mean - 2 * std,
+    }
+
+
+BaseModelT = TypeVar("BaseModelT", bound=BaseModel)
 
 
 def compute_risks(
     checkpoint: CheckpointModel,
     form_data: dict[str, Any],
     lnls: list[str],
-) -> dict[str, MeanAndStd]:
-    """Compute the risks for the given checkpoint and form data."""
+) -> BaseModelT:
+    """
+    Compute the risks for the given checkpoint and form data.
+
+    Returns an instance of a dynamically created pydantic `BaseModel` class that has
+    fields like `ipsi_II` or `contra_III`. In these fields, it stores the risk in
+    dictionaries like:
+
+    .. code-block:: python
+
+        {
+            True: 26.3,   # Risk of involvement in the respective LNL
+            None: 5.2,    # Two times the standard deviation of the risk
+            False: 68.5,  # Remaining number to sum to 100
+        }
+
+    This format is compatible with the `lyprox.dataexplorer.query.Statistics` object
+    and thus also with the HTML templates used in the `dataexplorer` app.
+    """
     model = checkpoint.construct_model()
     priors = checkpoint.compute_priors(t_stage=form_data["t_stage"])
     diagnosis = assemble_diagnosis(form_data=form_data, lnls=lnls)
@@ -86,10 +133,11 @@ def compute_risks(
         sensitivity=form_data["sensitivity"],
     )
 
-    risks = {}
+    fields, kwargs = {}, {}
     for side in ["ipsi", "contra"]:
         for lnl in lnls:
-            if f"{side}_{lnl}" not in form_data:
+            key = f"{side}_{lnl}"
+            if key not in form_data:
                 continue
 
             if isinstance(model, Unilateral | HPVUnilateral):
@@ -97,13 +145,12 @@ def compute_risks(
             else:
                 involvement = {side: {lnl: True}}
 
-            _risks = [
-                model.marginalize(involvement=involvement, given_state_dist=post)
-                for post in posteriors
-            ]
-            risks[f"{side}_{lnl}"] = MeanAndStd(
-                mean=np.mean(_risks),
-                std=np.std(_risks),
+            kwargs[key] = collect_risk_stats(
+                [
+                    model.marginalize(involvement=involvement, given_state_dist=post)
+                    for post in posteriors
+                ]
             )
+            fields[key] = (NullableBoolPercents, ...)
 
-    return risks
+    return create_model("Risks", __base__=BaseModel, **fields)(**kwargs)
