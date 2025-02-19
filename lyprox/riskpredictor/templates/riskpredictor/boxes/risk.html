@@ -20,8 +20,8 @@
     <thead>
       <tr>
         <td>LNL</td>
-        <td>select</td>
-        <td>risk</td>
+        <td class="has-text-centered">select</td>
+        <td class="has-text-centered">risk</td>
       </tr>
     </thead>
     <tbody>
@@ -31,7 +31,7 @@
       <tr>
         <td>{{ lnl }}</td>
         <td>{{ form|get:lnl_key }}</td>
-        <td>{{ lnl_key }}</td>
+        {% include 'barplot.html' with stats=risks lnl_key=lnl_key show_percent=True hide_tooltip=True %}
       </tr>
       {% endwith %}
       {% endwith %}

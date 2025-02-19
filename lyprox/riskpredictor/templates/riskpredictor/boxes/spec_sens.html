@@ -1,0 +1,40 @@
+{% load customtags %}
+
+<div class="box is-height-100">
+  <div class="level">
+    <div class="level-left">
+      <div class="level-item">
+        <p class="title is-4">Sensitivity & Specificity</p>
+      </div>
+    </div>
+    <div class="level-right">
+      <div class="level-item">
+        <div class="tooltip">
+          <span class="icon">
+            <i class="fas fa-question"></i>
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <label for="{{ form.specificity.id_for_label }}" class="heading">Specificity</label>
+  <div class="field has-addons">
+    <div class="control is-expanded">
+      {{ form.specificity }}
+    </div>
+    <div class="control is-flex is-align-items-center">
+      <output class="slider tag is-medium is-info" for="{{ form.specificity.id_for_label }}">0.8</output>
+    </div>
+  </div>
+
+  <label for="{{ form.sensitivity.id_for_label }}" class="heading">Sensitivity</label>
+  <div class="field has-addons">
+    <div class="control is-expanded">
+      {{ form.sensitivity }}
+    </div>
+    <div class="control is-flex is-align-items-center">
+      <output class="slider tag is-medium is-info" for="{{ form.sensitivity.id_for_label }}">0.8</output>
+    </div>
+  </div>
+</div>

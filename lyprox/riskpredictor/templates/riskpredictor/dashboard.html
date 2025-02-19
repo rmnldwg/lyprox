@@ -13,11 +13,13 @@
 {% endblock "css" %}
 
 {% block "js" %}
+<script src="https://cdn.jsdelivr.net/npm/bulma-slider@2.0.5/dist/js/bulma-slider.min.js"></script>
 <script src="https://unpkg.com/prettier@2.8.7/standalone.js"></script>
 <script src="https://unpkg.com/prettier@2.8.7/parser-yaml.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
-<script src="{% static 'dataexplorer/dashboard.js' %}"></script>
+{% comment %} <script src="{% static 'dataexplorer/dashboard.js' %}"></script> {% endcomment %}
 <script src="{% static 'riskpredictor/yaml_formatter.js' %}"></script>
+<link rel="stylesheet" href="{% static 'dashboard.css' %}">
 <link rel="stylesheet" href="{% static 'riskpredictor/dashboard.css' %}">
 {% endblock "js" %}
 
@@ -31,8 +33,19 @@
   <section class="section">
     <div class="fixed-grid has-4-cols">
       <div class="grid">
-        <div class="cell is-col-span-1">
-          {% include 'riskpredictor/boxes/tumor.html' with form=form is_midline=checkpoint.is_midline %}
+        <div class="grid is-height-100">
+          <div class="cell is-col-span-1">
+            <div class="fixed-grid has-1-cols is-height-100">
+              <div class="grid is-height-100">
+                <div class="cell is-col-span-1">
+                  {% include 'riskpredictor/boxes/tumor.html' with form=form is_midline=checkpoint.is_midline %}
+                </div>
+                <div class="cell is-col-span-1">
+                  {% include 'riskpredictor/boxes/spec_sens.html' %}
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
         <div class="cell is-col-span-3">
           <div class="fixed-grid is-height-100 has-2-cols">
@@ -43,12 +56,10 @@
                 {% endif %}
               </div>
               <div class="cell">
-                {% include 'riskpredictor/boxes/risk.html' with form=form side='ipsi' %}
+                {% include 'riskpredictor/boxes/risk.html' with form=form side='ipsi' risks=risks %}
               </div>
               <div class="cell is-col-span-2">
-                <div class="box is-height-100">
-                  controls
-                </div>
+                {% include 'riskpredictor/boxes/controls.html' %}
               </div>
             </div>
           </div>
