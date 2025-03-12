@@ -1,5 +1,4 @@
-"""
-Querying and generating statistics from the table of patients.
+"""Querying and generating statistics from the table of patients.
 
 In this module, we define the classes and methods to filter and query the table, as
 well as compute statistics from a queried/filtered patient table to be displayed on the
@@ -81,8 +80,7 @@ def join_dataset_tables(
     datasets: QuerySet | Sequence[DatasetModel],
     method: Literal["max_llh", "rank"] = "max_llh",
 ) -> pd.DataFrame:
-    """
-    Join the tables of the selected datasets into a single table.
+    """Join the tables of the selected datasets into a single table.
 
     This iterates through the datasets and loads their respective `DataFrame` tables.
     It also adds a column `["dataset", "info", "name"]` to the table to keep track of
@@ -109,8 +107,7 @@ def join_dataset_tables(
 
 
 def execute_query(cleaned_form: dict[str, Any]) -> pd.DataFrame:
-    """
-    Execute the query defined by the `DataexplorerForm`.
+    """Execute the query defined by the `DataexplorerForm`.
 
     After validating a `DataexplorerForm` by calling ``form.is_valid()``, the cleaned
     data is accessible as the attribute ``form.cleaned_data``. The returned dictionary
@@ -144,8 +141,7 @@ def execute_query(cleaned_form: dict[str, Any]) -> pd.DataFrame:
 
 
 def safe_value_counts(column: pd.Series) -> dict[Any, int]:
-    """
-    Return the value counts of a column, including missing values as ``None``.
+    """Return the value counts of a column, including missing values as ``None``.
 
     >>> column = pd.Series(['a', 'b', 'c', np.nan, 'a', 'b', 'c', 'a', 'b', 'c'])
     >>> safe_value_counts(column)
@@ -165,8 +161,7 @@ EnsureKeysSignature = Callable[[dict[KT, int]], dict[KT, int]]
 
 
 def make_ensure_keys_validator(keys: list[KT]) -> EnsureKeysSignature:
-    """
-    Create an `AfterValidator` to ensure all ``keys`` are present in the data.
+    """Create an `AfterValidator` to ensure all ``keys`` are present in the data.
 
     This creates a function that can be used with pydantic's `AfterValidator` to ensure
     that all ``keys`` are present in the validated data. pydantic first receives the
@@ -208,8 +203,7 @@ T = TypeVar("T", bound="BaseStatistics")
 
 
 class BaseStatistics(BaseModel):
-    """
-    Basic statistics to be computed and displayed on the dashboard.
+    """Basic statistics to be computed and displayed on the dashboard.
 
     This defines the base class with counts of the basic patient and tumor information.
     It also defines the classmethod to compute the statistics from a dataset. In a
@@ -250,8 +244,7 @@ class BaseStatistics(BaseModel):
         table: pd.DataFrame,
         method: Literal["max_llh", "rank"] = "max_llh",
     ) -> T:
-        """
-        Compute statistics from a table of patients.
+        """Compute statistics from a table of patients.
 
         This method computes e.g. how many patients in the queried table are
         HPV positive, or how many patients have a certain T-stage. The statistics are

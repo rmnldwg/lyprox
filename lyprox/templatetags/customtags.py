@@ -1,10 +1,10 @@
-"""
-Custom tags and filters for Django's HTML templating.
+"""Custom tags and filters for Django's HTML templating.
 
 Surprisingly, Django's templating does not provide some basic functionality I expected
 to be there. So, I had to write some custom tags (like the sum of a list) and filters
 specific to LyProX's needs.
 """
+
 import ast
 import json
 import logging
@@ -35,20 +35,23 @@ def safe_eval(expr: str) -> Any:
 
 class MyMathExtension(MathExtension):
     """Custom math extension for markdown."""
+
     def __init__(self, *args, **kwargs):
         """Initialize the extension."""
         super().__init__(*args, **kwargs)
-        self.config.update({
-            "enable_dollar_delimiter": [True, "Enable single-dollar delimiter"],
-        })
+        self.config.update(
+            {
+                "enable_dollar_delimiter": [True, "Enable single-dollar delimiter"],
+            }
+        )
 
 
 T = TypeVar("T")
 
+
 @register.filter(name="index")
 def index(seq: Sequence[T], i: str) -> T:
-    """
-    Get the ``i``-th element of ``seq``.
+    """Get the ``i``-th element of ``seq``.
 
     Allows one to use ``{{ seq|index:'i' }}`` in Django templates.
     """
@@ -58,15 +61,14 @@ def index(seq: Sequence[T], i: str) -> T:
 
 @register.filter(name="barplot_css")
 def barplot_css(value_counts: dict[Any, int], argstr: str) -> float:
-    """
-    Return the relative width to be sent to the CSS for the dashboard's bar plot.
+    """Return the relative width to be sent to the CSS for the dashboard's bar plot.
 
     Use it like this in the HTML templates:
     ``{{ value_counts|barplot_css:'<key>,<width>' }}``, where the key and the total
     width are separated by a comma. The key is the key of the value in the
     ``value_counts`` dict and the width is the total width of the bar plot.
     """
-    keystr, widthstr = argstr.split(',')
+    keystr, widthstr = argstr.split(",")
     key = safe_eval(keystr)
     width = float(widthstr)
     total = sum(list(value_counts.values()))
@@ -75,10 +77,10 @@ def barplot_css(value_counts: dict[Any, int], argstr: str) -> float:
 
 N = TypeVar("N", int, float)
 
+
 @register.filter(name="sum")
 def sum_(iterable: Iterable[N]) -> N:
-    """
-    Implement the sum im Django templates.
+    """Implement the sum im Django templates.
 
     Use it like this: ``{{ mylist|sum }}`` or ``{{ mydict.values|sum }}``.
     """
@@ -124,14 +126,13 @@ def custom_markdown(text: str) -> str:
 
 @register.simple_tag(name="include_md", takes_context=True)
 def include_md(context: template.RequestContext, template_name: str) -> str:
-    """
-    Include a markdown file in the template.
+    """Include a markdown file in the template.
 
     The markdown file may also include Django template tags, just as the HTML. This tag
     is used like this: ``{% include_md "path/to/file.md" %}``.
     """
     # 'context' here isn't a dictionary, but an instance of RequestContext
-    context_dict = {k: v for subdict in context.dicts for k,v in subdict.items()}
+    context_dict = {k: v for subdict in context.dicts for k, v in subdict.items()}
     # parse the template and fill the tags with context variables
     template = render_to_string(template_name, context=context_dict)
     return mark_safe(custom_markdown(template))  # noqa: S308
@@ -164,6 +165,7 @@ def concat(this: str, other: str) -> str:
 KT = TypeVar("KT")
 VT = TypeVar("VT")
 
+
 @register.filter(name="get")
 def get(mapping: Mapping[KT, VT], key: KT) -> VT | None:
     """Get an item from dict-like ``mapping`` using ``key``."""
@@ -172,10 +174,10 @@ def get(mapping: Mapping[KT, VT], key: KT) -> VT | None:
     except KeyError:
         return None
 
+
 @register.filter(name="get_percent")
 def get_percent(value_counts: dict[Any, int], key: Any) -> str:
-    """
-    Get the percentage ``value_counts[key]`` in the total of ``value_counts``.
+    """Get the percentage ``value_counts[key]`` in the total of ``value_counts``.
 
     Use it like this in the HTML templates: ``{{ value_counts|get_percent:key }}``.
     """
@@ -197,8 +199,7 @@ def remove_host(url: str) -> str:
 
 @register.simple_tag(name="to_list")
 def to_list(*args) -> list:
-    """
-    Convert arguments to a list.
+    """Convert arguments to a list.
 
     This is useful if you want to iterate over a list of items in a Django template
     and you don't want to provide that list to the context, but 'harcoded' in the

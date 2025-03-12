@@ -1,5 +1,4 @@
-"""
-Orchestrate the logic of the dashboard.
+"""Orchestrate the logic of the dashboard.
 
 The views in this module are being called when the user sends a request to the server.
 Which view is called for which URL is defined in the `urls` module. The views process
@@ -52,8 +51,7 @@ def help_view(request) -> HttpResponse:
 
 
 def render_data_stats(request: HttpRequest) -> HttpResponse:
-    """
-    Return the dashboard view when the user first accesses the dashboard.
+    """Return the dashboard view when the user first accesses the dashboard.
 
     This view handles GET requests, which typically only occur when the user first
     navigates to the dashboard. But it is also possible to query the dashboard with
@@ -92,8 +90,7 @@ def render_data_stats(request: HttpRequest) -> HttpResponse:
 
 
 def update_data_stats(request: HttpRequest) -> JsonResponse:
-    """
-    AJAX view to update the dashboard statistics without reloading the page.
+    """AJAX view to update the dashboard statistics without reloading the page.
 
     This view is conceptually similar to the `dashboard_view`, but instead of rendering
     the entire HTML page, it returns only a JSON response with the updated statistics

@@ -1,5 +1,4 @@
-"""
-Defines the fields that can be used to query the patient records.
+"""Defines the fields that can be used to query the patient records.
 
 Basically, this defines what buttons, dropdowns, and checkboxes are displayed on the
 dashboard and to some extent also how they look. Here, we also define the
@@ -43,8 +42,7 @@ logger = logging.getLogger(__name__)
 
 
 def trio_to_bool(value: int | Any) -> bool | Any:
-    """
-    Transform -1, 0, and +1 to ``False``, ``None`` and ``True`` respectively.
+    """Transform -1, 0, and +1 to ``False``, ``None`` and ``True`` respectively.
 
     Any other values are simply passed through unchanged. This is used to map the
     values of the three-way toggle buttons to its boolean representation.
@@ -71,8 +69,7 @@ def format_dataset_choices(datasets: list[str]) -> list[tuple[str, str]]:
 
 
 class ThreeWayToggleWidget(forms.RadioSelect):
-    """
-    Widget that renders the three-way toggle button.
+    """Widget that renders the three-way toggle button.
 
     It also allows to set the attributes of the individual inputs (radio buttons) as
     `option_attrs` as well as the attributes of the container as ``attrs``.
@@ -126,8 +123,7 @@ class ThreeWayToggleWidget(forms.RadioSelect):
 
 
 class ThreeWayToggle(forms.ChoiceField):
-    """
-    Field to choose one of three options: ``True``, ``None`` and ``False``.
+    """Field to choose one of three options: ``True``, ``None`` and ``False``.
 
     ``True`` is represented by a plus sign and means "positive", ``None`` is
     represented by a ban sign and means "unknown", and ``False`` is represented by a
@@ -187,8 +183,7 @@ class EasySubsiteChoiceField(forms.MultipleChoiceField):
 
     @classmethod
     def from_enum(cls, enum: type, **kwargs) -> "EasySubsiteChoiceField":
-        """
-        Create a field from a subsite enum.
+        """Create a field from a subsite enum.
 
         All this does is pass the ``enum``'s choices and values to the constructor as
         ``choices`` and ``initial``, respectively. It makes the field not required and
@@ -213,8 +208,7 @@ T = TypeVar("T", bound="DataexplorerForm")
 
 
 class DataexplorerForm(FormLoggerMixin, forms.Form):
-    """
-    Form for querying the database.
+    """Form for querying the database.
 
     The form's fields somewhat mirror the fields in the `Statistics` class in
     the `query` module.
@@ -298,8 +292,7 @@ class DataexplorerForm(FormLoggerMixin, forms.Form):
     """Show the statistics after querying as percentages or absolute numbers."""
 
     def __init__(self, *args, user, **kwargs):
-        """
-        Extend default initialization.
+        """Extend default initialization.
 
         After calling the parent constructor, the selectable datasets are populated
         based on the user's permissions. I.e., a logged-in user can see private
@@ -378,8 +371,7 @@ class DataexplorerForm(FormLoggerMixin, forms.Form):
         return cleaned_data
 
     def clean(self) -> dict[str, Any]:
-        """
-        Clean the form data.
+        """Clean the form data.
 
         The default cleaning provided by Django is extended to deal with some special
         cases that arise from our data. On the one hand, this involved casting the

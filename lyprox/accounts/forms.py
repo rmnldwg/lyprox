@@ -1,3 +1,9 @@
+"""Forms for the accounts app.
+
+This allows the customization of the login form and the sign-up request form. The
+latter is not even implemented yet.
+"""
+
 from django import forms
 from django.contrib.auth.forms import AuthenticationForm, UsernameField
 from django.forms import widgets
@@ -7,10 +13,10 @@ from .models import Institution, User
 
 
 class CustomAuthenticationForm(AuthenticationForm):
-    """
-    Custom form that allows assignment of classes to widgets. Note that due
-    to the inheritance from `AuthenticationForm` the email field, which is used
-    to log in users, is called username.
+    """Custom form that allows assignment of classes to widgets.
+
+    Note that due to the inheritance from `AuthenticationForm` the email field, which
+    is used to log in users, is called username.
     """
 
     username = UsernameField(
@@ -30,6 +36,8 @@ class SignupRequestForm(forms.ModelForm):
     """Form for requesting to be signed up by an administrator."""
 
     class Meta:
+        """Meta class for the form."""
+
         model = User
         fields = ["title", "first_name", "last_name", "email", "institution"]
         widgets = {
@@ -57,8 +65,9 @@ class SignupRequestForm(forms.ModelForm):
     )
 
     def save(self, commit: bool):
-        """
-        Override save method, so that the entered data is not used to create
+        """Override save method.
+
+        This modifies the behaviour that the entered data is not used to create
         a `User` instance, but the information is just stored/sent to an admin.
         """
         # TODO: Store the cleaned data somewhere or send it via email to the
@@ -69,4 +78,6 @@ class InsitutionForm(FormLoggerMixin, forms.Form):
     """Form for creating an institution. This is not yet in use or even functional."""
 
     class Meta:
+        """Meta class for the form."""
+
         model = Institution

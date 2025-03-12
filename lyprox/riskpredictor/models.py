@@ -1,5 +1,4 @@
-"""
-Models for the `riskpredictor` Django app.
+"""Models for the `riskpredictor` Django app.
 
 The model `CheckpointModel` holds an upload of parameter samples that were produced
 during an inference run of the ``lymph-model``. The samples should be fetched from the
@@ -152,8 +151,7 @@ def cached_compute_priors(
 
 
 class CheckpointModel(loggers.ModelLoggerMixin, models.Model):
-    """
-    Results of an inference run of the ``lymph-model`` package.
+    """Results of an inference run of the ``lymph-model`` package.
 
     It fetches the HDF5 parameter samples from the DVC remote storage and uses them to
     compute the prior risk matrices and caches them using joblib.

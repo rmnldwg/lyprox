@@ -1,5 +1,4 @@
-"""
-Main configurations. An explanation of all options can be found in the `Django docs`_.
+"""Main configurations. Explanations of all options can be found in the `Django docs`_.
 
 Generally, the most important settings - but also as few as possible - should be
 fetched from environment variables. This is good practice (see `12 Factor App`_) and
@@ -151,9 +150,9 @@ LogLevelType = Literal["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"]
 
 # Logging
 def set_logging(log_level: LogLevelType) -> dict:
-    """
-    Return logging settings in the form of a dictionary as function of the
-    log-level. This is used so that in a subdomain settings file the function
+    """Return logging settings for specified ``log_level``.
+
+    This is used so that in a subdomain settings file the function
     can be called again to overwrite the logging settings easily.
     """
     return {

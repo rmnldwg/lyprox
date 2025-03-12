@@ -4,8 +4,7 @@ import logging
 
 
 class ModelLoggerMixin:
-    """
-    Mixin for django models that provide logging capabilities.
+    """Mixin for django models that provide logging capabilities.
 
     Any model class that (also) inherits from this mixin will automatically create
     logs for some important events, such as saving and deleting instances.
@@ -31,8 +30,7 @@ class ModelLoggerMixin:
 
 
 class FormLoggerMixin:
-    """
-    Mixin for django forms that provide logging information for events.
+    """Mixin for django forms that provide logging information for events.
 
     Adding this mixin to the classes a form inherits from will automatically enable
     logging some information when the form is validated.
@@ -60,8 +58,7 @@ class FormLoggerMixin:
 
 
 class ViewLoggerMixin:
-    """
-    Mixin for django views that provides logging capabilities.
+    """Mixin for django views that provides logging capabilities.
 
     As the `FormLoggerMixin`, this mixin provides logging information for events, but
     in views instead of forms.

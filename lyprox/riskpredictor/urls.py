@@ -1,5 +1,4 @@
-"""
-URLs related to the `riskpredictor` prediction app.
+"""URLs related to the `riskpredictor` prediction app.
 
 This app is reachable under the URL ``https://lyprox.org/riskpredictor``. Like the
 `dataexplorer`, this includes a dashboard and a help page.

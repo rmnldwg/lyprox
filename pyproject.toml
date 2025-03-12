@@ -27,7 +27,7 @@ dependencies = [
     "python-magic ~= 0.4",
     "gunicorn ~= 20.1",
     "dvc ~= 3.2",
-    "lymph-model == 1.3.2",
+    "lymph-model == 1.3.3",
     "lyscripts == 1.0.0.a5",
     "PyGithub ~= 1.58",
     "dateparser ~= 1.1",
@@ -65,7 +65,7 @@ local_scheme = "no-local-version"
 
 [tool.ruff.lint]
 select = ["E", "F", "W", "B", "C", "R", "U", "D", "I", "S", "T", "A", "N"]
-ignore = ["D204", "D205", "D212"]
+ignore = ["D204", "D205", "D213"]
 exclude = ["*/migrations/*", "tests/*"]
 
 [tool.pytest.ini_options]

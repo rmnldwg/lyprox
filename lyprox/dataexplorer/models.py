@@ -40,8 +40,7 @@ def cached_load_dataframe(
 
 
 class DatasetModel(loggers.ModelLoggerMixin, models.Model):
-    """
-    Minimal model representing a dataset.
+    """Minimal model representing a dataset.
 
     This is basically a Django representation of the
     :py:class:`~lydata.loader.LyDataset` class.
@@ -89,8 +88,7 @@ class DatasetModel(loggers.ModelLoggerMixin, models.Model):
         return settings.GITHUB.get_repo(self.repo_name)
 
     def get_kwargs(self) -> dict[str, int | str]:
-        """
-        Assemble ``kwargs`` from this model's field.
+        """Assemble ``kwargs`` from this model's field.
 
         These will both be used to call the :py:func:`~cached_load_dataframe` function
         as well as initialize a :py:class:`~lydata.loader.LyDataset` object.
@@ -108,8 +106,7 @@ class DatasetModel(loggers.ModelLoggerMixin, models.Model):
         return LyDataset(**self.get_kwargs())
 
     def load_dataframe(self) -> pd.DataFrame:
-        """
-        Load the underlying table.
+        """Load the underlying table.
 
         This calls the :py:func:`~cached_load_dataframe` function with the assembled
         ``kwargs`` and returns the resulting DataFrame.

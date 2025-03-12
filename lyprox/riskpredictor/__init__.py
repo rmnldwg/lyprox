@@ -1,6 +1,4 @@
-"""
-Django app for computing the risk of a particular involvement pattern, given a
-personalized diagnosis.
+"""Risk predictions for involvement patterns, given personalized diagnoses.
 
 This prediction is based on the probabilistic hidden Markov model we developed to
 model lymphatic metastatic progression in head and neck cancer [1]_.

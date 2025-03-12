@@ -1,5 +1,4 @@
-"""
-Forms used in the `riskpredictor` app.
+"""Forms used in the `riskpredictor` app.
 
 The first form, the `CheckpointModelForm`, is used to create a new
 `models.CheckpointModel` and makes sure that the user enters a valid git repository

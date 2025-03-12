@@ -11,8 +11,7 @@ T = TypeVar("FormT", bound=Form)
 
 
 def form_from_initial(cls: type[T], **kwargs: Any) -> T:
-    """
-    Create a form instance with the defined initial data.
+    """Create a form instance with the defined initial data.
 
     Form fields are typically defined with initial values. And Django's forms allow
     extracting this initial values from an instance of a form. So, what this helper

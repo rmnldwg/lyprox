@@ -1,5 +1,4 @@
-"""
-Module for functions to predict the risk of lymphatic progression.
+"""Module for functions to predict the risk of lymphatic progression.
 
 The code in this module is utilized by the `views.RiskPredictionView` of the
 `riskpredictor` app to compute the risk of lymphatic progression for a given diagnosis.
@@ -76,8 +75,7 @@ def assemble_diagnosis(
 def collect_risk_stats(
     risk_values: np.ndarray,
 ) -> dict[Literal[True, None, False], float]:
-    """
-    For an array of `risk_values`, collect the mean and std for each risk type.
+    """For an array of `risk_values`, collect the mean and std for each risk type.
 
     The format is chosen like the `lyprox.dataexplorer.query.Statistics` object that
     collects how many patients had `True`, `None`, or `False` involvement for a given
@@ -103,8 +101,7 @@ def compute_risks(
     form_data: dict[str, Any],
     lnls: list[str],
 ) -> BaseModelT:
-    """
-    Compute the risks for the given checkpoint and form data.
+    """Compute the risks for the given checkpoint and form data.
 
     Returns an instance of a dynamically created pydantic `BaseModel` class that has
     fields like `ipsi_II` or `contra_III`. In these fields, it stores the risk in

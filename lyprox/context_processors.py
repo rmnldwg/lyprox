@@ -1,5 +1,4 @@
-"""
-Context processors for the LyProX app.
+"""Context processors for the LyProX app.
 
 These functions are called by Django when rendering templates. They add extra
 information to the context available to the HTML templates. For example, `navbar_apps`
@@ -20,6 +19,7 @@ def selected_settings(_request) -> dict[str, Any]:
         "IS_FROZEN": settings.IS_FROZEN,
         "FROZEN_VERSIONS": settings.FROZEN_VERSIONS,
     }
+
 
 def navbar_apps(_request) -> dict[str, Any]:
     """Return dictionary of apps to add to the navbar."""

@@ -1,5 +1,4 @@
-"""
-Defines the URLs within the dashboard app.
+"""Defines the URLs within the dashboard app.
 
 This module's basic job is to define the `urlpatterns` list, which binds a URL (or a
 part of a URL) to a view function. The view functions are defined in the `views` module.

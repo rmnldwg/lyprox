@@ -21,8 +21,7 @@ def add_publications_to_context(context: dict[str, Any]) -> dict[str, Any]:
 
 
 def index(request):
-    """
-    Return the landing page HTML.
+    """Return the landing page HTML.
 
     This adds the installed apps to the context where the ``add_to_navbar`` attribute
     is set to ``True``.
