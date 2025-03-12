@@ -9,7 +9,7 @@ from typing import Annotated, Any, Literal, TypeVar
 
 import numpy as np
 from lydata.utils import ModalityConfig
-from lymph.models import HPVUnilateral, Unilateral
+from lymph.models import HPVUnilateral, Midline, Unilateral
 from lymph.types import Model
 from lyscripts.configs import DiagnosisConfig, add_modalities
 from pydantic import AfterValidator, BaseModel, create_model
@@ -31,6 +31,7 @@ def compute_posteriors(
     model: Model,
     priors: np.ndarray,
     diagnosis: DiagnosisConfig,
+    midext: bool | None = None,
     specificity: float = 0.9,
     sensitivity: float = 0.9,
 ) -> np.ndarray:
@@ -38,6 +39,7 @@ def compute_posteriors(
     modality_config = ModalityConfig(spec=specificity, sens=sensitivity)
     model = add_modalities(model=model, modalities={"D": modality_config})
     posteriors = []
+    midext_kwarg = {"midext": midext} if isinstance(model, Midline) else {}
 
     if isinstance(model, Unilateral | HPVUnilateral):
         diagnosis = diagnosis.ipsi
@@ -48,6 +50,7 @@ def compute_posteriors(
         posterior = model.posterior_state_dist(
             given_state_dist=prior,
             given_diagnosis=diagnosis,
+            **midext_kwarg,
         )
         posteriors.append(posterior)
 
@@ -126,6 +129,7 @@ def compute_risks(
         model=model,
         priors=priors,
         diagnosis=diagnosis,
+        midext=form_data["midext"],
         specificity=form_data["specificity"],
         sensitivity=form_data["sensitivity"],
     )
@@ -144,7 +148,10 @@ def compute_risks(
 
             kwargs[key] = collect_risk_stats(
                 [
-                    model.marginalize(involvement=involvement, given_state_dist=post)
+                    model.marginalize(
+                        involvement=involvement,
+                        given_state_dist=post,
+                    )
                     for post in posteriors
                 ]
             )

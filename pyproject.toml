@@ -28,7 +28,7 @@ dependencies = [
     "gunicorn ~= 20.1",
     "dvc ~= 3.2",
     "lymph-model == 1.3.3",
-    "lyscripts == 1.0.0.a5",
+    "lyscripts == 1.0.0.a6",
     "PyGithub ~= 1.58",
     "dateparser ~= 1.1",
     "python-markdown-math ~= 0.8",
