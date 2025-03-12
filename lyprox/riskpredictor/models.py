@@ -94,7 +94,7 @@ def cached_construct_model_and_add_dists(
         # This is necessary, since the previous version of the midline model did not
         # have the `midext_prob` parameter. We set it to 0.5 and ignore it for setting
         # the parameters to recreate the old behavior (at least as long as `midext` is
-        # always provided).
+        # always provided and thereby renormalizes the computed risks).
         model.set_params(midext_prob=0.5)
         logger.debug("Set `midext_prob=0.5` for the deprecated Midline model.")
         params = list(model.get_params())

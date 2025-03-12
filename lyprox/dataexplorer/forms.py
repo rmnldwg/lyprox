@@ -24,6 +24,7 @@ created from the initial defaults or from the user's input.
 .. _as Django intends forms to be used: https://docs.djangoproject.com/en/4.2/ref/forms/
 """
 
+import ast
 import logging
 from collections.abc import Generator
 from typing import Any, TypeVar
@@ -166,6 +167,9 @@ class ThreeWayToggle(forms.ChoiceField):
 
     def to_python(self, value: bool | None) -> bool | None:
         """Cast the string to an integer. ``""`` is interpreted as ``None``."""
+        if value in ["True", "False", "None"]:
+            value = ast.literal_eval(value)
+
         if value in [True, False, None]:
             return value
 
