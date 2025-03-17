@@ -101,15 +101,13 @@ $(document).keydown(function (event) {
 });
 
 /**
- * Synchronize the slider value with the displayed value.
+ * Synchronize the value of a slider with its output element.
  *
- * @param {*} element Slider element
+ * @param {*} slider The slider element
  */
-function syncSliderValue(element) {
-  const name = element.attr('name');
-  const value = element.val();
-  const valuePercentDisplay = $(`#${name}-display`);
-  valuePercentDisplay.text((100 * value).toFixed(0) + '%');
+function syncSliderValue(slider) {
+  const output = $('output[for="' + slider.attr('id') + '"]');
+  output.val((100 * slider.val()).toFixed(0) + "%");
 }
 
 $("input[type=range]").on('input', function () {

@@ -83,17 +83,26 @@ def collect_risk_stats(
 
     The format is chosen like the `lyprox.dataexplorer.query.Statistics` object that
     collects how many patients had `True`, `None`, or `False` involvement for a given
-    LNL. In this case, under the key `True`, we store the marginalized risk of
-    involvement in the respective LNL, under `None` two times the standard deviation,
-    and under `False` the remaining number to sum to 100%.
+    LNL. In this case, we construct the returned dictionary like this:
+
+    .. code-block:: python
+
+        {
+            True: 26.3,   # Risk of involvement minus half the standard deviation
+            None: 5.2,    # The standard deviation of the risk
+            False: 68.5,  # Remaining number to sum to 100
+        }
+
+    This format is compatible with the `lyprox.dataexplorer.query.Statistics` object
+    and thus also with the HTML templates used in the `dataexplorer` app.
     """
     risk_values = 100 * np.array(risk_values)
     mean = np.mean(risk_values, axis=0)
     std = np.std(risk_values, axis=0)
     return {
-        True: mean,
-        None: 2 * std,
-        False: 100 - mean - 2 * std,
+        True: mean - std / 2,
+        None: std,
+        False: 100 - (mean + std / 2),
     }
 
 
@@ -142,18 +151,7 @@ def compute_risks(
 
     Returns an instance of a dynamically created pydantic `BaseModel` class that has
     fields like `ipsi_II` or `contra_III`. In these fields, it stores the risk in
-    dictionaries like:
-
-    .. code-block:: python
-
-        {
-            True: 26.3,   # Risk of involvement in the respective LNL
-            None: 5.2,    # Two times the standard deviation of the risk
-            False: 68.5,  # Remaining number to sum to 100
-        }
-
-    This format is compatible with the `lyprox.dataexplorer.query.Statistics` object
-    and thus also with the HTML templates used in the `dataexplorer` app.
+    dictionaries returned by the `collect_risk_stats` function.
     """
     model = checkpoint.construct_model()
     priors = checkpoint.compute_priors(t_stage=form_data["t_stage"])
