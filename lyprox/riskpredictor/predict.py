@@ -5,6 +5,7 @@ The code in this module is utilized by the `views.RiskPredictionView` of the
 """
 
 import logging
+from collections.abc import Container
 from typing import Annotated, Any, Literal, TypeVar
 
 import numpy as np
@@ -96,6 +97,39 @@ def collect_risk_stats(
     }
 
 
+def create_risks_fields_and_kwargs(
+    model: Model,
+    state_dists: np.ndarray,
+    lnls: list[str],
+    keys_to_consider: Container[str],
+) -> tuple[dict[str, tuple[type, ...]], dict[str, dict]]:
+    """Create the fields and kwargs for dynamically created pydantic `Risks` model."""
+    fields, kwargs = {}, {}
+    for side in ["ipsi", "contra"]:
+        for lnl in lnls:
+            key = f"{side}_{lnl}"
+            if key not in keys_to_consider:
+                continue
+
+            if isinstance(model, Unilateral | HPVUnilateral):
+                involvement = {lnl: True}
+            else:
+                involvement = {side: {lnl: True}}
+
+            kwargs[key] = collect_risk_stats(
+                [
+                    model.marginalize(
+                        involvement=involvement,
+                        given_state_dist=dist,
+                    )
+                    for dist in state_dists
+                ]
+            )
+            fields[key] = (NullableBoolPercents, ...)
+
+    return fields, kwargs
+
+
 BaseModelT = TypeVar("BaseModelT", bound=BaseModel)
 
 
@@ -133,28 +167,11 @@ def compute_risks(
         specificity=form_data["specificity"],
         sensitivity=form_data["sensitivity"],
     )
-
-    fields, kwargs = {}, {}
-    for side in ["ipsi", "contra"]:
-        for lnl in lnls:
-            key = f"{side}_{lnl}"
-            if key not in form_data:
-                continue
-
-            if isinstance(model, Unilateral | HPVUnilateral):
-                involvement = {lnl: True}
-            else:
-                involvement = {side: {lnl: True}}
-
-            kwargs[key] = collect_risk_stats(
-                [
-                    model.marginalize(
-                        involvement=involvement,
-                        given_state_dist=post,
-                    )
-                    for post in posteriors
-                ]
-            )
-            fields[key] = (NullableBoolPercents, ...)
-
-    return create_model("Risks", __base__=BaseModel, **fields)(**kwargs)
+    fields, kwargs = create_risks_fields_and_kwargs(
+        model=model,
+        state_dists=posteriors,
+        lnls=lnls,
+        keys_to_consider=form_data,
+    )
+    Risks = create_model("Risks", __base__=BaseModel, **fields)  # noqa: N806
+    return Risks(**kwargs)
