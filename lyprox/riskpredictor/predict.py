@@ -5,6 +5,7 @@ The code in this module is utilized by the `views.RiskPredictionView` of the
 """
 
 import logging
+import time
 from collections.abc import Container
 from typing import Annotated, Any, Literal, TypeVar
 
@@ -153,6 +154,8 @@ def compute_risks(
     fields like `ipsi_II` or `contra_III`. In these fields, it stores the risk in
     dictionaries returned by the `collect_risk_stats` function.
     """
+    start_time = time.perf_counter()
+
     model = checkpoint.construct_model()
     priors = checkpoint.compute_priors(t_stage=form_data["t_stage"])
     diagnosis = assemble_diagnosis(form_data=form_data, lnls=lnls)
@@ -172,4 +175,8 @@ def compute_risks(
         keys_to_consider=form_data,
     )
     Risks = create_model("Risks", __base__=BaseModel, **fields)  # noqa: N806
-    return Risks(**kwargs)
+    risks = Risks(**kwargs)
+
+    stop_time = time.perf_counter()
+    logger.info(f"Risk computation took {stop_time - start_time:.2f}s.")
+    return risks
