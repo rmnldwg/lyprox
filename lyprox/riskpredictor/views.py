@@ -86,18 +86,24 @@ def update_risk_prediction(request: HttpRequest, checkpoint_pk: int) -> JsonResp
     It then computes the risks and returns them in JSON format again to be handled
     by JavaScript on the client side.
     """
-    _data = json.loads(request.body.decode("utf-8"))
-    _checkpoint = CheckpointModel.objects.get(pk=checkpoint_pk)
-    form, risks = ...
-    risks["type"] = "risks"  # tells JavaScript how to write the labels
-    risks["total"] = 100.0  # necessary for JavaScript barplot updater
+    request_data = json.loads(request.body.decode("utf-8"))
+    checkpoint = CheckpointModel.objects.get(pk=checkpoint_pk)
+    form = RiskpredictorForm(request_data, checkpoint=checkpoint)
 
-    if form.is_valid():
-        logger.info("AJAX form valid, returning success and risks.")
-        return JsonResponse(data=risks)
+    if not form.is_valid():
+        logger.error("Riskpredictor from from AJAX request not valid.")
+        return JsonResponse({"error": "Form is not valid."})
 
-    logger.warning("AJAX form invalid.")
-    return JsonResponse(data={"error": "Something went wrong."}, status=400)
+    lnls = list(form.get_lnls())
+    risks = predict.compute_risks(
+        checkpoint=checkpoint,
+        form_data=form.cleaned_data,
+        lnls=lnls,
+    )
+    risks = risks.model_dump()
+    risks["total"] = 100.0
+    risks["type"] = "risk"
+    return JsonResponse(risks)
 
 
 def help_view(request) -> HttpResponse:
