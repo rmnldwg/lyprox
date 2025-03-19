@@ -307,7 +307,7 @@ function mapDataKey(strKey) {
     return true;
   } else if (strKey == "False") {
     return false;
-  } else if (strKey == "") {
+  } else if (strKey == "None") {
     return null;
   };
 
@@ -390,9 +390,13 @@ function populateFields(response) {
       if (showPercent == "True" && !isTotal) {
         $(this).html(percent(newValue).toFixed(0) + "%");
       } else {
-        $(this).html(newValue.toFixed(0));
+        if (newValue == 0) {
+          $(this).html("");
+        } else {
+          $(this).html(newValue.toFixed(0));
+        }
       };
-    } else if (key != "" || key != "") {
+    } else if (key !== null) {
       $(this).html(newValue.toFixed(0) + "%");
     } else {
       $(this).html("±" + newValue.toFixed(0) + "%");
