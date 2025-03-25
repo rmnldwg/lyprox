@@ -14,8 +14,8 @@
   <div class="container">
     <div class="columns is-centered">
       <div class="column is-8">
-        {% for inference_result in inference_results %}
-        {% include 'riskpredictor/inference_result_card.html' with ir=inference_result %}
+        {% for checkpoint in checkpoints %}
+        {% include 'riskpredictor/checkpoint_card.html' with checkpoint=checkpoint %}
         {% endfor %}
       </div>
     </div>

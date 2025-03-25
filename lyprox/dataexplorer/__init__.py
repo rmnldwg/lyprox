@@ -1,5 +1,4 @@
-"""
-The app that makes the data interactively explorable by the user.
+"""The app that makes the data interactively explorable by the user.
 
 What happens roughly in that order is that 1) at startup, Django loads the data
 explorer via the `apps` module, which 2) also triggers the loading of all available

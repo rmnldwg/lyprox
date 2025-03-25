@@ -1,259 +1,182 @@
-"""
-Module for functions to predict the risk of lymphatic progression.
+"""Module for functions to predict the risk of lymphatic progression.
 
 The code in this module is utilized by the `views.RiskPredictionView` of the
 `riskpredictor` app to compute the risk of lymphatic progression for a given diagnosis.
 """
+
 import logging
 import time
-from typing import Any, Dict, List, Optional, Union
+from collections.abc import Container
+from typing import Annotated, Any, Literal, TypeVar
 
 import numpy as np
-import pandas as pd
-from lymph import Bilateral, MidlineBilateral, Unilateral
-from lyscripts.utils import flatten
+from lydata.utils import ModalityConfig
+from lymph.models import HPVUnilateral, Midline, Unilateral
+from lymph.types import Model
+from lyscripts.configs import DiagnosisConfig, add_modalities
+from pydantic import AfterValidator, BaseModel, create_model
 
-from .models import InferenceResult
+from lyprox.dataexplorer.query import make_ensure_keys_validator
+from lyprox.riskpredictor.models import CheckpointModel
 
 logger = logging.getLogger(__name__)
 
 
-def create_patient(
-    diagnosis: Dict[str, Dict[str, Optional[bool]]],
-    t_stage: str,
-    is_bilateral: bool = False,
-    midline_extension: Optional[bool] = None,
-) -> pd.DataFrame:
-    """Create a patient dataframe from a specific diagnosis.
+NullableBoolPercents = Annotated[
+    dict[Literal[True, False, None], float],
+    AfterValidator(make_ensure_keys_validator([True, False, None])),
+]
+"""Keys may be ``True``, ``False``, or ``None``, while values are the counts of each."""
 
-    This is necessary, so that the ``lymph-model`` can be used to compute the
-    probability of the given diagnosis for any possible hidden state.
-    """
-    patient_row = {}
 
-    if is_bilateral:
-        patient_row["modality"] = diagnosis
-        patient_row["info"] = {"tumor": {"t_stage": t_stage}}
-        patient_row["info"]["tumor"]["midline_extension"] = midline_extension
+def compute_posteriors(
+    model: Model,
+    priors: np.ndarray,
+    diagnosis: DiagnosisConfig,
+    midext: bool | None = None,
+    specificity: float = 0.9,
+    sensitivity: float = 0.9,
+) -> np.ndarray:
+    """Compute the posterior state dists for the given model, priors, and diagnosis."""
+    modality_config = ModalityConfig(spec=specificity, sens=sensitivity)
+    model = add_modalities(model=model, modalities={"D": modality_config})
+    posteriors = []
+    midext_kwarg = {"midext": midext} if isinstance(model, Midline) else {}
+
+    if isinstance(model, Unilateral | HPVUnilateral):
+        diagnosis = diagnosis.ipsi
     else:
-        patient_row["modality"] = diagnosis["ipsi"]
-        patient_row["info"] = {"t_stage": t_stage}
+        diagnosis = diagnosis.model_dump()
 
-    patient_row = flatten(patient_row)
-    return pd.DataFrame(patient_row, index=[0])
+    for prior in priors:
+        posterior = model.posterior_state_dist(
+            given_state_dist=prior,
+            given_diagnosis=diagnosis,
+            **midext_kwarg,
+        )
+        posteriors.append(posterior)
+
+    return np.stack(posteriors)
 
 
-def compute_diagnose_probs(
-    inference_result: InferenceResult,
-    t_stage: str,
-    diagnosis: Dict[str, Dict[str, Optional[bool]]],
-    specificity: float,
-    sensitivity: float,
-    midline_extension: Optional[bool] = None,
-) -> Dict[str, np.ndarray]:
-    """Compute the probability of the selected diagnosis for any possible hidden state
-    and for both sides of the neck, if the model is a bilateral one.
+def assemble_diagnosis(
+    form_data: dict[str, Any],
+    lnls: list[str],
+    modality: str = "D",
+) -> DiagnosisConfig:
+    """Create a `DiagnosisConfig` object from the cleaned form data."""
+    diagnosis_dict = {}
 
-    In probabilistic terms, this is the probability P(D=d|X) of the diagnosis D=d given
-    any of the possible hidden states X. Consequently, this is a 1D array of length
-    2^V, where V is the number of LNLs in the model.
-    """
-    lymph_model = inference_result.get_lymph_model()
-    lymph_model.modalities = {"modality": [specificity, sensitivity]}
+    for side in ["ipsi", "contra"]:
+        diagnosis_dict[side] = {modality: {}}
+        for lnl in lnls:
+            if f"{side}_{lnl}" not in form_data:
+                continue
+            diagnosis_dict[side][modality][lnl] = form_data[f"{side}_{lnl}"]
 
-    patient = create_patient(
-        diagnosis, t_stage,
-        is_bilateral=inference_result.is_bilateral,
-        midline_extension=midline_extension,
-    )
-    lymph_model.patient_data = patient
+    return DiagnosisConfig(**diagnosis_dict)
 
-    if inference_result.is_midline:
-        model_selector = "ext" if midline_extension else "noext"
-        lymph_model = getattr(lymph_model, model_selector)
 
-    if inference_result.is_bilateral:
-        return {
-            "ipsi": lymph_model.ipsi.diagnose_matrices[t_stage],
-            "contra": lymph_model.contra.diagnose_matrices[t_stage],
+def collect_risk_stats(
+    risk_values: np.ndarray,
+) -> dict[Literal[True, None, False], float]:
+    """For an array of `risk_values`, collect the mean and std for each risk type.
+
+    The format is chosen like the `lyprox.dataexplorer.query.Statistics` object that
+    collects how many patients had `True`, `None`, or `False` involvement for a given
+    LNL. In this case, we construct the returned dictionary like this:
+
+    .. code-block:: python
+
+        {
+            True: 26.3,   # Risk of involvement minus half the standard deviation
+            None: 5.2,    # The standard deviation of the risk
+            False: 68.5,  # Remaining number to sum to 100
         }
 
-    return {"ipsi": lymph_model.diagnose_matrices[t_stage]}
-
-
-def compute_posterior_risks(
-    inference_result: InferenceResult,
-    diagnose_probs: Dict[str, np.ndarray],
-    risk_matrices: np.ndarray,
-) -> np.ndarray:
-    """Compute the posterior risks for any possible hidden state and for each of
-    the samples used to compute the prior risks.
-
-    In probabilistic terms, this is the probability P(X|D=d) of any of the possible
-    hidden state X given the diagnosis D=d. This is computed for each of the N samples.
-    Consequently, this is a 3D array of shape (N, 2^V, 2^V) in the bilateral case, or
-    (N, 2^V) in the unilateral case.
+    This format is compatible with the `lyprox.dataexplorer.query.Statistics` object
+    and thus also with the HTML templates used in the `dataexplorer` app.
     """
-    if inference_result.is_bilateral:
-        posterior_risk = np.einsum(
-            "i,nij,j->nij",
-            diagnose_probs["ipsi"].flatten(),
-            risk_matrices,
-            diagnose_probs["contra"].flatten(),
-        )
-        normalization = np.sum(posterior_risk, axis=(1, 2)).reshape(-1, 1, 1)
-    else:
-        posterior_risk = np.einsum(
-            "i,ni->ni",
-            diagnose_probs["ipsi"].flatten(),
-            risk_matrices,
-        )
-        normalization = np.sum(posterior_risk, axis=1).reshape(-1, 1)
-
-    return posterior_risk / normalization
+    risk_values = 100 * np.array(risk_values)
+    mean = np.mean(risk_values, axis=0)
+    std = np.std(risk_values, axis=0)
+    return {
+        True: mean - std / 2,
+        None: std,
+        False: 100 - (mean + std / 2),
+    }
 
 
-def create_marginalisation(
-    lymph_model: Union[Unilateral, Bilateral, MidlineBilateral],
-    pattern: Dict[str, Optional[bool]],
-) -> np.ndarray:
-    """Create a vector for marginalizing over hidden states that match the given
-    pattern.
-
-    If one wants to know the probability of e.g. LNL II involvement, one needs to
-    marginalize over all hidden states where LNL II is involved. This function creates
-    a vector that is 1 for all hidden states that match the given pattern and 0 for
-    all others.
-    """
-    if isinstance(lymph_model, MidlineBilateral):
-        lymph_model = lymph_model.ext
-
-    if isinstance(lymph_model, Bilateral):
-        lymph_model = lymph_model.ipsi
-
-    pattern = np.array([pattern.get(lnl.name, None) for lnl in lymph_model.lnls])
-
-    marginalisation = np.zeros(shape=len(lymph_model.state_list), dtype=bool)
-    for i, state in enumerate(lymph_model.state_list):
-        marginalisation[i] = np.all(np.equal(
-            pattern, state,
-            where=(pattern != None),
-            out=np.ones_like(pattern, dtype=bool),
-        ))
-
-    return marginalisation
-
-
-def compute_marginalised_risks(
-    inference_result: InferenceResult,
-    posterior_risks: np.ndarray,
-) -> Dict[str, np.ndarray]:
-    """Compute the marginalised risks of involvement of each LNL.
-
-    In probabilistic terms, this is the probability P(X=x|D=d), which is computed by
-    marginalizing over all hidden states that do match the given diagnosis (for wich
-    the posterior risk over all possible hidden states was already computed).
-    """
-    num_lnls = len(inference_result.lnls)
-    lymph_model = inference_result.get_lymph_model()
-    marginalisation = np.ones(shape=(num_lnls, 2**num_lnls), dtype=bool)
-
-    for i, lnl in enumerate(inference_result.lnls):
-        marginalisation[i] = create_marginalisation(
-            lymph_model,
-            pattern={lnl: True},
-        )
-
-    marginalised_risks = {}
-    if inference_result.is_bilateral:
-        post_risks_marg_over_contra = np.sum(posterior_risks, axis=2).T
-        post_risks_marg_over_ipsi = np.sum(posterior_risks, axis=1).T
-
-        marginalised_risks["ipsi"] = marginalisation @ post_risks_marg_over_contra
-        marginalised_risks["contra"] = marginalisation @ post_risks_marg_over_ipsi
-    else:
-        marginalised_risks["ipsi"] = marginalisation @ posterior_risks.T
-
-    return marginalised_risks
-
-
-def aggregate_results(
-    inference_result: InferenceResult,
-    marginalized_risks: Dict[str, np.ndarray],
-) -> Dict[str, List[float]]:
-    """Aggregate the results of the risk computation into a dictionary.
-
-    This is a helper function that is used to convert the numpy arrays that are
-    returned by the risk computation into a dictionary that can be used as context
-    for the `views.RiskPredictionView` view.
-
-    The returned dictionary has the following structure: For each side (ipsi or contra)
-    and each LNL, the dictionary contains a list of three values: The first value is
-    the error of the prediction, the second value is the risk of involvement (but minus
-    half the error), and the third value is the probability of being healthy (again
-    minus half the error).
-    """
-    result = {}
+def create_risks_fields_and_kwargs(
+    model: Model,
+    state_dists: np.ndarray,
+    lnls: list[str],
+    keys_to_consider: Container[str],
+) -> tuple[dict[str, tuple[type, ...]], dict[str, dict]]:
+    """Create the fields and kwargs for dynamically created pydantic `Risks` model."""
+    fields, kwargs = {}, {}
     for side in ["ipsi", "contra"]:
-        if side not in marginalized_risks:
-            continue
+        for lnl in lnls:
+            key = f"{side}_{lnl}"
+            if key not in keys_to_consider:
+                continue
 
-        for i, lnl in enumerate(inference_result.lnls):
-            risk_mean = 100 * np.mean(marginalized_risks[side][i])
-            risk_stddev = 100 * np.std(marginalized_risks[side][i])
-            result[f"{side}_{lnl}"] = [
-                risk_stddev,                         # error of the prediction
-                risk_mean - risk_stddev/2.,          # risk of involvement - half error
-                100. - (risk_mean - risk_stddev/2.), # prob of healthy - half error
-            ]
+            if isinstance(model, Unilateral | HPVUnilateral):
+                involvement = {lnl: True}
+            else:
+                involvement = {side: {lnl: True}}
 
-    return result
+            kwargs[key] = collect_risk_stats(
+                [
+                    model.marginalize(
+                        involvement=involvement,
+                        given_state_dist=dist,
+                    )
+                    for dist in state_dists
+                ]
+            )
+            fields[key] = (NullableBoolPercents, ...)
+
+    return fields, kwargs
 
 
-def risks(
-    inference_result: InferenceResult,
-    t_stage: str,
-    diagnosis: Dict[str, Dict[str, Optional[bool]]],
-    specificity: float,
-    sensitivity: float,
-    midline_extension: Optional[bool] = None,
-    **_kwargs,
-) -> Dict[str, Any]:
-    """Compute the marginalized risk of microscopic involvement in any of the modelled
-    LNLs for a given diagnosis.
+BaseModelT = TypeVar("BaseModelT", bound=BaseModel)
+
+
+def compute_risks(
+    checkpoint: CheckpointModel,
+    form_data: dict[str, Any],
+    lnls: list[str],
+) -> BaseModelT:
+    """Compute the risks for the given checkpoint and form data.
+
+    Returns an instance of a dynamically created pydantic `BaseModel` class that has
+    fields like `ipsi_II` or `contra_III`. In these fields, it stores the risk in
+    dictionaries returned by the `collect_risk_stats` function.
     """
     start_time = time.perf_counter()
 
-    diagnose_probs = compute_diagnose_probs(
-        inference_result,
-        t_stage,
-        diagnosis,
-        specificity,
-        sensitivity,
-        midline_extension,
+    model = checkpoint.construct_model()
+    priors = checkpoint.compute_priors(t_stage=form_data["t_stage"])
+    diagnosis = assemble_diagnosis(form_data=form_data, lnls=lnls)
+
+    posteriors = compute_posteriors(
+        model=model,
+        priors=priors,
+        diagnosis=diagnosis,
+        midext=form_data["midext"],
+        specificity=form_data["specificity"],
+        sensitivity=form_data["sensitivity"],
     )
-    risk_matrices = inference_result.load_risk_matrices(t_stage, midline_extension)
-
-    posterior_risks = compute_posterior_risks(
-        inference_result,
-        diagnose_probs,
-        risk_matrices,
+    fields, kwargs = create_risks_fields_and_kwargs(
+        model=model,
+        state_dists=posteriors,
+        lnls=lnls,
+        keys_to_consider=form_data,
     )
+    Risks = create_model("Risks", __base__=BaseModel, **fields)  # noqa: N806
+    risks = Risks(**kwargs)
 
-    marginalised_risks = compute_marginalised_risks(inference_result, posterior_risks)
-    result = aggregate_results(inference_result, marginalised_risks)
-
-    end_time = time.perf_counter()
-    logger.info(f"Time elapsed: {end_time - start_time:.2f} seconds")
-
-    return result
-
-
-def default_risks(inference_result: InferenceResult, **kwargs) -> Dict[str, Any]:
-    """Return default risks (everything unknown)."""
-    result = {}
-    for side in ["ipsi", "contra"]:
-        for lnl in inference_result.lnls:
-            result[f"{side}_{lnl}"] = [100, 0, 0]
-
-    return result
+    stop_time = time.perf_counter()
+    logger.info(f"Risk computation took {stop_time - start_time:.2f}s.")
+    return risks

@@ -1,5 +1,4 @@
-"""
-Main configurations. An explanation of all options can be found in the `Django docs`_.
+"""Main configurations. Explanations of all options can be found in the `Django docs`_.
 
 Generally, the most important settings - but also as few as possible - should be
 fetched from environment variables. This is good practice (see `12 Factor App`_) and
@@ -23,8 +22,10 @@ Only these environment vars should need to be changed:
 .. _Django docs: https://docs.djangoproject.com/en/4.2/ref/settings/
 .. _12 Factor App: https://12factor.net/config
 """
+
 import os
 from pathlib import Path
+from typing import Literal
 
 from django import urls
 from django.db import models
@@ -66,21 +67,24 @@ with the env var ``DJANGO_ALLOWED_HOSTS``.
 GITHUB_TOKEN = os.environ["GITHUB_TOKEN"]
 """
 Read-only GitHub access token for fetching information about
-`lyprox.riskpredictor.models.InferenceResult`.
+`lyprox.riskpredictor.models.CheckpointModel`.
 """
 GITHUB = Github(auth=Auth.Token(GITHUB_TOKEN))
 
 LNLS = ["I", "Ia", "Ib", "II", "IIa", "IIb", "III", "IV", "V", "Va", "Vb", "VII"]
 
+
 class TStages(models.IntegerChoices):
     """Tumor stages."""
+
     # TIS = -2, "TIS"
     # TX  = -1, "TX"
-    T0  =  0, "T0"
-    T1  =  1, "T1"
-    T2  =  2, "T2"
-    T3  =  3, "T3"
-    T4  =  4, "T4"
+    T0 = 0, "T0"
+    T1 = 1, "T1"
+    T2 = 2, "T2"
+    T3 = 3, "T3"
+    T4 = 4, "T4"
+
 
 CSRF_COOKIE_SECURE = not DEBUG
 CRSF_TRUSTED_ORIGINS = [f"https://{host}" for host in ALLOWED_HOSTS]
@@ -141,15 +145,17 @@ FROZEN_VERSIONS = [
     }
 ]
 
+LogLevelType = Literal["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"]
+
 
 # Logging
-def set_LOGGING(LOG_LEVEL):
-    """
-    Return logging settings in the form of a dictionary as function of the
-    log-level. This is used so that in a subdomain settings file the function
+def set_logging(log_level: LogLevelType) -> dict:
+    """Return logging settings for specified ``log_level``.
+
+    This is used so that in a subdomain settings file the function
     can be called again to overwrite the logging settings easily.
     """
-    LOGGING = {
+    return {
         "version": 1,
         "disanle_existing_loggers": False,
         "formatters": {
@@ -165,30 +171,29 @@ def set_LOGGING(LOG_LEVEL):
         },
         "root": {
             "handlers": ["console"],
-            "level": LOG_LEVEL,
+            "level": log_level,
         },
         "loggers": {
             "": {
-                "level": LOG_LEVEL,
+                "level": log_level,
                 "handlers": ["console"],
                 "propagate": False,
             },
             "django": {
-                "level": LOG_LEVEL,
+                "level": log_level,
                 "handlers": ["console"],
                 "propagate": False,
             },
             "lyprox": {
-                "level": LOG_LEVEL,
+                "level": log_level,
                 "handlers": ["console"],
                 "propagate": False,
             },
         },
     }
-    return LOGGING
 
 
-LOGGING = set_LOGGING(LOG_LEVEL)
+LOGGING = set_logging(LOG_LEVEL)
 
 
 # Application definition
@@ -266,7 +271,9 @@ DBBACKUP_STORAGE_OPTIONS = {"location": "/home/rmnldwg/backups/lyprox/"}
 # Password validation
 # https://docs.djangoproject.com/en/3.1/ref/settings/#auth-password-validators
 AUTH_PASSWORD_VALIDATORS = [
-    {"NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator"},  # noqa: E501
+    {
+        "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator"  # noqa: E501
+    },
     {"NAME": "django.contrib.auth.password_validation.MinimumLengthValidator"},
     {"NAME": "django.contrib.auth.password_validation.CommonPasswordValidator"},
     {"NAME": "django.contrib.auth.password_validation.NumericPasswordValidator"},
@@ -294,3 +301,5 @@ MEDIA_URL = "/media/"
 STATICFILES_DIRS = [BASE_DIR / "lyprox" / "static"]
 
 PUBLICATIONS_PATH = STATIC_ROOT / "publications" / "data.yaml"
+
+JOBLIB_CACHE_DIR = BASE_DIR / ".cache"

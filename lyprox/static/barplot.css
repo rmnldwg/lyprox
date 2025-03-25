@@ -6,16 +6,6 @@
     background-repeat:no-repeat;
 }
 
-.barplot-legend-left {
-    text-align: left;
-}
-.barplot-legend-center {
-    text-align: center;
-}
-.barplot-legend-right {
-    text-align: right;
-}
-
 .barplot-legend {
     width: 40px;
 }

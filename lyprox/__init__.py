@@ -1,5 +1,4 @@
-"""
-`LyProX`_ is a `Django`_ app to interactively explore patterns of lymphatic progression.
+"""`LyProX`_ is a `Django`_ app to interactively explore lymphatic progression patterns.
 
 This is the documentation for the `source code`_ of the `LyProX`_ web app. It is
 intended for developers who want to contribute to the project oder use the code for

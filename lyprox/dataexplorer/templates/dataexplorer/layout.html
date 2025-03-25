@@ -9,7 +9,7 @@
 {% endblock head %}
 
 {% block "css" %}
-<link rel="stylesheet" href="{% static 'dataexplorer/dashboard.css' %}">
+<link rel="stylesheet" href="{% static 'dashboard.css' %}">
 {% endblock %}
 
 {% block "js" %}
@@ -18,9 +18,9 @@
 
 {% block content %}
 <!--
-    The CSRF token is not necessary for the GET request by this form, but for the AJAX request.
-    Also, it is outside the form such that it doesn't get sent via the keyboard shortcut GET request.
-  -->
+  The CSRF token is not necessary for the GET request by this form, but for the AJAX request.
+  Also, it is outside the form such that it doesn't get sent via the keyboard shortcut GET request.
+-->
 {% csrf_token %}
 <form method="GET" action="{% url 'dataexplorer:dashboard' %}" id="dashboard-form" name="dashboardform">
   <section class="section">
@@ -55,43 +55,6 @@
         </div>
       </div>
     </div>
-
-    {% comment %} <div class="grid">
-      <div class="tile is-3 is-vertical is-parent">
-        <!-- Primary tumor -->
-        {% include 'dataexplorer/filter/tumor.html' with form=form %}
-      </div>
-
-      <div class="tile is-9 is-vertical">
-        <div class="tile">
-          <div class="tile is-parent">
-            <!-- Patient details -->
-            {% include 'dataexplorer/filter/patient.html' with form=form %}
-          </div>
-          <div class="tile is-parent">
-            <!-- Datasets -->
-            {% include 'dataexplorer/filter/datasets.html' with form=form %}
-          </div>
-        </div>
-        <div class="tile is-parent is-vertical">
-
-          <!-- Modalities -->
-          {% include 'dataexplorer/filter/modalities.html' with form=form %}
-        </div>
-
-        <!-- Involvement prevalence -->
-        <div class="tile">
-          <!-- contralateral -->
-          {% include 'dataexplorer/involvement.html' with form=form side='contra' %}
-
-          <!-- ipsilateral -->
-          {% include 'dataexplorer/involvement.html' with form=form side='ipsi' %}
-        </div>
-
-        <!-- Controls -->
-        {% include 'dataexplorer/controls.html' with form=form %}
-      </div>
-    </div> {% endcomment %}
   </section>
 </form>
 {% endblock %}

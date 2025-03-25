@@ -1,5 +1,4 @@
-"""
-Middlewares intercept and modify requests before handling them.
+"""Middlewares intercept and modify requests before handling them.
 
 That may be useful if one wants to redirect a user in specific situation. For example,
 if the website is in maintenance mode, the `MaintenanceMiddleware` will redirect all
@@ -18,10 +17,7 @@ logger = logging.getLogger(__name__)
 
 
 class MaintenanceMiddleware:
-    """
-    Redirect a visitor to the maintenance page if the ``MAINTENANCE`` is set
-    to ``True`` in the `settings`.
-    """
+    """Redirect maintenance page if the ``MAINTENANCE`` setting is ``True``."""
 
     def __init__(self, get_response) -> None:
         """Create the middleware."""
@@ -38,9 +34,7 @@ class MaintenanceMiddleware:
 
 
 class LoginRequiredMiddleware:
-    """
-    Redirect a visitor to the login page if the requested URL matches one of the
-    ``LOGIN_REQUIRED_URLS`` in the `lyprox.settings`.
+    """Redirect to login if requested URL matches one of the ``LOGIN_REQUIRED_URLS``.
 
     This code is adapted from `stackoverflow`_.
 
@@ -62,10 +56,7 @@ class LoginRequiredMiddleware:
         return self.get_response(request)
 
     def process_view(self, request, view_func, view_args, view_kwargs):
-        """
-        Redirect a visitor to the login page if the requested URL matches one of the
-        ``LOGIN_REQUIRED_URLS`` in the `lyprox.settings`.
-        """
+        """Redirect to login if URL is one of ``LOGIN_REQUIRED_URLS``."""
         if request.user.is_authenticated:
             return None
 

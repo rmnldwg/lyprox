@@ -1,0 +1,53 @@
+{% load static %}
+{% load sekizai_tags %}
+{% load customtags %}
+
+
+{% addtoblock "js" %}
+<script src="{% static 'riskpredictor/inference_result_card.js' %}"></script>
+{% endaddtoblock %}
+
+
+<div class="box">
+  <div class="level mb-0">
+    <div class="level-left">
+      <div class="level-item">
+        <div>
+          <a href="{{ checkpoint.repo_name }}" target="_blank" class="title is-4 is-family-code has-text-primary">
+            {{ checkpoint.ref }}
+          </a>
+
+          <div class="field mt-3 is-grouped is-grouped-multiline">
+            <div class="control">
+              <div class="tags has-addons">
+                <span class="tag is-primary is-light">samples</span>
+                <span class="tag is-warning is-light">{{ checkpoint.num_samples }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="level-right">
+      <div class="level-item buttons">
+        <a href="{% url 'riskpredictor:dashboard' checkpoint_pk=checkpoint.pk %}" class="button is-warning has-text-white">
+          <span class="icon">
+            <i class="fas fa-percentage"></i>
+          </span>
+          <span>risk</span>
+        </a>
+        <button class="button is-primary has-text-white" onClick="toggleCollapsible({{ checkpoint.pk }})">
+          <span class="icon">
+            <i class="fas fa-chevron-down"></i>
+          </span>
+          <span>info</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="block content is-hidden mt-3 is-size-6" id="collapsible-{{ checkpoint.pk }}">
+    {% render_md checkpoint.description %}
+  </div>
+</div>

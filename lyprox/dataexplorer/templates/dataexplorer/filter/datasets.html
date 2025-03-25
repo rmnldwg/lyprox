@@ -25,20 +25,16 @@
     </div>
   </div>
 
-  <div class="grid is-col-min-7">
+  <div class="field is-grouped is-grouped-multiline">
     {% for checkbox in form.datasets %}
-    <div class="cell">
-      <div class="field">
-        <div class="control">
-          {{ checkbox.tag }}
-          <label for="{{ checkbox.id_for_label }}" class="button is-medium is-size-6 is-link is-light is-fullwidth p-2">
-            <span class="icon is-large tag has-background-white p-1">
-              <img src="{{ checkbox.choice_label|get_logo }}" alt="institution logo">
-            </span>
-            <span>{{ checkbox.choice_label|get_subsite }}</span>
-          </label>
-        </div>
-      </div>
+    <div class="control">
+      {{ checkbox.tag }}
+      <label for="{{ checkbox.id_for_label }}" class="button is-medium is-size-6 is-link is-light pl-1">
+        <span class="icon is-large tag has-background-white p-1 mx-1">
+          <img src="{{ checkbox.choice_label|get_logo }}" alt="institution logo">
+        </span>
+        <span>{{ checkbox.choice_label|get_subsite }}</span>
+      </label>
     </div>
     {% endfor %}
   </div>

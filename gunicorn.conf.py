@@ -1,6 +1,4 @@
-"""
-gunicorn configuration settings.
-"""
+"""gunicorn configuration settings."""
 import multiprocessing
 import os
 
