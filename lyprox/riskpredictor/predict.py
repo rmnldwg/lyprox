@@ -1,7 +1,8 @@
 """Module for functions to predict the risk of lymphatic progression.
 
-The code in this module is utilized by the `views.RiskPredictionView` of the
-`riskpredictor` app to compute the risk of lymphatic progression for a given diagnosis.
+The code in this module is utilized by the `views.render_risk_prediction` and
+`views.render_risk_prediction` functions of the `riskpredictor` app to compute the
+risk of lymphatic progression for a given diagnosis.
 """
 
 import logging

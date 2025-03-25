@@ -77,6 +77,7 @@ project-name = "LyProX"
 add-package = ["lyprox"]
 intersphinx = [
     "https://lymph-model.readthedocs.io/latest/objects.inv",
+    "https://lyscripts.readthedocs.io/latest/objects.inv",
     "https://lydata.readthedocs.io/latest/objects.inv",
     "https://docs.pydantic.dev/latest/objects.inv",
     "https://pandas.pydata.org/docs/objects.inv",

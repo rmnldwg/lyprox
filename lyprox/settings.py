@@ -7,8 +7,8 @@ much security relevant stuff going on.
 
 The settings are written such that errors are thrown when the required environment vars
 are not present. This is by design, to ensure the host environment is configured for
-the application. It is recommended that you write an `.env` file at the root of the
-project (DON'T TRACK IT WITH GIT!) and source it (source .env) before running the
+the application. It is recommended that you write an ``.env`` file at the root of the
+project (DON'T TRACK IT WITH GIT!) and source it (``source .env``) before running the
 application.
 
 Only these environment vars should need to be changed:
