@@ -21,6 +21,9 @@ The most important modules in this package are:
 - the `riskpredictor` module, that allows computing the risk for occult disease,
   given an individual diagnosis as computed by a specified model.
 
+.. contents:: Beyond the documented code, you will also find the following information
+    in this documentation:
+
 .. _LyProX: https://lyprox.org
 .. _Django: https://djangoproject.com
 .. _source code: https://github.com/rmnldwg/lyprox
@@ -29,26 +32,36 @@ Maintenance
 ===========
 
 Beyond understanding and modifying the source code of the app, there is also general
-maintenance work to be done. Right now, the web app runs on a `Azure`_ virtual machine.
+maintenance work to be done. Right now, the web app runs on an `Azure`_ virtual machine.
 
 On this machine, the repository is cloned into the `/srv/www/lyprox.org` directory.
 A `systemd`_ service provides the `gunicorn`_ server that in turn provides the
 interface between the `Django`_ app and the `nginx`_ web server that handles any
 incoming requests.
 
-General Bash Commands
----------------------
+We have chosen `systemd`_ over e.g. docker, because in this simple instance where
+we don't need a separate database server or other services, it is easier to set up
+and maintain. Note however, that this limits the app to be deployed on virtual machines
+that actually have `systemd`_ installed.
+
+Bash Commands
+-------------
 
 Here, we give a list of useful commands to see what is going on and perform certain
-tasks on the server:
+tasks on the server.
 
-- ``sudo systemctl status lyprox.org.service``:
+Systemd Commands
+^^^^^^^^^^^^^^^^
+
+First, some commands related to the `systemd`_ services:
+
+- ``sudo systemctl status lyprox.org.service``
     Check the status of the `gunicorn`_ server. Ideally, it should show - in addition
     to some general info - the green text ``active (running)``.
-- ``sudo systemctl start lyprox.org.service``:
+- ``sudo systemctl start lyprox.org.service``
     Launch the `gunicorn`_ server. One can also use ``stop`` or ``restart`` to perform
     the corresponding action.
-- ``sudo journalctl -u lyprox.org.service -f``:
+- ``sudo journalctl -u lyprox.org.service -f``
     Shows a continuous stream of the latest log messages emitted by the app. Here,
     one will see the log messages written into the source code of the app.
 
@@ -56,11 +69,17 @@ Similarly, one can inspect the status and logs of the ``nginx.service`` that run
 interface between the `gunicorn`_ server and the outside world with the corresponding
 commands. Simply replace ``lyprox.org`` with ``nginx.service`` in the above commands.
 
-- ``uv sync``:
+Environment
+^^^^^^^^^^^
+
+Next, some commands related to the virtual Python environment and the environment
+variables that Django uses for certain settings and secrets:
+
+- ``uv sync``
     We use `uv`_ to manage virtual environments and with this command, one can
     synchronize the virtual environment with the `requirements.txt` file. For this to
     work, one needs to be inside the ``/srv/www/lyprox.org`` directory.
-- ``set -a; source .env; set +a``:
+- ``set -a; source .env; set +a``
     This command loads all the environment variables from the `.env` file into the
     current shell. It is strongly recommended to put the secret key as well as some
     config and passwords into the `.env` file and **not** directly in the `settings`.
@@ -72,61 +91,117 @@ commands. Simply replace ``lyprox.org`` with ``nginx.service`` in the above comm
 .. _nginx: https://nginx.org
 .. _uv: https://docs.astral.sh/uv/
 
-(Custom) Django Commands
-------------------------
+Django Commands
+---------------
+
+Built In
+^^^^^^^^
 
 Django itself also provides a number of commands that can be run from the command line.
 Note that the way we have configured everything, all commands are available under the
 ``lyprox`` CLI that is installed via the ``uv sync`` command (if the repo is the
 current working directory and the virtual environment is activated).
 
-- ``lyprox runserver``:
+- ``lyprox runserver``
     This starts a Python webserver that is only accessible from the local machine.
     This should **NOT** be used in production, but is useful for development, mostly
     on local machines.
-- ``lyprox collectstatic``:
+- ``lyprox collectstatic``
     This command collects all static files from the various apps and puts them into
     the directory that is exposed to the internet by the `nginx`_ server. This is
     necessary whenever static files are changed or added.
-- ``lyprox migrate``:
+- ``lyprox migrate``
     This command applies all migrations to the database. In a typical `Django`_ app
     migrations happen sometimes and this command ensures that changes to the database
     model are reflected in the database itself without loosing any data. However, we
     do not really care about loosing data since nothing is stored **only** in the
     `SQLite3`_ database. So, this command is mainly used to initialize the database.
-- ``lyprox shell``:
+- ``lyprox shell``
     This command starts a Python shell with the `Django`_ environment loaded. This is
     useful for testing code snippets or inspecting the database.
+
+Custom
+^^^^^^
 
 All these are provided by `Django`_ itself and are also
 `well documented <https://docs.djangoproject.com/en/4.2/ref/django-admin/>`_ in their
 docs. Now come a couple of commands that we implemented for ourselves. They are all
 about populating the database:
 
-- ``lyprox init_institutions --from-file initial/institutions.json``:
-    This command allows creating all the institutions that are defined in the
-    ``initial/institutions.json`` file. Institutions must be initialized first, because
-    both the users as well as the datasets must belong to an insitution.
-- ``lyprox init_users --from-file initial/users.json``:
-    This command allows creating all the users that are defined in the
+- ``lyprox add_institutions --from-file initial/institutions.json``
+    The `add_institutions` command allows creating all the institutions that are
+    defined in the ``initial/institutions.json`` file. Institutions must be initialized
+    first, because both the users as well as the datasets must belong to an insitution.
+- ``lyprox add_users --from-file initial/users.json``
+    The `add_users` command allows creating all the users that are defined in the
     ``initial/users.json`` file. Users must be initialized after the institutions,
     because they must belong to an institution. Note that the passwords are not stored
     in the JSON file, but in environment variables (i.e., in the ``.env`` file). The
     name of the environment variable is ``DJANGO_<EMAIL>_PASSWORD``, where ``<EMAIL>``
     is the part of the email address before the ``@`` symbol, with all dots removed.
-- ``lyprox init_datasets --from-file initial/datasets.json``:
-    With this command, fetching and loading CSV tables of patient records from the
-    `lyDATA`_ repo is initiated. The loaded `pandas`_ dataframes are cached using
-    `joblib`_ and thus the patient data never reaches the `SQLite3`_ database.
-- ``lyprox init_riskmodels --from-file initial/riskmodels.json``:
-    Lastly, this command loads a model definition from the config files that the
-    ``initial/riskmodels.json`` file points to. Then, it fetches the MCMC samples for
-    that model and precomputes posterior state distributions for a subset of the
-    samples. This is then used in the `riskpredictor` app to compute the personalized
-    risk on demand. Again, `joblib`_ is used to cache and speed up the results.
+- ``lyprox add_datasets --from-file initial/datasets.json``
+    With the `add_datasets` command, fetching and loading CSV tables of patient records
+    from the `lyDATA`_ repo is initiated. The loaded `pandas`_ dataframes are cached
+    using `joblib`_ and thus the patient data never reaches the `SQLite3`_ database.
+- ``lyprox add_riskmodels --from-file initial/riskmodels.json``
+    Lastly, the `add_riskmodels` command loads a model definition from the config files
+    that the ``initial/riskmodels.json`` file points to. Then, it fetches the MCMC
+    samples for that model and precomputes posterior state distributions for a subset
+    of the samples. This is then used in the `riskpredictor` app to compute the
+    personalized risk on demand. Again, `joblib`_ is used to cache and speed up the
+    results.
 
 .. _lyDATA: https://github.com/rmnldwg/lydata
 .. _pandas: https://pandas.pydata.org
 .. _joblib: https://joblib.readthedocs.io
 .. _SQLite3: https://sqlite.org
+
+Code Style
+==========
+
+To keep the code and documentation clean and readable, we follow a few conventions:
+
+- We use `ruff`_ to format the code. Which rules are selected and ignored is specified
+  in the ``pyproject.toml`` file at the root of the repository.
+- We use `pre-commit`_ to run `ruff`_ and other checks before every commit. This is
+  to ensure that the conventions around code style are followed. For this to work, one
+  needs to install `pre-commit`_ (e.g. by running ``uv add pre-commit`` or - better
+  yet - by installing it via `pipx`_) and subsequently install the following two hoks:
+
+    - ``pre-commit install``
+    - ``pre-commit install --hook-type commit-msg``
+
+- We are huge fans of type hints and use them wherever possible. It is not enforced,
+  because there may be cases where type hints are not possible or not useful. But in
+  general, we try to use them as much as possible.
+- Docstrings should be written in the following format (with ``"`` instead of ``'``):
+
+  .. code-block:: python
+
+      def my_function(arg1: int, arg2: str) -> float:
+          '''Briefly describe what the function does.
+
+          Then go on and describe it in detail. Make sure to mention what ``arg`` does
+          and also what the effect of ``arg2`` is.
+
+          We are not huge fans of e.g. Google style docstrings where every parameter
+          is separately listed and described. Rather, use descriptive names for the
+          arguments and describe them in the text. The main Python documentation
+          follows a similar style.
+          '''
+          print(arg2)
+          return 3.14 + arg1
+          ...
+- The documentation is auto-generated from the code using `pydoctor`_. Its output is
+  simple and clean, yet comprehensive. It basically lists all modules, classes, and
+  functions in the same hierarchy as they appear in the code base. If the docstrings
+  are written well, this can basically guide the reader through the code base.
+  Cross-refernces can simply be put in single backticks, e.g. ```my_symbol``` will
+  search the entire code-base (and even other docs, if linked) for this symbol and
+  add a link to it if found.
+
+.. _ruff: https://docs.astral.sh/ruff/
+.. _pre-commit: https://pre-commit.com/
+.. _pipx: https://pipx.pypa.io/latest/
+.. _pydoctor: https://pydoctor.readthedocs.io/en/latest/
 """
