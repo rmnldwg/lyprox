@@ -42,6 +42,7 @@ documentation = "https://rmnldwg.github.io/lyprox"
 [project.optional-dependencies]
 docs = [
     "pydoctor",
+    "myst-parser",
 ]
 test = [
     "pytest-django",

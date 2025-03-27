@@ -34,7 +34,7 @@ Maintenance
 Beyond understanding and modifying the source code of the app, there is also general
 maintenance work to be done. Right now, the web app runs on an `Azure`_ virtual machine.
 
-On this machine, the repository is cloned into the `/srv/www/lyprox.org` directory.
+On this machine, the repository is cloned into the ``/srv/www/lyprox.org`` directory.
 A `systemd`_ service provides the `gunicorn`_ server that in turn provides the
 interface between the `Django`_ app and the `nginx`_ web server that handles any
 incoming requests.
@@ -77,13 +77,13 @@ variables that Django uses for certain settings and secrets:
 
 - ``uv sync``
     We use `uv`_ to manage virtual environments and with this command, one can
-    synchronize the virtual environment with the `requirements.txt` file. For this to
+    synchronize the virtual environment with the ``requirements.txt`` file. For this to
     work, one needs to be inside the ``/srv/www/lyprox.org`` directory.
 - ``set -a; source .env; set +a``
-    This command loads all the environment variables from the `.env` file into the
+    This command loads all the environment variables from the ``.env`` file into the
     current shell. It is strongly recommended to put the secret key as well as some
-    config and passwords into the `.env` file and **not** directly in the `settings`.
-    Of course, **never** commit the `.env` file to source control.
+    config and passwords into the ``.env`` file and **not** directly in the `settings`.
+    Of course, **never** commit the ``.env`` file to source control.
 
 .. _Azure: https://portal.azure.com
 .. _systemd: https://systemd.io
@@ -156,52 +156,36 @@ about populating the database:
 .. _joblib: https://joblib.readthedocs.io
 .. _SQLite3: https://sqlite.org
 
+Conventions
+===========
+
+.. include:: CONTRIBUTING.md
+    :start-after: ## Style Conventions
+    :end-before: ### Code Style
+    :parser: myst
+
 Code Style
-==========
+----------
 
-To keep the code and documentation clean and readable, we follow a few conventions:
+.. include:: CONTRIBUTING.md
+    :start-after: ### Code Style
+    :end-before: ### Docstrings
+    :parser: myst
 
-- We use `ruff`_ to format the code. Which rules are selected and ignored is specified
-  in the ``pyproject.toml`` file at the root of the repository.
-- We use `pre-commit`_ to run `ruff`_ and other checks before every commit. This is
-  to ensure that the conventions around code style are followed. For this to work, one
-  needs to install `pre-commit`_ (e.g. by running ``uv add pre-commit`` or - better
-  yet - by installing it via `pipx`_) and subsequently install the following two hoks:
+Docstrings
+----------
 
-    - ``pre-commit install``
-    - ``pre-commit install --hook-type commit-msg``
+.. include:: CONTRIBUTING.md
+    :start-after: ### Docstrings
+    :end-before: ### Pre-Commit Hooks and Conventional Commits
+    :parser: myst
 
-- We are huge fans of type hints and use them wherever possible. It is not enforced,
-  because there may be cases where type hints are not possible or not useful. But in
-  general, we try to use them as much as possible.
-- Docstrings should be written in the following format (with ``"`` instead of ``'``):
+Pre-Commit Hooks and Conventional Commits
+-----------------------------------------
 
-  .. code-block:: python
+.. include:: CONTRIBUTING.md
+    :start-after: ### Pre-Commit Hooks and Conventional Commits
+    :end-before: ## Attribution
+    :parser: myst
 
-      def my_function(arg1: int, arg2: str) -> float:
-          '''Briefly describe what the function does.
-
-          Then go on and describe it in detail. Make sure to mention what ``arg`` does
-          and also what the effect of ``arg2`` is.
-
-          We are not huge fans of e.g. Google style docstrings where every parameter
-          is separately listed and described. Rather, use descriptive names for the
-          arguments and describe them in the text. The main Python documentation
-          follows a similar style.
-          '''
-          print(arg2)
-          return 3.14 + arg1
-          ...
-- The documentation is auto-generated from the code using `pydoctor`_. Its output is
-  simple and clean, yet comprehensive. It basically lists all modules, classes, and
-  functions in the same hierarchy as they appear in the code base. If the docstrings
-  are written well, this can basically guide the reader through the code base.
-  Cross-refernces can simply be put in single backticks, e.g. ```my_symbol``` will
-  search the entire code-base (and even other docs, if linked) for this symbol and
-  add a link to it if found.
-
-.. _ruff: https://docs.astral.sh/ruff/
-.. _pre-commit: https://pre-commit.com/
-.. _pipx: https://pipx.pypa.io/latest/
-.. _pydoctor: https://pydoctor.readthedocs.io/en/latest/
 """
