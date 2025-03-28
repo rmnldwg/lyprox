@@ -2,9 +2,7 @@
 
 Adds definitions of risk models to the database. As with the `add_datasets` command,
 this does not actually load and store the model samples in the database. Instead, those
-are fetched and computed on demand using `joblib`_.
-
-.. _joblib: https://joblib.readthedocs.io
+are fetched and computed on demand using `joblib`.
 
 The structure of the command is similar to the `add_institutions`, `add_users`, and
 `add_datasets` commands. The command can be called with a JSON file containing a list

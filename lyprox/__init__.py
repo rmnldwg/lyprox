@@ -142,25 +142,24 @@ about populating the database:
 - ``lyprox add_datasets --from-file initial/datasets.json``
     With the `add_datasets` command, fetching and loading CSV tables of patient records
     from the `lyDATA`_ repo is initiated. The loaded `pandas`_ dataframes are cached
-    using `joblib`_ and thus the patient data never reaches the `SQLite3`_ database.
+    using `joblib` and thus the patient data never reaches the `SQLite3`_ database.
 - ``lyprox add_riskmodels --from-file initial/riskmodels.json``
     Lastly, the `add_riskmodels` command loads a model definition from the config files
     that the ``initial/riskmodels.json`` file points to. Then, it fetches the MCMC
     samples for that model and precomputes posterior state distributions for a subset
     of the samples. This is then used in the `riskpredictor` app to compute the
-    personalized risk on demand. Again, `joblib`_ is used to cache and speed up the
+    personalized risk on demand. Again, `joblib` is used to cache and speed up the
     results.
 
 .. _lyDATA: https://github.com/rmnldwg/lydata
 .. _pandas: https://pandas.pydata.org
-.. _joblib: https://joblib.readthedocs.io
 .. _SQLite3: https://sqlite.org
 
 Conventions
 ===========
 
 .. include:: CONTRIBUTING.md
-    :start-after: ## Style Conventions
+    :start-after: ## Conventions
     :end-before: ### Code Style
     :parser: myst
 

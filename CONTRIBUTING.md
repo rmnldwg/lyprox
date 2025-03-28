@@ -107,13 +107,19 @@ Therefore, we write docstring that create documentations that look similar to ho
 def my_function(arg1: int, arg2: str) -> float:
     """Briefly describe what the function does.
 
-    Then go on and describe it in detail. Make sure to mention what `arg1` does
-    and also what the effect of `arg2` is.
+    Then go on and describe it in detail. Make sure to mention what ``arg1`` does
+    and also what the effect of ``arg2`` is.
 
-    We are not huge fans of, e.g., Google-style docstrings where every parameter
-    is separately listed and described. Instead, use descriptive names for the
-    arguments and describe them in the text. The main Python documentation
-    follows a similar style.
+    You can also link to other symbols using single backticks. E.g., if the main
+    Python docs are linked, then you could mention the `print` function and then
+    pydoctor would turn that into a link to this built-in function's docs.
+
+    We also really like doctests. First, they are tested. Second, they directly
+    showcase some examples:
+
+    >>> my_function(5, "hey")
+    hey
+    8.14
     """
     print(arg2)
     return 3.14 + arg1

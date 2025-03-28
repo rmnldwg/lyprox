@@ -85,20 +85,20 @@ export ENV_VARIABLE_NAME="variable-value"
 
 The variables that need to be set are:
 
-- `DJANGO_ENV`: can be `"debug"`, `"production"`, or `"maintenance"`. For running the interface locally, it should be set to `"debug"`.
-- `DJANGO_SECRET_KEY`: the app-wide secret for authentication and security functions. It can be generated using django's built-in functions. Enter a python REPL by typing `python` into the terminal and then execute these two commands:
+- `DJANGO_ENV`: Can be `"debug"`, `"production"`, or `"maintenance"`. For running the interface locally, it should be set to `"debug"`.
+- `DJANGO_LOG_LEVEL`: The log level only has an effect in `"debug"` mode. Is set to `"WARNING"` otherwise.
+- `DJANGO_SECRET_KEY`: This is the app-wide secret for authentication and security functions. It can be generated using django's built-in functions. Enter a python REPL by typing `python` into the terminal and then execute these two commands:
 
-    ```python
-    >>> from django.core.management.utils import get_random_secret_key
-    >>> print(get_random_secret_key())
-    ```
+  ```python
+  >>> from django.core.management.utils import get_random_secret_key
+  >>> print(get_random_secret_key())
+  ```
 
-    This will output something like `6-y$g=ek4x!f3kq+=c+f%5@(f1efpdl!(sp&so(bgdli_&_8+n`. Leave the REPL again with `CTRL` + `D`
+  This will output something like `6-y$g=ek4x!f3kq+=c+f%5@(f1efpdl!(sp&so(bgdli_&_8+n`. Note that this is *the* most sensitive variable for the security of the web app!
 
-- `DJANGO_ALLOWED_HOSTS`: space-separated list of hostnames. Set to `"localhost 127.0.0.1"` for local use
-- `DJANGO_LOG_LEVEL`: log level. Only has an effect in `"debug"` mode. Is set to `"WARNING"` otherwise
-- `DJANGO_BASE_PATH`: The base directory of the server. Typically the root of the repository.
-- `GITHUB_TOKEN`: A personal GitHub token for the API. This is used to access the [lyDATA] repo and fetch the datasets. Refer to the [GitHub documentation](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens) on how to create such a token.
+- `DJANGO_ALLOWED_HOSTS`: This is space-separated list of hostnames from which access is allowed. Set to `"localhost 127.0.0.1"` for local use. For deployment this should be changed to the domain name you are using.
+- `DJANGO_BASE_DIR`: The base directory of the server is ypically the root of the repository. From this directory, the web app infers the location of a couple of directories and paths it needs e.g. for loading and storing static files and media stuff. If this isn't set, one might end up with a situation where Django tries to set up everything relative to the ``site-packages`` folder inside the ``.venv``.
+- `GITHUB_TOKEN`: A personal secret for accessing GitHub's official API. This is used to access the [lyDATA] repo and fetch the datasets. Refer to the [GitHub documentation](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens) on how to create such a token.
 
 [12-factor app]: https://12factor.net/
 [lyDATA]: https://github.com/rmnldwg/lydata

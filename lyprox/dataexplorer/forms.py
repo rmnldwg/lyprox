@@ -302,9 +302,9 @@ class DataexplorerForm(FormLoggerMixin, forms.Form):
         based on the user's permissions. I.e., a logged-in user can see private
         datasets, while an anonymous user can only see public datasets.
 
-        Then, the defined `Subsites` as separate `MultipleChoiceField` fields are added
-        to the form. We do this dynamically via the `add_subsite_choice_fields` method,
-        because we want to render the subsites separately in the frontend.
+        Then, the defined `Subsites` as separate `EasySubsiteChoiceField` fields are
+        added to the form. We do this dynamically via the `add_subsite_choice_fields`
+        method, because we want to render the subsites separately in the frontend.
 
         Also, the LNL toggle buttons are added to the form dynamically, because it
         would be cumbersome to add them manually for each LNL and side.

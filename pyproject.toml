@@ -77,11 +77,13 @@ python_files = "test_*.py"
 project-name = "LyProX"
 add-package = ["lyprox"]
 intersphinx = [
-    "https://lymph-model.readthedocs.io/latest/objects.inv",
+    "https://lymph-model.readthedocs.io/stable/objects.inv",
     "https://lyscripts.readthedocs.io/latest/objects.inv",
     "https://lydata.readthedocs.io/latest/objects.inv",
     "https://docs.pydantic.dev/latest/objects.inv",
     "https://pandas.pydata.org/docs/objects.inv",
+    "http://docs.djangoproject.com/en/4.2/_objects",
+    "https://joblib.readthedocs.io/en/stable/objects.inv",
 ]
 docformat = "google"
 make-html = true
