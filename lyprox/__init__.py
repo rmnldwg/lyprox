@@ -4,14 +4,16 @@ Introduction
 ============
 
 This is the documentation for the `source code`_ of the `LyProX`_ web app. It is
-intended for developers who want to contribute to the project oder use the code for
+intended for developers who want to contribute to the project or use the code for
 their own purposes.
 
 We will try to write this documentation as self-contained as possible, because in
 our experience, the `Django`_ documentation is not always easy to navigate and learning
 by example is often more effective.
 
-The most important modules in this package are:
+The most important modules in this package are listed below. We recommend to start
+with their documentations for a deep dive into how the web app works and how it may
+be modified, enhanced, or extended.
 
 - the `settings`, where all the configuration of the website is defined. Most
   importantly, it documents all the environment variables that need to be set

@@ -214,8 +214,21 @@ T = TypeVar("T", bound="DataexplorerForm")
 class DataexplorerForm(FormLoggerMixin, forms.Form):
     """Form for querying the database.
 
-    The form's fields somewhat mirror the fields in the `Statistics` class in
-    the `query` module.
+    It is supposed to be called with the GET or POST data to be cleaned as the first
+    argument. The ``user`` argument is necessary to determine which datasets the user
+    may or may not have access to. If the user isn't logged in, the form will use the
+    `update_dataset_options` method to only show public datasets.
+
+    Via `add_subsite_choice_fields` and `add_lnl_toggle_buttons`, the form is
+    dynamically extended with the buttons and selection for subsites and LNLs. Beyond
+    that, all fields mirror the fields in the `Statistics` class in the `query` module
+    pretty closely.
+
+    The form class also has the classmethod `from_initial`, which creates a bound
+    form from the initial field data. This is useful as the form isn't used like a
+    typical Django form that is rendered empty and unbound, waiting for user input.
+    Instead, the form is always bound (either with the initial data or with the user's
+    input), validated, and only then rendered.
     """
 
     modalities = forms.MultipleChoiceField(
@@ -300,7 +313,8 @@ class DataexplorerForm(FormLoggerMixin, forms.Form):
 
         After calling the parent constructor, the selectable datasets are populated
         based on the user's permissions. I.e., a logged-in user can see private
-        datasets, while an anonymous user can only see public datasets.
+        datasets, while an anonymous user can only see public datasets. This is handled
+        by the `update_dataset_options` method.
 
         Then, the defined `Subsites` as separate `EasySubsiteChoiceField` fields are
         added to the form. We do this dynamically via the `add_subsite_choice_fields`
@@ -320,13 +334,13 @@ class DataexplorerForm(FormLoggerMixin, forms.Form):
         self.add_lnl_toggle_buttons()
 
     def update_dataset_options(self, user) -> None:
-        """Update the dataset choices based on the user's permissions."""
+        """Update the `DatasetModel` choices based on the ``user``'s permissions."""
         if user.is_authenticated:
             self.fields["datasets"].queryset = DatasetModel.objects.all()
             self.fields["datasets"].initial = DatasetModel.objects.all()
 
     def add_subsite_choice_fields(self):
-        """Add all subsite choice fields to the form."""
+        """Add all `Subsites` choice fields to the form."""
         for subsite, enum in Subsites.get_subsite_enums().items():
             self.fields[f"subsite_{subsite}"] = EasySubsiteChoiceField.from_enum(enum)
 
@@ -347,21 +361,43 @@ class DataexplorerForm(FormLoggerMixin, forms.Form):
 
     @classmethod
     def from_initial(cls: type[T], user) -> T:
-        """Return a bound form filled with the default values for each field."""
+        """Return a bound form filled with the default values for each field.
+
+        This uses the `form_from_initial` helper function to create the form with the
+        initial data. This helper function is also used at other places in the code
+        to create forms filled with initial data.
+        """
         return form_from_initial(cls, user=user)
 
     def get_subsite_fields(self) -> list[str]:
-        """Return the subsite checkboxes."""
+        """Return the names of the subsite checkboxes."""
         return [name for name in self.fields.keys() if name.startswith("subsite_")]
 
     @staticmethod
     def generate_icd_codes(cleaned_data: dict[str, Any]) -> Generator[str, None, None]:
-        """Generate all subsite ICD codes."""
+        """Generate all subsite ICD codes from the ``cleaned_data``.
+
+        In the ``cleaned_data`` up to this point, the ICD codes are still grouped by
+        `Subsites`. E.g., there would be a key ``subsite_larynx`` in the
+        ``cleaned_data`` with a list of selected ICD codes as value. This method
+        extracts and concatenates all these lists of selected ICD codes into a single
+        generator of selected ICD codes.
+        """
         for subsite in Subsites.get_subsite_enums().keys():
             yield from cleaned_data[f"subsite_{subsite}"]
 
     def check_lnl_conflicts(self, cleaned_data: dict[str, Any]) -> dict[str, Any]:
-        """Ensure that LNLs I, II, and V are not in conflict with their sublevels."""
+        """Ensure that LNLs I, II, and V are not in conflict with their sublevels.
+
+        This is already handled in the frontend using JavaScript, but it is technically
+        possible to e.g. provide a GET request with the URL parameters that would
+        still violate the sub- and superlevel constraints.
+
+        One example would be that the superlevel II is selected to be healthy, but
+        sublevel IIa is selected to be involved. That's a violation, because by
+        definition, superlevel II is involved as soon as one of the sublevels harbors
+        disease.
+        """
         for side in ["ipsi", "contra"]:
             for lnl in ["I", "II", "V"]:
                 a = cleaned_data[f"{side}_{lnl}a"]
@@ -382,6 +418,9 @@ class DataexplorerForm(FormLoggerMixin, forms.Form):
         ``t_stage`` list of values to integers, but more importantly, it also ensures
         that the sub- and superlevel involvement of the LNLs I, II, and V are not in
         conflict.
+
+        Further, it extracts a list of ICD codes from the subsite checkboxes via the
+        `generate_icd_codes` method.
         """
         cleaned_data = super().clean()
 

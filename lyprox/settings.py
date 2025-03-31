@@ -8,10 +8,10 @@ much security relevant stuff going on.
 The settings are written such that errors are thrown when the required environment vars
 are not present. This is by design, to ensure the host environment is configured for
 the application. It is recommended that you write an ``.env`` file at the root of the
-project (DON'T TRACK IT WITH GIT!) and source it (``source .env``) before running the
-application.
+project (DON'T TRACK IT WITH GIT!) and source it (``set -a; source .env``) before
+running the application.
 
-Only these environment vars should need to be changed:
+The minimally required environment variables that need to be set are:
 
 - ``DJANGO_ENV`` can be ``"debug"``, ``"maintenance"``, or ``"production"``.
 - ``DJANGO_SECRET_KEY`` determines the value of the app's `SECRET_KEY` and must contain
@@ -21,6 +21,10 @@ Only these environment vars should need to be changed:
 - ``DJANGO_LOG_LEVEL`` for Django's `LOG_LEVEL`. This only has an effect in debug mode.
 - ``DJANGO_BASE_DIR`` is the directory in which Django is based. Using `BASE_DIR`, this
   is used to determine the location of the database and static files.
+- ``GITHUB_TOKEN`` is the token for the GitHub API. This determines the value of the
+  corresponding `GITHUB_TOKEN` setting. See this variable's docstring for more details.
+  Note that if this is not set, it won't immediately throw an error, but the datasets
+  will likely fail to be loaded initially.
 
 .. _Django docs: https://docs.djangoproject.com/en/4.2/ref/settings/
 .. _12 Factor App: https://12factor.net/config
