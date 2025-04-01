@@ -6,13 +6,15 @@ main dashboard of LyProX.
 
 In the `views`, the `execute_query` function is called with the cleaned data from the
 `DataexplorerForm`. This `execute_query` function then creates a combined query using
-the fancy `Q` and `C` objects from `lydata`. These classes allow arbitrary combinations
-of deferred queries to be created and only later be executed.
+the fancy `lydata.accessor.C` objects from `lydata`_. These classes allow arbitrary
+combinations of deferred queries to be created and only later be executed.
 
 After executing the query, the filtered dataset is used to compute `Statistics` using
 the `from_table` classmethod. This `pydantic.BaseModel` has similar fields to the
 `DataexplorerForm` and is used to display the aggregated information of the filtered
 patient table in the dashboard.
+
+.. _lydata: https://lydata.readthedocs.io/stable/
 """
 
 import logging
@@ -82,12 +84,12 @@ def join_dataset_tables(
 ) -> pd.DataFrame:
     """Join the tables of the selected datasets into a single table.
 
-    This iterates through the datasets and loads their respective `DataFrame` tables.
-    It also adds a column `["dataset", "info", "name"]` to the table to keep track of
+    This iterates through the datasets and loads their respective `pd.DataFrame` tables.
+    It also adds a column ``["dataset", "info", "name"]`` to the table to keep track of
     which dataset a row belongs to. Finally, it concatenates all tables into a single
     table and returns it.
 
-    In case the `datasets` are empty, a likewise empty table is created with all the
+    In case the ``datasets`` are empty, a likewise empty table is created with all the
     columns necessary to create a `Statistics` object. These columns are in turn
     constructed from the schema of the `lydata.validator` module.
     """
@@ -106,31 +108,39 @@ def join_dataset_tables(
     return pd.concat(tables, ignore_index=True)
 
 
-def execute_query(cleaned_form: dict[str, Any]) -> pd.DataFrame:
+def execute_query(cleaned_form_data: dict[str, Any]) -> pd.DataFrame:
     """Execute the query defined by the `DataexplorerForm`.
 
     After validating a `DataexplorerForm` by calling ``form.is_valid()``, the cleaned
     data is accessible as the attribute ``form.cleaned_data``. The returned dictionary
-    should be passed to this function as the ``cleaned_form`` argument. Based on this
-    cleaned form data, the involvement data from different modalities is combined using
-    the `lydata` accessor method `lydata.LyDataAccessor.combine`. Then, a query is
-    created using the `lydata.C` objects and executed on the dataset. The resulting
+    should be passed to this function as the ``cleaned_form_data`` argument.
+
+    Based on
+    this cleaned form data, the involvement data from different modalities is combined
+    using the `lydata`_ accessor method `lydata.accessor.LyDataAccessor.combine`. Then,
+    a query is created using the `lydata.accessor.C` objects and executed on the
+    dataset using the `lydata.accessor.LyDataAccessor.query` method. The resulting
     filtered dataset is returned.
+
+    .. _lydata: https://lydata.readthedocs.io/stable/
     """
     start_time = time.perf_counter()
-    method = cleaned_form["modality_combine"]
-    joined_table = join_dataset_tables(datasets=cleaned_form["datasets"], method=method)
+    method = cleaned_form_data["modality_combine"]
+    joined_table = join_dataset_tables(
+        datasets=cleaned_form_data["datasets"],
+        method=method,
+    )
 
     if len(joined_table) == 0:
         return joined_table
 
     combined_inv_subtable = joined_table.ly.combine(
-        modalities=assemble_selected_modalities(names=cleaned_form["modalities"]),
+        modalities=assemble_selected_modalities(names=cleaned_form_data["modalities"]),
         method=method,
     )
     combined_inv_table = pd.concat({method: combined_inv_subtable}, axis="columns")
     combined_table = joined_table.join(combined_inv_table)
-    query = get_risk_factor_query(cleaned_form) & get_lnl_query(cleaned_form)
+    query = get_risk_factor_query(cleaned_form_data) & get_lnl_query(cleaned_form_data)
     queried_table = combined_table.ly.query(query)
     end_time = time.perf_counter()
 

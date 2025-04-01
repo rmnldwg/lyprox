@@ -27,7 +27,12 @@ class RangeInput(widgets.NumberInput):
 
 
 class CheckpointModelForm(loggers.FormLoggerMixin, forms.ModelForm):
-    """Form for creating a new `CheckpointModel` instance."""
+    """Form for creating a new `CheckpointModel` instance.
+
+    Its main purpose is to override the default `clean` method and extend it to check
+    for the validity of the provided paths to the config files. Aside from that it is
+    simply used like a normal `forms.ModelForm`.
+    """
 
     class Meta:
         """Meta class for the form."""
@@ -75,7 +80,15 @@ class CheckpointModelForm(loggers.FormLoggerMixin, forms.ModelForm):
         }
 
     def clean(self) -> dict[str, Any]:
-        """Check all the fields for validity."""
+        """Check whether the config file paths exist.
+
+        After performing the standard, built-in cleaning, this mainly checks if the
+        provided paths to the config files are valid. It does so by instantiating a
+        `DVCFileSystem`_ and then looking inside the repo file system for the specified
+        files.
+
+        .. _`DVCFileSystem`: https://dvc.org/doc/api-reference/dvcfilesystem
+        """
         cleaned_data = super().clean()
         repo_name = cleaned_data["repo_name"]
         repo_url = f"https://github.com/{repo_name}"
@@ -120,7 +133,18 @@ T = TypeVar("T", bound="RiskpredictorForm")
 
 
 class RiskpredictorForm(forms.Form):
-    """Form for the riskpredictor dashboard page."""
+    """Form for the riskpredictor dashboard page.
+
+    Via this form a user can enter a diagnosis and have the web app compute the
+    marginalized risk for every LNL covered by the model.
+
+    Conceptually, this form is similar to the `DataexplorerForm` in that it is always
+    bound either to initial data or to whatever the user entered in the dashboard.
+
+    Using this form's ``cleaned_data`` attribute, the `compute_risks` class ultimately
+    computes the posterior state distributions for the given diagnosis using the
+    defined model.
+    """
 
     specificity = forms.FloatField(
         min_value=0.5,

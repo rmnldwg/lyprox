@@ -42,15 +42,12 @@ def cached_load_dataframe(
 class DatasetModel(loggers.ModelLoggerMixin, models.Model):
     """Minimal model representing a dataset.
 
-    This is basically a Django representation of the
-    :py:class:`~lydata.loader.LyDataset` class.
+    This is basically a Django representation of the `LyDataset` class.
 
-    Its :py:meth:`~DatasetModel.load_dataframe` method makes use of the function
-    :py:func:`~cached_load_dataframe` to load the dataset into a pandas DataFrame.
-    Note that this function uses `joblib`_ to cache the results of the function call
+    Its `DatasetModel.load_dataframe` method makes use of the function
+    `cached_load_dataframe` to load the dataset into a pandas DataFrame.
+    Note that this function uses `joblib` to cache the results of the function call
     in a persistent location given by the ``JOBLIB_CACHE_DIR`` setting.
-
-    .. _joblib: https://joblib.readthedocs.io/en/stable/
     """
 
     year: int = models.IntegerField()
@@ -90,8 +87,8 @@ class DatasetModel(loggers.ModelLoggerMixin, models.Model):
     def get_kwargs(self) -> dict[str, int | str]:
         """Assemble ``kwargs`` from this model's field.
 
-        These will both be used to call the :py:func:`~cached_load_dataframe` function
-        as well as initialize a :py:class:`~lydata.loader.LyDataset` object.
+        These will both be used to call the `cached_load_dataframe` function as well
+        as initialize a `LyDataset` object.
         """
         return {
             "year": self.year,
@@ -102,14 +99,14 @@ class DatasetModel(loggers.ModelLoggerMixin, models.Model):
         }
 
     def get_lydataset(self) -> LyDataset:
-        """Create a :py:class:`~lydata.loader.LyDataset` from this model."""
+        """Create a `LyDataset` from this model."""
         return LyDataset(**self.get_kwargs())
 
     def load_dataframe(self) -> pd.DataFrame:
         """Load the underlying table.
 
-        This calls the :py:func:`~cached_load_dataframe` function with the assembled
-        ``kwargs`` and returns the resulting DataFrame.
+        This calls the `cached_load_dataframe` function with the assembled
+        ``kwargs`` and returns the resulting `pd.DataFrame`.
         """
         kwargs = self.get_kwargs()
         is_in_cache = cached_load_dataframe.check_call_in_cache(**kwargs)

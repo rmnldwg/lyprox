@@ -151,10 +151,20 @@ def cached_compute_priors(
 
 
 class CheckpointModel(loggers.ModelLoggerMixin, models.Model):
-    """Results of an inference run of the ``lymph-model`` package.
+    """Results of a round of parameter sampling for one of the `lymph.models`.
 
-    It fetches the HDF5 parameter samples from the DVC remote storage and uses them to
-    compute the prior risk matrices and caches them using joblib.
+    In this database model, one can specify where (i.e., in which remote repositories)
+    to look for YAML files that define a model via the `lyscripts.configs`. The
+    `validate_configs` method is used to validate these YAML configs.
+
+    It also allows to `fetch_samples` (which are typically not stored in the
+    repository, but are referenced by `DVC`_ to be found in a remote storage) and can
+    `precompute_priors` for all T-stages and a subset of the samples.
+
+    Much of what this class sets up and precomputes is cached using `joblib` for
+    faster computation of the actual risks later on.
+
+    .. _DVC: https://dvc.org/
     """
 
     repo_name = models.CharField(max_length=50, default="rmnldwg/lynference")
@@ -162,14 +172,14 @@ class CheckpointModel(loggers.ModelLoggerMixin, models.Model):
     ref = models.CharField(max_length=40, default="main")
     """Git reference of the trained model. E.g., a commit hash, tag, or branch name."""
     graph_config_path = models.CharField(max_length=100, default="graph.ly.yaml")
-    """Path to YAML file containing the graph configuration inside the git repo."""
+    """Path to YAML file containing the `GraphConfig` inside the git repo."""
     model_config_path = models.CharField(max_length=100, default="model.ly.yaml")
-    """Path to YAML file containing the model configuration inside the git repo."""
+    """Path to YAML file containing the `ModelConfig` inside the git repo."""
     dist_configs_path = models.CharField(
         max_length=100,
         default="distributions.ly.yaml",
     )
-    """Path to YAML file defining the distributions over diagnose times."""
+    """Path to YAML file defining a `DistributionConfig` for each T-stage."""
     samples_path = models.CharField(max_length=100, default="models/samples.hdf5")
     """Path to HDF5 file containing the parameter samples inside the git repo."""
     num_samples = models.PositiveIntegerField(default=100)
@@ -202,12 +212,15 @@ class CheckpointModel(loggers.ModelLoggerMixin, models.Model):
         )
 
     def validate_configs(self) -> ConfigAndVersionTupleType:
-        """Validate the pydantic configs necessary for constructing the model."""
+        """Validate the `pydantic`_ configs necessary for constructing the model.
+
+        .. _`pydantic`: https://docs.pydantic.dev/latest/
+        """
         merged_yaml = self.get_merged_yaml()
         return validate_configs(merged_yaml)
 
     def construct_model(self) -> Model:
-        """Create the lymph model instance from the validated configs."""
+        """Create one of the `lymph.models` as specified in the validated configs."""
         graph_config, model_config, dist_configs, version = self.validate_configs()
         return cached_construct_model_and_add_dists(
             graph_config=graph_config,
@@ -227,7 +240,11 @@ class CheckpointModel(loggers.ModelLoggerMixin, models.Model):
         return isinstance(self.construct_model(), Midline)
 
     def fetch_samples(self) -> np.ndarray:
-        """Fetch the model samples from the HDF5 file in the DVC repo."""
+        """Fetch the model samples from the `HDF5`_ file in the `DVC`_ repo.
+
+        .. _`HDF5`: https://www.hdfgroup.org/solutions/hdf5/
+        .. _`DVC`: https://dvc.org/
+        """
         return cached_fetch_model_samples(
             repo_name=self.repo_name,
             ref=self.ref,
@@ -244,7 +261,7 @@ class CheckpointModel(loggers.ModelLoggerMixin, models.Model):
         )
 
     def precompute_priors(self) -> None:
-        """Precompute the priors for all T-stages and cache them."""
+        """Precompute the priors for all T-stages and cache them using `joblib`."""
         for t_stage in self.construct_model().get_all_distributions():
             priors = self.compute_priors(t_stage=t_stage)
             self.logger.info(

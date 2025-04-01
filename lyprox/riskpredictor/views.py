@@ -82,9 +82,9 @@ def render_risk_prediction(request: HttpRequest, checkpoint_pk: int) -> HttpResp
 def update_risk_prediction(request: HttpRequest, checkpoint_pk: int) -> JsonResponse:
     """View for the AJAX request of the riskpredictor dashboard.
 
-    This view receives the same data as the `RiskPredictionView`, albeit in JSON format.
-    It then computes the risks and returns them in JSON format again to be handled
-    by JavaScript on the client side.
+    This view receives the same data as the `render_risk_prediction` function, but in
+    JSON format. It then computes the risks and returns them in JSON format again to be
+    handled by JavaScript on the client side.
     """
     request_data = json.loads(request.body.decode("utf-8"))
     checkpoint = CheckpointModel.objects.get(pk=checkpoint_pk)

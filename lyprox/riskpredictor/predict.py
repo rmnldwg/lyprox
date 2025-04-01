@@ -1,7 +1,8 @@
 """Module for functions to predict the risk of lymphatic progression.
 
-The code in this module is utilized by the `views.RiskPredictionView` of the
-`riskpredictor` app to compute the risk of lymphatic progression for a given diagnosis.
+The code in this module is utilized by the `views.render_risk_prediction` and
+`views.render_risk_prediction` functions of the `riskpredictor` app to compute the
+risk of lymphatic progression for a given diagnosis.
 """
 
 import logging
@@ -80,11 +81,11 @@ def assemble_diagnosis(
 def collect_risk_stats(
     risk_values: np.ndarray,
 ) -> dict[Literal[True, None, False], float]:
-    """For an array of `risk_values`, collect the mean and std for each risk type.
+    """For an array of ``risk_values``, collect the mean and std for each risk type.
 
     The format is chosen like the `lyprox.dataexplorer.query.Statistics` object that
-    collects how many patients had `True`, `None`, or `False` involvement for a given
-    LNL. In this case, we construct the returned dictionary like this:
+    collects how many patients had ``True``, ``None``, or ``False`` involvement for a
+    given LNL. In this case, we construct the returned dictionary like this:
 
     .. code-block:: python
 
@@ -113,7 +114,7 @@ def create_risks_fields_and_kwargs(
     lnls: list[str],
     keys_to_consider: Container[str],
 ) -> tuple[dict[str, tuple[type, ...]], dict[str, dict]]:
-    """Create the fields and kwargs for dynamically created pydantic `Risks` model."""
+    """Create the fields and kwargs for dynamically created pydantic ``Risks`` model."""
     fields, kwargs = {}, {}
     for side in ["ipsi", "contra"]:
         for lnl in lnls:
@@ -151,7 +152,7 @@ def compute_risks(
     """Compute the risks for the given checkpoint and form data.
 
     Returns an instance of a dynamically created pydantic `BaseModel` class that has
-    fields like `ipsi_II` or `contra_III`. In these fields, it stores the risk in
+    fields like ``ipsi_II`` or ``contra_III``. In these fields, it stores the risk in
     dictionaries returned by the `collect_risk_stats` function.
     """
     start_time = time.perf_counter()

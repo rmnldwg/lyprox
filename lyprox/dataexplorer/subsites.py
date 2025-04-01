@@ -19,6 +19,7 @@ class Subsites:
 
     This container class for all the subsite ICD enums provides the convenience of
     accessing all subsites in a single place. One may use it as follows:
+
     >>> Subsites.Tongue.C02_0.label
     'Dorsal surface of tongue'
     >>> Subsites.Gum.choices   # doctest: +NORMALIZE_WHITESPACE

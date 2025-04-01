@@ -1,4 +1,64 @@
-"""Command to add risk prediction models to database."""
+"""Command to add risk prediction models to database.
+
+Adds definitions of risk models to the database. As with the `add_datasets` command,
+this does not actually load and store the model samples in the database. Instead, those
+are fetched and computed on demand using `joblib`.
+
+The structure of the command is similar to the `add_institutions`, `add_users`, and
+`add_datasets` commands. The command can be called with a JSON file containing a list
+of risk model configurations or with command line arguments to create a single risk
+model. The output of ``lyprox add_riskmodels --help`` is:
+
+.. code-block:: text
+
+    usage: lyprox add_riskmodels [-h] (--from-file FROM_FILE | --from-stdin)
+                                 [--repo-name REPO_NAME] [--ref REF]
+                                 [--graph-config-path GRAPH_CONFIG_PATH]
+                                 [--model-config-path MODEL_CONFIG_PATH]
+                                 [--dist-configs-path DIST_CONFIGS_PATH]
+                                 [--samples-path SAMPLES_PATH]
+                                 [--num-samples NUM_SAMPLES] [--version]
+                                 [-v {0,1,2,3}] [--settings SETTINGS]
+                                 [--pythonpath PYTHONPATH] [--traceback]
+                                 [--no-color] [--force-color] [--skip-checks]
+
+    Command to add risk prediction models to database.
+
+    options:
+      -h, --help            show this help message and exit
+      --from-file FROM_FILE
+                            Path to JSON file with list of risk models.
+      --from-stdin          Use command line arguments to create a single risk
+                            model.
+      --repo-name REPO_NAME
+                            Name of git repository.
+      --ref REF             Reference of git repository.
+      --graph-config-path GRAPH_CONFIG_PATH
+                            Path to YAML graph config in git repository.
+      --model-config-path MODEL_CONFIG_PATH
+                            Path to YAML model config in git repository.
+      --dist-configs-path DIST_CONFIGS_PATH
+                            Path to YAML distribution configs in git repository.
+      --samples-path SAMPLES_PATH
+                            Path to YAML params in git repository.
+      --num-samples NUM_SAMPLES
+                            Number of samples used.
+      --version             Show program's version number and exit.
+      -v {0,1,2,3}, --verbosity {0,1,2,3}
+                            Verbosity level; 0=minimal output, 1=normal output,
+                            2=verbose output, 3=very verbose output
+      --settings SETTINGS   The Python path to a settings module, e.g.
+                            "myproject.settings.main". If this isn't provided, the
+                            DJANGO_SETTINGS_MODULE environment variable will be
+                            used.
+      --pythonpath PYTHONPATH
+                            A directory to add to the Python path, e.g.
+                            "/home/djangoprojects/myproject".
+      --traceback           Raise on CommandError exceptions.
+      --no-color            Don't colorize the command output.
+      --force-color         Force colorization of the command output.
+      --skip-checks         Skip system checks.
+"""
 
 import json
 from pathlib import Path

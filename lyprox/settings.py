@@ -7,17 +7,24 @@ much security relevant stuff going on.
 
 The settings are written such that errors are thrown when the required environment vars
 are not present. This is by design, to ensure the host environment is configured for
-the application. It is recommended that you write an `.env` file at the root of the
-project (DON'T TRACK IT WITH GIT!) and source it (source .env) before running the
-application.
+the application. It is recommended that you write an ``.env`` file at the root of the
+project (DON'T TRACK IT WITH GIT!) and source it (``set -a; source .env``) before
+running the application.
 
-Only these environment vars should need to be changed:
+The minimally required environment variables that need to be set are:
 
 - ``DJANGO_ENV`` can be ``"debug"``, ``"maintenance"``, or ``"production"``.
-- ``DJANGO_SECRET_KEY`` must contain the secret key for Django's security stuff.
+- ``DJANGO_SECRET_KEY`` determines the value of the app's `SECRET_KEY` and must contain
+  the secret key for Django's security stuff.
 - ``DJANGO_ALLOWED_HOSTS`` needs to contain the allowed host names separated by spaces.
-- ``DJANGO_LOG_LEVEL`` for the log level. This only has an effect in debug mode.
-- ``DJANGO_BASE_DIR`` is the directory in which Django is based.
+  It will be stored in the `ALLOWED_HOSTS` setting.
+- ``DJANGO_LOG_LEVEL`` for Django's `LOG_LEVEL`. This only has an effect in debug mode.
+- ``DJANGO_BASE_DIR`` is the directory in which Django is based. Using `BASE_DIR`, this
+  is used to determine the location of the database and static files.
+- ``GITHUB_TOKEN`` is the token for the GitHub API. This determines the value of the
+  corresponding `GITHUB_TOKEN` setting. See this variable's docstring for more details.
+  Note that if this is not set, it won't immediately throw an error, but the datasets
+  will likely fail to be loaded initially.
 
 .. _Django docs: https://docs.djangoproject.com/en/4.2/ref/settings/
 .. _12 Factor App: https://12factor.net/config
@@ -43,31 +50,48 @@ be set to ``"maintenance"`` for this to work. Also see `lyprox.views.maintenance
 """
 
 PRODUCTION = os.environ["DJANGO_ENV"] == "production"
-"""Set ``DJANGO_ENV`` to ``"production"`` to disable `DEBUG` and `MAINTENANCE` modes."""
+"""The environment mode.
+
+.. include:: run-local.md
+    :start-after: `DJANGO_ENV`:
+    :end-before: - `DJANGO_LOG_LEVEL`
+    :parser: myst
+"""
 
 LOG_LEVEL = os.environ["DJANGO_LOG_LEVEL"] if DEBUG else "WARNING"
-"""
-Set the threshold for logging event when in `DEBUG` mode. During ``"maintenance"``
-and ``"production"`` this is fixed to ``"WARNING"``. Set via the environment variable
-``DJANGO_LOG_LEVEL``.
+"""Minimum level of emitted log messages.
+
+.. include:: run-local.md
+    :start-after: `DJANGO_LOG_LEVEL`:
+    :end-before: - `DJANGO_SECRET_KEY`
+    :parser: myst
 """
 
 SECRET_KEY = os.environ["DJANGO_SECRET_KEY"]
-"""
-Secret key for cryptographic functions. This is the most sensitive information about
-the application. It is set via the environment variable ``DJANGO_SECRET_KEY``.
+"""Secret key for cryptography read from the environment variable ``DJANGO_SECRET_KEY``.
+
+.. include:: run-local.md
+    :start-after: `DJANGO_SECRET_KEY`:
+    :end-before: - `DJANGO_ALLOWED_HOSTS`
+    :parser: myst
 """
 
 ALLOWED_HOSTS = os.environ["DJANGO_ALLOWED_HOSTS"].split(" ")
-"""
-Space-separated list of hostnames for which django will accept requests. Can be set
-with the env var ``DJANGO_ALLOWED_HOSTS``.
+"""From which hosts the application is allowed to be accessed.
+
+.. include:: run-local.md
+    :start-after: `DJANGO_ALLOWED_HOSTS`:
+    :end-before: - `DJANGO_BASE_DIR`
+    :parser: myst
 """
 
 GITHUB_TOKEN = os.environ["GITHUB_TOKEN"]
-"""
-Read-only GitHub access token for fetching information about
-`lyprox.riskpredictor.models.CheckpointModel`.
+"""Authentication token for GitHub API.
+
+.. include:: run-local.md
+    :start-after: `GITHUB_TOKEN`:
+    :end-before: ## Running the interface
+    :parser: myst
 """
 GITHUB = Github(auth=Auth.Token(GITHUB_TOKEN))
 
@@ -96,9 +120,12 @@ SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(os.environ["DJANGO_BASE_DIR"])
-"""
-Setting the base dir manually is necessary, because otherwise everything might be
-set up relative to venv's site-packages.
+"""Path to the base directory of the project.
+
+.. include:: run-local.md
+    :start-after: `DJANGO_BASE_DIR`:
+    :end-before: - `GITHUB_TOKEN`
+    :parser: myst
 """
 
 LOGIN_URL = urls.reverse_lazy("accounts:login")
