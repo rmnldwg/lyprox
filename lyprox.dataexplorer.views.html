@@ -7,7 +7,7 @@
   <head>
     
     <title>lyprox.dataexplorer.views</title>
-    <meta name="generator" content="pydoctor 22.9.1"> 
+    <meta name="generator" content="pydoctor 24.11.2"> 
         
     </meta>
     <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
@@ -15,6 +15,7 @@
     <link rel="stylesheet" type="text/css" href="bootstrap.min.css" />
     <link rel="stylesheet" type="text/css" href="apidocs.css" />
     <link rel="stylesheet" type="text/css" href="extra.css" />
+    
 </head>
 
   <body>
@@ -52,7 +53,7 @@
             
             <span class="input-group-btn">
               <a style="display: none;" class="btn btn-default" id="search-clear-button" title="Clear" onclick="clearSearch()"><img src="fonts/x-circle.svg" alt="Clear" /></a>
-              <a class="btn btn-default" id="search-help-button" title="Help" onclick="toggleSearchHelpText()"><img src="fonts/info.svg" alt="Help" /></a>
+              <a class="btn btn-default" id="apidocs-help-button" title="Help" href="apidocs-help.html"><img src="fonts/info.svg" alt="Help" /></a>
             </span>
           </div>
         </div>
@@ -76,39 +77,6 @@
             <h1>Cannot search: JavaScript is not supported/enabled in your browser.</h1>
         </noscript>
 
-        <div class="hint" id="search-help-box">
-          <p class="rst-last">
-      
-            Search bar offers the following options:
-            <ul>   
-                <li>
-                  <strong>Term presence.</strong> The below example searches for documents that 
-                    must contain “foo”, might contain “bar” and must not contain “baz”: <code>+foo bar -baz</code>
-                </li> 
-
-                <li>
-                  <strong>Wildcards.</strong> The below example searches for documents with words beginning with “foo”: <code>foo*</code>
-                </li> 
-
-                <li>
-                  <strong>Search in specific fields.</strong> The following search matches all objects 
-                  in "twisted.mail" that matches “search”: <code>+qname:twisted.mail.* +search</code>
-
-                  <p>
-                    Possible fields: 'name', 'qname' (fully qualified name), 'docstring', and 'kind'.
-                    Last two fields are only applicable if "search in docstrings" is enabled.
-                  </p>
-                </li>
-
-                <li>
-                  <strong>Fuzzy matches.</strong> The following search matches all documents 
-                  that have a word within 1 edit distance of “foo”: <code>foo~1</code>
-                </li>
-            </ul>
-
-          </p>
-        </div>
-
         <div id="search-status"> </div>
 
         <div class="warning" id="search-warn-box" style="display: none;">
@@ -119,8 +87,8 @@
           <!-- Filled dynamically by JS -->
         </table>
         
-        <div style="margin-top: 8px;">
-          <p>Results provided by <a href="https://lunrjs.com">Lunr.js</a></p>
+        <div style="margin-top: 10px;">
+          <p>For more information on the search, visit the <a href="apidocs-help.html#rst-search">help page</a>.</p>
         </div>
       </div>
 
@@ -151,36 +119,13 @@
         
          
 
-        <div class="childrenKindTitle">Classes</div>
-        <ul>
-    
-    <li class="">
         
         
-        
-
-        
-            <div class="itemName"><code><a href="lyprox.dataexplorer.views.DashboardView.html" class="internal-link" title="lyprox.dataexplorer.views.DashboardView"><wbr></wbr>Dashboard<wbr></wbr>View</a></code>
-            </div>
-        
-
-    </li>
-</ul>
 
         <div class="childrenKindTitle">Functions</div>
         <ul>
     
     <li class="">
-        
-        
-        
-
-        
-            <div class="itemName"><code><a href="#dashboard_AJAX_view" class="internal-link" title="lyprox.dataexplorer.views.dashboard_AJAX_view">dashboard_<wbr></wbr>AJAX_view</a></code>
-            </div>
-        
-
-    </li><li class="">
         
         
         
@@ -196,7 +141,17 @@
         
 
         
-            <div class="itemName"><code><a href="#transform_np_to_lists" class="internal-link" title="lyprox.dataexplorer.views.transform_np_to_lists">transform<wbr></wbr>_np<wbr></wbr>_to<wbr></wbr>_lists</a></code>
+            <div class="itemName"><code><a href="#render_data_stats" class="internal-link" title="lyprox.dataexplorer.views.render_data_stats">render<wbr></wbr>_data<wbr></wbr>_stats</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="#update_data_stats" class="internal-link" title="lyprox.dataexplorer.views.update_data_stats">update<wbr></wbr>_data<wbr></wbr>_stats</a></code>
             </div>
         
 
@@ -245,6 +200,26 @@
         
 
         
+            <div class="itemName"><code><a href="lyprox.dataexplorer.admin.html" class="internal-link" title="lyprox.dataexplorer.admin">admin</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="lyprox.dataexplorer.apps.html" class="internal-link" title="lyprox.dataexplorer.apps">apps</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
             <div class="itemName"><code><a href="lyprox.dataexplorer.forms.html" class="internal-link" title="lyprox.dataexplorer.forms">forms</a></code>
             </div>
         
@@ -255,7 +230,47 @@
         
 
         
+            <div class="itemName"><code><a href="lyprox.dataexplorer.management.html" class="internal-link" title="lyprox.dataexplorer.management">management</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="lyprox.dataexplorer.migrations.html" class="internal-link" title="lyprox.dataexplorer.migrations">migrations</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="lyprox.dataexplorer.models.html" class="internal-link" title="lyprox.dataexplorer.models">models</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
             <div class="itemName"><code><a href="lyprox.dataexplorer.query.html" class="internal-link" title="lyprox.dataexplorer.query">query</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="lyprox.dataexplorer.subsites.html" class="internal-link" title="lyprox.dataexplorer.subsites">subsites</a></code>
             </div>
         
 
@@ -332,29 +347,37 @@
         </div>
 
         <div class="moduleDocstring">
-          <div><p>The <code><a href="lyprox.dataexplorer.views.html" class="internal-link" title="lyprox.dataexplorer.views">views</a></code> module in the <code><a href="lyprox.dataexplorer.html" class="internal-link" title="lyprox.dataexplorer">dataexplorer</a></code> app mostly handles the
-<code><a href="lyprox.dataexplorer.views.DashboardView.html" class="internal-link" title="lyprox.dataexplorer.views.DashboardView">DashboardView</a></code>, which takes care of initializing the complex
-<code><a href="lyprox.dataexplorer.forms.DashboardForm.html" class="internal-link" title="lyprox.dataexplorer.forms.DashboardForm">forms.DashboardForm</a></code>, passing the cleaned values to all the filtering
-functions in the <code><a href="lyprox.dataexplorer.query.html" class="internal-link" title="lyprox.dataexplorer.query">query</a></code> module to finally pass the queried information to
-the context variable that is rendered into the HTML response.</p>
+          <div><p>Orchestrate the logic of the dashboard.</p>
+<p>The views in this module are being called when the user sends a request to the server.
+Which view is called for which URL is defined in the <code><a href="lyprox.dataexplorer.urls.html" class="internal-link" title="lyprox.dataexplorer.urls">urls</a></code> module. The views process
+the data in the request and return a response. In between, the views delegate the
+creation of the <code><a href="lyprox.dataexplorer.forms.DataexplorerForm.html" class="internal-link" title="lyprox.dataexplorer.forms.DataexplorerForm">DataexplorerForm</a></code>, its validation and cleaning, then <code><a href="lyprox.dataexplorer.query.html#execute_query" class="internal-link" title="lyprox.dataexplorer.query.execute_query">execute_query</a></code>
+and compute the <code><a href="lyprox.dataexplorer.query.html#Statistics" class="internal-link" title="lyprox.dataexplorer.query.Statistics">Statistics</a></code> from the filtered dataset.</p>
+<p>The way this typically plays out in detail is the following: The user navigates to the
+URL <tt class="rst-docutils rst-literal"><span class="pre">https://lyprox.org/dataexplorer/</span></tt> and the <code><a href="#render_data_stats" class="internal-link" title="lyprox.dataexplorer.views.render_data_stats">render_data_stats</a></code> is called. This
+view creates an instance of <code><a href="lyprox.dataexplorer.forms.DataexplorerForm.html#from_initial" class="internal-link" title="lyprox.dataexplorer.forms.DataexplorerForm.from_initial">DataexplorerForm.from_initial</a></code> with the default values and
+renders the dashboard HTML layout. The template that is used for this is defined in
+<tt class="rst-docutils rst-literal">./lyprox/dataexplorer/templates/dataexplorer/layout.html</tt>. The user can then
+interact with the dashboard and change the values of the form fields. Upon clicking the
+"Compute" button, an <a class="rst-external rst-reference" href="https://en.wikipedia.org/wiki/Ajax_(programming)" target="_top">AJAX</a> request is sent with the updated form data. In the
+<code><a href="#update_data_stats" class="internal-link" title="lyprox.dataexplorer.views.update_data_stats">update_data_stats</a></code>, another <code><a href="lyprox.dataexplorer.forms.DataexplorerForm.html" class="internal-link" title="lyprox.dataexplorer.forms.DataexplorerForm">DataexplorerForm</a></code> instance is created, this time with
+the updated queries from the user. The form is validated and cleaned (using
+<tt class="rst-docutils rst-literal">form.is_valid()</tt>) and the cleaned data (<tt class="rst-docutils rst-literal">form.cleaned_data</tt>) is passed to the
+<code><a href="lyprox.dataexplorer.query.html#execute_query" class="internal-link" title="lyprox.dataexplorer.query.execute_query">execute_query</a></code> function. This function queries the dataset and returns the patients
+that match the query.</p>
+<p>From the returned queried patients, the <code><a href="lyprox.dataexplorer.query.html#Statistics" class="internal-link" title="lyprox.dataexplorer.query.Statistics">Statistics</a></code> class is used to compute the
+statistics, which are then returned as JSON data to the frontend. The frontend then
+updates the dashboard with the new statistics without reloading the entire page.</p>
+<p>Read more about how views work in Django, what responses they return and how to use
+the context they may provide in the <a class="rst-external rst-reference" href="https://docs.djangoproject.com/en/4.2/topics/http/views/" target="_top">Django documentation</a>.</p>
 </div>
         </div>
 
         <div id="splitTables">
-          <table class="children sortable" id="id40">
+          <table class="children sortable" id="id61">
   
   
-  <tr class="class">
-    
-    <td>Class</td>
-    <td><code><a href="lyprox.dataexplorer.views.DashboardView.html" class="internal-link" title="lyprox.dataexplorer.views.DashboardView"><wbr></wbr>Dashboard<wbr></wbr>View</a></code></td>
-    <td>Use the <code><a href="lyprox.dataexplorer.forms.DashboardForm.html" class="internal-link" title="lyprox.dataexplorer.forms.DashboardForm">forms.DashboardForm</a></code> and the <code><a href="lyprox.patients.models.Patient.html" class="internal-link" title="lyprox.patients.models.Patient">patients.models.Patient</a></code> model along with the <code><a href="lyprox.dataexplorer.query.html" class="internal-link" title="lyprox.dataexplorer.query">query</a></code> functions to extract the requested information from the database and render it into the HTML response displaying the lymphatic patterns of progression.</td>
-  </tr><tr class="function">
-    
-    <td>Function</td>
-    <td><code><a href="#dashboard_AJAX_view" class="internal-link" title="lyprox.dataexplorer.views.dashboard_AJAX_view">dashboard_<wbr></wbr>AJAX_view</a></code></td>
-    <td>View that receives JSON data from the AJAX request and cleans it using the same method as the class-based <tt class="rst-docutils literal">DashboardView</tt>.</td>
-  </tr><tr class="function">
+  <tr class="function">
     
     <td>Function</td>
     <td><code><a href="#help_view" class="internal-link" title="lyprox.dataexplorer.views.help_view">help<wbr></wbr>_view</a></code></td>
@@ -362,8 +385,13 @@ the context variable that is rendered into the HTML response.</p>
   </tr><tr class="function">
     
     <td>Function</td>
-    <td><code><a href="#transform_np_to_lists" class="internal-link" title="lyprox.dataexplorer.views.transform_np_to_lists">transform<wbr></wbr>_np<wbr></wbr>_to<wbr></wbr>_lists</a></code></td>
-    <td>If <tt class="rst-docutils literal">stats</tt> contains any values that are of type <tt class="rst-docutils literal">np.ndarray</tt>, then they are converted to normal lists.</td>
+    <td><code><a href="#render_data_stats" class="internal-link" title="lyprox.dataexplorer.views.render_data_stats">render<wbr></wbr>_data<wbr></wbr>_stats</a></code></td>
+    <td>Return the dashboard view when the user first accesses the dashboard.</td>
+  </tr><tr class="function">
+    
+    <td>Function</td>
+    <td><code><a href="#update_data_stats" class="internal-link" title="lyprox.dataexplorer.views.update_data_stats">update<wbr></wbr>_data<wbr></wbr>_stats</a></code></td>
+    <td>AJAX view to update the dashboard statistics without reloading the page.</td>
   </tr><tr class="variable">
     
     <td>Variable</td>
@@ -380,31 +408,6 @@ the context variable that is rendered into the HTML response.</p>
           <div class="basefunction">
   
   
-  <a name="lyprox.dataexplorer.views.dashboard_AJAX_view">
-    
-  </a>
-  <a name="dashboard_AJAX_view">
-    
-  </a>
-  <div class="functionHeader">
-    
-    <span class="py-keyword">def</span> <span class="py-defname">dashboard_AJAX_view</span>(request):
-    
-    <a class="headerLink" href="#dashboard_AJAX_view" title="lyprox.dataexplorer.views.dashboard_AJAX_view">
-      
-      
-      ¶
-    </a>
-  </div>
-  <div class="docstring functionBody">
-    
-    <div><p>View that receives JSON data from the AJAX request and cleans it using the
-same method as the class-based <tt class="rst-docutils literal">DashboardView</tt>.</p>
-</div>
-  </div>
-</div><div class="basefunction">
-  
-  
   <a name="lyprox.dataexplorer.views.help_view">
     
   </a>
@@ -413,7 +416,8 @@ same method as the class-based <tt class="rst-docutils literal">DashboardView</t
   </a>
   <div class="functionHeader">
     
-    <span class="py-keyword">def</span> <span class="py-defname">help_view</span>(request):
+    
+    <span class="py-keyword">def</span> <span class="py-defname">help_view</span><span class="function-signature">(request) -&gt; <code>HttpResponse</code></span>:
     
     <a class="headerLink" href="#help_view" title="lyprox.dataexplorer.views.help_view">
       
@@ -423,23 +427,23 @@ same method as the class-based <tt class="rst-docutils literal">DashboardView</t
   </div>
   <div class="docstring functionBody">
     
-    <div><p>Simply display the dashboard help text.</p>
-<table class="fieldTable"><tr class="fieldStart"><td class="fieldName" colspan="2">Returns</td></tr><tr><td class="fieldArgContainer"><code>HttpResponse</code></td><td class="fieldArgDesc"><span class="undocumented">Undocumented</span></td></tr></table></div>
+    <div><p>Simply display the dashboard help text.</p></div>
   </div>
 </div><div class="basefunction">
   
   
-  <a name="lyprox.dataexplorer.views.transform_np_to_lists">
+  <a name="lyprox.dataexplorer.views.render_data_stats">
     
   </a>
-  <a name="transform_np_to_lists">
+  <a name="render_data_stats">
     
   </a>
   <div class="functionHeader">
     
-    <span class="py-keyword">def</span> <span class="py-defname">transform_np_to_lists</span>(stats):
     
-    <a class="headerLink" href="#transform_np_to_lists" title="lyprox.dataexplorer.views.transform_np_to_lists">
+    <span class="py-keyword">def</span> <span class="py-defname">render_data_stats</span><span class="function-signature">(request: <code><a href="http://docs.djangoproject.com/en/4.2/ref/request-response/#django.http.HttpRequest" class="intersphinx-link">HttpRequest</a></code>) -&gt; <code>HttpResponse</code></span>:
+    
+    <a class="headerLink" href="#render_data_stats" title="lyprox.dataexplorer.views.render_data_stats">
       
       
       ¶
@@ -447,9 +451,48 @@ same method as the class-based <tt class="rst-docutils literal">DashboardView</t
   </div>
   <div class="docstring functionBody">
     
-    <div><p>If <tt class="rst-docutils literal">stats</tt> contains any values that are of type <tt class="rst-docutils literal">np.ndarray</tt>, then they are
-converted to normal lists.</p>
-<table class="fieldTable"><tr class="fieldStart"><td class="fieldName" colspan="2">Parameters</td></tr><tr><td class="fieldArgContainer"><span class="fieldArg">stats:</span><code>Dict[<wbr></wbr>str, <wbr></wbr>Any]</code></td><td class="fieldArgDesc"><span class="undocumented">Undocumented</span></td></tr><tr class="fieldStart"><td class="fieldName" colspan="2">Returns</td></tr><tr><td class="fieldArgContainer"><code>Dict[<wbr></wbr>str, <wbr></wbr>Any]</code></td><td class="fieldArgDesc"><span class="undocumented">Undocumented</span></td></tr></table></div>
+    <div><p>Return the dashboard view when the user first accesses the dashboard.</p>
+<p>This view handles GET requests, which typically only occur when the user first
+navigates to the dashboard. But it is also possible to query the dashboard with
+URL parameters (e.g. <tt class="rst-docutils rst-literal"><span class="pre">https://lyprox.org/dataexplorer/?t_stage=1&amp;t_stage=2...</span></tt>).</p>
+<p>The view creates a <code><a href="lyprox.dataexplorer.forms.DataexplorerForm.html" class="internal-link" title="lyprox.dataexplorer.forms.DataexplorerForm">DataexplorerForm</a></code> instance with the data from a GET request or
+with the default initial values. It then calls <code><a href="lyprox.dataexplorer.query.html#execute_query" class="internal-link" title="lyprox.dataexplorer.query.execute_query">execute_query</a></code> with
+<tt class="rst-docutils rst-literal">form.cleaned_data</tt> and returns the <code><a href="lyprox.dataexplorer.query.html#Statistics" class="internal-link" title="lyprox.dataexplorer.query.Statistics">Statistics</a></code> <tt class="rst-docutils rst-literal">from_dataset()</tt> using the
+queried dataset to the frontend.</p>
+</div>
+  </div>
+</div><div class="basefunction">
+  
+  
+  <a name="lyprox.dataexplorer.views.update_data_stats">
+    
+  </a>
+  <a name="update_data_stats">
+    
+  </a>
+  <div class="functionHeader">
+    
+    
+    <span class="py-keyword">def</span> <span class="py-defname">update_data_stats</span><span class="function-signature">(request: <code><a href="http://docs.djangoproject.com/en/4.2/ref/request-response/#django.http.HttpRequest" class="intersphinx-link">HttpRequest</a></code>) -&gt; <code>JsonResponse</code></span>:
+    
+    <a class="headerLink" href="#update_data_stats" title="lyprox.dataexplorer.views.update_data_stats">
+      
+      
+      ¶
+    </a>
+  </div>
+  <div class="docstring functionBody">
+    
+    <div><p>AJAX view to update the dashboard statistics without reloading the page.</p>
+<p>This view is conceptually similar to the <code><a href="#render_data_stats" class="internal-link" title="lyprox.dataexplorer.views.render_data_stats">render_data_stats</a></code>, but instead of
+rendering the entire HTML page, it returns only a JSON response with the updated
+statistics which are then handled by some JavaScript on the frontend.</p>
+<p>It also doesn't receive a GET request, but a POST request with the
+<code><a href="lyprox.dataexplorer.forms.DataexplorerForm.html" class="internal-link" title="lyprox.dataexplorer.forms.DataexplorerForm">DataexplorerForm</a></code> fields as JSON data. The form is validated and cleaned as always
+(using <tt class="rst-docutils rst-literal">form.is_valid()</tt>).</p>
+<p>Some resources to learn more about AJAX requests in Django can be found
+<a class="rst-external rst-reference" href="https://realpython.com/django-and-ajax-form-submissions/" target="_top">in this article</a>.</p>
+</div>
   </div>
 </div><div class="basevariable">
   
@@ -484,10 +527,10 @@ converted to normal lists.</p>
     <footer class="navbar navbar-default">
 
   
-  <div class="container">
+  <div class="container-fluid">
     <a href="index.html">API Documentation</a> for LyProX,
   generated by <a href="https://github.com/twisted/pydoctor/">pydoctor</a>
-    22.9.1 at 2024-10-09 13:21:38.
+    24.11.2 at 2025-04-01 13:02:24.
   </div>
 
   <!-- Search related scripts needs to be loaded at the end of HTML 

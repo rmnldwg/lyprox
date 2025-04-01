@@ -1,0 +1,916 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+          "DTD/xhtml1-strict.dtd">
+<html>
+  
+
+  <head>
+    
+    <title>lyprox.dataexplorer.query.BaseStatistics</title>
+    <meta name="generator" content="pydoctor 24.11.2"> 
+        
+    </meta>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1 maximum-scale=1" />
+    <link rel="stylesheet" type="text/css" href="bootstrap.min.css" />
+    <link rel="stylesheet" type="text/css" href="apidocs.css" />
+    <link rel="stylesheet" type="text/css" href="extra.css" />
+    
+</head>
+
+  <body>
+
+    
+
+    <nav class="navbar navbar-default mainnavbar">
+      
+  
+  <div class="container-fluid">
+
+
+    <div class="navbar-header">
+      
+      <div class="navlinks">
+        <span class="navbar-brand">
+          LyProX <a href="index.html">API Documentation</a>
+        </span>
+
+        <a href="moduleIndex.html">
+          Modules
+        </a>
+
+        <a href="classIndex.html">
+          Classes
+        </a>
+
+        <a href="nameIndex.html">
+          Names
+        </a>
+
+        <div id="search-box-container">
+          <div class="input-group">
+            <input id="search-box" type="search" name="search-query" placeholder="Search..." aria-label="Search" minlength="2" class="form-control" autocomplete="off" />
+            
+            <span class="input-group-btn">
+              <a style="display: none;" class="btn btn-default" id="search-clear-button" title="Clear" onclick="clearSearch()"><img src="fonts/x-circle.svg" alt="Clear" /></a>
+              <a class="btn btn-default" id="apidocs-help-button" title="Help" href="apidocs-help.html"><img src="fonts/info.svg" alt="Help" /></a>
+            </span>
+          </div>
+        </div>
+
+      </div>
+
+      <div id="search-results-container" style="display: none;">
+        
+        <div id="search-buttons">
+          <span class="label label-default" id="search-docstrings-button">
+          <label class="checkbox-inline">
+            <input type="checkbox" id="toggle-search-in-docstrings-checkbox" value="false" onclick="toggleSearchInDocstrings()">
+              search in docstrings
+            </input>
+          </label>
+          </span>
+          
+        </div>
+        
+        <noscript>
+            <h1>Cannot search: JavaScript is not supported/enabled in your browser.</h1>
+        </noscript>
+
+        <div id="search-status"> </div>
+
+        <div class="warning" id="search-warn-box" style="display: none;">
+          <p class="rst-last"><span id="search-warn"></span></p>
+        </div>
+
+        <table id="search-results">
+          <!-- Filled dynamically by JS -->
+        </table>
+        
+        <div style="margin-top: 10px;">
+          <p>For more information on the search, visit the <a href="apidocs-help.html#rst-search">help page</a>.</p>
+        </div>
+      </div>
+
+    </div>
+
+
+  </div>
+</nav>
+    
+    <div class="container-fluid">
+
+      <!-- Side navigation -->
+      <div class="sidebarcontainer" style="display: none;">
+        
+        <div class="sidebar"><nav class="sidebar">
+  
+
+  <div>
+
+      <div class="thingTitle">
+        <span>Class</span>
+        <code class="thisobject"><a href="lyprox.dataexplorer.query.BaseStatistics.html" class="internal-link" title="This class"><wbr></wbr>Base<wbr></wbr>Statistics</a></code> 
+      </div>
+      
+      <div>
+        
+
+        
+         
+
+        
+        
+
+        <div class="childrenKindTitle">Methods</div>
+        <ul>
+    
+    <li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="#from_table" class="internal-link" title="lyprox.dataexplorer.query.BaseStatistics.from_table">from<wbr></wbr>_table</a></code>
+            </div>
+        
+
+    </li>
+</ul> 
+
+        
+         
+
+        <div class="childrenKindTitle">Attributes</div>
+        <ul>
+    
+    <li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="#central" class="internal-link" title="lyprox.dataexplorer.query.BaseStatistics.central">central</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="#datasets" class="internal-link" title="lyprox.dataexplorer.query.BaseStatistics.datasets">datasets</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="#hpv" class="internal-link" title="lyprox.dataexplorer.query.BaseStatistics.hpv">hpv</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="#is_n_plus" class="internal-link" title="lyprox.dataexplorer.query.BaseStatistics.is_n_plus">is<wbr></wbr>_n<wbr></wbr>_plus</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="#midext" class="internal-link" title="lyprox.dataexplorer.query.BaseStatistics.midext">midext</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="#sex" class="internal-link" title="lyprox.dataexplorer.query.BaseStatistics.sex">sex</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="#smoke" class="internal-link" title="lyprox.dataexplorer.query.BaseStatistics.smoke">smoke</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="#subsite" class="internal-link" title="lyprox.dataexplorer.query.BaseStatistics.subsite">subsite</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="#surgery" class="internal-link" title="lyprox.dataexplorer.query.BaseStatistics.surgery">surgery</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="#t_stage" class="internal-link" title="lyprox.dataexplorer.query.BaseStatistics.t_stage">t<wbr></wbr>_stage</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="#total" class="internal-link" title="lyprox.dataexplorer.query.BaseStatistics.total">total</a></code>
+            </div>
+        
+
+    </li>
+</ul> 
+
+        
+         
+        
+      </div>
+  </div><div>
+
+      <div class="thingTitle">
+        <span>Module</span>
+        <code><a href="lyprox.dataexplorer.query.html" class="internal-link" title="The parent of this class">query</a></code> 
+      </div>
+      
+      <div>
+        
+
+        
+         
+
+        <div class="childrenKindTitle">Classes</div>
+        <ul>
+    
+    <li class=" thisobject">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="lyprox.dataexplorer.query.BaseStatistics.html" class="internal-link" title="lyprox.dataexplorer.query.BaseStatistics"><wbr></wbr>Base<wbr></wbr>Statistics</a></code>
+            </div>
+        
+
+    </li>
+</ul>
+
+        <div class="childrenKindTitle">Functions</div>
+        <ul>
+    
+    <li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="lyprox.dataexplorer.query.html#assemble_selected_modalities" class="internal-link" title="lyprox.dataexplorer.query.assemble_selected_modalities">assemble<wbr></wbr>_selected<wbr></wbr>_modalities</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="lyprox.dataexplorer.query.html#execute_query" class="internal-link" title="lyprox.dataexplorer.query.execute_query">execute<wbr></wbr>_query</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="lyprox.dataexplorer.query.html#get_lnl_query" class="internal-link" title="lyprox.dataexplorer.query.get_lnl_query">get<wbr></wbr>_lnl<wbr></wbr>_query</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="lyprox.dataexplorer.query.html#get_risk_factor_query" class="internal-link" title="lyprox.dataexplorer.query.get_risk_factor_query">get<wbr></wbr>_risk<wbr></wbr>_factor<wbr></wbr>_query</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="lyprox.dataexplorer.query.html#join_dataset_tables" class="internal-link" title="lyprox.dataexplorer.query.join_dataset_tables">join<wbr></wbr>_dataset<wbr></wbr>_tables</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="lyprox.dataexplorer.query.html#make_ensure_keys_validator" class="internal-link" title="lyprox.dataexplorer.query.make_ensure_keys_validator">make<wbr></wbr>_ensure<wbr></wbr>_keys<wbr></wbr>_validator</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="lyprox.dataexplorer.query.html#safe_value_counts" class="internal-link" title="lyprox.dataexplorer.query.safe_value_counts">safe<wbr></wbr>_value<wbr></wbr>_counts</a></code>
+            </div>
+        
+
+    </li>
+</ul> 
+
+        
+         
+
+        <div class="childrenKindTitle">Variables</div>
+        <ul>
+    
+    <li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="lyprox.dataexplorer.query.html#KT" class="internal-link" title="lyprox.dataexplorer.query.KT">KT</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="lyprox.dataexplorer.query.html#T" class="internal-link" title="lyprox.dataexplorer.query.T">T</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="lyprox.dataexplorer.query.html#EnsureKeysSignature" class="internal-link" title="lyprox.dataexplorer.query.EnsureKeysSignature"><wbr></wbr>Ensure<wbr></wbr>Keys<wbr></wbr>Signature</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="lyprox.dataexplorer.query.html#lnl_fields" class="internal-link" title="lyprox.dataexplorer.query.lnl_fields">lnl<wbr></wbr>_fields</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="lyprox.dataexplorer.query.html#logger" class="internal-link" title="lyprox.dataexplorer.query.logger">logger</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="lyprox.dataexplorer.query.html#NullableBoolCounts" class="internal-link" title="lyprox.dataexplorer.query.NullableBoolCounts"><wbr></wbr>Nullable<wbr></wbr>Bool<wbr></wbr>Counts</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="lyprox.dataexplorer.query.html#SexCounts" class="internal-link" title="lyprox.dataexplorer.query.SexCounts"><wbr></wbr>Sex<wbr></wbr>Counts</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="lyprox.dataexplorer.query.html#Statistics" class="internal-link" title="lyprox.dataexplorer.query.Statistics"><wbr></wbr>Statistics</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="lyprox.dataexplorer.query.html#SubsiteCounts" class="internal-link" title="lyprox.dataexplorer.query.SubsiteCounts"><wbr></wbr>Subsite<wbr></wbr>Counts</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="lyprox.dataexplorer.query.html#TStageCounts" class="internal-link" title="lyprox.dataexplorer.query.TStageCounts"><wbr></wbr>TStage<wbr></wbr>Counts</a></code>
+            </div>
+        
+
+    </li>
+</ul> 
+
+        
+         
+        
+      </div>
+  </div>
+
+</nav>
+        </div>
+        <div id="collapseSideBar">
+          <a class="btn btn-link" onclick="toggleSideBarCollapse()" title="Toggle Sidebar Collapse">
+          </a>
+        </div> 
+        <script src="sidebartoggle.js" type="text/javascript"></script>
+       
+      </div>
+
+      <div id="main" class="">
+        
+
+        
+
+        <div class="page-header">
+          <h1 class="class"><code><code><a href="index.html" class="internal-link">lyprox</a></code><wbr></wbr>.<code><a href="lyprox.dataexplorer.html" class="internal-link" title="lyprox.dataexplorer">dataexplorer</a></code><wbr></wbr>.<code><a href="lyprox.dataexplorer.query.html" class="internal-link" title="lyprox.dataexplorer.query">query</a></code><wbr></wbr>.<code><a href="lyprox.dataexplorer.query.BaseStatistics.html" class="internal-link" title="lyprox.dataexplorer.query.BaseStatistics">BaseStatistics</a></code></code></h1>
+          <div id="showPrivate">
+            <button class="btn btn-link" onclick="togglePrivate()">Toggle Private API</button>
+          </div>
+        </div>
+
+        <div class="categoryHeader">
+          class documentation
+        </div>
+
+        <div class="extrasDocstring">
+          <p class="class-signature"><code><span class="py-keyword">class</span> <span class="py-defname">BaseStatistics</span>(<a href="https://docs.pydantic.dev/latest/api/base_model/#pydantic.BaseModel" class="intersphinx-link">BaseModel</a>):</code></p>
+          <p><a href="classIndex.html#lyprox.dataexplorer.query.BaseStatistics">View In Hierarchy</a></p>
+        </div>
+
+        <div class="moduleDocstring">
+          <div><p>Basic statistics to be computed and displayed on the dashboard.</p>
+<p>This defines the base class with counts of the basic patient and tumor information.
+It also defines the classmethod to compute the statistics from a dataset. In a
+dynamically created subclass of this one, the fields for every LNL ipsi- and
+contralaterally are added to the <code><a href="lyprox.dataexplorer.query.html#Statistics" class="internal-link" title="lyprox.dataexplorer.query.Statistics">Statistics</a></code> class.</p>
+</div>
+        </div>
+
+        <div id="splitTables">
+          <table class="children sortable" id="id47">
+  
+  
+  <tr class="classmethod">
+    
+    <td>Class Method</td>
+    <td><code><a href="#from_table" class="internal-link" title="lyprox.dataexplorer.query.BaseStatistics.from_table">from<wbr></wbr>_table</a></code></td>
+    <td>Compute statistics from a table of patients.</td>
+  </tr><tr class="classvariable">
+    
+    <td>Class Variable</td>
+    <td><code><a href="#central" class="internal-link" title="lyprox.dataexplorer.query.BaseStatistics.central">central</a></code></td>
+    <td>For how many patients was the tumor located centrally, for how many not?</td>
+  </tr><tr class="classvariable">
+    
+    <td>Class Variable</td>
+    <td><code><a href="#datasets" class="internal-link" title="lyprox.dataexplorer.query.BaseStatistics.datasets">datasets</a></code></td>
+    <td>How many patients are in each dataset.</td>
+  </tr><tr class="classvariable">
+    
+    <td>Class Variable</td>
+    <td><code><a href="#hpv" class="internal-link" title="lyprox.dataexplorer.query.BaseStatistics.hpv">hpv</a></code></td>
+    <td>Patients with or without HPV.</td>
+  </tr><tr class="classvariable">
+    
+    <td>Class Variable</td>
+    <td><code><a href="#is_n_plus" class="internal-link" title="lyprox.dataexplorer.query.BaseStatistics.is_n_plus">is<wbr></wbr>_n<wbr></wbr>_plus</a></code></td>
+    <td>Number of patients with or without N+ status.</td>
+  </tr><tr class="classvariable">
+    
+    <td>Class Variable</td>
+    <td><code><a href="#midext" class="internal-link" title="lyprox.dataexplorer.query.BaseStatistics.midext">midext</a></code></td>
+    <td>Number of patients with or without tumors crossing the midline.</td>
+  </tr><tr class="classvariable">
+    
+    <td>Class Variable</td>
+    <td><code><a href="#sex" class="internal-link" title="lyprox.dataexplorer.query.BaseStatistics.sex">sex</a></code></td>
+    <td>Number of male and female patients.</td>
+  </tr><tr class="classvariable">
+    
+    <td>Class Variable</td>
+    <td><code><a href="#smoke" class="internal-link" title="lyprox.dataexplorer.query.BaseStatistics.smoke">smoke</a></code></td>
+    <td>Number of patients who did or did not smoke.</td>
+  </tr><tr class="classvariable">
+    
+    <td>Class Variable</td>
+    <td><code><a href="#subsite" class="internal-link" title="lyprox.dataexplorer.query.BaseStatistics.subsite">subsite</a></code></td>
+    <td>Number of patients with tumors in different subsites.</td>
+  </tr><tr class="classvariable">
+    
+    <td>Class Variable</td>
+    <td><code><a href="#surgery" class="internal-link" title="lyprox.dataexplorer.query.BaseStatistics.surgery">surgery</a></code></td>
+    <td>Number of patients that did or did not undergo surgery.</td>
+  </tr><tr class="classvariable">
+    
+    <td>Class Variable</td>
+    <td><code><a href="#t_stage" class="internal-link" title="lyprox.dataexplorer.query.BaseStatistics.t_stage">t<wbr></wbr>_stage</a></code></td>
+    <td>Counts of patients with different T-stages.</td>
+  </tr><tr class="property">
+    
+    <td>Property</td>
+    <td><code><a href="#total" class="internal-link" title="lyprox.dataexplorer.query.BaseStatistics.total">total</a></code></td>
+    <td>Return the total number of patients in the dataset.</td>
+  </tr>
+</table>
+          
+
+            
+        </div>
+
+        <div id="childList">
+          <div class="baseclassmethod">
+  
+  
+  <a name="lyprox.dataexplorer.query.BaseStatistics.from_table">
+    
+  </a>
+  <a name="from_table">
+    
+  </a>
+  <div class="functionHeader">
+    
+    @classmethod<br />
+    <span class="py-keyword">def</span> <span class="py-defname">from_table</span><span class="function-signature">(cls: <code>type[<wbr></wbr><a href="lyprox.dataexplorer.query.html#T" class="internal-link" title="lyprox.dataexplorer.query.T">T</a>]</code>, table: <code><a href="https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.html#pandas.DataFrame" class="intersphinx-link">pd.DataFrame</a></code>, method: <code>Literal[<wbr></wbr><span class="rst-variable-quote">'</span><span class="rst-variable-string">max_llh</span><span class="rst-variable-quote">'</span>, <wbr></wbr><span class="rst-variable-quote">'</span><span class="rst-variable-string">rank</span><span class="rst-variable-quote">'</span>]</code> = <span class="rst-variable-quote">'</span><span class="rst-variable-string">max_llh</span><span class="rst-variable-quote">'</span>) -&gt; <code><a href="lyprox.dataexplorer.query.html#T" class="internal-link" title="lyprox.dataexplorer.query.T">T</a></code></span>:
+    
+    <a class="headerLink" href="#from_table" title="lyprox.dataexplorer.query.BaseStatistics.from_table">
+      
+      
+      ¶
+    </a>
+  </div>
+  <div class="docstring functionBody">
+    
+    <div><p>Compute statistics from a table of patients.</p>
+<p>This method computes e.g. how many patients in the queried table are
+HPV positive, or how many patients have a certain T-stage. The statistics are
+computed from the queried table and passed to the context of the
+<code><a href="lyprox.dataexplorer.views.html" class="internal-link" title="lyprox.dataexplorer.views">dataexplorer.views</a></code>. From there, the statistics can be displayed in the
+rendered HTML or JSON response.</p>
+</div>
+  </div>
+</div><div class="baseclassvariable">
+  
+  
+  <a name="lyprox.dataexplorer.query.BaseStatistics.central">
+    
+  </a>
+  <a name="central">
+    
+  </a>
+  <div class="functionHeader">
+    
+    <span class="py-defname">central</span>: <code><a href="lyprox.dataexplorer.query.html#NullableBoolCounts" class="internal-link" title="lyprox.dataexplorer.query.NullableBoolCounts">NullableBoolCounts</a></code> =
+    
+    <a class="headerLink" href="#central" title="lyprox.dataexplorer.query.BaseStatistics.central">
+      
+      
+      ¶
+    </a>
+  </div>
+  <div class="functionBody">
+    
+    <div><p>For how many patients was the tumor located centrally, for how many not?</p></div>
+    
+  </div>
+</div><div class="baseclassvariable">
+  
+  
+  <a name="lyprox.dataexplorer.query.BaseStatistics.datasets">
+    
+  </a>
+  <a name="datasets">
+    
+  </a>
+  <div class="functionHeader">
+    
+    <span class="py-defname">datasets</span>: <code>dict[<wbr></wbr>str, <wbr></wbr>int]</code> =
+    
+    <a class="headerLink" href="#datasets" title="lyprox.dataexplorer.query.BaseStatistics.datasets">
+      
+      
+      ¶
+    </a>
+  </div>
+  <div class="functionBody">
+    
+    <div><p>How many patients are in each dataset.</p></div>
+    
+  </div>
+</div><div class="baseclassvariable">
+  
+  
+  <a name="lyprox.dataexplorer.query.BaseStatistics.hpv">
+    
+  </a>
+  <a name="hpv">
+    
+  </a>
+  <div class="functionHeader">
+    
+    <span class="py-defname">hpv</span>: <code><a href="lyprox.dataexplorer.query.html#NullableBoolCounts" class="internal-link" title="lyprox.dataexplorer.query.NullableBoolCounts">NullableBoolCounts</a></code> =
+    
+    <a class="headerLink" href="#hpv" title="lyprox.dataexplorer.query.BaseStatistics.hpv">
+      
+      
+      ¶
+    </a>
+  </div>
+  <div class="functionBody">
+    
+    <div><p>Patients with or without HPV.</p></div>
+    
+  </div>
+</div><div class="baseclassvariable">
+  
+  
+  <a name="lyprox.dataexplorer.query.BaseStatistics.is_n_plus">
+    
+  </a>
+  <a name="is_n_plus">
+    
+  </a>
+  <div class="functionHeader">
+    
+    <span class="py-defname">is_n_plus</span>: <code><a href="lyprox.dataexplorer.query.html#NullableBoolCounts" class="internal-link" title="lyprox.dataexplorer.query.NullableBoolCounts">NullableBoolCounts</a></code> =
+    
+    <a class="headerLink" href="#is_n_plus" title="lyprox.dataexplorer.query.BaseStatistics.is_n_plus">
+      
+      
+      ¶
+    </a>
+  </div>
+  <div class="functionBody">
+    
+    <div><p>Number of patients with or without N+ status.</p></div>
+    
+  </div>
+</div><div class="baseclassvariable">
+  
+  
+  <a name="lyprox.dataexplorer.query.BaseStatistics.midext">
+    
+  </a>
+  <a name="midext">
+    
+  </a>
+  <div class="functionHeader">
+    
+    <span class="py-defname">midext</span>: <code><a href="lyprox.dataexplorer.query.html#NullableBoolCounts" class="internal-link" title="lyprox.dataexplorer.query.NullableBoolCounts">NullableBoolCounts</a></code> =
+    
+    <a class="headerLink" href="#midext" title="lyprox.dataexplorer.query.BaseStatistics.midext">
+      
+      
+      ¶
+    </a>
+  </div>
+  <div class="functionBody">
+    
+    <div><p>Number of patients with or without tumors crossing the midline.</p></div>
+    
+  </div>
+</div><div class="baseclassvariable">
+  
+  
+  <a name="lyprox.dataexplorer.query.BaseStatistics.sex">
+    
+  </a>
+  <a name="sex">
+    
+  </a>
+  <div class="functionHeader">
+    
+    <span class="py-defname">sex</span>: <code><a href="lyprox.dataexplorer.query.html#SexCounts" class="internal-link" title="lyprox.dataexplorer.query.SexCounts">SexCounts</a></code> =
+    
+    <a class="headerLink" href="#sex" title="lyprox.dataexplorer.query.BaseStatistics.sex">
+      
+      
+      ¶
+    </a>
+  </div>
+  <div class="functionBody">
+    
+    <div><p>Number of male and female patients.</p></div>
+    
+  </div>
+</div><div class="baseclassvariable">
+  
+  
+  <a name="lyprox.dataexplorer.query.BaseStatistics.smoke">
+    
+  </a>
+  <a name="smoke">
+    
+  </a>
+  <div class="functionHeader">
+    
+    <span class="py-defname">smoke</span>: <code><a href="lyprox.dataexplorer.query.html#NullableBoolCounts" class="internal-link" title="lyprox.dataexplorer.query.NullableBoolCounts">NullableBoolCounts</a></code> =
+    
+    <a class="headerLink" href="#smoke" title="lyprox.dataexplorer.query.BaseStatistics.smoke">
+      
+      
+      ¶
+    </a>
+  </div>
+  <div class="functionBody">
+    
+    <div><p>Number of patients who did or did not smoke.</p></div>
+    
+  </div>
+</div><div class="baseclassvariable">
+  
+  
+  <a name="lyprox.dataexplorer.query.BaseStatistics.subsite">
+    
+  </a>
+  <a name="subsite">
+    
+  </a>
+  <div class="functionHeader">
+    
+    <span class="py-defname">subsite</span>: <code><a href="lyprox.dataexplorer.query.html#SubsiteCounts" class="internal-link" title="lyprox.dataexplorer.query.SubsiteCounts">SubsiteCounts</a></code> =
+    
+    <a class="headerLink" href="#subsite" title="lyprox.dataexplorer.query.BaseStatistics.subsite">
+      
+      
+      ¶
+    </a>
+  </div>
+  <div class="functionBody">
+    
+    <div><p>Number of patients with tumors in different subsites.</p></div>
+    
+  </div>
+</div><div class="baseclassvariable">
+  
+  
+  <a name="lyprox.dataexplorer.query.BaseStatistics.surgery">
+    
+  </a>
+  <a name="surgery">
+    
+  </a>
+  <div class="functionHeader">
+    
+    <span class="py-defname">surgery</span>: <code><a href="lyprox.dataexplorer.query.html#NullableBoolCounts" class="internal-link" title="lyprox.dataexplorer.query.NullableBoolCounts">NullableBoolCounts</a></code> =
+    
+    <a class="headerLink" href="#surgery" title="lyprox.dataexplorer.query.BaseStatistics.surgery">
+      
+      
+      ¶
+    </a>
+  </div>
+  <div class="functionBody">
+    
+    <div><p>Number of patients that did or did not undergo surgery.</p></div>
+    
+  </div>
+</div><div class="baseclassvariable">
+  
+  
+  <a name="lyprox.dataexplorer.query.BaseStatistics.t_stage">
+    
+  </a>
+  <a name="t_stage">
+    
+  </a>
+  <div class="functionHeader">
+    
+    <span class="py-defname">t_stage</span>: <code><a href="lyprox.dataexplorer.query.html#TStageCounts" class="internal-link" title="lyprox.dataexplorer.query.TStageCounts">TStageCounts</a></code> =
+    
+    <a class="headerLink" href="#t_stage" title="lyprox.dataexplorer.query.BaseStatistics.t_stage">
+      
+      
+      ¶
+    </a>
+  </div>
+  <div class="functionBody">
+    
+    <div><p>Counts of patients with different T-stages.</p></div>
+    
+  </div>
+</div><div class="baseproperty">
+  
+  
+  <a name="lyprox.dataexplorer.query.BaseStatistics.total">
+    
+  </a>
+  <a name="total">
+    
+  </a>
+  <div class="functionHeader">
+    @<a href="https://docs.pydantic.dev/latest/api/fields/#pydantic.fields.computed_field" class="intersphinx-link">computed_field</a><br />@property<br />
+    <span class="py-defname">total</span>: <code>int</code> =
+    
+    <a class="headerLink" href="#total" title="lyprox.dataexplorer.query.BaseStatistics.total">
+      
+      
+      ¶
+    </a>
+  </div>
+  <div class="functionBody">
+    
+    <div><p>Return the total number of patients in the dataset.</p></div>
+    
+  </div>
+</div>
+        </div>
+      
+      </div>
+    </div>
+
+    <footer class="navbar navbar-default">
+
+  
+  <div class="container-fluid">
+    <a href="index.html">API Documentation</a> for LyProX,
+  generated by <a href="https://github.com/twisted/pydoctor/">pydoctor</a>
+    24.11.2 at 2025-04-01 13:02:24.
+  </div>
+
+  <!-- Search related scripts needs to be loaded at the end of HTML 
+    parsing not to introduce overhead and display HTML data asap -->
+  <script src="ajax.js" type="text/javascript"></script>
+  <script src="searchlib.js" type="text/javascript"></script>
+  <script src="search.js" type="text/javascript"></script>
+
+</footer>
+  
+    <script src="pydoctor.js" type="text/javascript"></script>
+
+  </body>
+</html>

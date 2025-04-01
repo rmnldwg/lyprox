@@ -7,7 +7,7 @@
   <head>
     
     <title>lyprox.dataexplorer.forms.ThreeWayToggle</title>
-    <meta name="generator" content="pydoctor 22.9.1"> 
+    <meta name="generator" content="pydoctor 24.11.2"> 
         
     </meta>
     <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
@@ -15,6 +15,7 @@
     <link rel="stylesheet" type="text/css" href="bootstrap.min.css" />
     <link rel="stylesheet" type="text/css" href="apidocs.css" />
     <link rel="stylesheet" type="text/css" href="extra.css" />
+    
 </head>
 
   <body>
@@ -52,7 +53,7 @@
             
             <span class="input-group-btn">
               <a style="display: none;" class="btn btn-default" id="search-clear-button" title="Clear" onclick="clearSearch()"><img src="fonts/x-circle.svg" alt="Clear" /></a>
-              <a class="btn btn-default" id="search-help-button" title="Help" onclick="toggleSearchHelpText()"><img src="fonts/info.svg" alt="Help" /></a>
+              <a class="btn btn-default" id="apidocs-help-button" title="Help" href="apidocs-help.html"><img src="fonts/info.svg" alt="Help" /></a>
             </span>
           </div>
         </div>
@@ -76,39 +77,6 @@
             <h1>Cannot search: JavaScript is not supported/enabled in your browser.</h1>
         </noscript>
 
-        <div class="hint" id="search-help-box">
-          <p class="rst-last">
-      
-            Search bar offers the following options:
-            <ul>   
-                <li>
-                  <strong>Term presence.</strong> The below example searches for documents that 
-                    must contain “foo”, might contain “bar” and must not contain “baz”: <code>+foo bar -baz</code>
-                </li> 
-
-                <li>
-                  <strong>Wildcards.</strong> The below example searches for documents with words beginning with “foo”: <code>foo*</code>
-                </li> 
-
-                <li>
-                  <strong>Search in specific fields.</strong> The following search matches all objects 
-                  in "twisted.mail" that matches “search”: <code>+qname:twisted.mail.* +search</code>
-
-                  <p>
-                    Possible fields: 'name', 'qname' (fully qualified name), 'docstring', and 'kind'.
-                    Last two fields are only applicable if "search in docstrings" is enabled.
-                  </p>
-                </li>
-
-                <li>
-                  <strong>Fuzzy matches.</strong> The following search matches all documents 
-                  that have a word within 1 edit distance of “foo”: <code>foo~1</code>
-                </li>
-            </ul>
-
-          </p>
-        </div>
-
         <div id="search-status"> </div>
 
         <div class="warning" id="search-warn-box" style="display: none;">
@@ -119,8 +87,8 @@
           <!-- Filled dynamically by JS -->
         </table>
         
-        <div style="margin-top: 8px;">
-          <p>Results provided by <a href="https://lunrjs.com">Lunr.js</a></p>
+        <div style="margin-top: 10px;">
+          <p>For more information on the search, visit the <a href="apidocs-help.html#rst-search">help page</a>.</p>
         </div>
       </div>
 
@@ -212,7 +180,7 @@
         
 
         
-            <div class="itemName"><code><a href="lyprox.dataexplorer.forms.DashboardForm.html" class="internal-link" title="lyprox.dataexplorer.forms.DashboardForm"><wbr></wbr>Dashboard<wbr></wbr>Form</a></code>
+            <div class="itemName"><code><a href="lyprox.dataexplorer.forms.DataexplorerForm.html" class="internal-link" title="lyprox.dataexplorer.forms.DataexplorerForm"><wbr></wbr>Dataexplorer<wbr></wbr>Form</a></code>
             </div>
         
 
@@ -222,17 +190,7 @@
         
 
         
-            <div class="itemName"><code><a href="lyprox.dataexplorer.forms.DatasetModelChoiceIndexer.html" class="internal-link" title="lyprox.dataexplorer.forms.DatasetModelChoiceIndexer"><wbr></wbr>Dataset<wbr></wbr>Model<wbr></wbr>Choice<wbr></wbr>Indexer</a></code>
-            </div>
-        
-
-    </li><li class="">
-        
-        
-        
-
-        
-            <div class="itemName"><code><a href="lyprox.dataexplorer.forms.DatasetMultipleChoiceField.html" class="internal-link" title="lyprox.dataexplorer.forms.DatasetMultipleChoiceField"><wbr></wbr>Dataset<wbr></wbr>Multiple<wbr></wbr>Choice<wbr></wbr>Field</a></code>
+            <div class="itemName"><code><a href="lyprox.dataexplorer.forms.EasySubsiteChoiceField.html" class="internal-link" title="lyprox.dataexplorer.forms.EasySubsiteChoiceField"><wbr></wbr>Easy<wbr></wbr>Subsite<wbr></wbr>Choice<wbr></wbr>Field</a></code>
             </div>
         
 
@@ -268,6 +226,26 @@
         
 
         
+            <div class="itemName"><code><a href="lyprox.dataexplorer.forms.html#format_dataset_choices" class="internal-link" title="lyprox.dataexplorer.forms.format_dataset_choices">format<wbr></wbr>_dataset<wbr></wbr>_choices</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="lyprox.dataexplorer.forms.html#get_modality_choices" class="internal-link" title="lyprox.dataexplorer.forms.get_modality_choices">get<wbr></wbr>_modality<wbr></wbr>_choices</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
             <div class="itemName"><code><a href="lyprox.dataexplorer.forms.html#trio_to_bool" class="internal-link" title="lyprox.dataexplorer.forms.trio_to_bool">trio<wbr></wbr>_to<wbr></wbr>_bool</a></code>
             </div>
         
@@ -282,6 +260,26 @@
         <ul>
     
     <li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="lyprox.dataexplorer.forms.html#T" class="internal-link" title="lyprox.dataexplorer.forms.T">T</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="lyprox.dataexplorer.forms.html#checkbox_attrs" class="internal-link" title="lyprox.dataexplorer.forms.checkbox_attrs">checkbox<wbr></wbr>_attrs</a></code>
+            </div>
+        
+
+    </li><li class="">
         
         
         
@@ -327,13 +325,18 @@
         </div>
 
         <div class="extrasDocstring">
-          <p><code><span class="py-keyword">class</span> <span class="py-defname">ThreeWayToggle</span>(forms.ChoiceField):</code></p>
+          <p class="class-signature"><code><span class="py-keyword">class</span> <span class="py-defname">ThreeWayToggle</span>(<a href="http://docs.djangoproject.com/en/4.2/ref/forms/fields/#django.forms.ChoiceField" class="intersphinx-link">forms.ChoiceField</a>):</code></p><p>Constructor: <code><a href="#__init__" class="internal-link" title="lyprox.dataexplorer.forms.ThreeWayToggle.__init__">ThreeWayToggle(widget_attrs, widget_option_attrs, widget_label, widget_tooltip, ...)</a></code></p>
           <p><a href="classIndex.html#lyprox.dataexplorer.forms.ThreeWayToggle">View In Hierarchy</a></p>
         </div>
 
         <div class="moduleDocstring">
-          <div><p>A toggle switch than can be in three different states: Positive/True,
-unkown/None and negative/False.</p>
+          <div><p>Field to choose one of three options: <tt class="rst-docutils rst-literal">True</tt>, <tt class="rst-docutils rst-literal">None</tt> and <tt class="rst-docutils rst-literal">False</tt>.</p>
+<p><tt class="rst-docutils rst-literal">True</tt> is represented by a plus sign and means "positive", <tt class="rst-docutils rst-literal">None</tt> is
+represented by a ban sign and means "unknown", and <tt class="rst-docutils rst-literal">False</tt> is represented by a
+minus sign and means "negative".</p>
+<p>The field is rendered by the <code><a href="lyprox.dataexplorer.forms.ThreeWayToggleWidget.html" class="internal-link" title="lyprox.dataexplorer.forms.ThreeWayToggleWidget">ThreeWayToggleWidget</a></code>. Every LNL's involvement as
+well as many binary risk factors such as smoking status, HPV status, and neck
+dissection status are represented by this field.</p>
 </div>
         </div>
 
@@ -345,12 +348,12 @@ unkown/None and negative/False.</p>
     
     <td>Method</td>
     <td><code><a href="#__init__" class="internal-link" title="lyprox.dataexplorer.forms.ThreeWayToggle.__init__">__init__</a></code></td>
-    <td>Pass the arguments, like <code><a href="lyprox.dataexplorer.forms.ThreeWayToggleWidget.html#label" class="internal-link" title="lyprox.dataexplorer.forms.ThreeWayToggleWidget.label">label</a></code> and <code><a href="lyprox.dataexplorer.forms.ThreeWayToggleWidget.html#tooltip" class="internal-link" title="lyprox.dataexplorer.forms.ThreeWayToggleWidget.tooltip">tooltip</a></code> to the constructor of the custom widget.</td>
+    <td>Pass args like <tt class="rst-docutils rst-literal">label</tt> and <tt class="rst-docutils rst-literal">tooltip</tt> to constructor of custom widget.</td>
   </tr><tr class="method">
     
     <td>Method</td>
     <td><code><a href="#to_python" class="internal-link" title="lyprox.dataexplorer.forms.ThreeWayToggle.to_python">to<wbr></wbr>_python</a></code></td>
-    <td>Cast the string to an integer.</td>
+    <td>Cast the string to an integer. <tt class="rst-docutils rst-literal">""</tt> is interpreted as <tt class="rst-docutils rst-literal">None</tt>.</td>
   </tr>
 </table>
           
@@ -370,7 +373,8 @@ unkown/None and negative/False.</p>
   </a>
   <div class="functionHeader">
     
-    <span class="py-keyword">def</span> <span class="py-defname">__init__</span>(self, attrs=None, option_attrs=None, label=None, tooltip=None, choices=None, initial=0, required=False, **kwargs):
+    
+    <span class="py-keyword">def</span> <span class="py-defname">__init__</span><span class="function-signature">(self, widget_attrs=None, widget_option_attrs=None, widget_label=None, widget_tooltip=None, choices=None, initial=None, required=False, **kwargs)</span>:
     
     <a class="headerLink" href="#__init__" title="lyprox.dataexplorer.forms.ThreeWayToggle.__init__">
       
@@ -380,9 +384,7 @@ unkown/None and negative/False.</p>
   </div>
   <div class="docstring functionBody">
     
-    <div><p>Pass the arguments, like <code><a href="lyprox.dataexplorer.forms.ThreeWayToggleWidget.html#label" class="internal-link" title="lyprox.dataexplorer.forms.ThreeWayToggleWidget.label">label</a></code> and <code><a href="lyprox.dataexplorer.forms.ThreeWayToggleWidget.html#tooltip" class="internal-link" title="lyprox.dataexplorer.forms.ThreeWayToggleWidget.tooltip">tooltip</a></code> to the constructor
-of the custom widget.</p>
-</div>
+    <div><p>Pass args like <tt class="rst-docutils rst-literal">label</tt> and <tt class="rst-docutils rst-literal">tooltip</tt> to constructor of custom widget.</p></div>
   </div>
 </div><div class="basemethod">
   
@@ -395,7 +397,8 @@ of the custom widget.</p>
   </a>
   <div class="functionHeader">
     
-    <span class="py-keyword">def</span> <span class="py-defname">to_python</span>(self, value):
+    
+    <span class="py-keyword">def</span> <span class="py-defname">to_python</span><span class="function-signature">(self, value: <code>bool | None</code>) -&gt; <code>bool | None</code></span>:
     
     <a class="headerLink" href="#to_python" title="lyprox.dataexplorer.forms.ThreeWayToggle.to_python">
       
@@ -405,8 +408,7 @@ of the custom widget.</p>
   </div>
   <div class="docstring functionBody">
     
-    <div><p>Cast the string to an integer.</p>
-</div>
+    <div><p>Cast the string to an integer. <tt class="rst-docutils rst-literal">""</tt> is interpreted as <tt class="rst-docutils rst-literal">None</tt>.</p></div>
   </div>
 </div>
         </div>
@@ -417,10 +419,10 @@ of the custom widget.</p>
     <footer class="navbar navbar-default">
 
   
-  <div class="container">
+  <div class="container-fluid">
     <a href="index.html">API Documentation</a> for LyProX,
   generated by <a href="https://github.com/twisted/pydoctor/">pydoctor</a>
-    22.9.1 at 2024-10-09 13:21:38.
+    24.11.2 at 2025-04-01 13:02:24.
   </div>
 
   <!-- Search related scripts needs to be loaded at the end of HTML 

@@ -7,7 +7,7 @@
   <head>
     
     <title>lyprox.templatetags.customtags.MyMathExtension</title>
-    <meta name="generator" content="pydoctor 22.9.1"> 
+    <meta name="generator" content="pydoctor 24.11.2"> 
         
     </meta>
     <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
@@ -15,6 +15,7 @@
     <link rel="stylesheet" type="text/css" href="bootstrap.min.css" />
     <link rel="stylesheet" type="text/css" href="apidocs.css" />
     <link rel="stylesheet" type="text/css" href="extra.css" />
+    
 </head>
 
   <body>
@@ -52,7 +53,7 @@
             
             <span class="input-group-btn">
               <a style="display: none;" class="btn btn-default" id="search-clear-button" title="Clear" onclick="clearSearch()"><img src="fonts/x-circle.svg" alt="Clear" /></a>
-              <a class="btn btn-default" id="search-help-button" title="Help" onclick="toggleSearchHelpText()"><img src="fonts/info.svg" alt="Help" /></a>
+              <a class="btn btn-default" id="apidocs-help-button" title="Help" href="apidocs-help.html"><img src="fonts/info.svg" alt="Help" /></a>
             </span>
           </div>
         </div>
@@ -76,39 +77,6 @@
             <h1>Cannot search: JavaScript is not supported/enabled in your browser.</h1>
         </noscript>
 
-        <div class="hint" id="search-help-box">
-          <p class="rst-last">
-      
-            Search bar offers the following options:
-            <ul>   
-                <li>
-                  <strong>Term presence.</strong> The below example searches for documents that 
-                    must contain “foo”, might contain “bar” and must not contain “baz”: <code>+foo bar -baz</code>
-                </li> 
-
-                <li>
-                  <strong>Wildcards.</strong> The below example searches for documents with words beginning with “foo”: <code>foo*</code>
-                </li> 
-
-                <li>
-                  <strong>Search in specific fields.</strong> The following search matches all objects 
-                  in "twisted.mail" that matches “search”: <code>+qname:twisted.mail.* +search</code>
-
-                  <p>
-                    Possible fields: 'name', 'qname' (fully qualified name), 'docstring', and 'kind'.
-                    Last two fields are only applicable if "search in docstrings" is enabled.
-                  </p>
-                </li>
-
-                <li>
-                  <strong>Fuzzy matches.</strong> The following search matches all documents 
-                  that have a word within 1 edit distance of “foo”: <code>foo~1</code>
-                </li>
-            </ul>
-
-          </p>
-        </div>
-
         <div id="search-status"> </div>
 
         <div class="warning" id="search-warn-box" style="display: none;">
@@ -119,8 +87,8 @@
           <!-- Filled dynamically by JS -->
         </table>
         
-        <div style="margin-top: 8px;">
-          <p>Results provided by <a href="https://lunrjs.com">Lunr.js</a></p>
+        <div style="margin-top: 10px;">
+          <p>For more information on the search, visit the <a href="apidocs-help.html#rst-search">help page</a>.</p>
         </div>
       </div>
 
@@ -218,7 +186,7 @@
         
 
         
-            <div class="itemName"><code><a href="lyprox.templatetags.customtags.html#addstr" class="internal-link" title="lyprox.templatetags.customtags.addstr">addstr</a></code>
+            <div class="itemName"><code><a href="lyprox.templatetags.customtags.html#barplot_css" class="internal-link" title="lyprox.templatetags.customtags.barplot_css">barplot<wbr></wbr>_css</a></code>
             </div>
         
 
@@ -228,7 +196,17 @@
         
 
         
-            <div class="itemName"><code><a href="lyprox.templatetags.customtags.html#bar" class="internal-link" title="lyprox.templatetags.customtags.bar">bar</a></code>
+            <div class="itemName"><code><a href="lyprox.templatetags.customtags.html#capitalize_subsite" class="internal-link" title="lyprox.templatetags.customtags.capitalize_subsite">capitalize<wbr></wbr>_subsite</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="lyprox.templatetags.customtags.html#concat" class="internal-link" title="lyprox.templatetags.customtags.concat">concat</a></code>
             </div>
         
 
@@ -258,6 +236,46 @@
         
 
         
+            <div class="itemName"><code><a href="lyprox.templatetags.customtags.html#get_logo" class="internal-link" title="lyprox.templatetags.customtags.get_logo">get<wbr></wbr>_logo</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="lyprox.templatetags.customtags.html#get_percent" class="internal-link" title="lyprox.templatetags.customtags.get_percent">get<wbr></wbr>_percent</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="lyprox.templatetags.customtags.html#get_subsite" class="internal-link" title="lyprox.templatetags.customtags.get_subsite">get<wbr></wbr>_subsite</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="lyprox.templatetags.customtags.html#getattr_" class="internal-link" title="lyprox.templatetags.customtags.getattr_">getattr_</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
             <div class="itemName"><code><a href="lyprox.templatetags.customtags.html#include_md" class="internal-link" title="lyprox.templatetags.customtags.include_md">include<wbr></wbr>_md</a></code>
             </div>
         
@@ -278,27 +296,7 @@
         
 
         
-            <div class="itemName"><code><a href="lyprox.templatetags.customtags.html#myprod" class="internal-link" title="lyprox.templatetags.customtags.myprod">myprod</a></code>
-            </div>
-        
-
-    </li><li class="">
-        
-        
-        
-
-        
-            <div class="itemName"><code><a href="lyprox.templatetags.customtags.html#mysum" class="internal-link" title="lyprox.templatetags.customtags.mysum">mysum</a></code>
-            </div>
-        
-
-    </li><li class="">
-        
-        
-        
-
-        
-            <div class="itemName"><code><a href="lyprox.templatetags.customtags.html#percent" class="internal-link" title="lyprox.templatetags.customtags.percent">percent</a></code>
+            <div class="itemName"><code><a href="lyprox.templatetags.customtags.html#multiply" class="internal-link" title="lyprox.templatetags.customtags.multiply">multiply</a></code>
             </div>
         
 
@@ -342,6 +340,36 @@
             </div>
         
 
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="lyprox.templatetags.customtags.html#safe_eval" class="internal-link" title="lyprox.templatetags.customtags.safe_eval">safe<wbr></wbr>_eval</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="lyprox.templatetags.customtags.html#sum_" class="internal-link" title="lyprox.templatetags.customtags.sum_">sum_</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="lyprox.templatetags.customtags.html#to_list" class="internal-link" title="lyprox.templatetags.customtags.to_list">to<wbr></wbr>_list</a></code>
+            </div>
+        
+
     </li>
 </ul> 
 
@@ -352,6 +380,46 @@
         <ul>
     
     <li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="lyprox.templatetags.customtags.html#KT" class="internal-link" title="lyprox.templatetags.customtags.KT">KT</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="lyprox.templatetags.customtags.html#N" class="internal-link" title="lyprox.templatetags.customtags.N">N</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="lyprox.templatetags.customtags.html#T" class="internal-link" title="lyprox.templatetags.customtags.T">T</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="lyprox.templatetags.customtags.html#VT" class="internal-link" title="lyprox.templatetags.customtags.VT">VT</a></code>
+            </div>
+        
+
+    </li><li class="">
         
         
         
@@ -407,23 +475,23 @@
         </div>
 
         <div class="extrasDocstring">
-          <p><code><span class="py-keyword">class</span> <span class="py-defname">MyMathExtension</span>(MathExtension):</code></p>
+          <p class="class-signature"><code><span class="py-keyword">class</span> <span class="py-defname">MyMathExtension</span>(MathExtension):</code></p><p>Constructor: <code><a href="#__init__" class="internal-link" title="lyprox.templatetags.customtags.MyMathExtension.__init__">MyMathExtension(*args, **kwargs)</a></code></p>
           <p><a href="classIndex.html#lyprox.templatetags.customtags.MyMathExtension">View In Hierarchy</a></p>
         </div>
 
         <div class="moduleDocstring">
-          <div><p class="undocumented">Undocumented</p></div>
+          <div><p>Custom math extension for markdown.</p></div>
         </div>
 
         <div id="splitTables">
-          <table class="children sortable" id="id124">
+          <table class="children sortable" id="id90">
   
   
   <tr class="method">
     
     <td>Method</td>
     <td><code><a href="#__init__" class="internal-link" title="lyprox.templatetags.customtags.MyMathExtension.__init__">__init__</a></code></td>
-    <td><span class="undocumented">Undocumented</span></td>
+    <td>Initialize the extension.</td>
   </tr>
 </table>
           
@@ -443,7 +511,8 @@
   </a>
   <div class="functionHeader">
     
-    <span class="py-keyword">def</span> <span class="py-defname">__init__</span>(self, *args, **kwargs):
+    
+    <span class="py-keyword">def</span> <span class="py-defname">__init__</span><span class="function-signature">(self, *args, **kwargs)</span>:
     
     <a class="headerLink" href="#__init__" title="lyprox.templatetags.customtags.MyMathExtension.__init__">
       
@@ -453,7 +522,7 @@
   </div>
   <div class="docstring functionBody">
     
-    <div><p class="undocumented">Undocumented</p></div>
+    <div><p>Initialize the extension.</p></div>
   </div>
 </div>
         </div>
@@ -464,10 +533,10 @@
     <footer class="navbar navbar-default">
 
   
-  <div class="container">
+  <div class="container-fluid">
     <a href="index.html">API Documentation</a> for LyProX,
   generated by <a href="https://github.com/twisted/pydoctor/">pydoctor</a>
-    22.9.1 at 2024-10-09 13:21:38.
+    24.11.2 at 2025-04-01 13:02:24.
   </div>
 
   <!-- Search related scripts needs to be loaded at the end of HTML 

@@ -7,7 +7,7 @@
   <head>
     
     <title>lyprox.riskpredictor.views</title>
-    <meta name="generator" content="pydoctor 22.9.1"> 
+    <meta name="generator" content="pydoctor 24.11.2"> 
         
     </meta>
     <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
@@ -15,6 +15,7 @@
     <link rel="stylesheet" type="text/css" href="bootstrap.min.css" />
     <link rel="stylesheet" type="text/css" href="apidocs.css" />
     <link rel="stylesheet" type="text/css" href="extra.css" />
+    
 </head>
 
   <body>
@@ -52,7 +53,7 @@
             
             <span class="input-group-btn">
               <a style="display: none;" class="btn btn-default" id="search-clear-button" title="Clear" onclick="clearSearch()"><img src="fonts/x-circle.svg" alt="Clear" /></a>
-              <a class="btn btn-default" id="search-help-button" title="Help" onclick="toggleSearchHelpText()"><img src="fonts/info.svg" alt="Help" /></a>
+              <a class="btn btn-default" id="apidocs-help-button" title="Help" href="apidocs-help.html"><img src="fonts/info.svg" alt="Help" /></a>
             </span>
           </div>
         </div>
@@ -76,39 +77,6 @@
             <h1>Cannot search: JavaScript is not supported/enabled in your browser.</h1>
         </noscript>
 
-        <div class="hint" id="search-help-box">
-          <p class="rst-last">
-      
-            Search bar offers the following options:
-            <ul>   
-                <li>
-                  <strong>Term presence.</strong> The below example searches for documents that 
-                    must contain “foo”, might contain “bar” and must not contain “baz”: <code>+foo bar -baz</code>
-                </li> 
-
-                <li>
-                  <strong>Wildcards.</strong> The below example searches for documents with words beginning with “foo”: <code>foo*</code>
-                </li> 
-
-                <li>
-                  <strong>Search in specific fields.</strong> The following search matches all objects 
-                  in "twisted.mail" that matches “search”: <code>+qname:twisted.mail.* +search</code>
-
-                  <p>
-                    Possible fields: 'name', 'qname' (fully qualified name), 'docstring', and 'kind'.
-                    Last two fields are only applicable if "search in docstrings" is enabled.
-                  </p>
-                </li>
-
-                <li>
-                  <strong>Fuzzy matches.</strong> The following search matches all documents 
-                  that have a word within 1 edit distance of “foo”: <code>foo~1</code>
-                </li>
-            </ul>
-
-          </p>
-        </div>
-
         <div id="search-status"> </div>
 
         <div class="warning" id="search-warn-box" style="display: none;">
@@ -119,8 +87,8 @@
           <!-- Filled dynamically by JS -->
         </table>
         
-        <div style="margin-top: 8px;">
-          <p>Results provided by <a href="https://lunrjs.com">Lunr.js</a></p>
+        <div style="margin-top: 10px;">
+          <p>For more information on the search, visit the <a href="apidocs-help.html#rst-search">help page</a>.</p>
         </div>
       </div>
 
@@ -160,7 +128,7 @@
         
 
         
-            <div class="itemName"><code><a href="lyprox.riskpredictor.views.AddInferenceResultView.html" class="internal-link" title="lyprox.riskpredictor.views.AddInferenceResultView"><wbr></wbr>Add<wbr></wbr>Inference<wbr></wbr>Result<wbr></wbr>View</a></code>
+            <div class="itemName"><code><a href="lyprox.riskpredictor.views.AddCheckpointModelView.html" class="internal-link" title="lyprox.riskpredictor.views.AddCheckpointModelView"><wbr></wbr>Add<wbr></wbr>Checkpoint<wbr></wbr>Model<wbr></wbr>View</a></code>
             </div>
         
 
@@ -170,17 +138,7 @@
         
 
         
-            <div class="itemName"><code><a href="lyprox.riskpredictor.views.ChooseInferenceResultView.html" class="internal-link" title="lyprox.riskpredictor.views.ChooseInferenceResultView"><wbr></wbr>Choose<wbr></wbr>Inference<wbr></wbr>Result<wbr></wbr>View</a></code>
-            </div>
-        
-
-    </li><li class="">
-        
-        
-        
-
-        
-            <div class="itemName"><code><a href="lyprox.riskpredictor.views.RiskPredictionView.html" class="internal-link" title="lyprox.riskpredictor.views.RiskPredictionView"><wbr></wbr>Risk<wbr></wbr>Prediction<wbr></wbr>View</a></code>
+            <div class="itemName"><code><a href="lyprox.riskpredictor.views.ChooseCheckpointModelView.html" class="internal-link" title="lyprox.riskpredictor.views.ChooseCheckpointModelView"><wbr></wbr>Choose<wbr></wbr>Checkpoint<wbr></wbr>Model<wbr></wbr>View</a></code>
             </div>
         
 
@@ -206,7 +164,7 @@
         
 
         
-            <div class="itemName"><code><a href="#riskpredictor_AJAX_view" class="internal-link" title="lyprox.riskpredictor.views.riskpredictor_AJAX_view">riskpredictor_<wbr></wbr>AJAX_view</a></code>
+            <div class="itemName"><code><a href="#render_risk_prediction" class="internal-link" title="lyprox.riskpredictor.views.render_risk_prediction">render<wbr></wbr>_risk<wbr></wbr>_prediction</a></code>
             </div>
         
 
@@ -217,6 +175,16 @@
 
         
             <div class="itemName"><code><a href="#test_view" class="internal-link" title="lyprox.riskpredictor.views.test_view">test<wbr></wbr>_view</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="#update_risk_prediction" class="internal-link" title="lyprox.riskpredictor.views.update_risk_prediction">update<wbr></wbr>_risk<wbr></wbr>_prediction</a></code>
             </div>
         
 
@@ -265,16 +233,6 @@
         
 
         
-            <div class="itemName"><code><a href="lyprox.riskpredictor.migrations.html" class="internal-link" title="lyprox.riskpredictor.migrations">migrations</a></code>
-            </div>
-        
-
-    </li><li class="">
-        
-        
-        
-
-        
             <div class="itemName"><code><a href="lyprox.riskpredictor.admin.html" class="internal-link" title="lyprox.riskpredictor.admin">admin</a></code>
             </div>
         
@@ -296,6 +254,26 @@
 
         
             <div class="itemName"><code><a href="lyprox.riskpredictor.forms.html" class="internal-link" title="lyprox.riskpredictor.forms">forms</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="lyprox.riskpredictor.management.html" class="internal-link" title="lyprox.riskpredictor.management">management</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="lyprox.riskpredictor.migrations.html" class="internal-link" title="lyprox.riskpredictor.migrations">migrations</a></code>
             </div>
         
 
@@ -402,29 +380,23 @@
         </div>
 
         <div class="moduleDocstring">
-          <div><p>Module for the views of the riskpredictor app.</p>
-</div>
+          <div><p>Module for the views of the riskpredictor app.</p></div>
         </div>
 
         <div id="splitTables">
-          <table class="children sortable" id="id117">
+          <table class="children sortable" id="id83">
   
   
   <tr class="class">
     
     <td>Class</td>
-    <td><code><a href="lyprox.riskpredictor.views.AddInferenceResultView.html" class="internal-link" title="lyprox.riskpredictor.views.AddInferenceResultView"><wbr></wbr>Add<wbr></wbr>Inference<wbr></wbr>Result<wbr></wbr>View</a></code></td>
-    <td>View for adding a new <code><a href="lyprox.riskpredictor.models.InferenceResult.html" class="internal-link" title="lyprox.riskpredictor.models.InferenceResult">InferenceResult</a></code> instance.</td>
+    <td><code><a href="lyprox.riskpredictor.views.AddCheckpointModelView.html" class="internal-link" title="lyprox.riskpredictor.views.AddCheckpointModelView"><wbr></wbr>Add<wbr></wbr>Checkpoint<wbr></wbr>Model<wbr></wbr>View</a></code></td>
+    <td>View for adding a new <code><a href="lyprox.riskpredictor.models.CheckpointModel.html" class="internal-link" title="lyprox.riskpredictor.models.CheckpointModel">CheckpointModel</a></code> instance.</td>
   </tr><tr class="class">
     
     <td>Class</td>
-    <td><code><a href="lyprox.riskpredictor.views.ChooseInferenceResultView.html" class="internal-link" title="lyprox.riskpredictor.views.ChooseInferenceResultView"><wbr></wbr>Choose<wbr></wbr>Inference<wbr></wbr>Result<wbr></wbr>View</a></code></td>
-    <td>View for choosing a <code><a href="lyprox.riskpredictor.models.InferenceResult.html" class="internal-link" title="lyprox.riskpredictor.models.InferenceResult">InferenceResult</a></code> instance.</td>
-  </tr><tr class="class">
-    
-    <td>Class</td>
-    <td><code><a href="lyprox.riskpredictor.views.RiskPredictionView.html" class="internal-link" title="lyprox.riskpredictor.views.RiskPredictionView"><wbr></wbr>Risk<wbr></wbr>Prediction<wbr></wbr>View</a></code></td>
-    <td>View for the dashboard of the riskpredictor app.</td>
+    <td><code><a href="lyprox.riskpredictor.views.ChooseCheckpointModelView.html" class="internal-link" title="lyprox.riskpredictor.views.ChooseCheckpointModelView"><wbr></wbr>Choose<wbr></wbr>Checkpoint<wbr></wbr>Model<wbr></wbr>View</a></code></td>
+    <td>View for choosing a <code><a href="lyprox.riskpredictor.models.CheckpointModel.html" class="internal-link" title="lyprox.riskpredictor.models.CheckpointModel">CheckpointModel</a></code> instance.</td>
   </tr><tr class="function">
     
     <td>Function</td>
@@ -433,13 +405,18 @@
   </tr><tr class="function">
     
     <td>Function</td>
-    <td><code><a href="#riskpredictor_AJAX_view" class="internal-link" title="lyprox.riskpredictor.views.riskpredictor_AJAX_view">riskpredictor_<wbr></wbr>AJAX_view</a></code></td>
-    <td>View for the AJAX request of the riskpredictor dashboard.</td>
+    <td><code><a href="#render_risk_prediction" class="internal-link" title="lyprox.riskpredictor.views.render_risk_prediction">render<wbr></wbr>_risk<wbr></wbr>_prediction</a></code></td>
+    <td>View for the riskpredictor dashboard.</td>
   </tr><tr class="function">
     
     <td>Function</td>
     <td><code><a href="#test_view" class="internal-link" title="lyprox.riskpredictor.views.test_view">test<wbr></wbr>_view</a></code></td>
     <td>View for testing the riskpredictor app.</td>
+  </tr><tr class="function">
+    
+    <td>Function</td>
+    <td><code><a href="#update_risk_prediction" class="internal-link" title="lyprox.riskpredictor.views.update_risk_prediction">update<wbr></wbr>_risk<wbr></wbr>_prediction</a></code></td>
+    <td>View for the AJAX request of the riskpredictor dashboard.</td>
   </tr><tr class="variable">
     
     <td>Variable</td>
@@ -464,7 +441,8 @@
   </a>
   <div class="functionHeader">
     
-    <span class="py-keyword">def</span> <span class="py-defname">help_view</span>(request):
+    
+    <span class="py-keyword">def</span> <span class="py-defname">help_view</span><span class="function-signature">(request) -&gt; <code><a href="http://docs.djangoproject.com/en/4.2/ref/request-response/#django.http.HttpResponse" class="intersphinx-link">HttpResponse</a></code></span>:
     
     <a class="headerLink" href="#help_view" title="lyprox.riskpredictor.views.help_view">
       
@@ -474,23 +452,23 @@
   </div>
   <div class="docstring functionBody">
     
-    <div><p>View for the help page of the riskpredictor app.</p>
-<table class="fieldTable"><tr class="fieldStart"><td class="fieldName" colspan="2">Returns</td></tr><tr><td class="fieldArgContainer"><code>HttpResponse</code></td><td class="fieldArgDesc"><span class="undocumented">Undocumented</span></td></tr></table></div>
+    <div><p>View for the help page of the riskpredictor app.</p></div>
   </div>
 </div><div class="basefunction">
   
   
-  <a name="lyprox.riskpredictor.views.riskpredictor_AJAX_view">
+  <a name="lyprox.riskpredictor.views.render_risk_prediction">
     
   </a>
-  <a name="riskpredictor_AJAX_view">
+  <a name="render_risk_prediction">
     
   </a>
   <div class="functionHeader">
     
-    <span class="py-keyword">def</span> <span class="py-defname">riskpredictor_AJAX_view</span>(request, pk, **kwargs):
     
-    <a class="headerLink" href="#riskpredictor_AJAX_view" title="lyprox.riskpredictor.views.riskpredictor_AJAX_view">
+    <span class="py-keyword">def</span> <span class="py-defname">render_risk_prediction</span><span class="function-signature">(request: <code><a href="http://docs.djangoproject.com/en/4.2/ref/request-response/#django.http.HttpRequest" class="intersphinx-link">HttpRequest</a></code>, checkpoint_pk: <code>int</code>) -&gt; <code><a href="http://docs.djangoproject.com/en/4.2/ref/request-response/#django.http.HttpResponse" class="intersphinx-link">HttpResponse</a></code></span>:
+    
+    <a class="headerLink" href="#render_risk_prediction" title="lyprox.riskpredictor.views.render_risk_prediction">
       
       
       ¶
@@ -498,11 +476,7 @@
   </div>
   <div class="docstring functionBody">
     
-    <div><p>View for the AJAX request of the riskpredictor dashboard.</p>
-<p>This view receives the same data as the <code><a href="lyprox.riskpredictor.views.RiskPredictionView.html" class="internal-link" title="lyprox.riskpredictor.views.RiskPredictionView">RiskPredictionView</a></code>, albeit in JSON format.
-It then computes the risks and returns them in JSON format again to be handled
-by JavaScript on the client side.</p>
-<table class="fieldTable"><tr class="fieldStart"><td class="fieldName" colspan="2">Parameters</td></tr><tr><td class="fieldArgContainer"><span class="fieldArg">request</span></td><td class="fieldArgDesc"><span class="undocumented">Undocumented</span></td></tr><tr><td class="fieldArgContainer"><span class="fieldArg">pk:</span><code>int</code></td><td class="fieldArgDesc"><span class="undocumented">Undocumented</span></td></tr><tr><td class="fieldArgContainer"><span class="fieldArg">**kwargs:</span><code>Any</code></td><td class="fieldArgDesc"><span class="undocumented">Undocumented</span></td></tr><tr class="fieldStart"><td class="fieldName" colspan="2">Returns</td></tr><tr><td class="fieldArgContainer"><code>JsonResponse</code></td><td class="fieldArgDesc"><span class="undocumented">Undocumented</span></td></tr></table></div>
+    <div><p>View for the riskpredictor dashboard.</p></div>
   </div>
 </div><div class="basefunction">
   
@@ -515,7 +489,8 @@ by JavaScript on the client side.</p>
   </a>
   <div class="functionHeader">
     
-    <span class="py-keyword">def</span> <span class="py-defname">test_view</span>(request):
+    
+    <span class="py-keyword">def</span> <span class="py-defname">test_view</span><span class="function-signature">(request)</span>:
     
     <a class="headerLink" href="#test_view" title="lyprox.riskpredictor.views.test_view">
       
@@ -525,7 +500,34 @@ by JavaScript on the client side.</p>
   </div>
   <div class="docstring functionBody">
     
-    <div><p>View for testing the riskpredictor app.</p>
+    <div><p>View for testing the riskpredictor app.</p></div>
+  </div>
+</div><div class="basefunction">
+  
+  
+  <a name="lyprox.riskpredictor.views.update_risk_prediction">
+    
+  </a>
+  <a name="update_risk_prediction">
+    
+  </a>
+  <div class="functionHeader">
+    
+    
+    <span class="py-keyword">def</span> <span class="py-defname">update_risk_prediction</span><span class="function-signature">(request: <code><a href="http://docs.djangoproject.com/en/4.2/ref/request-response/#django.http.HttpRequest" class="intersphinx-link">HttpRequest</a></code>, checkpoint_pk: <code>int</code>) -&gt; <code><a href="http://docs.djangoproject.com/en/4.2/ref/request-response/#django.http.JsonResponse" class="intersphinx-link">JsonResponse</a></code></span>:
+    
+    <a class="headerLink" href="#update_risk_prediction" title="lyprox.riskpredictor.views.update_risk_prediction">
+      
+      
+      ¶
+    </a>
+  </div>
+  <div class="docstring functionBody">
+    
+    <div><p>View for the AJAX request of the riskpredictor dashboard.</p>
+<p>This view receives the same data as the <code><a href="#render_risk_prediction" class="internal-link" title="lyprox.riskpredictor.views.render_risk_prediction">render_risk_prediction</a></code> function, but in
+JSON format. It then computes the risks and returns them in JSON format again to be
+handled by JavaScript on the client side.</p>
 </div>
   </div>
 </div><div class="basevariable">
@@ -561,10 +563,10 @@ by JavaScript on the client side.</p>
     <footer class="navbar navbar-default">
 
   
-  <div class="container">
+  <div class="container-fluid">
     <a href="index.html">API Documentation</a> for LyProX,
   generated by <a href="https://github.com/twisted/pydoctor/">pydoctor</a>
-    22.9.1 at 2024-10-09 13:21:38.
+    24.11.2 at 2025-04-01 13:02:24.
   </div>
 
   <!-- Search related scripts needs to be loaded at the end of HTML 

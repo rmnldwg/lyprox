@@ -7,7 +7,7 @@
   <head>
     
     <title>lyprox.riskpredictor.forms</title>
-    <meta name="generator" content="pydoctor 22.9.1"> 
+    <meta name="generator" content="pydoctor 24.11.2"> 
         
     </meta>
     <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
@@ -15,6 +15,7 @@
     <link rel="stylesheet" type="text/css" href="bootstrap.min.css" />
     <link rel="stylesheet" type="text/css" href="apidocs.css" />
     <link rel="stylesheet" type="text/css" href="extra.css" />
+    
 </head>
 
   <body>
@@ -52,7 +53,7 @@
             
             <span class="input-group-btn">
               <a style="display: none;" class="btn btn-default" id="search-clear-button" title="Clear" onclick="clearSearch()"><img src="fonts/x-circle.svg" alt="Clear" /></a>
-              <a class="btn btn-default" id="search-help-button" title="Help" onclick="toggleSearchHelpText()"><img src="fonts/info.svg" alt="Help" /></a>
+              <a class="btn btn-default" id="apidocs-help-button" title="Help" href="apidocs-help.html"><img src="fonts/info.svg" alt="Help" /></a>
             </span>
           </div>
         </div>
@@ -76,39 +77,6 @@
             <h1>Cannot search: JavaScript is not supported/enabled in your browser.</h1>
         </noscript>
 
-        <div class="hint" id="search-help-box">
-          <p class="rst-last">
-      
-            Search bar offers the following options:
-            <ul>   
-                <li>
-                  <strong>Term presence.</strong> The below example searches for documents that 
-                    must contain “foo”, might contain “bar” and must not contain “baz”: <code>+foo bar -baz</code>
-                </li> 
-
-                <li>
-                  <strong>Wildcards.</strong> The below example searches for documents with words beginning with “foo”: <code>foo*</code>
-                </li> 
-
-                <li>
-                  <strong>Search in specific fields.</strong> The following search matches all objects 
-                  in "twisted.mail" that matches “search”: <code>+qname:twisted.mail.* +search</code>
-
-                  <p>
-                    Possible fields: 'name', 'qname' (fully qualified name), 'docstring', and 'kind'.
-                    Last two fields are only applicable if "search in docstrings" is enabled.
-                  </p>
-                </li>
-
-                <li>
-                  <strong>Fuzzy matches.</strong> The following search matches all documents 
-                  that have a word within 1 edit distance of “foo”: <code>foo~1</code>
-                </li>
-            </ul>
-
-          </p>
-        </div>
-
         <div id="search-status"> </div>
 
         <div class="warning" id="search-warn-box" style="display: none;">
@@ -119,8 +87,8 @@
           <!-- Filled dynamically by JS -->
         </table>
         
-        <div style="margin-top: 8px;">
-          <p>Results provided by <a href="https://lunrjs.com">Lunr.js</a></p>
+        <div style="margin-top: 10px;">
+          <p>For more information on the search, visit the <a href="apidocs-help.html#rst-search">help page</a>.</p>
         </div>
       </div>
 
@@ -160,17 +128,7 @@
         
 
         
-            <div class="itemName"><code><a href="lyprox.riskpredictor.forms.DashboardForm.html" class="internal-link" title="lyprox.riskpredictor.forms.DashboardForm"><wbr></wbr>Dashboard<wbr></wbr>Form</a></code>
-            </div>
-        
-
-    </li><li class="">
-        
-        
-        
-
-        
-            <div class="itemName"><code><a href="lyprox.riskpredictor.forms.InferenceResultForm.html" class="internal-link" title="lyprox.riskpredictor.forms.InferenceResultForm"><wbr></wbr>Inference<wbr></wbr>Result<wbr></wbr>Form</a></code>
+            <div class="itemName"><code><a href="lyprox.riskpredictor.forms.CheckpointModelForm.html" class="internal-link" title="lyprox.riskpredictor.forms.CheckpointModelForm"><wbr></wbr>Checkpoint<wbr></wbr>Model<wbr></wbr>Form</a></code>
             </div>
         
 
@@ -184,6 +142,16 @@
             </div>
         
 
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="lyprox.riskpredictor.forms.RiskpredictorForm.html" class="internal-link" title="lyprox.riskpredictor.forms.RiskpredictorForm"><wbr></wbr>Riskpredictor<wbr></wbr>Form</a></code>
+            </div>
+        
+
     </li>
 </ul>
 
@@ -193,8 +161,21 @@
         
          
 
+        <div class="childrenKindTitle">Variables</div>
+        <ul>
+    
+    <li class="">
         
-         
+        
+        
+
+        
+            <div class="itemName"><code><a href="#T" class="internal-link" title="lyprox.riskpredictor.forms.T">T</a></code>
+            </div>
+        
+
+    </li>
+</ul> 
 
         
          
@@ -214,16 +195,6 @@
         <ul>
     
     <li class="">
-        
-        
-        
-
-        
-            <div class="itemName"><code><a href="lyprox.riskpredictor.migrations.html" class="internal-link" title="lyprox.riskpredictor.migrations">migrations</a></code>
-            </div>
-        
-
-    </li><li class="">
         
         
         
@@ -250,6 +221,26 @@
 
         
             <div class="itemName"><code><a href="lyprox.riskpredictor.forms.html" class="internal-link" title="lyprox.riskpredictor.forms">forms</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="lyprox.riskpredictor.management.html" class="internal-link" title="lyprox.riskpredictor.management">management</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="lyprox.riskpredictor.migrations.html" class="internal-link" title="lyprox.riskpredictor.migrations">migrations</a></code>
             </div>
         
 
@@ -356,31 +347,36 @@
         </div>
 
         <div class="moduleDocstring">
-          <div><p>This module contains the forms used in the riskpredictor app.</p>
-<p>The first form, the <code><a href="lyprox.riskpredictor.forms.InferenceResultForm.html" class="internal-link" title="lyprox.riskpredictor.forms.InferenceResultForm">InferenceResultForm</a></code>, is used to create a new
-<code><a href="lyprox.riskpredictor.models.InferenceResult.html" class="internal-link" title="lyprox.riskpredictor.models.InferenceResult">models.InferenceResult</a></code> and makes sure that the user enters a valid git repository
+          <div><p>Forms used in the <code><a href="lyprox.riskpredictor.html" class="internal-link" title="lyprox.riskpredictor">riskpredictor</a></code> app.</p>
+<p>The first form, the <code><a href="lyprox.riskpredictor.forms.CheckpointModelForm.html" class="internal-link" title="lyprox.riskpredictor.forms.CheckpointModelForm">CheckpointModelForm</a></code>, is used to create a new
+<code><a href="lyprox.riskpredictor.models.CheckpointModel.html" class="internal-link" title="lyprox.riskpredictor.models.CheckpointModel">models.CheckpointModel</a></code> and makes sure that the user enters a valid git repository
 and revision.</p>
 </div>
         </div>
 
         <div id="splitTables">
-          <table class="children sortable" id="id104">
+          <table class="children sortable" id="id66">
   
   
   <tr class="class">
     
     <td>Class</td>
-    <td><code><a href="lyprox.riskpredictor.forms.DashboardForm.html" class="internal-link" title="lyprox.riskpredictor.forms.DashboardForm"><wbr></wbr>Dashboard<wbr></wbr>Form</a></code></td>
-    <td>Form for the dashboard page.</td>
-  </tr><tr class="class">
-    
-    <td>Class</td>
-    <td><code><a href="lyprox.riskpredictor.forms.InferenceResultForm.html" class="internal-link" title="lyprox.riskpredictor.forms.InferenceResultForm"><wbr></wbr>Inference<wbr></wbr>Result<wbr></wbr>Form</a></code></td>
-    <td>Form for creating a new <code><a href="lyprox.riskpredictor.models.InferenceResult.html" class="internal-link" title="lyprox.riskpredictor.models.InferenceResult">InferenceResult</a></code> instance.</td>
+    <td><code><a href="lyprox.riskpredictor.forms.CheckpointModelForm.html" class="internal-link" title="lyprox.riskpredictor.forms.CheckpointModelForm"><wbr></wbr>Checkpoint<wbr></wbr>Model<wbr></wbr>Form</a></code></td>
+    <td>Form for creating a new <code><a href="lyprox.riskpredictor.models.CheckpointModel.html" class="internal-link" title="lyprox.riskpredictor.models.CheckpointModel">CheckpointModel</a></code> instance.</td>
   </tr><tr class="class">
     
     <td>Class</td>
     <td><code><a href="lyprox.riskpredictor.forms.RangeInput.html" class="internal-link" title="lyprox.riskpredictor.forms.RangeInput"><wbr></wbr>Range<wbr></wbr>Input</a></code></td>
+    <td>A widget for a range slider input field.</td>
+  </tr><tr class="class">
+    
+    <td>Class</td>
+    <td><code><a href="lyprox.riskpredictor.forms.RiskpredictorForm.html" class="internal-link" title="lyprox.riskpredictor.forms.RiskpredictorForm"><wbr></wbr>Riskpredictor<wbr></wbr>Form</a></code></td>
+    <td>Form for the riskpredictor dashboard page.</td>
+  </tr><tr class="typevariable">
+    
+    <td>Type Variable</td>
+    <td><code><a href="#T" class="internal-link" title="lyprox.riskpredictor.forms.T">T</a></code></td>
     <td><span class="undocumented">Undocumented</span></td>
   </tr>
 </table>
@@ -390,7 +386,32 @@ and revision.</p>
         </div>
 
         <div id="childList">
-          
+          <div class="basetypevariable">
+  
+  
+  <a name="lyprox.riskpredictor.forms.T">
+    
+  </a>
+  <a name="T">
+    
+  </a>
+  <div class="functionHeader">
+    
+    <span class="py-defname">T</span> =
+    
+    <a class="headerLink" href="#T" title="lyprox.riskpredictor.forms.T">
+      
+      
+      ¶
+    </a>
+  </div>
+  <div class="functionBody">
+    
+    <div><p class="undocumented">Undocumented</p></div>
+    <table class="valueTable"><tr class="fieldStart"><td class="fieldName">Value</td></tr><tr><td><pre class="constant-value"><code>TypeVar(<wbr></wbr><span class="rst-variable-quote">'</span><span class="rst-variable-string">T</span><span class="rst-variable-quote">'</span>,
+        <wbr></wbr>bound=<span class="rst-variable-quote">'</span><span class="rst-variable-string">RiskpredictorForm</span><span class="rst-variable-quote">'</span>)</code></pre></td></tr></table>
+  </div>
+</div>
         </div>
       
       </div>
@@ -399,10 +420,10 @@ and revision.</p>
     <footer class="navbar navbar-default">
 
   
-  <div class="container">
+  <div class="container-fluid">
     <a href="index.html">API Documentation</a> for LyProX,
   generated by <a href="https://github.com/twisted/pydoctor/">pydoctor</a>
-    22.9.1 at 2024-10-09 13:21:38.
+    24.11.2 at 2025-04-01 13:02:24.
   </div>
 
   <!-- Search related scripts needs to be loaded at the end of HTML 

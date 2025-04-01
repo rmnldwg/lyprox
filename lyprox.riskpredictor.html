@@ -7,7 +7,7 @@
   <head>
     
     <title>lyprox.riskpredictor</title>
-    <meta name="generator" content="pydoctor 22.9.1"> 
+    <meta name="generator" content="pydoctor 24.11.2"> 
         
     </meta>
     <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
@@ -15,6 +15,7 @@
     <link rel="stylesheet" type="text/css" href="bootstrap.min.css" />
     <link rel="stylesheet" type="text/css" href="apidocs.css" />
     <link rel="stylesheet" type="text/css" href="extra.css" />
+    
 </head>
 
   <body>
@@ -52,7 +53,7 @@
             
             <span class="input-group-btn">
               <a style="display: none;" class="btn btn-default" id="search-clear-button" title="Clear" onclick="clearSearch()"><img src="fonts/x-circle.svg" alt="Clear" /></a>
-              <a class="btn btn-default" id="search-help-button" title="Help" onclick="toggleSearchHelpText()"><img src="fonts/info.svg" alt="Help" /></a>
+              <a class="btn btn-default" id="apidocs-help-button" title="Help" href="apidocs-help.html"><img src="fonts/info.svg" alt="Help" /></a>
             </span>
           </div>
         </div>
@@ -76,39 +77,6 @@
             <h1>Cannot search: JavaScript is not supported/enabled in your browser.</h1>
         </noscript>
 
-        <div class="hint" id="search-help-box">
-          <p class="rst-last">
-      
-            Search bar offers the following options:
-            <ul>   
-                <li>
-                  <strong>Term presence.</strong> The below example searches for documents that 
-                    must contain “foo”, might contain “bar” and must not contain “baz”: <code>+foo bar -baz</code>
-                </li> 
-
-                <li>
-                  <strong>Wildcards.</strong> The below example searches for documents with words beginning with “foo”: <code>foo*</code>
-                </li> 
-
-                <li>
-                  <strong>Search in specific fields.</strong> The following search matches all objects 
-                  in "twisted.mail" that matches “search”: <code>+qname:twisted.mail.* +search</code>
-
-                  <p>
-                    Possible fields: 'name', 'qname' (fully qualified name), 'docstring', and 'kind'.
-                    Last two fields are only applicable if "search in docstrings" is enabled.
-                  </p>
-                </li>
-
-                <li>
-                  <strong>Fuzzy matches.</strong> The following search matches all documents 
-                  that have a word within 1 edit distance of “foo”: <code>foo~1</code>
-                </li>
-            </ul>
-
-          </p>
-        </div>
-
         <div id="search-status"> </div>
 
         <div class="warning" id="search-warn-box" style="display: none;">
@@ -119,8 +87,8 @@
           <!-- Filled dynamically by JS -->
         </table>
         
-        <div style="margin-top: 8px;">
-          <p>Results provided by <a href="https://lunrjs.com">Lunr.js</a></p>
+        <div style="margin-top: 10px;">
+          <p>For more information on the search, visit the <a href="apidocs-help.html#rst-search">help page</a>.</p>
         </div>
       </div>
 
@@ -157,16 +125,6 @@
         
 
         
-            <div class="itemName"><code><a href="lyprox.riskpredictor.migrations.html" class="internal-link" title="lyprox.riskpredictor.migrations">migrations</a></code>
-            </div>
-        
-
-    </li><li class="">
-        
-        
-        
-
-        
             <div class="itemName"><code><a href="lyprox.riskpredictor.admin.html" class="internal-link" title="lyprox.riskpredictor.admin">admin</a></code>
             </div>
         
@@ -188,6 +146,26 @@
 
         
             <div class="itemName"><code><a href="lyprox.riskpredictor.forms.html" class="internal-link" title="lyprox.riskpredictor.forms">forms</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="lyprox.riskpredictor.management.html" class="internal-link" title="lyprox.riskpredictor.management">management</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="lyprox.riskpredictor.migrations.html" class="internal-link" title="lyprox.riskpredictor.migrations">migrations</a></code>
             </div>
         
 
@@ -289,6 +267,16 @@
         
 
         
+            <div class="itemName"><code><a href="lyprox.context_processors.html" class="internal-link" title="lyprox.context_processors">context<wbr></wbr>_processors</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
             <div class="itemName"><code><a href="lyprox.dataexplorer.html" class="internal-link" title="lyprox.dataexplorer">dataexplorer</a></code>
             </div>
         
@@ -299,7 +287,7 @@
         
 
         
-            <div class="itemName"><code><a href="lyprox.patients.html" class="internal-link" title="lyprox.patients">patients</a></code>
+            <div class="itemName"><code><a href="lyprox.manage.html" class="internal-link" title="lyprox.manage">manage</a></code>
             </div>
         
 
@@ -319,26 +307,6 @@
         
 
         
-            <div class="itemName"><code><a href="lyprox.templatetags.html" class="internal-link" title="lyprox.templatetags">templatetags</a></code>
-            </div>
-        
-
-    </li><li class="">
-        
-        
-        
-
-        
-            <div class="itemName"><code><a href="lyprox.manage.html" class="internal-link" title="lyprox.manage">manage</a></code>
-            </div>
-        
-
-    </li><li class="">
-        
-        
-        
-
-        
             <div class="itemName"><code><a href="lyprox.settings.html" class="internal-link" title="lyprox.settings">settings</a></code>
             </div>
         
@@ -349,7 +317,27 @@
         
 
         
+            <div class="itemName"><code><a href="lyprox.templatetags.html" class="internal-link" title="lyprox.templatetags">templatetags</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
             <div class="itemName"><code><a href="lyprox.urls.html" class="internal-link" title="lyprox.urls">urls</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="lyprox.utils.html" class="internal-link" title="lyprox.utils">utils</a></code>
             </div>
         
 
@@ -370,6 +358,16 @@
 
         
             <div class="itemName"><code><a href="lyprox.wsgi.html" class="internal-link" title="lyprox.wsgi">wsgi</a></code>
+            </div>
+        
+
+    </li><li class="private">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="lyprox.__main__.html" class="internal-link" title="lyprox.__main__">__main__</a></code>
             </div>
         
 
@@ -436,42 +434,77 @@
         </div>
 
         <div class="moduleDocstring">
-          <div><p>Django app for computing the risk of a particular involvement pattern, given a
-personalized diagnosis.</p>
-<p>This prediction is based on the probabilistic hidden Markov model we developed to
-model lymphatic metastatic progression in head and neck cancer <a class="rst-footnote-reference" href="#rst-footnote-1" id="rst-footnote-reference-1">[1]</a>.</p>
-<p>The underlying code to compute the risks lives in the GitHub repository <a class="rst-reference rst-external" href="https://github.com/rmnldwg/lymph" target="_top">lymph</a> and
-can be installed from <a class="rst-reference rst-external" href="https://pypi.org/project/lymph-model/" target="_top">PyPI</a></p>
-<table class="rst-docutils footnote" frame="void" id="rst-footnote-1" rules="none">
-<colgroup><col class="label" /><col /></colgroup>
-<tbody valign="top">
-<tr><td class="rst-label"><a class="fn-backref" href="#footnote-reference-1">[1]</a></td><td>R. Ludwig, B. Pouymayou, P. Balermpas, and J. Unkelbach,
-"A hidden Markov model for lymphatic tumor progression in the head and neck",
-Sci Rep, vol. 11, no. 1, p. 12261, Dec. 2021, doi: 10.1038/s41598-021-91544-1.</td></tr>
-</tbody>
-</table>
+          <div><p>Risk predictions for involvement patterns, given personalized diagnoses.</p>
+<p>The predictions displayed in the risk predictor are not actually computed by the web
+app. Instead, LyProX reconstructs one of the <code><a href="https://lymph-model.readthedocs.io/stable/models.html#module-lymph.models" class="intersphinx-link">lymph.models</a></code> with the help of config
+files - parsed by the <a class="rst-external rst-reference" href="https://lyscripts.readthedocs.io/latest" target="_top">lyscripts</a> package - that can be found in any repos that define
+a <a class="rst-external rst-reference" href="https://dvc.org/" target="_top">DVC</a> pipeline.</p>
+<p>This is probably the most complex interplay between the different libraries, so we will
+try to break it down as complrehensively as possible:</p>
+<ol class="rst-arabic rst-simple">
+<li><dl class="rst-docutils rst-first">
+<dt>The <a class="rst-external rst-reference" href="https://lymph-model.readthedocs.io/stable" target="_top">lymph</a> Models</dt>
+<dd>The code implementing the mathematical models for lymphatic tumor progression are
+provided by the <a class="rst-external rst-reference" href="https://lymph-model.readthedocs.io/stable" target="_top">lymph</a> library. They implement the different <code><a href="https://lymph-model.readthedocs.io/stable/models.html#module-lymph.models" class="intersphinx-link">lymph.models</a></code>.</dd>
+</dl>
+</li>
+<li><dl class="rst-docutils rst-first">
+<dt><a class="rst-external rst-reference" href="https://dvc.org/" target="_top">DVC</a> Pipelines in Paper Repos</dt>
+<dd>Our research group has, in the past, published a number of papers where we inferred
+the optimal parameters of various such models, given a cohort of patients. These
+sets of inferred parameter samples are referenced by a tool called <a class="rst-external rst-reference" href="https://dvc.org/" target="_top">DVC</a> in
+different repositories with instructions on how to fetch them from a remote storage
+container.</dd>
+</dl>
+</li>
+<li><dl class="rst-docutils rst-first">
+<dt>Reproducing Models with <a class="rst-external rst-reference" href="https://lyscripts.readthedocs.io/latest" target="_top">lyscripts</a></dt>
+<dd>However, these references are worthless without unambiguous instructions on how to
+reconstruct the exact model that was used for inference. For this, we use the
+<a class="rst-external rst-reference" href="https://lyscripts.readthedocs.io/latest" target="_top">lyscripts</a> package. Its module <code><a href="https://lyscripts.readthedocs.io/latest/configs.html#module-lyscripts.configs" class="intersphinx-link">lyscripts.configs</a></code> provides a bunch of
+<code><a href="https://docs.pydantic.dev/latest/api/base_model/#pydantic.BaseModel" class="intersphinx-link">pydantic.BaseModel</a></code> subclasses for defining basically every important aspect of the
+modelling process.</dd>
+</dl>
+</li>
+</ol>
+<p>What happens in this "little" app now, is that one defines where it should look for
+the YAML files that define a model and a sampling pipeline. This definition is stored
+as a <code><a href="lyprox.riskpredictor.models.CheckpointModel.html" class="internal-link" title="lyprox.riskpredictor.models.CheckpointModel">CheckpointModel</a></code> in the <a class="rst-external rst-reference" href="https://www.sqlite.org/index.html" target="_top">SQLite</a> database. From instances of this class, one
+can then validate the config files, fetch the samples from the remote storage using
+<a class="rst-external rst-reference" href="https://dvc.org/" target="_top">DVC</a>, and precompute prior state distributions from the trained model. See the docs
+of the <code><a href="lyprox.riskpredictor.models.CheckpointModel.html" class="internal-link" title="lyprox.riskpredictor.models.CheckpointModel">CheckpointModel</a></code> for a list of all the available methods and how they cache
+their intermediate results using <code><a href="https://joblib.readthedocs.io/en/stable/index.html#module-joblib" class="intersphinx-link">joblib</a></code>.</p>
+<p>Consequently, a user can then head to the risk predictor's dashboard, select a
+<code><a href="lyprox.riskpredictor.models.CheckpointModel.html" class="internal-link" title="lyprox.riskpredictor.models.CheckpointModel">CheckpointModel</a></code> and have the web app compute specific risks defined via the
+<code><a href="lyprox.riskpredictor.forms.RiskpredictorForm.html" class="internal-link" title="lyprox.riskpredictor.forms.RiskpredictorForm">RiskpredictorForm</a></code> from the precomputed quantities. This actual risk predictions
+happens in the <code><a href="lyprox.riskpredictor.predict.html" class="internal-link" title="lyprox.riskpredictor.predict">predict</a></code> module of the app.</p>
 </div>
         </div>
 
         <div id="splitTables">
-          <table class="children sortable" id="id101">
+          <table class="children sortable" id="id63">
   
   
   <tr class="module">
     
     <td>Module</td>
     <td><code><a href="lyprox.riskpredictor.admin.html" class="internal-link" title="lyprox.riskpredictor.admin">admin</a></code></td>
-    <td><span class="undocumented">Undocumented</span></td>
+    <td>Boilerplate code to register the CheckpointModel with the Django admin interface.</td>
   </tr><tr class="module">
     
     <td>Module</td>
     <td><code><a href="lyprox.riskpredictor.apps.html" class="internal-link" title="lyprox.riskpredictor.apps">apps</a></code></td>
-    <td><span class="undocumented">Undocumented</span></td>
+    <td>Boilerplate Django configuration for the riskpredictor app.</td>
   </tr><tr class="module">
     
     <td>Module</td>
     <td><code><a href="lyprox.riskpredictor.forms.html" class="internal-link" title="lyprox.riskpredictor.forms">forms</a></code></td>
-    <td>This module contains the forms used in the riskpredictor app.</td>
+    <td>Forms used in the <code><a href="lyprox.riskpredictor.html" class="internal-link" title="lyprox.riskpredictor">riskpredictor</a></code> app.</td>
+  </tr><tr class="package">
+    
+    <td>Package</td>
+    <td><code><a href="lyprox.riskpredictor.management.html" class="internal-link" title="lyprox.riskpredictor.management">management</a></code></td>
+    <td><span class="undocumented">Undocumented</span></td>
   </tr><tr class="package">
     
     <td>Package</td>
@@ -481,7 +514,7 @@ Sci Rep, vol. 11, no. 1, p. 12261, Dec. 2021, doi: 10.1038/s41598-021-91544-1.</
     
     <td>Module</td>
     <td><code><a href="lyprox.riskpredictor.models.html" class="internal-link" title="lyprox.riskpredictor.models">models</a></code></td>
-    <td>The model <code><a href="lyprox.riskpredictor.models.InferenceResult.html" class="internal-link" title="lyprox.riskpredictor.models.InferenceResult">InferenceResult</a></code> holds an upload of parameter samples that were produced during an inference run of the <tt class="rst-docutils literal"><span class="pre">lymph-model</span></tt>. The samples should be fetched from the DVC remote storage and used to compute the prior risk matrices.</td>
+    <td>Models for the <code><a href="lyprox.riskpredictor.html" class="internal-link" title="lyprox.riskpredictor">riskpredictor</a></code> Django app.</td>
   </tr><tr class="module">
     
     <td>Module</td>
@@ -496,7 +529,7 @@ Sci Rep, vol. 11, no. 1, p. 12261, Dec. 2021, doi: 10.1038/s41598-021-91544-1.</
     
     <td>Module</td>
     <td><code><a href="lyprox.riskpredictor.urls.html" class="internal-link" title="lyprox.riskpredictor.urls">urls</a></code></td>
-    <td>URLs related to the riskpredictor prediction app under <tt class="rst-docutils literal"><span class="pre">https://lyprox.org/riskpredictor</span></tt>. Like the <code>dashboard</code>, this includes a dashboard and a help page.</td>
+    <td>URLs related to the <code><a href="lyprox.riskpredictor.html" class="internal-link" title="lyprox.riskpredictor">riskpredictor</a></code> prediction app.</td>
   </tr><tr class="module">
     
     <td>Module</td>
@@ -519,10 +552,10 @@ Sci Rep, vol. 11, no. 1, p. 12261, Dec. 2021, doi: 10.1038/s41598-021-91544-1.</
     <footer class="navbar navbar-default">
 
   
-  <div class="container">
+  <div class="container-fluid">
     <a href="index.html">API Documentation</a> for LyProX,
   generated by <a href="https://github.com/twisted/pydoctor/">pydoctor</a>
-    22.9.1 at 2024-10-09 13:21:38.
+    24.11.2 at 2025-04-01 13:02:24.
   </div>
 
   <!-- Search related scripts needs to be loaded at the end of HTML 

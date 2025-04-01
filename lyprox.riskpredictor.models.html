@@ -7,7 +7,7 @@
   <head>
     
     <title>lyprox.riskpredictor.models</title>
-    <meta name="generator" content="pydoctor 22.9.1"> 
+    <meta name="generator" content="pydoctor 24.11.2"> 
         
     </meta>
     <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
@@ -15,6 +15,7 @@
     <link rel="stylesheet" type="text/css" href="bootstrap.min.css" />
     <link rel="stylesheet" type="text/css" href="apidocs.css" />
     <link rel="stylesheet" type="text/css" href="extra.css" />
+    
 </head>
 
   <body>
@@ -52,7 +53,7 @@
             
             <span class="input-group-btn">
               <a style="display: none;" class="btn btn-default" id="search-clear-button" title="Clear" onclick="clearSearch()"><img src="fonts/x-circle.svg" alt="Clear" /></a>
-              <a class="btn btn-default" id="search-help-button" title="Help" onclick="toggleSearchHelpText()"><img src="fonts/info.svg" alt="Help" /></a>
+              <a class="btn btn-default" id="apidocs-help-button" title="Help" href="apidocs-help.html"><img src="fonts/info.svg" alt="Help" /></a>
             </span>
           </div>
         </div>
@@ -76,39 +77,6 @@
             <h1>Cannot search: JavaScript is not supported/enabled in your browser.</h1>
         </noscript>
 
-        <div class="hint" id="search-help-box">
-          <p class="rst-last">
-      
-            Search bar offers the following options:
-            <ul>   
-                <li>
-                  <strong>Term presence.</strong> The below example searches for documents that 
-                    must contain “foo”, might contain “bar” and must not contain “baz”: <code>+foo bar -baz</code>
-                </li> 
-
-                <li>
-                  <strong>Wildcards.</strong> The below example searches for documents with words beginning with “foo”: <code>foo*</code>
-                </li> 
-
-                <li>
-                  <strong>Search in specific fields.</strong> The following search matches all objects 
-                  in "twisted.mail" that matches “search”: <code>+qname:twisted.mail.* +search</code>
-
-                  <p>
-                    Possible fields: 'name', 'qname' (fully qualified name), 'docstring', and 'kind'.
-                    Last two fields are only applicable if "search in docstrings" is enabled.
-                  </p>
-                </li>
-
-                <li>
-                  <strong>Fuzzy matches.</strong> The following search matches all documents 
-                  that have a word within 1 edit distance of “foo”: <code>foo~1</code>
-                </li>
-            </ul>
-
-          </p>
-        </div>
-
         <div id="search-status"> </div>
 
         <div class="warning" id="search-warn-box" style="display: none;">
@@ -119,8 +87,8 @@
           <!-- Filled dynamically by JS -->
         </table>
         
-        <div style="margin-top: 8px;">
-          <p>Results provided by <a href="https://lunrjs.com">Lunr.js</a></p>
+        <div style="margin-top: 10px;">
+          <p>For more information on the search, visit the <a href="apidocs-help.html#rst-search">help page</a>.</p>
         </div>
       </div>
 
@@ -160,7 +128,7 @@
         
 
         
-            <div class="itemName"><code><a href="lyprox.riskpredictor.models.InferenceResult.html" class="internal-link" title="lyprox.riskpredictor.models.InferenceResult"><wbr></wbr>Inference<wbr></wbr>Result</a></code>
+            <div class="itemName"><code><a href="lyprox.riskpredictor.models.CheckpointModel.html" class="internal-link" title="lyprox.riskpredictor.models.CheckpointModel"><wbr></wbr>Checkpoint<wbr></wbr>Model</a></code>
             </div>
         
 
@@ -176,7 +144,47 @@
         
 
         
-            <div class="itemName"><code><a href="#get_path_for_risk_matrices" class="internal-link" title="lyprox.riskpredictor.models.get_path_for_risk_matrices">get<wbr></wbr>_path<wbr></wbr>_for<wbr></wbr>_risk<wbr></wbr>_matrices</a></code>
+            <div class="itemName"><code><a href="#cached_compute_priors" class="internal-link" title="lyprox.riskpredictor.models.cached_compute_priors">cached<wbr></wbr>_compute<wbr></wbr>_priors</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="#cached_construct_model_and_add_dists" class="internal-link" title="lyprox.riskpredictor.models.cached_construct_model_and_add_dists">cached<wbr></wbr>_construct<wbr></wbr>_model<wbr></wbr>_and<wbr></wbr>_add<wbr></wbr>_dists</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="#cached_fetch_and_merge_yaml" class="internal-link" title="lyprox.riskpredictor.models.cached_fetch_and_merge_yaml">cached<wbr></wbr>_fetch<wbr></wbr>_and<wbr></wbr>_merge<wbr></wbr>_yaml</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="#cached_fetch_model_samples" class="internal-link" title="lyprox.riskpredictor.models.cached_fetch_model_samples">cached<wbr></wbr>_fetch<wbr></wbr>_model<wbr></wbr>_samples</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="#validate_configs" class="internal-link" title="lyprox.riskpredictor.models.validate_configs">validate<wbr></wbr>_configs</a></code>
             </div>
         
 
@@ -186,8 +194,41 @@
         
          
 
+        <div class="childrenKindTitle">Variables</div>
+        <ul>
+    
+    <li class="">
         
-         
+        
+        
+
+        
+            <div class="itemName"><code><a href="#ConfigAndVersionTupleType" class="internal-link" title="lyprox.riskpredictor.models.ConfigAndVersionTupleType"><wbr></wbr>Config<wbr></wbr>And<wbr></wbr>Version<wbr></wbr>Tuple<wbr></wbr>Type</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="#logger" class="internal-link" title="lyprox.riskpredictor.models.logger">logger</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="#memory" class="internal-link" title="lyprox.riskpredictor.models.memory">memory</a></code>
+            </div>
+        
+
+    </li>
+</ul> 
 
         
          
@@ -207,16 +248,6 @@
         <ul>
     
     <li class="">
-        
-        
-        
-
-        
-            <div class="itemName"><code><a href="lyprox.riskpredictor.migrations.html" class="internal-link" title="lyprox.riskpredictor.migrations">migrations</a></code>
-            </div>
-        
-
-    </li><li class="">
         
         
         
@@ -243,6 +274,26 @@
 
         
             <div class="itemName"><code><a href="lyprox.riskpredictor.forms.html" class="internal-link" title="lyprox.riskpredictor.forms">forms</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="lyprox.riskpredictor.management.html" class="internal-link" title="lyprox.riskpredictor.management">management</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="lyprox.riskpredictor.migrations.html" class="internal-link" title="lyprox.riskpredictor.migrations">migrations</a></code>
             </div>
         
 
@@ -349,29 +400,65 @@
         </div>
 
         <div class="moduleDocstring">
-          <div><p>The model <code><a href="lyprox.riskpredictor.models.InferenceResult.html" class="internal-link" title="lyprox.riskpredictor.models.InferenceResult">InferenceResult</a></code> holds an upload of parameter samples that were produced
-during an inference run of the <tt class="rst-docutils literal"><span class="pre">lymph-model</span></tt>. The samples should be fetched from the
+          <div><p>Models for the <code><a href="lyprox.riskpredictor.html" class="internal-link" title="lyprox.riskpredictor">riskpredictor</a></code> Django app.</p>
+<p>The model <code><a href="lyprox.riskpredictor.models.CheckpointModel.html" class="internal-link" title="lyprox.riskpredictor.models.CheckpointModel">CheckpointModel</a></code> holds an upload of parameter samples that were produced
+during an inference run of the <tt class="rst-docutils rst-literal"><span class="pre">lymph-model</span></tt>. The samples should be fetched from the
 DVC remote storage and used to compute the prior risk matrices.</p>
-<p>Given a specific diagnosis, as entered via the <code>forms.RiskForm</code>, the <tt class="rst-docutils literal"><span class="pre">lymph-model</span></tt>
-package and the precomputed risk matrices in the <code><a href="lyprox.riskpredictor.models.InferenceResult.html" class="internal-link" title="lyprox.riskpredictor.models.InferenceResult">InferenceResult</a></code> instances, the
-personalized risk estimates can be computed.</p>
+<p>Given a specific diagnosis, as entered via the <code><a href="lyprox.riskpredictor.forms.RiskpredictorForm.html" class="internal-link" title="lyprox.riskpredictor.forms.RiskpredictorForm">forms.RiskpredictorForm</a></code>, the
+<tt class="rst-docutils rst-literal"><span class="pre">lymph-model</span></tt> package and the precomputed risk matrices in the <code><a href="lyprox.riskpredictor.models.CheckpointModel.html" class="internal-link" title="lyprox.riskpredictor.models.CheckpointModel">CheckpointModel</a></code>
+instances, the personalized risk estimates can be computed.</p>
 </div>
         </div>
 
         <div id="splitTables">
-          <table class="children sortable" id="id112">
+          <table class="children sortable" id="id78">
   
   
   <tr class="class">
     
     <td>Class</td>
-    <td><code><a href="lyprox.riskpredictor.models.InferenceResult.html" class="internal-link" title="lyprox.riskpredictor.models.InferenceResult"><wbr></wbr>Inference<wbr></wbr>Result</a></code></td>
-    <td>Results of an inference run of the <tt class="rst-docutils literal"><span class="pre">lymph-model</span></tt> package.</td>
+    <td><code><a href="lyprox.riskpredictor.models.CheckpointModel.html" class="internal-link" title="lyprox.riskpredictor.models.CheckpointModel"><wbr></wbr>Checkpoint<wbr></wbr>Model</a></code></td>
+    <td>Results of a round of parameter sampling for one of the <code><a href="https://lymph-model.readthedocs.io/stable/models.html#module-lymph.models" class="intersphinx-link">lymph.models</a></code>.</td>
   </tr><tr class="function">
     
     <td>Function</td>
-    <td><code><a href="#get_path_for_risk_matrices" class="internal-link" title="lyprox.riskpredictor.models.get_path_for_risk_matrices">get<wbr></wbr>_path<wbr></wbr>_for<wbr></wbr>_risk<wbr></wbr>_matrices</a></code></td>
-    <td>Returns the path where the risk matrices should be stored for a given <code><a href="lyprox.riskpredictor.models.InferenceResult.html" class="internal-link" title="lyprox.riskpredictor.models.InferenceResult">InferenceResult</a></code> instance.</td>
+    <td><code><a href="#cached_compute_priors" class="internal-link" title="lyprox.riskpredictor.models.cached_compute_priors">cached<wbr></wbr>_compute<wbr></wbr>_priors</a></code></td>
+    <td>Compute the prior state dists for the given model, samples, and t_stage.</td>
+  </tr><tr class="function">
+    
+    <td>Function</td>
+    <td><code><a href="#cached_construct_model_and_add_dists" class="internal-link" title="lyprox.riskpredictor.models.cached_construct_model_and_add_dists">cached<wbr></wbr>_construct<wbr></wbr>_model<wbr></wbr>_and<wbr></wbr>_add<wbr></wbr>_dists</a></code></td>
+    <td>Construct the lymph model and add the distributions to it.</td>
+  </tr><tr class="function">
+    
+    <td>Function</td>
+    <td><code><a href="#cached_fetch_and_merge_yaml" class="internal-link" title="lyprox.riskpredictor.models.cached_fetch_and_merge_yaml">cached<wbr></wbr>_fetch<wbr></wbr>_and<wbr></wbr>_merge<wbr></wbr>_yaml</a></code></td>
+    <td>Fetch and merge the YAML configuration files from the repo.</td>
+  </tr><tr class="function">
+    
+    <td>Function</td>
+    <td><code><a href="#cached_fetch_model_samples" class="internal-link" title="lyprox.riskpredictor.models.cached_fetch_model_samples">cached<wbr></wbr>_fetch<wbr></wbr>_model<wbr></wbr>_samples</a></code></td>
+    <td>Fetch the model samples from the HDF5 file in the DVC repo.</td>
+  </tr><tr class="function">
+    
+    <td>Function</td>
+    <td><code><a href="#validate_configs" class="internal-link" title="lyprox.riskpredictor.models.validate_configs">validate<wbr></wbr>_configs</a></code></td>
+    <td>Validate the pydantic configs necessary for constructing the model.</td>
+  </tr><tr class="typealias">
+    
+    <td>Type Alias</td>
+    <td><code><a href="#ConfigAndVersionTupleType" class="internal-link" title="lyprox.riskpredictor.models.ConfigAndVersionTupleType"><wbr></wbr>Config<wbr></wbr>And<wbr></wbr>Version<wbr></wbr>Tuple<wbr></wbr>Type</a></code></td>
+    <td><span class="undocumented">Undocumented</span></td>
+  </tr><tr class="variable">
+    
+    <td>Variable</td>
+    <td><code><a href="#logger" class="internal-link" title="lyprox.riskpredictor.models.logger">logger</a></code></td>
+    <td><span class="undocumented">Undocumented</span></td>
+  </tr><tr class="variable">
+    
+    <td>Variable</td>
+    <td><code><a href="#memory" class="internal-link" title="lyprox.riskpredictor.models.memory">memory</a></code></td>
+    <td><span class="undocumented">Undocumented</span></td>
   </tr>
 </table>
           
@@ -383,17 +470,18 @@ personalized risk estimates can be computed.</p>
           <div class="basefunction">
   
   
-  <a name="lyprox.riskpredictor.models.get_path_for_risk_matrices">
+  <a name="lyprox.riskpredictor.models.cached_compute_priors">
     
   </a>
-  <a name="get_path_for_risk_matrices">
+  <a name="cached_compute_priors">
     
   </a>
   <div class="functionHeader">
     
-    <span class="py-keyword">def</span> <span class="py-defname">get_path_for_risk_matrices</span>(instance, filename):
+    @memory.cache<br />
+    <span class="py-keyword">def</span> <span class="py-defname">cached_compute_priors</span><span class="function-signature">(model: <code><a href="https://lymph-model.readthedocs.io/stable/types.html#lymph.types.Model" class="intersphinx-link">Model</a></code>, samples: <code>np.ndarray</code>, t_stage: <code>str | int</code>) -&gt; <code>np.ndarray</code></span>:
     
-    <a class="headerLink" href="#get_path_for_risk_matrices" title="lyprox.riskpredictor.models.get_path_for_risk_matrices">
+    <a class="headerLink" href="#cached_compute_priors" title="lyprox.riskpredictor.models.cached_compute_priors">
       
       
       ¶
@@ -401,9 +489,175 @@ personalized risk estimates can be computed.</p>
   </div>
   <div class="docstring functionBody">
     
-    <div><p>Returns the path where the risk matrices should be stored for a given
-<code><a href="lyprox.riskpredictor.models.InferenceResult.html" class="internal-link" title="lyprox.riskpredictor.models.InferenceResult">InferenceResult</a></code> instance.</p>
-</div>
+    <div><p>Compute the prior state dists for the given model, samples, and t_stage.</p></div>
+  </div>
+</div><div class="basefunction">
+  
+  
+  <a name="lyprox.riskpredictor.models.cached_construct_model_and_add_dists">
+    
+  </a>
+  <a name="cached_construct_model_and_add_dists">
+    
+  </a>
+  <div class="functionHeader">
+    
+    @memory.cache<br />
+    <span class="py-keyword">def</span> <span class="py-defname">cached_construct_model_and_add_dists</span><span class="function-signature">(graph_config: <code><a href="https://lyscripts.readthedocs.io/latest/configs.html#lyscripts.configs.GraphConfig" class="intersphinx-link">GraphConfig</a></code>, model_config: <code><a href="https://lyscripts.readthedocs.io/latest/configs.html#lyscripts.configs.ModelConfig" class="intersphinx-link">ModelConfig</a></code>, dist_configs: <code>dict[<wbr></wbr>str | int, <wbr></wbr><a href="https://lyscripts.readthedocs.io/latest/configs.html#lyscripts.configs.DistributionConfig" class="intersphinx-link">DistributionConfig</a>]</code>, version: <code>int</code>) -&gt; <code><a href="https://lymph-model.readthedocs.io/stable/types.html#lymph.types.Model" class="intersphinx-link">Model</a></code></span>:
+    
+    <a class="headerLink" href="#cached_construct_model_and_add_dists" title="lyprox.riskpredictor.models.cached_construct_model_and_add_dists">
+      
+      
+      ¶
+    </a>
+  </div>
+  <div class="docstring functionBody">
+    
+    <div><p>Construct the lymph model and add the distributions to it.</p></div>
+  </div>
+</div><div class="basefunction">
+  
+  
+  <a name="lyprox.riskpredictor.models.cached_fetch_and_merge_yaml">
+    
+  </a>
+  <a name="cached_fetch_and_merge_yaml">
+    
+  </a>
+  <div class="functionHeader">
+    
+    @memory.cache<br />
+    <span class="py-keyword">def</span> <span class="py-defname">cached_fetch_and_merge_yaml</span><span class="function-signature">(repo_name: <code>str</code>, ref: <code>str</code>, graph_config_path: <code>str</code>, model_config_path: <code>str</code>, dist_configs_path: <code>str</code>) -&gt; <code>dict[<wbr></wbr>str, <wbr></wbr>Any]</code></span>:
+    
+    <a class="headerLink" href="#cached_fetch_and_merge_yaml" title="lyprox.riskpredictor.models.cached_fetch_and_merge_yaml">
+      
+      
+      ¶
+    </a>
+  </div>
+  <div class="docstring functionBody">
+    
+    <div><p>Fetch and merge the YAML configuration files from the repo.</p></div>
+  </div>
+</div><div class="basefunction">
+  
+  
+  <a name="lyprox.riskpredictor.models.cached_fetch_model_samples">
+    
+  </a>
+  <a name="cached_fetch_model_samples">
+    
+  </a>
+  <div class="functionHeader">
+    
+    @memory.cache<br />
+    <span class="py-keyword">def</span> <span class="py-defname">cached_fetch_model_samples</span><span class="function-signature">(repo_name: <code>str</code>, ref: <code>str</code>, samples_path: <code>str</code>, num_samples: <code>int</code>, seed: <code>int</code> = 42) -&gt; <code>np.ndarray</code></span>:
+    
+    <a class="headerLink" href="#cached_fetch_model_samples" title="lyprox.riskpredictor.models.cached_fetch_model_samples">
+      
+      
+      ¶
+    </a>
+  </div>
+  <div class="docstring functionBody">
+    
+    <div><p>Fetch the model samples from the HDF5 file in the DVC repo.</p></div>
+  </div>
+</div><div class="basefunction">
+  
+  
+  <a name="lyprox.riskpredictor.models.validate_configs">
+    
+  </a>
+  <a name="validate_configs">
+    
+  </a>
+  <div class="functionHeader">
+    
+    
+    <span class="py-keyword">def</span> <span class="py-defname">validate_configs</span><span class="function-signature">(merged_yaml: <code>dict[<wbr></wbr>str, <wbr></wbr>Any]</code>) -&gt; <code><a href="#ConfigAndVersionTupleType" class="internal-link" title="lyprox.riskpredictor.models.ConfigAndVersionTupleType">ConfigAndVersionTupleType</a></code></span>:
+    
+    <a class="headerLink" href="#validate_configs" title="lyprox.riskpredictor.models.validate_configs">
+      
+      
+      ¶
+    </a>
+  </div>
+  <div class="docstring functionBody">
+    
+    <div><p>Validate the pydantic configs necessary for constructing the model.</p></div>
+  </div>
+</div><div class="basetypealias">
+  
+  
+  <a name="lyprox.riskpredictor.models.ConfigAndVersionTupleType">
+    
+  </a>
+  <a name="ConfigAndVersionTupleType">
+    
+  </a>
+  <div class="functionHeader">
+    
+    <span class="py-defname">ConfigAndVersionTupleType</span> =
+    
+    <a class="headerLink" href="#ConfigAndVersionTupleType" title="lyprox.riskpredictor.models.ConfigAndVersionTupleType">
+      
+      
+      ¶
+    </a>
+  </div>
+  <div class="functionBody">
+    
+    <div><p class="undocumented">Undocumented</p></div>
+    <table class="valueTable"><tr class="fieldStart"><td class="fieldName">Value</td></tr><tr><td><pre class="constant-value"><code>tuple[<wbr></wbr><a href="https://lyscripts.readthedocs.io/latest/configs.html#lyscripts.configs.GraphConfig" class="intersphinx-link">GraphConfig</a>, <wbr></wbr><a href="https://lyscripts.readthedocs.io/latest/configs.html#lyscripts.configs.ModelConfig" class="intersphinx-link">ModelConfig</a>, <wbr></wbr>dict[<wbr></wbr>str | int, <wbr></wbr><a href="https://lyscripts.readthedocs.io/latest/configs.html#lyscripts.configs.DistributionConfig" class="intersphinx-link">DistributionConfig</a>], <wbr></wbr>int]</code></pre></td></tr></table>
+  </div>
+</div><div class="basevariable">
+  
+  
+  <a name="lyprox.riskpredictor.models.logger">
+    
+  </a>
+  <a name="logger">
+    
+  </a>
+  <div class="functionHeader">
+    
+    <span class="py-defname">logger</span> =
+    
+    <a class="headerLink" href="#logger" title="lyprox.riskpredictor.models.logger">
+      
+      
+      ¶
+    </a>
+  </div>
+  <div class="functionBody">
+    
+    <div><p class="undocumented">Undocumented</p></div>
+    
+  </div>
+</div><div class="basevariable">
+  
+  
+  <a name="lyprox.riskpredictor.models.memory">
+    
+  </a>
+  <a name="memory">
+    
+  </a>
+  <div class="functionHeader">
+    
+    <span class="py-defname">memory</span> =
+    
+    <a class="headerLink" href="#memory" title="lyprox.riskpredictor.models.memory">
+      
+      
+      ¶
+    </a>
+  </div>
+  <div class="functionBody">
+    
+    <div><p class="undocumented">Undocumented</p></div>
+    
   </div>
 </div>
         </div>
@@ -414,10 +668,10 @@ personalized risk estimates can be computed.</p>
     <footer class="navbar navbar-default">
 
   
-  <div class="container">
+  <div class="container-fluid">
     <a href="index.html">API Documentation</a> for LyProX,
   generated by <a href="https://github.com/twisted/pydoctor/">pydoctor</a>
-    22.9.1 at 2024-10-09 13:21:38.
+    24.11.2 at 2025-04-01 13:02:24.
   </div>
 
   <!-- Search related scripts needs to be loaded at the end of HTML 

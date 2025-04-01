@@ -7,7 +7,7 @@
   <head>
     
     <title>lyprox.riskpredictor.predict</title>
-    <meta name="generator" content="pydoctor 22.9.1"> 
+    <meta name="generator" content="pydoctor 24.11.2"> 
         
     </meta>
     <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
@@ -15,6 +15,7 @@
     <link rel="stylesheet" type="text/css" href="bootstrap.min.css" />
     <link rel="stylesheet" type="text/css" href="apidocs.css" />
     <link rel="stylesheet" type="text/css" href="extra.css" />
+    
 </head>
 
   <body>
@@ -52,7 +53,7 @@
             
             <span class="input-group-btn">
               <a style="display: none;" class="btn btn-default" id="search-clear-button" title="Clear" onclick="clearSearch()"><img src="fonts/x-circle.svg" alt="Clear" /></a>
-              <a class="btn btn-default" id="search-help-button" title="Help" onclick="toggleSearchHelpText()"><img src="fonts/info.svg" alt="Help" /></a>
+              <a class="btn btn-default" id="apidocs-help-button" title="Help" href="apidocs-help.html"><img src="fonts/info.svg" alt="Help" /></a>
             </span>
           </div>
         </div>
@@ -76,39 +77,6 @@
             <h1>Cannot search: JavaScript is not supported/enabled in your browser.</h1>
         </noscript>
 
-        <div class="hint" id="search-help-box">
-          <p class="rst-last">
-      
-            Search bar offers the following options:
-            <ul>   
-                <li>
-                  <strong>Term presence.</strong> The below example searches for documents that 
-                    must contain “foo”, might contain “bar” and must not contain “baz”: <code>+foo bar -baz</code>
-                </li> 
-
-                <li>
-                  <strong>Wildcards.</strong> The below example searches for documents with words beginning with “foo”: <code>foo*</code>
-                </li> 
-
-                <li>
-                  <strong>Search in specific fields.</strong> The following search matches all objects 
-                  in "twisted.mail" that matches “search”: <code>+qname:twisted.mail.* +search</code>
-
-                  <p>
-                    Possible fields: 'name', 'qname' (fully qualified name), 'docstring', and 'kind'.
-                    Last two fields are only applicable if "search in docstrings" is enabled.
-                  </p>
-                </li>
-
-                <li>
-                  <strong>Fuzzy matches.</strong> The following search matches all documents 
-                  that have a word within 1 edit distance of “foo”: <code>foo~1</code>
-                </li>
-            </ul>
-
-          </p>
-        </div>
-
         <div id="search-status"> </div>
 
         <div class="warning" id="search-warn-box" style="display: none;">
@@ -119,8 +87,8 @@
           <!-- Filled dynamically by JS -->
         </table>
         
-        <div style="margin-top: 8px;">
-          <p>Results provided by <a href="https://lunrjs.com">Lunr.js</a></p>
+        <div style="margin-top: 10px;">
+          <p>For more information on the search, visit the <a href="apidocs-help.html#rst-search">help page</a>.</p>
         </div>
       </div>
 
@@ -163,7 +131,7 @@
         
 
         
-            <div class="itemName"><code><a href="#aggregate_results" class="internal-link" title="lyprox.riskpredictor.predict.aggregate_results">aggregate<wbr></wbr>_results</a></code>
+            <div class="itemName"><code><a href="#assemble_diagnosis" class="internal-link" title="lyprox.riskpredictor.predict.assemble_diagnosis">assemble<wbr></wbr>_diagnosis</a></code>
             </div>
         
 
@@ -173,7 +141,7 @@
         
 
         
-            <div class="itemName"><code><a href="#compute_diagnose_probs" class="internal-link" title="lyprox.riskpredictor.predict.compute_diagnose_probs">compute<wbr></wbr>_diagnose<wbr></wbr>_probs</a></code>
+            <div class="itemName"><code><a href="#collect_risk_stats" class="internal-link" title="lyprox.riskpredictor.predict.collect_risk_stats">collect<wbr></wbr>_risk<wbr></wbr>_stats</a></code>
             </div>
         
 
@@ -183,7 +151,7 @@
         
 
         
-            <div class="itemName"><code><a href="#compute_marginalised_risks" class="internal-link" title="lyprox.riskpredictor.predict.compute_marginalised_risks">compute<wbr></wbr>_marginalised<wbr></wbr>_risks</a></code>
+            <div class="itemName"><code><a href="#compute_posteriors" class="internal-link" title="lyprox.riskpredictor.predict.compute_posteriors">compute<wbr></wbr>_posteriors</a></code>
             </div>
         
 
@@ -193,7 +161,7 @@
         
 
         
-            <div class="itemName"><code><a href="#compute_posterior_risks" class="internal-link" title="lyprox.riskpredictor.predict.compute_posterior_risks">compute<wbr></wbr>_posterior<wbr></wbr>_risks</a></code>
+            <div class="itemName"><code><a href="#compute_risks" class="internal-link" title="lyprox.riskpredictor.predict.compute_risks">compute<wbr></wbr>_risks</a></code>
             </div>
         
 
@@ -203,37 +171,7 @@
         
 
         
-            <div class="itemName"><code><a href="#create_marginalisation" class="internal-link" title="lyprox.riskpredictor.predict.create_marginalisation">create<wbr></wbr>_marginalisation</a></code>
-            </div>
-        
-
-    </li><li class="">
-        
-        
-        
-
-        
-            <div class="itemName"><code><a href="#create_patient" class="internal-link" title="lyprox.riskpredictor.predict.create_patient">create<wbr></wbr>_patient</a></code>
-            </div>
-        
-
-    </li><li class="">
-        
-        
-        
-
-        
-            <div class="itemName"><code><a href="#default_risks" class="internal-link" title="lyprox.riskpredictor.predict.default_risks">default<wbr></wbr>_risks</a></code>
-            </div>
-        
-
-    </li><li class="">
-        
-        
-        
-
-        
-            <div class="itemName"><code><a href="#risks" class="internal-link" title="lyprox.riskpredictor.predict.risks">risks</a></code>
+            <div class="itemName"><code><a href="#create_risks_fields_and_kwargs" class="internal-link" title="lyprox.riskpredictor.predict.create_risks_fields_and_kwargs">create<wbr></wbr>_risks<wbr></wbr>_fields<wbr></wbr>_and<wbr></wbr>_kwargs</a></code>
             </div>
         
 
@@ -252,7 +190,27 @@
         
 
         
+            <div class="itemName"><code><a href="#BaseModelT" class="internal-link" title="lyprox.riskpredictor.predict.BaseModelT"><wbr></wbr>Base<wbr></wbr>Model<wbr></wbr>T</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
             <div class="itemName"><code><a href="#logger" class="internal-link" title="lyprox.riskpredictor.predict.logger">logger</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="#NullableBoolPercents" class="internal-link" title="lyprox.riskpredictor.predict.NullableBoolPercents"><wbr></wbr>Nullable<wbr></wbr>Bool<wbr></wbr>Percents</a></code>
             </div>
         
 
@@ -282,16 +240,6 @@
         
 
         
-            <div class="itemName"><code><a href="lyprox.riskpredictor.migrations.html" class="internal-link" title="lyprox.riskpredictor.migrations">migrations</a></code>
-            </div>
-        
-
-    </li><li class="">
-        
-        
-        
-
-        
             <div class="itemName"><code><a href="lyprox.riskpredictor.admin.html" class="internal-link" title="lyprox.riskpredictor.admin">admin</a></code>
             </div>
         
@@ -313,6 +261,26 @@
 
         
             <div class="itemName"><code><a href="lyprox.riskpredictor.forms.html" class="internal-link" title="lyprox.riskpredictor.forms">forms</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="lyprox.riskpredictor.management.html" class="internal-link" title="lyprox.riskpredictor.management">management</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="lyprox.riskpredictor.migrations.html" class="internal-link" title="lyprox.riskpredictor.migrations">migrations</a></code>
             </div>
         
 
@@ -420,60 +388,56 @@
 
         <div class="moduleDocstring">
           <div><p>Module for functions to predict the risk of lymphatic progression.</p>
-<p>The code in this module is utilized by the <code><a href="lyprox.riskpredictor.views.RiskPredictionView.html" class="internal-link" title="lyprox.riskpredictor.views.RiskPredictionView">views.RiskPredictionView</a></code> of the
-<code><a href="lyprox.riskpredictor.html" class="internal-link" title="lyprox.riskpredictor">riskpredictor</a></code> app to compute the risk of lymphatic progression for a given diagnosis.</p>
+<p>The code in this module is utilized by the <code><a href="lyprox.riskpredictor.views.html#render_risk_prediction" class="internal-link" title="lyprox.riskpredictor.views.render_risk_prediction">views.render_risk_prediction</a></code> and
+<code><a href="lyprox.riskpredictor.views.html#render_risk_prediction" class="internal-link" title="lyprox.riskpredictor.views.render_risk_prediction">views.render_risk_prediction</a></code> functions of the <code><a href="lyprox.riskpredictor.html" class="internal-link" title="lyprox.riskpredictor">riskpredictor</a></code> app to compute the
+risk of lymphatic progression for a given diagnosis.</p>
 </div>
         </div>
 
         <div id="splitTables">
-          <table class="children sortable" id="id115">
+          <table class="children sortable" id="id81">
   
   
   <tr class="function">
     
     <td>Function</td>
-    <td><code><a href="#aggregate_results" class="internal-link" title="lyprox.riskpredictor.predict.aggregate_results">aggregate<wbr></wbr>_results</a></code></td>
-    <td>Aggregate the results of the risk computation into a dictionary.</td>
+    <td><code><a href="#assemble_diagnosis" class="internal-link" title="lyprox.riskpredictor.predict.assemble_diagnosis">assemble<wbr></wbr>_diagnosis</a></code></td>
+    <td>Create a <code><a href="https://lyscripts.readthedocs.io/latest/configs.html#lyscripts.configs.DiagnosisConfig" class="intersphinx-link">DiagnosisConfig</a></code> object from the cleaned form data.</td>
   </tr><tr class="function">
     
     <td>Function</td>
-    <td><code><a href="#compute_diagnose_probs" class="internal-link" title="lyprox.riskpredictor.predict.compute_diagnose_probs">compute<wbr></wbr>_diagnose<wbr></wbr>_probs</a></code></td>
-    <td>Compute the probability of the selected diagnosis for any possible hidden state and for both sides of the neck, if the model is a bilateral one.</td>
+    <td><code><a href="#collect_risk_stats" class="internal-link" title="lyprox.riskpredictor.predict.collect_risk_stats">collect<wbr></wbr>_risk<wbr></wbr>_stats</a></code></td>
+    <td>For an array of <tt class="rst-docutils rst-literal">risk_values</tt>, collect the mean and std for each risk type.</td>
   </tr><tr class="function">
     
     <td>Function</td>
-    <td><code><a href="#compute_marginalised_risks" class="internal-link" title="lyprox.riskpredictor.predict.compute_marginalised_risks">compute<wbr></wbr>_marginalised<wbr></wbr>_risks</a></code></td>
-    <td>Compute the marginalised risks of involvement of each LNL.</td>
+    <td><code><a href="#compute_posteriors" class="internal-link" title="lyprox.riskpredictor.predict.compute_posteriors">compute<wbr></wbr>_posteriors</a></code></td>
+    <td>Compute the posterior state dists for the given model, priors, and diagnosis.</td>
   </tr><tr class="function">
     
     <td>Function</td>
-    <td><code><a href="#compute_posterior_risks" class="internal-link" title="lyprox.riskpredictor.predict.compute_posterior_risks">compute<wbr></wbr>_posterior<wbr></wbr>_risks</a></code></td>
-    <td>Compute the posterior risks for any possible hidden state and for each of the samples used to compute the prior risks.</td>
+    <td><code><a href="#compute_risks" class="internal-link" title="lyprox.riskpredictor.predict.compute_risks">compute<wbr></wbr>_risks</a></code></td>
+    <td>Compute the risks for the given checkpoint and form data.</td>
   </tr><tr class="function">
     
     <td>Function</td>
-    <td><code><a href="#create_marginalisation" class="internal-link" title="lyprox.riskpredictor.predict.create_marginalisation">create<wbr></wbr>_marginalisation</a></code></td>
-    <td>Create a vector for marginalizing over hidden states that match the given pattern.</td>
-  </tr><tr class="function">
+    <td><code><a href="#create_risks_fields_and_kwargs" class="internal-link" title="lyprox.riskpredictor.predict.create_risks_fields_and_kwargs">create<wbr></wbr>_risks<wbr></wbr>_fields<wbr></wbr>_and<wbr></wbr>_kwargs</a></code></td>
+    <td>Create the fields and kwargs for dynamically created pydantic <tt class="rst-docutils rst-literal">Risks</tt> model.</td>
+  </tr><tr class="typevariable">
     
-    <td>Function</td>
-    <td><code><a href="#create_patient" class="internal-link" title="lyprox.riskpredictor.predict.create_patient">create<wbr></wbr>_patient</a></code></td>
-    <td>Create a patient dataframe from a specific diagnosis.</td>
-  </tr><tr class="function">
-    
-    <td>Function</td>
-    <td><code><a href="#default_risks" class="internal-link" title="lyprox.riskpredictor.predict.default_risks">default<wbr></wbr>_risks</a></code></td>
-    <td>Return default risks (everything unknown).</td>
-  </tr><tr class="function">
-    
-    <td>Function</td>
-    <td><code><a href="#risks" class="internal-link" title="lyprox.riskpredictor.predict.risks">risks</a></code></td>
-    <td>Compute the marginalized risk of microscopic involvement in any of the modelled LNLs for a given diagnosis.</td>
+    <td>Type Variable</td>
+    <td><code><a href="#BaseModelT" class="internal-link" title="lyprox.riskpredictor.predict.BaseModelT"><wbr></wbr>Base<wbr></wbr>Model<wbr></wbr>T</a></code></td>
+    <td><span class="undocumented">Undocumented</span></td>
   </tr><tr class="variable">
     
     <td>Variable</td>
     <td><code><a href="#logger" class="internal-link" title="lyprox.riskpredictor.predict.logger">logger</a></code></td>
     <td><span class="undocumented">Undocumented</span></td>
+  </tr><tr class="variable">
+    
+    <td>Variable</td>
+    <td><code><a href="#NullableBoolPercents" class="internal-link" title="lyprox.riskpredictor.predict.NullableBoolPercents"><wbr></wbr>Nullable<wbr></wbr>Bool<wbr></wbr>Percents</a></code></td>
+    <td>Keys may be <tt class="rst-docutils rst-literal">True</tt>, <tt class="rst-docutils rst-literal">False</tt>, or <tt class="rst-docutils rst-literal">None</tt>, while values are the counts of each.</td>
   </tr>
 </table>
           
@@ -485,17 +449,18 @@
           <div class="basefunction">
   
   
-  <a name="lyprox.riskpredictor.predict.aggregate_results">
+  <a name="lyprox.riskpredictor.predict.assemble_diagnosis">
     
   </a>
-  <a name="aggregate_results">
+  <a name="assemble_diagnosis">
     
   </a>
   <div class="functionHeader">
     
-    <span class="py-keyword">def</span> <span class="py-defname">aggregate_results</span>(inference_result, marginalized_risks):
     
-    <a class="headerLink" href="#aggregate_results" title="lyprox.riskpredictor.predict.aggregate_results">
+    <span class="py-keyword">def</span> <span class="py-defname">assemble_diagnosis</span><span class="function-signature">(form_data: <code>dict[<wbr></wbr>str, <wbr></wbr>Any]</code>, lnls: <code>list[<wbr></wbr>str]</code>, modality: <code>str</code> = <span class="rst-variable-quote">'</span><span class="rst-variable-string">D</span><span class="rst-variable-quote">'</span>) -&gt; <code><a href="https://lyscripts.readthedocs.io/latest/configs.html#lyscripts.configs.DiagnosisConfig" class="intersphinx-link">DiagnosisConfig</a></code></span>:
+    
+    <a class="headerLink" href="#assemble_diagnosis" title="lyprox.riskpredictor.predict.assemble_diagnosis">
       
       
       ¶
@@ -503,31 +468,23 @@
   </div>
   <div class="docstring functionBody">
     
-    <div><p>Aggregate the results of the risk computation into a dictionary.</p>
-<p>This is a helper function that is used to convert the numpy arrays that are
-returned by the risk computation into a dictionary that can be used as context
-for the <code><a href="lyprox.riskpredictor.views.RiskPredictionView.html" class="internal-link" title="lyprox.riskpredictor.views.RiskPredictionView">views.RiskPredictionView</a></code> view.</p>
-<p>The returned dictionary has the following structure: For each side (ipsi or contra)
-and each LNL, the dictionary contains a list of three values: The first value is
-the error of the prediction, the second value is the risk of involvement (but minus
-half the error), and the third value is the probability of being healthy (again
-minus half the error).</p>
-<table class="fieldTable"><tr class="fieldStart"><td class="fieldName" colspan="2">Parameters</td></tr><tr><td class="fieldArgContainer"><span class="fieldArg">inference<wbr></wbr>_result:</span><code><a href="lyprox.riskpredictor.models.InferenceResult.html" class="internal-link" title="lyprox.riskpredictor.models.InferenceResult">InferenceResult</a></code></td><td class="fieldArgDesc"><span class="undocumented">Undocumented</span></td></tr><tr><td class="fieldArgContainer"><span class="fieldArg">marginalized<wbr></wbr>_risks:</span><code>Dict[<wbr></wbr>str, <wbr></wbr>np.ndarray]</code></td><td class="fieldArgDesc"><span class="undocumented">Undocumented</span></td></tr><tr class="fieldStart"><td class="fieldName" colspan="2">Returns</td></tr><tr><td class="fieldArgContainer"><code>Dict[<wbr></wbr>str, <wbr></wbr>List[<wbr></wbr>float]]</code></td><td class="fieldArgDesc"><span class="undocumented">Undocumented</span></td></tr></table></div>
+    <div><p>Create a <code><a href="https://lyscripts.readthedocs.io/latest/configs.html#lyscripts.configs.DiagnosisConfig" class="intersphinx-link">DiagnosisConfig</a></code> object from the cleaned form data.</p></div>
   </div>
 </div><div class="basefunction">
   
   
-  <a name="lyprox.riskpredictor.predict.compute_diagnose_probs">
+  <a name="lyprox.riskpredictor.predict.collect_risk_stats">
     
   </a>
-  <a name="compute_diagnose_probs">
+  <a name="collect_risk_stats">
     
   </a>
   <div class="functionHeader">
     
-    <span class="py-keyword">def</span> <span class="py-defname">compute_diagnose_probs</span>(inference_result, t_stage, diagnosis, specificity, sensitivity, midline_extension=None):
     
-    <a class="headerLink" href="#compute_diagnose_probs" title="lyprox.riskpredictor.predict.compute_diagnose_probs">
+    <span class="py-keyword">def</span> <span class="py-defname">collect_risk_stats</span><span class="function-signature">(risk_values: <code>np.ndarray</code>) -&gt; <code>dict[<wbr></wbr>Literal[<wbr></wbr>True, <wbr></wbr>None, <wbr></wbr>False], <wbr></wbr>float]</code></span>:
+    
+    <a class="headerLink" href="#collect_risk_stats" title="lyprox.riskpredictor.predict.collect_risk_stats">
       
       
       ¶
@@ -535,27 +492,34 @@ minus half the error).</p>
   </div>
   <div class="docstring functionBody">
     
-    <div><p>Compute the probability of the selected diagnosis for any possible hidden state
-and for both sides of the neck, if the model is a bilateral one.</p>
-<p>In probabilistic terms, this is the probability P(D=d|X) of the diagnosis D=d given
-any of the possible hidden states X. Consequently, this is a 1D array of length
-2^V, where V is the number of LNLs in the model.</p>
-<table class="fieldTable"><tr class="fieldStart"><td class="fieldName" colspan="2">Parameters</td></tr><tr><td class="fieldArgContainer"><span class="fieldArg">inference<wbr></wbr>_result:</span><code><a href="lyprox.riskpredictor.models.InferenceResult.html" class="internal-link" title="lyprox.riskpredictor.models.InferenceResult">InferenceResult</a></code></td><td class="fieldArgDesc"><span class="undocumented">Undocumented</span></td></tr><tr><td class="fieldArgContainer"><span class="fieldArg">t<wbr></wbr>_stage:</span><code>str</code></td><td class="fieldArgDesc"><span class="undocumented">Undocumented</span></td></tr><tr><td class="fieldArgContainer"><span class="fieldArg">diagnosis:</span><code>Dict[<wbr></wbr>str, <wbr></wbr>Dict[<wbr></wbr>str, <wbr></wbr>Optional[<wbr></wbr>bool]]]</code></td><td class="fieldArgDesc"><span class="undocumented">Undocumented</span></td></tr><tr><td class="fieldArgContainer"><span class="fieldArg">specificity:</span><code>float</code></td><td class="fieldArgDesc"><span class="undocumented">Undocumented</span></td></tr><tr><td class="fieldArgContainer"><span class="fieldArg">sensitivity:</span><code>float</code></td><td class="fieldArgDesc"><span class="undocumented">Undocumented</span></td></tr><tr><td class="fieldArgContainer"><span class="fieldArg">midline<wbr></wbr>_extension:</span><code>Optional[<wbr></wbr>bool]</code></td><td class="fieldArgDesc"><span class="undocumented">Undocumented</span></td></tr><tr class="fieldStart"><td class="fieldName" colspan="2">Returns</td></tr><tr><td class="fieldArgContainer"><code>Dict[<wbr></wbr>str, <wbr></wbr>np.ndarray]</code></td><td class="fieldArgDesc"><span class="undocumented">Undocumented</span></td></tr></table></div>
+    <div><p>For an array of <tt class="rst-docutils rst-literal">risk_values</tt>, collect the mean and std for each risk type.</p>
+<p>The format is chosen like the <code><a href="lyprox.dataexplorer.query.html#Statistics" class="internal-link">lyprox.dataexplorer.query.Statistics</a></code> object that
+collects how many patients had <tt class="rst-docutils rst-literal">True</tt>, <tt class="rst-docutils rst-literal">None</tt>, or <tt class="rst-docutils rst-literal">False</tt> involvement for a
+given LNL. In this case, we construct the returned dictionary like this:</p>
+<pre class="py-doctest">
+{
+    <span class="py-builtin">True</span>: 26.3,   <span class="py-comment"># Risk of involvement minus half the standard deviation</span>
+    <span class="py-builtin">None</span>: 5.2,    <span class="py-comment"># The standard deviation of the risk</span>
+    <span class="py-builtin">False</span>: 68.5,  <span class="py-comment"># Remaining number to sum to 100</span>
+}</pre><p>This format is compatible with the <code><a href="lyprox.dataexplorer.query.html#Statistics" class="internal-link">lyprox.dataexplorer.query.Statistics</a></code> object
+and thus also with the HTML templates used in the <code><a href="lyprox.dataexplorer.html" class="internal-link" title="lyprox.dataexplorer">dataexplorer</a></code> app.</p>
+</div>
   </div>
 </div><div class="basefunction">
   
   
-  <a name="lyprox.riskpredictor.predict.compute_marginalised_risks">
+  <a name="lyprox.riskpredictor.predict.compute_posteriors">
     
   </a>
-  <a name="compute_marginalised_risks">
+  <a name="compute_posteriors">
     
   </a>
   <div class="functionHeader">
     
-    <span class="py-keyword">def</span> <span class="py-defname">compute_marginalised_risks</span>(inference_result, posterior_risks):
     
-    <a class="headerLink" href="#compute_marginalised_risks" title="lyprox.riskpredictor.predict.compute_marginalised_risks">
+    <span class="py-keyword">def</span> <span class="py-defname">compute_posteriors</span><span class="function-signature">(model: <code><a href="https://lymph-model.readthedocs.io/stable/types.html#lymph.types.Model" class="intersphinx-link">Model</a></code>, priors: <code>np.ndarray</code>, diagnosis: <code><a href="https://lyscripts.readthedocs.io/latest/configs.html#lyscripts.configs.DiagnosisConfig" class="intersphinx-link">DiagnosisConfig</a></code>, midext: <code>bool | None</code> = None, specificity: <code>float</code> = 0.9, sensitivity: <code>float</code> = 0.9) -&gt; <code>np.ndarray</code></span>:
+    
+    <a class="headerLink" href="#compute_posteriors" title="lyprox.riskpredictor.predict.compute_posteriors">
       
       
       ¶
@@ -563,26 +527,23 @@ any of the possible hidden states X. Consequently, this is a 1D array of length
   </div>
   <div class="docstring functionBody">
     
-    <div><p>Compute the marginalised risks of involvement of each LNL.</p>
-<p>In probabilistic terms, this is the probability P(X=x|D=d), which is computed by
-marginalizing over all hidden states that do match the given diagnosis (for wich
-the posterior risk over all possible hidden states was already computed).</p>
-<table class="fieldTable"><tr class="fieldStart"><td class="fieldName" colspan="2">Parameters</td></tr><tr><td class="fieldArgContainer"><span class="fieldArg">inference<wbr></wbr>_result:</span><code><a href="lyprox.riskpredictor.models.InferenceResult.html" class="internal-link" title="lyprox.riskpredictor.models.InferenceResult">InferenceResult</a></code></td><td class="fieldArgDesc"><span class="undocumented">Undocumented</span></td></tr><tr><td class="fieldArgContainer"><span class="fieldArg">posterior<wbr></wbr>_risks:</span><code>np.ndarray</code></td><td class="fieldArgDesc"><span class="undocumented">Undocumented</span></td></tr><tr class="fieldStart"><td class="fieldName" colspan="2">Returns</td></tr><tr><td class="fieldArgContainer"><code>Dict[<wbr></wbr>str, <wbr></wbr>np.ndarray]</code></td><td class="fieldArgDesc"><span class="undocumented">Undocumented</span></td></tr></table></div>
+    <div><p>Compute the posterior state dists for the given model, priors, and diagnosis.</p></div>
   </div>
 </div><div class="basefunction">
   
   
-  <a name="lyprox.riskpredictor.predict.compute_posterior_risks">
+  <a name="lyprox.riskpredictor.predict.compute_risks">
     
   </a>
-  <a name="compute_posterior_risks">
+  <a name="compute_risks">
     
   </a>
   <div class="functionHeader">
     
-    <span class="py-keyword">def</span> <span class="py-defname">compute_posterior_risks</span>(inference_result, diagnose_probs, risk_matrices):
     
-    <a class="headerLink" href="#compute_posterior_risks" title="lyprox.riskpredictor.predict.compute_posterior_risks">
+    <span class="py-keyword">def</span> <span class="py-defname">compute_risks</span><span class="function-signature">(checkpoint: <code><a href="lyprox.riskpredictor.models.CheckpointModel.html" class="internal-link" title="lyprox.riskpredictor.models.CheckpointModel">CheckpointModel</a></code>, form_data: <code>dict[<wbr></wbr>str, <wbr></wbr>Any]</code>, lnls: <code>list[<wbr></wbr>str]</code>) -&gt; <code><a href="#BaseModelT" class="internal-link" title="lyprox.riskpredictor.predict.BaseModelT">BaseModelT</a></code></span>:
+    
+    <a class="headerLink" href="#compute_risks" title="lyprox.riskpredictor.predict.compute_risks">
       
       
       ¶
@@ -590,28 +551,27 @@ the posterior risk over all possible hidden states was already computed).</p>
   </div>
   <div class="docstring functionBody">
     
-    <div><p>Compute the posterior risks for any possible hidden state and for each of
-the samples used to compute the prior risks.</p>
-<p>In probabilistic terms, this is the probability P(X|D=d) of any of the possible
-hidden state X given the diagnosis D=d. This is computed for each of the N samples.
-Consequently, this is a 3D array of shape (N, 2^V, 2^V) in the bilateral case, or
-(N, 2^V) in the unilateral case.</p>
-<table class="fieldTable"><tr class="fieldStart"><td class="fieldName" colspan="2">Parameters</td></tr><tr><td class="fieldArgContainer"><span class="fieldArg">inference<wbr></wbr>_result:</span><code><a href="lyprox.riskpredictor.models.InferenceResult.html" class="internal-link" title="lyprox.riskpredictor.models.InferenceResult">InferenceResult</a></code></td><td class="fieldArgDesc"><span class="undocumented">Undocumented</span></td></tr><tr><td class="fieldArgContainer"><span class="fieldArg">diagnose<wbr></wbr>_probs:</span><code>Dict[<wbr></wbr>str, <wbr></wbr>np.ndarray]</code></td><td class="fieldArgDesc"><span class="undocumented">Undocumented</span></td></tr><tr><td class="fieldArgContainer"><span class="fieldArg">risk<wbr></wbr>_matrices:</span><code>np.ndarray</code></td><td class="fieldArgDesc"><span class="undocumented">Undocumented</span></td></tr><tr class="fieldStart"><td class="fieldName" colspan="2">Returns</td></tr><tr><td class="fieldArgContainer"><code>np.ndarray</code></td><td class="fieldArgDesc"><span class="undocumented">Undocumented</span></td></tr></table></div>
+    <div><p>Compute the risks for the given checkpoint and form data.</p>
+<p>Returns an instance of a dynamically created pydantic <code><a href="https://docs.pydantic.dev/latest/api/base_model/#pydantic.BaseModel" class="intersphinx-link">BaseModel</a></code> class that has
+fields like <tt class="rst-docutils rst-literal">ipsi_II</tt> or <tt class="rst-docutils rst-literal">contra_III</tt>. In these fields, it stores the risk in
+dictionaries returned by the <code><a href="#collect_risk_stats" class="internal-link" title="lyprox.riskpredictor.predict.collect_risk_stats">collect_risk_stats</a></code> function.</p>
+</div>
   </div>
 </div><div class="basefunction">
   
   
-  <a name="lyprox.riskpredictor.predict.create_marginalisation">
+  <a name="lyprox.riskpredictor.predict.create_risks_fields_and_kwargs">
     
   </a>
-  <a name="create_marginalisation">
+  <a name="create_risks_fields_and_kwargs">
     
   </a>
   <div class="functionHeader">
     
-    <span class="py-keyword">def</span> <span class="py-defname">create_marginalisation</span>(lymph_model, pattern):
     
-    <a class="headerLink" href="#create_marginalisation" title="lyprox.riskpredictor.predict.create_marginalisation">
+    <span class="py-keyword">def</span> <span class="py-defname">create_risks_fields_and_kwargs</span><span class="function-signature">(model: <code><a href="https://lymph-model.readthedocs.io/stable/types.html#lymph.types.Model" class="intersphinx-link">Model</a></code>, state_dists: <code>np.ndarray</code>, lnls: <code>list[<wbr></wbr>str]</code>, keys_to_consider: <code>Container[<wbr></wbr>str]</code>) -&gt; <code>tuple[<wbr></wbr>dict[<wbr></wbr>str, <wbr></wbr>tuple[<wbr></wbr>type, <wbr></wbr><span class="rst-variable-ellipsis">...</span>]], <wbr></wbr>dict[<wbr></wbr>str, <wbr></wbr>dict]]</code></span>:
+    
+    <a class="headerLink" href="#create_risks_fields_and_kwargs" title="lyprox.riskpredictor.predict.create_risks_fields_and_kwargs">
       
       
       ¶
@@ -619,88 +579,32 @@ Consequently, this is a 3D array of shape (N, 2^V, 2^V) in the bilateral case, o
   </div>
   <div class="docstring functionBody">
     
-    <div><p>Create a vector for marginalizing over hidden states that match the given
-pattern.</p>
-<p>If one wants to know the probability of e.g. LNL II involvement, one needs to
-marginalize over all hidden states where LNL II is involved. This function creates
-a vector that is 1 for all hidden states that match the given pattern and 0 for
-all others.</p>
-<table class="fieldTable"><tr class="fieldStart"><td class="fieldName" colspan="2">Parameters</td></tr><tr><td class="fieldArgContainer"><span class="fieldArg">lymph<wbr></wbr>_model:</span><code>Union[<wbr></wbr>Unilateral, <wbr></wbr>Bilateral, <wbr></wbr>MidlineBilateral]</code></td><td class="fieldArgDesc"><span class="undocumented">Undocumented</span></td></tr><tr><td class="fieldArgContainer"><span class="fieldArg">pattern:</span><code>Dict[<wbr></wbr>str, <wbr></wbr>Optional[<wbr></wbr>bool]]</code></td><td class="fieldArgDesc"><span class="undocumented">Undocumented</span></td></tr><tr class="fieldStart"><td class="fieldName" colspan="2">Returns</td></tr><tr><td class="fieldArgContainer"><code>np.ndarray</code></td><td class="fieldArgDesc"><span class="undocumented">Undocumented</span></td></tr></table></div>
+    <div><p>Create the fields and kwargs for dynamically created pydantic <tt class="rst-docutils rst-literal">Risks</tt> model.</p></div>
   </div>
-</div><div class="basefunction">
+</div><div class="basetypevariable">
   
   
-  <a name="lyprox.riskpredictor.predict.create_patient">
+  <a name="lyprox.riskpredictor.predict.BaseModelT">
     
   </a>
-  <a name="create_patient">
+  <a name="BaseModelT">
     
   </a>
   <div class="functionHeader">
     
-    <span class="py-keyword">def</span> <span class="py-defname">create_patient</span>(diagnosis, t_stage, is_bilateral=False, midline_extension=None):
+    <span class="py-defname">BaseModelT</span> =
     
-    <a class="headerLink" href="#create_patient" title="lyprox.riskpredictor.predict.create_patient">
+    <a class="headerLink" href="#BaseModelT" title="lyprox.riskpredictor.predict.BaseModelT">
       
       
       ¶
     </a>
   </div>
-  <div class="docstring functionBody">
+  <div class="functionBody">
     
-    <div><p>Create a patient dataframe from a specific diagnosis.</p>
-<p>This is necessary, so that the <tt class="rst-docutils literal"><span class="pre">lymph-model</span></tt> can be used to compute the
-probability of the given diagnosis for any possible hidden state.</p>
-<table class="fieldTable"><tr class="fieldStart"><td class="fieldName" colspan="2">Parameters</td></tr><tr><td class="fieldArgContainer"><span class="fieldArg">diagnosis:</span><code>Dict[<wbr></wbr>str, <wbr></wbr>Dict[<wbr></wbr>str, <wbr></wbr>Optional[<wbr></wbr>bool]]]</code></td><td class="fieldArgDesc"><span class="undocumented">Undocumented</span></td></tr><tr><td class="fieldArgContainer"><span class="fieldArg">t<wbr></wbr>_stage:</span><code>str</code></td><td class="fieldArgDesc"><span class="undocumented">Undocumented</span></td></tr><tr><td class="fieldArgContainer"><span class="fieldArg">is<wbr></wbr>_bilateral:</span><code>bool</code></td><td class="fieldArgDesc"><span class="undocumented">Undocumented</span></td></tr><tr><td class="fieldArgContainer"><span class="fieldArg">midline<wbr></wbr>_extension:</span><code>Optional[<wbr></wbr>bool]</code></td><td class="fieldArgDesc"><span class="undocumented">Undocumented</span></td></tr><tr class="fieldStart"><td class="fieldName" colspan="2">Returns</td></tr><tr><td class="fieldArgContainer"><code>pd.DataFrame</code></td><td class="fieldArgDesc"><span class="undocumented">Undocumented</span></td></tr></table></div>
-  </div>
-</div><div class="basefunction">
-  
-  
-  <a name="lyprox.riskpredictor.predict.default_risks">
-    
-  </a>
-  <a name="default_risks">
-    
-  </a>
-  <div class="functionHeader">
-    
-    <span class="py-keyword">def</span> <span class="py-defname">default_risks</span>(inference_result, **kwargs):
-    
-    <a class="headerLink" href="#default_risks" title="lyprox.riskpredictor.predict.default_risks">
-      
-      
-      ¶
-    </a>
-  </div>
-  <div class="docstring functionBody">
-    
-    <div><p>Return default risks (everything unknown).</p>
-<table class="fieldTable"><tr class="fieldStart"><td class="fieldName" colspan="2">Parameters</td></tr><tr><td class="fieldArgContainer"><span class="fieldArg">inference<wbr></wbr>_result:</span><code><a href="lyprox.riskpredictor.models.InferenceResult.html" class="internal-link" title="lyprox.riskpredictor.models.InferenceResult">InferenceResult</a></code></td><td class="fieldArgDesc"><span class="undocumented">Undocumented</span></td></tr><tr><td class="fieldArgContainer"><span class="fieldArg">**kwargs</span></td><td class="fieldArgDesc"><span class="undocumented">Undocumented</span></td></tr><tr class="fieldStart"><td class="fieldName" colspan="2">Returns</td></tr><tr><td class="fieldArgContainer"><code>Dict[<wbr></wbr>str, <wbr></wbr>Any]</code></td><td class="fieldArgDesc"><span class="undocumented">Undocumented</span></td></tr></table></div>
-  </div>
-</div><div class="basefunction">
-  
-  
-  <a name="lyprox.riskpredictor.predict.risks">
-    
-  </a>
-  <a name="risks">
-    
-  </a>
-  <div class="functionHeader">
-    
-    <span class="py-keyword">def</span> <span class="py-defname">risks</span>(inference_result, t_stage, diagnosis, specificity, sensitivity, midline_extension=None, **_kwargs):
-    
-    <a class="headerLink" href="#risks" title="lyprox.riskpredictor.predict.risks">
-      
-      
-      ¶
-    </a>
-  </div>
-  <div class="docstring functionBody">
-    
-    <div><p>Compute the marginalized risk of microscopic involvement in any of the modelled
-LNLs for a given diagnosis.</p>
-<table class="fieldTable"><tr class="fieldStart"><td class="fieldName" colspan="2">Parameters</td></tr><tr><td class="fieldArgContainer"><span class="fieldArg">inference<wbr></wbr>_result:</span><code><a href="lyprox.riskpredictor.models.InferenceResult.html" class="internal-link" title="lyprox.riskpredictor.models.InferenceResult">InferenceResult</a></code></td><td class="fieldArgDesc"><span class="undocumented">Undocumented</span></td></tr><tr><td class="fieldArgContainer"><span class="fieldArg">t<wbr></wbr>_stage:</span><code>str</code></td><td class="fieldArgDesc"><span class="undocumented">Undocumented</span></td></tr><tr><td class="fieldArgContainer"><span class="fieldArg">diagnosis:</span><code>Dict[<wbr></wbr>str, <wbr></wbr>Dict[<wbr></wbr>str, <wbr></wbr>Optional[<wbr></wbr>bool]]]</code></td><td class="fieldArgDesc"><span class="undocumented">Undocumented</span></td></tr><tr><td class="fieldArgContainer"><span class="fieldArg">specificity:</span><code>float</code></td><td class="fieldArgDesc"><span class="undocumented">Undocumented</span></td></tr><tr><td class="fieldArgContainer"><span class="fieldArg">sensitivity:</span><code>float</code></td><td class="fieldArgDesc"><span class="undocumented">Undocumented</span></td></tr><tr><td class="fieldArgContainer"><span class="fieldArg">midline<wbr></wbr>_extension:</span><code>Optional[<wbr></wbr>bool]</code></td><td class="fieldArgDesc"><span class="undocumented">Undocumented</span></td></tr><tr><td class="fieldArgContainer"><span class="fieldArg">**_kwargs</span></td><td class="fieldArgDesc"><span class="undocumented">Undocumented</span></td></tr><tr class="fieldStart"><td class="fieldName" colspan="2">Returns</td></tr><tr><td class="fieldArgContainer"><code>Dict[<wbr></wbr>str, <wbr></wbr>Any]</code></td><td class="fieldArgDesc"><span class="undocumented">Undocumented</span></td></tr></table></div>
+    <div><p class="undocumented">Undocumented</p></div>
+    <table class="valueTable"><tr class="fieldStart"><td class="fieldName">Value</td></tr><tr><td><pre class="constant-value"><code>TypeVar(<wbr></wbr><span class="rst-variable-quote">'</span><span class="rst-variable-string">BaseModelT</span><span class="rst-variable-quote">'</span>,
+        <wbr></wbr>bound=<a href="https://docs.pydantic.dev/latest/api/base_model/#pydantic.BaseModel" class="intersphinx-link">BaseModel</a>)</code></pre></td></tr></table>
   </div>
 </div><div class="basevariable">
   
@@ -726,6 +630,30 @@ LNLs for a given diagnosis.</p>
     <div><p class="undocumented">Undocumented</p></div>
     
   </div>
+</div><div class="basevariable">
+  
+  
+  <a name="lyprox.riskpredictor.predict.NullableBoolPercents">
+    
+  </a>
+  <a name="NullableBoolPercents">
+    
+  </a>
+  <div class="functionHeader">
+    
+    <span class="py-defname">NullableBoolPercents</span> =
+    
+    <a class="headerLink" href="#NullableBoolPercents" title="lyprox.riskpredictor.predict.NullableBoolPercents">
+      
+      
+      ¶
+    </a>
+  </div>
+  <div class="functionBody">
+    
+    <div><p>Keys may be <tt class="rst-docutils rst-literal">True</tt>, <tt class="rst-docutils rst-literal">False</tt>, or <tt class="rst-docutils rst-literal">None</tt>, while values are the counts of each.</p></div>
+    
+  </div>
 </div>
         </div>
       
@@ -735,10 +663,10 @@ LNLs for a given diagnosis.</p>
     <footer class="navbar navbar-default">
 
   
-  <div class="container">
+  <div class="container-fluid">
     <a href="index.html">API Documentation</a> for LyProX,
   generated by <a href="https://github.com/twisted/pydoctor/">pydoctor</a>
-    22.9.1 at 2024-10-09 13:21:38.
+    24.11.2 at 2025-04-01 13:02:24.
   </div>
 
   <!-- Search related scripts needs to be loaded at the end of HTML 

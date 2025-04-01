@@ -7,7 +7,7 @@
   <head>
     
     <title>lyprox.dataexplorer.forms</title>
-    <meta name="generator" content="pydoctor 22.9.1"> 
+    <meta name="generator" content="pydoctor 24.11.2"> 
         
     </meta>
     <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
@@ -15,6 +15,7 @@
     <link rel="stylesheet" type="text/css" href="bootstrap.min.css" />
     <link rel="stylesheet" type="text/css" href="apidocs.css" />
     <link rel="stylesheet" type="text/css" href="extra.css" />
+    
 </head>
 
   <body>
@@ -52,7 +53,7 @@
             
             <span class="input-group-btn">
               <a style="display: none;" class="btn btn-default" id="search-clear-button" title="Clear" onclick="clearSearch()"><img src="fonts/x-circle.svg" alt="Clear" /></a>
-              <a class="btn btn-default" id="search-help-button" title="Help" onclick="toggleSearchHelpText()"><img src="fonts/info.svg" alt="Help" /></a>
+              <a class="btn btn-default" id="apidocs-help-button" title="Help" href="apidocs-help.html"><img src="fonts/info.svg" alt="Help" /></a>
             </span>
           </div>
         </div>
@@ -76,39 +77,6 @@
             <h1>Cannot search: JavaScript is not supported/enabled in your browser.</h1>
         </noscript>
 
-        <div class="hint" id="search-help-box">
-          <p class="rst-last">
-      
-            Search bar offers the following options:
-            <ul>   
-                <li>
-                  <strong>Term presence.</strong> The below example searches for documents that 
-                    must contain “foo”, might contain “bar” and must not contain “baz”: <code>+foo bar -baz</code>
-                </li> 
-
-                <li>
-                  <strong>Wildcards.</strong> The below example searches for documents with words beginning with “foo”: <code>foo*</code>
-                </li> 
-
-                <li>
-                  <strong>Search in specific fields.</strong> The following search matches all objects 
-                  in "twisted.mail" that matches “search”: <code>+qname:twisted.mail.* +search</code>
-
-                  <p>
-                    Possible fields: 'name', 'qname' (fully qualified name), 'docstring', and 'kind'.
-                    Last two fields are only applicable if "search in docstrings" is enabled.
-                  </p>
-                </li>
-
-                <li>
-                  <strong>Fuzzy matches.</strong> The following search matches all documents 
-                  that have a word within 1 edit distance of “foo”: <code>foo~1</code>
-                </li>
-            </ul>
-
-          </p>
-        </div>
-
         <div id="search-status"> </div>
 
         <div class="warning" id="search-warn-box" style="display: none;">
@@ -119,8 +87,8 @@
           <!-- Filled dynamically by JS -->
         </table>
         
-        <div style="margin-top: 8px;">
-          <p>Results provided by <a href="https://lunrjs.com">Lunr.js</a></p>
+        <div style="margin-top: 10px;">
+          <p>For more information on the search, visit the <a href="apidocs-help.html#rst-search">help page</a>.</p>
         </div>
       </div>
 
@@ -160,7 +128,7 @@
         
 
         
-            <div class="itemName"><code><a href="lyprox.dataexplorer.forms.DashboardForm.html" class="internal-link" title="lyprox.dataexplorer.forms.DashboardForm"><wbr></wbr>Dashboard<wbr></wbr>Form</a></code>
+            <div class="itemName"><code><a href="lyprox.dataexplorer.forms.DataexplorerForm.html" class="internal-link" title="lyprox.dataexplorer.forms.DataexplorerForm"><wbr></wbr>Dataexplorer<wbr></wbr>Form</a></code>
             </div>
         
 
@@ -170,17 +138,7 @@
         
 
         
-            <div class="itemName"><code><a href="lyprox.dataexplorer.forms.DatasetModelChoiceIndexer.html" class="internal-link" title="lyprox.dataexplorer.forms.DatasetModelChoiceIndexer"><wbr></wbr>Dataset<wbr></wbr>Model<wbr></wbr>Choice<wbr></wbr>Indexer</a></code>
-            </div>
-        
-
-    </li><li class="">
-        
-        
-        
-
-        
-            <div class="itemName"><code><a href="lyprox.dataexplorer.forms.DatasetMultipleChoiceField.html" class="internal-link" title="lyprox.dataexplorer.forms.DatasetMultipleChoiceField"><wbr></wbr>Dataset<wbr></wbr>Multiple<wbr></wbr>Choice<wbr></wbr>Field</a></code>
+            <div class="itemName"><code><a href="lyprox.dataexplorer.forms.EasySubsiteChoiceField.html" class="internal-link" title="lyprox.dataexplorer.forms.EasySubsiteChoiceField"><wbr></wbr>Easy<wbr></wbr>Subsite<wbr></wbr>Choice<wbr></wbr>Field</a></code>
             </div>
         
 
@@ -216,6 +174,26 @@
         
 
         
+            <div class="itemName"><code><a href="#format_dataset_choices" class="internal-link" title="lyprox.dataexplorer.forms.format_dataset_choices">format<wbr></wbr>_dataset<wbr></wbr>_choices</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="#get_modality_choices" class="internal-link" title="lyprox.dataexplorer.forms.get_modality_choices">get<wbr></wbr>_modality<wbr></wbr>_choices</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
             <div class="itemName"><code><a href="#trio_to_bool" class="internal-link" title="lyprox.dataexplorer.forms.trio_to_bool">trio<wbr></wbr>_to<wbr></wbr>_bool</a></code>
             </div>
         
@@ -230,6 +208,26 @@
         <ul>
     
     <li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="#T" class="internal-link" title="lyprox.dataexplorer.forms.T">T</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="#checkbox_attrs" class="internal-link" title="lyprox.dataexplorer.forms.checkbox_attrs">checkbox<wbr></wbr>_attrs</a></code>
+            </div>
+        
+
+    </li><li class="">
         
         
         
@@ -259,7 +257,27 @@
         <div class="childrenKindTitle">Modules</div>
         <ul>
     
-    <li class=" thisobject">
+    <li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="lyprox.dataexplorer.admin.html" class="internal-link" title="lyprox.dataexplorer.admin">admin</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="lyprox.dataexplorer.apps.html" class="internal-link" title="lyprox.dataexplorer.apps">apps</a></code>
+            </div>
+        
+
+    </li><li class=" thisobject">
         
         
         
@@ -275,7 +293,47 @@
         
 
         
+            <div class="itemName"><code><a href="lyprox.dataexplorer.management.html" class="internal-link" title="lyprox.dataexplorer.management">management</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="lyprox.dataexplorer.migrations.html" class="internal-link" title="lyprox.dataexplorer.migrations">migrations</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="lyprox.dataexplorer.models.html" class="internal-link" title="lyprox.dataexplorer.models">models</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
             <div class="itemName"><code><a href="lyprox.dataexplorer.query.html" class="internal-link" title="lyprox.dataexplorer.query">query</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="lyprox.dataexplorer.subsites.html" class="internal-link" title="lyprox.dataexplorer.subsites">subsites</a></code>
             </div>
         
 
@@ -352,15 +410,25 @@
         </div>
 
         <div class="moduleDocstring">
-          <div><p>The <code><a href="lyprox.dataexplorer.forms.html" class="internal-link" title="lyprox.dataexplorer.forms">dataexplorer.forms</a></code> module defines the relatively complex form that is
-used for querying the database later.</p>
-<p>It also implements some custom form elements, like <code><a href="lyprox.dataexplorer.forms.ThreeWayToggle.html" class="internal-link" title="lyprox.dataexplorer.forms.ThreeWayToggle">ThreeWayToggle</a></code> and
-<code><a href="lyprox.dataexplorer.forms.ThreeWayToggleWidget.html" class="internal-link" title="lyprox.dataexplorer.forms.ThreeWayToggleWidget">ThreeWayToggleWidget</a></code> that represent the custom logic and appearance of a
-three-way toggle button respectively, which appears numerous times in the
-Dashboard interface.</p>
-<p>Finally, a custom <tt class="rst-docutils literal">MultipleChoice</tt> field of somewhat unnecessary complexity
-is implemented here that allows us to select the institutions from which the
-ptients should be included via check boxes with the institution logo on it.</p>
+          <div><p>Defines the fields that can be used to query the patient records.</p>
+<p>Basically, this defines what buttons, dropdowns, and checkboxes are displayed on the
+dashboard and to some extent also how they look. Here, we also define the
+<code><a href="lyprox.dataexplorer.forms.ThreeWayToggle.html" class="internal-link" title="lyprox.dataexplorer.forms.ThreeWayToggle">ThreeWayToggle</a></code> button that is used to select between three states: positive, negative,
+and unknown. The <code><a href="lyprox.dataexplorer.forms.ThreeWayToggle.html" class="internal-link" title="lyprox.dataexplorer.forms.ThreeWayToggle">ThreeWayToggle</a></code> button is used for selecting HPV status, nicotine
+abuse, LNL involvement and more.</p>
+<p>Typically, when calling one of the <code><a href="lyprox.dataexplorer.views.html" class="internal-link" title="lyprox.dataexplorer.views">dataexplorer.views</a></code> functions, an instance of the
+<code><a href="lyprox.dataexplorer.forms.DataexplorerForm.html" class="internal-link" title="lyprox.dataexplorer.forms.DataexplorerForm">DataexplorerForm</a></code> is created with the user's permissions and the initial data from the
+<code><a href="lyprox.dataexplorer.forms.DataexplorerForm.html#from_initial" class="internal-link" title="lyprox.dataexplorer.forms.DataexplorerForm.from_initial">DataexplorerForm.from_initial</a></code> class method. This initial data is then used to display
+the dashboard. Then, the user applies filters to the data and submits the form by
+pressing the "Compute" button. The form is then validated and cleaned
+(<tt class="rst-docutils rst-literal">form.is_valid()</tt>), also in the <code><a href="lyprox.dataexplorer.views.html" class="internal-link" title="lyprox.dataexplorer.views">dataexplorer.views</a></code> module.</p>
+<p>Note: the <code><a href="lyprox.dataexplorer.forms.DataexplorerForm.html" class="internal-link" title="lyprox.dataexplorer.forms.DataexplorerForm">DataexplorerForm</a></code> is not strictly used <a class="rst-external rst-reference" href="https://docs.djangoproject.com/en/4.2/ref/forms/" target="_top">as Django intends forms to be used</a>.
+In Django's logic, a form just after creation is "unbound" and in that state expects
+user input (think of a login form with empty fields). However, in our dashboard, no
+fields are ever "empty". Even when you first load the dashboard, the <code><a href="lyprox.dataexplorer.forms.ThreeWayToggle.html" class="internal-link" title="lyprox.dataexplorer.forms.ThreeWayToggle">ThreeWayToggle</a></code>
+buttons are already set to a value (<tt class="rst-docutils rst-literal">None</tt>). Therefore, we never have this "unbound"
+state of the form. Instead, we always work with bound and validated forms, either
+created from the initial defaults or from the user's input.</p>
 </div>
         </div>
 
@@ -371,33 +439,48 @@ ptients should be included via check boxes with the institution logo on it.</p>
   <tr class="class">
     
     <td>Class</td>
-    <td><code><a href="lyprox.dataexplorer.forms.DashboardForm.html" class="internal-link" title="lyprox.dataexplorer.forms.DashboardForm"><wbr></wbr>Dashboard<wbr></wbr>Form</a></code></td>
+    <td><code><a href="lyprox.dataexplorer.forms.DataexplorerForm.html" class="internal-link" title="lyprox.dataexplorer.forms.DataexplorerForm"><wbr></wbr>Dataexplorer<wbr></wbr>Form</a></code></td>
     <td>Form for querying the database.</td>
   </tr><tr class="class">
     
     <td>Class</td>
-    <td><code><a href="lyprox.dataexplorer.forms.DatasetModelChoiceIndexer.html" class="internal-link" title="lyprox.dataexplorer.forms.DatasetModelChoiceIndexer"><wbr></wbr>Dataset<wbr></wbr>Model<wbr></wbr>Choice<wbr></wbr>Indexer</a></code></td>
-    <td>Custom class with which one can access additional information from the model that is chosen by the <code><a href="lyprox.dataexplorer.forms.DatasetMultipleChoiceField.html" class="internal-link" title="lyprox.dataexplorer.forms.DatasetMultipleChoiceField">DatasetMultipleChoiceField</a></code>.</td>
-  </tr><tr class="class">
-    
-    <td>Class</td>
-    <td><code><a href="lyprox.dataexplorer.forms.DatasetMultipleChoiceField.html" class="internal-link" title="lyprox.dataexplorer.forms.DatasetMultipleChoiceField"><wbr></wbr>Dataset<wbr></wbr>Multiple<wbr></wbr>Choice<wbr></wbr>Field</a></code></td>
-    <td>Customize label description and add method that returns the logo URL for Datasets. The implementation is inspired by how the <tt class="rst-docutils literal">choices</tt> are implemented. But since some other functionality depends on how those choices are implemented, it cannot be changed easily.</td>
+    <td><code><a href="lyprox.dataexplorer.forms.EasySubsiteChoiceField.html" class="internal-link" title="lyprox.dataexplorer.forms.EasySubsiteChoiceField"><wbr></wbr>Easy<wbr></wbr>Subsite<wbr></wbr>Choice<wbr></wbr>Field</a></code></td>
+    <td>Simple subclass that provides a convenience method to create subsite fields.</td>
   </tr><tr class="class">
     
     <td>Class</td>
     <td><code><a href="lyprox.dataexplorer.forms.ThreeWayToggle.html" class="internal-link" title="lyprox.dataexplorer.forms.ThreeWayToggle"><wbr></wbr>Three<wbr></wbr>Way<wbr></wbr>Toggle</a></code></td>
-    <td>A toggle switch than can be in three different states: Positive/True, unkown/None and negative/False.</td>
+    <td>Field to choose one of three options: <tt class="rst-docutils rst-literal">True</tt>, <tt class="rst-docutils rst-literal">None</tt> and <tt class="rst-docutils rst-literal">False</tt>.</td>
   </tr><tr class="class">
     
     <td>Class</td>
     <td><code><a href="lyprox.dataexplorer.forms.ThreeWayToggleWidget.html" class="internal-link" title="lyprox.dataexplorer.forms.ThreeWayToggleWidget"><wbr></wbr>Three<wbr></wbr>Way<wbr></wbr>Toggle<wbr></wbr>Widget</a></code></td>
-    <td>Widget that renders the three-way toggle button and allows to set the attributes of the individual inputs (radio buttons) as <code><a href="lyprox.dataexplorer.forms.ThreeWayToggleWidget.html#option_attrs" class="internal-link" title="lyprox.dataexplorer.forms.ThreeWayToggleWidget.option_attrs">option_attrs</a></code> as well as the attributes of the container as <tt class="rst-docutils literal">attrs</tt>.</td>
+    <td>Widget that renders the three-way toggle button.</td>
+  </tr><tr class="function">
+    
+    <td>Function</td>
+    <td><code><a href="#format_dataset_choices" class="internal-link" title="lyprox.dataexplorer.forms.format_dataset_choices">format<wbr></wbr>_dataset<wbr></wbr>_choices</a></code></td>
+    <td>Create a list of tuples for the dataset choices.</td>
+  </tr><tr class="function">
+    
+    <td>Function</td>
+    <td><code><a href="#get_modality_choices" class="internal-link" title="lyprox.dataexplorer.forms.get_modality_choices">get<wbr></wbr>_modality<wbr></wbr>_choices</a></code></td>
+    <td>Return the choices for the modality field.</td>
   </tr><tr class="function">
     
     <td>Function</td>
     <td><code><a href="#trio_to_bool" class="internal-link" title="lyprox.dataexplorer.forms.trio_to_bool">trio<wbr></wbr>_to<wbr></wbr>_bool</a></code></td>
-    <td>Transform -1, 0, and +1 to False, None and True respectively.</td>
+    <td>Transform -1, 0, and +1 to <tt class="rst-docutils rst-literal">False</tt>, <tt class="rst-docutils rst-literal">None</tt> and <tt class="rst-docutils rst-literal">True</tt> respectively.</td>
+  </tr><tr class="typevariable">
+    
+    <td>Type Variable</td>
+    <td><code><a href="#T" class="internal-link" title="lyprox.dataexplorer.forms.T">T</a></code></td>
+    <td><span class="undocumented">Undocumented</span></td>
+  </tr><tr class="variable">
+    
+    <td>Variable</td>
+    <td><code><a href="#checkbox_attrs" class="internal-link" title="lyprox.dataexplorer.forms.checkbox_attrs">checkbox<wbr></wbr>_attrs</a></code></td>
+    <td><span class="undocumented">Undocumented</span></td>
   </tr><tr class="variable">
     
     <td>Variable</td>
@@ -414,6 +497,54 @@ ptients should be included via check boxes with the institution logo on it.</p>
           <div class="basefunction">
   
   
+  <a name="lyprox.dataexplorer.forms.format_dataset_choices">
+    
+  </a>
+  <a name="format_dataset_choices">
+    
+  </a>
+  <div class="functionHeader">
+    
+    
+    <span class="py-keyword">def</span> <span class="py-defname">format_dataset_choices</span><span class="function-signature">(datasets: <code>list[<wbr></wbr>str]</code>) -&gt; <code>list[<wbr></wbr>tuple[<wbr></wbr>str, <wbr></wbr>str]]</code></span>:
+    
+    <a class="headerLink" href="#format_dataset_choices" title="lyprox.dataexplorer.forms.format_dataset_choices">
+      
+      
+      ¶
+    </a>
+  </div>
+  <div class="docstring functionBody">
+    
+    <div><p>Create a list of tuples for the dataset choices.</p></div>
+  </div>
+</div><div class="basefunction">
+  
+  
+  <a name="lyprox.dataexplorer.forms.get_modality_choices">
+    
+  </a>
+  <a name="get_modality_choices">
+    
+  </a>
+  <div class="functionHeader">
+    
+    
+    <span class="py-keyword">def</span> <span class="py-defname">get_modality_choices</span><span class="function-signature">() -&gt; <code>list[<wbr></wbr>tuple[<wbr></wbr>str, <wbr></wbr>str]]</code></span>:
+    
+    <a class="headerLink" href="#get_modality_choices" title="lyprox.dataexplorer.forms.get_modality_choices">
+      
+      
+      ¶
+    </a>
+  </div>
+  <div class="docstring functionBody">
+    
+    <div><p>Return the choices for the modality field.</p></div>
+  </div>
+</div><div class="basefunction">
+  
+  
   <a name="lyprox.dataexplorer.forms.trio_to_bool">
     
   </a>
@@ -422,7 +553,8 @@ ptients should be included via check boxes with the institution logo on it.</p>
   </a>
   <div class="functionHeader">
     
-    <span class="py-keyword">def</span> <span class="py-defname">trio_to_bool</span>(value):
+    
+    <span class="py-keyword">def</span> <span class="py-defname">trio_to_bool</span><span class="function-signature">(value: <code>int | Any</code>) -&gt; <code>bool | Any</code></span>:
     
     <a class="headerLink" href="#trio_to_bool" title="lyprox.dataexplorer.forms.trio_to_bool">
       
@@ -432,10 +564,59 @@ ptients should be included via check boxes with the institution logo on it.</p>
   </div>
   <div class="docstring functionBody">
     
-    <div><p>Transform -1, 0, and +1 to False, None and True respectively.</p>
+    <div><p>Transform -1, 0, and +1 to <tt class="rst-docutils rst-literal">False</tt>, <tt class="rst-docutils rst-literal">None</tt> and <tt class="rst-docutils rst-literal">True</tt> respectively.</p>
 <p>Any other values are simply passed through unchanged. This is used to map the
 values of the three-way toggle buttons to its boolean representation.</p>
-<table class="fieldTable"><tr class="fieldStart"><td class="fieldName" colspan="2">Parameters</td></tr><tr><td class="fieldArgContainer"><span class="fieldArg">value:</span><code>int</code></td><td class="fieldArgDesc"><span class="undocumented">Undocumented</span></td></tr></table></div>
+</div>
+  </div>
+</div><div class="basetypevariable">
+  
+  
+  <a name="lyprox.dataexplorer.forms.T">
+    
+  </a>
+  <a name="T">
+    
+  </a>
+  <div class="functionHeader">
+    
+    <span class="py-defname">T</span> =
+    
+    <a class="headerLink" href="#T" title="lyprox.dataexplorer.forms.T">
+      
+      
+      ¶
+    </a>
+  </div>
+  <div class="functionBody">
+    
+    <div><p class="undocumented">Undocumented</p></div>
+    <table class="valueTable"><tr class="fieldStart"><td class="fieldName">Value</td></tr><tr><td><pre class="constant-value"><code>TypeVar(<wbr></wbr><span class="rst-variable-quote">'</span><span class="rst-variable-string">T</span><span class="rst-variable-quote">'</span>,
+        <wbr></wbr>bound=<span class="rst-variable-quote">'</span><span class="rst-variable-string">DataexplorerForm</span><span class="rst-variable-quote">'</span>)</code></pre></td></tr></table>
+  </div>
+</div><div class="basevariable">
+  
+  
+  <a name="lyprox.dataexplorer.forms.checkbox_attrs">
+    
+  </a>
+  <a name="checkbox_attrs">
+    
+  </a>
+  <div class="functionHeader">
+    
+    <span class="py-defname">checkbox_attrs</span>: <code>dict[<wbr></wbr>str, <wbr></wbr>str]</code> =
+    
+    <a class="headerLink" href="#checkbox_attrs" title="lyprox.dataexplorer.forms.checkbox_attrs">
+      
+      
+      ¶
+    </a>
+  </div>
+  <div class="functionBody">
+    
+    <div><p class="undocumented">Undocumented</p></div>
+    
   </div>
 </div><div class="basevariable">
   
@@ -470,10 +651,10 @@ values of the three-way toggle buttons to its boolean representation.</p>
     <footer class="navbar navbar-default">
 
   
-  <div class="container">
+  <div class="container-fluid">
     <a href="index.html">API Documentation</a> for LyProX,
   generated by <a href="https://github.com/twisted/pydoctor/">pydoctor</a>
-    22.9.1 at 2024-10-09 13:21:38.
+    24.11.2 at 2025-04-01 13:02:24.
   </div>
 
   <!-- Search related scripts needs to be loaded at the end of HTML 

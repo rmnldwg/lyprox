@@ -7,7 +7,7 @@
   <head>
     
     <title>lyprox</title>
-    <meta name="generator" content="pydoctor 22.9.1"> 
+    <meta name="generator" content="pydoctor 24.11.2"> 
         
     </meta>
     <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
@@ -15,6 +15,7 @@
     <link rel="stylesheet" type="text/css" href="bootstrap.min.css" />
     <link rel="stylesheet" type="text/css" href="apidocs.css" />
     <link rel="stylesheet" type="text/css" href="extra.css" />
+    
 </head>
 
   <body>
@@ -52,7 +53,7 @@
             
             <span class="input-group-btn">
               <a style="display: none;" class="btn btn-default" id="search-clear-button" title="Clear" onclick="clearSearch()"><img src="fonts/x-circle.svg" alt="Clear" /></a>
-              <a class="btn btn-default" id="search-help-button" title="Help" onclick="toggleSearchHelpText()"><img src="fonts/info.svg" alt="Help" /></a>
+              <a class="btn btn-default" id="apidocs-help-button" title="Help" href="apidocs-help.html"><img src="fonts/info.svg" alt="Help" /></a>
             </span>
           </div>
         </div>
@@ -76,39 +77,6 @@
             <h1>Cannot search: JavaScript is not supported/enabled in your browser.</h1>
         </noscript>
 
-        <div class="hint" id="search-help-box">
-          <p class="rst-last">
-      
-            Search bar offers the following options:
-            <ul>   
-                <li>
-                  <strong>Term presence.</strong> The below example searches for documents that 
-                    must contain “foo”, might contain “bar” and must not contain “baz”: <code>+foo bar -baz</code>
-                </li> 
-
-                <li>
-                  <strong>Wildcards.</strong> The below example searches for documents with words beginning with “foo”: <code>foo*</code>
-                </li> 
-
-                <li>
-                  <strong>Search in specific fields.</strong> The following search matches all objects 
-                  in "twisted.mail" that matches “search”: <code>+qname:twisted.mail.* +search</code>
-
-                  <p>
-                    Possible fields: 'name', 'qname' (fully qualified name), 'docstring', and 'kind'.
-                    Last two fields are only applicable if "search in docstrings" is enabled.
-                  </p>
-                </li>
-
-                <li>
-                  <strong>Fuzzy matches.</strong> The following search matches all documents 
-                  that have a word within 1 edit distance of “foo”: <code>foo~1</code>
-                </li>
-            </ul>
-
-          </p>
-        </div>
-
         <div id="search-status"> </div>
 
         <div class="warning" id="search-warn-box" style="display: none;">
@@ -119,8 +87,8 @@
           <!-- Filled dynamically by JS -->
         </table>
         
-        <div style="margin-top: 8px;">
-          <p>Results provided by <a href="https://lunrjs.com">Lunr.js</a></p>
+        <div style="margin-top: 10px;">
+          <p>For more information on the search, visit the <a href="apidocs-help.html#rst-search">help page</a>.</p>
         </div>
       </div>
 
@@ -146,6 +114,31 @@
       </div>
       
       <div>
+         
+          <div class="childrenKindTitle">Contents</div>
+          <ul><li><a class="rst-internal rst-reference" href="#rst-introduction" id="rst-toc-entry-13">Introduction</a></li>
+<li><p class="rst-first"><a class="rst-internal rst-reference" href="#rst-maintenance" id="rst-toc-entry-14">Maintenance</a></p>
+<ul class="rst-simple">
+<li><a class="rst-internal rst-reference" href="#rst-bash-commands" id="rst-toc-entry-15">Bash Commands</a><ul>
+<li><a class="rst-internal rst-reference" href="#rst-systemd-commands" id="rst-toc-entry-16">Systemd Commands</a></li>
+<li><a class="rst-internal rst-reference" href="#rst-environment" id="rst-toc-entry-17">Environment</a></li>
+</ul>
+</li>
+<li><a class="rst-internal rst-reference" href="#rst-django-commands" id="rst-toc-entry-18">Django Commands</a><ul>
+<li><a class="rst-internal rst-reference" href="#rst-built-in" id="rst-toc-entry-19">Built In</a></li>
+<li><a class="rst-internal rst-reference" href="#rst-custom" id="rst-toc-entry-20">Custom</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p class="rst-first"><a class="rst-internal rst-reference" href="#rst-conventions" id="rst-toc-entry-21">Conventions</a></p>
+<ul class="rst-simple">
+<li><a class="rst-internal rst-reference" href="#rst-code-style" id="rst-toc-entry-22">Code Style</a></li>
+<li><a class="rst-internal rst-reference" href="#rst-docstrings" id="rst-toc-entry-23">Docstrings</a></li>
+<li><a class="rst-internal rst-reference" href="#rst-pre-commit-hooks-and-conventional-commits" id="rst-toc-entry-24">Pre-Commit Hooks and Conventional Commits</a></li>
+</ul>
+</li>
+</ul>
         
 
         <div class="childrenKindTitle">Modules</div>
@@ -167,37 +160,17 @@
         
 
         
+            <div class="itemName"><code><a href="lyprox.context_processors.html" class="internal-link" title="lyprox.context_processors">context<wbr></wbr>_processors</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
             <div class="itemName"><code><a href="lyprox.dataexplorer.html" class="internal-link" title="lyprox.dataexplorer">dataexplorer</a></code>
-            </div>
-        
-
-    </li><li class="">
-        
-        
-        
-
-        
-            <div class="itemName"><code><a href="lyprox.patients.html" class="internal-link" title="lyprox.patients">patients</a></code>
-            </div>
-        
-
-    </li><li class="">
-        
-        
-        
-
-        
-            <div class="itemName"><code><a href="lyprox.riskpredictor.html" class="internal-link" title="lyprox.riskpredictor">riskpredictor</a></code>
-            </div>
-        
-
-    </li><li class="">
-        
-        
-        
-
-        
-            <div class="itemName"><code><a href="lyprox.templatetags.html" class="internal-link" title="lyprox.templatetags">templatetags</a></code>
             </div>
         
 
@@ -217,6 +190,16 @@
         
 
         
+            <div class="itemName"><code><a href="lyprox.riskpredictor.html" class="internal-link" title="lyprox.riskpredictor">riskpredictor</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
             <div class="itemName"><code><a href="lyprox.settings.html" class="internal-link" title="lyprox.settings">settings</a></code>
             </div>
         
@@ -227,7 +210,27 @@
         
 
         
+            <div class="itemName"><code><a href="lyprox.templatetags.html" class="internal-link" title="lyprox.templatetags">templatetags</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
             <div class="itemName"><code><a href="lyprox.urls.html" class="internal-link" title="lyprox.urls">urls</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="lyprox.utils.html" class="internal-link" title="lyprox.utils">utils</a></code>
             </div>
         
 
@@ -248,6 +251,16 @@
 
         
             <div class="itemName"><code><a href="lyprox.wsgi.html" class="internal-link" title="lyprox.wsgi">wsgi</a></code>
+            </div>
+        
+
+    </li><li class="private">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="lyprox.__main__.html" class="internal-link" title="lyprox.__main__">__main__</a></code>
             </div>
         
 
@@ -314,11 +327,254 @@
         </div>
 
         <div class="moduleDocstring">
-          <div><p>This is the module at the heart of <a class="rst-reference rst-external" href="https://lyprox.org" target="_top">LyProX</a>.</p>
-<p>It defines the <code><a href="lyprox.settings.html" class="internal-link" title="lyprox.settings">settings</a></code> that <a class="rst-reference rst-external" href="https://djangoproject.com" target="_top">Django</a> uses for the website and ties together all
-the functionality that is provided by the <code><a href="lyprox.patients.html" class="internal-link" title="lyprox.patients">patients</a></code> and <code><a href="lyprox.dataexplorer.html" class="internal-link" title="lyprox.dataexplorer">dataexplorer</a></code> apps.</p>
-<p>For a motivation of why we implemented this web app and an overview over the entire
-orject, head over to the <a class="rst-reference rst-external" href="https://github.com/rmnldwg/lyprox" target="_top">repository</a>.</p>
+          <div><p><a class="rst-external rst-reference" href="https://lyprox.org" target="_top">LyProX</a> is a <a class="rst-external rst-reference" href="https://djangoproject.com" target="_top">Django</a> app to interactively explore lymphatic progression patterns.</p>
+<div class="rst-section" id="rst-introduction">
+<h2 class="heading"><a class="rst-toc-backref" href="#rst-toc-entry-1">Introduction</a></h2>
+<p>This is the documentation for the <a class="rst-external rst-reference" href="https://github.com/rmnldwg/lyprox" target="_top">source code</a> of the <a class="rst-external rst-reference" href="https://lyprox.org" target="_top">LyProX</a> web app. It is
+intended for developers who want to contribute to the project or use the code for
+their own purposes.</p>
+<p>We will try to write this documentation as self-contained as possible, because in
+our experience, the <a class="rst-external rst-reference" href="https://djangoproject.com" target="_top">Django</a> documentation is not always easy to navigate and learning
+by example is often more effective.</p>
+<p>The most important modules in this package are listed below. We recommend to start
+with their documentations for a deep dive into how the web app works and how it may
+be modified, enhanced, or extended.</p>
+<ul class="rst-simple">
+<li>the <code><a href="lyprox.settings.html" class="internal-link" title="lyprox.settings">settings</a></code>, where all the configuration of the website is defined. Most
+importantly, it documents all the environment variables that need to be set
+to run the website.</li>
+<li>the <code><a href="lyprox.dataexplorer.html" class="internal-link" title="lyprox.dataexplorer">dataexplorer</a></code> module, which provides the interactive data exploration tool
+that is the heart of the website.</li>
+<li>the <code><a href="lyprox.riskpredictor.html" class="internal-link" title="lyprox.riskpredictor">riskpredictor</a></code> module, that allows computing the risk for occult disease,
+given an individual diagnosis as computed by a specified model.</li>
+</ul>
+<div class="rst-topic rst-contents" id="rst-beyond-the-documented-code-you-will-also-find-the-following-information-in-this-documentation">
+<p class="rst-topic-title">Beyond the documented code, you will also find the following information
+in this documentation:</p>
+<ul class="rst-simple">
+<li><a class="rst-internal rst-reference" href="#rst-introduction" id="rst-toc-entry-1">Introduction</a></li>
+<li><a class="rst-internal rst-reference" href="#rst-maintenance" id="rst-toc-entry-2">Maintenance</a><ul>
+<li><a class="rst-internal rst-reference" href="#rst-bash-commands" id="rst-toc-entry-3">Bash Commands</a><ul>
+<li><a class="rst-internal rst-reference" href="#rst-systemd-commands" id="rst-toc-entry-4">Systemd Commands</a></li>
+<li><a class="rst-internal rst-reference" href="#rst-environment" id="rst-toc-entry-5">Environment</a></li>
+</ul>
+</li>
+<li><a class="rst-internal rst-reference" href="#rst-django-commands" id="rst-toc-entry-6">Django Commands</a><ul>
+<li><a class="rst-internal rst-reference" href="#rst-built-in" id="rst-toc-entry-7">Built In</a></li>
+<li><a class="rst-internal rst-reference" href="#rst-custom" id="rst-toc-entry-8">Custom</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="rst-internal rst-reference" href="#rst-conventions" id="rst-toc-entry-9">Conventions</a><ul>
+<li><a class="rst-internal rst-reference" href="#rst-code-style" id="rst-toc-entry-10">Code Style</a></li>
+<li><a class="rst-internal rst-reference" href="#rst-docstrings" id="rst-toc-entry-11">Docstrings</a></li>
+<li><a class="rst-internal rst-reference" href="#rst-pre-commit-hooks-and-conventional-commits" id="rst-toc-entry-12">Pre-Commit Hooks and Conventional Commits</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div class="rst-section" id="rst-maintenance">
+<h2 class="heading"><a class="rst-toc-backref" href="#rst-toc-entry-2">Maintenance</a></h2>
+<p>Beyond understanding and modifying the source code of the app, there is also general
+maintenance work to be done. Right now, the web app runs on an <a class="rst-external rst-reference" href="https://portal.azure.com" target="_top">Azure</a> virtual machine.</p>
+<p>On this machine, the repository is cloned into the <tt class="rst-docutils rst-literal">/srv/www/lyprox.org</tt> directory.
+A <a class="rst-external rst-reference" href="https://systemd.io" target="_top">systemd</a> service provides the <a class="rst-external rst-reference" href="https://gunicorn.org" target="_top">gunicorn</a> server that in turn provides the
+interface between the <a class="rst-external rst-reference" href="https://djangoproject.com" target="_top">Django</a> app and the <a class="rst-external rst-reference" href="https://nginx.org" target="_top">nginx</a> web server that handles any
+incoming requests.</p>
+<p>We have chosen <a class="rst-external rst-reference" href="https://systemd.io" target="_top">systemd</a> over e.g. docker, because in this simple instance where
+we don't need a separate database server or other services, it is easier to set up
+and maintain. Note however, that this limits the app to be deployed on virtual machines
+that actually have <a class="rst-external rst-reference" href="https://systemd.io" target="_top">systemd</a> installed.</p>
+<div class="rst-section" id="rst-bash-commands">
+<h3 class="heading"><a class="rst-toc-backref" href="#rst-toc-entry-3">Bash Commands</a></h3>
+<p>Here, we give a list of useful commands to see what is going on and perform certain
+tasks on the server.</p>
+<div class="rst-section" id="rst-systemd-commands">
+<h4 class="heading"><a class="rst-toc-backref" href="#rst-toc-entry-4">Systemd Commands</a></h4>
+<p>First, some commands related to the <a class="rst-external rst-reference" href="https://systemd.io" target="_top">systemd</a> services:</p>
+<ul class="rst-simple">
+<li><dl class="rst-docutils rst-first">
+<dt><tt class="rst-docutils rst-literal">sudo systemctl status lyprox.org.service</tt></dt>
+<dd>Check the status of the <a class="rst-external rst-reference" href="https://gunicorn.org" target="_top">gunicorn</a> server. Ideally, it should show - in addition
+to some general info - the green text <tt class="rst-docutils rst-literal">active (running)</tt>.</dd>
+</dl>
+</li>
+<li><dl class="rst-docutils rst-first">
+<dt><tt class="rst-docutils rst-literal">sudo systemctl start lyprox.org.service</tt></dt>
+<dd>Launch the <a class="rst-external rst-reference" href="https://gunicorn.org" target="_top">gunicorn</a> server. One can also use <tt class="rst-docutils rst-literal">stop</tt> or <tt class="rst-docutils rst-literal">restart</tt> to perform
+the corresponding action.</dd>
+</dl>
+</li>
+<li><dl class="rst-docutils rst-first">
+<dt><tt class="rst-docutils rst-literal">sudo journalctl <span class="pre">-u</span> lyprox.org.service <span class="pre">-f</span></tt></dt>
+<dd>Shows a continuous stream of the latest log messages emitted by the app. Here,
+one will see the log messages written into the source code of the app.</dd>
+</dl>
+</li>
+</ul>
+<p>Similarly, one can inspect the status and logs of the <tt class="rst-docutils rst-literal">nginx.service</tt> that runs the
+interface between the <a class="rst-external rst-reference" href="https://gunicorn.org" target="_top">gunicorn</a> server and the outside world with the corresponding
+commands. Simply replace <tt class="rst-docutils rst-literal">lyprox.org</tt> with <tt class="rst-docutils rst-literal">nginx.service</tt> in the above commands.</p>
+</div>
+<div class="rst-section" id="rst-environment">
+<h4 class="heading"><a class="rst-toc-backref" href="#rst-toc-entry-5">Environment</a></h4>
+<p>Next, some commands related to the virtual Python environment and the environment
+variables that Django uses for certain settings and secrets:</p>
+<ul class="rst-simple">
+<li><dl class="rst-docutils rst-first">
+<dt><tt class="rst-docutils rst-literal">uv sync</tt></dt>
+<dd>We use <a class="rst-external rst-reference" href="https://docs.astral.sh/uv/" target="_top">uv</a> to manage virtual environments and with this command, one can
+synchronize the virtual environment with the <tt class="rst-docutils rst-literal">requirements.txt</tt> file. For this to
+work, one needs to be inside the <tt class="rst-docutils rst-literal">/srv/www/lyprox.org</tt> directory.</dd>
+</dl>
+</li>
+<li><dl class="rst-docutils rst-first">
+<dt><tt class="rst-docutils rst-literal">set <span class="pre">-a;</span> source .env; set +a</tt></dt>
+<dd>This command loads all the environment variables from the <tt class="rst-docutils rst-literal">.env</tt> file into the
+current shell. It is strongly recommended to put the secret key as well as some
+config and passwords into the <tt class="rst-docutils rst-literal">.env</tt> file and <strong>not</strong> directly in the <code><a href="lyprox.settings.html" class="internal-link" title="lyprox.settings">settings</a></code>.
+Of course, <strong>never</strong> commit the <tt class="rst-docutils rst-literal">.env</tt> file to source control.</dd>
+</dl>
+</li>
+</ul>
+</div>
+</div>
+<div class="rst-section" id="rst-django-commands">
+<h3 class="heading"><a class="rst-toc-backref" href="#rst-toc-entry-6">Django Commands</a></h3>
+<div class="rst-section" id="rst-built-in">
+<h4 class="heading"><a class="rst-toc-backref" href="#rst-toc-entry-7">Built In</a></h4>
+<p>Django itself also provides a number of commands that can be run from the command line.
+Note that the way we have configured everything, all commands are available under the
+<tt class="rst-docutils rst-literal">lyprox</tt> CLI that is installed via the <tt class="rst-docutils rst-literal">uv sync</tt> command (if the repo is the
+current working directory and the virtual environment is activated).</p>
+<ul class="rst-simple">
+<li><dl class="rst-docutils rst-first">
+<dt><tt class="rst-docutils rst-literal">lyprox runserver</tt></dt>
+<dd>This starts a Python webserver that is only accessible from the local machine.
+This should <strong>NOT</strong> be used in production, but is useful for development, mostly
+on local machines.</dd>
+</dl>
+</li>
+<li><dl class="rst-docutils rst-first">
+<dt><tt class="rst-docutils rst-literal">lyprox collectstatic</tt></dt>
+<dd>This command collects all static files from the various apps and puts them into
+the directory that is exposed to the internet by the <a class="rst-external rst-reference" href="https://nginx.org" target="_top">nginx</a> server. This is
+necessary whenever static files are changed or added.</dd>
+</dl>
+</li>
+<li><dl class="rst-docutils rst-first">
+<dt><tt class="rst-docutils rst-literal">lyprox migrate</tt></dt>
+<dd>This command applies all migrations to the database. In a typical <a class="rst-external rst-reference" href="https://djangoproject.com" target="_top">Django</a> app
+migrations happen sometimes and this command ensures that changes to the database
+model are reflected in the database itself without loosing any data. However, we
+do not really care about loosing data since nothing is stored <strong>only</strong> in the
+<a class="rst-external rst-reference" href="https://sqlite.org" target="_top">SQLite3</a> database. So, this command is mainly used to initialize the database.</dd>
+</dl>
+</li>
+<li><dl class="rst-docutils rst-first">
+<dt><tt class="rst-docutils rst-literal">lyprox shell</tt></dt>
+<dd>This command starts a Python shell with the <a class="rst-external rst-reference" href="https://djangoproject.com" target="_top">Django</a> environment loaded. This is
+useful for testing code snippets or inspecting the database.</dd>
+</dl>
+</li>
+</ul>
+</div>
+<div class="rst-section" id="rst-custom">
+<h4 class="heading"><a class="rst-toc-backref" href="#rst-toc-entry-8">Custom</a></h4>
+<p>All these are provided by <a class="rst-external rst-reference" href="https://djangoproject.com" target="_top">Django</a> itself and are also
+<a class="rst-external rst-reference" href="https://docs.djangoproject.com/en/4.2/ref/django-admin/" target="_top">well documented</a> in their
+docs. Now come a couple of commands that we implemented for ourselves. They are all
+about populating the database:</p>
+<ul class="rst-simple">
+<li><dl class="rst-docutils rst-first">
+<dt><tt class="rst-docutils rst-literal">lyprox add_institutions <span class="pre">--from-file</span> initial/institutions.json</tt></dt>
+<dd>The <code><a href="lyprox.accounts.management.commands.add_institutions.html" class="internal-link" title="lyprox.accounts.management.commands.add_institutions">add_institutions</a></code> command allows creating all the institutions that are
+defined in the <tt class="rst-docutils rst-literal">initial/institutions.json</tt> file. Institutions must be initialized
+first, because both the users as well as the datasets must belong to an insitution.</dd>
+</dl>
+</li>
+<li><dl class="rst-docutils rst-first">
+<dt><tt class="rst-docutils rst-literal">lyprox add_users <span class="pre">--from-file</span> initial/users.json</tt></dt>
+<dd>The <code><a href="lyprox.accounts.management.commands.add_users.html" class="internal-link" title="lyprox.accounts.management.commands.add_users">add_users</a></code> command allows creating all the users that are defined in the
+<tt class="rst-docutils rst-literal">initial/users.json</tt> file. Users must be initialized after the institutions,
+because they must belong to an institution. Note that the passwords are not stored
+in the JSON file, but in environment variables (i.e., in the <tt class="rst-docutils rst-literal">.env</tt> file). The
+name of the environment variable is <tt class="rst-docutils rst-literal">DJANGO_&lt;EMAIL&gt;_PASSWORD</tt>, where <tt class="rst-docutils rst-literal">&lt;EMAIL&gt;</tt>
+is the part of the email address before the <tt class="rst-docutils rst-literal">@</tt> symbol, with all dots removed.</dd>
+</dl>
+</li>
+<li><dl class="rst-docutils rst-first">
+<dt><tt class="rst-docutils rst-literal">lyprox add_datasets <span class="pre">--from-file</span> initial/datasets.json</tt></dt>
+<dd>With the <code><a href="lyprox.dataexplorer.management.commands.add_datasets.html" class="internal-link" title="lyprox.dataexplorer.management.commands.add_datasets">add_datasets</a></code> command, fetching and loading CSV tables of patient records
+from the <a class="rst-external rst-reference" href="https://github.com/rmnldwg/lydata" target="_top">lyDATA</a> repo is initiated. The loaded <a class="rst-external rst-reference" href="https://pandas.pydata.org" target="_top">pandas</a> dataframes are cached
+using <code><a href="https://joblib.readthedocs.io/en/stable/index.html#module-joblib" class="intersphinx-link">joblib</a></code> and thus the patient data never reaches the <a class="rst-external rst-reference" href="https://sqlite.org" target="_top">SQLite3</a> database.</dd>
+</dl>
+</li>
+<li><dl class="rst-docutils rst-first">
+<dt><tt class="rst-docutils rst-literal">lyprox add_riskmodels <span class="pre">--from-file</span> initial/riskmodels.json</tt></dt>
+<dd>Lastly, the <code><a href="lyprox.riskpredictor.management.commands.add_riskmodels.html" class="internal-link" title="lyprox.riskpredictor.management.commands.add_riskmodels">add_riskmodels</a></code> command loads a model definition from the config files
+that the <tt class="rst-docutils rst-literal">initial/riskmodels.json</tt> file points to. Then, it fetches the MCMC
+samples for that model and precomputes posterior state distributions for a subset
+of the samples. This is then used in the <code><a href="lyprox.riskpredictor.html" class="internal-link" title="lyprox.riskpredictor">riskpredictor</a></code> app to compute the
+personalized risk on demand. Again, <code><a href="https://joblib.readthedocs.io/en/stable/index.html#module-joblib" class="intersphinx-link">joblib</a></code> is used to cache and speed up the
+results.</dd>
+</dl>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="rst-section" id="rst-conventions">
+<h2 class="heading"><a class="rst-toc-backref" href="#rst-toc-entry-9">Conventions</a></h2>
+<p>To keep the code and documentation clean and readable, we follow a few conventions. Any contributions should adhere to these style conventions.</p>
+<div class="rst-section" id="rst-code-style">
+<h3 class="heading"><a class="rst-toc-backref" href="#rst-toc-entry-10">Code Style</a></h3>
+<p>We use <a class="rst-external rst-reference" href="https://docs.astral.sh/ruff/" target="_top">ruff</a> to format the code. The selected and ignored rules are specified in the <tt class="rst-docutils rst-literal">pyproject.toml</tt> file at the root of the repository.</p>
+<p>Also, we are big fans of <a class="rst-external rst-reference" href="https://mypy.readthedocs.io/en/stable/cheat_sheet_py3.html" target="_top">type hints</a> in function arguments and class attributes and use them wherever possible. While not enforced, as there may be cases where type hints are not feasible or useful, we generally strive to use them extensively.</p>
+</div>
+<div class="rst-section" id="rst-docstrings">
+<h3 class="heading"><a class="rst-toc-backref" href="#rst-toc-entry-11">Docstrings</a></h3>
+<p>Docstrings should follow the format below. Note that we don't like the styles where the docstring lists all function arguments and their types <em>again</em>. We think this is redundant as long as</p>
+<ul class="rst-simple">
+<li>the argument names are meaningful</li>
+<li>all arguments are type hinted</li>
+<li>the use and effect of each argument is described in the body of the docstring</li>
+</ul>
+<p>Therefore, we write docstring that create documentations that look similar to how the <a class="rst-external rst-reference" href="https://docs.python.org/3.10/library/functions.html#getattr" target="_top">main Python docs</a> are structured (note the linked example of <tt class="rst-docutils rst-literal">getattr()</tt>).</p>
+<pre class="rst-literal-block rst-code rst-python">
+<span class="rst-k">def</span><span class="rst-w"> </span><span class="rst-nf">my_function</span><span class="rst-p">(</span><span class="rst-n">arg1</span><span class="rst-p">:</span> <span class="rst-nb">int</span><span class="rst-p">,</span> <span class="rst-n">arg2</span><span class="rst-p">:</span> <span class="rst-nb">str</span><span class="rst-p">)</span> <span class="rst-o">-&gt;</span> <span class="rst-nb">float</span><span class="rst-p">:</span><span class="rst-w">
+    </span><span class="rst-sd">"""Briefly describe what the function does.
+
+    Then go on and describe it in detail. Make sure to mention what ``arg1`` does
+    and also what the effect of ``arg2`` is.
+
+    You can also link to other symbols using single backticks. E.g., if the main
+    Python docs are linked, then you could mention the `print` function and then
+    pydoctor would turn that into a link to this built-in function's docs.
+
+    We also really like doctests. First, they are tested. Second, they directly
+    showcase some examples:
+
+    &gt;&gt;&gt; my_function(5, "hey")
+    hey
+    8.14
+    """</span><span class="rst-w">
+</span>    <span class="rst-nb">print</span><span class="rst-p">(</span><span class="rst-n">arg2</span><span class="rst-p">)</span><span class="rst-w">
+</span>    <span class="rst-k">return</span> <span class="rst-mf">3.14</span> <span class="rst-o">+</span> <span class="rst-n">arg1</span>
+</pre>
+<p>When using docstrings as above, the documentation can be auto-generated from the code using <a class="rst-external rst-reference" href="https://pydoctor.readthedocs.io/en/latest/" target="_top">pydoctor</a>. Its output is simple, clean, and comprehensive. It lists all modules, classes, and functions in the same hierarchy as they appear in the codebase. If the docstrings are well-written, they can effectively guide the reader through the codebase. Cross-references can be added using single backticks, e.g., <tt class="rst-docutils rst-literal">`my_symbol`</tt> will search the entire codebase (and even other linked docs) for this symbol and add a link to it if found.</p>
+</div>
+<div class="rst-section" id="rst-pre-commit-hooks-and-conventional-commits">
+<h3 class="heading"><a class="rst-toc-backref" href="#rst-toc-entry-12">Pre-Commit Hooks and Conventional Commits</a></h3>
+<p>We use <a class="rst-external rst-reference" href="https://pre-commit.com/" target="_top">pre-commit</a> to run [ruff] and other checks before every commit. This ensures that the code adheres to some basic standards and that all commit messages are so-called <a class="rst-external rst-reference" href="https://www.conventionalcommits.org/en/v1.0.0/" target="_top">conventional commits</a>. To enable this, you need to install <a class="rst-external rst-reference" href="https://pre-commit.com/" target="_top">pre-commit</a> (e.g., by running <tt class="rst-docutils rst-literal">uv add <span class="pre">pre-commit</span></tt> or, better yet, by installing it via <a class="rst-external rst-reference" href="https://pipx.pypa.io/" target="_top">pipx</a>) and then install the following two hooks:</p>
+<pre class="rst-literal-block rst-bash rst-code">
+pre-commit<span class="rst-w"> </span>install<span class="rst-w">
+</span>pre-commit<span class="rst-w"> </span>install<span class="rst-w"> </span>--hook-type<span class="rst-o">=</span>commit-msg
+</pre>
+<!-- omit in toc --></div>
+</div>
 </div>
         </div>
 
@@ -330,12 +586,17 @@ orject, head over to the <a class="rst-reference rst-external" href="https://git
     
     <td>Package</td>
     <td><code><a href="lyprox.accounts.html" class="internal-link" title="lyprox.accounts">accounts</a></code></td>
-    <td><span class="undocumented">No package docstring; 2/8 modules, 0/2 package documented</span></td>
+    <td><span class="undocumented">No package docstring; 3/7 modules, 0/2 package documented</span></td>
+  </tr><tr class="module">
+    
+    <td>Module</td>
+    <td><code><a href="lyprox.context_processors.html" class="internal-link" title="lyprox.context_processors">context<wbr></wbr>_processors</a></code></td>
+    <td>Context processors for the LyProX app.</td>
   </tr><tr class="package">
     
     <td>Package</td>
     <td><code><a href="lyprox.dataexplorer.html" class="internal-link" title="lyprox.dataexplorer">dataexplorer</a></code></td>
-    <td>The app <code>dashboard</code> manages the querying and displaying of lymphatic progression patterns under the "Data Explorer" tab on LyProX.</td>
+    <td>The app that makes the data interactively explorable by the user.</td>
   </tr><tr class="module">
     
     <td>Module</td>
@@ -344,28 +605,28 @@ orject, head over to the <a class="rst-reference rst-external" href="https://git
   </tr><tr class="package">
     
     <td>Package</td>
-    <td><code><a href="lyprox.patients.html" class="internal-link" title="lyprox.patients">patients</a></code></td>
-    <td>The <code><a href="lyprox.patients.html" class="internal-link" title="lyprox.patients">patients</a></code> app manages the database and its access. It allows the user to create, edit and delete new entries in the database and ensures that it is always consistent.</td>
-  </tr><tr class="package">
-    
-    <td>Package</td>
     <td><code><a href="lyprox.riskpredictor.html" class="internal-link" title="lyprox.riskpredictor">riskpredictor</a></code></td>
-    <td>Django app for computing the risk of a particular involvement pattern, given a personalized diagnosis.</td>
+    <td>Risk predictions for involvement patterns, given personalized diagnoses.</td>
   </tr><tr class="module">
     
     <td>Module</td>
     <td><code><a href="lyprox.settings.html" class="internal-link" title="lyprox.settings">settings</a></code></td>
-    <td>Django settings module that defines important configurations. For an explanation of all the listed values, see the official <a class="rst-reference rst-external" href="https://docs.djangoproject.com/en/4.1/ref/settings/" target="_top">Django documentation</a>.</td>
+    <td>Main configurations. Explanations of all options can be found in the <a class="rst-external rst-reference" href="https://docs.djangoproject.com/en/4.2/ref/settings/" target="_top">Django docs</a>.</td>
   </tr><tr class="package">
     
     <td>Package</td>
     <td><code><a href="lyprox.templatetags.html" class="internal-link" title="lyprox.templatetags">templatetags</a></code></td>
-    <td><span class="undocumented">Undocumented</span></td>
+    <td><span class="undocumented">No package docstring; 1/1 module documented</span></td>
   </tr><tr class="module">
     
     <td>Module</td>
     <td><code><a href="lyprox.urls.html" class="internal-link" title="lyprox.urls">urls</a></code></td>
-    <td>LyProX' URL configuration. This defines the view for the landing page, the URLs for downloads and media and the maintenance page. Otherwise it basically calls the URL configuration from the other apps, ...</td>
+    <td>LyProX' URL configuration.</td>
+  </tr><tr class="module">
+    
+    <td>Module</td>
+    <td><code><a href="lyprox.utils.html" class="internal-link" title="lyprox.utils">utils</a></code></td>
+    <td>Utility functions.</td>
   </tr><tr class="module">
     
     <td>Module</td>
@@ -375,6 +636,11 @@ orject, head over to the <a class="rst-reference rst-external" href="https://git
     
     <td>Module</td>
     <td><code><a href="lyprox.wsgi.html" class="internal-link" title="lyprox.wsgi">wsgi</a></code></td>
+    <td>The WSGI configuration for the LyProX project. Don't touch it.</td>
+  </tr><tr class="module private">
+    
+    <td>Module</td>
+    <td><code><a href="lyprox.__main__.html" class="internal-link" title="lyprox.__main__">__main__</a></code></td>
     <td><span class="undocumented">Undocumented</span></td>
   </tr><tr class="module private">
     
@@ -398,10 +664,10 @@ orject, head over to the <a class="rst-reference rst-external" href="https://git
     <footer class="navbar navbar-default">
 
   
-  <div class="container">
+  <div class="container-fluid">
     <a href="index.html">API Documentation</a> for LyProX,
   generated by <a href="https://github.com/twisted/pydoctor/">pydoctor</a>
-    22.9.1 at 2024-10-09 13:21:38.
+    24.11.2 at 2025-04-01 13:02:24.
   </div>
 
   <!-- Search related scripts needs to be loaded at the end of HTML 

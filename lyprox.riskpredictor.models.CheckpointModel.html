@@ -1,0 +1,1039 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+          "DTD/xhtml1-strict.dtd">
+<html>
+  
+
+  <head>
+    
+    <title>lyprox.riskpredictor.models.CheckpointModel</title>
+    <meta name="generator" content="pydoctor 24.11.2"> 
+        
+    </meta>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1 maximum-scale=1" />
+    <link rel="stylesheet" type="text/css" href="bootstrap.min.css" />
+    <link rel="stylesheet" type="text/css" href="apidocs.css" />
+    <link rel="stylesheet" type="text/css" href="extra.css" />
+    
+</head>
+
+  <body>
+
+    
+
+    <nav class="navbar navbar-default mainnavbar">
+      
+  
+  <div class="container-fluid">
+
+
+    <div class="navbar-header">
+      
+      <div class="navlinks">
+        <span class="navbar-brand">
+          LyProX <a href="index.html">API Documentation</a>
+        </span>
+
+        <a href="moduleIndex.html">
+          Modules
+        </a>
+
+        <a href="classIndex.html">
+          Classes
+        </a>
+
+        <a href="nameIndex.html">
+          Names
+        </a>
+
+        <div id="search-box-container">
+          <div class="input-group">
+            <input id="search-box" type="search" name="search-query" placeholder="Search..." aria-label="Search" minlength="2" class="form-control" autocomplete="off" />
+            
+            <span class="input-group-btn">
+              <a style="display: none;" class="btn btn-default" id="search-clear-button" title="Clear" onclick="clearSearch()"><img src="fonts/x-circle.svg" alt="Clear" /></a>
+              <a class="btn btn-default" id="apidocs-help-button" title="Help" href="apidocs-help.html"><img src="fonts/info.svg" alt="Help" /></a>
+            </span>
+          </div>
+        </div>
+
+      </div>
+
+      <div id="search-results-container" style="display: none;">
+        
+        <div id="search-buttons">
+          <span class="label label-default" id="search-docstrings-button">
+          <label class="checkbox-inline">
+            <input type="checkbox" id="toggle-search-in-docstrings-checkbox" value="false" onclick="toggleSearchInDocstrings()">
+              search in docstrings
+            </input>
+          </label>
+          </span>
+          
+        </div>
+        
+        <noscript>
+            <h1>Cannot search: JavaScript is not supported/enabled in your browser.</h1>
+        </noscript>
+
+        <div id="search-status"> </div>
+
+        <div class="warning" id="search-warn-box" style="display: none;">
+          <p class="rst-last"><span id="search-warn"></span></p>
+        </div>
+
+        <table id="search-results">
+          <!-- Filled dynamically by JS -->
+        </table>
+        
+        <div style="margin-top: 10px;">
+          <p>For more information on the search, visit the <a href="apidocs-help.html#rst-search">help page</a>.</p>
+        </div>
+      </div>
+
+    </div>
+
+
+  </div>
+</nav>
+    
+    <div class="container-fluid">
+
+      <!-- Side navigation -->
+      <div class="sidebarcontainer" style="display: none;">
+        
+        <div class="sidebar"><nav class="sidebar">
+  
+
+  <div>
+
+      <div class="thingTitle">
+        <span>Class</span>
+        <code class="thisobject"><a href="lyprox.riskpredictor.models.CheckpointModel.html" class="internal-link" title="This class"><wbr></wbr>Checkpoint<wbr></wbr>Model</a></code> 
+      </div>
+      
+      <div>
+        
+
+        
+         
+
+        <div class="childrenKindTitle">Classes</div>
+        <ul>
+    
+    <li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="lyprox.riskpredictor.models.CheckpointModel.Meta.html" class="internal-link" title="lyprox.riskpredictor.models.CheckpointModel.Meta"><wbr></wbr>Meta</a></code>
+            </div>
+        
+
+    </li>
+</ul>
+
+        <div class="childrenKindTitle">Methods</div>
+        <ul>
+    
+    <li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="#__str__" class="internal-link" title="lyprox.riskpredictor.models.CheckpointModel.__str__">__str__</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="#compute_priors" class="internal-link" title="lyprox.riskpredictor.models.CheckpointModel.compute_priors">compute<wbr></wbr>_priors</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="#construct_model" class="internal-link" title="lyprox.riskpredictor.models.CheckpointModel.construct_model">construct<wbr></wbr>_model</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="#fetch_samples" class="internal-link" title="lyprox.riskpredictor.models.CheckpointModel.fetch_samples">fetch<wbr></wbr>_samples</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="#get_merged_yaml" class="internal-link" title="lyprox.riskpredictor.models.CheckpointModel.get_merged_yaml">get<wbr></wbr>_merged<wbr></wbr>_yaml</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="#precompute_priors" class="internal-link" title="lyprox.riskpredictor.models.CheckpointModel.precompute_priors">precompute<wbr></wbr>_priors</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="#save" class="internal-link" title="lyprox.riskpredictor.models.CheckpointModel.save">save</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="#validate_configs" class="internal-link" title="lyprox.riskpredictor.models.CheckpointModel.validate_configs">validate<wbr></wbr>_configs</a></code>
+            </div>
+        
+
+    </li>
+</ul> 
+
+        
+         
+
+        <div class="childrenKindTitle">Attributes</div>
+        <ul>
+    
+    <li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="#dist_configs_path" class="internal-link" title="lyprox.riskpredictor.models.CheckpointModel.dist_configs_path">dist<wbr></wbr>_configs<wbr></wbr>_path</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="#graph_config_path" class="internal-link" title="lyprox.riskpredictor.models.CheckpointModel.graph_config_path">graph<wbr></wbr>_config<wbr></wbr>_path</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="#model_config_path" class="internal-link" title="lyprox.riskpredictor.models.CheckpointModel.model_config_path">model<wbr></wbr>_config<wbr></wbr>_path</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="#num_samples" class="internal-link" title="lyprox.riskpredictor.models.CheckpointModel.num_samples">num<wbr></wbr>_samples</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="#ref" class="internal-link" title="lyprox.riskpredictor.models.CheckpointModel.ref">ref</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="#repo_name" class="internal-link" title="lyprox.riskpredictor.models.CheckpointModel.repo_name">repo<wbr></wbr>_name</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="#samples_path" class="internal-link" title="lyprox.riskpredictor.models.CheckpointModel.samples_path">samples<wbr></wbr>_path</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="#is_midline" class="internal-link" title="lyprox.riskpredictor.models.CheckpointModel.is_midline">is<wbr></wbr>_midline</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="#is_unilateral" class="internal-link" title="lyprox.riskpredictor.models.CheckpointModel.is_unilateral">is<wbr></wbr>_unilateral</a></code>
+            </div>
+        
+
+    </li>
+</ul> 
+
+        
+         
+        
+      </div>
+  </div><div>
+
+      <div class="thingTitle">
+        <span>Module</span>
+        <code><a href="lyprox.riskpredictor.models.html" class="internal-link" title="The parent of this class">models</a></code> 
+      </div>
+      
+      <div>
+        
+
+        
+         
+
+        <div class="childrenKindTitle">Classes</div>
+        <ul>
+    
+    <li class=" thisobject">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="lyprox.riskpredictor.models.CheckpointModel.html" class="internal-link" title="lyprox.riskpredictor.models.CheckpointModel"><wbr></wbr>Checkpoint<wbr></wbr>Model</a></code>
+            </div>
+        
+
+    </li>
+</ul>
+
+        <div class="childrenKindTitle">Functions</div>
+        <ul>
+    
+    <li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="lyprox.riskpredictor.models.html#cached_compute_priors" class="internal-link" title="lyprox.riskpredictor.models.cached_compute_priors">cached<wbr></wbr>_compute<wbr></wbr>_priors</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="lyprox.riskpredictor.models.html#cached_construct_model_and_add_dists" class="internal-link" title="lyprox.riskpredictor.models.cached_construct_model_and_add_dists">cached<wbr></wbr>_construct<wbr></wbr>_model<wbr></wbr>_and<wbr></wbr>_add<wbr></wbr>_dists</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="lyprox.riskpredictor.models.html#cached_fetch_and_merge_yaml" class="internal-link" title="lyprox.riskpredictor.models.cached_fetch_and_merge_yaml">cached<wbr></wbr>_fetch<wbr></wbr>_and<wbr></wbr>_merge<wbr></wbr>_yaml</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="lyprox.riskpredictor.models.html#cached_fetch_model_samples" class="internal-link" title="lyprox.riskpredictor.models.cached_fetch_model_samples">cached<wbr></wbr>_fetch<wbr></wbr>_model<wbr></wbr>_samples</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="lyprox.riskpredictor.models.html#validate_configs" class="internal-link" title="lyprox.riskpredictor.models.validate_configs">validate<wbr></wbr>_configs</a></code>
+            </div>
+        
+
+    </li>
+</ul> 
+
+        
+         
+
+        <div class="childrenKindTitle">Variables</div>
+        <ul>
+    
+    <li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="lyprox.riskpredictor.models.html#ConfigAndVersionTupleType" class="internal-link" title="lyprox.riskpredictor.models.ConfigAndVersionTupleType"><wbr></wbr>Config<wbr></wbr>And<wbr></wbr>Version<wbr></wbr>Tuple<wbr></wbr>Type</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="lyprox.riskpredictor.models.html#logger" class="internal-link" title="lyprox.riskpredictor.models.logger">logger</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="lyprox.riskpredictor.models.html#memory" class="internal-link" title="lyprox.riskpredictor.models.memory">memory</a></code>
+            </div>
+        
+
+    </li>
+</ul> 
+
+        
+         
+        
+      </div>
+  </div>
+
+</nav>
+        </div>
+        <div id="collapseSideBar">
+          <a class="btn btn-link" onclick="toggleSideBarCollapse()" title="Toggle Sidebar Collapse">
+          </a>
+        </div> 
+        <script src="sidebartoggle.js" type="text/javascript"></script>
+       
+      </div>
+
+      <div id="main" class="">
+        
+
+        
+
+        <div class="page-header">
+          <h1 class="class"><code><code><a href="index.html" class="internal-link">lyprox</a></code><wbr></wbr>.<code><a href="lyprox.riskpredictor.html" class="internal-link" title="lyprox.riskpredictor">riskpredictor</a></code><wbr></wbr>.<code><a href="lyprox.riskpredictor.models.html" class="internal-link" title="lyprox.riskpredictor.models">models</a></code><wbr></wbr>.<code><a href="lyprox.riskpredictor.models.CheckpointModel.html" class="internal-link" title="lyprox.riskpredictor.models.CheckpointModel">CheckpointModel</a></code></code></h1>
+          <div id="showPrivate">
+            <button class="btn btn-link" onclick="togglePrivate()">Toggle Private API</button>
+          </div>
+        </div>
+
+        <div class="categoryHeader">
+          class documentation
+        </div>
+
+        <div class="extrasDocstring">
+          <p class="class-signature"><code><span class="py-keyword">class</span> <span class="py-defname">CheckpointModel</span>(<a href="lyprox.loggers.ModelLoggerMixin.html" class="internal-link" title="lyprox.loggers.ModelLoggerMixin">loggers.ModelLoggerMixin</a>, <a href="http://docs.djangoproject.com/en/4.2/ref/models/instances/#django.db.models.Model" class="intersphinx-link">models.Model</a>):</code></p>
+          <p><a href="classIndex.html#lyprox.riskpredictor.models.CheckpointModel">View In Hierarchy</a></p>
+        </div>
+
+        <div class="moduleDocstring">
+          <div><p>Results of a round of parameter sampling for one of the <code><a href="https://lymph-model.readthedocs.io/stable/models.html#module-lymph.models" class="intersphinx-link">lymph.models</a></code>.</p>
+<p>In this database model, one can specify where (i.e., in which remote repositories)
+to look for YAML files that define a model via the <code><a href="https://lyscripts.readthedocs.io/latest/configs.html#module-lyscripts.configs" class="intersphinx-link">lyscripts.configs</a></code>. The
+<code><a href="#validate_configs" class="internal-link" title="lyprox.riskpredictor.models.CheckpointModel.validate_configs">validate_configs</a></code> method is used to validate these YAML configs.</p>
+<p>It also allows to <code><a href="#fetch_samples" class="internal-link" title="lyprox.riskpredictor.models.CheckpointModel.fetch_samples">fetch_samples</a></code> (which are typically not stored in the
+repository, but are referenced by <a class="rst-external rst-reference" href="https://dvc.org/" target="_top">DVC</a> to be found in a remote storage) and can
+<code><a href="#precompute_priors" class="internal-link" title="lyprox.riskpredictor.models.CheckpointModel.precompute_priors">precompute_priors</a></code> for all T-stages and a subset of the samples.</p>
+<p>Much of what this class sets up and precomputes is cached using <code><a href="https://joblib.readthedocs.io/en/stable/index.html#module-joblib" class="intersphinx-link">joblib</a></code> for
+faster computation of the actual risks later on.</p>
+</div>
+        </div>
+
+        <div id="splitTables">
+          <table class="children sortable" id="id79">
+  
+  
+  <tr class="class">
+    
+    <td>Class</td>
+    <td><code><a href="lyprox.riskpredictor.models.CheckpointModel.Meta.html" class="internal-link" title="lyprox.riskpredictor.models.CheckpointModel.Meta"><wbr></wbr>Meta</a></code></td>
+    <td>Meta options for the <code><a href="lyprox.riskpredictor.models.CheckpointModel.html" class="internal-link" title="lyprox.riskpredictor.models.CheckpointModel">CheckpointModel</a></code>.</td>
+  </tr><tr class="method">
+    
+    <td>Method</td>
+    <td><code><a href="#__str__" class="internal-link" title="lyprox.riskpredictor.models.CheckpointModel.__str__">__str__</a></code></td>
+    <td>Return the string representation of the instance.</td>
+  </tr><tr class="method">
+    
+    <td>Method</td>
+    <td><code><a href="#compute_priors" class="internal-link" title="lyprox.riskpredictor.models.CheckpointModel.compute_priors">compute<wbr></wbr>_priors</a></code></td>
+    <td>Compute priors for every T-stage using the model samples.</td>
+  </tr><tr class="method">
+    
+    <td>Method</td>
+    <td><code><a href="#construct_model" class="internal-link" title="lyprox.riskpredictor.models.CheckpointModel.construct_model">construct<wbr></wbr>_model</a></code></td>
+    <td>Create one of the <code><a href="https://lymph-model.readthedocs.io/stable/models.html#module-lymph.models" class="intersphinx-link">lymph.models</a></code> as specified in the validated configs.</td>
+  </tr><tr class="method">
+    
+    <td>Method</td>
+    <td><code><a href="#fetch_samples" class="internal-link" title="lyprox.riskpredictor.models.CheckpointModel.fetch_samples">fetch<wbr></wbr>_samples</a></code></td>
+    <td>Fetch the model samples from the <a class="rst-external rst-reference" href="https://www.hdfgroup.org/solutions/hdf5/" target="_top">HDF5</a> file in the <a class="rst-external rst-reference" href="https://dvc.org/" target="_top">DVC</a> repo.</td>
+  </tr><tr class="method">
+    
+    <td>Method</td>
+    <td><code><a href="#get_merged_yaml" class="internal-link" title="lyprox.riskpredictor.models.CheckpointModel.get_merged_yaml">get<wbr></wbr>_merged<wbr></wbr>_yaml</a></code></td>
+    <td>Fetch and merge the YAML configuration files from the repo.</td>
+  </tr><tr class="method">
+    
+    <td>Method</td>
+    <td><code><a href="#precompute_priors" class="internal-link" title="lyprox.riskpredictor.models.CheckpointModel.precompute_priors">precompute<wbr></wbr>_priors</a></code></td>
+    <td>Precompute the priors for all T-stages and cache them using <code><a href="https://joblib.readthedocs.io/en/stable/index.html#module-joblib" class="intersphinx-link">joblib</a></code>.</td>
+  </tr><tr class="method">
+    
+    <td>Method</td>
+    <td><code><a href="#save" class="internal-link" title="lyprox.riskpredictor.models.CheckpointModel.save">save</a></code></td>
+    <td>Fill the cache with precomputed priors before saving the instance.</td>
+  </tr><tr class="method">
+    
+    <td>Method</td>
+    <td><code><a href="#validate_configs" class="internal-link" title="lyprox.riskpredictor.models.CheckpointModel.validate_configs">validate<wbr></wbr>_configs</a></code></td>
+    <td>Validate the <a class="rst-external rst-reference" href="https://docs.pydantic.dev/latest/" target="_top">pydantic</a> configs necessary for constructing the model.</td>
+  </tr><tr class="classvariable">
+    
+    <td>Class Variable</td>
+    <td><code><a href="#dist_configs_path" class="internal-link" title="lyprox.riskpredictor.models.CheckpointModel.dist_configs_path">dist<wbr></wbr>_configs<wbr></wbr>_path</a></code></td>
+    <td>Path to YAML file defining a <code><a href="https://lyscripts.readthedocs.io/latest/configs.html#lyscripts.configs.DistributionConfig" class="intersphinx-link">DistributionConfig</a></code> for each T-stage.</td>
+  </tr><tr class="classvariable">
+    
+    <td>Class Variable</td>
+    <td><code><a href="#graph_config_path" class="internal-link" title="lyprox.riskpredictor.models.CheckpointModel.graph_config_path">graph<wbr></wbr>_config<wbr></wbr>_path</a></code></td>
+    <td>Path to YAML file containing the <code><a href="https://lyscripts.readthedocs.io/latest/configs.html#lyscripts.configs.GraphConfig" class="intersphinx-link">GraphConfig</a></code> inside the git repo.</td>
+  </tr><tr class="classvariable">
+    
+    <td>Class Variable</td>
+    <td><code><a href="#model_config_path" class="internal-link" title="lyprox.riskpredictor.models.CheckpointModel.model_config_path">model<wbr></wbr>_config<wbr></wbr>_path</a></code></td>
+    <td>Path to YAML file containing the <code><a href="https://lyscripts.readthedocs.io/latest/configs.html#lyscripts.configs.ModelConfig" class="intersphinx-link">ModelConfig</a></code> inside the git repo.</td>
+  </tr><tr class="classvariable">
+    
+    <td>Class Variable</td>
+    <td><code><a href="#num_samples" class="internal-link" title="lyprox.riskpredictor.models.CheckpointModel.num_samples">num<wbr></wbr>_samples</a></code></td>
+    <td>Number of samples to use for computing the prior risk matrices.</td>
+  </tr><tr class="classvariable">
+    
+    <td>Class Variable</td>
+    <td><code><a href="#ref" class="internal-link" title="lyprox.riskpredictor.models.CheckpointModel.ref">ref</a></code></td>
+    <td>Git reference of the trained model. E.g., a commit hash, tag, or branch name.</td>
+  </tr><tr class="classvariable">
+    
+    <td>Class Variable</td>
+    <td><code><a href="#repo_name" class="internal-link" title="lyprox.riskpredictor.models.CheckpointModel.repo_name">repo<wbr></wbr>_name</a></code></td>
+    <td>Identifier of the GitHub repository that contains the trained model.</td>
+  </tr><tr class="classvariable">
+    
+    <td>Class Variable</td>
+    <td><code><a href="#samples_path" class="internal-link" title="lyprox.riskpredictor.models.CheckpointModel.samples_path">samples<wbr></wbr>_path</a></code></td>
+    <td>Path to HDF5 file containing the parameter samples inside the git repo.</td>
+  </tr><tr class="property">
+    
+    <td>Property</td>
+    <td><code><a href="#is_midline" class="internal-link" title="lyprox.riskpredictor.models.CheckpointModel.is_midline">is<wbr></wbr>_midline</a></code></td>
+    <td>Check if the model is a <code><a href="https://lymph-model.readthedocs.io/stable/models.html#lymph.models.Midline" class="intersphinx-link">Midline</a></code> model.</td>
+  </tr><tr class="property">
+    
+    <td>Property</td>
+    <td><code><a href="#is_unilateral" class="internal-link" title="lyprox.riskpredictor.models.CheckpointModel.is_unilateral">is<wbr></wbr>_unilateral</a></code></td>
+    <td>Check if the model is a <code><a href="https://lymph-model.readthedocs.io/stable/models.html#lymph.models.Unilateral" class="intersphinx-link">Unilateral</a></code> model.</td>
+  </tr>
+</table>
+          
+
+            
+        </div>
+
+        <div id="childList">
+          <div class="basemethod">
+  
+  
+  <a name="lyprox.riskpredictor.models.CheckpointModel.__str__">
+    
+  </a>
+  <a name="__str__">
+    
+  </a>
+  <div class="functionHeader">
+    
+    
+    <span class="py-keyword">def</span> <span class="py-defname">__str__</span><span class="function-signature">(self) -&gt; <code>str</code></span>:
+    
+    <a class="headerLink" href="#__str__" title="lyprox.riskpredictor.models.CheckpointModel.__str__">
+      
+      
+      ¶
+    </a>
+  </div>
+  <div class="docstring functionBody">
+    
+    <div><p>Return the string representation of the instance.</p></div>
+  </div>
+</div><div class="basemethod">
+  
+  
+  <a name="lyprox.riskpredictor.models.CheckpointModel.compute_priors">
+    
+  </a>
+  <a name="compute_priors">
+    
+  </a>
+  <div class="functionHeader">
+    
+    
+    <span class="py-keyword">def</span> <span class="py-defname">compute_priors</span><span class="function-signature">(self, t_stage: <code>int | str</code>) -&gt; <code>np.ndarray</code></span>:
+    
+    <a class="headerLink" href="#compute_priors" title="lyprox.riskpredictor.models.CheckpointModel.compute_priors">
+      
+      
+      ¶
+    </a>
+  </div>
+  <div class="docstring functionBody">
+    
+    <div><p>Compute priors for every T-stage using the model samples.</p></div>
+  </div>
+</div><div class="basemethod">
+  
+  
+  <a name="lyprox.riskpredictor.models.CheckpointModel.construct_model">
+    
+  </a>
+  <a name="construct_model">
+    
+  </a>
+  <div class="functionHeader">
+    
+    
+    <span class="py-keyword">def</span> <span class="py-defname">construct_model</span><span class="function-signature">(self) -&gt; <code><a href="https://lymph-model.readthedocs.io/stable/types.html#lymph.types.Model" class="intersphinx-link">Model</a></code></span>:
+    
+    <a class="headerLink" href="#construct_model" title="lyprox.riskpredictor.models.CheckpointModel.construct_model">
+      
+      
+      ¶
+    </a>
+  </div>
+  <div class="docstring functionBody">
+    
+    <div><p>Create one of the <code><a href="https://lymph-model.readthedocs.io/stable/models.html#module-lymph.models" class="intersphinx-link">lymph.models</a></code> as specified in the validated configs.</p></div>
+  </div>
+</div><div class="basemethod">
+  
+  
+  <a name="lyprox.riskpredictor.models.CheckpointModel.fetch_samples">
+    
+  </a>
+  <a name="fetch_samples">
+    
+  </a>
+  <div class="functionHeader">
+    
+    
+    <span class="py-keyword">def</span> <span class="py-defname">fetch_samples</span><span class="function-signature">(self) -&gt; <code>np.ndarray</code></span>:
+    
+    <a class="headerLink" href="#fetch_samples" title="lyprox.riskpredictor.models.CheckpointModel.fetch_samples">
+      
+      
+      ¶
+    </a>
+  </div>
+  <div class="docstring functionBody">
+    
+    <div><p>Fetch the model samples from the <a class="rst-external rst-reference" href="https://www.hdfgroup.org/solutions/hdf5/" target="_top">HDF5</a> file in the <a class="rst-external rst-reference" href="https://dvc.org/" target="_top">DVC</a> repo.</p>
+</div>
+  </div>
+</div><div class="basemethod">
+  
+  
+  <a name="lyprox.riskpredictor.models.CheckpointModel.get_merged_yaml">
+    
+  </a>
+  <a name="get_merged_yaml">
+    
+  </a>
+  <div class="functionHeader">
+    
+    
+    <span class="py-keyword">def</span> <span class="py-defname">get_merged_yaml</span><span class="function-signature">(self) -&gt; <code>dict[<wbr></wbr>str, <wbr></wbr>Any]</code></span>:
+    
+    <a class="headerLink" href="#get_merged_yaml" title="lyprox.riskpredictor.models.CheckpointModel.get_merged_yaml">
+      
+      
+      ¶
+    </a>
+  </div>
+  <div class="docstring functionBody">
+    
+    <div><p>Fetch and merge the YAML configuration files from the repo.</p></div>
+  </div>
+</div><div class="basemethod">
+  
+  
+  <a name="lyprox.riskpredictor.models.CheckpointModel.precompute_priors">
+    
+  </a>
+  <a name="precompute_priors">
+    
+  </a>
+  <div class="functionHeader">
+    
+    
+    <span class="py-keyword">def</span> <span class="py-defname">precompute_priors</span><span class="function-signature">(self)</span>:
+    
+    <a class="headerLink" href="#precompute_priors" title="lyprox.riskpredictor.models.CheckpointModel.precompute_priors">
+      
+      
+      ¶
+    </a>
+  </div>
+  <div class="docstring functionBody">
+    
+    <div><p>Precompute the priors for all T-stages and cache them using <code><a href="https://joblib.readthedocs.io/en/stable/index.html#module-joblib" class="intersphinx-link">joblib</a></code>.</p></div>
+  </div>
+</div><div class="basemethod">
+  
+  
+  <a name="lyprox.riskpredictor.models.CheckpointModel.save">
+    
+  </a>
+  <a name="save">
+    
+  </a>
+  <div class="functionHeader">
+    
+    
+    <span class="py-keyword">def</span> <span class="py-defname">save</span><span class="function-signature">(self, *args: <code>Any</code>, **kwargs: <code>Any</code>)</span>:
+    
+    <a class="headerLink" href="#save" title="lyprox.riskpredictor.models.CheckpointModel.save">
+      
+      
+      ¶
+    </a>
+  </div>
+  <div class="docstring functionBody">
+    <div class="interfaceinfo">overrides <code><a href="lyprox.loggers.ModelLoggerMixin.html#save" class="internal-link">lyprox.loggers.ModelLoggerMixin.save</a></code></div>
+    <div><p>Fill the cache with precomputed priors before saving the instance.</p></div>
+  </div>
+</div><div class="basemethod">
+  
+  
+  <a name="lyprox.riskpredictor.models.CheckpointModel.validate_configs">
+    
+  </a>
+  <a name="validate_configs">
+    
+  </a>
+  <div class="functionHeader">
+    
+    
+    <span class="py-keyword">def</span> <span class="py-defname">validate_configs</span><span class="function-signature">(self) -&gt; <code><a href="lyprox.riskpredictor.models.html#ConfigAndVersionTupleType" class="internal-link" title="lyprox.riskpredictor.models.ConfigAndVersionTupleType">ConfigAndVersionTupleType</a></code></span>:
+    
+    <a class="headerLink" href="#validate_configs" title="lyprox.riskpredictor.models.CheckpointModel.validate_configs">
+      
+      
+      ¶
+    </a>
+  </div>
+  <div class="docstring functionBody">
+    
+    <div><p>Validate the <a class="rst-external rst-reference" href="https://docs.pydantic.dev/latest/" target="_top">pydantic</a> configs necessary for constructing the model.</p>
+</div>
+  </div>
+</div><div class="baseclassvariable">
+  
+  
+  <a name="lyprox.riskpredictor.models.CheckpointModel.dist_configs_path">
+    
+  </a>
+  <a name="dist_configs_path">
+    
+  </a>
+  <div class="functionHeader">
+    
+    <span class="py-defname">dist_configs_path</span> =
+    
+    <a class="headerLink" href="#dist_configs_path" title="lyprox.riskpredictor.models.CheckpointModel.dist_configs_path">
+      
+      
+      ¶
+    </a>
+  </div>
+  <div class="functionBody">
+    
+    <div><p>Path to YAML file defining a <code><a href="https://lyscripts.readthedocs.io/latest/configs.html#lyscripts.configs.DistributionConfig" class="intersphinx-link">DistributionConfig</a></code> for each T-stage.</p></div>
+    
+  </div>
+</div><div class="baseclassvariable">
+  
+  
+  <a name="lyprox.riskpredictor.models.CheckpointModel.graph_config_path">
+    
+  </a>
+  <a name="graph_config_path">
+    
+  </a>
+  <div class="functionHeader">
+    
+    <span class="py-defname">graph_config_path</span> =
+    
+    <a class="headerLink" href="#graph_config_path" title="lyprox.riskpredictor.models.CheckpointModel.graph_config_path">
+      
+      
+      ¶
+    </a>
+  </div>
+  <div class="functionBody">
+    
+    <div><p>Path to YAML file containing the <code><a href="https://lyscripts.readthedocs.io/latest/configs.html#lyscripts.configs.GraphConfig" class="intersphinx-link">GraphConfig</a></code> inside the git repo.</p></div>
+    
+  </div>
+</div><div class="baseclassvariable">
+  
+  
+  <a name="lyprox.riskpredictor.models.CheckpointModel.model_config_path">
+    
+  </a>
+  <a name="model_config_path">
+    
+  </a>
+  <div class="functionHeader">
+    
+    <span class="py-defname">model_config_path</span> =
+    
+    <a class="headerLink" href="#model_config_path" title="lyprox.riskpredictor.models.CheckpointModel.model_config_path">
+      
+      
+      ¶
+    </a>
+  </div>
+  <div class="functionBody">
+    
+    <div><p>Path to YAML file containing the <code><a href="https://lyscripts.readthedocs.io/latest/configs.html#lyscripts.configs.ModelConfig" class="intersphinx-link">ModelConfig</a></code> inside the git repo.</p></div>
+    
+  </div>
+</div><div class="baseclassvariable">
+  
+  
+  <a name="lyprox.riskpredictor.models.CheckpointModel.num_samples">
+    
+  </a>
+  <a name="num_samples">
+    
+  </a>
+  <div class="functionHeader">
+    
+    <span class="py-defname">num_samples</span> =
+    
+    <a class="headerLink" href="#num_samples" title="lyprox.riskpredictor.models.CheckpointModel.num_samples">
+      
+      
+      ¶
+    </a>
+  </div>
+  <div class="functionBody">
+    
+    <div><p>Number of samples to use for computing the prior risk matrices.</p></div>
+    
+  </div>
+</div><div class="baseclassvariable">
+  
+  
+  <a name="lyprox.riskpredictor.models.CheckpointModel.ref">
+    
+  </a>
+  <a name="ref">
+    
+  </a>
+  <div class="functionHeader">
+    
+    <span class="py-defname">ref</span> =
+    
+    <a class="headerLink" href="#ref" title="lyprox.riskpredictor.models.CheckpointModel.ref">
+      
+      
+      ¶
+    </a>
+  </div>
+  <div class="functionBody">
+    
+    <div><p>Git reference of the trained model. E.g., a commit hash, tag, or branch name.</p></div>
+    
+  </div>
+</div><div class="baseclassvariable">
+  
+  
+  <a name="lyprox.riskpredictor.models.CheckpointModel.repo_name">
+    
+  </a>
+  <a name="repo_name">
+    
+  </a>
+  <div class="functionHeader">
+    
+    <span class="py-defname">repo_name</span> =
+    
+    <a class="headerLink" href="#repo_name" title="lyprox.riskpredictor.models.CheckpointModel.repo_name">
+      
+      
+      ¶
+    </a>
+  </div>
+  <div class="functionBody">
+    
+    <div><p>Identifier of the GitHub repository that contains the trained model.</p></div>
+    
+  </div>
+</div><div class="baseclassvariable">
+  
+  
+  <a name="lyprox.riskpredictor.models.CheckpointModel.samples_path">
+    
+  </a>
+  <a name="samples_path">
+    
+  </a>
+  <div class="functionHeader">
+    
+    <span class="py-defname">samples_path</span> =
+    
+    <a class="headerLink" href="#samples_path" title="lyprox.riskpredictor.models.CheckpointModel.samples_path">
+      
+      
+      ¶
+    </a>
+  </div>
+  <div class="functionBody">
+    
+    <div><p>Path to HDF5 file containing the parameter samples inside the git repo.</p></div>
+    
+  </div>
+</div><div class="baseproperty">
+  
+  
+  <a name="lyprox.riskpredictor.models.CheckpointModel.is_midline">
+    
+  </a>
+  <a name="is_midline">
+    
+  </a>
+  <div class="functionHeader">
+    @property<br />
+    <span class="py-defname">is_midline</span>: <code>bool</code> =
+    
+    <a class="headerLink" href="#is_midline" title="lyprox.riskpredictor.models.CheckpointModel.is_midline">
+      
+      
+      ¶
+    </a>
+  </div>
+  <div class="functionBody">
+    
+    <div><p>Check if the model is a <code><a href="https://lymph-model.readthedocs.io/stable/models.html#lymph.models.Midline" class="intersphinx-link">Midline</a></code> model.</p></div>
+    
+  </div>
+</div><div class="baseproperty">
+  
+  
+  <a name="lyprox.riskpredictor.models.CheckpointModel.is_unilateral">
+    
+  </a>
+  <a name="is_unilateral">
+    
+  </a>
+  <div class="functionHeader">
+    @property<br />
+    <span class="py-defname">is_unilateral</span>: <code>bool</code> =
+    
+    <a class="headerLink" href="#is_unilateral" title="lyprox.riskpredictor.models.CheckpointModel.is_unilateral">
+      
+      
+      ¶
+    </a>
+  </div>
+  <div class="functionBody">
+    
+    <div><p>Check if the model is a <code><a href="https://lymph-model.readthedocs.io/stable/models.html#lymph.models.Unilateral" class="intersphinx-link">Unilateral</a></code> model.</p></div>
+    
+  </div>
+</div>
+        </div>
+      
+      </div>
+    </div>
+
+    <footer class="navbar navbar-default">
+
+  
+  <div class="container-fluid">
+    <a href="index.html">API Documentation</a> for LyProX,
+  generated by <a href="https://github.com/twisted/pydoctor/">pydoctor</a>
+    24.11.2 at 2025-04-01 13:02:24.
+  </div>
+
+  <!-- Search related scripts needs to be loaded at the end of HTML 
+    parsing not to introduce overhead and display HTML data asap -->
+  <script src="ajax.js" type="text/javascript"></script>
+  <script src="searchlib.js" type="text/javascript"></script>
+  <script src="search.js" type="text/javascript"></script>
+
+</footer>
+  
+    <script src="pydoctor.js" type="text/javascript"></script>
+
+  </body>
+</html>

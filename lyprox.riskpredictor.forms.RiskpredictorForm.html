@@ -1,0 +1,731 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+          "DTD/xhtml1-strict.dtd">
+<html>
+  
+
+  <head>
+    
+    <title>lyprox.riskpredictor.forms.RiskpredictorForm</title>
+    <meta name="generator" content="pydoctor 24.11.2"> 
+        
+    </meta>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1 maximum-scale=1" />
+    <link rel="stylesheet" type="text/css" href="bootstrap.min.css" />
+    <link rel="stylesheet" type="text/css" href="apidocs.css" />
+    <link rel="stylesheet" type="text/css" href="extra.css" />
+    
+</head>
+
+  <body>
+
+    
+
+    <nav class="navbar navbar-default mainnavbar">
+      
+  
+  <div class="container-fluid">
+
+
+    <div class="navbar-header">
+      
+      <div class="navlinks">
+        <span class="navbar-brand">
+          LyProX <a href="index.html">API Documentation</a>
+        </span>
+
+        <a href="moduleIndex.html">
+          Modules
+        </a>
+
+        <a href="classIndex.html">
+          Classes
+        </a>
+
+        <a href="nameIndex.html">
+          Names
+        </a>
+
+        <div id="search-box-container">
+          <div class="input-group">
+            <input id="search-box" type="search" name="search-query" placeholder="Search..." aria-label="Search" minlength="2" class="form-control" autocomplete="off" />
+            
+            <span class="input-group-btn">
+              <a style="display: none;" class="btn btn-default" id="search-clear-button" title="Clear" onclick="clearSearch()"><img src="fonts/x-circle.svg" alt="Clear" /></a>
+              <a class="btn btn-default" id="apidocs-help-button" title="Help" href="apidocs-help.html"><img src="fonts/info.svg" alt="Help" /></a>
+            </span>
+          </div>
+        </div>
+
+      </div>
+
+      <div id="search-results-container" style="display: none;">
+        
+        <div id="search-buttons">
+          <span class="label label-default" id="search-docstrings-button">
+          <label class="checkbox-inline">
+            <input type="checkbox" id="toggle-search-in-docstrings-checkbox" value="false" onclick="toggleSearchInDocstrings()">
+              search in docstrings
+            </input>
+          </label>
+          </span>
+          
+        </div>
+        
+        <noscript>
+            <h1>Cannot search: JavaScript is not supported/enabled in your browser.</h1>
+        </noscript>
+
+        <div id="search-status"> </div>
+
+        <div class="warning" id="search-warn-box" style="display: none;">
+          <p class="rst-last"><span id="search-warn"></span></p>
+        </div>
+
+        <table id="search-results">
+          <!-- Filled dynamically by JS -->
+        </table>
+        
+        <div style="margin-top: 10px;">
+          <p>For more information on the search, visit the <a href="apidocs-help.html#rst-search">help page</a>.</p>
+        </div>
+      </div>
+
+    </div>
+
+
+  </div>
+</nav>
+    
+    <div class="container-fluid">
+
+      <!-- Side navigation -->
+      <div class="sidebarcontainer" style="display: none;">
+        
+        <div class="sidebar"><nav class="sidebar">
+  
+
+  <div>
+
+      <div class="thingTitle">
+        <span>Class</span>
+        <code class="thisobject"><a href="lyprox.riskpredictor.forms.RiskpredictorForm.html" class="internal-link" title="This class"><wbr></wbr>Riskpredictor<wbr></wbr>Form</a></code> 
+      </div>
+      
+      <div>
+        
+
+        
+         
+
+        
+        
+
+        <div class="childrenKindTitle">Methods</div>
+        <ul>
+    
+    <li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="#from_initial" class="internal-link" title="lyprox.riskpredictor.forms.RiskpredictorForm.from_initial">from<wbr></wbr>_initial</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="#__init__" class="internal-link" title="lyprox.riskpredictor.forms.RiskpredictorForm.__init__">__init__</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="#add_lnl_fields" class="internal-link" title="lyprox.riskpredictor.forms.RiskpredictorForm.add_lnl_fields">add<wbr></wbr>_lnl<wbr></wbr>_fields</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="#add_midext_field" class="internal-link" title="lyprox.riskpredictor.forms.RiskpredictorForm.add_midext_field">add<wbr></wbr>_midext<wbr></wbr>_field</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="#add_t_stage_field" class="internal-link" title="lyprox.riskpredictor.forms.RiskpredictorForm.add_t_stage_field">add<wbr></wbr>_t<wbr></wbr>_stage<wbr></wbr>_field</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="#clean_midext" class="internal-link" title="lyprox.riskpredictor.forms.RiskpredictorForm.clean_midext">clean<wbr></wbr>_midext</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="#get_lnls" class="internal-link" title="lyprox.riskpredictor.forms.RiskpredictorForm.get_lnls">get<wbr></wbr>_lnls</a></code>
+            </div>
+        
+
+    </li>
+</ul> 
+
+        
+         
+
+        <div class="childrenKindTitle">Attributes</div>
+        <ul>
+    
+    <li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="#sensitivity" class="internal-link" title="lyprox.riskpredictor.forms.RiskpredictorForm.sensitivity">sensitivity</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="#specificity" class="internal-link" title="lyprox.riskpredictor.forms.RiskpredictorForm.specificity">specificity</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="#checkpoint" class="internal-link" title="lyprox.riskpredictor.forms.RiskpredictorForm.checkpoint">checkpoint</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="#model" class="internal-link" title="lyprox.riskpredictor.forms.RiskpredictorForm.model">model</a></code>
+            </div>
+        
+
+    </li>
+</ul> 
+
+        
+         
+        
+      </div>
+  </div><div>
+
+      <div class="thingTitle">
+        <span>Module</span>
+        <code><a href="lyprox.riskpredictor.forms.html" class="internal-link" title="The parent of this class">forms</a></code> 
+      </div>
+      
+      <div>
+        
+
+        
+         
+
+        <div class="childrenKindTitle">Classes</div>
+        <ul>
+    
+    <li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="lyprox.riskpredictor.forms.CheckpointModelForm.html" class="internal-link" title="lyprox.riskpredictor.forms.CheckpointModelForm"><wbr></wbr>Checkpoint<wbr></wbr>Model<wbr></wbr>Form</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="lyprox.riskpredictor.forms.RangeInput.html" class="internal-link" title="lyprox.riskpredictor.forms.RangeInput"><wbr></wbr>Range<wbr></wbr>Input</a></code>
+            </div>
+        
+
+    </li><li class=" thisobject">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="lyprox.riskpredictor.forms.RiskpredictorForm.html" class="internal-link" title="lyprox.riskpredictor.forms.RiskpredictorForm"><wbr></wbr>Riskpredictor<wbr></wbr>Form</a></code>
+            </div>
+        
+
+    </li>
+</ul>
+
+        
+         
+
+        
+         
+
+        <div class="childrenKindTitle">Variables</div>
+        <ul>
+    
+    <li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="lyprox.riskpredictor.forms.html#T" class="internal-link" title="lyprox.riskpredictor.forms.T">T</a></code>
+            </div>
+        
+
+    </li>
+</ul> 
+
+        
+         
+        
+      </div>
+  </div>
+
+</nav>
+        </div>
+        <div id="collapseSideBar">
+          <a class="btn btn-link" onclick="toggleSideBarCollapse()" title="Toggle Sidebar Collapse">
+          </a>
+        </div> 
+        <script src="sidebartoggle.js" type="text/javascript"></script>
+       
+      </div>
+
+      <div id="main" class="">
+        
+
+        
+
+        <div class="page-header">
+          <h1 class="class"><code><code><a href="index.html" class="internal-link">lyprox</a></code><wbr></wbr>.<code><a href="lyprox.riskpredictor.html" class="internal-link" title="lyprox.riskpredictor">riskpredictor</a></code><wbr></wbr>.<code><a href="lyprox.riskpredictor.forms.html" class="internal-link" title="lyprox.riskpredictor.forms">forms</a></code><wbr></wbr>.<code><a href="lyprox.riskpredictor.forms.RiskpredictorForm.html" class="internal-link" title="lyprox.riskpredictor.forms.RiskpredictorForm">RiskpredictorForm</a></code></code></h1>
+          <div id="showPrivate">
+            <button class="btn btn-link" onclick="togglePrivate()">Toggle Private API</button>
+          </div>
+        </div>
+
+        <div class="categoryHeader">
+          class documentation
+        </div>
+
+        <div class="extrasDocstring">
+          <p class="class-signature"><code><span class="py-keyword">class</span> <span class="py-defname">RiskpredictorForm</span>(<a href="http://docs.djangoproject.com/en/4.2/ref/forms/api/#django.forms.Form" class="intersphinx-link">forms.Form</a>):</code></p><p>Constructor: <code><a href="#__init__" class="internal-link" title="lyprox.riskpredictor.forms.RiskpredictorForm.__init__">RiskpredictorForm(*args, checkpoint, **kwargs)</a></code></p>
+          <p><a href="classIndex.html#lyprox.riskpredictor.forms.RiskpredictorForm">View In Hierarchy</a></p>
+        </div>
+
+        <div class="moduleDocstring">
+          <div><p>Form for the riskpredictor dashboard page.</p>
+<p>Via this form a user can enter a diagnosis and have the web app compute the
+marginalized risk for every LNL covered by the model.</p>
+<p>Conceptually, this form is similar to the <code><a href="lyprox.dataexplorer.forms.DataexplorerForm.html" class="internal-link" title="lyprox.dataexplorer.forms.DataexplorerForm">DataexplorerForm</a></code> in that it is always
+bound either to initial data or to whatever the user entered in the dashboard.</p>
+<p>Using this form's <tt class="rst-docutils rst-literal">cleaned_data</tt> attribute, the <code><a href="lyprox.riskpredictor.predict.html#compute_risks" class="internal-link" title="lyprox.riskpredictor.predict.compute_risks">compute_risks</a></code> class ultimately
+computes the posterior state distributions for the given diagnosis using the
+defined model.</p>
+</div>
+        </div>
+
+        <div id="splitTables">
+          <table class="children sortable" id="id70">
+  
+  
+  <tr class="classmethod">
+    
+    <td>Class Method</td>
+    <td><code><a href="#from_initial" class="internal-link" title="lyprox.riskpredictor.forms.RiskpredictorForm.from_initial">from<wbr></wbr>_initial</a></code></td>
+    <td>Create a form instance with the initial form data.</td>
+  </tr><tr class="method">
+    
+    <td>Method</td>
+    <td><code><a href="#__init__" class="internal-link" title="lyprox.riskpredictor.forms.RiskpredictorForm.__init__">__init__</a></code></td>
+    <td>Initialize the form and add the fields for the lymph node levels.</td>
+  </tr><tr class="method">
+    
+    <td>Method</td>
+    <td><code><a href="#add_lnl_fields" class="internal-link" title="lyprox.riskpredictor.forms.RiskpredictorForm.add_lnl_fields">add<wbr></wbr>_lnl<wbr></wbr>_fields</a></code></td>
+    <td>Add the fields for the lymph node levels defined in the trained model.</td>
+  </tr><tr class="method">
+    
+    <td>Method</td>
+    <td><code><a href="#add_midext_field" class="internal-link" title="lyprox.riskpredictor.forms.RiskpredictorForm.add_midext_field">add<wbr></wbr>_midext<wbr></wbr>_field</a></code></td>
+    <td>Add the field for the midline status.</td>
+  </tr><tr class="method">
+    
+    <td>Method</td>
+    <td><code><a href="#add_t_stage_field" class="internal-link" title="lyprox.riskpredictor.forms.RiskpredictorForm.add_t_stage_field">add<wbr></wbr>_t<wbr></wbr>_stage<wbr></wbr>_field</a></code></td>
+    <td>Add the field for the T stage with the choices being defined in the model.</td>
+  </tr><tr class="method">
+    
+    <td>Method</td>
+    <td><code><a href="#clean_midext" class="internal-link" title="lyprox.riskpredictor.forms.RiskpredictorForm.clean_midext">clean<wbr></wbr>_midext</a></code></td>
+    <td>For now, the midline extension cannot be unknown (value of 0).</td>
+  </tr><tr class="method">
+    
+    <td>Method</td>
+    <td><code><a href="#get_lnls" class="internal-link" title="lyprox.riskpredictor.forms.RiskpredictorForm.get_lnls">get<wbr></wbr>_lnls</a></code></td>
+    <td>Get the lymph node levels from the model.</td>
+  </tr><tr class="classvariable">
+    
+    <td>Class Variable</td>
+    <td><code><a href="#sensitivity" class="internal-link" title="lyprox.riskpredictor.forms.RiskpredictorForm.sensitivity">sensitivity</a></code></td>
+    <td>The sensitivity of the entered diagnosis.</td>
+  </tr><tr class="classvariable">
+    
+    <td>Class Variable</td>
+    <td><code><a href="#specificity" class="internal-link" title="lyprox.riskpredictor.forms.RiskpredictorForm.specificity">specificity</a></code></td>
+    <td>The specificity of the entered diagnosis.</td>
+  </tr><tr class="instancevariable">
+    
+    <td>Instance Variable</td>
+    <td><code><a href="#checkpoint" class="internal-link" title="lyprox.riskpredictor.forms.RiskpredictorForm.checkpoint">checkpoint</a></code></td>
+    <td><span class="undocumented">Undocumented</span></td>
+  </tr><tr class="instancevariable">
+    
+    <td>Instance Variable</td>
+    <td><code><a href="#model" class="internal-link" title="lyprox.riskpredictor.forms.RiskpredictorForm.model">model</a></code></td>
+    <td><span class="undocumented">Undocumented</span></td>
+  </tr>
+</table>
+          
+
+            
+        </div>
+
+        <div id="childList">
+          <div class="baseclassmethod">
+  
+  
+  <a name="lyprox.riskpredictor.forms.RiskpredictorForm.from_initial">
+    
+  </a>
+  <a name="from_initial">
+    
+  </a>
+  <div class="functionHeader">
+    
+    @classmethod<br />
+    <span class="py-keyword">def</span> <span class="py-defname">from_initial</span><span class="function-signature">(cls: <code>type[<wbr></wbr><a href="lyprox.riskpredictor.forms.html#T" class="internal-link" title="lyprox.riskpredictor.forms.T">T</a>]</code>, checkpoint: <code><a href="lyprox.riskpredictor.models.CheckpointModel.html" class="internal-link" title="lyprox.riskpredictor.models.CheckpointModel">CheckpointModel</a></code>) -&gt; <code><a href="lyprox.riskpredictor.forms.html#T" class="internal-link" title="lyprox.riskpredictor.forms.T">T</a></code></span>:
+    
+    <a class="headerLink" href="#from_initial" title="lyprox.riskpredictor.forms.RiskpredictorForm.from_initial">
+      
+      
+      ¶
+    </a>
+  </div>
+  <div class="docstring functionBody">
+    
+    <div><p>Create a form instance with the initial form data.</p></div>
+  </div>
+</div><div class="basemethod">
+  
+  
+  <a name="lyprox.riskpredictor.forms.RiskpredictorForm.__init__">
+    
+  </a>
+  <a name="__init__">
+    
+  </a>
+  <div class="functionHeader">
+    
+    
+    <span class="py-keyword">def</span> <span class="py-defname">__init__</span><span class="function-signature">(self, *args, checkpoint: <code><a href="lyprox.riskpredictor.models.CheckpointModel.html" class="internal-link" title="lyprox.riskpredictor.models.CheckpointModel">CheckpointModel</a> | None</code> = None, **kwargs)</span>:
+    
+    <a class="headerLink" href="#__init__" title="lyprox.riskpredictor.forms.RiskpredictorForm.__init__">
+      
+      
+      ¶
+    </a>
+  </div>
+  <div class="docstring functionBody">
+    
+    <div><p>Initialize the form and add the fields for the lymph node levels.</p></div>
+  </div>
+</div><div class="basemethod">
+  
+  
+  <a name="lyprox.riskpredictor.forms.RiskpredictorForm.add_lnl_fields">
+    
+  </a>
+  <a name="add_lnl_fields">
+    
+  </a>
+  <div class="functionHeader">
+    
+    
+    <span class="py-keyword">def</span> <span class="py-defname">add_lnl_fields</span><span class="function-signature">(self)</span>:
+    
+    <a class="headerLink" href="#add_lnl_fields" title="lyprox.riskpredictor.forms.RiskpredictorForm.add_lnl_fields">
+      
+      
+      ¶
+    </a>
+  </div>
+  <div class="docstring functionBody">
+    
+    <div><p>Add the fields for the lymph node levels defined in the trained model.</p></div>
+  </div>
+</div><div class="basemethod">
+  
+  
+  <a name="lyprox.riskpredictor.forms.RiskpredictorForm.add_midext_field">
+    
+  </a>
+  <a name="add_midext_field">
+    
+  </a>
+  <div class="functionHeader">
+    
+    
+    <span class="py-keyword">def</span> <span class="py-defname">add_midext_field</span><span class="function-signature">(self)</span>:
+    
+    <a class="headerLink" href="#add_midext_field" title="lyprox.riskpredictor.forms.RiskpredictorForm.add_midext_field">
+      
+      
+      ¶
+    </a>
+  </div>
+  <div class="docstring functionBody">
+    
+    <div><p>Add the field for the midline status.</p></div>
+  </div>
+</div><div class="basemethod">
+  
+  
+  <a name="lyprox.riskpredictor.forms.RiskpredictorForm.add_t_stage_field">
+    
+  </a>
+  <a name="add_t_stage_field">
+    
+  </a>
+  <div class="functionHeader">
+    
+    
+    <span class="py-keyword">def</span> <span class="py-defname">add_t_stage_field</span><span class="function-signature">(self)</span>:
+    
+    <a class="headerLink" href="#add_t_stage_field" title="lyprox.riskpredictor.forms.RiskpredictorForm.add_t_stage_field">
+      
+      
+      ¶
+    </a>
+  </div>
+  <div class="docstring functionBody">
+    
+    <div><p>Add the field for the T stage with the choices being defined in the model.</p></div>
+  </div>
+</div><div class="basemethod">
+  
+  
+  <a name="lyprox.riskpredictor.forms.RiskpredictorForm.clean_midext">
+    
+  </a>
+  <a name="clean_midext">
+    
+  </a>
+  <div class="functionHeader">
+    
+    
+    <span class="py-keyword">def</span> <span class="py-defname">clean_midext</span><span class="function-signature">(self) -&gt; <code>bool</code></span>:
+    
+    <a class="headerLink" href="#clean_midext" title="lyprox.riskpredictor.forms.RiskpredictorForm.clean_midext">
+      
+      
+      ¶
+    </a>
+  </div>
+  <div class="docstring functionBody">
+    
+    <div><p>For now, the midline extension cannot be unknown (value of 0).</p></div>
+  </div>
+</div><div class="basemethod">
+  
+  
+  <a name="lyprox.riskpredictor.forms.RiskpredictorForm.get_lnls">
+    
+  </a>
+  <a name="get_lnls">
+    
+  </a>
+  <div class="functionHeader">
+    
+    
+    <span class="py-keyword">def</span> <span class="py-defname">get_lnls</span><span class="function-signature">(self) -&gt; <code>dict[<wbr></wbr>str, <wbr></wbr><a href="https://lymph-model.readthedocs.io/stable/graph.html#lymph.graph.LymphNodeLevel" class="intersphinx-link">graph.LymphNodeLevel</a>]</code></span>:
+    
+    <a class="headerLink" href="#get_lnls" title="lyprox.riskpredictor.forms.RiskpredictorForm.get_lnls">
+      
+      
+      ¶
+    </a>
+  </div>
+  <div class="docstring functionBody">
+    
+    <div><p>Get the lymph node levels from the model.</p></div>
+  </div>
+</div><div class="baseclassvariable">
+  
+  
+  <a name="lyprox.riskpredictor.forms.RiskpredictorForm.sensitivity">
+    
+  </a>
+  <a name="sensitivity">
+    
+  </a>
+  <div class="functionHeader">
+    
+    <span class="py-defname">sensitivity</span> =
+    
+    <a class="headerLink" href="#sensitivity" title="lyprox.riskpredictor.forms.RiskpredictorForm.sensitivity">
+      
+      
+      ¶
+    </a>
+  </div>
+  <div class="functionBody">
+    
+    <div><p>The sensitivity of the entered diagnosis.</p></div>
+    
+  </div>
+</div><div class="baseclassvariable">
+  
+  
+  <a name="lyprox.riskpredictor.forms.RiskpredictorForm.specificity">
+    
+  </a>
+  <a name="specificity">
+    
+  </a>
+  <div class="functionHeader">
+    
+    <span class="py-defname">specificity</span> =
+    
+    <a class="headerLink" href="#specificity" title="lyprox.riskpredictor.forms.RiskpredictorForm.specificity">
+      
+      
+      ¶
+    </a>
+  </div>
+  <div class="functionBody">
+    
+    <div><p>The specificity of the entered diagnosis.</p></div>
+    
+  </div>
+</div><div class="baseinstancevariable">
+  
+  
+  <a name="lyprox.riskpredictor.forms.RiskpredictorForm.checkpoint">
+    
+  </a>
+  <a name="checkpoint">
+    
+  </a>
+  <div class="functionHeader">
+    
+    <span class="py-defname">checkpoint</span> =
+    
+    <a class="headerLink" href="#checkpoint" title="lyprox.riskpredictor.forms.RiskpredictorForm.checkpoint">
+      
+      
+      ¶
+    </a>
+  </div>
+  <div class="functionBody">
+    
+    <div><p class="undocumented">Undocumented</p></div>
+    
+  </div>
+</div><div class="baseinstancevariable">
+  
+  
+  <a name="lyprox.riskpredictor.forms.RiskpredictorForm.model">
+    
+  </a>
+  <a name="model">
+    
+  </a>
+  <div class="functionHeader">
+    
+    <span class="py-defname">model</span> =
+    
+    <a class="headerLink" href="#model" title="lyprox.riskpredictor.forms.RiskpredictorForm.model">
+      
+      
+      ¶
+    </a>
+  </div>
+  <div class="functionBody">
+    
+    <div><p class="undocumented">Undocumented</p></div>
+    
+  </div>
+</div>
+        </div>
+      
+      </div>
+    </div>
+
+    <footer class="navbar navbar-default">
+
+  
+  <div class="container-fluid">
+    <a href="index.html">API Documentation</a> for LyProX,
+  generated by <a href="https://github.com/twisted/pydoctor/">pydoctor</a>
+    24.11.2 at 2025-04-01 13:02:24.
+  </div>
+
+  <!-- Search related scripts needs to be loaded at the end of HTML 
+    parsing not to introduce overhead and display HTML data asap -->
+  <script src="ajax.js" type="text/javascript"></script>
+  <script src="searchlib.js" type="text/javascript"></script>
+  <script src="search.js" type="text/javascript"></script>
+
+</footer>
+  
+    <script src="pydoctor.js" type="text/javascript"></script>
+
+  </body>
+</html>
