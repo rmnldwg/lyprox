@@ -34,6 +34,7 @@ import json
 import logging
 from typing import Any
 
+import numpy as np
 import pandas as pd
 from django.http import HttpRequest, HttpResponseBadRequest
 from django.http.response import HttpResponse, JsonResponse
@@ -156,8 +157,39 @@ def color_boolean(value: Any) -> str:
     return "background-color: lightcoral"
 
 
+def map_to_cell_classes(patients: pd.DataFrame) -> pd.DataFrame:
+    """Return a class for each cell of the ``patients`` table."""
+    classes_map = np.empty_like(patients, dtype=str)
+    classes_map = np.where(
+        patients,
+        "is-danger is-light",
+        "is-success is-light",
+    )
+    classes_map = np.where(patients.isna(), "is-info is-light", classes_map)
+    classes_map = np.where(
+        patients.map(lambda val: isinstance(val, bool) or pd.isna(val)).all(),
+        classes_map,
+        "",
+    )
+    return pd.DataFrame(classes_map, columns=patients.columns, index=patients.index)
+
+
+def bring_consensus_col_to_left(patients: pd.DataFrame) -> pd.DataFrame:
+    """Make sure the consensus column is the third top-level column."""
+    consensus = "max_llh" if "max_llh" in patients.columns else "rank"
+
+    unordered_cols = patients.columns.get_level_values(0).unique().to_list()
+    unordered_cols = [
+        col for col in unordered_cols if col not in ["patient", "tumor", consensus]
+    ]
+    ordered_cols = ["patient", "tumor", consensus] + unordered_cols
+
+    return patients[ordered_cols]
+
+
 def style_table(patients: pd.DataFrame) -> Styler:
     """Apply styles to the `pandas.DataFrame` for better readability."""
+    patients = bring_consensus_col_to_left(patients)
     return (
         patients.drop(columns=[("patient", "#", "id")])
         .style.format_index(
@@ -167,8 +199,8 @@ def style_table(patients: pd.DataFrame) -> Styler:
         )
         .set_sticky(axis="index")
         .set_sticky(axis="columns")
-        .set_table_attributes("class='table is-striped'")
-        .applymap(color_boolean)
+        .set_table_attributes("class='table'")
+        .set_td_classes(map_to_cell_classes(patients))
     )
 
 
