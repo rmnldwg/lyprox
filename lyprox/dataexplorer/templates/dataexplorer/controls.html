@@ -38,7 +38,7 @@
             {% include 'dataexplorer/help/tooltip.html' with side="left" position="top" image='dataexplorer/help/buttons.gif' markdown='dataexplorer/help/buttons.md' %}
           </div>
           <button class="button is-medium is-warning is-light is-outlined" type="submit"
-            formaction="{# url 'patients:list' #}" data-tooltip="Display selected subset in list">
+            formaction="{% url 'dataexplorer:table' %}" data-tooltip="Display selected subset in list">
             <span>Patients in selection: <span class="stats" data-statfield="total">{{ stats.total }}</span></span>
           </button>
 

@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% load sekizai_tags %}
+{% load customtags %}
+{% load static %}
+
+{% block head %}
+{% include 'head_content.html' with title='LyProX · Data Explorer' %}
+{% endblock head %}
+
+{% block content %}
+<section class="section">
+  <div class="container">
+    <div class="table-container">
+      {{ table|safe }}
+    </div>
+  </div>
+</section>
+{% endblock %}
