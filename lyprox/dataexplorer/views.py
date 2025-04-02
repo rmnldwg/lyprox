@@ -34,7 +34,6 @@ import json
 import logging
 from typing import Any
 
-import numpy as np
 import pandas as pd
 from django.http import HttpRequest, HttpResponseBadRequest
 from django.http.response import HttpResponse, JsonResponse
@@ -42,6 +41,7 @@ from django.shortcuts import render
 from lydata.utils import get_default_modalities
 from pandas.io.formats.style import Styler
 
+from lyprox.accounts.models import Institution
 from lyprox.dataexplorer.forms import DataexplorerForm
 from lyprox.dataexplorer.query import Statistics, execute_query
 from lyprox.settings import LNLS
@@ -159,18 +159,26 @@ def color_boolean(value: Any) -> str:
 
 def map_to_cell_classes(patients: pd.DataFrame) -> pd.DataFrame:
     """Return a class for each cell of the ``patients`` table."""
-    classes_map = np.empty_like(patients, dtype=str)
-    classes_map = np.where(
-        patients,
-        "is-danger is-light",
-        "is-success is-light",
-    )
-    classes_map = np.where(patients.isna(), "is-info is-light", classes_map)
-    classes_map = np.where(
-        patients.map(lambda val: isinstance(val, bool) or pd.isna(val)).all(),
-        classes_map,
-        "",
-    )
+    consensus = "max_llh" if "max_llh" in patients.columns else "rank"
+    classes_map = pd.DataFrame().reindex_like(patients).fillna("")
+    modalities = [consensus] + list(get_default_modalities())
+
+    for modality in modalities:
+        for side in ["ipsi", "contra"]:
+            classes_map[modality, side] = (
+                pd.DataFrame()
+                .reindex_like(patients[modality, side])
+                .fillna("is-success has-text-weight-bold has-text-white")
+            )
+            classes_map[modality, side] = classes_map[modality, side].where(
+                cond=patients[modality, side],
+                other="is-danger has-text-weight-bold has-text-white",
+            )
+            classes_map[modality, side] = classes_map[modality, side].where(
+                cond=patients[modality, side].notna(),
+                other="is-info has-text-weight-bold",
+            )
+
     return pd.DataFrame(classes_map, columns=patients.columns, index=patients.index)
 
 
@@ -187,20 +195,41 @@ def bring_consensus_col_to_left(patients: pd.DataFrame) -> pd.DataFrame:
     return patients[ordered_cols]
 
 
+def get_institution_shortname(value: str) -> str:
+    """Replace the institution names with their abbreviations."""
+    return Institution.objects.get(name=value).shortname
+
+
+def replace_nan_with_x(value: Any) -> str:
+    """Replace NaN values with 'X' in the table view."""
+    if pd.isna(value) or value == "nan" or value == "None":
+        return "-"
+
+    return value
+
+
 def style_table(patients: pd.DataFrame) -> Styler:
     """Apply styles to the `pandas.DataFrame` for better readability."""
     patients = bring_consensus_col_to_left(patients)
     return (
-        patients.drop(columns=[("patient", "#", "id")])
+        patients.drop(columns=[("patient", "#", "id"), ("dataset", "info", "name")])
         .style.format_index(
             formatter=split_and_capitalize,
             level=[0, 1, 2],
             axis=1,
         )
+        .format(
+            formatter=replace_nan_with_x,
+        )
+        .format(
+            formatter=get_institution_shortname,
+            subset=[("patient", "#", "institution")],
+        )
         .set_sticky(axis="index")
         .set_sticky(axis="columns")
         .set_table_attributes("class='table'")
         .set_td_classes(map_to_cell_classes(patients))
+        .set_properties(width="100%")
     )
 
 

@@ -33,6 +33,7 @@ dependencies = [
     "dateparser ~= 1.1",
     "python-markdown-math ~= 0.8",
     "lydata == 0.2.5",
+    "dotenv>=0.9.9",
 ]
 
 [project.urls]

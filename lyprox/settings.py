@@ -36,9 +36,13 @@ from typing import Literal
 
 from django import urls
 from django.db import models
+from dotenv import load_dotenv
 from github import Auth, Github
 
 from ._version import version
+
+if not load_dotenv():
+    raise RuntimeError("Failed to load variables from .env file.")
 
 DEBUG = os.environ["DJANGO_ENV"] == "debug"
 """``True``, when in debug mode, meaning ``DJANGO_ENV`` is set to ``"debug"``."""
