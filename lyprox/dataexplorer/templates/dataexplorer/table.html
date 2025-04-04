@@ -8,6 +8,10 @@
 {% include 'head_content.html' with title='LyProX · Data Explorer' %}
 {% endblock head %}
 
+{% block "css" %}
+<link rel="stylesheet" href="{% static 'dataexplorer/table.css' %}">
+{% endblock %}
+
 {% block content %}
 <section class="section">
   <div class="container">

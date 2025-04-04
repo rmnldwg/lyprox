@@ -32,6 +32,7 @@ the context they may provide in the `Django documentation`_.
 
 import json
 import logging
+import time
 from typing import Any
 
 import pandas as pd
@@ -210,6 +211,7 @@ def replace_nan_with_x(value: Any) -> str:
 
 def style_table(patients: pd.DataFrame) -> Styler:
     """Apply styles to the `pandas.DataFrame` for better readability."""
+    start_time = time.perf_counter()
     patients = bring_consensus_col_to_left(patients)
     cols_to_drop = [
         ("patient", "#", "id"),
@@ -219,7 +221,7 @@ def style_table(patients: pd.DataFrame) -> Styler:
         ("enbloc_dissected"),
         ("enbloc_positive"),
     ]
-    return (
+    result = (
         patients.drop(columns=cols_to_drop)
         .style.format_index(
             formatter=split_and_capitalize,
@@ -239,6 +241,12 @@ def style_table(patients: pd.DataFrame) -> Styler:
         .set_td_classes(map_to_cell_classes(patients))
         .set_properties(width="100%")
     )
+    stop_time = time.perf_counter()
+    logger.info(
+        f"Styling the table took {stop_time - start_time:.2f} seconds. "
+        f"Number of rows: {len(patients)}"
+    )
+    return result
 
 
 def render_data_table(request: HttpRequest) -> HttpResponse:
