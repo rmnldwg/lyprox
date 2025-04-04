@@ -83,6 +83,15 @@ There are four important settings that the `core/settings.py` file does not defi
 export ENV_VARIABLE_NAME="variable-value"
 ```
 
+alternatively, it is possible to place these variables in an `.env` file at the root of the repository that is automatically loaded at server startup. It should have the following format:
+
+```txt
+ENV_VARIABLE="variable-value"
+```
+
+> [!WARNING]
+> **Never** add the `.env` file into your source control system (like git)! It contains secrets that **must not** become public!
+
 The variables that need to be set are:
 
 - `DJANGO_ENV`: Can be `"debug"`, `"production"`, or `"maintenance"`. For running the interface locally, it should be set to `"debug"`.
