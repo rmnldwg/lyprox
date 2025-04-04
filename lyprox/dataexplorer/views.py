@@ -168,11 +168,11 @@ def map_to_cell_classes(patients: pd.DataFrame) -> pd.DataFrame:
             classes_map[modality, side] = (
                 pd.DataFrame()
                 .reindex_like(patients[modality, side])
-                .fillna("is-success has-text-weight-bold has-text-white")
+                .fillna("is-danger has-text-weight-bold has-text-white")
             )
             classes_map[modality, side] = classes_map[modality, side].where(
                 cond=patients[modality, side],
-                other="is-danger has-text-weight-bold has-text-white",
+                other="is-success has-text-weight-bold has-text-white",
             )
             classes_map[modality, side] = classes_map[modality, side].where(
                 cond=patients[modality, side].notna(),
@@ -211,8 +211,16 @@ def replace_nan_with_x(value: Any) -> str:
 def style_table(patients: pd.DataFrame) -> Styler:
     """Apply styles to the `pandas.DataFrame` for better readability."""
     patients = bring_consensus_col_to_left(patients)
+    cols_to_drop = [
+        ("patient", "#", "id"),
+        ("dataset", "info", "name"),
+        ("total_dissected"),
+        ("positive_dissected"),
+        ("enbloc_dissected"),
+        ("enbloc_positive"),
+    ]
     return (
-        patients.drop(columns=[("patient", "#", "id"), ("dataset", "info", "name")])
+        patients.drop(columns=cols_to_drop)
         .style.format_index(
             formatter=split_and_capitalize,
             level=[0, 1, 2],
