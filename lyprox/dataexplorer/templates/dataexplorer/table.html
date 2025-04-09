@@ -12,8 +12,18 @@
 <link rel="stylesheet" href="{% static 'dataexplorer/table.css' %}">
 {% endblock %}
 
+{% block "js" %}
+{% endblock %}
+
 {% block content %}
 <section class="section">
+  <a href="{% url 'dataexplorer:help' %}?{{ request.GET.urlencode }}" class="button is-floating is-warning has-text-white has-text-weight-bold">
+    <span class="icon">
+      <i class="fas fa-download"></i>
+    </span>
+    <span>Download CSV</span>
+  </a>
+
   <div class="container">
     <div class="box">
       <div class="table-container">
