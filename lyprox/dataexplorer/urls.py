@@ -13,6 +13,7 @@ urlpatterns = [
     path("", views.render_data_stats, name="dashboard"),
     path("ajax/", views.update_data_stats, name="ajax"),
     path("table/", views.render_data_table, name="table"),
+    path("download/", views.make_csv_download, name="download"),
     path("help/", views.help_view, name="help"),
 ]
 """

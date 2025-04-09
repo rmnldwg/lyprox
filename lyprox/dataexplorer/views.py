@@ -272,3 +272,29 @@ def render_data_table(request: HttpRequest) -> HttpResponse:
         template_name="dataexplorer/table.html",
         context={"table": style_table(patients).to_html()},
     )
+
+
+def make_csv_download(request: HttpRequest) -> HttpResponse:
+    """Return a CSV file with the selected patients."""
+    request_data = request.GET
+    form = DataexplorerForm(request_data, user=request.user)
+
+    if not form.is_valid():
+        logger.info("Dashboard form not valid.")
+        form = DataexplorerForm.from_initial(user=request.user)
+
+    if not form.is_valid():
+        logger.error(
+            f"Form not valid even after initializing with initial data: {form.errors}"
+        )
+        return HttpResponseBadRequest("Form is not valid.")
+
+    patients = execute_query(cleaned_form_data=form.cleaned_data)
+
+    return HttpResponse(
+        patients.to_csv(index=False),
+        content_type="text/csv",
+        headers={
+            "Content-Disposition": 'attachment; filename="patients.csv"',
+        },
+    )
