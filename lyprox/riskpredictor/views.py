@@ -70,13 +70,19 @@ def render_risk_prediction(request: HttpRequest, checkpoint_pk: int) -> HttpResp
         form_data=form.cleaned_data,
         lnls=lnls,
     )
+    graph_config, model_config, dist_configs, _version = checkpoint.validate_configs()
     context = {
         "checkpoint": checkpoint,
         "form": form,
         "risks": risks,
         "lnls": lnls,
+        "graph_params": graph_config.model_dump(),
+        "model_params": model_config.model_dump(),
+        "dist_params": {
+            dist: dist_config.model_dump() for dist, dist_config in dist_configs.items()
+        },
     }
-    return render(request, "riskpredictor/dashboard.html", context)
+    return render(request, "riskpredictor/layout.html", context)
 
 
 def update_risk_prediction(request: HttpRequest, checkpoint_pk: int) -> JsonResponse:

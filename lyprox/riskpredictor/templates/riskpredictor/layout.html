@@ -65,6 +65,35 @@
         </div>
       </div>
     </div>
+    <h3 class="title is-3">Configurations</h1>
+    <div class="fixed-grid has-3-cols">
+      <div class="grid">
+        <div class="cell">
+          <div class="box is-height-100">
+            <h4 class="title is-4">Graph</h2>
+            <div class="block yaml-source" data-yaml="{% render_yaml graph_params %}">
+              <pre class="p-3"><code class="yaml-display language-yaml p-0"></code></pre>
+            </div>
+          </div>
+        </div>
+        <div class="cell">
+          <div class="box is-height-100">
+            <h4 class="title is-4">Model</h2>
+            <div class="block yaml-source" data-yaml="{% render_yaml model_params %}">
+              <pre class="p-3"><code class="yaml-display language-yaml p-0"></code></pre>
+            </div>
+          </div>
+        </div>
+        <div class="cell">
+          <div class="box is-height-100">
+            <h4 class="title is-4">Distributions</h2>
+            <div class="block yaml-source" data-yaml="{% render_yaml dist_params %}">
+              <pre class="p-3"><code class="yaml-display language-yaml p-0"></code></pre>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </section>
 </form>
 {% endblock content %}
