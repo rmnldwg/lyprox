@@ -9,13 +9,35 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpRequest, HttpResponse, JsonResponse
 from django.shortcuts import render
 from django.views.generic import CreateView, ListView
+from lymph import graph
+from lymph.types import Model
 
 from lyprox.loggers import ViewLoggerMixin
 from lyprox.riskpredictor import predict
 from lyprox.riskpredictor.forms import CheckpointModelForm, RiskpredictorForm
-from lyprox.riskpredictor.models import CheckpointModel
+from lyprox.riskpredictor.models import (
+    CheckpointModel,
+    cached_construct_model_and_add_dists,
+)
 
 logger = logging.getLogger(__name__)
+
+
+def retrieve_graph_representation(model: Model) -> graph.Representation:
+    """Retrieve the graph representation from a model."""
+    if hasattr(model, "graph"):
+        return model.graph
+
+    if hasattr(model, "hpv"):
+        return retrieve_graph_representation(model.hpv)
+
+    if hasattr(model, "ipsi"):
+        return retrieve_graph_representation(model.ipsi)
+
+    if hasattr(model, "ext"):
+        return retrieve_graph_representation(model.ext)
+
+    raise ValueError("Model does not have a graph representation.")
 
 
 def test_view(request):
@@ -70,13 +92,22 @@ def render_risk_prediction(request: HttpRequest, checkpoint_pk: int) -> HttpResp
         form_data=form.cleaned_data,
         lnls=lnls,
     )
-    graph_config, model_config, dist_configs, _version = checkpoint.validate_configs()
+    graph_config, model_config, dist_configs, version = checkpoint.validate_configs()
+    model = cached_construct_model_and_add_dists(
+        graph_config=graph_config,
+        model_config=model_config,
+        dist_configs=dist_configs,
+        version=version,
+    )
+    model.set_named_params(*checkpoint.fetch_samples().mean(axis=0))
+    graph_repr = retrieve_graph_representation(model)
+
     context = {
         "checkpoint": checkpoint,
         "form": form,
         "risks": risks,
         "lnls": lnls,
-        "graph_params": graph_config.model_dump(),
+        "graph_mermaid": graph_repr.get_mermaid(),
         "model_params": model_config.model_dump(),
         "dist_params": {
             dist: dist_config.model_dump() for dist, dist_config in dist_configs.items()
