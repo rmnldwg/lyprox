@@ -1,0 +1,13 @@
+tbody {
+    overflow-y: scroll;
+    height: 1024px;
+}
+
+.button.is-floating {
+    position: fixed;
+    bottom: 40px;
+    right: 40px;
+    font-size: 1rem;
+    box-shadow: 0 .0625em .125em rgba(10, 10, 10, .05);
+    z-index: 3
+}

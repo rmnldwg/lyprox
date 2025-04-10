@@ -8,8 +8,14 @@ much security relevant stuff going on.
 The settings are written such that errors are thrown when the required environment vars
 are not present. This is by design, to ensure the host environment is configured for
 the application. It is recommended that you write an ``.env`` file at the root of the
-project (DON'T TRACK IT WITH GIT!) and source it (``set -a; source .env``) before
-running the application.
+project (DON'T TRACK IT WITH GIT!), from which the environment variables are loaded.
+The ``.env`` file should look like this:
+
+.. code-block:: text
+
+    # .env
+    DJANGO_ENV=debug
+    DJANGO_SECRET_KEY=...
 
 The minimally required environment variables that need to be set are:
 
@@ -36,9 +42,13 @@ from typing import Literal
 
 from django import urls
 from django.db import models
+from dotenv import load_dotenv
 from github import Auth, Github
 
 from ._version import version
+
+if not load_dotenv():
+    raise RuntimeError("Failed to load variables from .env file.")
 
 DEBUG = os.environ["DJANGO_ENV"] == "debug"
 """``True``, when in debug mode, meaning ``DJANGO_ENV`` is set to ``"debug"``."""
@@ -230,9 +240,7 @@ INSTALLED_APPS = [
     "lyprox.dataexplorer.apps.DataExplorerConfig",
     "lyprox.riskpredictor.apps.RiskConfig",
     # third party apps
-    "django_filters",
     "fontawesomefree",
-    "phonenumber_field",
     "sekizai",
     # django contrib apps
     "django.contrib.admin",
