@@ -240,9 +240,7 @@ INSTALLED_APPS = [
     "lyprox.dataexplorer.apps.DataExplorerConfig",
     "lyprox.riskpredictor.apps.RiskConfig",
     # third party apps
-    "django_filters",
     "fontawesomefree",
-    "phonenumber_field",
     "sekizai",
     # django contrib apps
     "django.contrib.admin",

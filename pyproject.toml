@@ -18,13 +18,10 @@ dynamic = ["version"]
 requires-python = "~=3.10"
 dependencies = [
     "Django ~= 4.2",
-    "django-filter ~= 25.1",
     "django-phonenumber-field[phonenumbers] ~= 8.0",
-    "django-auth-logger ~= 2.2",
     "django-sekizai ~= 4.1",
     "Markdown ~= 3.7",
     "fontawesomefree ~= 5.15",
-    "python-magic ~= 0.4",
     "gunicorn ~= 23.0",
     "dvc ~= 3.59",
     "PyGithub ~= 2.6",

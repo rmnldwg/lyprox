@@ -778,39 +778,6 @@ wheels = [
 ]
 
 [[package]]
-name = "django-auth-logger"
-version = "2.2.2"
-source = { registry = "https://pypi.org/simple" }
-resolution-markers = [
-    "python_full_version < '3.11'",
-]
-dependencies = [
-    { name = "django", marker = "python_full_version < '3.11'" },
-    { name = "django-ipware", marker = "python_full_version < '3.11'" },
-]
-sdist = { url = "https://files.pythonhosted.org/packages/69/ed/2ca48d30819578550fda2867911b9fd9bd51f25c11212f184238a705cb7b/django_auth_logger-2.2.2.tar.gz", hash = "sha256:0a06b8fa871075d46377be8367445d951bab4e645d7f4f8749118acee9145476", size = 3900 }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/4f/41/a7e3fc50f658d14cac3ddac83368653c871049ac6d94fd100709e21e12ec/django_auth_logger-2.2.2-py3-none-any.whl", hash = "sha256:8104ed29daf65df5b992570f3ce048f390816a4fa3748f9759cbaac8eb158175", size = 5151 },
-]
-
-[[package]]
-name = "django-auth-logger"
-version = "2.3.0"
-source = { registry = "https://pypi.org/simple" }
-resolution-markers = [
-    "python_full_version >= '3.12'",
-    "python_full_version == '3.11.*'",
-]
-dependencies = [
-    { name = "django", marker = "python_full_version >= '3.11'" },
-    { name = "django-ipware", marker = "python_full_version >= '3.11'" },
-]
-sdist = { url = "https://files.pythonhosted.org/packages/38/5d/99f7f9414d38a502e937b0bc82fb57127d3687841f7df5277e025eb6b296/django_auth_logger-2.3.0.tar.gz", hash = "sha256:7fcb3c783ac433b5f0080dc643a10c7b8845105646c9ff87abe9d0a383c5b881", size = 3882 }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/98/e9/a0ff8efafa1951963e85874bc2afb0880d5b25f9bd4d2a1d07b7181c8858/django_auth_logger-2.3.0-py3-none-any.whl", hash = "sha256:d982047371ea3066b326037e6f1de7479a6924ed341a99cb85b6662e5ffd672e", size = 5129 },
-]
-
-[[package]]
 name = "django-classy-tags"
 version = "4.1.0"
 source = { registry = "https://pypi.org/simple" }
@@ -832,30 +799,6 @@ dependencies = [
 sdist = { url = "https://files.pythonhosted.org/packages/8a/f1/318684c9466968bf9a9c221663128206e460c1a67f595055be4b284cde8a/django-extensions-3.2.3.tar.gz", hash = "sha256:44d27919d04e23b3f40231c4ab7af4e61ce832ef46d610cc650d53e68328410a", size = 277216 }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/a7/7e/ba12b9660642663f5273141018d2bec0a1cae1711f4f6d1093920e157946/django_extensions-3.2.3-py3-none-any.whl", hash = "sha256:9600b7562f79a92cbf1fde6403c04fee314608fefbb595502e34383ae8203401", size = 229868 },
-]
-
-[[package]]
-name = "django-filter"
-version = "25.1"
-source = { registry = "https://pypi.org/simple" }
-dependencies = [
-    { name = "django" },
-]
-sdist = { url = "https://files.pythonhosted.org/packages/b5/40/c702a6fe8cccac9bf426b55724ebdf57d10a132bae80a17691d0cf0b9bac/django_filter-25.1.tar.gz", hash = "sha256:1ec9eef48fa8da1c0ac9b411744b16c3f4c31176c867886e4c48da369c407153", size = 143021 }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/07/a6/70dcd68537c434ba7cb9277d403c5c829caf04f35baf5eb9458be251e382/django_filter-25.1-py3-none-any.whl", hash = "sha256:4fa48677cf5857b9b1347fed23e355ea792464e0fe07244d1fdfb8a806215b80", size = 94114 },
-]
-
-[[package]]
-name = "django-ipware"
-version = "7.0.1"
-source = { registry = "https://pypi.org/simple" }
-dependencies = [
-    { name = "python-ipware" },
-]
-sdist = { url = "https://files.pythonhosted.org/packages/23/64/c7e4791edf01ba483cce444770b3e6a930ba12195ba1eeb37b5bf6dce8a8/django-ipware-7.0.1.tar.gz", hash = "sha256:d9ec43d2bf7cdf216fed8d494a084deb5761a54860a53b2e74346a4f384cff47", size = 6827 }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/11/33/bf539925b102d68200da5b1d3eacb8aa5d5d9a065972e8b8724d0d53bb0d/django_ipware-7.0.1-py2.py3-none-any.whl", hash = "sha256:db16bbee920f661ae7f678e4270460c85850f03c6761a4eaeb489bdc91f64709", size = 6425 },
 ]
 
 [[package]]
@@ -1672,9 +1615,6 @@ source = { editable = "." }
 dependencies = [
     { name = "dateparser" },
     { name = "django" },
-    { name = "django-auth-logger", version = "2.2.2", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.11'" },
-    { name = "django-auth-logger", version = "2.3.0", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.11'" },
-    { name = "django-filter" },
     { name = "django-phonenumber-field", extra = ["phonenumbers"] },
     { name = "django-sekizai" },
     { name = "dotenv" },
@@ -1686,7 +1626,6 @@ dependencies = [
     { name = "lyscripts" },
     { name = "markdown" },
     { name = "pygithub" },
-    { name = "python-magic" },
     { name = "python-markdown-math" },
 ]
 
@@ -1706,9 +1645,7 @@ test = [
 requires-dist = [
     { name = "dateparser", specifier = "~=1.2" },
     { name = "django", specifier = "~=4.2" },
-    { name = "django-auth-logger", specifier = "~=2.2" },
     { name = "django-extensions", marker = "extra == 'dev'", specifier = "~=3.2" },
-    { name = "django-filter", specifier = "~=25.1" },
     { name = "django-phonenumber-field", extras = ["phonenumbers"], specifier = "~=8.0" },
     { name = "django-sekizai", specifier = "~=4.1" },
     { name = "dotenv", specifier = "~=0.9" },
@@ -1723,7 +1660,6 @@ requires-dist = [
     { name = "pydoctor", marker = "extra == 'docs'" },
     { name = "pygithub", specifier = "~=2.6" },
     { name = "pytest-django", marker = "extra == 'test'" },
-    { name = "python-magic", specifier = "~=0.4" },
     { name = "python-markdown-math", specifier = "~=0.8" },
 ]
 provides-extras = ["docs", "test", "dev"]
@@ -2967,24 +2903,6 @@ source = { registry = "https://pypi.org/simple" }
 sdist = { url = "https://files.pythonhosted.org/packages/88/2c/7bb1416c5620485aa793f2de31d3df393d3686aa8a8506d11e10e13c5baf/python_dotenv-1.1.0.tar.gz", hash = "sha256:41f90bc6f5f177fb41f53e87666db362025010eb28f60a01c9143bfa33a2b2d5", size = 39920 }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/1e/18/98a99ad95133c6a6e2005fe89faedf294a748bd5dc803008059409ac9b1e/python_dotenv-1.1.0-py3-none-any.whl", hash = "sha256:d7c01d9e2293916c18baf562d95698754b0dbbb5e74d457c45d4f6561fb9d55d", size = 20256 },
-]
-
-[[package]]
-name = "python-ipware"
-version = "3.0.0"
-source = { registry = "https://pypi.org/simple" }
-sdist = { url = "https://files.pythonhosted.org/packages/9e/60/da4426c3e9aee56f08b24091a9e85a0414260f928f97afd0013dfbd0332f/python_ipware-3.0.0.tar.gz", hash = "sha256:9117b1c4dddcb5d5ca49e6a9617de2fc66aec2ef35394563ac4eecabdf58c062", size = 16609 }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/08/bd/ccd7416fdb30f104ddf6cfd8ee9f699441c7d9880a26f9b3089438adee05/python_ipware-3.0.0-py3-none-any.whl", hash = "sha256:fc936e6e7ec9fcc107f9315df40658f468ac72f739482a707181742882e36b60", size = 10761 },
-]
-
-[[package]]
-name = "python-magic"
-version = "0.4.27"
-source = { registry = "https://pypi.org/simple" }
-sdist = { url = "https://files.pythonhosted.org/packages/da/db/0b3e28ac047452d079d375ec6798bf76a036a08182dbb39ed38116a49130/python-magic-0.4.27.tar.gz", hash = "sha256:c1ba14b08e4a5f5c31a302b7721239695b2f0f058d125bd5ce1ee36b9d9d3c3b", size = 14677 }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/6c/73/9f872cb81fc5c3bb48f7227872c28975f998f3e7c2b1c16e95e6432bbb90/python_magic-0.4.27-py2.py3-none-any.whl", hash = "sha256:c212960ad306f700aa0d01e5d7a325d20548ff97eb9920dcd29513174f0294d3", size = 13840 },
 ]
 
 [[package]]
