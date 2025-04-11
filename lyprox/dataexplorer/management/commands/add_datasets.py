@@ -121,10 +121,10 @@ class Command(base.BaseCommand):
             ]
 
         for config in dataset_configs:
+            config["institution"] = Institution.objects.get(
+                shortname=config["institution"].upper(),
+            )
             try:
-                config["institution"] = Institution.objects.get(
-                    shortname=config["institution"].upper(),
-                )
                 dataset = DatasetModel.objects.create(**config)
                 table = dataset.load_dataframe()
                 self.stdout.write(
@@ -135,11 +135,13 @@ class Command(base.BaseCommand):
             except IntegrityError:
                 self.stdout.write(
                     self.style.WARNING(
-                        f"Dataset '{config['year']}-{config['institution']}-"
-                        f"{config['subsite']}' already exists. Skipping."
+                        f"Dataset '{config['year']}"
+                        f"-{config['institution'].shortname.lower()}"
+                        f"-{config['subsite']}' already exists. Skipping."
                     )
                 )
             except Exception as exc:
                 self.stdout.write(
                     self.style.ERROR(f"Failed to add dataset {config} due to {exc}.")
                 )
+                dataset.delete()
