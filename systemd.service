@@ -9,8 +9,8 @@ WorkingDirectory = /srv/www/{{ hostname }}
 EnvironmentFile = /srv/www/{{ hostname }}/.env
 TimeoutSec = 1200
 
-ExecStartPre = +/srv/www/{{ hostname }}/.venv/bin/lyprox migrate --noinput
-ExecStartPre = +/srv/www/{{ hostname }}/.venv/bin/lyprox collectstatic --noinput
+ExecStartPre = /srv/www/{{ hostname }}/.venv/bin/lyprox migrate --noinput
+ExecStartPre = /srv/www/{{ hostname }}/.venv/bin/lyprox collectstatic --noinput
 ExecStartPre = /srv/www/{{ hostname }}/.venv/bin/lyprox add_institutions --from-file /srv/www/{{ hostname }}/initial/institutions.json
 ExecStartPre = /srv/www/{{ hostname }}/.venv/bin/lyprox add_users --from-file /srv/www/{{ hostname }}/initial/users.json
 ExecStartPre = /srv/www/{{ hostname }}/.venv/bin/lyprox add_datasets --from-file /srv/www/{{ hostname }}/initial/datasets.json
