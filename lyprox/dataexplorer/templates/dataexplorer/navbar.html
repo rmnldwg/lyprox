@@ -2,12 +2,16 @@
   This gets loaded by the main navbar.html template. This allows for easy customization of the navbar.
 -->
 <div class="navbar-item has-dropdown is-hoverable">
-  <a href="{% url 'dataexplorer:dashboard' %}" class="navbar-link"
+  <a href="{% url 'dataexplorer:dashboard' %}" class="navbar-link has-text-white"
     title="explore patterns of progression in datasets">
     Data Explorer
   </a>
 
   <div class="navbar-dropdown">
+    <a href="{% url 'dataexplorer:table' %}" class="navbar-item"
+    title="display all patients in a table">
+      List
+    </a>
     <a href="{% url 'dataexplorer:dashboard' %}" class="navbar-item"
       title="explore patterns of progression in datasets">
       Dashboard

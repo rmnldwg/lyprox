@@ -1,655 +1,320 @@
-"""
-Module for translating the user input into a database query. It retrieves the
-information of interest and returns it in a format that can then be put into the
-response of the server.
+"""Querying and generating statistics from the table of patients.
 
-The main interaction point is the `run_query` function. It takes an initial ``QuerySet``
-of `patients.models.Patient` objects and filters it down according to the cleaned data
-from a `form.DashboardForm`.
+In this module, we define the classes and methods to filter and query the table, as
+well as compute statistics from a queried/filtered patient table to be displayed on the
+main dashboard of LyProX.
+
+In the `views`, the `execute_query` function is called with the cleaned data from the
+`DataexplorerForm`. This `execute_query` function then creates a combined query using
+the fancy `lydata.accessor.C` objects from `lydata`_. These classes allow arbitrary
+combinations of deferred queries to be created and only later be executed.
+
+After executing the query, the filtered dataset is used to compute `Statistics` using
+the `from_table` classmethod. This `pydantic.BaseModel` has similar fields to the
+`DataexplorerForm` and is used to display the aggregated information of the filtered
+patient table in the dashboard.
+
+.. _lydata: https://lydata.readthedocs.io/stable/
 """
-# pylint: disable=no-member, unused-argument
 
 import logging
-import re
 import time
-from functools import lru_cache
-from typing import Any, Callable, Dict, List, Optional, Tuple
+from collections.abc import Callable, Sequence
+from typing import Annotated, Any, Literal, TypeVar
 
-import numpy as np
+import lydata  # noqa: F401
+import lydata.utils as lyutils
+import lydata.validator as lyvalidator
+import pandas as pd
 from django.db.models import QuerySet
+from lydata import C
+from lydata.accessor import NoneQ, QTypes
+from pydantic import AfterValidator, BaseModel, computed_field, create_model
 
-from ..accounts.models import Institution
-from ..patients.models import Dataset, Diagnose, Patient, Tumor
+from lyprox.dataexplorer.models import DatasetModel
+from lyprox.dataexplorer.subsites import Subsites
+from lyprox.settings import LNLS
 
 logger = logging.getLogger(__name__)
 
 
-def run_query(
-    patients: Optional[QuerySet],
-    cleaned_form_data: Dict[str, Any],
-    do_compute_statistics: bool = True,
-) -> Dict[int, Any]:
-    """
-    Run a database query using the cleaned form data from the
-    `forms.DashboardForm`.
-
-    It first filters all patients in the database by patient-specific
-    characteristics. Then all tumors by tumor features. Afterwards, it only
-    keeps those patients that have tumors which were not yet filtered out.
-    It continues to remove patients based on their diagnosed lymph node
-    involvement and the selected involvement patterns.
-
-    The filtering parameters are provided by the cleaned data of a `form.DashboardForm`.
-    The default initial QuerySet of patients is simply all patients in the database,
-    unless ``patients`` is specified. In that case, the provided ``QuerySet`` is the
-    starting point of the filtering query.
-
-    The computation of statistics can be skipped using the ``do_compute_statistics``
-    parameter (default is ``True``).
-    """
-    if patients is None:
-        patients = Patient.objects.all()
-
-    start_time = time.perf_counter()
-
-    patients = patient_specific(patients, **cleaned_form_data)
-    tumors = tumor_specific(Tumor.objects.all(), **cleaned_form_data)
-    patients = patients.filter(tumor__in=tumors)
-    diagnoses = Diagnose.objects.all().filter(patient__in=patients)
-
-    # This is now a dictionary with exactly those patient's IDs who are
-    # still not filtered out (after patient-, tumor- and diagnose-specific
-    # filtering).
-    combined_diagnoses_by_id = diagnose_specific(
-        diagnoses, **cleaned_form_data
-    )
-    filtered_patient_ids = combined_diagnoses_by_id.keys()
-    patients = patients.filter(id__in=filtered_patient_ids)
-    tumors = tumors.filter(patient__id__in=filtered_patient_ids)
-
-    if not do_compute_statistics:
-        return patients, {}
-
-    patients_by_id = sort_patients_by_id(patients.values())
-    tumors_by_patient_id = sort_tumors_by_patient(tumors.values())
-
-    try:
-        info_by_id = collect_info(
-            patients=patients_by_id,
-            tumors=tumors_by_patient_id,
-            diagnoses=combined_diagnoses_by_id,
-        )
-    except KeyError as key_err:
-        logger.error("Most likely, different patient IDs were found in dicts.")
-        raise KeyError from key_err
-
-    statistics = compute_statistics(info_by_id)
-
-    end_time = time.perf_counter()
-    logger.info(
-        "Entire query took %(time).3f s, returns %(count)d patients",
-        {"time": end_time - start_time, "count": patients.count()},
-    )
-
-    return patients, statistics
-
-
-def collect_info(
-    patients: Dict[int, Any],
-    tumors: Dict[int, Any],
-    diagnoses: Dict[int, Any],
-) -> Dict[int, Any]:
-    """
-    Collect the patient-, tumor-, and diagonse-information in one dictionary.
-
-    Args:
-        patients: Patients sorted by ID. Should be the output of `sort_patients_by_id`
-        tumors: Tumors by patient ID, as returned by `sort_tumors_by_patient`
-        diagnoses: Combined involvement by patient ID. Output of
-            `sort_diagnoses_by_patient`.
-
-    Returns:
-        A dictionary with patient IDs as keys and the combined information underneath.
-    """
-    for id, patient in patients.items():
-        patient["tumor"] = tumors[id]
-
-        for side, side_diagnose in diagnoses[id].items():
-            patient[side] = side_diagnose
-
-    return patients
-
-
-def compute_statistics(patients: Dict[int, Any]) -> Dict[str, Any]:
-    """
-    Use the collected information as returned by `collect_info` and generate
-    statistics for them.
-
-    Many of these statistics come in the form of a list of length 3. They indicate for
-    how many patients the correpsonding field was ``True`` (index ``1``), ``False``
-    (index ``-1``, meaning the last entry), or ``None`` (index ``0``).
-
-    So, for example, ``"hpv_status": [23, 82, 72]`` means that 82 patients are HPV
-    positive, 72 HPV negative and for 23 we do not have any information.
-
-    In the beginning, this kind of encoding seemed smart, because I could give semantic
-    meaning to an index (positive being +1, negative -1). But in Django's HTML
-    templates that doesn't work and I have to use 0, 1, and 2 there...
-    """
-    start_time = time.perf_counter()
-
-    statistics = {   # initialize counts of patient- & tumor-related fields
-        'total': len(patients),
-
-        'datasets': {ds.id: 0 for ds in Dataset.objects.all()},
-
-        'sex': np.zeros(shape=(3,), dtype=int),
-        'nicotine_abuse': np.zeros(shape=(3,), dtype=int),
-        'hpv_status': np.zeros(shape=(3,), dtype=int),
-        'neck_dissection': np.zeros(shape=(3,), dtype=int),
-        'n_status': np.zeros(shape=(3,), dtype=int),
-
-        'subsites': np.zeros(shape=len(Tumor.SUBSITE_DICT), dtype=int),
-        't_stages': np.zeros(shape=(len(Patient.T_stages),), dtype=int),
-        'central': np.zeros(shape=(3,), dtype=int),
-        'extension': np.zeros(shape=(3,), dtype=int),
+def assemble_selected_modalities(names: list[str]) -> dict[str, lyutils.ModalityConfig]:
+    """Turn a list of modality names into a dictionary of modality configurations."""
+    return {
+        name: modality_config
+        for name, modality_config in lyutils.get_default_modalities().items()
+        if name in names
     }
-    for side in ['ipsi', 'contra']:
-        for lnl in Diagnose.LNLs:
-            statistics[f'{side}_{lnl}'] = np.zeros(shape=(3,), dtype=int)
-
-    # loop through patients to populate the counts dictionary
-    for id, patient in patients.items():
-        statistics['datasets'][patient["dataset_id"]] += 1
-
-        # PATIENT specific counts
-        statistics['nicotine_abuse'] += tf2arr(patient["nicotine_abuse"])
-        statistics['hpv_status'] += tf2arr(patient["hpv_status"])
-        statistics['neck_dissection'] += tf2arr(patient["neck_dissection"])
-
-        # TUMOR specific counts
-        statistics['subsites'] += subsite2arr(patient["tumor"]["subsite"])
-        statistics['t_stages'][patient["tumor"]["t_stage"]] += 1
-        statistics['central'] += tf2arr(patient["tumor"]["central"])
-        statistics['extension'] += tf2arr(patient["tumor"]["extension"])
-
-        # N0/N+ counts
-        has_ipsi = any(patient["ipsi"][lnl] for lnl in Diagnose.LNLs)
-        has_contra = any(patient["contra"][lnl] for lnl in Diagnose.LNLs)
-
-        if not has_ipsi and not has_contra:
-            statistics['n_status'] += np.array([0,0,1])
-        else:
-            statistics['n_status'] += np.array([0,1,0])
-
-        # DIAGNOSE specific (involvement) counts
-        for side in ['ipsi', 'contra']:
-            for lnl in Diagnose.LNLs:
-                statistics[f'{side}_{lnl}'] += tf2arr(patient[side][lnl])
-
-    statistics["datasets"] = [num for num in statistics["datasets"].values()]
-
-    end_time = time.perf_counter()
-    logger.info(
-        "Statistics generation took %(time).3f s",
-        {"time": end_time - start_time},
-    )
-
-    return statistics
 
 
-def tf2arr(value):
+def get_risk_factor_query(cleaned_form: dict[str, Any]) -> QTypes:
+    """Create a query for the risk factors based on the cleaned form data."""
+    risk_factor_query = C("t_stage").isin(cleaned_form["t_stage"])
+    risk_factor_query &= C("subsite").isin(cleaned_form["subsite"])
+
+    for short_names in ["smoke", "hpv", "surgery", "midext", "central"]:
+        if cleaned_form[short_names] is not None:
+            risk_factor_query &= C(short_names) == cleaned_form[short_names]
+
+    if (is_n_plus := cleaned_form["is_n_plus"]) is not None:
+        risk_factor_query &= C("n_stage") > 0 if is_n_plus else C("n_stage") == 0
+
+    logger.debug(f"Query for risk factors: {risk_factor_query}")
+    return risk_factor_query
+
+
+def get_lnl_query(cleaned_form: dict[str, Any]) -> QTypes:
+    """Create a query for the LNLs based on the cleaned form data."""
+    lnl_query = NoneQ()
+    method = cleaned_form["modality_combine"]
+
+    for side in ["ipsi", "contra"]:
+        for lnl in LNLS:
+            field = f"{side}_{lnl}"
+            if cleaned_form[field] is not None:
+                lnl_query &= C(method, side, lnl) == cleaned_form[field]
+
+    logger.debug(f"Query for LNLs: {lnl_query}")
+    return lnl_query
+
+
+def join_dataset_tables(
+    datasets: QuerySet | Sequence[DatasetModel],
+    method: Literal["max_llh", "rank"] = "max_llh",
+) -> pd.DataFrame:
+    """Join the tables of the selected datasets into a single table.
+
+    This iterates through the datasets and loads their respective `pd.DataFrame` tables.
+    It also adds a column ``["dataset", "info", "name"]`` to the table to keep track of
+    which dataset a row belongs to. Finally, it concatenates all tables into a single
+    table and returns it.
+
+    In case the ``datasets`` are empty, a likewise empty table is created with all the
+    columns necessary to create a `Statistics` object. These columns are in turn
+    constructed from the schema of the `lydata.validator` module.
     """
-    Map ``True``, ``False`` & ``None`` to one-hot-arrays of length 3.
+    tables = []
+    for dataset in datasets:
+        table = dataset.load_dataframe()
+        table["dataset", "info", "name"] = dataset.name
+        tables.append(table)
 
-    This particular mapping comes from the fact that in the form ``True``, ``None``,
-    ``False`` are represented by integers 1, 0, -1. So, the one-hot encoding uses an
-    array of length 3 that is one only at these respective indices, where -1 is the
-    last item.
+    if len(tables) == 0:
+        schema = lyvalidator.construct_schema(modalities=[method])
+        empty_table = pd.DataFrame(columns=schema.columns.keys())
+        empty_table["dataset", "info", "name"] = []
+        return empty_table
 
-    See also the documentation of the `compute_statistics` function for an explanation
-    of this encoding.
+    return pd.concat(tables, ignore_index=True)
+
+
+def execute_query(cleaned_form_data: dict[str, Any]) -> pd.DataFrame:
+    """Execute the query defined by the `DataexplorerForm`.
+
+    After validating a `DataexplorerForm` by calling ``form.is_valid()``, the cleaned
+    data is accessible as the attribute ``form.cleaned_data``. The returned dictionary
+    should be passed to this function as the ``cleaned_form_data`` argument.
+
+    Based on
+    this cleaned form data, the involvement data from different modalities is combined
+    using the `lydata`_ accessor method `lydata.accessor.LyDataAccessor.combine`. Then,
+    a query is created using the `lydata.accessor.C` objects and executed on the
+    dataset using the `lydata.accessor.LyDataAccessor.query` method. The resulting
+    filtered dataset is returned.
+
+    .. _lydata: https://lydata.readthedocs.io/stable/
     """
-    if value is None:
-        return np.array([1, 0, 0], dtype=int)
-    else:
-        if value:
-            return np.array([0, 1, 0], dtype=int)
-        else:
-            return np.array([0, 0, 1], dtype=int)
-
-
-def subsite2arr(subsite):
-    """
-    Map different subsites to an one-hot-array of subsite groups.
-
-    E.g., a one in the first place means "base of tongue", at the second place is
-    "tonsil" and so on.
-    """
-    res = np.zeros(shape=len(Tumor.SUBSITE_DICT), dtype=int)
-
-    for i,subsite_list in enumerate(Tumor.SUBSITE_DICT.values()):
-        if subsite in subsite_list:
-            res[i] = 1
-
-    if np.sum(res) > 1:
-        logger.warning("Tumor associated with multiple subsites: %s", subsite)
-
-    return res
-
-
-def patient_specific(
-    patients: Optional[QuerySet] = None,
-    nicotine_abuse: Optional[bool] = None,
-    hpv_status: Optional[bool] = None,
-    neck_dissection: Optional[bool] = None,
-    dataset__in: Optional[Institution] = None,
-    **rest
-) -> QuerySet:
-    """
-    Filter ``QuerySet`` of patients based on patient-specific properties.
-
-    This function is designed in such a way that one can simply add another
-    argument to its definition without actually changing the logic inside it
-    and it will the be able to filter for that added argument (given that it
-    is also a field in the model `patients.models.Patient`).
-
-    Args:
-        patients: The ``QuerySet`` of patients to begin with. I ``None``, this is just
-            the entire patient dataset.
-        nicotine_abuse: Filter smokers or non-smokers?
-        hpv_status: Select based on HPV status.
-        neck_dissection: Filter thos that did or didn't undergo neck dissection.
-        dataset__in: Select based on the dataset that describes the respective patient.
-
-    Returns:
-        The filtered ``QuerySet``.
-    """
-    if patients is None:
-        patients = Patient.objects.all()
-
-    kwargs = locals()
     start_time = time.perf_counter()
-    kwargs.pop('patients')
-    kwargs.pop('rest')
+    method = cleaned_form_data["modality_combine"]
+    joined_table = join_dataset_tables(
+        datasets=cleaned_form_data["datasets"],
+        method=method,
+    )
 
-    # the form fields are named such that they can be inserted into the
-    # QuerySet filtering function directly
-    for key, value in kwargs.items():
-        if value is not None:
-            patients = patients.filter(**{key: value})
+    if len(joined_table) == 0:
+        return joined_table
 
+    combined_inv_subtable = joined_table.ly.combine(
+        modalities=assemble_selected_modalities(names=cleaned_form_data["modalities"]),
+        method=method,
+    )
+    combined_inv_table = pd.concat({method: combined_inv_subtable}, axis="columns")
+    combined_table = joined_table.join(combined_inv_table)
+    query = get_risk_factor_query(cleaned_form_data) & get_lnl_query(cleaned_form_data)
+    queried_table = combined_table.ly.query(query)
     end_time = time.perf_counter()
-    logger.info(
-        "Patient query took %(time).3f s",
-        {"time": end_time - start_time},
-    )
 
-    return patients
+    logger.info(f"Query executed in {end_time - start_time:.2f} seconds.")
+    logger.info(f"{len(queried_table)} patients remain in queried dataset.")
 
-
-def sort_patients_by_id(patients: QuerySet) -> Dict[int, Any]:
-    """Collect patient information by patient ID in a dictionary."""
-    sorted_patients = {}
-    for patient in patients:
-        patient_id = patient.pop("id")
-        sorted_patients[patient_id] = patient
-
-    return sorted_patients
+    return queried_table
 
 
-def tumor_specific(
-    tumors: Optional[QuerySet] = None,
-    subsite__in: Optional[List[str]] = None,
-    t_stage__in: Optional[List[int]] = None,
-    central: Optional[bool] = None,
-    extension: Optional[bool] = None,
-    **rest
-) -> QuerySet:
+def safe_value_counts(column: pd.Series) -> dict[Any, int]:
+    """Return the value counts of a column, including missing values as ``None``.
+
+    >>> column = pd.Series(['a', 'b', 'c', np.nan, 'a', 'b', 'c', 'a', 'b', 'c'])
+    >>> safe_value_counts(column)
+    {'a': 3, 'b': 3, 'c': 3, None: 1}
     """
-    Filter ``QuerySet`` of tumors based on tumor-specific properties.
+    result = {}
 
-    It works almost exactly like the patient-specific querying function
-    `patient_specific` in terms of adding new arguments to filter by.
+    for key, value in column.value_counts(dropna=False).to_dict().items():
+        key = key if not pd.isna(key) else None
+        result[key] = value
 
-    Args:
-        tumors: ``QuerySet`` of tumors to begin with. if ``None``, this simply
-            includes all patients in the database.
-        subsite__in: Is the tumor's subsite in this list of subsites?
-        t_stage__in: Does the tumor's T-stage match one of this list?
-        central: Is the tumor symmetric w.r.t. the mid-sagittal line?
-        extension: Does the tumor extend over the mid-sagittal line?
+    return result
 
-    Returns:
-        The ``QuerySet`` of tumors filtered for the requested characterisics.
+
+KT = TypeVar("KT")
+EnsureKeysSignature = Callable[[dict[KT, int]], dict[KT, int]]
+
+
+def make_ensure_keys_validator(keys: list[KT]) -> EnsureKeysSignature:
+    """Create an `AfterValidator` to ensure all ``keys`` are present in the data.
+
+    This creates a function that can be used with pydantic's `AfterValidator` to ensure
+    that all ``keys`` are present in the validated data. pydantic first receives the
+    value counts from the `safe_value_counts` function, validates it, and then calls the
+    function created by this wrapper to ensure that all keys are present.
     """
-    if tumors is None:
-        tumors = Tumor.objects.all()
 
-    kwargs = locals()                     # extract keyword arguments and...
-    start_time = time.perf_counter()
-    kwargs.pop('tumors')                  # ...remove the tumor queryset and...
-    kwargs.pop('rest')                    # ...any other kwargs from this dictionary.
+    def ensure_keys(data: dict[KT, int]) -> dict[KT, int]:
+        """Ensure all `keys` are present in the data."""
+        initial = {key: 0 for key in keys}
+        initial.update(data)
+        return initial
 
-    for key, value in kwargs.items():     # iterate over provided kwargs and ...
-        if value is not None:             # ...if it's of interest, then filter
-            tumors = tumors.filter(**{key: value})
-
-    end_time = time.perf_counter()
-    logger.info(
-        "Tumor query took %(time).3f s",
-        {"time": end_time - start_time},
-    )
-
-    return tumors
+    return ensure_keys
 
 
-def sort_tumors_by_patient(tumors: QuerySet) -> Dict[int, Any]:
-    """Collect tumor information by patient ID in a dictionary."""
-    sorted_tumors = {}
-    for tumor in tumors:
-        patient_id = tumor.pop("patient_id")
-        sorted_tumors[patient_id] = tumor
+NullableBoolCounts = Annotated[
+    dict[Literal[True, False, None], int],
+    AfterValidator(make_ensure_keys_validator([True, False, None])),
+]
+"""Keys may be ``True``, ``False``, or ``None``, while values are the counts of each."""
+SexCounts = Annotated[
+    dict[Literal["male", "female"], int],
+    AfterValidator(make_ensure_keys_validator(keys=["male", "female"])),
+]
+"""Keys are ``male`` and ``female``, value are respective counts."""
+TStageCounts = Annotated[
+    dict[Literal[0, 1, 2, 3, 4], int],
+    AfterValidator(make_ensure_keys_validator(keys=[0, 1, 2, 3, 4])),
+]
+"""Keys are the T-stages, values are the counts of each."""
+SubsiteCounts = Annotated[
+    dict[str, int],
+    AfterValidator(make_ensure_keys_validator(keys=Subsites.all_values())),
+]
+"""Keys are the subsite ICD codes, values are the counts of each."""
 
-    return sorted_tumors
+T = TypeVar("T", bound="BaseStatistics")
 
 
-def diagnose_specific(
-    diagnoses: Optional[QuerySet],
-    modalities: Optional[List[int]],
-    modality_combine: str = "maxLLH",
-    n_status: Optional[bool] = None,
-    **kwargs,
-) -> Dict[int, Dict[str, Dict[str, Optional[bool]]]]:
+class BaseStatistics(BaseModel):
+    """Basic statistics to be computed and displayed on the dashboard.
+
+    This defines the base class with counts of the basic patient and tumor information.
+    It also defines the classmethod to compute the statistics from a dataset. In a
+    dynamically created subclass of this one, the fields for every LNL ipsi- and
+    contralaterally are added to the `Statistics` class.
     """
-    Filter the diagnoses based on selected involvement patterns.
 
-    In contrast to the `patient_specific` and `tumor_specific` functions, this one is
-    more complicated: It needs to combine multiple modalities' information before
-    checking if a patient's involvement matches the selected pattern.
+    datasets: dict[str, int]
+    """How many patients are in each dataset."""
+    sex: SexCounts
+    """Number of male and female patients."""
+    smoke: NullableBoolCounts
+    """Number of patients who did or did not smoke."""
+    hpv: NullableBoolCounts
+    """Patients with or without HPV."""
+    surgery: NullableBoolCounts
+    """Number of patients that did or did not undergo surgery."""
+    t_stage: TStageCounts
+    """Counts of patients with different T-stages."""
+    is_n_plus: NullableBoolCounts
+    """Number of patients with or without N+ status."""
+    subsite: SubsiteCounts
+    """Number of patients with tumors in different subsites."""
+    central: NullableBoolCounts
+    """For how many patients was the tumor located centrally, for how many not?"""
+    midext: NullableBoolCounts
+    """Number of patients with or without tumors crossing the midline."""
 
-    Args:
-        diagnoses: ``QuerySet`` of diagnoses. If ``None``, all diagnose entries in the
-            database will be used.
-        modalities: List of diagnostic modalities to consider in the filtering.
-        modality_combine: Name of the method to use for combining multiple, possibly
-            conflicting diagnoses from different modalities.
-        n_status: If ``True``, only patients will be kept that are N+ patients.
-            ``False`` means only N0 patients are kept and ``None`` ignores N-status.
+    @computed_field
+    @property
+    def total(self) -> int:
+        """Return the total number of patients in the dataset."""
+        return sum(self.datasets.values())
 
-    Returns:
-        A nested dictionary with patient IDs as top-level keys. Under each patient,
-        there are the keys ``"ipsi"`` and ``"contra"``. And under that, finally, a
-        dictionary stores the combined involvement (can be ``True`` for metastatic,
-        ``False`` for healthy, or ``None`` for unknown) per LNL.
-    """
-    if diagnoses is None:
-        diagnoses = Diagnose.objects.all()
+    @classmethod
+    def from_table(
+        cls: type[T],
+        table: pd.DataFrame,
+        method: Literal["max_llh", "rank"] = "max_llh",
+    ) -> T:
+        """Compute statistics from a table of patients.
 
-    start_time = time.perf_counter()
-
-    diagnoses = diagnoses.filter(modality__in=modalities)
-    sorted_diagnoses = sort_diagnoses_by_patient(diagnoses)
-    combined_diagnoses = combine_diagnoses(modality_combine, sorted_diagnoses)
-    filter_pattern = extract_filter_pattern(kwargs)
-
-    patient_ids_to_delete = []
-    for patient_id, patient_diagnose in combined_diagnoses.items():
-        if not does_patient_match(patient_diagnose, filter_pattern, n_status):
-            patient_ids_to_delete.append(patient_id)
-
-    for patient_id in patient_ids_to_delete:
-        combined_diagnoses.pop(patient_id, None)
-
-    end_time = time.perf_counter()
-    logger.info(
-        "Diagnose query took %(time).3f s",
-        {"time": end_time - start_time},
-    )
-
-    return combined_diagnoses
-
-
-def sort_diagnoses_by_patient(diagnoses: QuerySet) -> Dict[int, Dict[str, np.ndarray]]:
-    """
-    Use a ``QuerySet`` of `patient.models.Diagnose` and sort its entries into a
-    nested dictionary.
-
-    The top level of the dictionary has the patient's IDs as keys. Underneath it is
-    sorted by side (``ipsi`` & ``contra``). The values of those are then `numpy`
-    matrices that are indexed by modality and by LNL. They hold the involvement that
-    was oserved by the corresponding modality for the respective LNL.
-
-    Args:
-        diagnoses: The ``QuerySet`` of diagnoses.
-
-    Returns:
-        The sorted, nested dictionary.
-    """
-    diagnoses = diagnoses.values()
-
-    sorted_diagnoses = {}
-    empty_diagnose_matrix = np.full(
-        shape=(len(Diagnose.LNLs), len(Diagnose.Modalities)),
-        fill_value=None,
-    )
-    modality_to_idx = {mod: i for i,mod in enumerate(Diagnose.Modalities.values)}
-
-    for diagnose in diagnoses:
-        if (patient_id := diagnose["patient_id"]) not in sorted_diagnoses:
-            patient_diagnose = {}
-        else:
-            patient_diagnose = sorted_diagnoses[patient_id]
-
-        if (side := diagnose["side"]) not in patient_diagnose:
-            side_diagnose = empty_diagnose_matrix.copy()
-        else:
-            side_diagnose = patient_diagnose[side]
-
-        modality_idx = modality_to_idx[diagnose["modality"]]
-
-        for i,lnl in enumerate(Diagnose.LNLs):
-            side_diagnose[i,modality_idx] = diagnose[lnl]
-
-        patient_diagnose[side] = side_diagnose
-        sorted_diagnoses[patient_id] = patient_diagnose
-
-    return sorted_diagnoses
-
-
-class ModalityCombinor:
-    """
-    Utility class that defines and helps to select the various methods for combining
-    diagnoses from different modalities.
-    """
-    def __init__(self, method: str) -> None:
+        This method computes e.g. how many patients in the queried table are
+        HPV positive, or how many patients have a certain T-stage. The statistics are
+        computed from the queried table and passed to the context of the
+        `dataexplorer.views`. From there, the statistics can be displayed in the
+        rendered HTML or JSON response.
         """
-        Initialize the helper class with the name of the method to combine modalities.
-        """
-        # pylint: disable=not-an-iterable
-        self.method = method
-        self.specificities = tuple(mod.spec for mod in Diagnose.Modalities)
-        self.sensitivities = tuple(mod.sens for mod in Diagnose.Modalities)
+        start_time = time.perf_counter()
 
-    @staticmethod
-    @lru_cache
-    def logical_OR(
-        values: Tuple[Optional[bool]],
-        specificities: Tuple[float],
-        sensitivities: Tuple[float],
-    ) -> bool:
-        """Use the logical OR to determine combined involvement."""
-        return any(values)
-
-    @staticmethod
-    @lru_cache
-    def logical_AND(
-        values: Tuple[Optional[bool]],
-        specificities: Tuple[float],
-        sensitivities: Tuple[float],
-    ) -> bool:
-        """Logical AND combination method."""
-        return any(not(v) if v is not None else None for v in values)
-
-    @staticmethod
-    @lru_cache
-    def rank(
-        values: Tuple[Optional[bool]],
-        specificities: Tuple[float],
-        sensitivities: Tuple[float],
-    ) -> bool:
-        """
-        Combine diagnoses by trusting the one with the highest spcificity/sensitivity.
-        """
-        healthy_sens = [
-            sensitivities[i] for i,value in enumerate(values) if value is False
-        ]
-        involved_spec = [
-            specificities[i] for i,value in enumerate(values) if value is True
-        ]
-        return np.max([*healthy_sens, 0.]) < np.max([*involved_spec, 0.])
-
-    @staticmethod
-    @lru_cache
-    def max_llh(
-        values: Tuple[Optional[bool]],
-        specificities: Tuple[float],
-        sensitivities: Tuple[float],
-    ) -> bool:
-        """
-        Combine diagnoses by computing true involvement is the most likely, given the
-        provided set of observations.
-        """
-        healthy_llh = 1.
-        involved_llh = 1.
-
-        for value, spec, sens in zip(values, specificities, sensitivities):
-            if value is None:
-                continue
-            if value:
-                healthy_llh *= 1. - spec
-                involved_llh *= sens
-            else:
-                healthy_llh *= spec
-                involved_llh *= 1. - sens
-
-        return healthy_llh < involved_llh
-
-    def combine(self, values: Tuple[Optional[bool]]) -> Optional[bool]:
-        """
-        Choose the method to combine the diagnoses and perform the combination using
-        the stored values for sensitivity and specificity.
-        """
-        if all(value is None for value in values):
-            return None
-
-        method_dict = {
-            "OR": self.logical_OR,
-            "AND": self.logical_AND,
-            "rank": self.rank,
-            "maxLLH": self.max_llh,
-        }
-
-        return method_dict[self.method](
-            values, self.specificities, self.sensitivities
-        )
-
-
-def combine_diagnoses(
-    method: Callable,
-    diagnoses: Dict[int, Dict[str, np.ndarray]]
-) -> Dict[int, Dict[str, Dict[str, Optional[bool]]]]:
-    """
-    Combine the potentially conflicting diagnoses for each patient and each side
-    according to the chosen combination method.
-
-    Args:
-        method: The function used to combine them. It should only take a tuple of
-            values where each value represents the involvement for the same LNL as
-            reported by the different modalities. The order of the values corresponds
-            to the order of the modalities in `patients.models.Diagnose.Modalities`.
-        diagnoses: This should be the output of the `sort_diagnoses` function.
-
-    Returns:
-        A dictionary where the combined involvement per LNL is stored under the
-        corresponding patient ID, side (``ipsi`` or ``contra``) and the respective
-        LNL's name (e.g. ``IIa``).
-    """
-    method = ModalityCombinor(method).combine
-    combined_diagnoses = {}
-
-    for patient_id, patient_diagnose in diagnoses.items():
-        combined_diagnoses[patient_id] = {}
-        for side in ["ipsi", "contra"]:
-            if side not in patient_diagnose:
-                combined_diagnoses[patient_id][side] = {
-                    lnl: None for lnl in Diagnose.LNLs
-                }
+        stats = {}
+        for name in cls.model_fields:
+            # these fields deal with the LNLs
+            if "ipsi" in name or "contra" in name:
+                side, lnl = name.split("_")
+                stats[name] = safe_value_counts(table[method, side, lnl])
                 continue
 
-            side_diagnose = patient_diagnose[side]
-            combined_diagnoses[patient_id][side] = {}
-            for i,lnl in enumerate(Diagnose.LNLs):
-                combined_diagnoses[patient_id][side][lnl] = method(
-                    tuple(side_diagnose[i])
-                )
-
-    return combined_diagnoses
-
-
-def extract_filter_pattern(
-    kwargs: Dict[str, Optional[bool]],
-) -> Dict[str, Dict[str, Optional[bool]]]:
-    """
-    Sort the ``kwargs`` from the request.
-
-    The filter patterns are sent in the request (e.g. as ``{ipsi_IIa: True}``). This
-    method sorts them into a dictionary by side (``ipsi`` or ``contra``) and by LNL.
-    """
-    filter_pattern = {"ipsi": {}, "contra": {}}
-    for key, value in kwargs.items():
-        pattern = r"(ipsi|contra)_([IVX]{1,3}[ab]?)"
-        if (match := re.match(pattern, key)) is not None:
-            filter_pattern[match[1]][match[2]] = value
-
-    return filter_pattern
-
-
-def does_patient_match(
-    patient_diagnose: Dict[str, Dict[str, Optional[bool]]],
-    filter_pattern: Dict[str, Dict[str, Optional[bool]]],
-    n_status: Optional[bool],
-) -> bool:
-    """
-    Compare the diagnose of a patient with the involvement pattern to filter for.
-
-    A 'match' occurs, when for both sides (``ipsi`` & ``contra``)
-    and all LNLs the patient's diagnose and the ``filter_pattern`` are the same or the
-    latter is undefined (``None``).
-
-    Args:
-        patient_diagnose: The diagnose of a single patient, as they are stored by their
-            IDs in the output of the `combine_diagnoses` dictionary.
-        filter_pattern: The involvement pattern that was selected in the `dashboard`
-            by the user, collected in the same format as the ``patient_diagnose``.
-        n_status: If ``True``, only patients will be kept that are N+ patients.
-            ``False`` means only N0 patients are kept and ``None`` ignores N-status.
-
-    Returns:
-        Whether ``patient_diagnose`` and ``filter_pattern`` match or not.
-    """
-    is_n_plus = False
-    for side, side_diagnose in patient_diagnose.items():
-        for lnl, lnl_diagnose in side_diagnose.items():
-            is_n_plus = True if lnl_diagnose is True else is_n_plus
-            if n_status is False and lnl_diagnose is True:
-                return False
-            if (lnl_pattern := filter_pattern[side][lnl]) is None:
+            # key `datasets` is not a shorthand code provided by the `lydata` package
+            if name == "datasets":
+                stats[name] = safe_value_counts(table["dataset", "info", "name"])
                 continue
-            if lnl_pattern != lnl_diagnose:
-                return False
 
-    if n_status is True:
-        return is_n_plus
+            # key `is_n_plus` is not a shorthand code provided by the `lydata` package
+            if name == "is_n_plus":
+                stats[name] = safe_value_counts(table.ly["n_stage"] > 0)
+                continue
 
-    return True
+            stats[name] = safe_value_counts(table.ly[name])
+
+        end_time = time.perf_counter()
+        logger.info(f"Statistics computed in {end_time - start_time:.2f} seconds.")
+        logger.debug(f"Statistics: {stats}")
+        return cls(**stats)
+
+
+lnl_fields = {
+    f"{side}_{lnl}": (NullableBoolCounts, ...)
+    for side in ["ipsi", "contra"]
+    for lnl in LNLS
+}
+"""LNL fields, dynamically created for unpacking in the `pydantic.create_model` call."""
+
+Statistics = create_model(
+    "Statistics",
+    __base__=BaseStatistics,
+    **lnl_fields,
+)
+"""
+Statistics to be computed and displayed on the dashboard.
+
+This class extends the `BaseStatistics` class by adding the dynamically created
+fields for the LNLs. That way, I did not have to write them by hand.
+
+The intended use is to first query a table of patients using the `execute_query`
+function with the cleaned form data from the `DataexplorerForm`. Then, pass the queried
+table to this class's `from_table` method to compute the statistics. Finally, pass the
+computed statistics to the context of the `dataexplorer.views` to be displayed in
+the rendered HTML or JSON response.
+
+By design, this class's fields mirror the fields of the `DataexplorerForm` class. This
+is obviously necessary, since any information data might be queried on is also
+information that one can compute statistics on.
+"""

@@ -1,0 +1,41 @@
+{% load customtags %}
+
+<div class="box is-height-100">
+  <div class="level">
+    <div class="level-item">
+      <p class="title is-4">{{ side }}lateral</p>
+    </div>
+    <div class="level-right">
+      <div class="level-item">
+        <div class="tooltip">
+          <span class="icon">
+            <i class="fas fa-question"></i>
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <table class="table is-fullwidth">
+    <thead>
+      <tr>
+        <td>LNL</td>
+        <td class="has-text-centered">select</td>
+        <td class="has-text-centered">risk</td>
+      </tr>
+    </thead>
+    <tbody>
+      {% for lnl in lnls %}
+      {% with side|concat:'_' as side_ %}
+      {% with side_|concat:lnl as lnl_key %}
+      <tr>
+        <td>{{ lnl }}</td>
+        <td>{{ form|get:lnl_key }}</td>
+        {% include 'barplot.html' with stats=risks lnl_key=lnl_key show_percent=True hide_tooltip=True %}
+      </tr>
+      {% endwith %}
+      {% endwith %}
+      {% endfor %}
+    </tbody>
+  </table>
+</div>

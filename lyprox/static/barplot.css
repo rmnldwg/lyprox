@@ -1,0 +1,19 @@
+.barplot {
+    background-image:
+        linear-gradient(#AE0060,#AE0060),
+        linear-gradient(#BDCFD6,#BDCFD6),
+        linear-gradient(#00AFA5,#00AFA5);
+    background-repeat:no-repeat;
+}
+
+.barplot-legend {
+    width: 40px;
+}
+
+.barplot-tablecell {
+    width: 100%;
+}
+
+span[data-tooltip] {
+    border-bottom: none;
+}

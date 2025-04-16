@@ -1,22 +1,43 @@
-"""
-Module for the views of the riskpredictor app.
-"""
+"""Module for the views of the riskpredictor app."""
+
 # pylint: disable=attribute-defined-outside-init
 import json
 import logging
-from typing import Any, Dict
+from typing import Any
 
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.http import HttpResponse, JsonResponse
+from django.http import HttpRequest, HttpResponse, JsonResponse
 from django.shortcuts import render
-from django.views.generic import CreateView, DetailView, ListView
+from django.views.generic import CreateView, ListView
+from lymph import graph
+from lymph.types import Model
 
-from ..loggers import ViewLoggerMixin
-from . import predict
-from .forms import DashboardForm, InferenceResultForm
-from .models import InferenceResult
+from lyprox.loggers import ViewLoggerMixin
+from lyprox.riskpredictor import predict
+from lyprox.riskpredictor.forms import CheckpointModelForm, RiskpredictorForm
+from lyprox.riskpredictor.models import (
+    CheckpointModel,
+    cached_construct_model_and_add_dists,
+)
 
 logger = logging.getLogger(__name__)
+
+
+def retrieve_graph_representation(model: Model) -> graph.Representation:
+    """Retrieve the graph representation from a model."""
+    if hasattr(model, "graph"):
+        return model.graph
+
+    if hasattr(model, "hpv"):
+        return retrieve_graph_representation(model.hpv)
+
+    if hasattr(model, "ipsi"):
+        return retrieve_graph_representation(model.ipsi)
+
+    if hasattr(model, "ext"):
+        return retrieve_graph_representation(model.ext)
+
+    raise ValueError("Model does not have a graph representation.")
 
 
 def test_view(request):
@@ -24,129 +45,102 @@ def test_view(request):
     return render(request, "riskpredictor/test.html")
 
 
-class AddInferenceResultView(
+class AddCheckpointModelView(
     ViewLoggerMixin,
     LoginRequiredMixin,
     CreateView,
 ):
-    """View for adding a new `InferenceResult` instance."""
-    model = InferenceResult
-    form_class = InferenceResultForm
-    template_name = "riskpredictor/inference_result_form.html"
+    """View for adding a new `CheckpointModel` instance."""
+
+    model = CheckpointModel
+    form_class = CheckpointModelForm
+    template_name = "riskpredictor/checkpoint_form.html"
     success_url = "/riskpredictor/list/"
 
 
-class ChooseInferenceResultView(
-    ViewLoggerMixin,
-    ListView,
-):
-    """View for choosing a `InferenceResult` instance."""
-    model = InferenceResult
-    template_name = "riskpredictor/inference_result_list.html"
-    context_object_name = "inference_results"
+class ChooseCheckpointModelView(ViewLoggerMixin, ListView):
+    """View for choosing a `CheckpointModel` instance."""
 
-    def get_context_data(self, **kwargs: Any) -> Dict[str, Any]:
+    model = CheckpointModel
+    template_name = "riskpredictor/checkpoint_list.html"
+    context_object_name = "checkpoints"
+
+    def get_context_data(self, **kwargs: Any) -> dict[str, Any]:
+        """Add the form to the context."""
         context = super().get_context_data(**kwargs)
         self.logger.info(context)
         return context
 
 
-class RiskPredictionView(
-    ViewLoggerMixin,
-    DetailView,
-):
-    """View for the dashboard of the riskpredictor app."""
-    model = InferenceResult
-    form_class = DashboardForm
-    template_name = "riskpredictor/dashboard.html"
-    context_object_name = "inference_result"
+def render_risk_prediction(request: HttpRequest, checkpoint_pk: int) -> HttpResponse:
+    """View for the riskpredictor dashboard."""
+    request_data = request.GET
+    checkpoint = CheckpointModel.objects.get(pk=checkpoint_pk)
+    form = RiskpredictorForm(request_data, checkpoint=checkpoint)
+
+    if not form.is_valid():
+        logger.info("Riskpredictor form not valid.")
+        form = RiskpredictorForm.from_initial(checkpoint=checkpoint)
+
+    if not form.is_valid():
+        logger.error("Form is not valid even after initializing with initial data.")
+        return HttpResponse("Form is not valid.")
+
+    lnls = list(form.get_lnls())
+    risks = predict.compute_risks(
+        checkpoint=checkpoint,
+        form_data=form.cleaned_data,
+        lnls=lnls,
+    )
+    graph_config, model_config, dist_configs, version = checkpoint.validate_configs()
+    model = cached_construct_model_and_add_dists(
+        graph_config=graph_config,
+        model_config=model_config,
+        dist_configs=dist_configs,
+        version=version,
+    )
+    model.set_named_params(*checkpoint.fetch_samples().mean(axis=0))
+    graph_repr = retrieve_graph_representation(model)
+
+    context = {
+        "checkpoint": checkpoint,
+        "form": form,
+        "risks": risks,
+        "lnls": lnls,
+        "graph_mermaid": graph_repr.get_mermaid(),
+        "model_params": model_config.model_dump(),
+        "dist_params": {
+            dist: dist_config.model_dump() for dist, dist_config in dist_configs.items()
+        },
+    }
+    return render(request, "riskpredictor/layout.html", context)
 
 
-    @classmethod
-    def handle_form(
-        cls,
-        inference_result: InferenceResult,
-        data: Dict[str, Any],
-    ) -> Dict[str, Any]:
-        """Populate the form and compute the risks.
-
-        Either fill the form with the request data or with the initial data. Then, call
-        the risk prediction methods and store the results in the `risks` attribute.
-        """
-        form = cls.form_class(data, inference_result=inference_result)
-
-        if not form.is_valid():
-            logger.info(form.errors.as_data())
-            if form.cleaned_data.get("is_submitted", False):
-                errors = form.errors.as_data()
-                logger.warning("Form is not valid, errors are: %s", errors)
-                risks = predict.default_risks(inference_result)
-                return form, risks
-
-            form = cls.initialize_form(form, inference_result)
-
-        risks = predict.risks(
-            inference_result=inference_result,
-            **form.cleaned_data,
-        )
-
-        return form, risks
-
-
-    @classmethod
-    def initialize_form(
-        cls,
-        form: DashboardForm,
-        inference_result: InferenceResult,
-    ) -> DashboardForm:
-        """Fill the form with the initial data from the respective form fields."""
-        initial = {}
-        for field_name, field in form.fields.items():
-            initial[field_name] = form.get_initial_for_field(field, field_name)
-
-        form = cls.form_class(initial, inference_result=inference_result)
-
-        if not form.is_valid():
-            errors = form.errors.as_data()
-            logger.warning("Initial form still invalid, errors are: %s", errors)
-
-        return form
-
-
-    def get_object(self, queryset=None) -> InferenceResult:
-        inference_result = super().get_object(queryset)
-        form, risks = self.handle_form(inference_result, data=self.request.GET)
-        self.form = form
-        self.risks = risks
-        return inference_result
-
-
-    def get_context_data(self, **kwargs: Any) -> Dict[str, Any]:
-        context = super().get_context_data(**kwargs)
-        context["form"] = self.form
-        context["risks"] = self.risks
-        return context
-
-
-def riskpredictor_AJAX_view(request, pk: int, **kwargs: Any) -> JsonResponse:
+def update_risk_prediction(request: HttpRequest, checkpoint_pk: int) -> JsonResponse:
     """View for the AJAX request of the riskpredictor dashboard.
 
-    This view receives the same data as the `RiskPredictionView`, albeit in JSON format.
-    It then computes the risks and returns them in JSON format again to be handled
-    by JavaScript on the client side.
+    This view receives the same data as the `render_risk_prediction` function, but in
+    JSON format. It then computes the risks and returns them in JSON format again to be
+    handled by JavaScript on the client side.
     """
-    data = json.loads(request.body.decode("utf-8"))
-    inference_result = InferenceResult.objects.get(pk=pk)
-    form, risks = RiskPredictionView.handle_form(inference_result, data)
-    risks["type"] = "risks"   # tells JavaScript how to write the labels
-    risks["total"] = 100.     # necessary for JavaScript barplot updater
+    request_data = json.loads(request.body.decode("utf-8"))
+    checkpoint = CheckpointModel.objects.get(pk=checkpoint_pk)
+    form = RiskpredictorForm(request_data, checkpoint=checkpoint)
 
-    if form.is_valid():
-        logger.info("AJAX form valid, returning success and risks.")
-        return JsonResponse(data=risks)
+    if not form.is_valid():
+        logger.error("Riskpredictor from from AJAX request not valid.")
+        return JsonResponse({"error": "Form is not valid."})
 
-    logger.warning("AJAX form invalid.")
-    return JsonResponse(data={"error": "Something went wrong."}, status=400)
+    lnls = list(form.get_lnls())
+    risks = predict.compute_risks(
+        checkpoint=checkpoint,
+        form_data=form.cleaned_data,
+        lnls=lnls,
+    )
+    risks = risks.model_dump()
+    risks["total"] = 100.0
+    risks["type"] = "risk"
+    return JsonResponse(risks)
 
 
 def help_view(request) -> HttpResponse:

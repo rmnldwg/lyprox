@@ -36,7 +36,7 @@
             <div class="control">
               {% if user.is_authenticated %}
               <div class="buttons has-addons">
-                <div class="button is-primary is-inverted">
+                <div class="button has-background-white has-text-primary is-outlined">
                   <span class="icon-text">
                     <span class="icon mr-2">
                       <img src="{{ user.institution.logo.url }}" alt="{{ user.institution.shortname }} logo">
@@ -44,7 +44,7 @@
                     <span>{{ user }}</span>
                   </span>
                 </div>
-                <a href="{% url 'accounts:logout' %}" class="button is-primary is-inverted is-outlined" title="logout">
+                <a href="{% url 'accounts:logout' %}" class="button is-outlined" title="logout">
                   <span>Log out</span>
                   <span class="icon">
                     <i class="fas fa-sign-out-alt"></i>
@@ -52,7 +52,7 @@
                 </a>
               </div>
               {% else %}
-              <a href="{% url 'accounts:login' %}" class="button is-primary is-inverted is-outlined" title="login">
+              <a href="{% url 'accounts:login' %}" class="button has-background-white has-text-primary" title="login">
                 <span class="icon">
                   <i class="fas fa-sign-in-alt"></i>
                 </span>
@@ -65,12 +65,12 @@
                 <div class="dropdown-trigger">
                   <div class="buttons has-addons">
                     <a href="https://github.com/rmnldwg/lyprox" target="_blank" title="Source code on GitHub"
-                      class="button is-primary is-inverted has-tooltip-bottom">
+                      class="button is-outlined has-background-white has-text-primary has-tooltip-bottom">
                       <span class="icon">
                         <i class="fab fa-lg fa-github"></i>
                       </span>
                     </a>
-                    <button class="button is-primary is-inverted is-outlined" title="View other/older versions">
+                    <button class="button is-outlined" title="View other/older versions">
                       <span>v{{ VERSION }}</span>
                       {% if IS_FROZEN %}
                       <span class="icon" title="frozen version">

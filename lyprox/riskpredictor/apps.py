@@ -1,7 +1,11 @@
+"""Boilerplate Django configuration for the riskpredictor app."""
+
 from django.apps import AppConfig
 
 
 class RiskConfig(AppConfig):
-    default_auto_field = 'django.db.models.BigAutoField'
-    name = 'lyprox.riskpredictor'
+    """Django configuration for the riskpredictor app."""
+
+    default_auto_field = "django.db.models.BigAutoField"
+    name = "lyprox.riskpredictor"
     add_to_navbar = True

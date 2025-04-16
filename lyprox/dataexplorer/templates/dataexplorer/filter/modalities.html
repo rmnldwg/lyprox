@@ -1,4 +1,4 @@
-<div class="tile is-child box">
+<div class="box is-height-100">
   <div class="columns">
     <div class="column is-2 is-flex is-flex-direction-row is-justify-content-left is-align-items-center">
       <p id="modalities-title" class="title is-4">Modalities</p>
@@ -7,9 +7,9 @@
     <div class="column is-8">
       <div class="field is-grouped is-grouped-multiline">
         {% for checkbox in form.modalities %}
-        <div class="control is-expanded">
+        <div class="control">
           {{ checkbox.tag }}
-          <label for="{{ checkbox.id_for_label }}" class="button is-primary is-light is-fullwidth">
+          <label for="{{ checkbox.id_for_label }}" class="button is-link is-light">
             {{ checkbox.choice_label }}
           </label>
         </div>

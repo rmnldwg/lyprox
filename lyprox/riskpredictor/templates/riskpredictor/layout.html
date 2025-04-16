@@ -1,0 +1,112 @@
+{% extends 'base.html' %}
+
+{% load sekizai_tags %}
+{% load customtags %}
+{% load static %}
+
+{% block head %}
+{% include 'head_content.html' with title="LyProX · Compute Personalized Risk" %}
+{% endblock head %}
+
+{% block "css" %}
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/default.min.css">
+<link rel="stylesheet" href="{% static 'dashboard.css' %}">
+{% endblock "css" %}
+
+{% block "js" %}
+<script src="https://cdn.jsdelivr.net/npm/bulma-slider@2.0.5/dist/js/bulma-slider.min.js"></script>
+<script src="https://unpkg.com/prettier@2.8.7/standalone.js"></script>
+<script src="https://unpkg.com/prettier@2.8.7/parser-yaml.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
+<script src="{% static 'dataexplorer/dashboard.js' %}"></script>
+<script src="{% static 'riskpredictor/yaml_formatter.js' %}"></script>
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+</script>
+{% endblock "js" %}
+
+{% block content %}
+<!--
+  The CSRF token is not necessary for the GET request by this form, but for the AJAX request.
+  Also, it is outside the form such that it doesn't get sent via the keyboard shortcut GET request.
+-->
+{% csrf_token %}
+<form action="{% url 'riskpredictor:dashboard' checkpoint_pk=checkpoint.pk %}" method="GET" id="dashboard-form" name="dashboardform">
+  <section class="section">
+    <div class="fixed-grid has-4-cols">
+      <div class="grid">
+        <div class="grid is-height-100">
+          <div class="cell is-col-span-1">
+            <div class="fixed-grid has-1-cols is-height-100">
+              <div class="grid is-height-100">
+                <div class="cell is-col-span-1">
+                  {% include 'riskpredictor/boxes/tumor.html' with form=form is_midline=checkpoint.is_midline %}
+                </div>
+                <div class="cell is-col-span-1">
+                  {% include 'riskpredictor/boxes/spec_sens.html' %}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="cell is-col-span-3">
+          <div class="fixed-grid is-height-100 has-2-cols">
+            <div class="grid is-height-100">
+              <div class="cell">
+                {% if not checkpoint.is_unilateral %}
+                {% include 'riskpredictor/boxes/risk.html' with form=form side='contra' %}
+                {% endif %}
+              </div>
+              <div class="cell">
+                {% include 'riskpredictor/boxes/risk.html' with form=form side='ipsi' risks=risks %}
+              </div>
+              <div class="cell is-col-span-2">
+                {% include 'riskpredictor/boxes/controls.html' %}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <h3 class="title is-3">Model Definition</h3>
+    <h3 class="subtitle is-5">
+      <a class="has-text-primary is-family-monospace" href="https://github.com/{{ checkpoint.repo_name }}/tree/{{ checkpoint.ref }}">
+        <span class="icon-text">
+          <span class="icon">
+            <i class="fab fa-github"></i>
+          </span>
+          <span>{{ checkpoint }}</span>
+        </span>
+      </a>
+    </h3>
+    <div class="fixed-grid has-3-cols">
+      <div class="grid">
+        <div class="cell">
+          <div class="box is-height-100">
+            <h4 class="title is-4">Graph</h2>
+            <div class="block">
+              <pre class="mermaid p-3">{{ graph_mermaid }}</pre>
+            </div>
+          </div>
+        </div>
+        <div class="cell">
+          <div class="box is-height-100">
+            <h4 class="title is-4">Model</h2>
+            <div class="block yaml-source" data-yaml="{% render_yaml model_params %}">
+              <pre class="p-3"><code class="yaml-display language-yaml p-0"></code></pre>
+            </div>
+          </div>
+        </div>
+        <div class="cell">
+          <div class="box is-height-100">
+            <h4 class="title is-4">Distributions</h2>
+            <div class="block yaml-source" data-yaml="{% render_yaml dist_params %}">
+              <pre class="p-3"><code class="yaml-display language-yaml p-0"></code></pre>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</form>
+{% endblock content %}

@@ -43,5 +43,14 @@
         "country": "NL",
         "phone": "+31503616161",
         "logo": "logos/umcg.png"
+    },
+    {
+        "name": "Universitätsklinikum Freiburg",
+        "shortname": "UKF",
+        "street": "Breisacher Straße 153",
+        "city": "Freiburg",
+        "country": "DE",
+        "phone": "+497612700",
+        "logo": "logos/ukf.png"
     }
 ]

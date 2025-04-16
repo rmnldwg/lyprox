@@ -1,191 +1,252 @@
-"""
-This module contains the forms used in the riskpredictor app.
+"""Forms used in the `riskpredictor` app.
 
-The first form, the `InferenceResultForm`, is used to create a new
-`models.InferenceResult` and makes sure that the user enters a valid git repository
+The first form, the `CheckpointModelForm`, is used to create a new
+`models.CheckpointModel` and makes sure that the user enters a valid git repository
 and revision.
 """
-from typing import Any, Dict
+
+from typing import Any, TypeVar
 
 from django import forms
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.forms import ValidationError, widgets
 from dvc.api import DVCFileSystem
 from dvc.scm import CloneError, RevError
-from lyscripts.predict.utils import complete_pattern
+from lymph import graph, models
 
-from .. import loggers
-from ..dataexplorer.forms import ThreeWayToggle, trio_to_bool
-from .models import InferenceResult
+from lyprox import loggers
+from lyprox.dataexplorer.forms import ThreeWayToggle
+from lyprox.riskpredictor.models import CheckpointModel
+from lyprox.utils import form_from_initial
 
 
 class RangeInput(widgets.NumberInput):
+    """A widget for a range slider input field."""
+
     input_type = "range"
 
 
-class InferenceResultForm(loggers.FormLoggerMixin, forms.ModelForm):
-    """Form for creating a new `InferenceResult` instance."""
-    git_repo_url = forms.URLField(
-        label="GitHub repository URL",
-        help_text="The URL of the GitHub repository that contains the trained model.",
-        initial="https://github.com/rmnldwg/lynference",
-        widget=widgets.TextInput(attrs={
-            "class": "input",
-            "placeholder": "e.g. https://github.com/my/repo",
-        }),
-    )
+class CheckpointModelForm(loggers.FormLoggerMixin, forms.ModelForm):
+    """Form for creating a new `CheckpointModel` instance.
+
+    Its main purpose is to override the default `clean` method and extend it to check
+    for the validity of the provided paths to the config files. Aside from that it is
+    simply used like a normal `forms.ModelForm`.
+    """
 
     class Meta:
-        model = InferenceResult
-        fields = ["revision", "params_path", "num_samples"]
+        """Meta class for the form."""
+
+        model = CheckpointModel
+        fields = [
+            "repo_name",
+            "ref",
+            "graph_config_path",
+            "model_config_path",
+            "dist_configs_path",
+            "num_samples",
+        ]
         widgets = {
-            "revision": widgets.TextInput(attrs={
-                "class": "input",
-                "placeholder": "e.g. `main` or a tag name",
-            }),
-            "params_path": widgets.TextInput(attrs={
-                "class": "input",
-                "placeholder": "e.g. `params.yaml`",
-            }),
-            "num_samples": widgets.NumberInput(attrs={
-                "class": "input",
-                "placeholder": "e.g. 1000",
-            }),
+            "ref": widgets.TextInput(
+                attrs={
+                    "class": "input",
+                    "placeholder": "e.g. `main`, commit hash, or tag name",
+                }
+            ),
+            "graph_config_path": widgets.TextInput(
+                attrs={
+                    "class": "input",
+                    "placeholder": "e.g. `graph.ly.yaml`",
+                }
+            ),
+            "model_config_path": widgets.TextInput(
+                attrs={
+                    "class": "input",
+                    "placeholder": "e.g. `model.ly.yaml`",
+                }
+            ),
+            "dist_configs_path": widgets.TextInput(
+                attrs={
+                    "class": "input",
+                    "placeholder": "e.g. `graph.ly.yaml`",
+                }
+            ),
+            "num_samples": widgets.NumberInput(
+                attrs={
+                    "class": "input",
+                    "placeholder": "e.g. 100",
+                }
+            ),
         }
 
-    def clean(self) -> Dict[str, Any]:
-        """Check all the fields for validity."""
-        cleaned_data = super().clean()
-        git_repo_url = cleaned_data["git_repo_url"]
-        revision = cleaned_data["revision"]
-        params_path = cleaned_data["params_path"]
+    def clean(self) -> dict[str, Any]:
+        """Check whether the config file paths exist.
 
-        repo_id = git_repo_url.split("github.com/")[-1]
-        cleaned_data["git_repo_owner"] = repo_id.split("/")[0]
-        cleaned_data["git_repo_name"] = repo_id.split("/")[1]
+        After performing the standard, built-in cleaning, this mainly checks if the
+        provided paths to the config files are valid. It does so by instantiating a
+        `DVCFileSystem`_ and then looking inside the repo file system for the specified
+        files.
+
+        .. _`DVCFileSystem`: https://dvc.org/doc/api-reference/dvcfilesystem
+        """
+        cleaned_data = super().clean()
+        repo_name = cleaned_data["repo_name"]
+        repo_url = f"https://github.com/{repo_name}"
+        ref = cleaned_data["ref"]
+        graph_config_path = cleaned_data["graph_config_path"]
+        model_config_path = cleaned_data["model_config_path"]
+        distributions_config_path = cleaned_data["distributions_config_path"]
 
         try:
-            fs = DVCFileSystem(url=git_repo_url, rev=revision)
+            fs = DVCFileSystem(url=repo_url, rev=ref)
 
-            if not fs.isfile(params_path):
+            if not fs.isfile(graph_config_path):
                 self.add_error(
-                    field="params_path",
-                    error=ValidationError("Not a valid path to the model parameters."),
+                    field="graph_config_path",
+                    error=ValidationError("Not a valid path to the graph config."),
+                )
+            if not fs.isfile(model_config_path):
+                self.add_error(
+                    field="model_config_path",
+                    error=ValidationError("Not a valid path to the model config."),
+                )
+            if not fs.isfile(distributions_config_path):
+                self.add_error(
+                    field="distributions_config_path",
+                    error=ValidationError("Not a valid path to the distributions."),
                 )
         except CloneError as _e:
             self.add_error(
-                field="git_repo_url",
-                error=ValidationError("Not a valid git repository."),
+                field="repo_name",
+                error=ValidationError("Not an existing GitHub repository."),
             )
         except RevError as _e:
             self.add_error(
-                field="revision",
-                error=ValidationError("Not a valid git revision."),
+                field="ref",
+                error=ValidationError("Not a valid git ref."),
             )
 
         return cleaned_data
 
 
-class DashboardForm(forms.Form):
-    """Form for the dashboard page."""
-    is_submitted = forms.BooleanField(
-        required=True, initial=True, widget=forms.HiddenInput
-    )
-    """Whether the form has been submitted via the button or not."""
+T = TypeVar("T", bound="RiskpredictorForm")
 
-    def __init__(self, *args, inference_result: InferenceResult = None, **kwargs):
+
+class RiskpredictorForm(forms.Form):
+    """Form for the riskpredictor dashboard page.
+
+    Via this form a user can enter a diagnosis and have the web app compute the
+    marginalized risk for every LNL covered by the model.
+
+    Conceptually, this form is similar to the `DataexplorerForm` in that it is always
+    bound either to initial data or to whatever the user entered in the dashboard.
+
+    Using this form's ``cleaned_data`` attribute, the `compute_risks` class ultimately
+    computes the posterior state distributions for the given diagnosis using the
+    defined model.
+    """
+
+    specificity = forms.FloatField(
+        min_value=0.5,
+        max_value=1,
+        initial=0.8,
+        widget=RangeInput(
+            attrs={
+                "class": "tag slider is-fullwidth",
+                "min": "0.5",
+                "max": "1",
+                "step": "0.01",
+            }
+        ),
+        validators=[
+            MinValueValidator(0.5, "Specificity below 0.5 makes no sense"),
+            MaxValueValidator(1, "Specificity above 1 makes no sense"),
+        ],
+    )
+    """The specificity of the entered diagnosis."""
+    sensitivity = forms.FloatField(
+        min_value=0.5,
+        max_value=1,
+        initial=0.8,
+        widget=RangeInput(
+            attrs={
+                "class": "tag slider is-fullwidth",
+                "min": "0.5",
+                "max": "1",
+                "step": "0.01",
+            }
+        ),
+        validators=[
+            MinValueValidator(0.5, "Sensitivity below 0.5 makes no sense"),
+            MaxValueValidator(1, "Sensitivity above 1 makes no sense"),
+        ],
+    )
+    """The sensitivity of the entered diagnosis."""
+
+    def __init__(
+        self,
+        *args,
+        checkpoint: CheckpointModel | None = None,
+        **kwargs,
+    ) -> None:
+        """Initialize the form and add the fields for the lymph node levels."""
         super().__init__(*args, **kwargs)
 
-        if inference_result is not None:
-            self.inference_result = inference_result
-            self.add_lnl_fields(self.inference_result)
-            self.add_t_stage_field(self.inference_result)
-            self.add_sens_spec_fields()
+        if checkpoint is not None:
+            self.checkpoint = checkpoint
+            self.model = self.checkpoint.construct_model()
+            self.add_lnl_fields()
+            self.add_t_stage_field()
 
-            if self.inference_result.is_midline:
-                self.add_midline_field()
+            if isinstance(self.model, models.Midline):
+                self.add_midext_field()
 
+    def get_lnls(self) -> dict[str, graph.LymphNodeLevel]:
+        """Get the lymph node levels from the model."""
+        if isinstance(self.model, models.Unilateral):
+            return self.model.graph.lnls
+        if isinstance(self.model, models.HPVUnilateral):
+            return self.model.hpv.graph.lnls
+        if isinstance(self.model, models.Bilateral):
+            return self.model.ipsi.graph.lnls
+        if isinstance(self.model, models.Midline):
+            return self.model.ext.ipsi.graph.lnls
 
-    def add_lnl_fields(self, inference_result: InferenceResult):
+        raise RuntimeError(f"Model type {type(self.model)} not recognized.")
+
+    def add_lnl_fields(self) -> None:
         """Add the fields for the lymph node levels defined in the trained model."""
-        for lnl in inference_result.lnls:
-            self.fields[f"ipsi_{lnl}"] = ThreeWayToggle(initial=-1)
+        for lnl in self.get_lnls():
+            self.fields[f"ipsi_{lnl}"] = ThreeWayToggle(initial=False)
 
-            if inference_result.is_bilateral:
-                self.fields[f"contra_{lnl}"] = ThreeWayToggle(initial=-1)
+            if isinstance(self.model, models.Bilateral | models.Midline):
+                self.fields[f"contra_{lnl}"] = ThreeWayToggle(initial=False)
 
-
-    def add_t_stage_field(self, inference_result: InferenceResult):
+    def add_t_stage_field(self) -> None:
         """Add the field for the T stage with the choices being defined in the model."""
+        t_stages = list(self.model.get_all_distributions())
         self.fields["t_stage"] = forms.ChoiceField(
-            choices=[(t, t) for t in inference_result.t_stages],
-            initial=inference_result.t_stages[0],
+            choices=[(t, t) for t in t_stages],
+            initial=t_stages[0],
         )
 
-
-    def add_sens_spec_fields(self, step: float = 0.01):
-        """Add the fields for the sensitivity and specificity."""
-        self.fields["sensitivity"] = forms.FloatField(
-            min_value=0.5, max_value=1, initial=0.8,
-            widget=RangeInput(attrs={
-                "class": "tag slider is-fullwidth",
-                "min": "0.5",
-                "max": "1",
-                "step": f"{step:.2f}",
-            }),
-            validators=[
-                MinValueValidator(0.5, "Sensitivity below 0.5 makes no sense"),
-                MaxValueValidator(1, "Sensitivity above 1 makes no sense"),
-            ],
-        )
-        self.fields["specificity"] = forms.FloatField(
-            min_value=0.5, max_value=1, initial=0.8,
-            widget=RangeInput(attrs={
-                "class": "tag slider is-fullwidth",
-                "min": "0.5",
-                "max": "1",
-                "step": f"{step:.2f}",
-            }),
-            validators=[
-                MinValueValidator(0.5, "Specificty below 0.5 makes no sense"),
-                MaxValueValidator(1, "Specificty above 1 makes no sense"),
-            ]
-        )
-
-
-    def add_midline_field(self):
+    def add_midext_field(self) -> None:
         """Add the field for the midline status."""
-        self.fields["midline_extension"] = ThreeWayToggle(
-            label=None,
-            tooltip="Does the tumor cross the mid-sagittal line?",
-            initial=-1,
+        self.fields["midext"] = ThreeWayToggle(
+            widget_label="Midline Extension",
+            widget_tooltip="Does the tumor cross the mid-sagittal line?",
+            choices=[(True, "plus"), (None, "ban"), (False, "minus")],
+            initial=False,
         )
 
+    @classmethod
+    def from_initial(cls: type[T], checkpoint: CheckpointModel) -> T:
+        """Create a form instance with the initial form data."""
+        return form_from_initial(cls, checkpoint=checkpoint)
 
-    def clean_midline_extension(self) -> bool:
+    def clean_midext(self) -> bool:
         """For now, the midline extension cannot be unknown (value of 0)."""
-        midline_extension = self.cleaned_data["midline_extension"]
-        if midline_extension == 0:
+        midext = self.cleaned_data["midext"]
+        if midext is None:
             raise ValidationError("Midline extension cannot be unknown.")
-        return midline_extension
-
-
-    def clean(self) -> Dict[str, Any]:
-        """Transform three-way toggles to booleans."""
-        cleaned_data = super().clean()
-
-        for field_name, field_value in cleaned_data.items():
-            cleaned_data[field_name] = trio_to_bool(field_value)
-
-        diagnosis = {}
-        for side in ["ipsi", "contra"]:
-            diagnosis[side] = {}
-            for lnl in self.inference_result.lnls:
-                if (key := f"{side}_{lnl}") not in cleaned_data:
-                    continue
-                diagnosis[side][lnl] = cleaned_data.pop(key)
-
-        cleaned_data["diagnosis"] = complete_pattern(
-            diagnosis, self.inference_result.lnls
-        )
-        return cleaned_data
+        return midext

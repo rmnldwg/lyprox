@@ -1,29 +1,54 @@
-"""
-Django settings module that defines important configurations. For an explanation of
-all the listed values, see the official `Django documentation`_.
+"""Main configurations. Explanations of all options can be found in the `Django docs`_.
 
 Generally, the most important settings - but also as few as possible - should be
-fetched from environment variables. The settings are written such that errors are
-thrown when the required env vars are not present. This is by design, to ensure the
-host environment is configured for the application.
+fetched from environment variables. This is good practice (see `12 Factor App`_) and
+especially for security related stuff important. Although LyProX doesn't really have
+much security relevant stuff going on.
 
-Only these env vars should need to be changed:
+The settings are written such that errors are thrown when the required environment vars
+are not present. This is by design, to ensure the host environment is configured for
+the application. It is recommended that you write an ``.env`` file at the root of the
+project (DON'T TRACK IT WITH GIT!), from which the environment variables are loaded.
+The ``.env`` file should look like this:
 
-- `DJANGO_ENV` can take on the values `"debug"`, `"maintenance"`, or `"production"`.
-- `DJANGO_SECRET_KEY` must contain the secret key for Django's security stuff.
-- `DJANGO_ALLOWED_HOSTS` needs to contain the allowed host names separated by spaces.
-- `DJANGO_LOG_LEVEL` for the log level. This only has an effect in debug mode.
-- `DJANGO_BASE_DIR` is the directory in which Django is based.
+.. code-block:: text
 
-.. _Django documentation: https://docs.djangoproject.com/en/4.1/ref/settings/
+    # .env
+    DJANGO_ENV=debug
+    DJANGO_SECRET_KEY=...
+
+The minimally required environment variables that need to be set are:
+
+- ``DJANGO_ENV`` can be ``"debug"``, ``"maintenance"``, or ``"production"``.
+- ``DJANGO_SECRET_KEY`` determines the value of the app's `SECRET_KEY` and must contain
+  the secret key for Django's security stuff.
+- ``DJANGO_ALLOWED_HOSTS`` needs to contain the allowed host names separated by spaces.
+  It will be stored in the `ALLOWED_HOSTS` setting.
+- ``DJANGO_LOG_LEVEL`` for Django's `LOG_LEVEL`. This only has an effect in debug mode.
+- ``DJANGO_BASE_DIR`` is the directory in which Django is based. Using `BASE_DIR`, this
+  is used to determine the location of the database and static files.
+- ``GITHUB_TOKEN`` is the token for the GitHub API. This determines the value of the
+  corresponding `GITHUB_TOKEN` setting. See this variable's docstring for more details.
+  Note that if this is not set, it won't immediately throw an error, but the datasets
+  will likely fail to be loaded initially.
+
+.. _Django docs: https://docs.djangoproject.com/en/4.2/ref/settings/
+.. _12 Factor App: https://12factor.net/config
 """
+
 import os
 from pathlib import Path
+from typing import Literal
 
 from django import urls
-from github import Github
+from django.db import models
+from dotenv import load_dotenv
+from github import Auth, Github
 
 from ._version import version
+
+if not load_dotenv():
+    raise RuntimeError("Failed to load variables from .env file.")
 
 DEBUG = os.environ["DJANGO_ENV"] == "debug"
 """``True``, when in debug mode, meaning ``DJANGO_ENV`` is set to ``"debug"``."""
@@ -35,33 +60,64 @@ be set to ``"maintenance"`` for this to work. Also see `lyprox.views.maintenance
 """
 
 PRODUCTION = os.environ["DJANGO_ENV"] == "production"
-"""Set ``DJANGO_ENV`` to ``"production"`` to disable `DEBUG` and `MAINTENANCE` modes."""
+"""The environment mode.
+
+.. include:: run-local.md
+    :start-after: `DJANGO_ENV`:
+    :end-before: - `DJANGO_LOG_LEVEL`
+    :parser: myst
+"""
 
 LOG_LEVEL = os.environ["DJANGO_LOG_LEVEL"] if DEBUG else "WARNING"
-"""
-Set the threshold for logging event when in `DEBUG` mode. During ``"maintenance"``
-and ``"production"`` this is fixed to ``"WARNING"``. Set via the environment variable
-``DJANGO_LOG_LEVEL``.
+"""Minimum level of emitted log messages.
+
+.. include:: run-local.md
+    :start-after: `DJANGO_LOG_LEVEL`:
+    :end-before: - `DJANGO_SECRET_KEY`
+    :parser: myst
 """
 
 SECRET_KEY = os.environ["DJANGO_SECRET_KEY"]
-"""
-Secret key for cryptographic functions. This is the most sensitive information about
-the application. It is set via the environment variable ``DJANGO_SECRET_KEY``.
+"""Secret key for cryptography read from the environment variable ``DJANGO_SECRET_KEY``.
+
+.. include:: run-local.md
+    :start-after: `DJANGO_SECRET_KEY`:
+    :end-before: - `DJANGO_ALLOWED_HOSTS`
+    :parser: myst
 """
 
 ALLOWED_HOSTS = os.environ["DJANGO_ALLOWED_HOSTS"].split(" ")
-"""
-Space-separated list of hostnames for which django will accept requests. Can be set
-with the env var ``DJANGO_ALLOWED_HOSTS``.
+"""From which hosts the application is allowed to be accessed.
+
+.. include:: run-local.md
+    :start-after: `DJANGO_ALLOWED_HOSTS`:
+    :end-before: - `DJANGO_BASE_DIR`
+    :parser: myst
 """
 
 GITHUB_TOKEN = os.environ["GITHUB_TOKEN"]
+"""Authentication token for GitHub API.
+
+.. include:: run-local.md
+    :start-after: `GITHUB_TOKEN`:
+    :end-before: ## Running the interface
+    :parser: myst
 """
-Read-only GitHub access token for fetching information about
-`lyprox.riskpredictor.models.InferenceResult`.
-"""
-GITHUB = Github(login_or_token=GITHUB_TOKEN)
+GITHUB = Github(auth=Auth.Token(GITHUB_TOKEN))
+
+LNLS = ["I", "Ia", "Ib", "II", "IIa", "IIb", "III", "IV", "V", "Va", "Vb", "VII"]
+
+
+class TStages(models.IntegerChoices):
+    """Tumor stages."""
+
+    # TIS = -2, "TIS"
+    # TX  = -1, "TX"
+    T0 = 0, "T0"
+    T1 = 1, "T1"
+    T2 = 2, "T2"
+    T3 = 3, "T3"
+    T4 = 4, "T4"
 
 
 CSRF_COOKIE_SECURE = not DEBUG
@@ -74,9 +130,12 @@ SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(os.environ["DJANGO_BASE_DIR"])
-"""
-Setting the base dir manually is necessary, because otherwise everything might be
-set up relative to venv's site-packages.
+"""Path to the base directory of the project.
+
+.. include:: run-local.md
+    :start-after: `DJANGO_BASE_DIR`:
+    :end-before: - `GITHUB_TOKEN`
+    :parser: myst
 """
 
 LOGIN_URL = urls.reverse_lazy("accounts:login")
@@ -119,75 +178,70 @@ IS_FROZEN = False
 FROZEN_VERSIONS = [
     {
         "name": "2021 oropharynx data",
-        "url" : "https://2021-oropharynx.lyprox.org",
+        "url": "https://2021-oropharynx.lyprox.org",
     }
 ]
 
+LogLevelType = Literal["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"]
+
+
 # Logging
-def set_LOGGING(LOG_LEVEL):
-    """Return logging settings in the form of a dictionary as function of the
-    log-level. This is used so that in a subdomain settings file the function
+def set_logging(log_level: LogLevelType) -> dict:
+    """Return logging settings for specified ``log_level``.
+
+    This is used so that in a subdomain settings file the function
     can be called again to overwrite the logging settings easily.
     """
-    LOGGING = {
+    return {
         "version": 1,
         "disanle_existing_loggers": False,
-
         "formatters": {
             "default": {
                 "format": "[%(asctime)s] %(levelname)-10s %(name)-40s %(message)s"
             }
         },
-
         "handlers": {
             "console": {
                 "class": "logging.StreamHandler",
                 "formatter": "default",
             },
         },
-
         "root": {
             "handlers": ["console"],
-            "level": LOG_LEVEL,
+            "level": log_level,
         },
-
         "loggers": {
-            "" : {
-                "level": LOG_LEVEL,
+            "": {
+                "level": log_level,
                 "handlers": ["console"],
                 "propagate": False,
             },
             "django": {
-                "level": LOG_LEVEL,
+                "level": log_level,
                 "handlers": ["console"],
                 "propagate": False,
             },
             "lyprox": {
-                "level": LOG_LEVEL,
+                "level": log_level,
                 "handlers": ["console"],
                 "propagate": False,
             },
-        }
+        },
     }
-    return LOGGING
 
-LOGGING = set_LOGGING(LOG_LEVEL)
+
+LOGGING = set_logging(LOG_LEVEL)
 
 
 # Application definition
 INSTALLED_APPS = [
     # my apps
     "lyprox.accounts.apps.AccountsConfig",
-    "lyprox.patients.apps.PatientsConfig",
     "lyprox.dataexplorer.apps.DataExplorerConfig",
     "lyprox.riskpredictor.apps.RiskConfig",
-
     # third party apps
-    "django_filters",
     "fontawesomefree",
-    "phonenumber_field",
     "sekizai",
-
     # django contrib apps
     "django.contrib.admin",
     "django.contrib.auth",
@@ -209,26 +263,26 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
 
-ROOT_URLCONF = 'lyprox.urls'
+ROOT_URLCONF = "lyprox.urls"
 
 TEMPLATES = [
     {
-        'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / "lyprox" / "templates"],
-        'APP_DIRS': True,
-        'OPTIONS': {
-            'context_processors': [
-                'django.template.context_processors.debug',
-                'django.template.context_processors.request',
-                'django.contrib.auth.context_processors.auth',
-                'django.contrib.messages.context_processors.messages',
-                'lyprox.context_processors.selected_settings',
-                'lyprox.context_processors.navbar_apps',
-                'sekizai.context_processors.sekizai',
+        "BACKEND": "django.template.backends.django.DjangoTemplates",
+        "DIRS": [BASE_DIR / "lyprox" / "templates"],
+        "APP_DIRS": True,
+        "OPTIONS": {
+            "context_processors": [
+                "django.template.context_processors.debug",
+                "django.template.context_processors.request",
+                "django.contrib.auth.context_processors.auth",
+                "django.contrib.messages.context_processors.messages",
+                "lyprox.context_processors.selected_settings",
+                "lyprox.context_processors.navbar_apps",
+                "sekizai.context_processors.sekizai",
             ],
-            'libraries': {
-                'customtags': 'lyprox.templatetags.customtags',
-            }
+            "libraries": {
+                "customtags": "lyprox.templatetags.customtags",
+            },
         },
     },
 ]
@@ -236,35 +290,35 @@ TEMPLATES = [
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+    "default": {
+        "ENGINE": "django.db.backends.sqlite3",
+        "NAME": BASE_DIR / "db.sqlite3",
     }
 }
 
-DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
+DEFAULT_AUTO_FIELD = "django.db.models.AutoField"
 
 # Database backup settings
 DBBACKUP_STORAGE = "django.core.files.storage.FileSystemStorage"
-DBBACKUP_STORAGE_OPTIONS = {
-    "location": "/home/rmnldwg/backups/lyprox/"
-}
+DBBACKUP_STORAGE_OPTIONS = {"location": "/home/rmnldwg/backups/lyprox/"}
 
 
 # Password validation
 # https://docs.djangoproject.com/en/3.1/ref/settings/#auth-password-validators
 AUTH_PASSWORD_VALIDATORS = [
-    {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator'},
-    {'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator'},
-    {'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator'},
-    {'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator'},
+    {
+        "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator"  # noqa: E501
+    },
+    {"NAME": "django.contrib.auth.password_validation.MinimumLengthValidator"},
+    {"NAME": "django.contrib.auth.password_validation.CommonPasswordValidator"},
+    {"NAME": "django.contrib.auth.password_validation.NumericPasswordValidator"},
 ]
 AUTH_USER_MODEL = "accounts.User"
 
 
 # Internationalization
 # https://docs.djangoproject.com/en/3.1/topics/i18n/
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = "en-us"
 TIME_ZONE = "Europe/Zurich"
 USE_I18N = True
 USE_L10N = True
@@ -279,8 +333,8 @@ STATIC_URL = "/static/"
 MEDIA_ROOT = BASE_DIR / "media"
 MEDIA_URL = "/media/"
 
-STATICFILES_DIRS = [
-    BASE_DIR / "lyprox" / "static"
-]
+STATICFILES_DIRS = [BASE_DIR / "lyprox" / "static"]
 
 PUBLICATIONS_PATH = STATIC_ROOT / "publications" / "data.yaml"
+
+JOBLIB_CACHE_DIR = BASE_DIR / ".cache"

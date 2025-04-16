@@ -1,37 +1,58 @@
 [
     {
-        "git_repo_url": "https://github.com/rmnldwg/lydata",
-        "revision": "main",
-        "data_path": "2021-usz-oropharynx/data.csv"
+        "year": 2021,
+        "institution": "usz",
+        "subsite": "oropharynx",
+        "repo_name": "rmnldwg/lydata",
+        "ref": "main"
     },
     {
-        "git_repo_url": "https://github.com/rmnldwg/lydata",
-        "revision": "main",
-        "data_path": "2021-clb-oropharynx/data.csv"
+        "year": 2021,
+        "institution": "clb",
+        "subsite": "oropharynx",
+        "repo_name": "rmnldwg/lydata",
+        "ref": "main"
     },
     {
-        "git_repo_url": "https://github.com/rmnldwg/lydata",
-        "revision": "main",
-        "data_path": "2023-isb-multisite/data.csv"
+        "year": 2023,
+        "institution": "clb",
+        "subsite": "multisite",
+        "repo_name": "rmnldwg/lydata",
+        "ref": "main"
     },
     {
-        "git_repo_url": "https://github.com/rmnldwg/lydata",
-        "revision": "main",
-        "data_path": "2023-clb-multisite/data.csv"
+        "year": 2023,
+        "institution": "isb",
+        "subsite": "multisite",
+        "repo_name": "rmnldwg/lydata",
+        "ref": "main"
     },
     {
-        "git_repo_url": "https://github.com/rmnldwg/lydata.private",
-        "revision": "2023-usz-hypopharynx-larynx",
-        "data_path": "2023-usz-hypopharynx-larynx/data.csv"
+        "year": 2023,
+        "institution": "usz",
+        "subsite": "hypopharynx-larynx",
+        "repo_name": "rmnldwg/lydata.private",
+        "ref": "2023-usz-hypopharynx-larynx"
     },
     {
-        "git_repo_url": "https://github.com/rmnldwg/lydata.private",
-        "revision": "2023-hvh-oropharynx",
-        "data_path": "2023-hvh-oropharynx/data.csv"
+        "year": 2024,
+        "institution": "umcg",
+        "subsite": "hypopharynx-larynx",
+        "repo_name": "rmnldwg/lydata.private",
+        "ref": "2024-umcg-hypopharynx-larynx"
     },
     {
-        "git_repo_url": "https://github.com/rmnldwg/lydata.private",
-        "revision": "2024-umcg-hypopharynx-larynx",
-        "data_path": "2024-umcg-hypopharynx-larynx/data.csv"
+        "year": 2025,
+        "institution": "hvh",
+        "subsite": "oropharynx",
+        "repo_name": "rmnldwg/lydata",
+        "ref": "main"
+    },
+    {
+        "year": 2025,
+        "institution": "ukf",
+        "subsite": "hypopharynx",
+        "repo_name": "rmnldwg/lydata.private",
+        "ref": "2025-ukf-hypopharynx"
     }
 ]

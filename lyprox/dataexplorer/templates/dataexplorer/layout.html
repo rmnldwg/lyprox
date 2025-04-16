@@ -9,7 +9,7 @@
 {% endblock head %}
 
 {% block "css" %}
-<link rel="stylesheet" href="{% static 'dataexplorer/dashboard.css' %}">
+<link rel="stylesheet" href="{% static 'dashboard.css' %}">
 {% endblock %}
 
 {% block "js" %}
@@ -18,44 +18,41 @@
 
 {% block content %}
 <!--
-    The CSRF token is not necessary for the GET request by this form, but for the AJAX request.
-    Also, it is outside the form such that it doesn't get sent via the keyboard shortcut GET request.
-  -->
+  The CSRF token is not necessary for the GET request by this form, but for the AJAX request.
+  Also, it is outside the form such that it doesn't get sent via the keyboard shortcut GET request.
+-->
 {% csrf_token %}
 <form method="GET" action="{% url 'dataexplorer:dashboard' %}" id="dashboard-form" name="dashboardform">
   <section class="section">
-
-    <div class="tile is-ancestor">
-      <div class="tile is-3 is-vertical is-parent">
-
-        <!-- Patient details -->
-        {% include 'dataexplorer/filter/patient.html' with form=form %}
-
-        <!-- Primary tumor -->
-        {% include 'dataexplorer/filter/tumor.html' with form=form %}
-      </div>
-
-      <div class="tile is-9 is-vertical">
-        <div class="tile is-parent is-vertical">
-
-          <!-- Datasets -->
-          {% include 'dataexplorer/filter/datasets.html' with form=form %}
-
-          <!-- Modalities -->
-          {% include 'dataexplorer/filter/modalities.html' with form=form %}
+    <div class="fixed-grid has-4-cols">
+      <div class="grid">
+        <div class="cell is-col-span-1">
+          {% include 'dataexplorer/filter/tumor.html' with form=form %}
         </div>
-
-        <!-- Involvement prevalence -->
-        <div class="tile">
-          <!-- contralateral -->
-          {% include 'dataexplorer/involvement.html' with form=form side='contra' %}
-
-          <!-- ipsilateral -->
-          {% include 'dataexplorer/involvement.html' with form=form side='ipsi' %}
+        <div class="cell is-col-span-3">
+          <div class="fixed-grid is-height-100 has-2-cols">
+            <div class="grid is-height-100">
+              <div class="cell">
+                {% include 'dataexplorer/filter/patient.html' with form=form %}
+              </div>
+              <div class="cell">
+                {% include 'dataexplorer/filter/datasets.html' with form=form %}
+              </div>
+              <div class="cell is-col-span-2">
+                {% include 'dataexplorer/filter/modalities.html' with form=form %}
+              </div>
+              <div class="cell">
+                {% include 'dataexplorer/involvement.html' with form=form side='contra' %}
+              </div>
+              <div class="cell">
+                {% include 'dataexplorer/involvement.html' with form=form side='ipsi' %}
+              </div>
+              <div class="cell is-col-span-2">
+                {% include 'dataexplorer/controls.html' with form=form %}
+              </div>
+            </div>
+          </div>
         </div>
-
-        <!-- Controls -->
-        {% include 'dataexplorer/controls.html' with form=form %}
       </div>
     </div>
   </section>

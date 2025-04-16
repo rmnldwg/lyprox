@@ -1,4 +1,4 @@
-from time import timezone
+"""Implement models for institutions and adapt the user model slightly."""
 
 from django.contrib.auth.models import (
     AbstractBaseUser,
@@ -263,13 +263,16 @@ COUNTRIES = (
 )
 
 class CountryField(models.CharField):
-    def __init__(self, *args, **kwargs):
+    """Field for storing a country code."""
+
+    def __init__(self, *args, **kwargs) -> None:
+        """Initialize the field with the country codes."""
         kwargs.setdefault('max_length', 2)
         kwargs.setdefault('choices', COUNTRIES)
+        return super().__init__(*args, **kwargs)
 
-        super(CountryField, self).__init__(*args, **kwargs)
-
-    def get_internal_type(self):
+    def get_internal_type(self) -> str:
+        """Return the internal type of the field."""
         return "CharField"
 
 
@@ -284,10 +287,12 @@ class Institution(ModelLoggerMixin, models.Model):
     logo = models.FileField(upload_to="logos/", blank=True, null=True)
 
     def __str__(self):
+        """Return the name and country of the institution."""
         return f"{self.shortname}, {self.get_country_display()}"
 
 
 class UserManager(BaseUserManager):
+    """Custom manager for the User model."""
     def _create_user(self, email, password, **extra_fields):
         """Create and save user with the fields for email and password."""
         if not email:
@@ -300,7 +305,7 @@ class UserManager(BaseUserManager):
         return user
 
     def create_user(self, email, password, **extra_fields):
-        """Clean email input and set staff status and `is_active` to `False`."""
+        """Clean email input and set staff status and ``is_active`` to ``False``."""
         extra_fields.setdefault("is_staff", False)
         extra_fields.setdefault("is_superuser", False)
         email = self.normalize_email(email)
@@ -360,4 +365,5 @@ class User(ModelLoggerMixin, AbstractBaseUser, PermissionsMixin):
     EMAIL_FIELD = "email"
 
     def __str__(self):
+        """Return the full name of the user."""
         return f"{self.first_name} {self.last_name}"
