@@ -109,9 +109,7 @@ chown -R $user:www-data /var/log/gunicorn
 chmod g+w /var/log/gunicorn
 
 info "create and set up systemd service:"
-tempfile=$(mktemp)
-cat /srv/www/$1/systemd.service | sed "s|{{ hostname }}|$1|g" > $tempfile
-cp $tempfile /etc/systemd/system/$1.service
+cp /srv/www/$1/systemd.service /etc/systemd/system/gunicorn@.service
 systemctl daemon-reload
 
 info "all done, don't forget to set env vars and start service"
