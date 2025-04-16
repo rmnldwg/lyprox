@@ -2,6 +2,24 @@
 
 All notable changes to this project will be documented in this file.
 
+<a name="1.0.2"></a>
+
+## [1.0.2] - 2025-04-16
+
+### 💼 Other
+
+- Branch 'main' into 'dev'
+- Don't show other versions
+- Delete old database before deployment
+
+<a name="1.0.1"></a>
+
+## [1.0.1] - 2025-04-16
+
+### ⚙️ Miscellaneous Tasks
+
+- Change entrypoint ins systemd config
+
 <a name="1.0.0"></a>
 
 ## [1.0.0] - 2025-04-16
@@ -387,6 +405,8 @@ Commits before the 2nd of March 2023 did not use conventional commits and no cha
 - [0.0.2] - 2021-10-04
 - 0.0.1 - 2021-10-04
 
+[1.0.2]: https://github.com/rmnldwg/lyprox/compare/1.0.1...1.0.2
+[1.0.1]: https://github.com/rmnldwg/lyprox/compare/1.0.0...1.0.1
 [1.0.0]: https://github.com/rmnldwg/lyprox/compare/0.4.6...1.0.0
 [0.4.6]: https://github.com/rmnldwg/lyprox/compare/0.4.5...0.4.6
 [0.4.5]: https://github.com/rmnldwg/lyprox/compare/0.4.4...0.4.5
