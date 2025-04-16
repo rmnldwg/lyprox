@@ -1656,7 +1656,7 @@ requires-dist = [
     { name = "jinja2", specifier = "~=3.1" },
     { name = "lydata", specifier = "==0.2.5" },
     { name = "lymph-model", specifier = "==1.3.3" },
-    { name = "lyscripts", specifier = "==1.0.0a6" },
+    { name = "lyscripts", specifier = "==1.0.0a7" },
     { name = "markdown", specifier = "~=3.7" },
     { name = "myst-parser", marker = "extra == 'docs'" },
     { name = "pydoctor", marker = "extra == 'docs'" },
@@ -1668,7 +1668,7 @@ provides-extras = ["docs", "test", "dev"]
 
 [[package]]
 name = "lyscripts"
-version = "1.0.0a6"
+version = "1.0.0a7"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "corner" },
@@ -1693,9 +1693,9 @@ dependencies = [
     { name = "tables", version = "3.10.2", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.11'" },
     { name = "xlrd" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/2e/32/6035b912c9bfcc91c2d626f4c2c94c0aa435de174b80a0707ab1e3c8b128/lyscripts-1.0.0a6.tar.gz", hash = "sha256:c7ef852fc9113f48a7947df0a69a592b7ebde419cd66af38e68bfd771609d093", size = 467224 }
+sdist = { url = "https://files.pythonhosted.org/packages/79/20/04ad05c9662054465659d0cada112724c21e9f1122499bb46640c2f83290/lyscripts-1.0.0a7.tar.gz", hash = "sha256:27afca26aeb1e4d27830a7743ed7cc75c69fe76a1abea83e791ed739dbaad479", size = 468370 }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/81/db/8aab81209915c72511b08b3a1b7c5c905817dd50fd33e85159cb3fda8b94/lyscripts-1.0.0a6-py3-none-any.whl", hash = "sha256:73e52f4e3cfddd2158b5fc8891629d8e574ee03252380b151d84c181c3be5259", size = 56042 },
+    { url = "https://files.pythonhosted.org/packages/d5/90/47cb79d5dc8c86e22649590d2ddeead6705b99492c1d473d511a7503e521/lyscripts-1.0.0a7-py3-none-any.whl", hash = "sha256:2df7ec047571cfd5c58d256fe8709e6e4f860a9d33fd292a0742da39cda51117", size = 56826 },
 ]
 
 [[package]]
