@@ -55,7 +55,7 @@ mkdir -p /srv/www/$1
 chown -R $user:www-data /srv/www/$1
 chmod -R 755 /srv/www/$1
 chmod g+ws /srv/www/$1        # s = anything created underneath will inherit group owner
-touch /srv/www/$1/db.sqlite3 && chmod ug=rw,o= /srv/www/$1/db.sqlite3
+rm -rf /srv/www/$1/db.sqlite3
 mkdir -p /srv/www/$1/static && chmod -R ug=rwx,o=rx /srv/www/$1/static
 mkdir -p /srv/www/$1/.cache && chmod -R g+rwxs /srv/www/$1/.cache
 
