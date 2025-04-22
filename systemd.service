@@ -1,21 +1,21 @@
 [Unit]
-Description = A Gunicorn Webserver for {{ hostname }}.
+Description = A Gunicorn Webserver for %i.
 After = network.target
 
 [Service]
 User = www-data
 Group = www-data
-WorkingDirectory = /srv/www/{{ hostname }}
-EnvironmentFile = /srv/www/{{ hostname }}/.env
+WorkingDirectory = /srv/www/%i
+EnvironmentFile = /srv/www/%i/.env
 TimeoutSec = 1200
 
-ExecStartPre = +/srv/www/{{ hostname }}/.venv/bin/lyprox migrate --noinput
-ExecStartPre = +/srv/www/{{ hostname }}/.venv/bin/lyprox collectstatic --noinput
-ExecStartPre = /srv/www/{{ hostname }}/.venv/bin/lyprox add_institutions --from-file /srv/www/{{ hostname }}/initial/institutions.json
-ExecStartPre = /srv/www/{{ hostname }}/.venv/bin/lyprox add_users --from-file /srv/www/{{ hostname }}/initial/users.json
-ExecStartPre = /srv/www/{{ hostname }}/.venv/bin/lyprox add_datasets --from-file /srv/www/{{ hostname }}/initial/datasets.json
-ExecStartPre = /srv/www/{{ hostname }}/.venv/bin/lyprox add_riskmodels --from-file /srv/www/{{ hostname }}/initial/riskmodels.json
-ExecStart = /srv/www/{{ hostname }}/.venv/bin/python -m gunicorn -c /srv/www/{{ hostname }}/gunicorn.conf.py
+ExecStartPre = /srv/www/%i/.venv/bin/lyprox migrate --noinput
+ExecStartPre = /srv/www/%i/.venv/bin/lyprox collectstatic --noinput
+ExecStartPre = /srv/www/%i/.venv/bin/lyprox add_institutions --from-file /srv/www/%i/initial/institutions.json
+ExecStartPre = /srv/www/%i/.venv/bin/lyprox add_users --from-file /srv/www/%i/initial/users.json
+ExecStartPre = /srv/www/%i/.venv/bin/lyprox add_datasets --from-file /srv/www/%i/initial/datasets.json
+ExecStartPre = /srv/www/%i/.venv/bin/lyprox add_riskmodels --from-file /srv/www/%i/initial/riskmodels.json
+ExecStart = /srv/www/%i/.venv/bin/python -m gunicorn -c /srv/www/%i/gunicorn.conf.py
 
 ExecReload = kill -s HUP $MAINPID
 ExecStop = kill -s TERM $MAINPID

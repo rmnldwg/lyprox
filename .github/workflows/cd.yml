@@ -55,4 +55,4 @@ jobs:
           sudo echo 'DJANGO_SECRET_KEY="${{ secrets.DJANGO_SECRET_KEY }}"' >> /srv/www/${{ env.HOSTNAME }}/.env
           sudo echo 'GITHUB_TOKEN="${{ secrets.READONLY_TOKEN }}"' >> /srv/www/${{ env.HOSTNAME }}/.env
           sudo echo '${{ secrets.DJANGO_PASSWORDS }}' >> /srv/www/${{ env.HOSTNAME }}/.env
-          sudo systemctl restart ${{ env.HOSTNAME }}.service
+          sudo systemctl restart gunicorn@${{ env.HOSTNAME }}.service

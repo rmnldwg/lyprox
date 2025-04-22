@@ -10,6 +10,7 @@
 
 {% block "css" %}
 <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/default.min.css">
+<link rel="stylesheet" href="{% static 'dashboard.css' %}">
 {% endblock "css" %}
 
 {% block "js" %}
@@ -19,7 +20,9 @@
 <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
 <script src="{% static 'dataexplorer/dashboard.js' %}"></script>
 <script src="{% static 'riskpredictor/yaml_formatter.js' %}"></script>
-<link rel="stylesheet" href="{% static 'dashboard.css' %}">
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+</script>
 {% endblock "js" %}
 
 {% block content %}
@@ -60,6 +63,45 @@
               <div class="cell is-col-span-2">
                 {% include 'riskpredictor/boxes/controls.html' %}
               </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <h3 class="title is-3">Model Definition</h3>
+    <h3 class="subtitle is-5">
+      <a class="has-text-primary is-family-monospace" href="https://github.com/{{ checkpoint.repo_name }}/tree/{{ checkpoint.ref }}">
+        <span class="icon-text">
+          <span class="icon">
+            <i class="fab fa-github"></i>
+          </span>
+          <span>{{ checkpoint }}</span>
+        </span>
+      </a>
+    </h3>
+    <div class="fixed-grid has-3-cols">
+      <div class="grid">
+        <div class="cell">
+          <div class="box is-height-100">
+            <h4 class="title is-4">Graph</h2>
+            <div class="block">
+              <pre class="mermaid p-3">{{ graph_mermaid }}</pre>
+            </div>
+          </div>
+        </div>
+        <div class="cell">
+          <div class="box is-height-100">
+            <h4 class="title is-4">Model</h2>
+            <div class="block yaml-source" data-yaml="{% render_yaml model_params %}">
+              <pre class="p-3"><code class="yaml-display language-yaml p-0"></code></pre>
+            </div>
+          </div>
+        </div>
+        <div class="cell">
+          <div class="box is-height-100">
+            <h4 class="title is-4">Distributions</h2>
+            <div class="block yaml-source" data-yaml="{% render_yaml dist_params %}">
+              <pre class="p-3"><code class="yaml-display language-yaml p-0"></code></pre>
             </div>
           </div>
         </div>

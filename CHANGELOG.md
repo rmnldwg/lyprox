@@ -2,6 +2,135 @@
 
 All notable changes to this project will be documented in this file.
 
+<a name="1.0.2"></a>
+
+## [1.0.2] - 2025-04-16
+
+### 💼 Other
+
+- Branch 'main' into 'dev'
+- Don't show other versions
+- Delete old database before deployment
+
+<a name="1.0.1"></a>
+
+## [1.0.1] - 2025-04-16
+
+### ⚙️ Miscellaneous Tasks
+
+- Change entrypoint ins systemd config
+
+<a name="1.0.0"></a>
+
+## [1.0.0] - 2025-04-16
+
+### 🚀 Features
+
+- Add subsite labels
+- Write constructor for statistics from data
+- Construct dashboard form from initial data
+- Add new querying based on [`lyDATA`]
+- Add toggle button for entire subsite (multiple ICDs)
+- Add minimal dataset model
+- Add computation of posterior state distribution to risk models
+- Add scaffolding for new risk predictor views
+- Make risk prediction work
+- Reimplement AJAX view of risk predictor
+- Log timing of risk prediction
+- Add basic table view (fixes [#121])
+- Add table view to navbar
+- Add download button to table view
+- Add CSV export of table
+- Add YAML config to risk model view
+- Add mermaid graph to risk model
+- Add private datasets and new institution
+
+### 🐛 Bug Fixes
+
+- Comment out links to 'patient' app
+- Modify HTML until initial form renders again
+- Update JS and forms for AJAX
+- Created forms must always be unbound
+- Create deprecated midline model correctly
+- Three-way toggle did not evaluate str as bool
+- `midext` is now correctly considered
+- Sens/spec slider update their values again
+- Recreate risk & standard deviation as in old version
+- Correctly populate fields from JSON via JS
+- Table header misaligned with body
+- Use new entry point for systemd service
+- Keep dataset off database when not found on GitHub
+
+### 💼 Other
+
+- Delete `patients` app
+- Replace class-based dashboard view
+- Use enums for ICD codes
+- Start with new views scaffolding
+- Start using new enums for choice fields
+- Tidy up some dashboard form elements
+- Simplify & improve subsites (fixes [#119])
+- Use better authentication for GitHub
+- Update [`lyDATA`] to fix missing `None`s
+- Rename main script (now `lyprox`)
+- Better field name for N0 vs N+
+- Improve dashboard JS code
+- Reshuffle dashboard layout
+- Bump lyscripts to 1.0.0.a7
+- Use model & joblib cache
+- Make some HTML & CSS stuff more reusable
+- Finish basic layout of new risk predictor
+- Don't use grid for datasets and modalities
+- Improve display of patient table
+- Improve table appearance
+- Reduce displayed table cols
+- Update dependencies
+- Remove unused dependencies
+- Explicitly add Jinja2 dependency
+
+### 📚 Documentation
+
+- Format & add detail to some form/query docstrings
+- Expand explanations & fix missing links
+- Start working on coherent guide for LyProX
+- Improve flow of data explorer docs
+- Update info on how to run locally
+- Improve docstrings in main module slightly
+- Add maintenance info to top-lvl docstring
+- Add section on code style
+- Add style/contrib guides
+- Fix wrong links
+- Flesh out risk predictor docs
+- Update info about .env (due to `dotenv` use)
+
+### 🎨 Styling
+
+- Make dashboard a bit more space-efficient
+- Make subsite selection prettier
+- Update dashboard layout using bulma v1.0
+- Update other sites except risk predictor
+- Fix countless ruff complaints
+- Make docstrings start on first line
+
+### 🧪 Testing
+
+- Add basic unit test for `DashboardForm`
+- Add data interface test
+- Fix and add really basic data explorer tests
+- Check basic query
+- Add primitive `__main__` to allow debugging
+
+### ⚙️ Miscellaneous Tasks
+
+- Add users to initial users
+- Update pre-commit hooks
+- Load only 1 dataset for quicker testing
+- Add/change cmd to load datasets
+- Correctly setup `.cache` directory
+- Add a basic nginx configuration for local testing
+- Don't use root to `migrate` and `collectstatic`
+- Launch correct `systemd` service
+
 <a name="0.4.6"></a>
 
 ## [0.4.6] - 2024-09-12
@@ -276,6 +405,11 @@ Commits before the 2nd of March 2023 did not use conventional commits and no cha
 - [0.0.2] - 2021-10-04
 - 0.0.1 - 2021-10-04
 
+[1.0.2]: https://github.com/rmnldwg/lyprox/compare/1.0.1...1.0.2
+[1.0.1]: https://github.com/rmnldwg/lyprox/compare/1.0.0...1.0.1
+[1.0.0]: https://github.com/rmnldwg/lyprox/compare/0.4.6...1.0.0
+[0.4.6]: https://github.com/rmnldwg/lyprox/compare/0.4.5...0.4.6
+[0.4.5]: https://github.com/rmnldwg/lyprox/compare/0.4.4...0.4.5
 [0.4.4]: https://github.com/rmnldwg/lyprox/compare/0.4.3...0.4.4
 [0.4.3]: https://github.com/rmnldwg/lyprox/compare/0.4.2...0.4.3
 [0.4.2]: https://github.com/rmnldwg/lyprox/compare/0.4.1...0.4.2
@@ -327,3 +461,4 @@ Commits before the 2nd of March 2023 did not use conventional commits and no cha
 [#111]: https://github.com/rmnldwg/lyprox/issues/111
 [#115]: https://github.com/rmnldwg/lyprox/issues/115
 [#119]: https://github.com/rmnldwg/lyprox/issues/119
+[#121]: https://github.com/rmnldwg/lyprox/issues/121
