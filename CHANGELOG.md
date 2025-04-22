@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file.
 
+<a name="1.0.3"></a>
+
+## [1.0.3] - 2025-04-22
+
+### 🚀 Features
+
+- Paginate the rows of the table of selected patients. Fixes [#125]
+
+### 🐛 Bug Fixes
+
+- Stop trying to render missing columns in the table view. Fixes [#124]
+
 <a name="1.0.2"></a>
 
 ## [1.0.2] - 2025-04-16
@@ -405,6 +417,7 @@ Commits before the 2nd of March 2023 did not use conventional commits and no cha
 - [0.0.2] - 2021-10-04
 - 0.0.1 - 2021-10-04
 
+[1.0.3]: https://github.com/rmnldwg/lyprox/compare/1.0.2...1.0.3
 [1.0.2]: https://github.com/rmnldwg/lyprox/compare/1.0.1...1.0.2
 [1.0.1]: https://github.com/rmnldwg/lyprox/compare/1.0.0...1.0.1
 [1.0.0]: https://github.com/rmnldwg/lyprox/compare/0.4.6...1.0.0
@@ -462,3 +475,5 @@ Commits before the 2nd of March 2023 did not use conventional commits and no cha
 [#115]: https://github.com/rmnldwg/lyprox/issues/115
 [#119]: https://github.com/rmnldwg/lyprox/issues/119
 [#121]: https://github.com/rmnldwg/lyprox/issues/121
+[#124]: https://github.com/rmnldwg/lyprox/issues/124
+[#125]: https://github.com/rmnldwg/lyprox/issues/125
