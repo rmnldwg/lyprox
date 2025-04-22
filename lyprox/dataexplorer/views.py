@@ -171,9 +171,11 @@ def map_to_cell_classes(patients: pd.DataFrame) -> pd.DataFrame:
     """Return a class for each cell of the ``patients`` table."""
     consensus = "max_llh" if "max_llh" in patients.columns else "rank"
     classes_map = pd.DataFrame().reindex_like(patients).fillna("")
-    modalities = [consensus] + list(get_default_modalities())
+    modalities = [consensus, "sonography"] + list(get_default_modalities())
 
     for modality in modalities:
+        if modality not in patients:
+            continue
         for side in ["ipsi", "contra"]:
             classes_map[modality, side] = (
                 pd.DataFrame()
@@ -231,7 +233,7 @@ def style_table(patients: pd.DataFrame) -> Styler:
         ("enbloc_positive"),
     ]
     result = (
-        patients.drop(columns=cols_to_drop)
+        patients.drop(columns=cols_to_drop, errors="ignore")
         .style.format_index(
             formatter=split_and_capitalize,
             level=[0, 1, 2],
