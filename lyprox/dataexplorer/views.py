@@ -36,6 +36,7 @@ import time
 from typing import Any
 
 import pandas as pd
+from django.core.paginator import Paginator
 from django.http import HttpRequest, HttpResponseBadRequest
 from django.http.response import HttpResponse, JsonResponse
 from django.shortcuts import render
@@ -57,18 +58,11 @@ def help_view(request) -> HttpResponse:
     return render(request, template_name, context)
 
 
-def render_data_stats(request: HttpRequest) -> HttpResponse:
-    """Return the dashboard view when the user first accesses the dashboard.
+FormAndPatients = tuple[DataexplorerForm, pd.DataFrame]
 
-    This view handles GET requests, which typically only occur when the user first
-    navigates to the dashboard. But it is also possible to query the dashboard with
-    URL parameters (e.g. ``https://lyprox.org/dataexplorer/?t_stage=1&t_stage=2...``).
 
-    The view creates a `DataexplorerForm` instance with the data from a GET request or
-    with the default initial values. It then calls `execute_query` with
-    ``form.cleaned_data`` and returns the `Statistics` ``from_dataset()`` using the
-    queried dataset to the frontend.
-    """
+def _get_form_and_patients_from_request(request: HttpRequest) -> FormAndPatients:
+    """Prepare the form from the request and execute the query."""
     request_data = request.GET
     form = DataexplorerForm(request_data, user=request.user)
 
@@ -82,7 +76,22 @@ def render_data_stats(request: HttpRequest) -> HttpResponse:
         )
         return HttpResponseBadRequest("Form is not valid.")
 
-    patients = execute_query(cleaned_form_data=form.cleaned_data)
+    return form, execute_query(cleaned_form_data=form.cleaned_data)
+
+
+def render_data_stats(request: HttpRequest) -> HttpResponse:
+    """Return the dashboard view when the user first accesses the dashboard.
+
+    This view handles GET requests, which typically only occur when the user first
+    navigates to the dashboard. But it is also possible to query the dashboard with
+    URL parameters (e.g. ``https://lyprox.org/dataexplorer/?t_stage=1&t_stage=2...``).
+
+    The view creates a `DataexplorerForm` instance with the data from a GET request or
+    with the default initial values. It then calls `execute_query` with
+    ``form.cleaned_data`` and returns the `Statistics` ``from_dataset()`` using the
+    queried dataset to the frontend.
+    """
+    form, patients = _get_form_and_patients_from_request(request)
 
     context = {
         "form": form,
@@ -249,47 +258,30 @@ def style_table(patients: pd.DataFrame) -> Styler:
     return result
 
 
-def render_data_table(request: HttpRequest) -> HttpResponse:
+def render_data_table(request: HttpRequest, page_idx: int) -> HttpResponse:
     """Render the `pandas.DataFrame` currently displayed in the dashboard."""
-    request_data = request.GET
-    form = DataexplorerForm(request_data, user=request.user)
-
-    if not form.is_valid():
-        logger.info("Dashboard form not valid.")
-        form = DataexplorerForm.from_initial(user=request.user)
-
-    if not form.is_valid():
-        logger.error(
-            f"Form not valid even after initializing with initial data: {form.errors}"
-        )
-        return HttpResponseBadRequest("Form is not valid.")
-
-    patients = execute_query(cleaned_form_data=form.cleaned_data)
+    _, patients = _get_form_and_patients_from_request(request)
     patients["tumor", "1", "extension"] = patients.ly.midext.astype(bool)
+
+    paginator = Paginator(object_list=patients, per_page=15)
+    page = paginator.get_page(page_idx)
 
     return render(
         request=request,
         template_name="dataexplorer/table.html",
-        context={"table": style_table(patients).to_html()},
+        context={
+            "page": page,
+            "previous_range": range(1, page.number),
+            "next_range": range(page.number + 1, paginator.num_pages + 1),
+            "num_next_pages": paginator.num_pages - page.number,
+            "table": style_table(page.object_list).to_html(),
+        },
     )
 
 
 def make_csv_download(request: HttpRequest) -> HttpResponse:
     """Return a CSV file with the selected patients."""
-    request_data = request.GET
-    form = DataexplorerForm(request_data, user=request.user)
-
-    if not form.is_valid():
-        logger.info("Dashboard form not valid.")
-        form = DataexplorerForm.from_initial(user=request.user)
-
-    if not form.is_valid():
-        logger.error(
-            f"Form not valid even after initializing with initial data: {form.errors}"
-        )
-        return HttpResponseBadRequest("Form is not valid.")
-
-    patients = execute_query(cleaned_form_data=form.cleaned_data)
+    _, patients = _get_form_and_patients_from_request(request)
 
     return HttpResponse(
         patients.to_csv(index=False),
