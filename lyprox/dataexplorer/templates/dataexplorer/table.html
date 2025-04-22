@@ -30,6 +30,74 @@
         {{ table|safe }}
       </div>
     </div>
+
+    <div class="block">
+      <nav class="pagination is-centered" role="pagination" aria-label="pagination">
+        {% if page.has_previous %}
+        <a href="{% url 'dataexplorer:table' page_idx=page.previous_page_number %}?{{ request.GET.urlencode }}" class="pagination-previous">
+          <span class="icons">
+            <span class="icon">
+              <i class="fas fa-chevron-left"></i>
+            </span>
+            <span>Previous</span>
+          </span>
+        </a>
+        {% else %}
+        <a href="#" class="pagination-previous is-disabled">
+          <span class="icon-text">
+            <span class="icon">
+              <i class="fas fa-chevron-left"></i>
+            </span>
+            <span>Previous</span>
+          </span>
+        </a>
+        {% endif %}
+
+        <ul class="pagination-list">
+          {% if page.number < 4 %}
+          {% for i in previous_range %}
+          <li><a href="{% url 'dataexplorer:table' page_idx=i %}?{{ request.GET.urlencode }}" class="pagination-link">{{ i }}</a></li>
+          {% endfor %}
+          {% else %}
+          <li><a href="{% url 'dataexplorer:table' page_idx=1 %}?{{ request.GET.urlencode }}" class="pagination-link">1</a></li>
+          <li><span class="pagination-ellipsis">&hellip;</span></li>
+          <li><a href="{% url 'dataexplorer:table' page_idx=page.previous_page_number %}?{{ request.GET.urlencode }}" class="pagination-link">{{ page.previous_page_number }}</a></li>
+          {% endif %}
+
+          <li><a href="{% url 'dataexplorer:table' page_idx=page.number %}?{{ request.GET.urlencode }}" class="pagination-link is-current">{{ page.number }}</a></li>
+
+          {% if num_next_pages < 4 %}
+          {% for i in next_range %}
+          <li><a href="{% url 'dataexplorer:table' page_idx=i %}?{{ request.GET.urlencode }}" class="pagination-link">{{ i }}</a></li>
+          {% endfor %}
+          {% else %}
+          <li><a href="{% url 'dataexplorer:table' page_idx=page.next_page_number %}?{{ request.GET.urlencode }}" class="pagination-link">{{ page.next_page_number }}</a></li>
+          <li><span class="pagination-ellipsis">&hellip;</span></li>
+          <li><a href="{% url 'dataexplorer:table' page_idx=page.paginator.num_pages %}?{{ request.GET.urlencode }}" class="pagination-link">{{ page.paginator.num_pages }}</a></li>
+          {% endif %}
+        </ul>
+
+        {% if page.has_next %}
+        <a href="{% url 'dataexplorer:table' page_idx=page.next_page_number %}?{{ request.GET.urlencode }}" class="pagination-next">
+          <span class="icons">
+            <span>Next</span>
+            <span class="icon">
+              <i class="fas fa-chevron-right"></i>
+            </span>
+          </span>
+        </a>
+        {% else %}
+        <a href="#" class="pagination-next is-disabled">
+          <span class="icons">
+            <span>Next</span>
+            <span class="icon">
+              <i class="fas fa-chevron-right"></i>
+            </span>
+          </span>
+        </a>
+        {% endif %}
+      </nav>
+    </div>
   </div>
 </section>
 {% endblock %}
