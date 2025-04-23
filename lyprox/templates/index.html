@@ -7,9 +7,10 @@
 {% endblock head %}
 
 {% block content %}
-<div class="hero is-primary has-background-primary-light">
-  <div class="hero-body">
-    <div class="container">
+
+<section class="hero is-primary has-background-primary-light">
+  <div class="container">
+    <div class="hero-body px-0">
       <div class="columns">
         <div class="column is-3">
           <figure class="image is-fullwidth">
@@ -21,40 +22,163 @@
 
         <div class="column">
           <h1 class="title is-2 has-text-danger has-text-weight-normal">
-            <span class="has-text-weight-bold">Ly</span>mphatic <span class="has-text-weight-bold">Pro</span>gression e<span class="has-text-weight-bold">X</span>plorer
+            <span class="has-text-weight-bold">Ly</span>mphatic <span class="has-text-weight-bold">Pro</span>
+            gressione<span class="has-text-weight-bold">X</span>plorer
           </h1>
-          <p class="subtitle is-4 has-text-primary">
+          <h2 class="subtitle is-4 has-text-primary">
             Collecting, sharing, and visualizing data on patterns
             <br>
             of lymphatic progression in head and neck cancer
-          </p>
+          </h2>
         </div>
 
         <div class="column is-1 is-hidden-touch"></div>
       </div>
     </div>
   </div>
-</div>
+</section>
 
 <section class="section">
   <div class="container">
-    <div class="content">
-      {% include_md 'description.md' %}
+    <div class="columns is-vcentered">
+      <div class="column">
+        <div class="box">
+          <h1 class="title">The Purpose of LyProX</h1>
+          <h2 class="subtitle">Understanding lymphatic tumor progression in head and neck cancer</h2>
+          <p class="block">
+            LyProX is designed to collect, share, and visualize data on lymphatic metastases in head and neck
+            squamous cell carcinomas. By providing detailed insights into progression patterns, it aims to
+            support researchers and clinicians in working towards more personalized elective nodal treatments.
+          </p>
+        </div>
+
+        <div class="box is-height-100">
+          <h1 class="title">Personalizing Treatment Planning</h1>
+          <h2 class="subtitle">Quantifying individual risk for better decision-making</h2>
+          <p class="block">
+            Current clinical
+            <a href="#2019-biau">
+              <span class="icon-text">
+                <span class="icon">
+                  <i class="fas fa-file-alt"></i>
+                </span>
+                <span>guidelines</span>
+              </span>
+            </a>
+            for the elective nodal clinical target volume (CTV-N) in head and
+            neck cancer are mostly based on the prevalence of involvement in any given lymph node level (LNL).
+            However, patients with vastly different states of lymphatic spread are often treated the same way.
+          </p>
+          <p class="block">
+            The basis for a more personalized approach is the quantification of individual risk for lymphatic
+            metastases. This, in turn, requires a comprehensive understanding of the detailed patterns of lymphatic
+            spread. LyProX aims to provide this understanding by collecting and visualizing such data.
+          </p>
+        </div>
+      </div>
+      <div class="column is-1"></div>
+      <div class="column is-4">
+        <figure class="image is-4by6">
+          <img src="{% static 'lymph-system-schematic.png' %}" alt="Schematic of the lymphatic system">
+        </figure>
+      </div>
     </div>
-    {% if IS_FROZEN %}
-    <div class="notification is-warning is-light">
-      <strong>Note:</strong> You are looking at version {{ VERSION }} of the
-      interface, which is frozen to serve as a reference for readers of our
-      recent publication. If you want to use the latest version of this website
-      that we try to continually develop and improve, click
-      <a href="https://www.lyprox.org">
-        <span class="icon">
-          <i class="fas fa-external-link-alt"></i>
-        </span>
-        here.
-      </a>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <div class="columns is-vcentered">
+      <div class="column is-4">
+        <figure class="image is-2by1">
+          <img src="{% static 'dashboard-screenshot.png' %}" alt="Screenshot of the LyProX dashboard">
+        </figure>
+      </div>
+      <div class="column is-1"></div>
+      <div class="column">
+        <div class="box is-height-100">
+          <h1 class="title">Interactive Data Exploration</h1>
+          <h2 class="subtitle">Hypothesis generation through visualization</h2>
+          <p class="block">
+            With an intuitive interface, LyProX allows users to explore datasets of lymphatic progression patterns
+            interactively. For each patient in the different cohorts, it stores in which LNLs metastases were found
+            using different diagnostic modalities or pathological assessments after a neck dissection.
+          </p>
+          <p class="block">
+            This detailed per-patient and per-level information can then be filtered and aggregated in the
+            <a href="{% url 'dataexplorer:dashboard' %}">
+              <span class="icon-text">
+                <span class="icon">
+                  <i class="fas fa-chart-bar"></i>
+                </span>
+                <span>dashboard</span>
+              </span>
+            </a>. For example, one may be interested in
+            the correlation between contralateral involvement and the lateralization of the primary tumor. Or how
+            much more likely downstream levels are to be involved if upstream levels are affected.
+          </p>
+          <p class="block">
+            Making the data interactively explorable fosters hypothesis generation and encourages further research
+            into lymphatic spread patterns. Also, the data may be downloaded as a
+            <a href="{% url 'dataexplorer:table' page_idx=1 %}">
+              <span class="icon-text">
+                <span class="icon">
+                  <i class="fas fa-table"></i>
+                </span>
+                <span>CSV table</span>
+              </span>
+            </a>
+            or fetched from our
+            <a href="https://github.com/rmnldwg/lydata">
+              <span class="icon-text">
+                <span class="icon">
+                  <i class="fab fa-github"></i>
+                </span>
+                <span>data repository</span>
+              </span>
+            </a>
+            for further analysis.
+          </p>
+        </div>
+      </div>
     </div>
-    {% endif %}
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <div class="columns is-vcentered">
+      <div class="column">
+        <div class="box is-height-100">
+          <h1 class="title">
+            Statistical Models of Progression
+          </h1>
+          <h2 class="subtitle">
+            Predicting lymphatic spread patterns using machine learning
+          </h2>
+          <p class="block">
+            After pulishing our first datasets, we started working on
+            <a href="#2021-ludwig">
+              <span class="icon-text">
+                <span class="icon">
+                  <i class="fa fa-file-alt"></i>
+                </span>
+              </span>
+              <span>probabilistic models</span>
+            </a>.
+            of lymphatic tumor progression
+            These interpretable hidden Markov models (HMMs) are trained on the data published in LyProX and
+            accurately predict the risk of occult disease in any LNL, given a new patient's diagnosis.
+          </p>
+      </div>
+    </div>
+    <div class="column is-1"></div>
+    <div class="column is-3">
+      <figure class="image">
+        <img src="{% static 'lymph-graph-schematic.png' %}" alt="Schematic of the lymphatic graph">
+      </figure>
+    </div>
+    <div class="column is-1"></div>
   </div>
 </section>
 
@@ -68,5 +192,4 @@
     {% endfor %}
   </div>
 </section>
-
 {% endblock content %}

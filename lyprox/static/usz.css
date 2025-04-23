@@ -5,8 +5,11 @@
 
 :root {
     --bulma-primary-h: 206deg;
+    --bulma-primary-s: 100%;
     --bulma-primary-l: 33%;
     --bulma-link-h: 206deg;
+    --bulma-link-text: hsl(var(--bulma-link-h), var(--bulma-link-s), var(--bulma-link-l));
+    --bulma-link-s: 100%;
     --bulma-link-l: 33%;
     --bulma-info-h: 196deg;
     --bulma-info-s: 23%;
@@ -18,4 +21,13 @@
     --bulma-warning-l: 47%;
     --bulma-danger-h: 327deg;
     --bulma-danger-l: 34%;
+}
+
+.is-height-100 {
+    height: 100% !important;
+}
+
+.is-256x256 {
+    width: 256px !important;
+    height: 256px !important;
 }
