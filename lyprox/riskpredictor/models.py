@@ -18,7 +18,6 @@ import numpy as np
 import yaml
 from django.db import models
 from dvc.api import DVCFileSystem
-from joblib import Memory
 from lymph.models import HPVUnilateral, Midline, Unilateral
 from lymph.types import Model
 from lyscripts.configs import (
@@ -31,13 +30,13 @@ from lyscripts.configs import (
 )
 from pydantic import TypeAdapter
 
-from lyprox import loggers, settings
+from lyprox import loggers
+from lyprox.settings import JOBLIB_MEMORY
 
 logger = logging.getLogger(__name__)
-memory = Memory(location=settings.JOBLIB_CACHE_DIR, verbose=0)
 
 
-@memory.cache
+@JOBLIB_MEMORY.cache
 def cached_fetch_and_merge_yaml(
     repo_name: str,
     ref: str,
@@ -79,7 +78,7 @@ def validate_configs(merged_yaml: dict[str, Any]) -> ConfigAndVersionTupleType:
     return graph_config, model_config, dist_configs, version
 
 
-@memory.cache
+@JOBLIB_MEMORY.cache
 def cached_construct_model_and_add_dists(
     graph_config: GraphConfig,
     model_config: ModelConfig,
@@ -105,7 +104,7 @@ def cached_construct_model_and_add_dists(
     return model
 
 
-@memory.cache
+@JOBLIB_MEMORY.cache
 def cached_fetch_model_samples(
     repo_name: str,
     ref: str,
@@ -134,7 +133,7 @@ def cached_fetch_model_samples(
     return samples[rand_idx]
 
 
-@memory.cache
+@JOBLIB_MEMORY.cache
 def cached_compute_priors(
     model: Model,
     samples: np.ndarray,
