@@ -58,16 +58,16 @@
           <h1 class="title">Personalizing Treatment Planning</h1>
           <h2 class="subtitle">Quantifying individual risk for better decision-making</h2>
           <p class="block">
-            Current clinical
-            <a href="#2019-biau">
+            Current clinical guidelines (e.g. by
+            <a href="https://doi.org/10.1016/j.radonc.2019.01.018">
               <span class="icon-text">
                 <span class="icon">
                   <i class="fas fa-file-alt"></i>
                 </span>
-                <span>guidelines</span>
+                <span>Biau et al.</span>
               </span>
             </a>
-            for the elective nodal clinical target volume (CTV-N) in head and
+            ) for the elective nodal clinical target volume (CTV-N) in head and
             neck cancer are mostly based on the prevalence of involvement in any given lymph node level (LNL).
             However, patients with vastly different states of lymphatic spread are often treated the same way.
           </p>
@@ -160,14 +160,14 @@
           </h2>
           <p class="block">
             After pulishing our first datasets, we started working on
-            <a href="#2021-ludwig">
+            <a href="#publications">
               <span class="icon-text">
                 <span class="icon">
                   <i class="fa fa-file-alt"></i>
                 </span>
+                <span>probabilistic models</span>
               </span>
-              <span>probabilistic models</span>
-            </a>.
+            </a>
             of lymphatic tumor progression
             These interpretable hidden Markov models (HMMs) are trained on the data published in LyProX and
             accurately predict the risk of occult disease in any LNL, given a new patient's diagnosis.
@@ -185,7 +185,7 @@
 </section>
 
 <!-- lycosystem -->
-<section class="section">
+<section class="section pt-0">
   <div class="container">
     <h1 class="title is-2">
       <span class="has-text-danger">ly</span><span class="has-text-primary">cosystem</span>
@@ -241,11 +241,69 @@
 <!-- Publications -->
 <section class="section">
   <div class="container">
-    <h1 class="title" id="publications">Our Publications</h1>
+    <h1 id="publications" class="title">Our Publications</h1>
+    <h2 class="subtitle">
+      Published papers on datasets and models of lymphatic tumor progression
+    </h2>
 
-    {% for pub in publications %}
-    {% include 'publication.html' with pub=pub %}
-    {% endfor %}
+    <div class="grid is-col-min-24">
+      {% for pub in publications %}
+      <div class="cell">
+        <div class="box is-height-100">
+          <div class="media">
+            <div class="media-left">
+              <a href="https://doi.org/{{ pub.doi }}" target="_blank" class="title has-text-link">[{{ forloop.counter }}]</a>
+            </div>
+            <div class="media-content">
+              <div class="content">
+                <p>
+                  <!-- journal -->
+                  <span class="icon-text has-text-grey">
+                    <span class="icon">
+                      <i class="fas fa-book"></i>
+                    </span>
+                    <span>
+                      <em>{{ pub.journal }}</em> <strong>{{ pub.volume }}</strong> ({{ pub.year }})
+                    </span>
+                  </span><br>
+                  <!-- authors -->
+                  {% for author in pub.authors %}
+                  {% if author.orcid %}
+                  <a class="icon-text has-text-grey" href={{ author.orcid }} target="_blank">
+                    <span class="icon">
+                      <i class="fab fa-orcid"></i>
+                    </span>
+                    <span>{{ author.short_name }}{% if not forloop.last %}, {% endif %}</span>
+                  </a>
+                  {% else %}
+                  <span class="icon-text has-text-grey">
+                    <span class="icon">
+                      <i class="fas fa-user"></i>
+                    </span>
+                    <span>{{ author.short_name }}{% if not forloop.last %}, {% endif %}</span>
+                  </span>
+                  {% endif %}
+                  {% endfor %}
+                </p>
+                <p>
+                  <!-- title -->
+                  <span class="title is-5">{{ pub.title }}</span>
+                </p>
+              </div>
+            </div>
+            <div class="media-right">
+              <span class="icon-text">
+                <span class="icon">
+                  <i class="fas fa-quote-right"></i>
+                </span>
+                <span>{{ pub.num_citations }}</span>
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
   </div>
 </section>
 {% endblock content %}

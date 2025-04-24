@@ -41,3 +41,15 @@
 .card-content {
     height: 100%;
 }
+
+.is-max-width-12 {
+    max-width: calc(12 * 1.5rem) !important;
+}
+
+.is-max-width-18 {
+    max-width: calc(18 * 1.5rem) !important;
+}
+
+.is-max-width-20 {
+    max-width: calc(20 * 1.5rem) !important;
+}
