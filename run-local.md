@@ -107,10 +107,10 @@ The variables that need to be set are:
 
 - `DJANGO_ALLOWED_HOSTS`: This is space-separated list of hostnames from which access is allowed. Set to `"localhost 127.0.0.1"` for local use. For deployment this should be changed to the domain name you are using.
 - `DJANGO_BASE_DIR`: The base directory of the server is ypically the root of the repository. From this directory, the web app infers the location of a couple of directories and paths it needs e.g. for loading and storing static files and media stuff. If this isn't set, one might end up with a situation where Django tries to set up everything relative to the ``site-packages`` folder inside the ``.venv``.
-- `GITHUB_TOKEN`: A personal secret for accessing GitHub's official API. This is used to access the [lyDATA] repo and fetch the datasets. Refer to the [GitHub documentation](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens) on how to create such a token.
+- `GITHUB_TOKEN`: A personal secret for accessing GitHub's official API. This is used to access the [lyDATA](https://github.com/rmnldwg/lydata) repo and fetch the datasets. Refer to the [GitHub documentation](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens) on how to create such a token.
+- `DJANGO_ADMIN_EMAIL`: The email address of the web app's administrator. This will be displayed on the website and it will also be sent to crossref when the [habanero](https://habanero.readthedocs.io/en/latest/index.html) module makes a request to fetch metadata for the list of publications on the landing page.
 
 [12-factor app]: https://12factor.net/
-[lyDATA]: https://github.com/rmnldwg/lydata
 
 ## Running the interface
 
