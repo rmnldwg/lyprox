@@ -1,0 +1,56 @@
+{% load static %}
+
+<div class="columns is-vcentered">
+  <div class="column is-4">
+    <figure class="image is-2by1">
+      <img src="{% static 'dashboard-screenshot.png' %}?v={{ VERSION }}" alt="Screenshot of the LyProX dashboard">
+    </figure>
+  </div>
+  <div class="column is-1"></div>
+  <div class="column">
+    <div class="box is-height-100">
+      <h1 class="title">Interactive Data Exploration</h1>
+      <h2 class="subtitle">Hypothesis generation through visualization</h2>
+      <p class="block">
+        With an intuitive interface, LyProX allows users to explore datasets of lymphatic progression patterns
+        interactively. For each patient in the different cohorts, it stores in which LNLs metastases were found
+        using different diagnostic modalities or pathological assessments after a neck dissection.
+      </p>
+      <p class="block">
+        This detailed per-patient and per-level information can then be filtered and aggregated in the
+        <a href="{% url 'dataexplorer:dashboard' %}">
+          <span class="icon-text">
+            <span class="icon">
+              <i class="fas fa-chart-bar"></i>
+            </span>
+            <span>dashboard</span>
+          </span>
+        </a>. For example, one may be interested in
+        the correlation between contralateral involvement and the lateralization of the primary tumor. Or how
+        much more likely downstream levels are to be involved if upstream levels are affected.
+      </p>
+      <p class="block">
+        Making the data interactively explorable fosters hypothesis generation and encourages further research
+        into lymphatic spread patterns. Also, the data may be downloaded as a
+        <a href="{% url 'dataexplorer:table' page_idx=1 %}">
+          <span class="icon-text">
+            <span class="icon">
+              <i class="fas fa-table"></i>
+            </span>
+            <span>CSV table</span>
+          </span>
+        </a>
+        or fetched from our
+        <a href="https://github.com/rmnldwg/lydata">
+          <span class="icon-text">
+            <span class="icon">
+              <i class="fab fa-github"></i>
+            </span>
+            <span>data repository</span>
+          </span>
+        </a>
+        for further analysis.
+      </p>
+    </div>
+  </div>
+</div>

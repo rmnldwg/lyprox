@@ -1,0 +1,64 @@
+<h1 id="publications" class="title">Our Publications</h1>
+<h2 class="subtitle">
+  Published papers on datasets and models of lymphatic tumor progression
+</h2>
+
+<div class="grid is-col-min-24">
+  {% for pub in publications %}
+  <div class="cell">
+    <div class="box is-height-100">
+      <div class="media">
+        <div class="media-left">
+          <a href="https://doi.org/{{ pub.doi }}" target="_blank"
+            class="title has-text-link">[{{ forloop.counter }}]</a>
+        </div>
+        <div class="media-content">
+          <div class="content">
+            <p>
+              <!-- journal -->
+              <span class="icon-text has-text-grey">
+                <span class="icon">
+                  <i class="fas fa-book"></i>
+                </span>
+                <span>
+                  <em>{{ pub.journal }}</em> <strong>{{ pub.volume }}</strong> ({{ pub.year }})
+                </span>
+              </span><br>
+              <!-- authors -->
+              {% for author in pub.authors %}
+              {% if author.orcid %}
+              <a class="icon-text has-text-grey" href={{ author.orcid }} target="_blank">
+                <span class="icon">
+                  <i class="fab fa-orcid"></i>
+                </span>
+                <span>{{ author.short_name }}{% if not forloop.last %}, {% endif %}</span>
+              </a>
+              {% else %}
+              <span class="icon-text has-text-grey">
+                <span class="icon">
+                  <i class="fas fa-user"></i>
+                </span>
+                <span>{{ author.short_name }}{% if not forloop.last %}, {% endif %}</span>
+              </span>
+              {% endif %}
+              {% endfor %}
+            </p>
+            <p>
+              <!-- title -->
+              <span class="title is-5">{{ pub.title }}</span>
+            </p>
+          </div>
+        </div>
+        <div class="media-right">
+          <span class="icon-text">
+            <span class="icon">
+              <i class="fas fa-quote-right"></i>
+            </span>
+            <span>{{ pub.num_citations }}</span>
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+  {% endfor %}
+</div>

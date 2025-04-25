@@ -1,0 +1,48 @@
+<h1 class="title is-2">
+  <span class="has-text-danger">ly</span><span class="has-text-primary">cosystem</span>
+</h1>
+<h2 class="subtitle is-4">
+  An ecosystem of tools, websites, and data repositories
+  <br>
+  for lymphatic tumor progression research
+</h2>
+
+<div class="grid">
+  {% for repo in repos %}
+  <div class="cell">
+    <div class="card">
+      <header class="card-header">
+        <p class="card-header-title is-family-monospace">{{ repo.owner }}/{{ repo.name }}</p>
+      </header>
+      <div class="card-image">
+        <figure class="image is-2by1">
+          <img src="{{ repo.social_card_url }}" alt="Github social card for {{ repo.name }}">
+        </figure>
+      </div>
+      <div class="card-content">
+        <div class="content">
+          {{ repo.description }}
+        </div>
+      </div>
+      <div class="card-footer">
+        <a href="{{ repo.url }}" class="card-footer-item">
+          <span class="icon-text">
+            <span class="icon">
+              <i class="fab fa-github"></i>
+            </span>
+            <span>GitHub</span>
+          </span>
+        </a>
+        <a href="{{ repo.docs_url }}" class="card-footer-item">
+          <span class="icon-text">
+            <span class="icon">
+              <i class="fas fa-book"></i>
+            </span>
+            <span>Docs</span>
+          </span>
+        </a>
+      </div>
+    </div>
+  </div>
+  {% endfor %}
+</div>
