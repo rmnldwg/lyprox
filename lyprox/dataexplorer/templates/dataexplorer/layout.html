@@ -9,11 +9,11 @@
 {% endblock head %}
 
 {% block "css" %}
-<link rel="stylesheet" href="{% static 'dashboard.css' %}">
+<link rel="stylesheet" href="{% static 'dashboard.css' %}?v={{ VERSION }}">
 {% endblock %}
 
 {% block "js" %}
-<script src="{% static 'dataexplorer/dashboard.js' %}"></script>
+<script src="{% static 'dataexplorer/dashboard.js' %}?v={{ VERSION }}"></script>
 {% endblock %}
 
 {% block content %}

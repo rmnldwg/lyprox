@@ -10,7 +10,7 @@
 
 {% block "css" %}
 <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/default.min.css">
-<link rel="stylesheet" href="{% static 'dashboard.css' %}">
+<link rel="stylesheet" href="{% static 'dashboard.css' %}?v={{ VERSION }}">
 {% endblock "css" %}
 
 {% block "js" %}
@@ -18,8 +18,8 @@
 <script src="https://unpkg.com/prettier@2.8.7/standalone.js"></script>
 <script src="https://unpkg.com/prettier@2.8.7/parser-yaml.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
-<script src="{% static 'dataexplorer/dashboard.js' %}"></script>
-<script src="{% static 'riskpredictor/yaml_formatter.js' %}"></script>
+<script src="{% static 'dataexplorer/dashboard.js' %}?v={{ VERSION }}"></script>
+<script src="{% static 'riskpredictor/yaml_formatter.js' %}?v={{ VERSION }}"></script>
 <script type="module">
   import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
 </script>

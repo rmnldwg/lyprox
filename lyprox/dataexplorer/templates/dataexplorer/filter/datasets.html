@@ -3,7 +3,7 @@
 {% load customtags %}
 
 {% addtoblock "css" %}
-<link rel="stylesheet" href="{% static 'dataexplorer/datasets.css' %}">
+<link rel="stylesheet" href="{% static 'dataexplorer/datasets.css' %}?v={{ VERSION }}">
 {% endaddtoblock %}
 
 <div class="box is-height-100">

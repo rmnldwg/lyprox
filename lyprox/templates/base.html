@@ -12,8 +12,8 @@
   <script src="https://cdn.jsdelivr.net/npm/katex/dist/contrib/mathtex-script-type.min.js" defer></script>
 
   <!-- Stylesheets -->
-  <link rel="stylesheet" type="text/css" href="{% static 'usz.css' %}">
-  <link href="{% static 'fontawesomefree/css/all.min.css' %}" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" type="text/css" href="{% static 'usz.css' %}?v={{ VERSION }}">
+  <link href="{% static 'fontawesomefree/css/all.min.css' %}?v={{ VERSION }}" rel="stylesheet" type="text/css">
   {% block "css" %}{% endblock "css" %}
   {% render_block "css" %}
 </head>
@@ -27,7 +27,7 @@
   {% include 'footer.html' %}
 
   <!-- Javascript -->
-  <script src="{% static 'fontawesomefree/js/all.min.js' %}"></script>
+  <script src="{% static 'fontawesomefree/js/all.min.js' %}?v={{ VERSION }}"></script>
   <script src="https://code.jquery.com/jquery-3.6.3.min.js" integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU=" crossorigin="anonymous"></script>
   {% block "js" %}{% endblock "js" %}
   {% render_block "js" %}

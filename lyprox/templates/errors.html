@@ -4,12 +4,12 @@
 <html lang="en" class="has-navbar-fixed-top">
 
 {% addtoblock "css" %}
-<link rel="stylesheet" type="text/css" href="{% static 'usz.css' %}">
-<link href="{% static 'fontawesomefree/css/all.min.css' %}" rel="stylesheet" type="text/css">
+<link rel="stylesheet" type="text/css" href="{% static 'usz.css' %}?v={{ VERSION }}">
+<link href="{% static 'fontawesomefree/css/all.min.css' %}?v={{ VERSION }}" rel="stylesheet" type="text/css">
 {% endaddtoblock %}
 
 {% addtoblock "js" %}
-<script src="{% static 'fontawesomefree/js/all.min.js' %}"></script>
+<script src="{% static 'fontawesomefree/js/all.min.js' %}?v={{ VERSION }}"></script>
 {% endaddtoblock %}
 
 <head>

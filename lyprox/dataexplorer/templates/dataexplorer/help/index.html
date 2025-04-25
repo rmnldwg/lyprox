@@ -10,7 +10,7 @@
 
 
 {% block content %}
-<link rel="stylesheet" href="{% static 'dataexplorer/help.css' %}">
+<link rel="stylesheet" href="{% static 'dataexplorer/help.css' %}?v={{ VERSION }}">
 
 <section class="section">
   <div class="container">
@@ -126,7 +126,7 @@
             for how to use the dasboard.
           </p>
           <figure class="image">
-            <img src="{% static 'dataexplorer/example_usage.png' %}" alt="annotated screenshot">
+            <img src="{% static 'dataexplorer/example_usage.png' %}?v={{ VERSION }}" alt="annotated screenshot">
           </figure>
 
           <h3 id="The bar plots">The bar plots</h3>
@@ -139,7 +139,7 @@
             percentages.
           </p>
           <figure class="image">
-            <img src="{% static 'dataexplorer/annotated_bar.png' %}" alt="annotated bar plot">
+            <img src="{% static 'dataexplorer/annotated_bar.png' %}?v={{ VERSION }}" alt="annotated bar plot">
           </figure>
 
           <h2 class="pt-6" id="Contribute">Contribute</h2>

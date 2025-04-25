@@ -2,14 +2,14 @@
 {% load static %}
 
 {% addtoblock "js" %}
-<script src="{% static 'navbar.js' %}"></script>
+<script src="{% static 'navbar.js' %}?v={{ VERSION }}"></script>
 {% endaddtoblock %}
 
 <nav class="navbar is-fixed-top is-primary" role="navigation">
   <div class="container">
     <div class="navbar-brand">
       <a class="navbar-item" href="{% url 'index' %}" title="home">
-        <img src="{% static 'logo-white.svg' %}" alt="LyProX Logo">
+        <img src="{% static 'logo-white.svg' %}?v={{ VERSION }}" alt="LyProX Logo">
       </a>
       <a role="button" class="navbar-burger" data-target="navMenu" aria-label="menu" aria-expanded="false">
         <span aria-hidden="true"></span>

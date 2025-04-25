@@ -9,22 +9,22 @@
 <!-- Google / Search Engine Tags -->
 <meta itemprop="name" content="{{ title }} {% if IS_FROZEN %}(frozen){% endif %}">
 <meta itemprop="description" content="{{ description }}">
-<meta itemprop="image" content="{{ request.scheme }}://{{ request.get_host }}{% static 'github-social-card.png' %}">
+<meta itemprop="image" content="{{ request.scheme }}://{{ request.get_host }}{% static 'github-social-card.png' %}?v={{ VERSION }}">
 
 <!-- Open Graph -->
 <meta property="og:type" content="website">
 <meta property="og:url" content="{{ request.scheme }}://{{ request.get_host }}">
 <meta property="og:title" content="{{ title }} {% if IS_FROZEN %}(frozen){% endif %}">
 <meta property="og:description" content="{{ description }}">
-<meta property="og:image" content="{{ request.scheme }}://{{ request.get_host }}{% static 'github-social-card.png' %}">
+<meta property="og:image" content="{{ request.scheme }}://{{ request.get_host }}{% static 'github-social-card.png' %}?v={{ VERSION }}">
 
 <!-- Twitter Meta Tags -->
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="{{ title }} {% if IS_FROZEN %}(frozen){% endif %}">
 <meta name="twitter:description" content="{{ description }}">
-<meta name="twitter:image" content="{{ request.scheme }}://{{ request.get_host }}{% static 'github-social-card.png' %}">
+<meta name="twitter:image" content="{{ request.scheme }}://{{ request.get_host }}{% static 'github-social-card.png' %}?v={{ VERSION }}">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link rel="shortcut icon" href="{% static 'favicon.ico' %}" type="image/x-icon">
+<link rel="shortcut icon" href="{% static 'favicon.ico' %}?v={{ VERSION }}" type="image/x-icon">
 
 {% endwith %}
