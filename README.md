@@ -42,7 +42,7 @@ There are two ways you can contribute to this project:
 2. The other way is by contributing to this repository, e.g. if you are a software developer. I guess this is somewhat unlikely, due to the very specific scope of this Django app, but we still welcome any contribution. In this case, a [detailed documentation] of the source code can be consulted.
 
 [roman.ludwig@usz.ch]: mailto:roman.ludwig@usz.ch
-[detailed documentation]: https://rmnldwg.github.io/lyprox
+[detailed documentation]: https://lycosystem.github.io/lyprox
 
 ## Run this interface locally
 

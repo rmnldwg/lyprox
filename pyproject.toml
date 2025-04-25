@@ -37,7 +37,7 @@ dependencies = [
 
 [project.urls]
 source = "https://github.com/rmnldwg/lyprox"
-documentation = "https://rmnldwg.github.io/lyprox"
+documentation = "https://lycosystem.github.io/lyprox"
 
 [project.optional-dependencies]
 docs = [
