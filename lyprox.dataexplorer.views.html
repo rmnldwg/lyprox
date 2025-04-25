@@ -255,6 +255,16 @@
             </div>
         
 
+    </li><li class="private">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="#_get_form_and_patients_from_request" class="internal-link" title="lyprox.dataexplorer.views._get_form_and_patients_from_request">_get<wbr></wbr>_form<wbr></wbr>_and<wbr></wbr>_patients<wbr></wbr>_from<wbr></wbr>_request</a></code>
+            </div>
+        
+
     </li>
 </ul> 
 
@@ -265,6 +275,16 @@
         <ul>
     
     <li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="#FormAndPatients" class="internal-link" title="lyprox.dataexplorer.views.FormAndPatients"><wbr></wbr>Form<wbr></wbr>And<wbr></wbr>Patients</a></code>
+            </div>
+        
+
+    </li><li class="">
         
         
         
@@ -542,11 +562,21 @@ the context they may provide in the <a class="rst-external rst-reference" href="
     <td>Function</td>
     <td><code><a href="#update_data_stats" class="internal-link" title="lyprox.dataexplorer.views.update_data_stats">update<wbr></wbr>_data<wbr></wbr>_stats</a></code></td>
     <td>AJAX view to update the dashboard statistics without reloading the page.</td>
+  </tr><tr class="typealias">
+    
+    <td>Type Alias</td>
+    <td><code><a href="#FormAndPatients" class="internal-link" title="lyprox.dataexplorer.views.FormAndPatients"><wbr></wbr>Form<wbr></wbr>And<wbr></wbr>Patients</a></code></td>
+    <td><span class="undocumented">Undocumented</span></td>
   </tr><tr class="variable">
     
     <td>Variable</td>
     <td><code><a href="#logger" class="internal-link" title="lyprox.dataexplorer.views.logger">logger</a></code></td>
     <td><span class="undocumented">Undocumented</span></td>
+  </tr><tr class="function private">
+    
+    <td>Function</td>
+    <td><code><a href="#_get_form_and_patients_from_request" class="internal-link" title="lyprox.dataexplorer.views._get_form_and_patients_from_request">_get<wbr></wbr>_form<wbr></wbr>_and<wbr></wbr>_patients<wbr></wbr>_from<wbr></wbr>_request</a></code></td>
+    <td>Prepare the form from the request and execute the query.</td>
   </tr>
 </table>
           
@@ -743,7 +773,7 @@ queried dataset to the frontend.</p>
   <div class="functionHeader">
     
     
-    <span class="py-keyword">def</span> <span class="py-defname">render_data_table</span><span class="function-signature">(request: <code><a href="http://docs.djangoproject.com/en/4.2/ref/request-response/#django.http.HttpRequest" class="intersphinx-link">HttpRequest</a></code>) -&gt; <code>HttpResponse</code></span>:
+    <span class="py-keyword">def</span> <span class="py-defname">render_data_table</span><span class="function-signature">(request: <code><a href="http://docs.djangoproject.com/en/4.2/ref/request-response/#django.http.HttpRequest" class="intersphinx-link">HttpRequest</a></code>, page_idx: <code>int</code>) -&gt; <code>HttpResponse</code></span>:
     
     <a class="headerLink" href="#render_data_table" title="lyprox.dataexplorer.views.render_data_table">
       
@@ -886,6 +916,30 @@ statistics which are then handled by some JavaScript on the frontend.</p>
 <a class="rst-external rst-reference" href="https://realpython.com/django-and-ajax-form-submissions/" target="_top">in this article</a>.</p>
 </div>
   </div>
+</div><div class="basetypealias">
+  
+  
+  <a name="lyprox.dataexplorer.views.FormAndPatients">
+    
+  </a>
+  <a name="FormAndPatients">
+    
+  </a>
+  <div class="functionHeader">
+    
+    <span class="py-defname">FormAndPatients</span> =
+    
+    <a class="headerLink" href="#FormAndPatients" title="lyprox.dataexplorer.views.FormAndPatients">
+      
+      
+      ¶
+    </a>
+  </div>
+  <div class="functionBody">
+    
+    <div><p class="undocumented">Undocumented</p></div>
+    <table class="valueTable"><tr class="fieldStart"><td class="fieldName">Value</td></tr><tr><td><pre class="constant-value"><code>tuple[<wbr></wbr><a href="lyprox.dataexplorer.forms.DataexplorerForm.html" class="internal-link" title="lyprox.dataexplorer.forms.DataexplorerForm">DataexplorerForm</a>, <wbr></wbr><a href="https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.html#pandas.DataFrame" class="intersphinx-link">pd.DataFrame</a>]</code></pre></td></tr></table>
+  </div>
 </div><div class="basevariable">
   
   
@@ -910,6 +964,30 @@ statistics which are then handled by some JavaScript on the frontend.</p>
     <div><p class="undocumented">Undocumented</p></div>
     
   </div>
+</div><div class="basefunction private">
+  
+  
+  <a name="lyprox.dataexplorer.views._get_form_and_patients_from_request">
+    
+  </a>
+  <a name="_get_form_and_patients_from_request">
+    
+  </a>
+  <div class="functionHeader">
+    
+    
+    <span class="py-keyword">def</span> <span class="py-defname">_get_form_and_patients_from_request</span><span class="function-signature">(request: <code><a href="http://docs.djangoproject.com/en/4.2/ref/request-response/#django.http.HttpRequest" class="intersphinx-link">HttpRequest</a></code>) -&gt; <code><a href="#FormAndPatients" class="internal-link" title="lyprox.dataexplorer.views.FormAndPatients">FormAndPatients</a></code></span>:
+    
+    <a class="headerLink" href="#_get_form_and_patients_from_request" title="lyprox.dataexplorer.views._get_form_and_patients_from_request">
+      
+      
+      ¶
+    </a>
+  </div>
+  <div class="docstring functionBody">
+    
+    <div><p>Prepare the form from the request and execute the query.</p></div>
+  </div>
 </div>
         </div>
       
@@ -922,7 +1000,7 @@ statistics which are then handled by some JavaScript on the frontend.</p>
   <div class="container-fluid">
     <a href="index.html">API Documentation</a> for LyProX,
   generated by <a href="https://github.com/twisted/pydoctor/">pydoctor</a>
-    24.11.2 at 2025-04-22 07:40:45.
+    24.11.2 at 2025-04-25 08:48:38.
   </div>
 
   <!-- Search related scripts needs to be loaded at the end of HTML 

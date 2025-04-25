@@ -1,0 +1,727 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+          "DTD/xhtml1-strict.dtd">
+<html>
+  
+
+  <head>
+    
+    <title>lyprox.views.Publication</title>
+    <meta name="generator" content="pydoctor 24.11.2"> 
+        
+    </meta>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1 maximum-scale=1" />
+    <link rel="stylesheet" type="text/css" href="bootstrap.min.css" />
+    <link rel="stylesheet" type="text/css" href="apidocs.css" />
+    <link rel="stylesheet" type="text/css" href="extra.css" />
+    
+</head>
+
+  <body>
+
+    
+
+    <nav class="navbar navbar-default mainnavbar">
+      
+  
+  <div class="container-fluid">
+
+
+    <div class="navbar-header">
+      
+      <div class="navlinks">
+        <span class="navbar-brand">
+          LyProX <a href="index.html">API Documentation</a>
+        </span>
+
+        <a href="moduleIndex.html">
+          Modules
+        </a>
+
+        <a href="classIndex.html">
+          Classes
+        </a>
+
+        <a href="nameIndex.html">
+          Names
+        </a>
+
+        <div id="search-box-container">
+          <div class="input-group">
+            <input id="search-box" type="search" name="search-query" placeholder="Search..." aria-label="Search" minlength="2" class="form-control" autocomplete="off" />
+            
+            <span class="input-group-btn">
+              <a style="display: none;" class="btn btn-default" id="search-clear-button" title="Clear" onclick="clearSearch()"><img src="fonts/x-circle.svg" alt="Clear" /></a>
+              <a class="btn btn-default" id="apidocs-help-button" title="Help" href="apidocs-help.html"><img src="fonts/info.svg" alt="Help" /></a>
+            </span>
+          </div>
+        </div>
+
+      </div>
+
+      <div id="search-results-container" style="display: none;">
+        
+        <div id="search-buttons">
+          <span class="label label-default" id="search-docstrings-button">
+          <label class="checkbox-inline">
+            <input type="checkbox" id="toggle-search-in-docstrings-checkbox" value="false" onclick="toggleSearchInDocstrings()">
+              search in docstrings
+            </input>
+          </label>
+          </span>
+          
+        </div>
+        
+        <noscript>
+            <h1>Cannot search: JavaScript is not supported/enabled in your browser.</h1>
+        </noscript>
+
+        <div id="search-status"> </div>
+
+        <div class="warning" id="search-warn-box" style="display: none;">
+          <p class="rst-last"><span id="search-warn"></span></p>
+        </div>
+
+        <table id="search-results">
+          <!-- Filled dynamically by JS -->
+        </table>
+        
+        <div style="margin-top: 10px;">
+          <p>For more information on the search, visit the <a href="apidocs-help.html#rst-search">help page</a>.</p>
+        </div>
+      </div>
+
+    </div>
+
+
+  </div>
+</nav>
+    
+    <div class="container-fluid">
+
+      <!-- Side navigation -->
+      <div class="sidebarcontainer" style="display: none;">
+        
+        <div class="sidebar"><nav class="sidebar">
+  
+
+  <div>
+
+      <div class="thingTitle">
+        <span>Class</span>
+        <code class="thisobject"><a href="lyprox.views.Publication.html" class="internal-link" title="This class"><wbr></wbr>Publication</a></code> 
+      </div>
+      
+      <div>
+        
+
+        
+         
+
+        
+        
+
+        <div class="childrenKindTitle">Methods</div>
+        <ul>
+    
+    <li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="#from_works_container" class="internal-link" title="lyprox.views.Publication.from_works_container">from<wbr></wbr>_works<wbr></wbr>_container</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="#bibliography" class="internal-link" title="lyprox.views.Publication.bibliography">bibliography</a></code>
+            </div>
+        
+
+    </li>
+</ul> 
+
+        
+         
+
+        <div class="childrenKindTitle">Attributes</div>
+        <ul>
+    
+    <li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="#authors" class="internal-link" title="lyprox.views.Publication.authors">authors</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="#doi" class="internal-link" title="lyprox.views.Publication.doi">doi</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="#journal" class="internal-link" title="lyprox.views.Publication.journal">journal</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="#num_citations" class="internal-link" title="lyprox.views.Publication.num_citations">num<wbr></wbr>_citations</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="#title" class="internal-link" title="lyprox.views.Publication.title">title</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="#volume" class="internal-link" title="lyprox.views.Publication.volume">volume</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="#year" class="internal-link" title="lyprox.views.Publication.year">year</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="#author_names" class="internal-link" title="lyprox.views.Publication.author_names">author<wbr></wbr>_names</a></code>
+            </div>
+        
+
+    </li>
+</ul> 
+
+        
+         
+        
+      </div>
+  </div><div>
+
+      <div class="thingTitle">
+        <span>Module</span>
+        <code><a href="lyprox.views.html" class="internal-link" title="The parent of this class">views</a></code> 
+      </div>
+      
+      <div>
+        
+
+        
+         
+
+        <div class="childrenKindTitle">Classes</div>
+        <ul>
+    
+    <li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="lyprox.views.AuthorName.html" class="internal-link" title="lyprox.views.AuthorName"><wbr></wbr>Author<wbr></wbr>Name</a></code>
+            </div>
+        
+
+    </li><li class=" thisobject">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="lyprox.views.Publication.html" class="internal-link" title="lyprox.views.Publication"><wbr></wbr>Publication</a></code>
+            </div>
+        
+
+    </li>
+</ul>
+
+        <div class="childrenKindTitle">Functions</div>
+        <ul>
+    
+    <li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="lyprox.views.html#add_lycosystem_repos_to_context" class="internal-link" title="lyprox.views.add_lycosystem_repos_to_context">add<wbr></wbr>_lycosystem<wbr></wbr>_repos<wbr></wbr>_to<wbr></wbr>_context</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="lyprox.views.html#add_publications_to_context" class="internal-link" title="lyprox.views.add_publications_to_context">add<wbr></wbr>_publications<wbr></wbr>_to<wbr></wbr>_context</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="lyprox.views.html#fetch_works_from_doi" class="internal-link" title="lyprox.views.fetch_works_from_doi">fetch<wbr></wbr>_works<wbr></wbr>_from<wbr></wbr>_doi</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="lyprox.views.html#index" class="internal-link" title="lyprox.views.index">index</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="lyprox.views.html#maintenance" class="internal-link" title="lyprox.views.maintenance">maintenance</a></code>
+            </div>
+        
+
+    </li>
+</ul> 
+
+        
+         
+
+        <div class="childrenKindTitle">Variables</div>
+        <ul>
+    
+    <li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="lyprox.views.html#logger" class="internal-link" title="lyprox.views.logger">logger</a></code>
+            </div>
+        
+
+    </li>
+</ul> 
+
+        
+         
+        
+      </div>
+  </div>
+
+</nav>
+        </div>
+        <div id="collapseSideBar">
+          <a class="btn btn-link" onclick="toggleSideBarCollapse()" title="Toggle Sidebar Collapse">
+          </a>
+        </div> 
+        <script src="sidebartoggle.js" type="text/javascript"></script>
+       
+      </div>
+
+      <div id="main" class="">
+        
+
+        
+
+        <div class="page-header">
+          <h1 class="class"><code><code><a href="index.html" class="internal-link">lyprox</a></code><wbr></wbr>.<code><a href="lyprox.views.html" class="internal-link" title="lyprox.views">views</a></code><wbr></wbr>.<code><a href="lyprox.views.Publication.html" class="internal-link" title="lyprox.views.Publication">Publication</a></code></code></h1>
+          <div id="showPrivate">
+            <button class="btn btn-link" onclick="togglePrivate()">Toggle Private API</button>
+          </div>
+        </div>
+
+        <div class="categoryHeader">
+          class documentation
+        </div>
+
+        <div class="extrasDocstring">
+          <p class="class-signature"><code><span class="py-keyword">class</span> <span class="py-defname">Publication</span>(<a href="https://docs.pydantic.dev/latest/api/base_model/#pydantic.BaseModel" class="intersphinx-link">BaseModel</a>):</code></p><p>Constructor: <code><a href="#from_works_container" class="internal-link" title="lyprox.views.Publication.from_works_container">Publication.from_works_container(works_container)</a></code></p>
+          <p><a href="classIndex.html#lyprox.views.Publication">View In Hierarchy</a></p>
+        </div>
+
+        <div class="moduleDocstring">
+          <div><p>Model for a publication.</p></div>
+        </div>
+
+        <div id="splitTables">
+          <table class="children sortable" id="id95">
+  
+  
+  <tr class="classmethod">
+    
+    <td>Class Method</td>
+    <td><code><a href="#from_works_container" class="internal-link" title="lyprox.views.Publication.from_works_container">from<wbr></wbr>_works<wbr></wbr>_container</a></code></td>
+    <td>Create a Publication instance from a WorksContainer.</td>
+  </tr><tr class="method">
+    
+    <td>Method</td>
+    <td><code><a href="#bibliography" class="internal-link" title="lyprox.views.Publication.bibliography">bibliography</a></code></td>
+    <td>Return the publication as a bibliographic string.</td>
+  </tr><tr class="classvariable">
+    
+    <td>Class Variable</td>
+    <td><code><a href="#authors" class="internal-link" title="lyprox.views.Publication.authors">authors</a></code></td>
+    <td><span class="undocumented">Undocumented</span></td>
+  </tr><tr class="classvariable">
+    
+    <td>Class Variable</td>
+    <td><code><a href="#doi" class="internal-link" title="lyprox.views.Publication.doi">doi</a></code></td>
+    <td><span class="undocumented">Undocumented</span></td>
+  </tr><tr class="classvariable">
+    
+    <td>Class Variable</td>
+    <td><code><a href="#journal" class="internal-link" title="lyprox.views.Publication.journal">journal</a></code></td>
+    <td><span class="undocumented">Undocumented</span></td>
+  </tr><tr class="classvariable">
+    
+    <td>Class Variable</td>
+    <td><code><a href="#num_citations" class="internal-link" title="lyprox.views.Publication.num_citations">num<wbr></wbr>_citations</a></code></td>
+    <td><span class="undocumented">Undocumented</span></td>
+  </tr><tr class="classvariable">
+    
+    <td>Class Variable</td>
+    <td><code><a href="#title" class="internal-link" title="lyprox.views.Publication.title">title</a></code></td>
+    <td><span class="undocumented">Undocumented</span></td>
+  </tr><tr class="classvariable">
+    
+    <td>Class Variable</td>
+    <td><code><a href="#volume" class="internal-link" title="lyprox.views.Publication.volume">volume</a></code></td>
+    <td><span class="undocumented">Undocumented</span></td>
+  </tr><tr class="classvariable">
+    
+    <td>Class Variable</td>
+    <td><code><a href="#year" class="internal-link" title="lyprox.views.Publication.year">year</a></code></td>
+    <td><span class="undocumented">Undocumented</span></td>
+  </tr><tr class="property">
+    
+    <td>Property</td>
+    <td><code><a href="#author_names" class="internal-link" title="lyprox.views.Publication.author_names">author<wbr></wbr>_names</a></code></td>
+    <td>Return the authors as a string.</td>
+  </tr>
+</table>
+          
+
+            
+        </div>
+
+        <div id="childList">
+          <div class="baseclassmethod">
+  
+  
+  <a name="lyprox.views.Publication.from_works_container">
+    
+  </a>
+  <a name="from_works_container">
+    
+  </a>
+  <div class="functionHeader">
+    
+    @classmethod<br />
+    <span class="py-keyword">def</span> <span class="py-defname">from_works_container</span><span class="function-signature">(cls: <code>type</code>, works_container: <code>WorksContainer</code>) -&gt; <code><a href="lyprox.views.Publication.html" class="internal-link" title="lyprox.views.Publication">Publication</a></code></span>:
+    
+    <a class="headerLink" href="#from_works_container" title="lyprox.views.Publication.from_works_container">
+      
+      
+      ¶
+    </a>
+  </div>
+  <div class="docstring functionBody">
+    
+    <div><p>Create a Publication instance from a WorksContainer.</p></div>
+  </div>
+</div><div class="basemethod">
+  
+  
+  <a name="lyprox.views.Publication.bibliography">
+    
+  </a>
+  <a name="bibliography">
+    
+  </a>
+  <div class="functionHeader">
+    
+    
+    <span class="py-keyword">def</span> <span class="py-defname">bibliography</span><span class="function-signature">(self) -&gt; <code>str</code></span>:
+    
+    <a class="headerLink" href="#bibliography" title="lyprox.views.Publication.bibliography">
+      
+      
+      ¶
+    </a>
+  </div>
+  <div class="docstring functionBody">
+    
+    <div><p>Return the publication as a bibliographic string.</p></div>
+  </div>
+</div><div class="baseclassvariable">
+  
+  
+  <a name="lyprox.views.Publication.authors">
+    
+  </a>
+  <a name="authors">
+    
+  </a>
+  <div class="functionHeader">
+    
+    <span class="py-defname">authors</span>: <code>list[<wbr></wbr><a href="lyprox.views.AuthorName.html" class="internal-link" title="lyprox.views.AuthorName">AuthorName</a>]</code> =
+    
+    <a class="headerLink" href="#authors" title="lyprox.views.Publication.authors">
+      
+      
+      ¶
+    </a>
+  </div>
+  <div class="functionBody">
+    
+    <div><p class="undocumented">Undocumented</p></div>
+    
+  </div>
+</div><div class="baseclassvariable">
+  
+  
+  <a name="lyprox.views.Publication.doi">
+    
+  </a>
+  <a name="doi">
+    
+  </a>
+  <div class="functionHeader">
+    
+    <span class="py-defname">doi</span>: <code>str</code> =
+    
+    <a class="headerLink" href="#doi" title="lyprox.views.Publication.doi">
+      
+      
+      ¶
+    </a>
+  </div>
+  <div class="functionBody">
+    
+    <div><p class="undocumented">Undocumented</p></div>
+    
+  </div>
+</div><div class="baseclassvariable">
+  
+  
+  <a name="lyprox.views.Publication.journal">
+    
+  </a>
+  <a name="journal">
+    
+  </a>
+  <div class="functionHeader">
+    
+    <span class="py-defname">journal</span>: <code>str</code> =
+    
+    <a class="headerLink" href="#journal" title="lyprox.views.Publication.journal">
+      
+      
+      ¶
+    </a>
+  </div>
+  <div class="functionBody">
+    
+    <div><p class="undocumented">Undocumented</p></div>
+    
+  </div>
+</div><div class="baseclassvariable">
+  
+  
+  <a name="lyprox.views.Publication.num_citations">
+    
+  </a>
+  <a name="num_citations">
+    
+  </a>
+  <div class="functionHeader">
+    
+    <span class="py-defname">num_citations</span>: <code>int</code> =
+    
+    <a class="headerLink" href="#num_citations" title="lyprox.views.Publication.num_citations">
+      
+      
+      ¶
+    </a>
+  </div>
+  <div class="functionBody">
+    
+    <div><p class="undocumented">Undocumented</p></div>
+    
+  </div>
+</div><div class="baseclassvariable">
+  
+  
+  <a name="lyprox.views.Publication.title">
+    
+  </a>
+  <a name="title">
+    
+  </a>
+  <div class="functionHeader">
+    
+    <span class="py-defname">title</span>: <code>str</code> =
+    
+    <a class="headerLink" href="#title" title="lyprox.views.Publication.title">
+      
+      
+      ¶
+    </a>
+  </div>
+  <div class="functionBody">
+    
+    <div><p class="undocumented">Undocumented</p></div>
+    
+  </div>
+</div><div class="baseclassvariable">
+  
+  
+  <a name="lyprox.views.Publication.volume">
+    
+  </a>
+  <a name="volume">
+    
+  </a>
+  <div class="functionHeader">
+    
+    <span class="py-defname">volume</span>: <code>str</code> =
+    
+    <a class="headerLink" href="#volume" title="lyprox.views.Publication.volume">
+      
+      
+      ¶
+    </a>
+  </div>
+  <div class="functionBody">
+    
+    <div><p class="undocumented">Undocumented</p></div>
+    
+  </div>
+</div><div class="baseclassvariable">
+  
+  
+  <a name="lyprox.views.Publication.year">
+    
+  </a>
+  <a name="year">
+    
+  </a>
+  <div class="functionHeader">
+    
+    <span class="py-defname">year</span>: <code>int</code> =
+    
+    <a class="headerLink" href="#year" title="lyprox.views.Publication.year">
+      
+      
+      ¶
+    </a>
+  </div>
+  <div class="functionBody">
+    
+    <div><p class="undocumented">Undocumented</p></div>
+    
+  </div>
+</div><div class="baseproperty">
+  
+  
+  <a name="lyprox.views.Publication.author_names">
+    
+  </a>
+  <a name="author_names">
+    
+  </a>
+  <div class="functionHeader">
+    @property<br />
+    <span class="py-defname">author_names</span>: <code>str</code> =
+    
+    <a class="headerLink" href="#author_names" title="lyprox.views.Publication.author_names">
+      
+      
+      ¶
+    </a>
+  </div>
+  <div class="functionBody">
+    
+    <div><p>Return the authors as a string.</p></div>
+    
+  </div>
+</div>
+        </div>
+      
+      </div>
+    </div>
+
+    <footer class="navbar navbar-default">
+
+  
+  <div class="container-fluid">
+    <a href="index.html">API Documentation</a> for LyProX,
+  generated by <a href="https://github.com/twisted/pydoctor/">pydoctor</a>
+    24.11.2 at 2025-04-25 08:48:38.
+  </div>
+
+  <!-- Search related scripts needs to be loaded at the end of HTML 
+    parsing not to introduce overhead and display HTML data asap -->
+  <script src="ajax.js" type="text/javascript"></script>
+  <script src="searchlib.js" type="text/javascript"></script>
+  <script src="search.js" type="text/javascript"></script>
+
+</footer>
+  
+    <script src="pydoctor.js" type="text/javascript"></script>
+
+  </body>
+</html>

@@ -119,8 +119,31 @@
         
          
 
+        <div class="childrenKindTitle">Classes</div>
+        <ul>
+    
+    <li class="">
         
         
+        
+
+        
+            <div class="itemName"><code><a href="lyprox.views.AuthorName.html" class="internal-link" title="lyprox.views.AuthorName"><wbr></wbr>Author<wbr></wbr>Name</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="lyprox.views.Publication.html" class="internal-link" title="lyprox.views.Publication"><wbr></wbr>Publication</a></code>
+            </div>
+        
+
+    </li>
+</ul>
 
         <div class="childrenKindTitle">Functions</div>
         <ul>
@@ -131,7 +154,27 @@
         
 
         
+            <div class="itemName"><code><a href="#add_lycosystem_repos_to_context" class="internal-link" title="lyprox.views.add_lycosystem_repos_to_context">add<wbr></wbr>_lycosystem<wbr></wbr>_repos<wbr></wbr>_to<wbr></wbr>_context</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
             <div class="itemName"><code><a href="#add_publications_to_context" class="internal-link" title="lyprox.views.add_publications_to_context">add<wbr></wbr>_publications<wbr></wbr>_to<wbr></wbr>_context</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="#fetch_works_from_doi" class="internal-link" title="lyprox.views.fetch_works_from_doi">fetch<wbr></wbr>_works<wbr></wbr>_from<wbr></wbr>_doi</a></code>
             </div>
         
 
@@ -384,11 +427,31 @@
           <table class="children sortable" id="id93">
   
   
-  <tr class="function">
+  <tr class="class">
+    
+    <td>Class</td>
+    <td><code><a href="lyprox.views.AuthorName.html" class="internal-link" title="lyprox.views.AuthorName"><wbr></wbr>Author<wbr></wbr>Name</a></code></td>
+    <td>Model for an author name.</td>
+  </tr><tr class="class">
+    
+    <td>Class</td>
+    <td><code><a href="lyprox.views.Publication.html" class="internal-link" title="lyprox.views.Publication"><wbr></wbr>Publication</a></code></td>
+    <td>Model for a publication.</td>
+  </tr><tr class="function">
+    
+    <td>Function</td>
+    <td><code><a href="#add_lycosystem_repos_to_context" class="internal-link" title="lyprox.views.add_lycosystem_repos_to_context">add<wbr></wbr>_lycosystem<wbr></wbr>_repos<wbr></wbr>_to<wbr></wbr>_context</a></code></td>
+    <td>Add infos about the repositories of the lycosystem to the context.</td>
+  </tr><tr class="function">
     
     <td>Function</td>
     <td><code><a href="#add_publications_to_context" class="internal-link" title="lyprox.views.add_publications_to_context">add<wbr></wbr>_publications<wbr></wbr>_to<wbr></wbr>_context</a></code></td>
-    <td>Add the publications stored in a YAML file to the context.</td>
+    <td>Add resolved references of publicationsto the context, given a list of DOIs.</td>
+  </tr><tr class="function">
+    
+    <td>Function</td>
+    <td><code><a href="#fetch_works_from_doi" class="internal-link" title="lyprox.views.fetch_works_from_doi">fetch<wbr></wbr>_works<wbr></wbr>_from<wbr></wbr>_doi</a></code></td>
+    <td>Get the reference from a DOI using Crossref.</td>
   </tr><tr class="function">
     
     <td>Function</td>
@@ -415,6 +478,30 @@
           <div class="basefunction">
   
   
+  <a name="lyprox.views.add_lycosystem_repos_to_context">
+    
+  </a>
+  <a name="add_lycosystem_repos_to_context">
+    
+  </a>
+  <div class="functionHeader">
+    
+    
+    <span class="py-keyword">def</span> <span class="py-defname">add_lycosystem_repos_to_context</span><span class="function-signature">(context: <code>dict[<wbr></wbr>str, <wbr></wbr>Any]</code>, repo_ids_and_img_paths: <code>list[<wbr></wbr>tuple[<wbr></wbr>str, <wbr></wbr>str]]</code>, ref: <code>str</code> = <span class="rst-variable-quote">'</span><span class="rst-variable-string">main</span><span class="rst-variable-quote">'</span>) -&gt; <code>dict[<wbr></wbr>str, <wbr></wbr>Any]</code></span>:
+    
+    <a class="headerLink" href="#add_lycosystem_repos_to_context" title="lyprox.views.add_lycosystem_repos_to_context">
+      
+      
+      ¶
+    </a>
+  </div>
+  <div class="docstring functionBody">
+    
+    <div><p>Add infos about the repositories of the lycosystem to the context.</p></div>
+  </div>
+</div><div class="basefunction">
+  
+  
   <a name="lyprox.views.add_publications_to_context">
     
   </a>
@@ -424,7 +511,7 @@
   <div class="functionHeader">
     
     
-    <span class="py-keyword">def</span> <span class="py-defname">add_publications_to_context</span><span class="function-signature">(context: <code>dict[<wbr></wbr>str, <wbr></wbr>Any]</code>) -&gt; <code>dict[<wbr></wbr>str, <wbr></wbr>Any]</code></span>:
+    <span class="py-keyword">def</span> <span class="py-defname">add_publications_to_context</span><span class="function-signature">(context: <code>dict[<wbr></wbr>str, <wbr></wbr>Any]</code>, dois: <code>list[<wbr></wbr>str]</code>) -&gt; <code>dict[<wbr></wbr>str, <wbr></wbr>Any]</code></span>:
     
     <a class="headerLink" href="#add_publications_to_context" title="lyprox.views.add_publications_to_context">
       
@@ -434,7 +521,33 @@
   </div>
   <div class="docstring functionBody">
     
-    <div><p>Add the publications stored in a YAML file to the context.</p></div>
+    <div><p>Add resolved references of publicationsto the context, given a list of DOIs.</p></div>
+  </div>
+</div><div class="basefunction">
+  
+  
+  <a name="lyprox.views.fetch_works_from_doi">
+    
+  </a>
+  <a name="fetch_works_from_doi">
+    
+  </a>
+  <div class="functionHeader">
+    
+    @JOBLIB_MEMORY.cache<br />
+    <span class="py-keyword">def</span> <span class="py-defname">fetch_works_from_doi</span><span class="function-signature">(crossref: <code>Crossref</code>, doi: <code>str</code>) -&gt; <code>WorksContainer | None</code></span>:
+    
+    <a class="headerLink" href="#fetch_works_from_doi" title="lyprox.views.fetch_works_from_doi">
+      
+      
+      ¶
+    </a>
+  </div>
+  <div class="docstring functionBody">
+    
+    <div><p>Get the reference from a DOI using Crossref.</p>
+<p>This function is cached to avoid hitting the Crossref API too often.</p>
+</div>
   </div>
 </div><div class="basefunction">
   
@@ -524,7 +637,7 @@ is set to <tt class="rst-docutils rst-literal">True</tt>.</p>
   <div class="container-fluid">
     <a href="index.html">API Documentation</a> for LyProX,
   generated by <a href="https://github.com/twisted/pydoctor/">pydoctor</a>
-    24.11.2 at 2025-04-22 07:40:45.
+    24.11.2 at 2025-04-25 08:48:38.
   </div>
 
   <!-- Search related scripts needs to be loaded at the end of HTML 

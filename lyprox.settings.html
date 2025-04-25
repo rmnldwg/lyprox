@@ -163,6 +163,16 @@
         
 
         
+            <div class="itemName"><code><a href="#ADMIN_EMAIL" class="internal-link" title="lyprox.settings.ADMIN_EMAIL">ADMIN<wbr></wbr>_EMAIL</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
             <div class="itemName"><code><a href="#ALLOWED_HOSTS" class="internal-link" title="lyprox.settings.ALLOWED_HOSTS">ALLOWED<wbr></wbr>_HOSTS</a></code>
             </div>
         
@@ -194,6 +204,16 @@
 
         
             <div class="itemName"><code><a href="#BASE_DIR" class="internal-link" title="lyprox.settings.BASE_DIR">BASE<wbr></wbr>_DIR</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="#CROSSREF" class="internal-link" title="lyprox.settings.CROSSREF">CROSSREF</a></code>
             </div>
         
 
@@ -333,6 +353,16 @@
         
 
         
+            <div class="itemName"><code><a href="#JOBLIB_MEMORY" class="internal-link" title="lyprox.settings.JOBLIB_MEMORY">JOBLIB<wbr></wbr>_MEMORY</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
             <div class="itemName"><code><a href="#LANGUAGE_CODE" class="internal-link" title="lyprox.settings.LANGUAGE_CODE">LANGUAGE<wbr></wbr>_CODE</a></code>
             </div>
         
@@ -454,6 +484,16 @@
 
         
             <div class="itemName"><code><a href="#PUBLICATIONS_PATH" class="internal-link" title="lyprox.settings.PUBLICATIONS_PATH">PUBLICATIONS<wbr></wbr>_PATH</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="#REFERENCES" class="internal-link" title="lyprox.settings.REFERENCES">REFERENCES</a></code>
             </div>
         
 
@@ -888,6 +928,11 @@ will likely fail to be loaded initially.</li>
   </tr><tr class="constant">
     
     <td>Constant</td>
+    <td><code><a href="#ADMIN_EMAIL" class="internal-link" title="lyprox.settings.ADMIN_EMAIL">ADMIN<wbr></wbr>_EMAIL</a></code></td>
+    <td>Email address of the admin.</td>
+  </tr><tr class="constant">
+    
+    <td>Constant</td>
     <td><code><a href="#ALLOWED_HOSTS" class="internal-link" title="lyprox.settings.ALLOWED_HOSTS">ALLOWED<wbr></wbr>_HOSTS</a></code></td>
     <td>From which hosts the application is allowed to be accessed.</td>
   </tr><tr class="constant">
@@ -905,6 +950,11 @@ will likely fail to be loaded initially.</li>
     <td>Constant</td>
     <td><code><a href="#BASE_DIR" class="internal-link" title="lyprox.settings.BASE_DIR">BASE<wbr></wbr>_DIR</a></code></td>
     <td>Path to the base directory of the project.</td>
+  </tr><tr class="constant">
+    
+    <td>Constant</td>
+    <td><code><a href="#CROSSREF" class="internal-link" title="lyprox.settings.CROSSREF">CROSSREF</a></code></td>
+    <td><span class="undocumented">Undocumented</span></td>
   </tr><tr class="constant">
     
     <td>Constant</td>
@@ -973,6 +1023,11 @@ will likely fail to be loaded initially.</li>
   </tr><tr class="constant">
     
     <td>Constant</td>
+    <td><code><a href="#JOBLIB_MEMORY" class="internal-link" title="lyprox.settings.JOBLIB_MEMORY">JOBLIB<wbr></wbr>_MEMORY</a></code></td>
+    <td>Cache for joblib. This is used to cache the results of expensive computations.</td>
+  </tr><tr class="constant">
+    
+    <td>Constant</td>
     <td><code><a href="#LANGUAGE_CODE" class="internal-link" title="lyprox.settings.LANGUAGE_CODE">LANGUAGE<wbr></wbr>_CODE</a></code></td>
     <td><span class="undocumented">Undocumented</span></td>
   </tr><tr class="constant">
@@ -1035,6 +1090,11 @@ will likely fail to be loaded initially.</li>
     <td>Constant</td>
     <td><code><a href="#PUBLICATIONS_PATH" class="internal-link" title="lyprox.settings.PUBLICATIONS_PATH">PUBLICATIONS<wbr></wbr>_PATH</a></code></td>
     <td><span class="undocumented">Undocumented</span></td>
+  </tr><tr class="constant">
+    
+    <td>Constant</td>
+    <td><code><a href="#REFERENCES" class="internal-link" title="lyprox.settings.REFERENCES">REFERENCES</a></code></td>
+    <td>List of DOIs of our works on lymphatic tumor progression modelling and data.</td>
   </tr><tr class="constant">
     
     <td>Constant</td>
@@ -1163,6 +1223,34 @@ can be called again to overwrite the logging settings easily.</p>
 </div><div class="baseconstant">
   
   
+  <a name="lyprox.settings.ADMIN_EMAIL">
+    
+  </a>
+  <a name="ADMIN_EMAIL">
+    
+  </a>
+  <div class="functionHeader">
+    
+    <span class="py-defname">ADMIN_EMAIL</span> =
+    
+    <a class="headerLink" href="#ADMIN_EMAIL" title="lyprox.settings.ADMIN_EMAIL">
+      
+      
+      ¶
+    </a>
+  </div>
+  <div class="functionBody">
+    
+    <div><p>Email address of the admin.</p>
+<blockquote>
+The email address of the web app's administrator. This will be displayed on the website and it will also be sent to crossref when the [habanero](<a class="rst-external rst-reference" href="https://habanero.readthedocs.io/en/latest/index.html" target="_top">https://habanero.readthedocs.io/en/latest/index.html</a>) module makes a request to fetch metadata for the list of publications on the landing page.</blockquote>
+<p>[12-factor app]: <a class="rst-external rst-reference" href="https://12factor.net/" target="_top">https://12factor.net/</a></p>
+</div>
+    <table class="valueTable"><tr class="fieldStart"><td class="fieldName">Value</td></tr><tr><td><pre class="constant-value"><code>os.getenv(<wbr></wbr><span class="rst-variable-quote">'</span><span class="rst-variable-string">DJANGO_ADMIN_EMAIL</span><span class="rst-variable-quote">'</span>, <wbr></wbr><span class="rst-variable-quote">'</span><span class="rst-variable-string">roman.ludwig@usz.ch</span><span class="rst-variable-quote">'</span>)</code></pre></td></tr></table>
+  </div>
+</div><div class="baseconstant">
+  
+  
   <a name="lyprox.settings.ALLOWED_HOSTS">
     
   </a>
@@ -1263,6 +1351,30 @@ can be called again to overwrite the logging settings easily.</p>
 <p>The base directory of the server is ypically the root of the repository. From this directory, the web app infers the location of a couple of directories and paths it needs e.g. for loading and storing static files and media stuff. If this isn't set, one might end up with a situation where Django tries to set up everything relative to the <tt class="rst-docutils rst-literal"><span class="pre">site-packages</span></tt> folder inside the <tt class="rst-docutils rst-literal">.venv</tt>.</p>
 </div>
     <table class="valueTable"><tr class="fieldStart"><td class="fieldName">Value</td></tr><tr><td><pre class="constant-value"><code>Path(<wbr></wbr>os.environ[<wbr></wbr><span class="rst-variable-quote">'</span><span class="rst-variable-string">DJANGO_BASE_DIR</span><span class="rst-variable-quote">'</span>])</code></pre></td></tr></table>
+  </div>
+</div><div class="baseconstant">
+  
+  
+  <a name="lyprox.settings.CROSSREF">
+    
+  </a>
+  <a name="CROSSREF">
+    
+  </a>
+  <div class="functionHeader">
+    
+    <span class="py-defname">CROSSREF</span> =
+    
+    <a class="headerLink" href="#CROSSREF" title="lyprox.settings.CROSSREF">
+      
+      
+      ¶
+    </a>
+  </div>
+  <div class="functionBody">
+    
+    <div><p class="undocumented">Undocumented</p></div>
+    <table class="valueTable"><tr class="fieldStart"><td class="fieldName">Value</td></tr><tr><td><pre class="constant-value"><code>Crossref(<wbr></wbr>mailto=<a href="#ADMIN_EMAIL" class="internal-link" title="lyprox.settings.ADMIN_EMAIL">ADMIN_EMAIL</a>, <wbr></wbr>ua_string=f'lyprox/{version}')</code></pre></td></tr></table>
   </div>
 </div><div class="baseconstant">
   
@@ -1585,6 +1697,30 @@ can be called again to overwrite the logging settings easily.</p>
     
     <div><p class="undocumented">Undocumented</p></div>
     <table class="valueTable"><tr class="fieldStart"><td class="fieldName">Value</td></tr><tr><td><pre class="constant-value"><code><a href="#BASE_DIR" class="internal-link" title="lyprox.settings.BASE_DIR">BASE_DIR</a> / <span class="rst-variable-quote">'</span><span class="rst-variable-string">.cache</span><span class="rst-variable-quote">'</span></code></pre></td></tr></table>
+  </div>
+</div><div class="baseconstant">
+  
+  
+  <a name="lyprox.settings.JOBLIB_MEMORY">
+    
+  </a>
+  <a name="JOBLIB_MEMORY">
+    
+  </a>
+  <div class="functionHeader">
+    
+    <span class="py-defname">JOBLIB_MEMORY</span> =
+    
+    <a class="headerLink" href="#JOBLIB_MEMORY" title="lyprox.settings.JOBLIB_MEMORY">
+      
+      
+      ¶
+    </a>
+  </div>
+  <div class="functionBody">
+    
+    <div><p>Cache for joblib. This is used to cache the results of expensive computations.</p></div>
+    <table class="valueTable"><tr class="fieldStart"><td class="fieldName">Value</td></tr><tr><td><pre class="constant-value"><code><a href="https://joblib.readthedocs.io/en/stable/generated/joblib.Memory.html#joblib.Memory" class="intersphinx-link">Memory</a>(<wbr></wbr>location=<a href="#JOBLIB_CACHE_DIR" class="internal-link" title="lyprox.settings.JOBLIB_CACHE_DIR">JOBLIB_CACHE_DIR</a>, <wbr></wbr>verbose=0)</code></pre></td></tr></table>
   </div>
 </div><div class="baseconstant">
   
@@ -1912,6 +2048,37 @@ be set to <tt class="rst-docutils rst-literal">"maintenance"</tt> for this to wo
     
     <div><p class="undocumented">Undocumented</p></div>
     <table class="valueTable"><tr class="fieldStart"><td class="fieldName">Value</td></tr><tr><td><pre class="constant-value"><code><a href="#STATIC_ROOT" class="internal-link" title="lyprox.settings.STATIC_ROOT">STATIC_ROOT</a> / <span class="rst-variable-quote">'</span><span class="rst-variable-string">publications</span><span class="rst-variable-quote">'</span> / <span class="rst-variable-quote">'</span><span class="rst-variable-string">data.yaml</span><span class="rst-variable-quote">'</span></code></pre></td></tr></table>
+  </div>
+</div><div class="baseconstant">
+  
+  
+  <a name="lyprox.settings.REFERENCES">
+    
+  </a>
+  <a name="REFERENCES">
+    
+  </a>
+  <div class="functionHeader">
+    
+    <span class="py-defname">REFERENCES</span>: <code>list[<wbr></wbr>str]</code> =
+    
+    <a class="headerLink" href="#REFERENCES" title="lyprox.settings.REFERENCES">
+      
+      
+      ¶
+    </a>
+  </div>
+  <div class="functionBody">
+    
+    <div><p>List of DOIs of our works on lymphatic tumor progression modelling and data.</p></div>
+    <table class="valueTable"><tr class="fieldStart"><td class="fieldName">Value</td></tr><tr><td><pre class="constant-value"><code>[<wbr></wbr><span class="rst-variable-quote">'</span><span class="rst-variable-string">10.1088/1361-6560/ab2a18</span><span class="rst-variable-quote">'</span>,
+ <wbr></wbr><span class="rst-variable-quote">'</span><span class="rst-variable-string">10.1016/j.radonc.2020.10.002</span><span class="rst-variable-quote">'</span>,
+ <wbr></wbr><span class="rst-variable-quote">'</span><span class="rst-variable-string">10.1038/s41598-021-91544-1</span><span class="rst-variable-quote">'</span>,
+ <wbr></wbr><span class="rst-variable-quote">'</span><span class="rst-variable-string">10.1016/j.radonc.2022.01.035</span><span class="rst-variable-quote">'</span>,
+ <wbr></wbr><span class="rst-variable-quote">'</span><span class="rst-variable-string">10.1016/j.dib.2022.108345</span><span class="rst-variable-quote">'</span>,
+ <wbr></wbr><span class="rst-variable-quote">'</span><span class="rst-variable-string">10.1016/j.dib.2023.110020</span><span class="rst-variable-quote">'</span>,
+ <wbr></wbr><span class="rst-variable-quote">'</span><span class="rst-variable-string">10.1038/s41598-024-66012-1</span><span class="rst-variable-quote">'</span>,
+<span class="rst-variable-ellipsis">...</span></code></pre></td></tr></table>
   </div>
 </div><div class="baseconstant">
   
@@ -2375,7 +2542,7 @@ to the list.</p>
   <div class="container-fluid">
     <a href="index.html">API Documentation</a> for LyProX,
   generated by <a href="https://github.com/twisted/pydoctor/">pydoctor</a>
-    24.11.2 at 2025-04-22 07:40:45.
+    24.11.2 at 2025-04-25 08:48:38.
   </div>
 
   <!-- Search related scripts needs to be loaded at the end of HTML 
