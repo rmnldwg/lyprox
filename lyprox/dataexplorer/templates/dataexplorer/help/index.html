@@ -10,7 +10,7 @@
 
 
 {% block content %}
-<link rel="stylesheet" href="{% static 'dataexplorer/help.css' %}">
+<link rel="stylesheet" href="{% static 'dataexplorer/help.css' %}?v={{ VERSION }}">
 
 <section class="section">
   <div class="container">
@@ -75,12 +75,15 @@
           <p class="notification is-warning is-light">
             <strong>Warning:</strong> dashboard is NOT for predicting the risk of occult
             metastases in individual patients. All we do here is visualize
-            data of previously seen patients. For actual risk predictions
-            for individual and newly diagnosed patients, check out our
-            <a href="https://www.nature.com/articles/s41598-021-91544-1">
-              paper on modelling tumor progression
-            </a> or wait a bit, since
-            we are thinking about implementing it also here.
+            data of previously seen patients. For actual predictions of occult disease
+            given a diagnosis, head over to the
+            <a href="{% url 'riskpredictor:list' %}">riskpredictor</a>.
+          </p>
+          <p class="notification is-info is-light">
+            <strong>Note:</strong> You may notice this help page is slightly out of date.
+            We have published an updated and polished version of the data explorer that
+            also changed the layout a bit. Nonetheless, the pictures and explanations below
+            should still be helpful to understand the basic concepts of the dashboard.
           </p>
 
           <h2 class="pt-6" id="Videos">Videos</h2>
@@ -123,7 +126,7 @@
             for how to use the dasboard.
           </p>
           <figure class="image">
-            <img src="{% static 'dataexplorer/example_usage.png' %}" alt="annotated screenshot">
+            <img src="{% static 'dataexplorer/example_usage.png' %}?v={{ VERSION }}" alt="annotated screenshot">
           </figure>
 
           <h3 id="The bar plots">The bar plots</h3>
@@ -136,7 +139,7 @@
             percentages.
           </p>
           <figure class="image">
-            <img src="{% static 'dataexplorer/annotated_bar.png' %}" alt="annotated bar plot">
+            <img src="{% static 'dataexplorer/annotated_bar.png' %}?v={{ VERSION }}" alt="annotated bar plot">
           </figure>
 
           <h2 class="pt-6" id="Contribute">Contribute</h2>

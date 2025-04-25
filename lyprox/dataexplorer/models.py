@@ -6,18 +6,17 @@ import time
 import pandas as pd
 from django.db import models
 from github import Repository
-from joblib import Memory
 from lydata.loader import LyDataset
 from lydata.utils import infer_all_levels
 
-from lyprox import loggers, settings
+from lyprox import loggers
 from lyprox.accounts.models import Institution
+from lyprox.settings import GITHUB, GITHUB_TOKEN, JOBLIB_MEMORY
 
 logger = logging.getLogger(__name__)
-memory = Memory(location=settings.JOBLIB_CACHE_DIR, verbose=0)
 
 
-@memory.cache
+@JOBLIB_MEMORY.cache
 def cached_load_dataframe(
     year: int,
     institution: str,
@@ -33,7 +32,7 @@ def cached_load_dataframe(
         repo_name=repo_name,
         ref=ref,
     )
-    df = lydataset.get_dataframe(use_github=True, token=settings.GITHUB_TOKEN)
+    df = lydataset.get_dataframe(use_github=True, token=GITHUB_TOKEN)
     df = infer_all_levels(df)
     logger.info(f"Loaded dataset {lydataset} into DataFrame ({df.shape=}).")
     return df
@@ -82,7 +81,7 @@ class DatasetModel(loggers.ModelLoggerMixin, models.Model):
 
     def get_repo(self) -> Repository:
         """Return the GitHub repository object."""
-        return settings.GITHUB.get_repo(self.repo_name)
+        return GITHUB.get_repo(self.repo_name)
 
     def get_kwargs(self) -> dict[str, int | str]:
         """Assemble ``kwargs`` from this model's field.

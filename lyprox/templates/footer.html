@@ -12,17 +12,7 @@
               </span>
             </figure>
             <div class="media-content">
-              <p>Website Version {{ VERSION }} {% if IS_FROZEN %}(frozen){% endif %}</p>
-              {% if IS_FROZEN %}
-              <a href="https://www.lyprox.org">
-                <span class="icon-text">
-                  <span class="icon" style="width: 1rem;">
-                    <i class="fas fa-arrow-alt-circle-up"></i>
-                  </span>
-                  <span>Go to latest version</span>
-                </span>
-              </a>
-              {% endif %}
+              <p>Website Version {{ VERSION }}</p>
             </div>
           </div>
         </div>
@@ -67,7 +57,7 @@
             </figure>
             <div class="media-content">
               <p>Contact:</p>
-              <a href="mailto:roman.ludwig@usz.ch" title="contact admin">roman.ludwig@usz.ch</a>
+              <a href="mailto:{{ ADMIN_EMAIL }}" title="contact admin">{{ ADMIN_EMAIL }}</a>
             </div>
           </div>
         </div>

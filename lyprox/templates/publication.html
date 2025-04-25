@@ -5,7 +5,7 @@
   <div class="media">
     <div class="media-left">
       <figure class="image is-64x64">
-        <img class="is-rounded" src="{% static 'publications/'|concat:pub.id|concat:'.png' %}" alt="publication icon">
+        <img class="is-rounded" src="{% static 'publications/'|concat:pub.id|concat:'.png' %}?v={{ VERSION }}" alt="publication icon">
       </figure>
     </div>
     <div class="media-content">

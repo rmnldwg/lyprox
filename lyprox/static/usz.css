@@ -5,8 +5,11 @@
 
 :root {
     --bulma-primary-h: 206deg;
+    --bulma-primary-s: 100%;
     --bulma-primary-l: 33%;
     --bulma-link-h: 206deg;
+    --bulma-link-text: hsl(var(--bulma-link-h), var(--bulma-link-s), var(--bulma-link-l));
+    --bulma-link-s: 100%;
     --bulma-link-l: 33%;
     --bulma-info-h: 196deg;
     --bulma-info-s: 23%;
@@ -18,4 +21,35 @@
     --bulma-warning-l: 47%;
     --bulma-danger-h: 327deg;
     --bulma-danger-l: 34%;
+}
+
+.is-height-100 {
+    height: 100% !important;
+}
+
+.is-256x256 {
+    width: 256px !important;
+    height: 256px !important;
+}
+
+.card {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.card-content {
+    height: 100%;
+}
+
+.is-max-width-12 {
+    max-width: calc(12 * 1.5rem) !important;
+}
+
+.is-max-width-18 {
+    max-width: calc(18 * 1.5rem) !important;
+}
+
+.is-max-width-20 {
+    max-width: calc(20 * 1.5rem) !important;
 }

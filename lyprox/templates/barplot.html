@@ -3,7 +3,7 @@
 {% load customtags %}
 
 {% addtoblock "css" %}
-<link rel="stylesheet" href="{% static 'barplot.css' %}">
+<link rel="stylesheet" href="{% static 'barplot.css' %}?v={{ VERSION }}">
 {% endaddtoblock %}
 
 {% with stat=stats|getattr:lnl_key %}

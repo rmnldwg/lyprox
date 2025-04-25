@@ -44,6 +44,8 @@ from django import urls
 from django.db import models
 from dotenv import load_dotenv
 from github import Auth, Github
+from habanero import Crossref
+from joblib import Memory
 
 from ._version import version
 
@@ -100,10 +102,33 @@ GITHUB_TOKEN = os.environ["GITHUB_TOKEN"]
 
 .. include:: run-local.md
     :start-after: `GITHUB_TOKEN`:
-    :end-before: ## Running the interface
+    :end-before: - `DJANGO_ADMIN_EMAIL`
     :parser: myst
 """
+
 GITHUB = Github(auth=Auth.Token(GITHUB_TOKEN))
+
+ADMIN_EMAIL = os.getenv("DJANGO_ADMIN_EMAIL", "roman.ludwig@usz.ch")
+"""Email address of the admin.
+
+.. include:: run-local.md
+    :start-after: `DJANGO_ADMIN_EMAIL`:
+    :end-before: ## Running the interface
+"""
+
+CROSSREF = Crossref(mailto=ADMIN_EMAIL, ua_string=f"lyprox/{version}")
+
+REFERENCES = [
+    "10.1088/1361-6560/ab2a18",
+    "10.1016/j.radonc.2020.10.002",
+    "10.1038/s41598-021-91544-1",
+    "10.1016/j.radonc.2022.01.035",
+    "10.1016/j.dib.2022.108345",
+    "10.1016/j.dib.2023.110020",
+    "10.1038/s41598-024-66012-1",
+    "10.1016/j.dib.2025.111546",
+]
+"""List of DOIs of our works on lymphatic tumor progression modelling and data."""
 
 LNLS = ["I", "Ia", "Ib", "II", "IIa", "IIb", "III", "IV", "V", "Va", "Vb", "VII"]
 
@@ -329,3 +354,5 @@ STATICFILES_DIRS = [BASE_DIR / "lyprox" / "static"]
 PUBLICATIONS_PATH = STATIC_ROOT / "publications" / "data.yaml"
 
 JOBLIB_CACHE_DIR = BASE_DIR / ".cache"
+JOBLIB_MEMORY = Memory(location=JOBLIB_CACHE_DIR, verbose=0)
+"""Cache for joblib. This is used to cache the results of expensive computations."""

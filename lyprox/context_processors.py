@@ -16,6 +16,7 @@ def selected_settings(_request) -> dict[str, Any]:
     """Return dictionary of some selected settings."""
     return {
         "VERSION": settings.VERSION,
+        "ADMIN_EMAIL": settings.ADMIN_EMAIL,
     }
 
 
