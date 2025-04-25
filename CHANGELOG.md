@@ -2,6 +2,35 @@
 
 All notable changes to this project will be documented in this file.
 
+<a name="1.1.0"></a>
+
+## [1.1.0] - 2025-04-25
+
+### 🚀 Features
+
+- Get admin email address from environment variables
+- Add our publications to landing page's context from list of DOIs
+- Force update of browser's static file cache with appended version nummber
+
+### 🐛 Bug Fixes
+
+- Make lycosystem cards on landing page same height
+
+### 💼 Other
+
+- Update descriptions on landing page
+- Add social cards of lycosystem repositories
+- Add [habanero] dependency
+- Use joblib `Memory` from settings
+
+### 📚 Documentation
+
+- Add disclaimer to riskpredictor about medical product
+- Add note about dataexplorer help page being outdated
+- Nicely present publications on landing page
+
+[habanero]: https://habanero.readthedocs.io/en/latest/
+
 <a name="1.0.3"></a>
 
 ## [1.0.3] - 2025-04-22
