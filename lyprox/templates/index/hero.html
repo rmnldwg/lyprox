@@ -1,0 +1,32 @@
+{% load static %}
+
+<section class="hero is-primary has-background-primary-light">
+  <div class="container">
+    <div class="hero-body px-0">
+      <div class="columns">
+        <div class="column is-3">
+          <figure class="image is-fullwidth">
+            <img src="{% static 'logo.svg' %}?v={{ VERSION }}" alt="LyProX logo">
+          </figure>
+        </div>
+
+        <div class="column is-1 is-hidden-touch"></div>
+
+        <div class="column">
+          <h1 class="title is-2 has-text-danger has-text-weight-normal">
+            <span class="has-text-weight-bold">Ly</span>mphatic
+            <span class="has-text-weight-bold">Pro</span>gression
+            e<span class="has-text-weight-bold">X</span>plorer
+          </h1>
+          <h2 class="subtitle is-4 has-text-primary">
+            Collecting, sharing, and visualizing data on patterns
+            <br>
+            of lymphatic progression in head and neck cancer
+          </h2>
+        </div>
+
+        <div class="column is-1 is-hidden-touch"></div>
+      </div>
+    </div>
+  </div>
+</section>

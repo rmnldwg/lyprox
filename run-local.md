@@ -121,14 +121,14 @@ lyprox migrate
 lyprox collectstatic
 ```
 
-This will prepare django's database. If that worked, you should [`add_institutions`](https://rmnldwg.github.io/lyprox/lyprox.accounts.management.commands.add_institutions.html) and [`add_users`](https://rmnldwg.github.io/lyprox/lyprox.accounts.management.commands.add_users.html) to the database. Check the linked documentation to see how these two commands work.
+This will prepare django's database. If that worked, you should [`add_institutions`](https://lycosystem.github.io/lyprox/lyprox.accounts.management.commands.add_institutions.html) and [`add_users`](https://lycosystem.github.io/lyprox/lyprox.accounts.management.commands.add_users.html) to the database. Check the linked documentation to see how these two commands work.
 
 ```bash
 lyprox add_institutions ...
 lyprox add_users ...
 ```
 
-If you want to also [`add_datasets`](https://rmnldwg.github.io/lyprox/lyprox.dataexplorer.management.commands.add_datasets.html), you can do so in a similar fashion. Make sure to check the docs.
+If you want to also [`add_datasets`](https://lycosystem.github.io/lyprox/lyprox.dataexplorer.management.commands.add_datasets.html), you can do so in a similar fashion. Make sure to check the docs.
 
 If everything up to this point went according to plan, you can now launch the interface:
 

@@ -1,0 +1,34 @@
+{% load static %}
+
+<div class="columns is-vcentered">
+  <div class="column">
+    <div class="box is-height-100">
+      <h1 class="title">
+        Statistical Models of Progression
+      </h1>
+      <h2 class="subtitle">
+        Predicting lymphatic spread patterns using machine learning
+      </h2>
+      <p class="block">
+        After pulishing our first datasets, we started working on
+        <a href="#publications">
+          <span class="icon-text">
+            <span class="icon">
+              <i class="fa fa-file-alt"></i>
+            </span>
+            <span>probabilistic models</span>
+          </span>
+        </a>
+        of lymphatic tumor progression
+        These interpretable hidden Markov models (HMMs) are trained on the data published in LyProX and
+        accurately predict the risk of occult disease in any LNL, given a new patient's diagnosis.
+      </p>
+  </div>
+</div>
+<div class="column is-1"></div>
+<div class="column is-3">
+  <figure class="image">
+    <img src="{% static 'lymph-graph-schematic.png' %}?v={{ VERSION }}" alt="Schematic of the lymphatic graph">
+  </figure>
+</div>
+<div class="column is-1"></div>

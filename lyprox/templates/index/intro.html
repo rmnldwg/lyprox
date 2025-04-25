@@ -1,0 +1,45 @@
+{% load static %}
+
+<div class="columns is-vcentered">
+  <div class="column">
+    <div class="box">
+      <h1 class="title">The Purpose of LyProX</h1>
+      <h2 class="subtitle">Understanding lymphatic tumor progression in head and neck cancer</h2>
+      <p class="block">
+        LyProX is designed to collect, share, and visualize data on lymphatic metastases in head and neck
+        squamous cell carcinomas. By providing detailed insights into progression patterns, it aims to
+        support researchers and clinicians in working towards more personalized elective nodal treatments.
+      </p>
+    </div>
+
+    <div class="box is-height-100">
+      <h1 class="title">Personalizing Treatment Planning</h1>
+      <h2 class="subtitle">Quantifying individual risk for better decision-making</h2>
+      <p class="block">
+        Current clinical guidelines (e.g. by
+        <a href="https://doi.org/10.1016/j.radonc.2019.01.018">
+          <span class="icon-text">
+            <span class="icon">
+              <i class="fas fa-file-alt"></i>
+            </span>
+            <span>Biau et al.</span>
+          </span>
+        </a>
+        ) for the elective nodal clinical target volume (CTV-N) in head and
+        neck cancer are mostly based on the prevalence of involvement in any given lymph node level (LNL).
+        However, patients with vastly different states of lymphatic spread are often treated the same way.
+      </p>
+      <p class="block">
+        The basis for a more personalized approach is the quantification of individual risk for lymphatic
+        metastases. This, in turn, requires a comprehensive understanding of the detailed patterns of lymphatic
+        spread. LyProX aims to provide this understanding by collecting and visualizing such data.
+      </p>
+    </div>
+  </div>
+  <div class="column is-1"></div>
+  <div class="column is-4">
+    <figure class="image is-4by6">
+      <img src="{% static 'lymph-system-schematic.png' %}?v={{ VERSION }}" alt="Schematic of the lymphatic system">
+    </figure>
+  </div>
+</div>
