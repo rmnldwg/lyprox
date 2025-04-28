@@ -2,6 +2,23 @@
 
 All notable changes to this project will be documented in this file.
 
+<a name="1.1.1"></a>
+
+## [1.1.1] - 2025-04-25
+
+### 💼 Other
+
+- Branch 'main' into 'dev'
+- Modularize landing page
+
+### 📚 Documentation
+
+- Correct gh pages links to docs
+
+### ⚙️ Miscellaneous Tasks
+
+- Update docs deployment action
+
 <a name="1.1.0"></a>
 
 ## [1.1.0] - 2025-04-25
@@ -446,6 +463,8 @@ Commits before the 2nd of March 2023 did not use conventional commits and no cha
 - [0.0.2] - 2021-10-04
 - 0.0.1 - 2021-10-04
 
+[1.1.1]: https://github.com/rmnldwg/lyprox/compare/1.1.0...1.1.1
+[1.1.0]: https://github.com/rmnldwg/lyprox/compare/1.0.3...1.1.0
 [1.0.3]: https://github.com/rmnldwg/lyprox/compare/1.0.2...1.0.3
 [1.0.2]: https://github.com/rmnldwg/lyprox/compare/1.0.1...1.0.2
 [1.0.1]: https://github.com/rmnldwg/lyprox/compare/1.0.0...1.0.1
