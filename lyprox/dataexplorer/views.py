@@ -156,17 +156,6 @@ def split_and_capitalize(value: str) -> str:
     return " ".join([smart_capitalize(word) for word in value.split("_")])
 
 
-def color_boolean(value: Any) -> str:
-    """Color the boolean values in the table view."""
-    if pd.isna(value):
-        return "background-color: lightgrey"
-
-    if not isinstance(value, bool):
-        return ""
-
-    return "background-color: lightcoral"
-
-
 def map_to_cell_classes(patients: pd.DataFrame) -> pd.DataFrame:
     """Return a class for each cell of the ``patients`` table."""
     consensus = "max_llh" if "max_llh" in patients.columns else "rank"
@@ -183,7 +172,7 @@ def map_to_cell_classes(patients: pd.DataFrame) -> pd.DataFrame:
                 .fillna("is-danger has-text-weight-bold has-text-white")
             )
             classes_map[modality, side] = classes_map[modality, side].where(
-                cond=patients[modality, side],
+                cond=patients[modality, side] == True,  # noqa: E712
                 other="is-success has-text-weight-bold has-text-white",
             )
             classes_map[modality, side] = classes_map[modality, side].where(
