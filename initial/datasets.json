@@ -4,28 +4,28 @@
         "institution": "usz",
         "subsite": "oropharynx",
         "repo_name": "rmnldwg/lydata",
-        "ref": "main"
+        "ref": "2021-usz-oropharynx-v3"
     },
     {
         "year": 2021,
         "institution": "clb",
         "subsite": "oropharynx",
         "repo_name": "rmnldwg/lydata",
-        "ref": "main"
+        "ref": "2021-clb-oropharynx"
     },
     {
         "year": 2023,
         "institution": "clb",
         "subsite": "multisite",
         "repo_name": "rmnldwg/lydata",
-        "ref": "main"
+        "ref": "2023-clb-multisite-v2"
     },
     {
         "year": 2023,
         "institution": "isb",
         "subsite": "multisite",
         "repo_name": "rmnldwg/lydata",
-        "ref": "main"
+        "ref": "2023-isb-multisite-v3"
     },
     {
         "year": 2023,
@@ -46,7 +46,7 @@
         "institution": "hvh",
         "subsite": "oropharynx",
         "repo_name": "rmnldwg/lydata",
-        "ref": "main"
+        "ref": "2025-hvh-oropharynx-v3"
     },
     {
         "year": 2025,
