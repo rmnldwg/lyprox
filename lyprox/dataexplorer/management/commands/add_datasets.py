@@ -54,7 +54,6 @@ import json
 from pathlib import Path
 
 from django.core.management import base
-from django.db import IntegrityError
 
 from lyprox.accounts.models import Institution
 from lyprox.dataexplorer.models import DatasetModel
@@ -125,23 +124,22 @@ class Command(base.BaseCommand):
                 shortname=config["institution"].upper(),
             )
             try:
-                dataset = DatasetModel.objects.create(**config)
+                dataset, was_created = DatasetModel.objects.update_or_create(
+                    year=config.pop("year"),
+                    institution=config.pop("institution"),
+                    subsite=config.pop("subsite"),
+                    defaults=config,
+                )
                 table = dataset.load_dataframe()
-                self.stdout.write(
-                    self.style.SUCCESS(
-                        f"Successfully added dataset {dataset} with {table.shape=}."
-                    )
-                )
-            except IntegrityError:
-                self.stdout.write(
-                    self.style.WARNING(
-                        f"Dataset '{config['year']}"
-                        f"-{config['institution'].shortname.lower()}"
-                        f"-{config['subsite']}' already exists. Skipping."
-                    )
-                )
             except Exception as exc:
-                self.stdout.write(
-                    self.style.ERROR(f"Failed to add dataset {config} due to {exc}.")
-                )
+                msg = f"Failed to add dataset {config} due to {exc}. Deleting dataset."
+                self.stdout.write(self.style.ERROR(msg))
                 dataset.delete()
+                continue
+
+            if was_created:
+                msg = f"Successfully added dataset {dataset} with {table.shape=}."
+                self.stdout.write(self.style.SUCCESS(msg))
+            else:
+                msg = f"Dataset {dataset} already exists. Updating to {table.shape=}."
+                self.stdout.write(self.style.WARNING(msg))
