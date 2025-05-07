@@ -36,15 +36,6 @@
         "is_superuser": false
     },
     {
-        "email": "lars.widmer@usz.ch",
-        "first_name": "Lars",
-        "last_name": "Widmer",
-        "institution": "USZ",
-        "is_active": true,
-        "is_staff": false,
-        "is_superuser": false
-    },
-    {
         "email": "esmee.looman@usz.ch",
         "first_name": "Esmee",
         "last_name": "Looman",
@@ -57,15 +48,6 @@
         "email": "yoel.perezhaas@usz.ch",
         "first_name": "Yoel",
         "last_name": "Perez Haas",
-        "institution": "USZ",
-        "is_active": true,
-        "is_staff": false,
-        "is_superuser": false
-    },
-    {
-        "email": "julian.broennimann@uzh.ch",
-        "first_name": "Julian",
-        "last_name": "Brönnimann",
         "institution": "USZ",
         "is_active": true,
         "is_staff": false,
@@ -93,6 +75,15 @@
         "email": "friedrichkaspargiuliano.kurz@uzh.ch",
         "first_name": "Fritz",
         "last_name": "Kurz",
+        "institution": "USZ",
+        "is_active": true,
+        "is_staff": false,
+        "is_superuser": false
+    },
+    {
+        "email": "noemi.buehrer@usz.ch",
+        "first_name": "Noemi",
+        "last_name": "Bührer",
         "institution": "USZ",
         "is_active": true,
         "is_staff": false,
