@@ -81,6 +81,15 @@
         "is_superuser": false
     },
     {
+        "email": "alexander.ruehle@uniklinik-freiburg.de",
+        "first_name": "Alexander",
+        "last_name": "Rühle",
+        "institution": "UKF",
+        "is_active": true,
+        "is_staff": false,
+        "is_superuser": false
+    }
+    {
         "email": "noemi.buehrer@usz.ch",
         "first_name": "Noemi",
         "last_name": "Bührer",
